@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тумский остров - Вроцлав</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .scene {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        .image-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            animation: moveForward 40s linear infinite;
+        }
+
+        .image {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background-image: url('media/tumski/tumski_01.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        @keyframes moveForward {
+            from {
+                transform: translateZ(0px);
+            }
+            to {
+                transform: translateZ(500px);
+            }
+        }
+
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .reset-animation {
+            animation: none !important;
+            transform: translateZ(0px) !important;
+        }
+
+        .custom-cursor-area {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            width: 50%;
+            height: 50%;
+            z-index: 999;
+            cursor: none;
+        }
+
+        .map-mark-area {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 50%;
+            height: 50%;
+            z-index: 998;
+        }
+
+        .map-mark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 48px;
+            height: 48px;
+            background-image: url('media/mapmark.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
+        }
+
+        .map-mark::after {
+            content: attr(data-title);
+            font-family: 'Marck Script', cursive;
+            position: absolute;
+            left: 120%;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 28px;
+            color: white;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            pointer-events: none;
+        }
+
+        .map-mark-area:hover .map-mark,
+        .map-mark-area:hover .map-mark::after {
+            opacity: 1;
+        }
+
+        .book-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .book-container {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow: hidden;
+        }
+
+        .book-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-height: 80%;
+            overflow-y: auto;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .book-title {
+            font-family: 'Marck Script', cursive;
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .book-text {
+            font-family: Arial, sans-serif;
+            color: #333;
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* Стили для полосы прокрутки */
+        .book-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .book-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        .book-content::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        .book-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 10px;
+            z-index: 1002;
+        }
+
+        .custom-cursor {
+            width: 64px;
+            height: 64px;
+            position: fixed;
+            pointer-events: none;
+            background-image: url('media/strelka.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
+            display: none;
+            z-index: 1000;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
+    <script src="i18n.js"></script>
+</head>
+<body>
+    <a href="index.html" class="back-link">← На главную</a>
+    <div class="custom-cursor"></div>
+    <div class="custom-cursor-area"></div>
+    <div class="map-mark-area">
+        <div class="map-mark" id="tumski"></div>
+        <audio id="bookSound" src="media/opening-a-book.wav"></audio>
+    </div>
+    <div class="book-overlay">
+        <button class="close-button">×</button>
+        <div class="book-container">
+            <img src="media/book.png" alt="Book" class="book-image">
+            <div class="book-content">
+                <h2 class="book-title"></h2>
+                <p class="book-text"></p>
+            </div>
+        </div>
+    </div>
+    <div class="scene">
+        <div class="image-container">
+            <div class="image"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Загружаем переводы и обновляем контент
+            await window.i18n.loadTranslations();
+            window.i18n.updatePageContent();
+
+            const container = document.querySelector('.image-container');
+            const cursor = document.querySelector('.custom-cursor');
+            const cursorArea = document.querySelector('.custom-cursor-area');
+            const mapMark = document.querySelector('#tumski');
+            const bookOverlay = document.querySelector('.book-overlay');
+            const closeButton = document.querySelector('.close-button');
+            const bookSound = document.querySelector('#bookSound');
+
+            document.addEventListener('dblclick', function() {
+                container.classList.add('reset-animation');
+                setTimeout(() => {
+                    container.classList.remove('reset-animation');
+                }, 50);
+            });
+
+            cursorArea.addEventListener('mousemove', function(e) {
+                cursor.style.display = 'block';
+                cursor.style.left = e.clientX - 32 + 'px';
+                cursor.style.top = e.clientY - 32 + 'px';
+            });
+
+            cursorArea.addEventListener('mouseleave', function() {
+                cursor.style.display = 'none';
+            });
+
+            mapMark.addEventListener('click', function() {
+                bookSound.currentTime = 0;
+                bookSound.play();
+                window.i18n.updatePageContent(); // Обновляем тексты при открытии книги
+                bookOverlay.style.display = 'flex';
+                container.style.animationPlayState = 'paused';
+            });
+
+            function resumeAnimation() {
+                bookOverlay.style.display = 'none';
+                container.style.animationPlayState = 'running';
+            }
+
+            closeButton.addEventListener('click', resumeAnimation);
+
+            bookOverlay.addEventListener('click', function(e) {
+                if (e.target === bookOverlay) {
+                    resumeAnimation();
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

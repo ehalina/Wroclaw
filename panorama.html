@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панорама Вроцлава</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css"/>
+    <style>
+        #panorama {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .error-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 4px;
+            text-align: center;
+            z-index: 1000;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← На главную</a>
+    <div id="panorama"></div>
+    <div class="error-message" id="errorMessage"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const panoramaUrl = './media/panorama-FRyKt4GzWJB9jqHZVGtVVw-5.png';
+            
+            pannellum.viewer('panorama', {
+                type: 'equirectangular',
+                panorama: panoramaUrl,
+                autoLoad: true,
+                autoRotate: -2,
+                yaw: 0,
+                hfov: 120,
+                maxYaw: 180,
+                minYaw: -180,
+                pitch: 0,
+                maxPitch: 90,
+                minPitch: -90,
+                compass: true,
+                hotSpots: [
+                    {
+                        pitch: 0,
+                        yaw: 0,
+                        type: 'info',
+                        text: 'Вроцлав',
+                        id: 'wroclaw'
+                    }
+                ],
+                title: 'Панорама Вроцлава',
+                author: 'Wrocław 360°',
+                preview: panoramaUrl,
+                dragSpeed: 0.5,
+                friction: 0.3,
+                mouseZoom: true,
+                touchZoom: true,
+                showFullscreenCtrl: true,
+                showZoomCtrl: true,
+                showHotspots: true,
+                showControls: true,
+                orientationOnByDefault: true,
+                doubleClickZoom: true,
+                keyboardZoom: true,
+                draggable: true,
+                disableKeyboardCtrl: false,
+                showLoader: true,
+                loading: 'Загрузка панорамы...',
+                default: {
+                    firstScene: 'panorama',
+                    sceneFadeDuration: 1000,
+                    autoLoad: true,
+                    yaw: 0,
+                    pitch: 0,
+                    hfov: 120
+                },
+                onError: function(error) {
+                    document.getElementById('errorMessage').style.display = 'block';
+                    document.getElementById('errorMessage').textContent = 'Ошибка загрузки панорамы: ' + error;
+                }
+            });
+        });
+    </script>
+</body>
+</html> 

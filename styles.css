@@ -1,0 +1,223 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #1a1a2e;
+    color: #fff;
+    font-family: 'Roboto Condensed', sans-serif;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+header {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 2rem 0;
+    width: 100%;
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.slogan {
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 0.2em;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+nav {
+    margin-top: 1rem;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 0.5rem 1rem;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+nav a:hover {
+    border-color: #fff;
+}
+
+main {
+    position: relative;
+    width: 66.67%;
+    height: 66.67%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.background {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.scene-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    transform-style: preserve-3d;
+}
+
+.scene {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    animation: cameraZoom 80s linear infinite;
+}
+
+.parallax-layer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    will-change: transform;
+    transform-style: preserve-3d;
+}
+
+.sun-rays {
+    background: radial-gradient(circle at 50% 50%, 
+        rgba(255, 255, 255, 0.2) 0%,
+        rgba(255, 255, 255, 0.1) 20%,
+        rgba(255, 255, 255, 0) 60%);
+    z-index: 1;
+    animation: sunRays 10s linear infinite;
+}
+
+.sky {
+    background: linear-gradient(to bottom, #1a1a2e, #16213e);
+    z-index: 0;
+}
+
+.main-image {
+    background-image: url('https://i.imgur.com/eOV8mTr.png');
+    z-index: 1;
+    transform: translateZ(0);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.fog {
+    background-image: url('https://i.imgur.com/gx4VCNe.jpeg');
+    opacity: 0.3;
+    z-index: 2;
+    transform: translateZ(100px);
+    animation: fogMove 40s linear infinite;
+}
+
+.fog2 {
+    background-image: url('https://i.imgur.com/gx4VCNe.jpeg');
+    opacity: 0.2;
+    z-index: 3;
+    transform: translateZ(150px);
+    animation: fogMove 50s linear infinite;
+}
+
+@keyframes fogMove {
+    0% {
+        transform: translateX(-100%) translateZ(100px);
+        opacity: 0.2;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    100% {
+        transform: translateX(100%) translateZ(100px);
+        opacity: 0.2;
+    }
+}
+
+@keyframes cameraZoom {
+    0% {
+        transform: scale(1) translateZ(0);
+    }
+    100% {
+        transform: scale(1.2) translateZ(100px);
+    }
+}
+
+@keyframes sunRays {
+    0% {
+        transform: translateX(-100%) rotate(0deg);
+    }
+    100% {
+        transform: translateX(100%) rotate(360deg);
+    }
+}
+
+.scene2 {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .scene2 {
+        display: block;
+    }
+}
+
+.audio-hint {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    z-index: 1000;
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, 20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+} 
