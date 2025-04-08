@@ -40,22 +40,39 @@ async function changeLang(lang) {
 
 // Функция для обновления контента на странице
 function updatePageContent() {
-    // Обновляем заголовок маркера
-    const mapMark = document.getElementById('tumski');
-    if (mapMark) {
-        mapMark.setAttribute('data-title', t('tumski.title'));
+    // Обновляем все элементы с атрибутом data-i18n
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        element.textContent = t(key);
+    });
+
+    // Обновляем заголовки маркеров
+    const mapMarkWyspa = document.getElementById('tumska_wyspa');
+    const mapMarkMost = document.getElementById('tumski_most');
+    const tumskiTexts = document.querySelectorAll('.tumski-text');
+
+    if (mapMarkWyspa) {
+        mapMarkWyspa.setAttribute('data-title', t('tumski.title'));
+    }
+
+    if (mapMarkMost) {
+        mapMarkMost.setAttribute('data-title', t('tumski_most.title'));
     }
 
     // Обновляем содержимое книги
     const bookTitle = document.querySelector('.book-title');
     const bookText = document.querySelector('.book-text');
     if (bookTitle && bookText) {
-        bookTitle.textContent = t('tumski.title');
-        bookText.textContent = t('tumski.description');
+        const clickedMarkId = document.activeElement?.id || 'tumska_wyspa';
+        const titleKey = clickedMarkId === 'tumski_most' ? 'tumski_most.title' : 'tumski.title';
+        const descriptionKey = clickedMarkId === 'tumski_most' ? 'tumski_most.description' : 'tumski.description';
+        
+        bookTitle.textContent = t(titleKey);
+        bookText.textContent = t(descriptionKey);
     }
 
     // Обновляем активный класс у кнопок переключения языка
-    document.querySelectorAll('.language-switcher button').forEach(btn => {
+    document.querySelectorAll('.language-option').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLang);
     });
 }
@@ -65,5 +82,6 @@ window.i18n = {
     loadTranslations,
     t,
     changeLang,
-    updatePageContent
+    updatePageContent,
+    getCurrentLang: () => currentLang
 }; 
