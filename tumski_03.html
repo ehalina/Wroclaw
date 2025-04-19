@@ -11,6 +11,7 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
+            position: fixed;
         }
 
         .scene {
@@ -19,6 +20,21 @@
             position: relative;
             overflow: hidden;
             perspective: 1000px;
+            transform-style: preserve-3d;
+            transform: translateZ(0);
+        }
+
+        @keyframes zoomForward {
+            0% {
+                transform: translateZ(0) scale(1);
+            }
+            100% {
+                transform: translateZ(2000px) scale(2.5);
+            }
+        }
+
+        .zoom-transition {
+            animation: zoomForward 1.5s ease-in forwards !important;
         }
 
         .image-container {
@@ -27,6 +43,14 @@
             position: absolute;
             transform-style: preserve-3d;
             animation: moveForward 40s linear infinite;
+            backface-visibility: hidden;
+            will-change: transform;
+            transform: translateZ(0);
+            overflow: hidden;
+        }
+
+        .image-container.zoom-transition {
+            animation: zoomForward 1.5s ease-in forwards !important;
         }
 
         .image {
@@ -34,18 +58,58 @@
             height: 100%;
             position: absolute;
             background-image: url('media/tumski/tumski_03.jpg');
-            background-size: contain; /* Изображение будет масштабироваться, чтобы поместиться целиком */
-            background-repeat: no-repeat; /* Изображение не будет повторяться */
-            background-position: center; /* Центрируем изображение */
-            background-color: black; /* Заливка черным цветом */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: black;
+            transition: opacity 0.1s ease-in;
+            backface-visibility: hidden;
+            will-change: transform;
+            transform-style: preserve-3d;
+            transform: translateZ(0);
+            overflow: hidden;
+        }
+
+        .image.fade-to-next {
+            transition: opacity 0.1s ease-in;
+            opacity: 0;
+        }
+
+        .next-image-container {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-image: url('media/tumski/tumski_04.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: black;
+            opacity: 0;
+            transition: opacity 0.01s ease-in;
+            z-index: 2;
+            backface-visibility: hidden;
+            will-change: transform;
+            transform-style: preserve-3d;
+            transform: translateZ(0);
+            overflow: hidden;
+        }
+
+        .fade-out {
+            opacity: 0;
+        }
+
+        .fade-in {
+            opacity: 1;
         }
 
         @keyframes moveForward {
             from {
-                transform: translateZ(0px);
+                transform: translateZ(0px) translateX(0);
             }
             to {
-                transform: translateZ(500px);
+                transform: translateZ(500px) translateX(0);
             }
         }
 
@@ -72,12 +136,241 @@
             transform: translateZ(0px) !important;
         }
 
-
-
-
-        .arrow-area {
+        .custom-cursor-area {
             position: fixed;
+            right: 0;
+            bottom: 0;
+            width: 50%; /* Четверть экрана */
+            height: 25%;
+            z-index: 999;
+            cursor: none;
+        }
+
+        /* Стрелка прямо */
+
+        .custom-cursor-prostoarea {
+            position: fixed;
+            right: 0;
+            bottom: 25%;
+            width: 50%;
+            height: 25%;
+            z-index: 999;
+            cursor: none;
+        }
+
+        .custom-cursor-prosto {
+            width: 64px;
+            height: 64px;
+            position: fixed;
+            background-image: url('media/strelka_prosto.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .custom-cursor-prostoarea:hover .custom-cursor-prosto {
+            opacity: 1;
+        }
+
+        .map-mark-area {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 50%;
+            height: 50%;
+            z-index: 998;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .map-mark {
+            width: 48px;
+            height: 48px;
+            background-image: url('media/mapmark.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .content-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .papera-image {
+            width: 280px;
+            height: 80px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            object-fit: contain;
+            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+        }
+
+        .tumski-text {
+            position: absolute;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 200;
+            font-style: italic;
+            font-size: 28px;
+            color: #795f59;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+        }
+
+        .map-mark-area:hover .map-mark,
+        .map-mark-area:hover .tumski-text,
+        .map-mark-area:hover .papera-image {
+            opacity: 1;
+        }
+
+        .book-overlay {
+            position: fixed;
+            top: 0;
             left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .book-container {
+            position: relative;
+            max-width: 100%;
+            max-height: 100vh;
+            overflow: hidden;
+        }
+
+        .book-image {
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #333;
+            font-size: 16px;
+            opacity: 0.7;
+            z-index: 1003;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .scroll-indicator:hover {
+            opacity: 1;
+        }
+
+        .scroll-indicator::after {
+            content: "▼";
+            display: block;
+        }
+
+        .book-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-height: 80%;
+            overflow-y: hidden;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            transition: overflow-y 0.3s ease;
+        }
+
+        .book-content.show-scrollbar {
+            overflow-y: auto;
+        }
+
+        .book-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .book-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+        }
+
+        .book-content::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 3px;
+        }
+
+        .book-title {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 200;
+            font-style: italic;
+            color: #333;
+            font-size: 32px;
+            margin: 10px 0 5px 0;
+        }
+
+        .book-text {
+            font-family: Arial, sans-serif;
+            color: #333;
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        .content-image {
+            max-width: 100%;
+            height: auto;
+            margin: 5px 0 20px 0;
+            border-radius: 8px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 10px;
+            z-index: 1002;
+        }
+
+        .custom-cursor {
+            width: 64px;
+            height: 64px;
+            position: fixed;
+            pointer-events: none;
+            background-image: url('media/strelka.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
+            display: none;
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .arrow-click-area {
+            position: fixed;
+            right: 0;
             bottom: 0;
             width: 50%;
             height: 50%;
@@ -85,18 +378,11 @@
             cursor: none;
         }
 
-        .arrow {
-            width: 64px;
-            height: 64px;
-            position: fixed;
-            pointer-events: none;
-            background-image: url('media/strelka_rev.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
-            display: none;
-            z-index: 1000;
-            cursor: pointer;
+        @font-face {
+            font-family: 'Roboto';
+            src: url('media/Roboto-ExtraLightItalic.ttf') format('truetype');
+            font-weight: 200;
+            font-style: italic;
         }
 
         .language-switcher {
@@ -161,11 +447,106 @@
             background: rgba(0, 0, 0, 0.05);
         }
 
+        .most-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .most-container {
+            position: relative;
+            width: 90%;
+            height: 90vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .most-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .most-title {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            font-size: 32px;
+            font-weight: 200;
+            font-style: italic;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 30px;
+            border-radius: 10px;
+            white-space: nowrap;
+        }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
     <script src="i18n.js"></script>
 </head>
 <body>
+    <a href="index.html" class="back-link">← На главную</a>
+    <div class="custom-cursor"></div>
+    <div class="custom-cursor-area"></div>
+    <div class="custom-cursor-prostoarea">
+        <div class="custom-cursor-prosto"></div>
+    </div>
+    <audio id="stepSound" src="media/step.wav"></audio>
+    <div class="map-mark-area">
+        <div class="map-mark" id="tumska_wyspa"></div>
+        <div class="content-wrapper">
+            <img src="media/papera1.png" alt="Papera" class="papera-image">
+            <div id="tumski-text" class="tumski-text" data-i18n="tumski.title"></div>
+        </div>
+        <audio id="bookSound" src="media/opening-a-book.wav"></audio>
+    </div>
+    <div class="map-mark-area" style="top: 30%; right: 15%; width: auto; height: auto;">
+        <div class="map-mark" id="tumski_most"></div>
+        <div class="content-wrapper">
+            <img src="media/papera1.png" alt="Papera" class="papera-image">
+            <div class="tumski-text" id="tumski-most-text" data-i18n="tumski_most.title"></div>
+        </div>
+        <audio id="bookSound" src="media/opening-a-book.wav"></audio>
+    </div>
+    <div class="book-overlay">
+        <button class="close-button">×</button>
+        <div class="book-container">
+            <img src="media/book.jpg" alt="Book" class="book-image">
+            <div class="book-content">
+                <h2 class="book-title"></h2>
+                <img src="media/watercolor/tumski.png" alt="Тумский остров" class="content-image">
+                <p class="book-text"></p>
+            </div>
+            <div class="scroll-indicator"></div>
+        </div>
+    </div>
+
+    <div class="most-overlay">
+        <button class="close-button">×</button>
+        <div class="most-container">
+            <img src="media/book02.jpg" alt="Тумский мост" class="most-image">
+            <div class="most-title"></div>
+        </div>
+    </div>
+
+    <div class="scene">
+        <div class="image-container">
+            <div class="image"></div>
+        </div>
+        <div class="next-image-container"></div>
+    </div>
     <div class="language-switcher">
         <button class="language-button" onclick="toggleLanguageDropdown()">
             <img src="media/local.jpg" alt="Language" class="language-icon">
@@ -177,17 +558,6 @@
             <a href="#" class="language-option" data-lang="en" onclick="changeLang('en')">EN</a>
         </div>
     </div>
-    <a href="index.html" class="back-link">← На главную</a>
-    <div class="arrow"></div>
-    <div class="arrow-area"></div>
-    <audio id="stepSound" src="media/step.wav"></audio>
-
-
-    <div class="scene">
-        <div class="image-container">
-            <div class="image"></div>
-        </div>
-    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
@@ -195,39 +565,114 @@
             window.i18n.updatePageContent();
 
             const container = document.querySelector('.image-container');
-            const arrow = document.querySelector('.arrow');
-            const arrowArea = document.querySelector('.arrow-area');
+            const cursor = document.querySelector('.custom-cursor');
+            const cursorArea = document.querySelector('.custom-cursor-area');
+            const cursorProstoArea = document.querySelector('.custom-cursor-prostoarea');
+            const cursorProsto = document.querySelector('.custom-cursor-prosto');
+            const mapMarkWyspa = document.querySelector('#tumska_wyspa');
+            const mapMarkMost = document.querySelector('#tumski_most');
+            const tumskiText = document.querySelectorAll('#tumski-text');
+            const tumskiTexts = document.querySelectorAll('.tumski-text');
+            const bookOverlay = document.querySelector('.book-overlay');
+            const mostOverlay = document.querySelector('.most-overlay');
             const closeButtons = document.querySelectorAll('.close-button');
             const bookSound = document.querySelector('#bookSound');
             const stepSound = document.querySelector('#stepSound');
+            const bookContent = document.querySelector('.book-content');
+            const scrollIndicator = document.querySelector('.scroll-indicator');
             let autoScrollInterval;
-
-            //Сброс анимации при двойном клике на сцену 
-            document.addEventListener('dblclick', function() {
-                container.classList.add('reset-animation');
-                setTimeout(() => {
-                    container.classList.remove('reset-animation');
-                }, 50);
+            
+            // Добавляем обработчик двойного клика для сброса анимации
+            document.addEventListener('dblclick', function(e) {
+                // Проверяем, что клик не по элементам управления
+                if (!e.target.closest('.back-link') && 
+                    !e.target.closest('.language-switcher') && 
+                    !e.target.closest('.book-overlay') && 
+                    !e.target.closest('.most-overlay')) {
+                    container.classList.add('reset-animation');
+                    setTimeout(() => {
+                        container.classList.remove('reset-animation');
+                    }, 100);
+                }
             });
 
+            //  Обрабочик для стрелки вправо
 
-            // Обработчики для стрелки
-            arrowArea.addEventListener('mousemove', function(e) {
-                arrow.style.display = 'block';
-                arrow.style.left = e.clientX - 32 + 'px';
-                arrow.style.top = e.clientY - 32 + 'px';
+            cursorArea.addEventListener('mousemove', function(e) {
+                cursor.style.display = 'block';
+                cursor.style.left = e.clientX - 32 + 'px';
+                cursor.style.top = e.clientY - 32 + 'px';
             });
 
-            arrowArea.addEventListener('mouseleave', function() {
-                arrow.style.display = 'none';
+            cursorArea.addEventListener('mouseleave', function() {
+                cursor.style.display = 'none';
             });
 
-            arrowArea.addEventListener('click', function() {
+            cursorArea.addEventListener('click', function() {
                 stepSound.currentTime = 0;
                 stepSound.play();
                 setTimeout(() => {
-                    window.location.href = 'tumski.html';
+                    window.location.href = 'tumski_02.html';
                 }, 300);
+            });
+
+          //  Обработчик для стрелки прямо
+
+          cursorProstoArea.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                // Проверяем, находится ли курсор в пределах области
+                if (e.clientX >= rect.left && e.clientX <= rect.right &&
+                    e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                    cursorProsto.style.opacity = '1';
+                    cursorProsto.style.left = e.clientX - 32 + 'px';
+                    cursorProsto.style.top = e.clientY - 32 + 'px';
+                } else {
+                    cursorProsto.style.opacity = '0';
+                }
+            });
+
+            document.addEventListener('mousemove', function(e) {
+                const rect = cursorProstoArea.getBoundingClientRect();
+                if (!(e.clientX >= rect.left && e.clientX <= rect.right &&
+                    e.clientY >= rect.top && e.clientY <= rect.bottom)) {
+                    cursorProsto.style.opacity = '0';
+                }
+            });
+
+            cursorProstoArea.addEventListener('mouseleave', function() {
+                cursorProsto.style.opacity = '0';
+            });
+
+            cursorProstoArea.addEventListener('click', function() {
+                stepSound.currentTime = 0;
+                stepSound.play();
+                
+                const imageContainer = document.querySelector('.image-container');
+                const currentImage = document.querySelector('.image');
+                const nextImageContainer = document.querySelector('.next-image-container');
+                
+                // Останавливаем текущую анимацию
+                imageContainer.style.animationPlayState = 'paused';
+                
+                // Запускаем анимацию зума
+                imageContainer.classList.add('zoom-transition');
+                
+                // Запускаем переход между изображениями
+                setTimeout(() => {
+                    currentImage.classList.add('fade-out');
+                    nextImageContainer.classList.add('fade-in');
+                    
+                    // Ждем завершения перехода перед сменой страницы
+                    setTimeout(() => {
+                        window.location.href = 'tumski_04.html';
+                    }, 500);
+                }, 1000);
+            });
+
+            // Предзагружаем следующее изображение сразу при загрузке страницы
+            window.addEventListener('load', function() {
+                const preloadImage = new Image();
+                preloadImage.src = 'media/tumski/tumski_04.jpg';
             });
 
             // Показываем/скрываем индикатор прокрутки в зависимости от наличия скролла
@@ -293,6 +738,57 @@
                     clearInterval(autoScrollInterval);
                     autoScrollInterval = null;
                 }
+            });
+
+            function openBook() {
+                bookSound.currentTime = 0;
+                bookSound.play();
+                window.i18n.updatePageContent();
+                bookOverlay.style.display = 'flex';
+                container.style.animationPlayState = 'paused';
+                bookContent.scrollTop = 0;
+                setTimeout(toggleScrollIndicator, 100);
+            }
+
+            function openMost() {
+                bookSound.currentTime = 0;
+                bookSound.play();
+                mostOverlay.style.display = 'flex';
+                container.style.animationPlayState = 'paused';
+                const mostTitle = mostOverlay.querySelector('.most-title');
+                mostTitle.textContent = window.i18n.t('tumski_most.title');
+            }
+            
+            
+            tumskiTxtX = document.querySelector('#tumski-text');
+            tumskiTxtX.addEventListener('click', openBook);
+
+            tumskiTxt = document.querySelector('#tumski-most-text');
+            tumskiTxt.addEventListener('click', openMost);
+
+            // Обработчики для Тумского моста
+            mapMarkMost.addEventListener('click', openMost);
+            const mostTitle = document.querySelector('[data-i18n="tumski_most.title"]');
+            if (mostTitle) {
+                mostTitle.parentElement.addEventListener('click', openMost);
+            }
+
+            function resumeAnimation() {
+                bookOverlay.style.display = 'none';
+                mostOverlay.style.display = 'none';
+                container.style.animationPlayState = 'running';
+            }
+
+            closeButtons.forEach(button => {
+                button.addEventListener('click', resumeAnimation);
+            });
+
+            [bookOverlay, mostOverlay].forEach(overlay => {
+                overlay.addEventListener('click', function(e) {
+                    if (e.target === overlay) {
+                        resumeAnimation();
+                    }
+                });
             });
         });
 
