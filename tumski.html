@@ -26,10 +26,10 @@
 
         @keyframes zoomForward {
             0% {
-                transform: translateZ(0) scale(1);
+                transform: translateZ(0) scale(1) translate(0, 0);
             }
             100% {
-                transform: translateZ(2000px) scale(2.5);
+                transform: translateZ(2000px) scale(2.5) translate(-25vw, -25vh);
             }
         }
 
@@ -42,6 +42,7 @@
             height: 100%;
             position: absolute;
             transform-style: preserve-3d;
+            transform-origin: center;
             animation: moveForward 40s linear infinite;
             backface-visibility: hidden;
             will-change: transform;
