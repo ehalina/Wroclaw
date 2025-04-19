@@ -33,7 +33,7 @@
             width: 100%;
             height: 100%;
             position: absolute;
-            background-image: url('media/tumski/tumski_02.jpg');
+            background-image: url('media/tumski/tumski_03.jpg');
             background-size: contain; /* Изображение будет масштабироваться, чтобы поместиться целиком */
             background-repeat: no-repeat; /* Изображение не будет повторяться */
             background-position: center; /* Центрируем изображение */
@@ -72,181 +72,8 @@
             transform: translateZ(0px) !important;
         }
 
-        .map-mark-area {
-            position: fixed;
-            top: 25%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 998;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
 
-        .map-mark {
-            width: 48px;
-            height: 48px;
-            background-image: url('media/mapmark.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
 
-        .content-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .papera-image {
-            width: 280px;
-            height: 80px;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            object-fit: contain;
-            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
-        }
-
-        .tumski-text {
-            position: absolute;
-            font-family: 'Roboto', sans-serif;
-            font-weight: 200;
-            font-style: italic;
-            font-size: 28px;
-            color: #795f59;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            cursor: pointer;
-            text-align: center;
-            width: 100%;
-        }
-
-        .map-mark-area:hover .map-mark,
-        .map-mark-area:hover .tumski-text,
-        .map-mark-area:hover .papera-image {
-            opacity: 1;
-        }
-
-        .book-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1001;
-        }
-
-        .book-container {
-            position: relative;
-            max-width: 100%;
-            max-height: 100vh;
-            overflow: hidden;
-        }
-
-        .book-image {
-            width: 100%;
-            height: 100vh;
-            object-fit: cover;
-        }
-
-        .book-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            max-height: 80%;
-            overflow-y: hidden;
-            padding: 20px;
-            box-sizing: border-box;
-            text-align: center;
-            transition: overflow-y 0.3s ease;
-        }
-
-        .book-content.show-scrollbar {
-            overflow-y: auto;
-        }
-
-        .book-content::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .book-content::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 3px;
-        }
-
-        .book-content::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 3px;
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #333;
-            font-size: 16px;
-            opacity: 0.7;
-            z-index: 1003;
-            cursor: pointer;
-            transition: opacity 0.3s ease;
-        }
-
-        .scroll-indicator:hover {
-            opacity: 1;
-        }
-
-        .scroll-indicator::after {
-            content: "▼";
-            display: block;
-        }
-
-        .book-title {
-            font-family: 'Roboto', sans-serif;
-            font-weight: 200;
-            font-style: italic;
-            color: #333;
-            font-size: 32px;
-            margin: 10px 0 5px 0;
-        }
-
-        .content-image {
-            max-width: 100%;
-            height: auto;
-            margin: 5px 0 20px 0;
-            border-radius: 8px;
-        }
-
-        .book-text {
-            font-family: Arial, sans-serif;
-            color: #333;
-            font-size: 18px;
-            line-height: 1.6;
-            margin: 0;
-        }
-
-        .close-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 10px;
-            z-index: 1002;
-        }
 
         .arrow-area {
             position: fixed;
@@ -334,50 +161,6 @@
             background: rgba(0, 0, 0, 0.05);
         }
 
-        .most-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1001;
-        }
-
-        .most-container {
-            position: relative;
-            width: 90%;
-            height: 90vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .most-image {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .most-title {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-family: 'Roboto', sans-serif;
-            font-size: 32px;
-            font-weight: 200;
-            font-style: italic;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px 30px;
-            border-radius: 10px;
-            white-space: nowrap;
-        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
     <script src="i18n.js"></script>
@@ -398,42 +181,7 @@
     <div class="arrow"></div>
     <div class="arrow-area"></div>
     <audio id="stepSound" src="media/step.wav"></audio>
-    <div class="map-mark-area">
-        <div class="map-mark" id="tumska_wyspa"></div>
-        <div class="content-wrapper">
-            <img src="media/papera1.png" alt="Papera" class="papera-image">
-            <div class="tumski-text" data-i18n="tumski.title"></div>
-        </div>
-        <audio id="bookSound" src="media/opening-a-book.wav"></audio>
-    </div>
-    <div class="map-mark-area" style="top: 45%; right: 15%; width: auto; height: auto;">
-        <div class="map-mark" id="tumski_most"></div>
-        <div class="content-wrapper">
-            <img src="media/papera1.png" alt="Papera" class="papera-image">
-            <div class="tumski-text" data-i18n="tumski_most.title"></div>
-        </div>
-        <audio id="bookSound" src="media/opening-a-book.wav"></audio>
-    </div>
-    <div class="book-overlay">
-        <button class="close-button">×</button>
-        <div class="book-container">
-            <img src="media/book.jpg" alt="Book" class="book-image">
-            <div class="book-content">
-                <h2 class="book-title"></h2>
-                <img src="media/watercolor/tumski.png" alt="Тумский остров" class="content-image">
-                <p class="book-text"></p>
-            </div>
-            <div class="scroll-indicator"></div>
-        </div>
-    </div>
 
-    <div class="most-overlay">
-        <button class="close-button">×</button>
-        <div class="most-container">
-            <img src="media/book02.jpg" alt="Тумский мост" class="most-image">
-            <div class="most-title"></div>
-        </div>
-    </div>
 
     <div class="scene">
         <div class="image-container">
@@ -449,15 +197,9 @@
             const container = document.querySelector('.image-container');
             const arrow = document.querySelector('.arrow');
             const arrowArea = document.querySelector('.arrow-area');
-            const mapMarkWyspa = document.querySelector('#tumska_wyspa');
-            const mapMarkMost = document.querySelector('#tumski_most');
-            const bookOverlay = document.querySelector('.book-overlay');
-            const mostOverlay = document.querySelector('.most-overlay');
             const closeButtons = document.querySelectorAll('.close-button');
             const bookSound = document.querySelector('#bookSound');
             const stepSound = document.querySelector('#stepSound');
-            const bookContent = document.querySelector('.book-content');
-            const scrollIndicator = document.querySelector('.scroll-indicator');
             let autoScrollInterval;
 
             //Сброс анимации при двойном клике на сцену 
@@ -468,59 +210,6 @@
                 }, 50);
             });
 
-            // Функция для открытия книги Тумского острова
-            function openBook() {
-                bookSound.currentTime = 0;
-                bookSound.play();
-                window.i18n.updatePageContent();
-                bookOverlay.style.display = 'flex';
-                container.style.animationPlayState = 'paused';
-                bookContent.scrollTop = 0;
-                setTimeout(toggleScrollIndicator, 100);
-            }
-
-            // Функция для открытия изображения Тумского моста
-            function openMost() {
-                bookSound.currentTime = 0;
-                bookSound.play();
-                mostOverlay.style.display = 'flex';
-                container.style.animationPlayState = 'paused';
-                const mostTitle = mostOverlay.querySelector('.most-title');
-                mostTitle.textContent = window.i18n.t('tumski_most.title');
-            }
-
-            // Обработчики для Тумского острова
-            mapMarkWyspa.addEventListener('click', openBook);
-            const tumskiTitle = document.querySelector('[data-i18n="tumski.title"]');
-            if (tumskiTitle) {
-                tumskiTitle.parentElement.addEventListener('click', openBook);
-            }
-
-            // Обработчики для Тумского моста
-            mapMarkMost.addEventListener('click', openMost);
-            const mostTitle = document.querySelector('[data-i18n="tumski_most.title"]');
-            if (mostTitle) {
-                mostTitle.parentElement.addEventListener('click', openMost);
-            }
-
-            // Закрытие оверлеев
-            function resumeAnimation() {
-                bookOverlay.style.display = 'none';
-                mostOverlay.style.display = 'none';
-                container.style.animationPlayState = 'running';
-            }
-
-            closeButtons.forEach(button => {
-                button.addEventListener('click', resumeAnimation);
-            });
-
-            [bookOverlay, mostOverlay].forEach(overlay => {
-                overlay.addEventListener('click', function(e) {
-                    if (e.target === overlay) {
-                        resumeAnimation();
-                    }
-                });
-            });
 
             // Обработчики для стрелки
             arrowArea.addEventListener('mousemove', function(e) {
