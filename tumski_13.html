@@ -26,15 +26,28 @@
 
         @keyframes zoomForward {
             0% {
-                transform: translateZ(0) scale(1);
+                transform: translateZ(0) scale(1) translate(0, 0);
             }
             100% {
-                transform: translateZ(2000px) scale(2.5);
+                transform: translateZ(2000px) scale(2.5) translate(60vw, -50vh);
             }
         }
 
         .zoom-transition {
             animation: zoomForward 1.5s ease-in forwards !important;
+        }
+
+        @keyframes zoomForwardRight {
+            0% {
+                transform: translateZ(0) scale(1) translate(0, 0);
+            }
+            100% {
+                transform: translateZ(2000px) scale(2.5) translate(-25vw, -20Svh);
+            }
+        }
+
+        .zoom-transition-Right {
+            animation: zoomForwardRight 1.5s ease-in forwards !important;
         }
 
         .image-container {
@@ -57,7 +70,7 @@
             width: 100%;
             height: 100%;
             position: absolute;
-            background-image: url('media/tumski/dwor_03.jpg');
+            background-image: url('media/tumski/tumski_13.jpg');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -81,7 +94,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            background-image: url('media/tumski/tumski_07.jpg');
+            background-image: url('media/tumski/tumski_12.jpg');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -138,36 +151,7 @@
 
 
 
-        /* Стрелка прямо */
 
-        .custom-cursor-prostoarea {
-            position: fixed;
-            right: 0;
-            bottom: 25%;
-            width: 100%;
-            height: 25%;
-            z-index: 999;
-            cursor: none;
-        }
-
-        .custom-cursor-prosto {
-            width: 64px;
-            height: 64px;
-            position: fixed;
-            background-image: url('media/strelka_prosto.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1000;
-            cursor: pointer;
-            pointer-events: auto;
-        }
-
-        .custom-cursor-prostoarea:hover .custom-cursor-prosto {
-            opacity: 1;
-        }
 
         .map-mark-area {
             position: fixed;
@@ -351,13 +335,23 @@
             height: 64px;
             position: fixed;
             pointer-events: none;
-            background-image: url('media/strelka.png');
+            background-image: url('media/strelka_prosto_r.png');
             background-size: contain;
             background-repeat: no-repeat;
             filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
             display: none;
-            z-index: 1000;
+            z-index: 1020;
             cursor: pointer;
+        }
+
+        .custom-cursor-area {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            width: 50%;
+            height: 50%;
+            z-index: 1020;
+            cursor: none;
         }
 
         .arrow-click-area {
@@ -490,7 +484,7 @@
             left: 0;
             bottom: 0;
             width: 100%;
-            height: 20%; /* Нижняя одна пятая экрана */
+            height: 10%; /* Нижняя одна пятая экрана */
             z-index: 999;
             cursor: none;
         }
@@ -513,7 +507,6 @@
         .custom-cursor-backarea:hover .custom-cursor-back {
             opacity: 1;
         }
-
         .hide-cursors {
             display: none !important;
             opacity: 0 !important;
@@ -638,49 +631,25 @@
                 cursor.style.display = 'block';
                 cursor.style.left = e.clientX - 32 + 'px';
                 cursor.style.top = e.clientY - 32 + 'px';
+                cursor.style.opacity = '1';
             });
 
             cursorArea.addEventListener('mouseleave', function() {
                 cursor.style.display = 'none';
+                cursor.style.opacity = '0';
+            });
+
+            // Добавляем глобальный обработчик для скрытия курсора при выходе за пределы области
+            document.addEventListener('mousemove', function(e) {
+                const rect = cursorArea.getBoundingClientRect();
+                if (!(e.clientX >= rect.left && e.clientX <= rect.right &&
+                    e.clientY >= rect.top && e.clientY <= rect.bottom)) {
+                    cursor.style.display = 'none';
+                    cursor.style.opacity = '0';
+                }
             });
 
             cursorArea.addEventListener('click', function() {
-                hideAllCursors();
-                stepSound.currentTime = 0;
-                stepSound.play();
-                setTimeout(() => {
-                    window.location.href = 'tumski_02.html';
-                }, 300);
-            });
-
-          //  Обработчик для стрелки прямо
-
-          cursorProstoArea.addEventListener('mousemove', function(e) {
-                const rect = this.getBoundingClientRect();
-                // Проверяем, находится ли курсор в пределах области
-                if (e.clientX >= rect.left && e.clientX <= rect.right &&
-                    e.clientY >= rect.top && e.clientY <= rect.bottom) {
-                    cursorProsto.style.opacity = '1';
-                    cursorProsto.style.left = e.clientX - 32 + 'px';
-                    cursorProsto.style.top = e.clientY - 32 + 'px';
-                } else {
-                    cursorProsto.style.opacity = '0';
-                }
-            });
-
-            document.addEventListener('mousemove', function(e) {
-                const rect = cursorProstoArea.getBoundingClientRect();
-                if (!(e.clientX >= rect.left && e.clientX <= rect.right &&
-                    e.clientY >= rect.top && e.clientY <= rect.bottom)) {
-                    cursorProsto.style.opacity = '0';
-                }
-            });
-
-            cursorProstoArea.addEventListener('mouseleave', function() {
-                cursorProsto.style.opacity = '0';
-            });
-
-            cursorProstoArea.addEventListener('click', function() {
                 hideAllCursors();
                 stepSound.currentTime = 0;
                 stepSound.play();
@@ -689,11 +658,14 @@
                 const currentImage = document.querySelector('.image');
                 const nextImageContainer = document.querySelector('.next-image-container');
                 
+                // Меняем изображение в nextImageContainer
+                nextImageContainer.style.backgroundImage = "url('media/tumski/tumski_12.jpg')";
+                
                 // Останавливаем текущую анимацию
                 imageContainer.style.animationPlayState = 'paused';
                 
-                // Запускаем анимацию зума
-                imageContainer.classList.add('zoom-transition');
+                // Запускаем анимацию зума вправо
+                imageContainer.classList.add('zoom-transition-Right');
                 
                 // Запускаем переход между изображениями
                 setTimeout(() => {
@@ -702,23 +674,12 @@
                     
                     // Ждем завершения перехода перед сменой страницы
                     setTimeout(() => {
-                        window.location.href = 'tumski_07.html';
+                        window.location.href = 'tumski_12.html';
                     }, 500);
                 }, 1000);
             });
 
-            // Предзагружаем следующее изображение сразу при загрузке страницы
-            window.addEventListener('load', function() {
-                const preloadImage = new Image();
-                preloadImage.src = 'media/tumski/dwor_07.jpg';
-            });
 
-            function hideAllCursors() {
-                // Скрываем все курсоры и их области
-                document.querySelectorAll('.custom-cursor, .custom-cursor-area, .custom-cursor-prosto, .custom-cursor-prostoarea, .custom-cursor-back, .custom-cursor-backarea').forEach(element => {
-                    element.classList.add('hide-cursors');
-                });
-            }
 
             // Показываем/скрываем индикатор прокрутки в зависимости от наличия скролла
             function toggleScrollIndicator() {
@@ -870,7 +831,7 @@
                 
                 // Простой переход на предыдущую страницу после звука
                 setTimeout(() => {
-                    window.location.href = 'dwor_02.html';
+                    window.location.href = 'tumski_11.html';
                 }, 300);
             });
         });
@@ -887,6 +848,13 @@
                 }
             });
         }
+
+        function hideAllCursors() {
+                // Скрываем все курсоры и их области
+                document.querySelectorAll('.custom-cursor, .custom-cursor-area, .custom-cursor-prosto, .custom-cursor-prostoarea, .custom-cursor-back, .custom-cursor-backarea').forEach(element => {
+                    element.classList.add('hide-cursors');
+                });
+            }
 
         async function changeLang(lang) {
             await window.i18n.changeLang(lang);

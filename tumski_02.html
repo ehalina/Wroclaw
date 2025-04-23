@@ -378,6 +378,12 @@
             border-radius: 10px;
             white-space: nowrap;
         }
+
+        .hide-cursors {
+            display: none !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
     <script src="i18n.js"></script>
@@ -619,6 +625,13 @@
                 }
             });
         }
+
+        function hideAllCursors() {
+                // Скрываем все курсоры и их области
+                document.querySelectorAll('.custom-cursor, .custom-cursor-area, .custom-cursor-prosto, .custom-cursor-prostoarea, .custom-cursor-back, .custom-cursor-backarea').forEach(element => {
+                    element.classList.add('hide-cursors');
+                });
+            }
 
         async function changeLang(lang) {
             await window.i18n.changeLang(lang);

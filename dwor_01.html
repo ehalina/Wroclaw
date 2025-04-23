@@ -513,6 +513,11 @@
         .custom-cursor-backarea:hover .custom-cursor-back {
             opacity: 1;
         }
+        .hide-cursors {
+            display: none !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
@@ -639,6 +644,7 @@
             });
 
             cursorArea.addEventListener('click', function() {
+                hideAllCursors();
                 stepSound.currentTime = 0;
                 stepSound.play();
                 setTimeout(() => {
@@ -674,6 +680,7 @@
             });
 
             cursorProstoArea.addEventListener('click', function() {
+                hideAllCursors();
                 stepSound.currentTime = 0;
                 stepSound.play();
                 
@@ -704,6 +711,13 @@
                 const preloadImage = new Image();
                 preloadImage.src = 'media/tumski/dwor_02.jpg';
             });
+
+            function hideAllCursors() {
+                // Скрываем все курсоры и их области
+                document.querySelectorAll('.custom-cursor, .custom-cursor-area, .custom-cursor-prosto, .custom-cursor-prostoarea, .custom-cursor-back, .custom-cursor-backarea').forEach(element => {
+                    element.classList.add('hide-cursors');
+                });
+            }
 
             // Показываем/скрываем индикатор прокрутки в зависимости от наличия скролла
             function toggleScrollIndicator() {
@@ -847,6 +861,7 @@
             });
 
             cursorBackArea.addEventListener('click', function() {
+                hideAllCursors();
                 if (stepSound) {
                     stepSound.currentTime = 0;
                     stepSound.play();

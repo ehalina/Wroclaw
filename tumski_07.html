@@ -557,6 +557,11 @@
         .gentle-move {
             animation: gentleMove 4s ease-in-out infinite;
         }
+        .hide-cursors {
+            display: none !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
@@ -683,6 +688,7 @@
             });
 
             cursorArea.addEventListener('click', function() {
+                hideAllCursors();
                 stepSound.currentTime = 0;
                 stepSound.play();
                 
@@ -742,6 +748,7 @@
             });
 
             cursorProstoArea.addEventListener('click', function() {
+                hideAllCursors();
                 stepSound.currentTime = 0;
                 stepSound.play();
                 
@@ -820,6 +827,13 @@
                     }, 30);
                 }
             });
+
+            function hideAllCursors() {
+                // Скрываем все курсоры и их области
+                document.querySelectorAll('.custom-cursor, .custom-cursor-area, .custom-cursor-prosto, .custom-cursor-prostoarea, .custom-cursor-back, .custom-cursor-backarea').forEach(element => {
+                    element.classList.add('hide-cursors');
+                });
+            }
 
             // Показываем полосу прокрутки при использовании колесика мыши
             bookContent.addEventListener('wheel', function() {
@@ -925,6 +939,7 @@
             });
 
             cursorBackArea.addEventListener('click', function() {
+                hideAllCursors();
                 if (stepSound) {
                     stepSound.currentTime = 0;
                     stepSound.play();

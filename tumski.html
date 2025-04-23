@@ -29,7 +29,7 @@
                 transform: translateZ(0) scale(1) translate(0, 0);
             }
             100% {
-                transform: translateZ(2000px) scale(2.5) translate(-25vw, -25vh);
+                transform: translateZ(2000px) scale(2.5) translate(-35vw, -25vh);
             }
         }
 
@@ -492,6 +492,12 @@
             border-radius: 10px;
             white-space: nowrap;
         }
+
+        .hide-cursors {
+            display: none !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
@@ -610,6 +616,8 @@
             });
 
             cursorArea.addEventListener('click', function() {
+                hideAllCursors();
+                hideAllCursors();
                 stepSound.currentTime = 0;
                 stepSound.play();
                 setTimeout(() => {
@@ -645,6 +653,8 @@
             });
 
             cursorProstoArea.addEventListener('click', function() {
+                hideAllCursors();
+                hideAllCursors();
                 stepSound.currentTime = 0;
                 stepSound.play();
                 
@@ -740,6 +750,13 @@
                     autoScrollInterval = null;
                 }
             });
+
+            function hideAllCursors() {
+                // Скрываем все курсоры и их области
+                document.querySelectorAll('.custom-cursor, .custom-cursor-area, .custom-cursor-prosto, .custom-cursor-prostoarea, .custom-cursor-back, .custom-cursor-backarea').forEach(element => {
+                    element.classList.add('hide-cursors');
+                });
+            }
 
             function openBook() {
                 bookSound.currentTime = 0;
