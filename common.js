@@ -23,31 +23,100 @@ const COMMON_ELEMENTS = {
 
 // Общие функции для работы с анимацией
 function setupResetAnimation(container) {
-    // Реализация функции сброса анимации
+    // Добавляем обработчик двойного клика
+    document.addEventListener('dblclick', function(e) {
+        // Проверяем, что клик не по элементам управления
+        if (!e.target.closest('.back-link') && 
+            !e.target.closest('.language-switcher') && 
+            !e.target.closest('.book-overlay') && 
+            !e.target.closest('.most-overlay')) {
+            // Добавляем класс для сброса анимации
+            container.classList.add('reset-animation');
+            // Убираем класс через 100мс
+            setTimeout(() => {
+                container.classList.remove('reset-animation');
+            }, 100);
+        }
+    });
 }
 
 // Общие функции для работы со стрелками
-function setupRightArrowHandler(cursor, cursorArea, stepSound) {
+function setupRightArrowHandler(cursor, cursorArea, stepSound, nextPageCallback) {
+    // Проверяем наличие необходимых элементов
+    if (!cursor || !cursorArea) {
+        console.error('Элементы стрелки вправо не найдены');
+        return;
+    }
+
     // Обработчик движения мыши над областью курсора
     cursorArea.addEventListener('mousemove', function(e) {
-        cursor.style.display = 'block';
-        cursor.style.left = e.clientX - 32 + 'px';
-        cursor.style.top = e.clientY - 32 + 'px';
+        const rect = this.getBoundingClientRect();
+        if (e.clientX >= rect.left && e.clientX <= rect.right &&
+            e.clientY >= rect.top && e.clientY <= rect.bottom) {
+            cursor.style.opacity = '1';
+            cursor.style.left = e.clientX - 32 + 'px';
+            cursor.style.top = e.clientY - 32 + 'px';
+        } else {
+            cursor.style.opacity = '0';
+        }
+    });
+
+    // Обработчик движения мыши по всему документу
+    document.addEventListener('mousemove', function(e) {
+        const rect = cursorArea.getBoundingClientRect();
+        if (!(e.clientX >= rect.left && e.clientX <= rect.right &&
+            e.clientY >= rect.top && e.clientY <= rect.bottom)) {
+            cursor.style.opacity = '0';
+        }
     });
 
     // Скрываем курсор при уходе мыши из области
     cursorArea.addEventListener('mouseleave', function() {
-        cursor.style.display = 'none';
+        cursor.style.opacity = '0';
     });
 
     // Обработчик клика по стрелке вправо
-    cursorArea.addEventListener('click', function() {
-        hideAllCursors();
-        stepSound.currentTime = 0;
-        stepSound.play();
-        setTimeout(() => {
-            window.location.href = 'tumski_02.html';
-        }, 300);
+    cursorArea.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        try {
+            hideAllCursors();
+            
+            if (stepSound) {
+                stepSound.currentTime = 0;
+                stepSound.play();
+            }
+            
+            // Получаем элементы для анимации
+            const imageContainer = document.querySelector('.image-container');
+            const currentImage = document.querySelector('.image');
+            const nextImageContainer = document.querySelector('.next-image-container');
+            
+            if (!imageContainer || !currentImage || !nextImageContainer) {
+                console.error('Не все элементы для анимации найдены');
+                return;
+            }
+
+            // Запускаем анимацию перехода
+            imageContainer.style.animationPlayState = 'paused';
+            imageContainer.classList.add('zoom-transition');
+            
+            // Запускаем анимацию fade
+            setTimeout(() => {
+                currentImage.classList.add('fade-out');
+                nextImageContainer.classList.add('fade-in');
+                
+                // Вызываем callback для перехода на следующую страницу
+                setTimeout(() => {
+                    if (typeof nextPageCallback === 'function') {
+                        nextPageCallback();
+                    }
+                }, 500);
+            }, 1000);
+        } catch (error) {
+            console.error('Ошибка при обработке клика:', error);
+        }
     });
 }
 
