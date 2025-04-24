@@ -91,7 +91,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, nextPageCallback)
             // Получаем элементы для анимации
             const imageContainer = document.querySelector('.image-container');
             const currentImage = document.querySelector('.image');
-            const nextImageContainer = document.querySelector('.next-image-container');
+            const nextImageContainer = document.querySelector('.next-image-container-Right');
             
             if (!imageContainer || !currentImage || !nextImageContainer) {
                 console.error('Не все элементы для анимации найдены');
@@ -100,7 +100,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, nextPageCallback)
 
             // Запускаем анимацию перехода
             imageContainer.style.animationPlayState = 'paused';
-            imageContainer.classList.add('zoom-transition');
+            imageContainer.classList.add('zoom-transition-Right');
             
             // Запускаем анимацию fade
             setTimeout(() => {
