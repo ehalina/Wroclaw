@@ -4,7 +4,13 @@
     "description": "Tumski Island is not just a spot on the map, but a true time portal leading straight into the depths of centuries. If Wrocław were an ancient book, its first chapter would begin right here, in the 10th century, among the mists, bell tolls, and mysterious silhouettes.\n\nThis island is not just a district, but a whole encyclopedia of wonders. Here, ancient temples neighbor with whimsical legends, streets whisper about the past, and in the evenings, as if by magic, a lamplighter appears. Yes, a real one, in a long coat, with a lantern and a special stick. And every night he manually lights the old gas lanterns, as if reminding the city that magic is still alive.\n\nSo get ready. We'll begin our walk from the Tumski Bridge and step by step we'll unravel the mysteries of medieval Wrocław. And if you suddenly hear the whisper of old walls - don't be afraid. It's just the island telling you its stories."
   },
   "tumski_most": {
-    "title": "Tumski Bridge"
+    "title": "Tumski Bridge",
+    "book02": {
+      "zone1": {
+        "title": "Tumski Bridge",
+        "text": "If Wrocław is a fairy-tale city (and it undoubtedly is), then Tumski Bridge is that magical portal that leads to its most ancient and mysterious heart. Its name, of course, sounds grand and important — 'Cathedral Bridge', because it leads directly to the majestic Cathedral of St. John the Baptist. And also because old Tumski is not just a bridge, but a boundary between worlds: once secular and ecclesiastical powers met here, and they even erected a special pillar with two coats of arms to ensure no one forgot who was in charge (though this didn't help)."
+      }
+    }
   },
   "panorama": {
     "title": "Observation Deck"

@@ -4,7 +4,13 @@
     "description": "Ostrów Tumski to nie tylko punkt na mapie, ale prawdziwy portal czasowy prowadzący prosto w głębiny wieków. Gdyby Wrocław był starożytną księgą, jego pierwszy rozdział zaczynałby się właśnie tutaj, w X wieku, pośród mgieł, dźwięku dzwonów i tajemniczych sylwetek.\n\nTa wyspa to nie zwykła dzielnica, ale prawdziwa encyklopedia cudów. Tutaj starożytne świątynie sąsiadują z fascynującymi legendami, ulice szepczą o przeszłości, a wieczorami, jak za dotknięciem czarodziejskiej różdżki, pojawia się latarnik. Tak, prawdziwy latarnik w długim płaszczu, z latarnią i specjalnym kijkiem. Każdej nocy ręcznie zapala stare gazowe latarnie, jakby przypominając miastu, że magia wciąż żyje.\n\nBądźcie gotowi. Rozpoczniemy naszą przechadzkę od Mostu Tumskiego i krok po kroku będziemy odkrywać tajemnice średniowiecznego Wrocławia. A jeśli usłyszycie szept starych murów - nie bójcie się. To po prostu wyspa opowiada wam swoje historie."
   },
   "tumski_most": {
-    "title": "Most Tumski"
+    "title": "Most Tumski",
+    "book02": {
+      "zone1": {
+        "title": "Most Tumski",
+        "text": "Jeśli Wrocław jest miastem z bajki (a bez wątpienia tak jest), to Most Tumski jest tym magicznym portalem, który prowadzi do jego najstarszego i najbardziej tajemniczego serca. Jego nazwa brzmi oczywiście dostojnie i ważnie — 'katedralny', bo prowadzi prosto do majestatycznej Katedry św. Jana Chrzciciela. A także dlatego, że stary Tumski to nie tylko most, ale granica między światami: kiedyś spotykała się tu władza świecka i kościelna, a nawet postawiono specjalny słup z dwoma herbami, żeby nikt nie zapomniał, kto tu rządzi (choć to nie pomogło)."
+      }
+    }
   },
   "panorama": {
     "title": "Punkt widokowy"

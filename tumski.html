@@ -805,33 +805,36 @@
 
             const preloadImage = new Image();
             preloadImage.src = 'media/tumski/tumski_03.jpg';
-            preloadImage.onload = function() {
-                console.log('Следующее изображение загружено');
-            };
-            preloadImage.onerror = function() {
-                console.error('Ошибка загрузки следующего изображения');
-            };
+            preloadImage.onload = function() {};
+            preloadImage.onerror = function() {};
             
-            tumskiTxtX = document.querySelector('#tumski-text');
-            tumskiTxtX.addEventListener('click', () => {
-                console.log('Tumski text clicked');
-                if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
-                    Common.openMost(bookSound, mostOverlay, container, mostTitle);
-                    console.log('Most overlay opened from Tumski text, starting highlight animation');
-                    setTimeout(() => {
-                        if (window.showInitialHighlight) {
-                            window.showInitialHighlight();
-                        }
-                    }, 500);
+            mapMarkWyspa.addEventListener('click', () => {
+                if (!bookOverlay.style.display || bookOverlay.style.display === 'none') {
+                    Common.openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator);
                 }
             });
 
+            tumskiTxtX = document.querySelector('#tumski-text');
+            tumskiTxtX.addEventListener('click', () => {
+                if (!bookOverlay.style.display || bookOverlay.style.display === 'none') {
+                    Common.openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator);
+                }
+            });
+
+            const tumskiTextParent = tumskiTxtX?.parentElement;
+            if (tumskiTextParent) {
+                tumskiTextParent.addEventListener('click', () => {
+                    if (!bookOverlay.style.display || bookOverlay.style.display === 'none') {
+                        Common.openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator);
+                    }
+                });
+            }
+
             tumskiTxt = document.querySelector('#tumski-most-text');
             tumskiTxt.addEventListener('click', () => {
-                console.log('Most text clicked');
                 if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
                     Common.openMost(bookSound, mostOverlay, container, mostTitle);
-                    console.log('Most overlay opened from text, starting highlight animation');
+                    mostTitle.style.display = 'none';
                     setTimeout(() => {
                         if (window.showInitialHighlight) {
                             window.showInitialHighlight();
@@ -841,10 +844,9 @@
             });
 
             mapMarkMost.addEventListener('click', () => {
-                console.log('Map mark clicked');
                 if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
                     Common.openMost(bookSound, mostOverlay, container, mostTitle);
-                    console.log('Most overlay opened, starting highlight animation');
+                    mostTitle.style.display = 'none';
                     setTimeout(() => {
                         if (window.showInitialHighlight) {
                             window.showInitialHighlight();
@@ -852,23 +854,6 @@
                     }, 500);
                 }
             });
-
-            // Добавляем обработчик для родительского элемента
-            const tumskiTextParent = tumskiTxtX?.parentElement;
-            if (tumskiTextParent) {
-                tumskiTextParent.addEventListener('click', () => {
-                    console.log('Tumski text parent clicked');
-                    if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
-                        Common.openMost(bookSound, mostOverlay, container, mostTitle);
-                        console.log('Most overlay opened from Tumski text parent, starting highlight animation');
-                        setTimeout(() => {
-                            if (window.showInitialHighlight) {
-                                window.showInitialHighlight();
-                            }
-                        }, 500);
-                    }
-                });
-            }
 
             closeButtons.forEach(button => {
                 button.addEventListener('click', () => {

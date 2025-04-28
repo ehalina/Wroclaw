@@ -732,8 +732,127 @@ const BUTTONS_CONFIG = {
     }
 };
 
+// Конфигурация для отображения текста
+const BOOK_TEXT_CONFIG = {
+    container: {
+        position: 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: '60%',
+        background: 'rgba(0, 0, 0, 0.8)',
+        color: 'white',
+        padding: '40px',
+        boxSizing: 'border-box',
+        overflowY: 'auto',
+        maxHeight: '80%',
+        borderRadius: '10px',
+        zIndex: 1001,
+        display: 'block'
+    },
+    title: {
+        fontSize: '28px',
+        marginBottom: '20px',
+        fontWeight: 'bold',
+        textAlign: 'center',
+        color: 'white'
+    },
+    text: {
+        fontSize: '18px',
+        lineHeight: '1.6',
+        whiteSpace: 'pre-line',
+        textAlign: 'justify',
+        color: 'white'
+    }
+};
+
 // Экспортируем константы
 window.BookPaths = BOOK_PATHS;
 window.BookZonesConfig = BOOK_ZONES_CONFIG;
 // Экспортируем конфигурацию кнопок
-window.ButtonsConfig = BUTTONS_CONFIG; 
+window.ButtonsConfig = BUTTONS_CONFIG;
+
+// Функция для отображения текста
+function showBookText(container, textKey) {
+    const currentLang = document.documentElement.lang || 'ru';
+    fetch(`locales/${currentLang}/translations.json`)
+        .then(response => response.json())
+        .then(translations => {
+            const textData = translations[textKey].book02.zone1;
+            
+            const textContainer = document.createElement('div');
+            Object.assign(textContainer.style, BOOK_TEXT_CONFIG.container);
+            
+            const title = document.createElement('h2');
+            Object.assign(title.style, BOOK_TEXT_CONFIG.title);
+            title.textContent = textData.title;
+            
+            const text = document.createElement('p');
+            Object.assign(text.style, BOOK_TEXT_CONFIG.text);
+            text.textContent = textData.text;
+            
+            textContainer.appendChild(title);
+            textContainer.appendChild(text);
+            
+            // Удаляем предыдущий текстовый контейнер, если он существует
+            const existingTextContainer = container.querySelector('.book-text-container');
+            if (existingTextContainer) {
+                container.removeChild(existingTextContainer);
+            }
+            
+            textContainer.classList.add('book-text-container');
+            container.appendChild(textContainer);
+        })
+        .catch(error => {
+            console.error('Ошибка загрузки текста:', error);
+        });
+}
+
+// Обновляем функцию открытия книги
+window.Common = window.Common || {};
+window.Common.openBook = function(event) {
+    const bookOverlay = document.createElement('div');
+    bookOverlay.style.position = 'fixed';
+    bookOverlay.style.top = '0';
+    bookOverlay.style.left = '0';
+    bookOverlay.style.width = '100%';
+    bookOverlay.style.height = '100%';
+    bookOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+    bookOverlay.style.zIndex = '1000';
+    bookOverlay.style.display = 'flex';
+    bookOverlay.style.justifyContent = 'center';
+    bookOverlay.style.alignItems = 'center';
+
+    const bookContainer = document.createElement('div');
+    bookContainer.style.position = 'relative';
+    bookContainer.style.width = '90%';
+    bookContainer.style.height = '90%';
+
+    const bookImage = document.createElement('img');
+    bookImage.src = window.BookPaths.BOOK_IMAGE_02;
+    bookImage.style.width = '100%';
+    bookImage.style.height = '100%';
+    bookImage.style.objectFit = 'contain';
+
+    const closeButton = document.createElement('button');
+    closeButton.innerHTML = '×';
+    closeButton.style.position = 'absolute';
+    closeButton.style.top = '20px';
+    closeButton.style.right = '20px';
+    closeButton.style.fontSize = '32px';
+    closeButton.style.color = 'white';
+    closeButton.style.background = 'none';
+    closeButton.style.border = 'none';
+    closeButton.style.cursor = 'pointer';
+    closeButton.style.zIndex = '1002';
+    
+    closeButton.onclick = () => document.body.removeChild(bookOverlay);
+    
+    bookContainer.appendChild(bookImage);
+    bookOverlay.appendChild(bookContainer);
+    bookOverlay.appendChild(closeButton);
+    document.body.appendChild(bookOverlay);
+    
+    // Показываем текст поверх изображения
+    showBookText(bookContainer, 'tumski_most');
+}; 
