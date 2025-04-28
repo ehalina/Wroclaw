@@ -12,6 +12,7 @@
             height: 100%;
             overflow: hidden;
             position: fixed;
+            background-color: black;
         }
 
         .scene {
@@ -29,7 +30,16 @@
                 transform: translateZ(0) scale(1) translate(0, 0);
             }
             100% {
-                transform: translateZ(2000px) scale(2.5) translate(50vw, -50vh);
+                transform: translateZ(2000px) scale(2.5) translate(60vw, -50vh);
+            }
+        }
+
+        @keyframes zoomForwardRight {
+            0% {
+                transform: translateZ(0) scale(1) translate(0, 0);
+            }
+            100% {
+                transform: translateZ(2000px) scale(2.5) translate(15vw, -25vh);
             }
         }
 
@@ -37,11 +47,16 @@
             animation: zoomForward 1.5s ease-in forwards !important;
         }
 
+        .zoom-transition-Right {
+            animation: zoomForwardRight 1.5s ease-in forwards !important;
+        }
+
         .image-container {
             width: 100%;
             height: 100%;
             position: absolute;
             transform-style: preserve-3d;
+            transform-origin: center;
             animation: moveForward 40s linear infinite;
             backface-visibility: hidden;
             will-change: transform;
@@ -51,6 +66,23 @@
 
         .image-container.zoom-transition {
             animation: zoomForward 1.5s ease-in forwards !important;
+        }
+
+        .image-container-Right {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            transform-origin: center;
+            animation: moveForward 40s linear infinite;
+            backface-visibility: hidden;
+            will-change: transform;
+            transform: translateZ(0);
+            overflow: hidden;
+        }
+
+        .image-container-Right.zoom-transition-Right {
+            animation: zoomForwardRight 1.5s ease-in forwards !important;
         }
 
         .image {
@@ -87,7 +119,28 @@
             background-position: center;
             background-color: black;
             opacity: 0;
-            transition: opacity 0.01s ease-in;
+            transition: opacity 2s ease-in;
+            z-index: 2;
+            backface-visibility: hidden;
+            will-change: transform;
+            transform-style: preserve-3d;
+            transform: translateZ(0);
+            overflow: hidden;
+        }
+
+        .next-image-container-Right {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-image: url('media/tumski/tumski_16.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: black;
+            opacity: 0;
+            transition: opacity 2s ease-in;
             z-index: 2;
             backface-visibility: hidden;
             will-change: transform;
@@ -138,15 +191,26 @@
 
 
 
-        /* Стрелка прямо */
-
+        /* Стрелка влево */
         .custom-cursor-prostoarea {
             position: fixed;
-            right: 0;
+            left: 0;
             bottom: 25%;
-            width: 100%;
+            width: 30%;
             height: 25%;
             z-index: 999;
+            cursor: none;
+        }
+
+        /* Стрелка вправо */
+        .custom-cursor-prostoarea-r {
+            position: fixed;
+            left: 30%;
+            right: 30%;
+            bottom: 25%;
+            width: 70%;
+            height: 25%;
+            z-index: 1005;
             cursor: none;
         }
 
@@ -165,7 +229,23 @@
             pointer-events: auto;
         }
 
-        .custom-cursor-prostoarea:hover .custom-cursor-prosto {
+        .custom-cursor-prosto-r {
+            width: 64px;
+            height: 64px;
+            position: fixed;
+            background-image: url('media/strelka_prosto_r.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+
+        .custom-cursor-prostoarea:hover .custom-cursor-prosto,
+        .custom-cursor-prostoarea-r:hover .custom-cursor-prosto-r {
             opacity: 1;
         }
 
@@ -522,13 +602,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
     <script src="i18n.js"></script>
+    <script src="common.js"></script>
+    <script src="arrow_handlers.js"></script>
+   <!-- <link rel="preload" href="media/tumski/tumski_16.jpg" as="image">-->
 </head>
 <body>
     <a href="index.html" class="back-link">← На главную</a>
-    <div class="custom-cursor"></div>
     <div class="custom-cursor-area"></div>
+        <div class="custom-cursor"></div>
     <div class="custom-cursor-prostoarea">
         <div class="custom-cursor-prosto"></div>
+    </div>
+    <div class="custom-cursor-prostoarea-r">
+        <div class="custom-cursor-prosto-r"></div>
     </div>
     <div class="custom-cursor-backarea">
         <div class="custom-cursor-back"></div>
@@ -576,19 +662,20 @@
             <div class="image"></div>
         </div>
         <div class="next-image-container"></div>
+        <div class="next-image-container-Right"></div>
         <div class="custom-cursor-backarea">
             <div class="custom-cursor-back"></div>
         </div>
     </div>
     <div class="language-switcher">
-        <button class="language-button" onclick="toggleLanguageDropdown()">
+        <button class="language-button" onclick="Common.toggleLanguageDropdown()">
             <img src="media/local.jpg" alt="Language" class="language-icon">
         </button>
         <div class="language-dropdown">
-            <a href="#" class="language-option" data-lang="ru" onclick="changeLang('ru')">RU</a>
-            <a href="#" class="language-option" data-lang="be" onclick="changeLang('be')">BE</a>
-            <a href="#" class="language-option" data-lang="pl" onclick="changeLang('pl')">PL</a>
-            <a href="#" class="language-option" data-lang="en" onclick="changeLang('en')">EN</a>
+            <a href="#" class="language-option" data-lang="ru" onclick="Common.changeLang('ru')">RU</a>
+            <a href="#" class="language-option" data-lang="be" onclick="Common.changeLang('be')">BE</a>
+            <a href="#" class="language-option" data-lang="pl" onclick="Common.changeLang('pl')">PL</a>
+            <a href="#" class="language-option" data-lang="en" onclick="Common.changeLang('en')">EN</a>
         </div>
     </div>
 
@@ -597,308 +684,171 @@
             await window.i18n.loadTranslations();
             window.i18n.updatePageContent();
 
-            const container = document.querySelector('.image-container');
-            const cursor = document.querySelector('.custom-cursor');
-            const cursorArea = document.querySelector('.custom-cursor-area');
-            const cursorProstoArea = document.querySelector('.custom-cursor-prostoarea');
-            const cursorProsto = document.querySelector('.custom-cursor-prosto');
+            // Получаем элементы страницы
+            const container = document.querySelector(Common.COMMON_ELEMENTS.IMAGE_CONTAINER);
+            const cursor = document.querySelector(Common.COMMON_ELEMENTS.CURSOR);
+            const cursorArea = document.querySelector(Common.COMMON_ELEMENTS.CURSOR_AREA);
+            const cursorProsto = document.querySelector(Common.COMMON_ELEMENTS.CURSOR_PROSTO);
+            const cursorProstoArea = document.querySelector(Common.COMMON_ELEMENTS.CURSOR_PROSTO_AREA);
             const mapMarkWyspa = document.querySelector('#tumska_wyspa');
             const mapMarkMost = document.querySelector('#tumski_most');
             const tumskiText = document.querySelectorAll('#tumski-text');
             const tumskiTexts = document.querySelectorAll('.tumski-text');
-            const bookOverlay = document.querySelector('.book-overlay');
-            const mostOverlay = document.querySelector('.most-overlay');
-            const closeButtons = document.querySelectorAll('.close-button');
+            const bookOverlay = document.querySelector(Common.COMMON_ELEMENTS.BOOK_OVERLAY);
+            const mostOverlay = document.querySelector(Common.COMMON_ELEMENTS.MOST_OVERLAY);
+            const closeButtons = document.querySelectorAll(Common.COMMON_ELEMENTS.CLOSE_BUTTON);
             const bookSound = document.querySelector('#bookSound');
             const stepSound = document.querySelector('#stepSound');
-            const bookContent = document.querySelector('.book-content');
-            const scrollIndicator = document.querySelector('.scroll-indicator');
-            const cursorBackArea = document.querySelector('.custom-cursor-backarea');
-            const cursorBack = document.querySelector('.custom-cursor-back');
-            let autoScrollInterval;
+            const bookContent = document.querySelector(Common.COMMON_ELEMENTS.BOOK_CONTENT);
+            const scrollIndicator = document.querySelector(Common.COMMON_ELEMENTS.SCROLL_INDICATOR);
+            const cursorBackArea = document.querySelector(Common.COMMON_ELEMENTS.CURSOR_BACK_AREA);
+            const cursorBack = document.querySelector(Common.COMMON_ELEMENTS.CURSOR_BACK);
+            const mostTitle = mostOverlay.querySelector('.most-title');
+
+            // Настраиваем обработчики
+            Common.setupResetAnimation(container);
             
-            // Добавляем обработчик двойного клика для сброса анимации
-            document.addEventListener('dblclick', function(e) {
-                // Проверяем, что клик не по элементам управления
-                if (!e.target.closest('.back-link') && 
-                    !e.target.closest('.language-switcher') && 
-                    !e.target.closest('.book-overlay') && 
-                    !e.target.closest('.most-overlay')) {
-                    container.classList.add('reset-animation');
-                    setTimeout(() => {
-                        container.classList.remove('reset-animation');
-                    }, 100);
-                }
-            });
-
-            //  Обрабочик для стрелки вправо
-
-            cursorArea.addEventListener('mousemove', function(e) {
-                cursor.style.display = 'block';
-                cursor.style.left = e.clientX - 32 + 'px';
-                cursor.style.top = e.clientY - 32 + 'px';
-            });
-
-            cursorArea.addEventListener('mouseleave', function() {
-                cursor.style.display = 'none';
-            });
-
-            cursorArea.addEventListener('click', function() {
-                hideAllCursors();
-                stepSound.currentTime = 0;
-                stepSound.play();
-                setTimeout(() => {
-                    window.location.href = 'tumski_15.html';
-                }, 300);
-            });
-
-          //  Обработчик для стрелки прямо
-
-          cursorProstoArea.addEventListener('mousemove', function(e) {
-                const rect = this.getBoundingClientRect();
-                // Проверяем, находится ли курсор в пределах области
-                if (e.clientX >= rect.left && e.clientX <= rect.right &&
-                    e.clientY >= rect.top && e.clientY <= rect.bottom) {
-                    cursorProsto.style.opacity = '1';
-                    cursorProsto.style.left = e.clientX - 32 + 'px';
-                    cursorProsto.style.top = e.clientY - 32 + 'px';
-                } else {
-                    cursorProsto.style.opacity = '0';
-                }
-            });
-
-            document.addEventListener('mousemove', function(e) {
-                const rect = cursorProstoArea.getBoundingClientRect();
-                if (!(e.clientX >= rect.left && e.clientX <= rect.right &&
-                    e.clientY >= rect.top && e.clientY <= rect.bottom)) {
-                    cursorProsto.style.opacity = '0';
-                }
-            });
-
-            cursorProstoArea.addEventListener('mouseleave', function() {
-                cursorProsto.style.opacity = '0';
-            });
-
-            cursorProstoArea.addEventListener('click', function() {
-                hideAllCursors();
-                stepSound.currentTime = 0;
-                stepSound.play();
-                
-                const imageContainer = document.querySelector('.image-container');
-                const currentImage = document.querySelector('.image');
-                const nextImageContainer = document.querySelector('.next-image-container');
-                
-                // Останавливаем текущую анимацию
-                imageContainer.style.animationPlayState = 'paused';
-                
-                // Запускаем анимацию зума
-                imageContainer.classList.add('zoom-transition');
-                
-                // Запускаем переход между изображениями
-                setTimeout(() => {
-                    currentImage.classList.add('fade-out');
-                    nextImageContainer.classList.add('fade-in');
+            // Обработчик стрелки прямо
+            Common.setupForwardArrowHandler(
+                document.querySelector('.custom-cursor-prosto'),
+                document.querySelector('.custom-cursor-prostoarea'),
+                stepSound,
+                () => {
+                    const imageContainer = document.querySelector('.image-container');
+                    const currentImage = document.querySelector('.image');
+                    const nextImageContainer = document.querySelector('.next-image-container');
                     
-                    // Ждем завершения перехода перед сменой страницы
+                    if (!imageContainer || !currentImage || !nextImageContainer) {
+                        console.error('Missing elements for forward arrow');
+                        return;
+                    }
+            
+                    // Останавливаем текущую анимацию
+                    imageContainer.style.animationPlayState = 'paused';
+            
+                    // Запускаем анимацию зума
+                    imageContainer.classList.add('zoom-transition');
+            
+                    // Запускаем переход между изображениями
                     setTimeout(() => {
-                        window.location.href = 'tumski_15.html';
-                    }, 500);
-                }, 1000);
-            });
-
-            // Предзагружаем следующее изображение сразу при загрузке страницы
-            window.addEventListener('load', function() {
-                const preloadImage = new Image();
-                preloadImage.src = 'media/tumski/tumski_15.jpg';
-            });
-
-            // Показываем/скрываем индикатор прокрутки в зависимости от наличия скролла
-            function toggleScrollIndicator() {
-                if (bookContent.scrollHeight > bookContent.clientHeight) {
-                    scrollIndicator.style.display = 'block';
-                } else {
-                    scrollIndicator.style.display = 'none';
+                        currentImage.classList.add('fade-out');
+                        nextImageContainer.classList.add('fade-in');
+                        
+                        // Ждем завершения перехода перед сменой страницы
+                        setTimeout(() => {
+                            window.location.href = 'tumski_15.html';
+                        }, 500);
+                    }, 1000);
                 }
-            }
+            );
+            
+            // Обработчик правой стрелки
+            Common.setupRightArrowHandler(
+                document.querySelector('.custom-cursor-prosto-r'),
+                document.querySelector('.custom-cursor-prostoarea-r'),
+                stepSound,
+                () => {
+                    const imageContainer = document.querySelector('.image-container');
+                    const currentImage = document.querySelector('.image');
+                    const nextImageContainer = document.querySelector('.next-image-container-Right');
+                    
+                    if (!imageContainer || !currentImage || !nextImageContainer) {
+                        console.error('Missing elements for right arrow');
+                        return;
+                    }
+            
+                    // Останавливаем текущую анимацию
+                    imageContainer.style.animationPlayState = 'paused';
+            
+                    // Запускаем анимацию зума вправо
+                    imageContainer.classList.add('zoom-transition-Right');
+            
+                    // Запускаем переход между изображениями
+                    setTimeout(() => {
+                        currentImage.classList.add('fade-out');
+                        nextImageContainer.classList.add('fade-in');
+                    
+                        // Ждем завершения перехода перед сменой страницы
+                        setTimeout(() => {
+                            window.location.href = 'tumski_16.html';
+                        }, 500);
+                    }, 1000);
+                }
+            );
+            
+            // Обработчик стрелки назад
+            Common.setupBackArrowHandler(
+                document.querySelector('.custom-cursor-back'),
+                document.querySelector('.custom-cursor-backarea'),
+                stepSound,
+                () => {
+                    window.location.href = 'tumski_08.html';
+                }
+            );
 
-            scrollIndicator.addEventListener('mouseenter', function() {
-                bookContent.classList.add('show-scrollbar');
-            });
+            // Настраиваем обработчики прокрутки
+            const { toggleScrollIndicator } = Common.setupScrollHandlers(bookContent, scrollIndicator);
 
-            scrollIndicator.addEventListener('mouseleave', function() {
-                if (!autoScrollInterval) {
-                    bookContent.classList.remove('show-scrollbar');
+            // Настраиваем обработчики для книг
+            tumskiTxtX = document.querySelector('#tumski-text');
+            tumskiTxtX.addEventListener('click', () => {
+                if (!bookOverlay.style.display || bookOverlay.style.display === 'none') {
+                    Common.openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator);
                 }
             });
 
-            scrollIndicator.addEventListener('click', function() {
-                if (autoScrollInterval) {
-                    clearInterval(autoScrollInterval);
-                    autoScrollInterval = null;
-                    bookContent.classList.remove('show-scrollbar');
-                } else {
-                    bookContent.classList.add('show-scrollbar');
-                    autoScrollInterval = setInterval(() => {
-                        if (bookContent.scrollTop + bookContent.clientHeight >= bookContent.scrollHeight) {
-                            clearInterval(autoScrollInterval);
-                            autoScrollInterval = null;
-                            bookContent.classList.remove('show-scrollbar');
-                            return;
-                        }
-                        bookContent.scrollTop += 1;
-                    }, 30);
+            tumskiTxt = document.querySelector('#tumski-most-text');
+            tumskiTxt.addEventListener('click', () => {
+                if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
+                    Common.openMost(bookSound, mostOverlay, container, mostTitle);
                 }
             });
 
-            function hideAllCursors() {
-                // Скрываем все курсоры и их области
-                document.querySelectorAll('.custom-cursor, .custom-cursor-area, .custom-cursor-prosto, .custom-cursor-prostoarea, .custom-cursor-back, .custom-cursor-backarea').forEach(element => {
-                    element.classList.add('hide-cursors');
+            mapMarkMost.addEventListener('click', () => {
+                if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
+                    Common.openMost(bookSound, mostOverlay, container, mostTitle);
+                }
+            });
+
+            const mostTitleElement = document.querySelector('[data-i18n="tumski_most.title"]');
+            if (mostTitleElement) {
+                mostTitleElement.parentElement.addEventListener('click', () => {
+                    if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
+                        Common.openMost(bookSound, mostOverlay, container, mostTitle);
+                    }
                 });
             }
 
-            // Показываем полосу прокрутки при использовании колесика мыши
-            bookContent.addEventListener('wheel', function() {
-                bookContent.classList.add('show-scrollbar');
-                // Скрываем полосу прокрутки через 2 секунды после последнего скролла
-                clearTimeout(this.scrollTimeout);
-                this.scrollTimeout = setTimeout(() => {
-                    if (!autoScrollInterval) {
-                        bookContent.classList.remove('show-scrollbar');
-                    }
-                }, 2000);
-            });
-
-            // Скрываем индикатор при достижении конца
-            bookContent.addEventListener('scroll', function() {
-                if (bookContent.scrollTop + bookContent.clientHeight >= bookContent.scrollHeight - 20) {
-                    scrollIndicator.style.display = 'none';
-                }
-            });
-
-            // Останавливаем прокрутку при клике на контент
-            bookContent.addEventListener('click', function() {
-                if (autoScrollInterval) {
-                    clearInterval(autoScrollInterval);
-                    autoScrollInterval = null;
-                }
-            });
-
-            function openBook() {
-                bookSound.currentTime = 0;
-                bookSound.play();
-                window.i18n.updatePageContent();
-                bookOverlay.style.display = 'flex';
-                container.style.animationPlayState = 'paused';
-                bookContent.scrollTop = 0;
-                setTimeout(toggleScrollIndicator, 100);
-            }
-
-            function openMost() {
-                bookSound.currentTime = 0;
-                bookSound.play();
-                mostOverlay.style.display = 'flex';
-                container.style.animationPlayState = 'paused';
-                const mostTitle = mostOverlay.querySelector('.most-title');
-                mostTitle.textContent = window.i18n.t('tumski_most.title');
-            }
-            
-            
-            tumskiTxtX = document.querySelector('#tumski-text');
-            tumskiTxtX.addEventListener('click', openBook);
-
-            tumskiTxt = document.querySelector('#tumski-most-text');
-            tumskiTxt.addEventListener('click', openMost);
-
-            // Обработчики для Тумского моста
-            mapMarkMost.addEventListener('click', openMost);
-            const mostTitle = document.querySelector('[data-i18n="tumski_most.title"]');
-            if (mostTitle) {
-                mostTitle.parentElement.addEventListener('click', openMost);
-            }
-
-            function resumeAnimation() {
-                bookOverlay.style.display = 'none';
-                mostOverlay.style.display = 'none';
-                container.style.animationPlayState = 'running';
-            }
-
+            // Настраиваем обработчики закрытия
             closeButtons.forEach(button => {
-                button.addEventListener('click', resumeAnimation);
+                button.addEventListener('click', () => {
+                    Common.resumeAnimation(bookOverlay, mostOverlay, container);
+                    // Сбрасываем анимацию
+                    container.classList.remove('zoom-transition');
+                    container.style.animation = 'none';
+                    container.offsetHeight; // Принудительное обновление DOM
+                    container.style.animation = null;
+                });
             });
 
             [bookOverlay, mostOverlay].forEach(overlay => {
                 overlay.addEventListener('click', function(e) {
                     if (e.target === overlay) {
-                        resumeAnimation();
+                        Common.resumeAnimation(bookOverlay, mostOverlay, container);
+                        // Сбрасываем анимацию
+                        container.classList.remove('zoom-transition');
+                        container.style.animation = 'none';
+                        container.offsetHeight; // Принудительное обновление DOM
+                        container.style.animation = null;
                     }
                 });
             });
 
-            // Обработчик для стрелки назад
-            cursorBackArea.addEventListener('mousemove', function(e) {
-                const rect = this.getBoundingClientRect();
-                if (e.clientX >= rect.left && e.clientX <= rect.right &&
-                    e.clientY >= rect.top && e.clientY <= rect.bottom) {
-                    cursorBack.style.opacity = '1';
-                    cursorBack.style.left = e.clientX - 32 + 'px';
-                    cursorBack.style.top = e.clientY - 32 + 'px';
-                } else {
-                    cursorBack.style.opacity = '0';
-                }
-            });
-
-            document.addEventListener('mousemove', function(e) {
-                const rect = cursorBackArea.getBoundingClientRect();
-                if (!(e.clientX >= rect.left && e.clientX <= rect.right &&
-                    e.clientY >= rect.top && e.clientY <= rect.bottom)) {
-                    cursorBack.style.opacity = '0';
-                }
-            });
-
-            cursorBackArea.addEventListener('mouseleave', function() {
-                cursorBack.style.opacity = '0';
-            });
-
-            cursorBackArea.addEventListener('click', function() {
-                hideAllCursors();
-                if (stepSound) {
-                    stepSound.currentTime = 0;
-                    stepSound.play();
-                }
-                
-                // Простой переход на предыдущую страницу после звука
-                setTimeout(() => {
-                    window.location.href = 'tumski_08.html';
-                }, 300);
-            });
+            // Удаляем старый обработчик стрелки назад, так как он теперь в common.js
+            cursorBackArea.removeEventListener('mousemove', function() {});
+            cursorBackArea.removeEventListener('mouseleave', function() {});
+            cursorBackArea.removeEventListener('click', function() {});
         });
-
-        function toggleLanguageDropdown() {
-            const dropdown = document.querySelector('.language-dropdown');
-            dropdown.classList.toggle('show');
-
-            // Закрываем дропдаун при клике вне его
-            document.addEventListener('click', function closeDropdown(e) {
-                if (!e.target.closest('.language-switcher')) {
-                    dropdown.classList.remove('show');
-                    document.removeEventListener('click', closeDropdown);
-                }
-            });
-        }
-
-        async function changeLang(lang) {
-            await window.i18n.changeLang(lang);
-            document.querySelector('.language-dropdown').classList.remove('show');
-            updateActiveLanguage();
-        }
-
-        function updateActiveLanguage() {
-            const currentLang = window.i18n.getCurrentLang();
-            document.querySelectorAll('.language-option').forEach(option => {
-                option.classList.toggle('active', option.getAttribute('data-lang') === currentLang);
-            });
-        }
     </script>
 </body>
 </html> 

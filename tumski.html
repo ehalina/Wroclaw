@@ -470,9 +470,17 @@
             align-items: center;
         }
 
-        .most-image {
+        .image-wrapper {
+            position: relative;
+            display: inline-block;
             max-width: 100%;
             max-height: 100%;
+        }
+
+        .most-image {
+            display: block;
+            max-width: 100%;
+            max-height: 90vh;
             object-fit: contain;
         }
 
@@ -498,12 +506,76 @@
             opacity: 0 !important;
             pointer-events: none !important;
         }
+
+        .book-zones {
+            position: absolute;
+            top: 0;
+            width: 10%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .right-zones {
+            right: 0;
+        }
+
+        .left-zones {
+            left: 0;
+        }
+
+        .book-zone {
+            position: absolute;
+            width: 100%;
+            background-color: transparent;
+            cursor: pointer;
+            pointer-events: auto;
+            transition: all 0.7s ease-in-out;
+        }
+
+        .right-zones .book-zone {
+            right: 0;
+        }
+
+        .left-zones .book-zone {
+            left: 0;
+        }
+
+        .book-zone:hover,
+        .book-zone.highlight {
+            background-color: rgba(255, 255, 255, 0.45);
+        }
+
+        @keyframes highlightPulse {
+            0% { 
+                background-color: rgba(255, 255, 255, 0);
+            }
+            100% { 
+                background-color: rgba(255, 255, 255, 0.45);
+            }
+        }
+
+        .book-zone.highlight {
+            animation: highlightPulse 0.5s ease-in-out forwards;
+        }
+
+        .zone {
+            transition: all 0.1s ease-in-out;
+        }
+        
+        .zone.highlight {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
     <script src="i18n.js"></script>
     <script src="common.js"></script>
     <script src="arrow_handlers.js"></script>
+    <script src="book_paths.js"></script>
+    <script src="common_buttons.js"></script>
 </head>
 <body>
     <a href="index.html" class="back-link">← На главную</a>
@@ -532,7 +604,7 @@
     <div class="book-overlay">
         <button class="close-button">×</button>
         <div class="book-container">
-            <img src="media/book.jpg" alt="Book" class="book-image">
+            <img src="" alt="Book" class="book-image" data-src="BOOK_IMAGE">
             <div class="book-content">
                 <h2 class="book-title"></h2>
                 <img src="media/watercolor/tumski.png" alt="Тумский остров" class="content-image">
@@ -545,7 +617,25 @@
     <div class="most-overlay">
         <button class="close-button">×</button>
         <div class="most-container">
-            <img src="media/book02.jpg" alt="Тумский мост" class="most-image">
+            <div class="image-wrapper">
+                <img src="" alt="Тумский мост" class="most-image" data-src="BOOK_IMAGE_02">
+                <img src="" alt="Overlay Image" class="overlay-image" style="display: none;">
+                <img src="" alt="Additional Image" class="additional-image" style="display: none;">
+                <img src="" alt="Book 31" class="book-31-image" style="display: none;">
+                <img src="" alt="Book 32" class="book-32-image" style="display: none;">
+                <div class="book-zones right-zones">
+                    <div class="book-zone zone-1" data-zone="1"></div>
+                    <div class="book-zone zone-2" data-zone="2"></div>
+                    <div class="book-zone zone-3" data-zone="3"></div>
+                    <div class="book-zone zone-4" data-zone="4"></div>
+                </div>
+                <div class="book-zones left-zones">
+                    <div class="book-zone zone-1" data-zone="1"></div>
+                    <div class="book-zone zone-2" data-zone="2"></div>
+                    <div class="book-zone zone-3" data-zone="3"></div>
+                    <div class="book-zone zone-4" data-zone="4"></div>
+                </div>
+            </div>
             <div class="most-title"></div>
         </div>
     </div>
@@ -570,10 +660,89 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
+            // Применяем общие стили кнопок
+            applyCommonButtonStyles();
+
+            // Устанавливаем пути к изображениям книг
+            document.querySelector('.book-image').src = window.BookPaths.BOOK_IMAGE;
+            document.querySelector('.most-image').src = window.BookPaths.BOOK_IMAGE_02;
+
+            // Инициализируем дополнительные изображения
+            const overlayImg = document.querySelector('.overlay-image');
+            const additionalImg = document.querySelector('.additional-image');
+            const book31Img = document.querySelector('.book-31-image');
+            const book32Img = document.querySelector('.book-32-image');
+            const config = window.BookZonesConfig;
+
+            // Инициализация изображений для зоны 2
+            if (config.zones.right.ZONE_2.overlayImage) {
+                overlayImg.src = window.BookPaths[config.zones.right.ZONE_2.overlayImage.src];
+                Object.assign(overlayImg.style, config.zones.right.ZONE_2.overlayImage.style);
+            }
+
+            if (config.zones.right.ZONE_2.additionalImage) {
+                additionalImg.src = window.BookPaths[config.zones.right.ZONE_2.additionalImage.src];
+                Object.assign(additionalImg.style, config.zones.right.ZONE_2.additionalImage.style);
+            }
+
+            // Инициализация изображений для зоны 3
+            const zone3Config = config.zones.right.ZONE_3;
+            if (zone3Config.overlayImage) {
+                overlayImg.src = window.BookPaths[zone3Config.overlayImage.src];
+                Object.assign(overlayImg.style, zone3Config.overlayImage.style);
+            }
+
+            if (zone3Config.additionalImages) {
+                book31Img.src = window.BookPaths[zone3Config.additionalImages[0].src];
+                Object.assign(book31Img.style, zone3Config.additionalImages[0].style);
+                
+                book32Img.src = window.BookPaths[zone3Config.additionalImages[1].src];
+                Object.assign(book32Img.style, zone3Config.additionalImages[1].style);
+            }
+
+            const rightZones = document.querySelector('.right-zones');
+            Object.assign(rightZones.style, config.rightContainer);
+            Object.assign(rightZones.style, config.styles.container);
+
+            const leftZones = document.querySelector('.left-zones');
+            Object.assign(leftZones.style, config.leftContainer);
+            Object.assign(leftZones.style, config.styles.container);
+
+            function setupZones(container, side) {
+                container.querySelectorAll('.book-zone').forEach((zone, index) => {
+                    const zoneNumber = index + 1;
+                    const zoneConfig = config.zones[side][`ZONE_${zoneNumber}`];
+                    const zoneStyles = config.styles.zone;
+                    const zoneColor = config.styles.zoneColors[`ZONE_${zoneNumber}`];
+                    const bookSound = document.querySelector('#bookSound');
+                    
+                    Object.assign(zone.style, zoneStyles);
+                    zone.style.top = zoneConfig.top;
+                    zone.style.height = zoneConfig.height;
+                    zone.style.backgroundColor = zoneColor;
+
+                    zone.addEventListener('mouseenter', () => {
+                        zone.style.backgroundColor = config.styles.zoneHover.backgroundColor;
+                    });
+
+                    zone.addEventListener('mouseleave', () => {
+                        zone.style.backgroundColor = zoneColor;
+                    });
+
+                    zone.addEventListener('click', () => {
+                        if (zoneConfig.onClick) {
+                            zoneConfig.onClick(overlayImg, additionalImg, book31Img, book32Img, bookSound);
+                        }
+                    });
+                });
+            }
+
+            setupZones(rightZones, 'right');
+            setupZones(leftZones, 'left');
+
             await window.i18n.loadTranslations();
             window.i18n.updatePageContent();
 
-            // Получаем элементы страницы
             const container = document.querySelector(Common.COMMON_ELEMENTS.IMAGE_CONTAINER);
             const cursor = document.querySelector(Common.COMMON_ELEMENTS.CURSOR);
             const cursorArea = document.querySelector(Common.COMMON_ELEMENTS.CURSOR_AREA);
@@ -592,28 +761,22 @@
             const scrollIndicator = document.querySelector(Common.COMMON_ELEMENTS.SCROLL_INDICATOR);
             const mostTitle = mostOverlay.querySelector('.most-title');
 
-            // Настраиваем обработчики
             Common.setupResetAnimation(container);
             Common.setupRightArrowHandler(cursor, cursorArea, stepSound, () => {
                 const imageContainer = document.querySelector('.image-container');
                 const currentImage = document.querySelector('.image');
                 const nextImageContainer = document.querySelector('.next-image-container');
                 
-                // Меняем изображение в nextImageContainer
                 nextImageContainer.style.backgroundImage = "url('media/tumski/tumski_02.jpg')";
                 
-                // Останавливаем текущую анимацию
                 imageContainer.style.animationPlayState = 'paused';
                 
-                // Запускаем анимацию зума
                 imageContainer.classList.add('zoom-transition');
                 
-                // Запускаем переход между изображениями
                 setTimeout(() => {
                     currentImage.classList.add('fade-out');
                     nextImageContainer.classList.add('fade-in');
                     
-                    // Ждем завершения перехода перед сменой страницы
                     setTimeout(() => {
                         window.location.href = 'tumski_02.html';
                     }, 500);
@@ -624,28 +787,22 @@
                 const currentImage = document.querySelector('.image');
                 const nextImageContainer = document.querySelector('.next-image-container');
                 
-                // Останавливаем текущую анимацию
                 imageContainer.style.animationPlayState = 'paused';
                 
-                // Запускаем анимацию зума
                 imageContainer.classList.add('zoom-transition');
                 
-                // Запускаем переход между изображениями
                 setTimeout(() => {
                     currentImage.classList.add('fade-out');
                     nextImageContainer.classList.add('fade-in');
                     
-                    // Ждем завершения перехода перед сменой страницы
                     setTimeout(() => {
                         window.location.href = 'tumski_03.html';
                     }, 500);
                 }, 1000);
             });
 
-            // Настраиваем обработчики прокрутки
             const { toggleScrollIndicator } = Common.setupScrollHandlers(bookContent, scrollIndicator);
 
-            // Предзагружаем следующее изображение
             const preloadImage = new Image();
             preloadImage.src = 'media/tumski/tumski_03.jpg';
             preloadImage.onload = function() {
@@ -655,44 +812,70 @@
                 console.error('Ошибка загрузки следующего изображения');
             };
             
-            // Настраиваем обработчики для книг
             tumskiTxtX = document.querySelector('#tumski-text');
             tumskiTxtX.addEventListener('click', () => {
-                if (!bookOverlay.style.display || bookOverlay.style.display === 'none') {
-                    Common.openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator);
+                console.log('Tumski text clicked');
+                if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
+                    Common.openMost(bookSound, mostOverlay, container, mostTitle);
+                    console.log('Most overlay opened from Tumski text, starting highlight animation');
+                    setTimeout(() => {
+                        if (window.showInitialHighlight) {
+                            window.showInitialHighlight();
+                        }
+                    }, 500);
                 }
             });
 
             tumskiTxt = document.querySelector('#tumski-most-text');
             tumskiTxt.addEventListener('click', () => {
+                console.log('Most text clicked');
                 if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
                     Common.openMost(bookSound, mostOverlay, container, mostTitle);
+                    console.log('Most overlay opened from text, starting highlight animation');
+                    setTimeout(() => {
+                        if (window.showInitialHighlight) {
+                            window.showInitialHighlight();
+                        }
+                    }, 500);
                 }
             });
 
             mapMarkMost.addEventListener('click', () => {
+                console.log('Map mark clicked');
                 if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
                     Common.openMost(bookSound, mostOverlay, container, mostTitle);
+                    console.log('Most overlay opened, starting highlight animation');
+                    setTimeout(() => {
+                        if (window.showInitialHighlight) {
+                            window.showInitialHighlight();
+                        }
+                    }, 500);
                 }
             });
 
-            const mostTitleElement = document.querySelector('[data-i18n="tumski_most.title"]');
-            if (mostTitleElement) {
-                mostTitleElement.parentElement.addEventListener('click', () => {
+            // Добавляем обработчик для родительского элемента
+            const tumskiTextParent = tumskiTxtX?.parentElement;
+            if (tumskiTextParent) {
+                tumskiTextParent.addEventListener('click', () => {
+                    console.log('Tumski text parent clicked');
                     if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
                         Common.openMost(bookSound, mostOverlay, container, mostTitle);
+                        console.log('Most overlay opened from Tumski text parent, starting highlight animation');
+                        setTimeout(() => {
+                            if (window.showInitialHighlight) {
+                                window.showInitialHighlight();
+                            }
+                        }, 500);
                     }
                 });
             }
 
-            // Настраиваем обработчики закрытия
             closeButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     Common.resumeAnimation(bookOverlay, mostOverlay, container);
-                    // Сбрасываем анимацию
                     container.classList.remove('zoom-transition');
                     container.style.animation = 'none';
-                    container.offsetHeight; // Принудительное обновление DOM
+                    container.offsetHeight;
                     container.style.animation = null;
                 });
             });
@@ -701,10 +884,9 @@
                 overlay.addEventListener('click', function(e) {
                     if (e.target === overlay) {
                         Common.resumeAnimation(bookOverlay, mostOverlay, container);
-                        // Сбрасываем анимацию
                         container.classList.remove('zoom-transition');
                         container.style.animation = 'none';
-                        container.offsetHeight; // Принудительное обновление DOM
+                        container.offsetHeight;
                         container.style.animation = null;
                     }
                 });

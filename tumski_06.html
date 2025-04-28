@@ -195,9 +195,9 @@
         .custom-cursor-prostoarea {
             position: fixed;
             left: 0;
-            bottom: 25%;
+            bottom: 10%;
             width: 50%;
-            height: 25%;
+            height: 50%;
             z-index: 999;
             cursor: none;
         }
@@ -206,9 +206,9 @@
         .custom-cursor-prostoarea-r {
             position: fixed;
             right: 0;
-            bottom: 25%;
+            bottom: 10%;
             width: 50%;
-            height: 25%;
+            height: 50%;
             z-index: 1005;
             cursor: none;
         }
@@ -442,9 +442,9 @@
         .arrow-click-area {
             position: fixed;
             right: 0;
-            bottom: 0;
+            bottom: 50%;
             width: 50%;
-            height: 50%;
+            height: 40%;
             z-index: 999;
             cursor: none;
         }
@@ -569,7 +569,7 @@
             left: 0;
             bottom: 0;
             width: 100%;
-            height: 20%; /* Нижняя одна пятая экрана */
+            height: 10%; /* Нижняя одна пятая экрана */
             z-index: 999;
             cursor: none;
         }
@@ -597,12 +597,79 @@
             opacity: 0 !important;
             pointer-events: none !important;
         }
+
+        /* Стрелка вверх */
+        .custom-cursor-prostoarea-v {
+            position: fixed;
+            left: 30%;
+            right: 30%;
+            top: 0;
+            height: 25%;
+            z-index: 1005;
+            cursor: none;
+        }
+
+        .custom-cursor-prosto-v {
+            width: 64px;
+            height: 64px;
+            position: fixed;
+            background-image: url('media/strelka_v.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1006;
+            cursor: pointer;
+            pointer-events: none;
+            transform: translateX(-50%) translateY(-50%);
+        }
+
+        .custom-cursor-prostoarea-v:hover .custom-cursor-prosto-v {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        @keyframes zoomForwardUp {
+            0% {
+                transform: translateZ(0) scale(1) translate(0, 0);
+            }
+            100% {
+                transform: translateZ(2000px) scale(2.5) translate(0, 50vh);
+            }
+        }
+
+        .zoom-transition-Up {
+            animation: zoomForwardUp 1.5s ease-in forwards !important;
+        }
+
+        .next-image-container-Up {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-image: url('media/tumski/katedra_01.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: black;
+            opacity: 0;
+            transition: opacity 2s ease-in;
+            z-index: 2;
+            backface-visibility: hidden;
+            will-change: transform;
+            transform-style: preserve-3d;
+            transform: translateZ(0);
+            overflow: hidden;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
     <script src="i18n.js"></script>
     <script src="common.js"></script>
     <script src="arrow_handlers.js"></script>
+  <!--  <link rel="preload" href="media/tumski/tumski_16.jpg" as="image">-->
 </head>
 <body>
     <a href="index.html" class="back-link">← На главную</a>
@@ -616,6 +683,9 @@
     </div>
     <div class="custom-cursor-backarea">
         <div class="custom-cursor-back"></div>
+    </div>
+    <div class="custom-cursor-prostoarea-v">
+        <div class="custom-cursor-prosto-v"></div>
     </div>
     <audio id="stepSound" src="media/step.wav"></audio>
     <div class="map-mark-area">
@@ -661,6 +731,7 @@
         </div>
         <div class="next-image-container"></div>
         <div class="next-image-container-Right"></div>
+        <div class="next-image-container-Up"></div>
         <div class="custom-cursor-backarea">
             <div class="custom-cursor-back"></div>
         </div>
@@ -846,6 +917,16 @@
             cursorBackArea.removeEventListener('mousemove', function() {});
             cursorBackArea.removeEventListener('mouseleave', function() {});
             cursorBackArea.removeEventListener('click', function() {});
+
+            // Обработчик стрелки вверх
+            Common.setupUpArrowHandler(
+                document.querySelector('.custom-cursor-prosto-v'),
+                document.querySelector('.custom-cursor-prostoarea-v'),
+                stepSound,
+                () => {
+                    window.location.href = 'katedra_01.html';
+                }
+            );
         });
     </script>
 </body>

@@ -30,7 +30,7 @@
                 transform: translateZ(0) scale(1) translate(0, 0);
             }
             100% {
-                transform: translateZ(2000px) scale(2.5) translate(0vw, -20vh);
+                transform: translateZ(2000px) scale(2.5) translate(60vw, -50vh);
             }
         }
 
@@ -39,7 +39,7 @@
                 transform: translateZ(0) scale(1) translate(0, 0);
             }
             100% {
-                transform: translateZ(2000px) scale(2.5) translate(-50vw, -50vh);
+                transform: translateZ(2000px) scale(2.5) translate(-25vw, -50vh);
             }
         }
 
@@ -89,7 +89,7 @@
             width: 100%;
             height: 100%;
             position: absolute;
-            background-image: url('media/tumski/pk_03.jpg');
+            background-image: url('media/tumski/pk_04.jpg');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -113,7 +113,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            background-image: url('media/tumski/pk_04.jpg');
+            background-image: url('media/tumski/pk_05.jpg');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -134,7 +134,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            background-image: url('media/tumski/tumski_07.jpg');
+            background-image: url('media/tumski/pk_05.jpg');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -191,13 +191,13 @@
 
 
 
-        /* Стрелка прямо */
+        /* Стрелка влево */
         .custom-cursor-prostoarea {
             position: fixed;
-            left: 35%;
+            left: 0;
             bottom: 25%;
-            width: 30%;
-            height: 55%;
+            width: 50%;
+            height: 25%;
             z-index: 999;
             cursor: none;
         }
@@ -207,8 +207,8 @@
             position: fixed;
             right: 0;
             bottom: 25%;
-            width: 35%;
-            height: 50%;
+            width: 50%;
+            height: 25%;
             z-index: 1005;
             cursor: none;
         }
@@ -217,7 +217,7 @@
             width: 64px;
             height: 64px;
             position: fixed;
-            background-image: url('media/strelka_prosto.png');
+            background-image: url('media/strelka_prosto_l.png');
             background-size: contain;
             background-repeat: no-repeat;
             filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
@@ -232,7 +232,7 @@
             width: 64px;
             height: 64px;
             position: fixed;
-            background-image: url('media/strelka.png');
+            background-image: url('media/strelka_prosto_r.png');
             background-size: contain;
             background-repeat: no-repeat;
             filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
@@ -598,13 +598,13 @@
             pointer-events: none !important;
         }
 
-        /* Стрелка влево */
+        /* Стрелка вверх */
         .custom-cursor-prostoarea-v {
             position: fixed;
-            right: 65%;
-            bottom: 25%;
-            width: 35%;
-            height: 50%;
+            left: 30%;
+            right: 30%;
+            top: 0;
+            height: 25%;
             z-index: 1005;
             cursor: none;
         }
@@ -613,7 +613,7 @@
             width: 64px;
             height: 64px;
             position: fixed;
-            background-image: url('media/strelka_rev.png');
+            background-image: url('media/strelka_v.png');
             background-size: contain;
             background-repeat: no-repeat;
             filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
@@ -635,7 +635,7 @@
                 transform: translateZ(0) scale(1) translate(0, 0);
             }
             100% {
-                transform: translateZ(2000px) scale(2.5) translate(25, -50vh);
+                transform: translateZ(2000px) scale(2.5) translate(0, 50vh);
             }
         }
 
@@ -649,7 +649,7 @@
             position: absolute;
             top: 0;
             left: 0;
-            background-image: url('media/tumski/pk_02.jpg');
+            background-image: url('media/tumski/katedra_01.jpg');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -673,11 +673,7 @@
 </head>
 <body>
     <a href="index.html" class="back-link">← На главную</a>
-    <div class="custom-cursor-area"></div>
-        <div class="custom-cursor"></div>
-    <div class="custom-cursor-prostoarea">
-        <div class="custom-cursor-prosto"></div>
-    </div>
+
     <div class="custom-cursor-prostoarea-r">
         <div class="custom-cursor-prosto-r"></div>
     </div>
@@ -803,7 +799,7 @@
                         
                         // Ждем завершения перехода перед сменой страницы
                         setTimeout(() => {
-                            window.location.href = 'pk_04.html';
+                            window.location.href = 'pk_01.html';
                         }, 500);
                     }, 1000);
                 }
@@ -837,7 +833,7 @@
                     
                         // Ждем завершения перехода перед сменой страницы
                         setTimeout(() => {
-                            window.location.href = 'tumski_07.html';
+                            window.location.href = 'pk_05.html';
                         }, 500);
                     }, 1000);
                 }
@@ -849,7 +845,7 @@
                 document.querySelector('.custom-cursor-backarea'),
                 stepSound,
                 () => {
-                    window.location.href = 'pk_02.html';
+                    window.location.href = 'pk_03.html';
                 }
             );
 
@@ -922,7 +918,7 @@
                 document.querySelector('.custom-cursor-prostoarea-v'),
                 stepSound,
                 () => {
-                    window.location.href = 'pk_02.html';
+                    window.location.href = 'katedra_01.html';
                 }
             );
         });

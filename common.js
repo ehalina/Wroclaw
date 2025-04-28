@@ -93,27 +93,41 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, nextPageCallback)
             const currentImage = document.querySelector('.image');
             const nextImageContainer = document.querySelector('.next-image-container-Right');
             
+            console.log('Элементы для анимации:', {
+                imageContainer: !!imageContainer,
+                currentImage: !!currentImage,
+                nextImageContainer: !!nextImageContainer,
+                nextImageContainerStyle: nextImageContainer ? window.getComputedStyle(nextImageContainer) : null,
+                nextImageContainerBackground: nextImageContainer ? window.getComputedStyle(nextImageContainer).backgroundImage : null
+            });
+
             if (!imageContainer || !currentImage || !nextImageContainer) {
                 console.error('Не все элементы для анимации найдены');
                 return;
             }
 
+            // Показываем следующее изображение
+            nextImageContainer.style.opacity = '1';
+            console.log('Установлена opacity = 1 для nextImageContainer');
+            
             // Запускаем анимацию перехода
             imageContainer.style.animationPlayState = 'paused';
             imageContainer.classList.add('zoom-transition-Right');
+            console.log('Добавлен класс zoom-transition-Right');
             
-            // Запускаем анимацию fade
+            // После завершения анимации переходим на следующую страницу
             setTimeout(() => {
-                currentImage.classList.add('fade-out');
-                nextImageContainer.classList.add('fade-in');
+                console.log('Текущее состояние элементов:', {
+                    imageContainerClass: imageContainer.className,
+                    nextImageContainerOpacity: window.getComputedStyle(nextImageContainer).opacity,
+                    nextImageContainerVisibility: window.getComputedStyle(nextImageContainer).visibility
+                });
                 
-                // Вызываем callback для перехода на следующую страницу
-                setTimeout(() => {
-                    if (typeof nextPageCallback === 'function') {
-                        nextPageCallback();
-                    }
-                }, 500);
-            }, 1000);
+                if (typeof nextPageCallback === 'function') {
+                    nextPageCallback();
+                }
+            }, 1500);
+            
         } catch (error) {
             console.error('Ошибка при обработке клика:', error);
         }
@@ -238,6 +252,102 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, prevPageCa
             }
         }, 300);
     });
+}
+
+function setupUpArrowHandler(cursor, cursorArea, stepSound, nextPageCallback) {
+    // Проверяем наличие необходимых элементов
+    if (!cursor || !cursorArea) {
+        console.error('Элементы стрелки вверх не найдены');
+        return;
+    }
+
+    console.log('Инициализация обработчика стрелки вверх:', {
+        cursor: cursor,
+        cursorArea: cursorArea
+    });
+
+    // Обработчик движения мыши над областью курсора
+    cursorArea.addEventListener('mousemove', function(e) {
+        const rect = this.getBoundingClientRect();
+        console.log('Движение мыши в области стрелки вверх:', {
+            mouseX: e.clientX,
+            mouseY: e.clientY,
+            rectLeft: rect.left,
+            rectRight: rect.right,
+            rectTop: rect.top,
+            rectBottom: rect.bottom
+        });
+
+        if (e.clientX >= rect.left && e.clientX <= rect.right &&
+            e.clientY >= rect.top && e.clientY <= rect.bottom) {
+            cursor.style.opacity = '1';
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            console.log('Стрелка вверх показана:', {
+                left: cursor.style.left,
+                top: cursor.style.top,
+                opacity: cursor.style.opacity
+            });
+        }
+    });
+
+    // Скрываем курсор при уходе мыши из области
+    cursorArea.addEventListener('mouseleave', function() {
+        cursor.style.opacity = '0';
+        console.log('Курсор скрыт при выходе из области');
+    });
+
+    // Обработчик клика
+    cursor.addEventListener('click', handleClick);
+    cursorArea.addEventListener('click', handleClick);
+
+    function handleClick(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Клик по стрелке вверх');
+
+        try {
+            hideAllCursors();
+            
+            if (stepSound) {
+                stepSound.currentTime = 0;
+                stepSound.play();
+            }
+            
+            // Получаем элементы для анимации
+            const imageContainer = document.querySelector('.image-container');
+            const currentImage = document.querySelector('.image');
+            const nextImageContainer = document.querySelector('.next-image-container-Up');
+            
+            console.log('Элементы для анимации вверх:', {
+                imageContainer: !!imageContainer,
+                currentImage: !!currentImage,
+                nextImageContainer: !!nextImageContainer
+            });
+
+            if (!imageContainer || !currentImage || !nextImageContainer) {
+                console.error('Не все элементы для анимации вверх найдены');
+                return;
+            }
+
+            // Показываем следующее изображение
+            nextImageContainer.style.opacity = '1';
+            
+            // Запускаем анимацию перехода
+            imageContainer.style.animationPlayState = 'paused';
+            imageContainer.classList.add('zoom-transition-Up');
+            
+            // После завершения анимации переходим на следующую страницу
+            setTimeout(() => {
+                if (typeof nextPageCallback === 'function') {
+                    nextPageCallback();
+                }
+            }, 1500);
+            
+        } catch (error) {
+            console.error('Ошибка при обработке клика:', error);
+        }
+    }
 }
 
 // Общие функции для работы с книгой
@@ -372,6 +482,7 @@ window.Common = {
     setupRightArrowHandler,
     setupForwardArrowHandler,
     setupBackArrowHandler,
+    setupUpArrowHandler,
     openBook,
     openMost,
     resumeAnimation,
