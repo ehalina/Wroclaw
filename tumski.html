@@ -578,7 +578,9 @@
     <script src="common_buttons.js"></script>
 </head>
 <body>
-    <a href="index.html" class="back-link">← На главную</a>
+    <a href="index.html" class="back-link">
+        <img src="media/maps_i.jpg" alt="Карта" style="height:64px;width:64px;vertical-align:middle;">
+    </a>
     <div class="custom-cursor"></div>
     <div class="custom-cursor-area"></div>
     <div class="custom-cursor-prostoarea">
@@ -876,6 +878,28 @@
                     }
                 });
             });
+
+            // === Добавляем обработчик для стрелки вправо ===
+            const customCursor = document.querySelector('.custom-cursor');
+            const customCursorArea = document.querySelector('.custom-cursor-area');
+
+            // Позиционируем стрелку в правом нижнем углу
+            customCursor.style.right = '40px';
+            customCursor.style.bottom = '40px';
+            customCursor.style.left = 'auto';
+            customCursor.style.top = 'auto';
+
+            customCursorArea.addEventListener('mouseenter', () => {
+                customCursor.style.display = 'block';
+            });
+            customCursorArea.addEventListener('mouseleave', () => {
+                customCursor.style.display = 'none';
+            });
+            customCursorArea.addEventListener('click', () => {
+                window.location.href = 'tumski_02.html';
+            });
+            // Скрываем стрелку по умолчанию
+            customCursor.style.display = 'none';
         });
     </script>
 </body>
