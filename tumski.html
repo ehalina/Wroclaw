@@ -578,9 +578,17 @@
     <script src="common_buttons.js"></script>
 </head>
 <body>
-    <a href="index.html" class="back-link">
+    <a href="index.html" class="back-link" id="open-map-modal">
         <img src="media/maps_i.jpg" alt="Карта" style="height:64px;width:64px;vertical-align:middle;">
     </a>
+    <!-- Модальное окно карты -->
+    <div id="map-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); z-index:2000; justify-content:center; align-items:center;">
+        <div style="position:relative; width:80vw; max-width:900px;">
+            <img id="map-image" src="media/tumski/map.jpg" alt="Карта" style="width:100%; height:auto; display:block; border-radius:12px;">
+            <img id="map-marker" src="media/mapmark.png" alt="Маркер" style="position:absolute; width:48px; height:48px; pointer-events:none;">
+            <button id="close-map-modal" style="position:absolute; top:16px; right:16px; background:none; border:none; color:white; font-size:36px; cursor:pointer; z-index:10;">×</button>
+        </div>
+    </div>
     <div class="custom-cursor"></div>
     <div class="custom-cursor-area"></div>
     <div class="custom-cursor-prostoarea">
@@ -900,6 +908,40 @@
             });
             // Скрываем стрелку по умолчанию
             customCursor.style.display = 'none';
+
+            const openMapBtn = document.getElementById('open-map-modal');
+            const mapModal = document.getElementById('map-modal');
+            const closeMapBtn = document.getElementById('close-map-modal');
+            const mapImage = document.getElementById('map-image');
+            const mapMarker = document.getElementById('map-marker');
+
+            openMapBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                mapModal.style.display = 'flex';
+                // Получаем координаты точки 1
+                const coords = getMapPointCoords(1);
+                // После загрузки изображения корректно позиционируем маркер
+                mapImage.onload = function() {
+                    positionMarker();
+                };
+                // Если картинка уже загружена
+                if (mapImage.complete) {
+                    positionMarker();
+                }
+                function positionMarker() {
+                    const rect = mapImage.getBoundingClientRect();
+                    // Координаты в процентах, маркер центрируем
+                    mapMarker.style.left = `calc(${coords.x}% - 24px)`;
+                    mapMarker.style.top = `calc(${coords.y}% - 48px)`;
+                }
+            });
+            closeMapBtn.addEventListener('click', function() {
+                mapModal.style.display = 'none';
+            });
+            // Закрытие по клику вне карты
+            mapModal.addEventListener('click', function(e) {
+                if (e.target === mapModal) mapModal.style.display = 'none';
+            });
         });
     </script>
 </body>
