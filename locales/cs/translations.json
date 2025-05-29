@@ -1,0 +1,51 @@
+{
+  "title": {
+    "tumski": "Ostrov Tumski",
+    "tumski_most": "Most Tumski"
+  },
+  "tumski": {
+    "title": "Ostrov Tumski",
+    "description": "Ostrov Tumski není jen místo na mapě, ale skutečný časový portál vedoucí přímo do hlubin staletí. Kdyby byl Vratislav starou knihou, jeho první kapitola by začínala právě zde, v 10. století, mezi mlhami, zvoněním zvonů a tajemnými siluetami.\n\nTento ostrov není jen čtvrtí, ale celou encyklopedií zázraků. Zde se starověké chrámy setkávají s podivnými legendami, ulice šeptají o minulosti a večer se jako kouzlem objevuje lampář. Ano, ten opravdový, v dlouhém plášti, s lucernou a speciální hůlkou. A každou noc ručně zapaluje staré plynové lampy, jako by městu připomínal, že magie stále žije.\n\nTakže se připravte. Začneme naši procházku na mostě Tumski a krok za krokem budeme odhalovat tajemství středověkého Vratislavi. A pokud náhle uslyšíte šepot starých zdí – nebojte se. Ostrov vám jen vypráví své příběhy."
+  },
+  "tumski_most": {
+    "title": "Most Tumski",
+    "description": "Most Tumski je pěší most spojující ostrov Tumski s pevninskou částí Vratislavi. Most je známý svými zámky lásky, které páry věší na jeho zábradlí jako symbol své lásky. Je to oblíbené místo pro romantické procházky a focení.",
+    "book02": {
+      "zone1": {
+        "title": "Most Tumski",
+        "text": "Pokud je Vratislav pohádkové město (a to bezpochyby je), pak je most Tumski přesně tím magickým portálem, který vede do jeho nejstaršího a nejtajemnějšího srdce. Jeho název je samozřejmě zvučný a významný – 'katedrální', protože vede přímo k majestátní katedrále svatého Jana Křtitele. A také proto, že starý most Tumski není jen mostem, ale hranicí mezi světy: kdysi se zde setkávala světská a církevní moc, a dokonce byl postaven speciální sloup se dvěma erby, aby nikdo nezapomněl, kdo zde má hlavní slovo (i když to nepomohlo)."
+      }
+    }
+  },
+  "panorama": {
+    "title": "Vyhlídková plošina"
+  },
+  "map.tumski_bridge": "Most Tumski",
+  "map.katedra": "Katedrála svatého Jana Křtitele",
+  "map.matka": "Socha Panny Marie",
+  "map.sobor": "Kostel svatého Kříže a svatého Bartoloměje",
+  "map.jan": "Pomník Jana Nepomuckého",
+  "map.kostel": "Kostel Panny Marie na písku",
+  "map.platan": "Platan javorolistý. Přírodní památka",
+  "map.ogrod": "Zahrada Papežské teologické fakulty",
+  "map.ogrodbot1": "Botanická zahrada Vratislavské univerzity",
+  "map.ogrodbot2": "Botanická zahrada Vratislavské univerzity",
+  "map.ogrodbot3": "Botanická zahrada Vratislavské univerzity",
+  "map.ogrodbot4": "Botanická zahrada Vratislavské univerzity",
+  "map.plackat": "Katedrální náměstí",
+  "map.odra1": "Odra",
+  "map.odra2": "Odra",
+  "map.odra3": "Odra",
+  "map.mlynski": "Mlýnský most",
+  "map.panny": "Ulice Panny Marie",
+  "map.piasek": "Ostrov Písek",
+  "map.katedralna1": "Katedrální ulice",
+  "map.katedralna2": "Katedrální náměstí",
+  "map.katedralna3": "Katedrální náměstí",
+  "map.katedralna4": "Katedrální náměstí",
+  "map.katedralna5": "Katedrální náměstí",
+  "map.brama": "Kluska brána",
+  "map.kanonia": "Kanonická ulice",
+  "map.bramabot": "Zahradní branka botanické zahrady",
+  "map.kapitulna": "Kapitulní ulice"
+} 

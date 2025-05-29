@@ -1,0 +1,51 @@
+{
+  "title": {
+    "tumski": "Tumski-Insel",
+    "tumski_most": "Tumski-Brücke"
+  },
+  "tumski": {
+    "title": "Tumski-Insel",
+    "description": "Die Tumski-Insel ist nicht nur ein Ort auf der Karte, sondern ein echtes Zeitportal, das direkt in die Tiefen der Jahrhunderte führt. Wenn Breslau ein altes Buch wäre, würde sein erstes Kapitel genau hier beginnen, im 10. Jahrhundert, zwischen Nebel, Glockengeläut und geheimnisvollen Silhouetten.\n\nDiese Insel ist nicht nur ein Stadtteil, sondern eine ganze Enzyklopädie der Wunder. Hier stehen uralte Tempel neben skurrilen Legenden, die Straßen flüstern von der Vergangenheit, und abends erscheint wie durch Zauberei ein Laternenanzünder. Ja, ein echter, in einem langen Mantel, mit einer Laterne und einem speziellen Stock. Und jede Nacht zündet er die alten Gaslaternen von Hand an, als wollte er die Stadt daran erinnern, dass die Magie noch lebt.\n\nAlso machen Sie sich bereit. Wir beginnen unseren Spaziergang an der Tumski-Brücke und werden Schritt für Schritt die Geheimnisse des mittelalterlichen Breslaus enträtseln. Und wenn Sie plötzlich das Flüstern der alten Mauern hören – keine Angst. Die Insel erzählt Ihnen nur ihre Geschichten."
+  },
+  "tumski_most": {
+    "title": "Tumski-Brücke",
+    "description": "Die Tumski-Brücke ist eine Fußgängerbrücke, die die Tumski-Insel mit dem Festland von Breslau verbindet. Die Brücke ist bekannt für ihre Liebesschlösser, die Paare als Zeichen ihrer Liebe an die Geländer hängen. Es ist ein beliebter Ort für romantische Spaziergänge und Fotoshootings.",
+    "book02": {
+      "zone1": {
+        "title": "Tumski-Brücke",
+        "text": "Wenn Breslau eine Märchenstadt ist (und das ist es zweifellos), dann ist die Tumski-Brücke genau dieses magische Portal, das zu seinem ältesten und geheimnisvollsten Herzen führt. Ihr Name ist natürlich klangvoll und bedeutend – 'Dombrücke', weil sie direkt zum majestätischen Dom St. Johannes des Täufers führt. Und auch, weil die alte Tumski-Brücke nicht nur eine Brücke ist, sondern eine Grenze zwischen Welten: Hier trafen einst weltliche und kirchliche Macht aufeinander, und sogar eine spezielle Säule mit zwei Wappen wurde aufgestellt, damit niemand vergisst, wer hier das Sagen hat (was allerdings nicht half)."
+      }
+    }
+  },
+  "panorama": {
+    "title": "Aussichtsplattform"
+  },
+  "map.tumski_bridge": "Tumski-Brücke",
+  "map.katedra": "Dom St. Johannes des Täufers",
+  "map.matka": "Marienstatue",
+  "map.sobor": "Kreuzkirche und St. Bartholomäus",
+  "map.jan": "Denkmal für Johannes Nepomuk",
+  "map.kostel": "Kirche St. Maria auf dem Sande",
+  "map.platan": "Ahornblättrige Platane. Naturdenkmal",
+  "map.ogrod": "Garten der Päpstlichen Theologischen Fakultät",
+  "map.ogrodbot1": "Botanischer Garten der Universität Breslau",
+  "map.ogrodbot2": "Botanischer Garten der Universität Breslau",
+  "map.ogrodbot3": "Botanischer Garten der Universität Breslau",
+  "map.ogrodbot4": "Botanischer Garten der Universität Breslau",
+  "map.plackat": "Domplatz",
+  "map.odra1": "Oder",
+  "map.odra2": "Oder",
+  "map.odra3": "Oder",
+  "map.mlynski": "Mühlenbrücke",
+  "map.panny": "Marienstraße",
+  "map.piasek": "Sandinsel",
+  "map.katedralna1": "Domstraße",
+  "map.katedralna2": "Domplatz",
+  "map.katedralna3": "Domplatz",
+  "map.katedralna4": "Domplatz",
+  "map.katedralna5": "Domplatz",
+  "map.brama": "Kluska-Tor",
+  "map.kanonia": "Kanonie-Straße",
+  "map.bramabot": "Gartentür des Botanischen Gartens",
+  "map.kapitulna": "Kapitelstraße"
+} 

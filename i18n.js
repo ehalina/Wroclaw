@@ -20,6 +20,11 @@ async function loadTranslations(lang = 'ru') {
 
 // Функция для получения перевода
 function t(key) {
+    // Сначала ищем плоский ключ
+    if (translations && translations.hasOwnProperty(key)) {
+        return translations[key];
+    }
+    // Если не найдено — ищем вложенный ключ
     const keys = key.split('.');
     let result = translations;
     for (const k of keys) {

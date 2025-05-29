@@ -122,14 +122,24 @@
             text-decoration: none;
             font-size: 16px;
             z-index: 1000;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
+            background: none;
             border-radius: 4px;
             transition: background 0.3s ease;
+            width: 64px;
+            height: 64px;
+            display: block;
         }
 
         .back-link:hover {
             background: rgba(0, 0, 0, 0.9);
+        }
+
+        .back-link img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            border: none;
         }
 
         .reset-animation {
@@ -386,68 +396,6 @@
             font-style: italic;
         }
 
-        .language-switcher {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-        }
-
-        .language-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            position: relative;
-        }
-
-        .language-icon {
-            width: 32px;
-            height: 32px;
-            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
-            transition: transform 0.2s ease;
-        }
-
-        .language-button:hover .language-icon {
-            transform: scale(1.1);
-        }
-
-        .language-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 8px;
-            padding: 8px 0;
-            margin-top: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            display: none;
-            flex-direction: column;
-            min-width: 100px;
-        }
-
-        .language-dropdown.show {
-            display: flex;
-        }
-
-        .language-option {
-            padding: 8px 16px;
-            cursor: pointer;
-            transition: background 0.2s ease;
-            text-align: center;
-            color: #333;
-            text-decoration: none;
-        }
-
-        .language-option:hover {
-            background: rgba(0, 0, 0, 0.1);
-        }
-
-        .language-option.active {
-            font-weight: bold;
-            background: rgba(0, 0, 0, 0.05);
-        }
-
         .most-overlay {
             position: fixed;
             top: 0;
@@ -576,9 +524,11 @@
     <script src="arrow_handlers.js"></script>
     <script src="book_paths.js"></script>
     <script src="common_buttons.js"></script>
+    <script src="language_menu.js"></script>
+    <script type="module" src="map_points.js"></script>
 </head>
 <body>
-    <a href="index.html" class="back-link" id="open-map-modal">
+    <a href="" class="back-link" id="open-map-modal">
         <img src="media/maps_i.jpg" alt="Карта" style="height:64px;width:64px;vertical-align:middle;">
     </a>
     <!-- Модальное окно карты -->
@@ -586,6 +536,7 @@
         <div style="position:relative; width:80vw; max-width:900px;">
             <img id="map-image" src="media/tumski/map.jpg" alt="Карта" style="width:100%; height:auto; display:block; border-radius:12px;">
             <img id="map-marker" src="media/mapmark.png" alt="Маркер" style="position:absolute; width:48px; height:48px; pointer-events:none;">
+            <div id="map-tooltip" style="display:none; position:absolute; background:rgba(0,0,0,0.8); color:white; padding:8px 12px; border-radius:4px; font-size:14px; pointer-events:none; z-index:1001;"></div>
             <button id="close-map-modal" style="position:absolute; top:16px; right:16px; background:none; border:none; color:white; font-size:36px; cursor:pointer; z-index:10;">×</button>
         </div>
     </div>
@@ -595,6 +546,7 @@
         <div class="custom-cursor-prosto"></div>
     </div>
     <audio id="stepSound" src="media/step.wav"></audio>
+    <audio id="mapSound" src="media/zwyki/bb6f2b8ec908f28.mp3"></audio>
     <div class="map-mark-area">
         <div class="map-mark" id="tumska_wyspa"></div>
         <div class="content-wrapper">
@@ -656,20 +608,22 @@
         </div>
         <div class="next-image-container"></div>
     </div>
-    <div class="language-switcher">
-        <button class="language-button" onclick="Common.toggleLanguageDropdown()">
-            <img src="media/local.jpg" alt="Language" class="language-icon">
-        </button>
-        <div class="language-dropdown">
-            <a href="#" class="language-option" data-lang="ru" onclick="Common.changeLang('ru')">RU</a>
-            <a href="#" class="language-option" data-lang="be" onclick="Common.changeLang('be')">BE</a>
-            <a href="#" class="language-option" data-lang="pl" onclick="Common.changeLang('pl')">PL</a>
-            <a href="#" class="language-option" data-lang="en" onclick="Common.changeLang('en')">EN</a>
-        </div>
-    </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
+            // Загружаем переводы и инициализируем i18n
+            await window.i18n.loadTranslations();
+            window.i18n.updatePageContent();
+
+            // Инициализируем языковое меню после загрузки i18n
+            LanguageMenu.init();
+
+            // Добавляем обработчик изменения языка
+            document.addEventListener('languageChanged', function() {
+                if (mapTooltip && mapTooltip.style.display === 'block') {
+                    window.updateMapTooltipText();
+                }
+            });
+
             // Применяем общие стили кнопок
             applyCommonButtonStyles();
 
@@ -749,9 +703,6 @@
 
             setupZones(rightZones, 'right');
             setupZones(leftZones, 'left');
-
-            await window.i18n.loadTranslations();
-            window.i18n.updatePageContent();
 
             const container = document.querySelector(Common.COMMON_ELEMENTS.IMAGE_CONTAINER);
             const cursor = document.querySelector(Common.COMMON_ELEMENTS.CURSOR);
@@ -914,11 +865,16 @@
             const closeMapBtn = document.getElementById('close-map-modal');
             const mapImage = document.getElementById('map-image');
             const mapMarker = document.getElementById('map-marker');
+            const mapTooltip = document.getElementById('map-tooltip');
 
-            openMapBtn.addEventListener('click', function(e) {
+            openMapBtn.addEventListener('click', async function(e) {
                 e.preventDefault();
                 mapModal.style.display = 'flex';
+                // Воспроизводим звук карты
+                const mapSound = document.getElementById('mapSound');
+                mapSound.play();
                 // Получаем координаты точки 1
+                const { getMapPointCoords, checkTooltipArea } = await import('./map_points.js');
                 const coords = getMapPointCoords(1);
                 // После загрузки изображения корректно позиционируем маркер
                 mapImage.onload = function() {
@@ -931,16 +887,62 @@
                 function positionMarker() {
                     const rect = mapImage.getBoundingClientRect();
                     // Координаты в процентах, маркер центрируем
-                    mapMarker.style.left = `calc(${coords.x}% - 24px)`;
-                    mapMarker.style.top = `calc(${coords.y}% - 48px)`;
+                    mapMarker.style.left = `${coords.x}%`;
+                    mapMarker.style.top = `${coords.y}%`;
+                    mapMarker.style.transform = 'translate(-50%, -50%)';
                 }
+
+                // === Исправленный обработчик движения мыши для подсказки ===
+                // Сначала удалим старые обработчики, если они были
+                mapImage.onmousemove = null;
+                mapImage.onmouseleave = null;
+
+                // Глобальная функция для обновления текста подсказки
+                function camelToSnake(str) {
+                    return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+                }
+                window.updateMapTooltipText = function(tooltipKey) {
+                    if (mapTooltip && mapTooltip.style.display === 'block') {
+                        let key = camelToSnake(tooltipKey);
+                        let tooltipText = window.i18n.t('map.' + key);
+                        mapTooltip.textContent = tooltipText;
+                    }
+                };
+
+                mapImage.onmousemove = function(e) {
+                    const rect = mapImage.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                    const y = ((e.clientY - rect.top) / rect.height) * 100;
+                    const tooltipKey = checkTooltipArea(x, y);
+                    if (tooltipKey) {
+                        mapTooltip.style.display = 'block';
+                        mapTooltip.style.left = `${e.clientX - rect.left + 20}px`;
+                        mapTooltip.style.top = `${e.clientY - rect.top + 20}px`;
+                        window.updateMapTooltipText(tooltipKey);
+                    } else {
+                        mapTooltip.style.display = 'none';
+                    }
+                };
+                mapImage.onmouseleave = function() {
+                    mapTooltip.style.display = 'none';
+                };
             });
             closeMapBtn.addEventListener('click', function() {
                 mapModal.style.display = 'none';
+                // Останавливаем звук карты
+                const mapSound = document.getElementById('mapSound');
+                mapSound.pause();
+                mapSound.currentTime = 0;
             });
             // Закрытие по клику вне карты
             mapModal.addEventListener('click', function(e) {
-                if (e.target === mapModal) mapModal.style.display = 'none';
+                if (e.target === mapModal) {
+                    mapModal.style.display = 'none';
+                    // Останавливаем звук карты
+                    const mapSound = document.getElementById('mapSound');
+                    mapSound.pause();
+                    mapSound.currentTime = 0;
+                }
             });
         });
     </script>

@@ -380,18 +380,28 @@ function toggleLanguageDropdown() {
     const dropdown = document.querySelector(COMMON_ELEMENTS.LANGUAGE_DROPDOWN);
     dropdown.classList.toggle('show');
 
-    document.addEventListener('click', function closeDropdown(e) {
-        if (!e.target.closest(COMMON_ELEMENTS.LANGUAGE_SWITCHER)) {
-            dropdown.classList.remove('show');
-            document.removeEventListener('click', closeDropdown);
-        }
-    });
+    // Добавляем обработчик закрытия только один раз
+    if (!toggleLanguageDropdown._handlerAdded) {
+        document.addEventListener('click', function closeDropdown(e) {
+            // Если клик вне language-switcher, закрываем меню
+            if (!e.target.closest(COMMON_ELEMENTS.LANGUAGE_SWITCHER)) {
+                dropdown.classList.remove('show');
+            }
+        });
+        toggleLanguageDropdown._handlerAdded = true;
+    }
 }
 
 async function changeLang(lang) {
     await window.i18n.changeLang(lang);
     document.querySelector(COMMON_ELEMENTS.LANGUAGE_DROPDOWN).classList.remove('show');
-    updateActiveLanguage();
+    this.updateActiveLanguage();
+
+    // Обновляем текст подсказки на карте, если модалка открыта
+    const mapModal = document.getElementById('map-modal');
+    if (mapModal && mapModal.style.display === 'flex') {
+        if (window.updateMapTooltipText) window.updateMapTooltipText();
+    }
 }
 
 function updateActiveLanguage() {
@@ -474,6 +484,18 @@ function hideAllCursors() {
         element.classList.add('hide-cursors');
     });
 }
+
+// Глобальная функция для обновления текста подсказки на карте
+window.updateMapTooltipText = function() {
+    const mapTooltip = document.getElementById('map-tooltip');
+    if (mapTooltip && mapTooltip.style.display === 'block') {
+        let tooltipText = 'Тумский мост';
+        if (window.i18n && typeof window.i18n.t === 'function') {
+            tooltipText = window.i18n.t('map.tumski_bridge');
+        }
+        mapTooltip.textContent = tooltipText;
+    }
+};
 
 // Экспорт функций и констант
 window.Common = {
