@@ -47,5 +47,16 @@
   "map.brama": "Kluska-Tor",
   "map.kanonia": "Kanonie-Straße",
   "map.bramabot": "Gartentür des Botanischen Gartens",
-  "map.kapitulna": "Kapitelstraße"
+  "map.kapitulna": "Kapitelstraße",
+  "quest.title1": "Quest 1: Finde alle Geheimnisse der Tumski-Insel",
+  "quest.task1": "Aufgabe 1",
+  "quest.task2": "Aufgabe 2",
+  "quest.task3": "Aufgabe 3",
+  "quest.task4": "Aufgabe 4",
+  "quest.task5": "Aufgabe 5",
+  "quest.task6": "Aufgabe 6",
+  "quest.task7": "Aufgabe 7",
+  "quest.task8": "Aufgabe 8",
+  "quest.task9": "Aufgabe 9",
+  "quest.task10": "Aufgabe 10"
 } 

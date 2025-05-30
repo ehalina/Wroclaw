@@ -32,13 +32,14 @@ const languageMenuStyles = `
         width: 100%;
         height: 100%;
         object-fit: contain;
+        border-radius: 4px;
     }
 
     .language-dropdown {
         position: absolute;
         top: 100%;
         right: 0; /* Выравнивание по правому краю родительского элемента */
-        background: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 246, 228, 0.9);
         border-radius: 8px;
         padding: 8px 0;
         margin-top: 8px;
@@ -88,13 +89,13 @@ const LanguageMenu = {
                     <img src="media/local.jpg" alt="Language" class="language-icon">
                 </button>
                 <div class="language-dropdown">
+                    <a href="#" class="language-option" data-lang="pl" onclick="LanguageMenu.changeLang('pl')">PL</a>
                     <a href="#" class="language-option" data-lang="ru" onclick="LanguageMenu.changeLang('ru')">RU</a>
                     <a href="#" class="language-option" data-lang="be" onclick="LanguageMenu.changeLang('be')">BE</a>
-                    <a href="#" class="language-option" data-lang="pl" onclick="LanguageMenu.changeLang('pl')">PL</a>
+                    <a href="#" class="language-option" data-lang="uk" onclick="LanguageMenu.changeLang('uk')">UK</a>
                     <a href="#" class="language-option" data-lang="en" onclick="LanguageMenu.changeLang('en')">EN</a>
                     <a href="#" class="language-option" data-lang="de" onclick="LanguageMenu.changeLang('de')">DE</a>
                     <a href="#" class="language-option" data-lang="cs" onclick="LanguageMenu.changeLang('cs')">CS</a>
-                    <a href="#" class="language-option" data-lang="uk" onclick="LanguageMenu.changeLang('uk')">UK</a>
                 </div>
             </div>
         `;

@@ -525,21 +525,10 @@
     <script src="book_paths.js"></script>
     <script src="common_buttons.js"></script>
     <script src="language_menu.js"></script>
+    <script src="map_modal.js"></script>
     <script type="module" src="map_points.js"></script>
 </head>
 <body>
-    <a href="" class="back-link" id="open-map-modal">
-        <img src="media/maps_i.jpg" alt="Карта" style="height:64px;width:64px;vertical-align:middle;">
-    </a>
-    <!-- Модальное окно карты -->
-    <div id="map-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.8); z-index:2000; justify-content:center; align-items:center;">
-        <div style="position:relative; width:80vw; max-width:900px;">
-            <img id="map-image" src="media/tumski/map.jpg" alt="Карта" style="width:100%; height:auto; display:block; border-radius:12px;">
-            <img id="map-marker" src="media/mapmark.png" alt="Маркер" style="position:absolute; width:48px; height:48px; pointer-events:none;">
-            <div id="map-tooltip" style="display:none; position:absolute; background:rgba(0,0,0,0.8); color:white; padding:8px 12px; border-radius:4px; font-size:14px; pointer-events:none; z-index:1001;"></div>
-            <button id="close-map-modal" style="position:absolute; top:16px; right:16px; background:none; border:none; color:white; font-size:36px; cursor:pointer; z-index:10;">×</button>
-        </div>
-    </div>
     <div class="custom-cursor"></div>
     <div class="custom-cursor-area"></div>
     <div class="custom-cursor-prostoarea">
@@ -617,12 +606,8 @@
             // Инициализируем языковое меню после загрузки i18n
             LanguageMenu.init();
 
-            // Добавляем обработчик изменения языка
-            document.addEventListener('languageChanged', function() {
-                if (mapTooltip && mapTooltip.style.display === 'block') {
-                    window.updateMapTooltipText();
-                }
-            });
+            // Инициализируем модальное окно карты
+            MapModal.init();
 
             // Применяем общие стили кнопок
             applyCommonButtonStyles();
@@ -859,91 +844,6 @@
             });
             // Скрываем стрелку по умолчанию
             customCursor.style.display = 'none';
-
-            const openMapBtn = document.getElementById('open-map-modal');
-            const mapModal = document.getElementById('map-modal');
-            const closeMapBtn = document.getElementById('close-map-modal');
-            const mapImage = document.getElementById('map-image');
-            const mapMarker = document.getElementById('map-marker');
-            const mapTooltip = document.getElementById('map-tooltip');
-
-            openMapBtn.addEventListener('click', async function(e) {
-                e.preventDefault();
-                mapModal.style.display = 'flex';
-                // Воспроизводим звук карты
-                const mapSound = document.getElementById('mapSound');
-                mapSound.play();
-                // Получаем координаты точки 1
-                const { getMapPointCoords, checkTooltipArea } = await import('./map_points.js');
-                const coords = getMapPointCoords(1);
-                // После загрузки изображения корректно позиционируем маркер
-                mapImage.onload = function() {
-                    positionMarker();
-                };
-                // Если картинка уже загружена
-                if (mapImage.complete) {
-                    positionMarker();
-                }
-                function positionMarker() {
-                    const rect = mapImage.getBoundingClientRect();
-                    // Координаты в процентах, маркер центрируем
-                    mapMarker.style.left = `${coords.x}%`;
-                    mapMarker.style.top = `${coords.y}%`;
-                    mapMarker.style.transform = 'translate(-50%, -50%)';
-                }
-
-                // === Исправленный обработчик движения мыши для подсказки ===
-                // Сначала удалим старые обработчики, если они были
-                mapImage.onmousemove = null;
-                mapImage.onmouseleave = null;
-
-                // Глобальная функция для обновления текста подсказки
-                function camelToSnake(str) {
-                    return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
-                }
-                window.updateMapTooltipText = function(tooltipKey) {
-                    if (mapTooltip && mapTooltip.style.display === 'block') {
-                        let key = camelToSnake(tooltipKey);
-                        let tooltipText = window.i18n.t('map.' + key);
-                        mapTooltip.textContent = tooltipText;
-                    }
-                };
-
-                mapImage.onmousemove = function(e) {
-                    const rect = mapImage.getBoundingClientRect();
-                    const x = ((e.clientX - rect.left) / rect.width) * 100;
-                    const y = ((e.clientY - rect.top) / rect.height) * 100;
-                    const tooltipKey = checkTooltipArea(x, y);
-                    if (tooltipKey) {
-                        mapTooltip.style.display = 'block';
-                        mapTooltip.style.left = `${e.clientX - rect.left + 20}px`;
-                        mapTooltip.style.top = `${e.clientY - rect.top + 20}px`;
-                        window.updateMapTooltipText(tooltipKey);
-                    } else {
-                        mapTooltip.style.display = 'none';
-                    }
-                };
-                mapImage.onmouseleave = function() {
-                    mapTooltip.style.display = 'none';
-                };
-            });
-            closeMapBtn.addEventListener('click', function() {
-                mapModal.style.display = 'none';
-                // Останавливаем звук карты
-                const mapSound = document.getElementById('mapSound');
-                mapSound.pause();
-                mapSound.currentTime = 0;
-            });
-            // Закрытие по клику вне карты
-            mapModal.addEventListener('click', function(e) {
-                if (e.target === mapModal) {
-                    mapModal.style.display = 'none';
-                    // Останавливаем звук карты
-                    const mapSound = document.getElementById('mapSound');
-                    mapSound.pause();
-                    mapSound.currentTime = 0;
-                }
-            });
         });
     </script>
 </body>

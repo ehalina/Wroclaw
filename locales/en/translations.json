@@ -42,5 +42,16 @@
   "map.brama": "Kluska Gate",
   "map.kanonia": "Kanonia Street",
   "map.bramabot": "The wicket gate of the botanical garden",
-  "map.kapitulna": "Capitol Street"
+  "map.kapitulna": "Kapitulna Street",
+  "quest.title1": "Quest 1: Find all the secrets of Tumski Island",
+  "quest.task1": "Task item 1",
+  "quest.task2": "Task item 2",
+  "quest.task3": "Task item 3",
+  "quest.task4": "Task item 4",
+  "quest.task5": "Task item 5",
+  "quest.task6": "Task item 6",
+  "quest.task7": "Task item 7",
+  "quest.task8": "Task item 8",
+  "quest.task9": "Task item 9",
+  "quest.task10": "Task item 10"
 } 
