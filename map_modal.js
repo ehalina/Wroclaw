@@ -113,11 +113,12 @@ const mapStyles = `
         position: relative;
         max-width: 100%;
         height: auto; /* Высота подстраивается под содержимое */
-        overflow: hidden;
+        overflow: visible; /* Изменено с hidden на visible */
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        padding-top: 80px;
         box-sizing: border-box;
     }
 
@@ -159,10 +160,10 @@ const mapStyles = `
     .quest-tasks {
         position: absolute;
         top: 150px; /* Приблизительное начальное значение, будет скорректировано JS */
-        left: 70%;
+        left: 60%;
         transform: translateX(-50%);
         z-index: 10;
-        width: 90%; /* Ширина 90% с учетом отступов */
+        width: calc(90% - 20px); /* Уменьшим ширину, чтобы оставить место для скроллбара */
         max-width: 700px; /* Ограничим максимальную ширину */
         color: #333;
         font-family: 'Roboto', sans-serif;
@@ -171,7 +172,7 @@ const mapStyles = `
         margin: 0;
         list-style: none;
         overflow-y: auto;
-        max-height: calc(100vh - 330px);
+        max-height: calc(100vh - 230px);
         padding-right: calc(15px); /* Сохраняем место для скроллбара */
         box-sizing: border-box; /* Учитываем паддинг в ширине */
     }
@@ -193,8 +194,8 @@ const mapStyles = `
      }
 
     .quest-tasks li img {
-        width: 24px; /* Размер чекбокса */
-        height: 24px;
+        width: 35px; /* Размер чекбокса */
+        height: 35px;
         margin-right: 5px; /* Уменьшаем отступ после чекбокса */
         flex-shrink: 0; /* Предотвращаем сжимание чекбокса */
         object-fit: contain;
@@ -227,6 +228,20 @@ const mapStyles = `
      .book-content.show-scrollbar {
         overflow-y: auto;
         pointer-events: auto;
+    }
+
+    .quest-tasks::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .quest-tasks::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.2); /* Светлый, полупрозрачный трек */
+        border-radius: 3px;
+    }
+
+    .quest-tasks::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.6); /* Светлый, полупрозрачный ползунок */
+        border-radius: 3px;
     }
 
     .book-content::-webkit-scrollbar {
@@ -601,11 +616,11 @@ const MapModal = {
             questTasksList.innerHTML = '';
 
             // Заполняем список заданий (пример, текст будет из локализации)
-            for (let i = 1; i <= 10; i++) {
+            for (let i = 1; i <= 12; i++) {
                 const listItem = document.createElement('li');
                 // Добавляем изображение чекбокса
                 const checkboxImg = document.createElement('img');
-                checkboxImg.src = 'media/checkbox1.jpg'; // Путь к изображению чекбокса
+                checkboxImg.src = 'media/checkbox0.png'; // Путь к изображению чекбокса
                 checkboxImg.alt = 'Checkbox';
                 listItem.appendChild(checkboxImg);
                 
@@ -624,12 +639,15 @@ const MapModal = {
             bookTitle.textContent = window.i18n ? window.i18n.t('quest.title1') : "Квест 1: Найди все тайны Тумского острова";
             bookTitle.style.display = 'block'; // Показываем заголовок
 
-            // После установки текста заголовка, позиционируем список заданий под ним
-            const titleRect = bookTitle.getBoundingClientRect();
-            // Рассчитываем top для списка заданий относительно верха book-image-content-wrapper
-            // Добавляем небольшой отступ (например, 40px) после заголовка
-            const tasksTop = titleRect.bottom - bookImage.getBoundingClientRect().top + 40;
-            questTasksList.style.top = `${tasksTop}px`;
+            // Позиционируем список заданий после загрузки изображения
+            bookImage.onload = function() {
+                positionQuestTasks();
+            };
+            
+            // Если изображение уже загружено (например, из кеша), вызываем функцию сразу
+            if (bookImage.complete) {
+                positionQuestTasks();
+            }
 
             // Открываем модальное окно
             bookOverlay.style.display = 'flex';
@@ -646,9 +664,6 @@ const MapModal = {
             if (bookText) bookText.style.display = 'none';
             if (scrollIndicator) scrollIndicator.style.display = 'none';
 
-            // Позиционируем список заданий после установки заголовка и изображения
-            positionQuestTasks();
-
         });
 
         // Функция для позиционирования списка заданий
@@ -661,8 +676,17 @@ const MapModal = {
 
             if (bookOverlay && bookOverlay.style.display === 'flex' && bookImage && bookTitle && questTasksList) {
                 const titleRect = bookTitle.getBoundingClientRect();
-                const tasksTop = titleRect.bottom - bookImage.getBoundingClientRect().top + 40; // Используем тот же отступ
+                const bookImageRect = bookImage.getBoundingClientRect();
+                const tasksTop = titleRect.bottom - bookImageRect.top + 40; // Используем тот же отступ
                 questTasksList.style.top = `${tasksTop}px`;
+               
+                // Рассчитываем максимальную высоту для списка заданий
+                // Высота изображения минус расстояние от верха изображения до верха списка заданий, минус небольшой отступ снизу.
+                const tasksMaxHeight = bookImageRect.height - (tasksTop * (bookImageRect.height / bookImageRect.width)) - 60; // Примерный расчет
+                questTasksList.style.maxHeight = `${tasksMaxHeight}px`;
+               
+                // Убедимся, что overflow-y установлен в auto
+                questTasksList.style.overflowY = 'auto';
             }
         }
 
