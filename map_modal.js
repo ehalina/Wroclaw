@@ -111,37 +111,77 @@ const mapStyles = `
 
     .book-container {
         position: relative;
-        max-width: 100%;
-        height: auto; /* Высота подстраивается под содержимое */
-        overflow: visible; /* Изменено с hidden на visible */
+        width: 90vw;
+        height: 90vh;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        overflow: hidden;
+    }
+
+    .book-image-content-wrapper {
+        position: relative;
+        width: 50%;
+        height: 100%;
+        overflow-y: auto;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        padding-top: 80px;
-        box-sizing: border-box;
-    }
-
-    /* Добавляем стили для нового контейнера изображения и контента */
-    .book-image-content-wrapper {
-        position: relative;
-        display: block;
-        max-width: 100%;
-        max-height: 100%;
+        background-color: #d2cdc4; /* Цвет фона для центральной части */
+        /* Удаляем padding, теперь верхнее и нижнее изображения в потоке */
+        /* padding-top: 150px; */
+        /* padding-bottom: 150px; */
     }
 
     .book-image {
+        /* Эти стили больше не нужны для quest.jpg */
+        display: none; /* Скрываем старое изображение */
+    }
+
+    .quest-top-image,
+    .quest-bottom-image {
+        /* position: absolute; */ /* Убираем абсолютное позиционирование */
+        /* z-index: 1; */ /* Убираем z-index */
+        left: 0; /* Убираем позиционирование */
         width: 100%;
-        height: 100vh;
-        object-fit: contain;
-        display: block;
+        height: auto;
+        display: block; /* Убедимся, что они блочные элементы */
+    }
+
+    .quest-top-image {
+        /* top: 0; */
+    }
+
+    .quest-bottom-image {
+        /* bottom: 0; */
+    }
+
+    .quest-left-image,
+    .quest-right-image {
+        display: none; /* Скрываем отдельные элементы, будем использовать как фон */
+    }
+
+    .book-content-area {
+        position: relative;
+        width: 100%;
+        z-index: 2; /* Поверх фоновых картинок */
+        /* Добавляем боковые фоновые изображения */
+        background-image: url('media/book/quest_03.jpg'), url('media/book/quest_04.jpg');
+        background-position: left top, right top; /* Позиционируем левое и правое изображение */
+        background-size: auto 100%;
+        background-repeat: no-repeat; /* Не повторяем изображения */
+        background-color: #d2cdc4; /* Цвет фона */
+        padding-left: 0px; /* Подберите значение по ширине боковой картинки */
+        padding-right: 0px; /* Подберите значение по ширине боковой картинки */
+       /*  box-sizing: border-box; Учитываем padding в общей ширине */
+       background-origin: content-box, content-box; /* Позиционируем относительно content-box */
+       background-clip: content-box, content-box; /* Обрезаем по content-box */
     }
 
     .book-title {
-        position: absolute;
-        top: 40px;
-        left: 50%;
-        transform: translateX(-50%);
+        width: 100%;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0); /* Убираем или делаем прозрачным */
         z-index: 10;
         font-family: 'Roboto', sans-serif;
         font-weight: 200;
@@ -149,65 +189,68 @@ const mapStyles = `
         font-size: clamp(24px, 4vw, 32px);
         color: #333;
         text-align: center;
-        width: calc(100% - 10%); /* Уменьшим ширину, оставляя 5% с каждой стороны */
-        max-width: 800px; /* Ограничим максимальную ширину */
-        margin: 0 auto; /* Центрируем блок */
-        padding: 0; /* Удалим горизонтальный паддинг, так как ширина теперь учитывает его */
-        box-sizing: border-box; /* Учитываем паддинг в ширине */
+        margin: 0;
+        box-sizing: border-box;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     }
 
     .quest-tasks {
-        position: absolute;
-        top: 150px; /* Приблизительное начальное значение, будет скорректировано JS */
-        left: 60%;
-        transform: translateX(-50%);
-        z-index: 10;
-        width: calc(90% - 20px); /* Уменьшим ширину, чтобы оставить место для скроллбара */
-        max-width: 700px; /* Ограничим максимальную ширину */
+        width: 100%;
+        padding: 20px;
         color: #333;
         font-family: 'Roboto', sans-serif;
         font-size: clamp(16px, 2.5vw, 20px);
-        padding: 0; /* Удалим горизонтальный паддинг, так как ширина теперь учитывает его */
         margin: 0;
         list-style: none;
-        overflow-y: auto;
-        max-height: calc(100vh - 230px);
-        padding-right: calc(15px); /* Сохраняем место для скроллбара */
-        box-sizing: border-box; /* Учитываем паддинг в ширине */
+        box-sizing: border-box;
+        z-index: 2; /* Размещаем поверх изображения */
+        /* Удаляем padding, так как боковые картинки теперь фон book-content-area */
+        /* padding-left: 60px; */
+        /* padding-right: 60px; */
     }
 
     .quest-tasks li {
-        display: flex; /* Используем flexbox для выравнивания чекбокса и текста */
-        align-items: center; /* Выравниваем элементы по центру вертикально */
-        margin-bottom: 10px; /* Отступ между пунктами списка */
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
         text-align: left;
-        counter-increment: quest-item; /* Счетчик для нумерации */
+        counter-increment: quest-item;
+        background: rgba(255, 255, 255, 0); /* Убираем или делаем прозрачным */
+        padding: 10px;
+        border-radius: 4px;
     }
 
-     .quest-tasks li::before {
-        content: counter(quest-item) ". "; /* Добавляем номер пункта */
-        margin-right: 5px; /* Уменьшаем отступ после номера */
+    .quest-tasks li::before {
+        content: counter(quest-item) ". ";
+        margin-right: 5px;
         font-weight: bold;
-        flex-shrink: 0; /* Предотвращаем сжимание номера */
-        align-self: center; /* Выравниваем по центру */
-     }
+        flex-shrink: 0;
+    }
 
     .quest-tasks li img {
-        width: 35px; /* Размер чекбокса */
+        width: 35px;
         height: 35px;
-        margin-right: 5px; /* Уменьшаем отступ после чекбокса */
-        flex-shrink: 0; /* Предотвращаем сжимание чекбокса */
+        margin-right: 10px;
+        flex-shrink: 0;
         object-fit: contain;
-        vertical-align: middle; /* Явно указываем вертикальное выравнивание */
-        align-self: center; /* Выравниваем по центру */
-        transform: translateY(-1px); /* Небольшое смещение вверх для точного выравнивания */
     }
 
     .quest-tasks li span {
-        /* Стили для текста задания */
-        flex-grow: 1; /* Разрешаем тексту занимать доступное место */
-        align-self: center; /* Выравниваем по центру */
+        flex-grow: 1;
+    }
+
+    .book-image-content-wrapper::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .book-image-content-wrapper::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+    }
+
+    .book-image-content-wrapper::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 4px;
     }
 
     .book-content {
@@ -457,12 +500,16 @@ const MapModal = {
             <!-- Book Overlay HTML (moved from tumski.html) -->
             <div class="book-overlay">
                 <button class="close-button">×</button>
-                <div class="book-container">
-                    <!-- Добавляем новый контейнер для изображения и контента -->
+                <div class="book-container">/book/
                     <div class="book-image-content-wrapper">
-                        <img src="" alt="Book" class="book-image">
-                        <h2 class="book-title"></h2>
-                        <ul class="quest-tasks"></ul>
+                        <img src="media/book/quest_01.jpg" alt="Квест верх" class="quest-top-image">
+                        <div class="book-content-area">
+                            <h2 class="book-title"></h2>
+                            <ul class="quest-tasks"></ul>
+                            <!-- Изображение льва теперь добавляется динамически в book-content-area -->
+                        </div>
+                        <img src="media/book/quest_02.jpg" alt="Квест низ" class="quest-bottom-image">
+                        <!-- Боковые изображения теперь фон book-content-area -->
                     </div>
                     <div class="book-content">
                         <!-- Content will be added dynamically if needed -->
@@ -597,17 +644,16 @@ const MapModal = {
 
         // TODO: Add click handler for openQuestBtn
         openQuestBtn.addEventListener('click', function() {
-             // console.log('Quest button clicked!');
-             // Добавьте здесь логику открытия модального окна квестов или другое действие
             const bookOverlay = document.querySelector(Common.COMMON_ELEMENTS.BOOK_OVERLAY);
-            const bookContainer = bookOverlay.querySelector('.book-container'); // Получаем контейнер для контента книги
-            const bookImage = bookOverlay.querySelector('.book-image');
-            const bookTitle = bookOverlay.querySelector('.book-title'); // Получаем элемент заголовка книги
+            const bookContainer = bookOverlay.querySelector('.book-container');
+            const bookTitle = bookOverlay.querySelector('.book-title');
             const bookSound = document.getElementById('bookSound');
             const container = document.querySelector(Common.COMMON_ELEMENTS.IMAGE_CONTAINER);
             const questTasksList = bookOverlay.querySelector('.quest-tasks');
+            const bookImageContentWrapper = bookOverlay.querySelector('.book-image-content-wrapper');
+            const bookContentArea = bookOverlay.querySelector('.book-content-area');
 
-            if (!bookOverlay || !bookContainer || !bookImage || !bookTitle || !bookSound || !container || !questTasksList) {
+            if (!bookOverlay || !bookContainer || !bookTitle || !bookSound || !container || !questTasksList || !bookImageContentWrapper || !bookContentArea) {
                 console.error("Не удалось найти элементы для открытия модального окна книги или списка заданий.");
                 return;
             }
@@ -615,39 +661,56 @@ const MapModal = {
             // Очищаем список перед заполнением
             questTasksList.innerHTML = '';
 
-            // Заполняем список заданий (пример, текст будет из локализации)
+            // Заполняем список заданий
             for (let i = 1; i <= 12; i++) {
                 const listItem = document.createElement('li');
-                // Добавляем изображение чекбокса
                 const checkboxImg = document.createElement('img');
-                checkboxImg.src = 'media/checkbox0.png'; // Путь к изображению чекбокса
+                checkboxImg.src = 'media/checkbox0.png';
                 checkboxImg.alt = 'Checkbox';
                 listItem.appendChild(checkboxImg);
                 
-                // Добавляем текст задания из локализации
                 const taskTextSpan = document.createElement('span');
-                taskTextSpan.textContent = window.i18n ? window.i18n.t(`quest.task${i}`) : `Задание ${i}`; // Ключи локализации quest.task1, quest.task2 и т.д.
+                taskTextSpan.textContent = window.i18n ? window.i18n.t(`quest.task${i}`) : `Задание ${i}`;
                 listItem.appendChild(taskTextSpan);
                 
                 questTasksList.appendChild(listItem);
-            }
 
-            // Устанавливаем изображение для квеста
-            bookImage.src = 'media/quest.jpg';
+                if (i === 1) {
+                    // Изображение льва теперь добавляется внутри book-content-area
+                    const taskImage = document.createElement('img');
+                    taskImage.src = 'media/watercolor/lev.jpg';
+                    taskImage.alt = 'Лев';
+                    taskImage.classList.add('task-image'); /* Добавляем класс */
+                    taskImage.style.width = '100%';
+                    taskImage.style.maxWidth = '400px';
+                    taskImage.style.marginTop = '20px';
+                    taskImage.style.marginBottom = '20px';
+                    taskImage.style.display = 'block';
+                    taskImage.style.marginLeft = 'auto';
+                    taskImage.style.marginRight = 'auto';
+                    taskImage.style.transform = 'rotate(-2deg)';
+                    taskImage.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
+                    taskImage.style.padding = '8px';
+                    taskImage.style.background = '#fff';
+                    taskImage.style.transition = 'all 0.3s ease';
+                    taskImage.style.cursor = 'pointer';
+                    
+                    taskImage.onmouseover = function() {
+                        this.style.transform = 'rotate(0deg) scale(1.02)';
+                        this.style.boxShadow = '8px 8px 15px rgba(0,0,0,0.6)';
+                    };
+                    taskImage.onmouseout = function() {
+                        this.style.transform = 'rotate(-2deg)';
+                        this.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
+                    };
+                    
+                    questTasksList.appendChild(taskImage); // Добавляем в questTasksList
+                }
+            }
 
             // Устанавливаем текст заголовка из локализации
             bookTitle.textContent = window.i18n ? window.i18n.t('quest.title1') : "Квест 1: Найди все тайны Тумского острова";
-            bookTitle.style.display = 'block'; // Показываем заголовок
-
-            // Позиционируем список заданий после загрузки изображения
-            bookImage.onload = function() {
-                positionQuestTasks();
-            };
-            
-            // Если изображение уже загружено (например, из кеша), вызываем функцию сразу
-            if (bookImage.complete) {
-                positionQuestTasks();
-            }
+            bookTitle.style.display = 'block';
 
             // Открываем модальное окно
             bookOverlay.style.display = 'flex';
@@ -663,35 +726,7 @@ const MapModal = {
             if (contentImage) contentImage.style.display = 'none';
             if (bookText) bookText.style.display = 'none';
             if (scrollIndicator) scrollIndicator.style.display = 'none';
-
         });
-
-        // Функция для позиционирования списка заданий
-        function positionQuestTasks() {
-            const bookOverlay = document.querySelector(Common.COMMON_ELEMENTS.BOOK_OVERLAY);
-            const bookContainer = bookOverlay ? bookOverlay.querySelector('.book-container') : null;
-            const bookImage = bookContainer ? bookContainer.querySelector('.book-image') : null;
-            const bookTitle = bookContainer ? bookContainer.querySelector('.book-title') : null;
-            const questTasksList = bookContainer ? bookContainer.querySelector('.quest-tasks') : null;
-
-            if (bookOverlay && bookOverlay.style.display === 'flex' && bookImage && bookTitle && questTasksList) {
-                const titleRect = bookTitle.getBoundingClientRect();
-                const bookImageRect = bookImage.getBoundingClientRect();
-                const tasksTop = titleRect.bottom - bookImageRect.top + 40; // Используем тот же отступ
-                questTasksList.style.top = `${tasksTop}px`;
-               
-                // Рассчитываем максимальную высоту для списка заданий
-                // Высота изображения минус расстояние от верха изображения до верха списка заданий, минус небольшой отступ снизу.
-                const tasksMaxHeight = bookImageRect.height - (tasksTop * (bookImageRect.height / bookImageRect.width)) - 60; // Примерный расчет
-                questTasksList.style.maxHeight = `${tasksMaxHeight}px`;
-               
-                // Убедимся, что overflow-y установлен в auto
-                questTasksList.style.overflowY = 'auto';
-            }
-        }
-
-        // Добавляем обработчик события изменения размера окна
-        window.addEventListener('resize', positionQuestTasks); // Используем новую функцию
 
         closeMapBtn.addEventListener('click', function() {
             mapModal.style.display = 'none';
