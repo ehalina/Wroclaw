@@ -516,6 +516,29 @@
             border: 2px solid rgba(255, 255, 255, 0.5);
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
+
+        .music-hint {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            font-size: 18px;
+            text-align: center;
+            z-index: 2000;
+            display: none;
+            animation: fadeInOut 6s ease-in-out;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { opacity: 0; }
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
@@ -536,6 +559,8 @@
     </div>
     <audio id="stepSound" src="media/step.wav"></audio>
     <audio id="mapSound" src="media/zwyki/bb6f2b8ec908f28.mp3"></audio>
+    <audio id="backgroundMusic" src="media/zwyki/town.mp3" loop></audio>
+    <div id="musicHint" class="music-hint" data-i18n="music.hint">Кликните в любом месте для запуска музыки</div>
     <div class="map-mark-area">
         <div class="map-mark" id="tumska_wyspa"></div>
         <div class="content-wrapper">
@@ -611,6 +636,45 @@
 
             // Применяем общие стили кнопок
             applyCommonButtonStyles();
+
+            // Автоматическое воспроизведение фоновой музыки
+            const backgroundMusic = document.querySelector('#backgroundMusic');
+            const musicHint = document.querySelector('#musicHint');
+            const isMuted = localStorage.getItem('soundMuted') === 'true';
+            
+            console.log('Фоновая музыка найдена:', !!backgroundMusic);
+            console.log('Звук отключен:', isMuted);
+            
+            if (backgroundMusic && !isMuted) {
+                backgroundMusic.volume = 0.5; // Устанавливаем громкость на 50%
+                
+                // Пробуем воспроизвести сразу
+                backgroundMusic.play().then(() => {
+                    console.log('Музыка успешно запущена');
+                }).catch(error => {
+                    console.log('Автовоспроизведение заблокировано браузером:', error);
+                    
+                    // Показываем подсказку пользователю
+                    if (musicHint) {
+                        musicHint.style.display = 'block';
+                        setTimeout(() => {
+                            musicHint.style.display = 'none';
+                        }, 6000);
+                    }
+                    
+                    // Пробуем воспроизвести при первом клике пользователя
+                    const startMusicOnClick = () => {
+                        backgroundMusic.play().then(() => {
+                            console.log('Музыка запущена при клике');
+                            document.removeEventListener('click', startMusicOnClick);
+                        }).catch(err => {
+                            console.log('Ошибка воспроизведения при клике:', err);
+                        });
+                    };
+                    
+                    document.addEventListener('click', startMusicOnClick, { once: true });
+                });
+            }
 
             // Устанавливаем пути к изображениям книг
             document.querySelector('.book-image').src = window.BookPaths.BOOK_IMAGE;

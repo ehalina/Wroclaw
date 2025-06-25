@@ -43,17 +43,23 @@
   "map.kanonia": "Kanonia Street",
   "map.bramabot": "The wicket gate of the botanical garden",
   "map.kapitulna": "Kapitulna Street",
-  "quest.title1": "Quest 1: Find all the secrets of Tumski Island",
-  "quest.task1": "The Mysterious Lion Guarding the Church",
-  "quest.task2": "Love Locks",
-  "quest.task3": "Saint John of Nepomuk",
-  "quest.task4": "The Madonna with Child",
-  "quest.task5": "Viewing Platform on the Cathedral Tower",
-  "quest.task6": "A Shell from World War II",
-  "quest.task7": "Henry Turned to Stone",
-  "quest.task8": "The Lamplighter",
-  "quest.task9": "The Black Dumpling",
-  "quest.task10": "Entrance to the Botanical Garden",
-  "quest.task11": "Garden of the Pontifical Faculty of Theology",
-  "quest.task12": "Statue of Mary Magdalene in the Garden of the Pontifical Faculty of Theology"
+  "quest": {
+    "title1": "Quest 1: Find all the secrets of Tumski Island",
+    "intro": "In the attic of an abandoned house, a collection of watercolors was discovered. Several dozen of them. The pages are dusty, in some places nibbled by time or mice (I'm not sure which of them was more precise), but the colors are still alive — so vivid that your throat tightens with the scent of rain on warm stone, if you stare too long.\n\nThe artist? Unknown. The signature is illegible. Maybe it's a name. Or maybe — coordinates to another reality.\n\nThe paintings depict places. Streets, people, windows. A lonely lamplighter beside a column. A tower with birds on the roof. All of it strangely familiar. As if I've seen it before. In a dream? In a book? In that life no one ever told me about?\n\nBut now, for some reason, I feel compelled to find them. Every single one. To see them in the real world.\n\nThough who's to say what's truly real, anyway?",
+    "task1": "The Mysterious Lion Guarding the Church",
+    "task2": "Love Locks",
+    "task3": "Saint John of Nepomuk",
+    "task4": "The Madonna with Child",
+    "task5": "Viewing Platform on the Cathedral Tower",
+    "task6": "A Shell from World War II",
+    "task7": "Henry Turned to Stone",
+    "task8": "The Lamplighter",
+    "task9": "The Black Dumpling",
+    "task10": "Entrance to the Botanical Garden",
+    "task11": "Garden of the Pontifical Faculty of Theology",
+    "task12": "Statue of Mary Magdalene in the Garden of the Pontifical Faculty of Theology"
+  },
+  "music": {
+    "hint": "Click anywhere to start the sounds"
+  }
 } 

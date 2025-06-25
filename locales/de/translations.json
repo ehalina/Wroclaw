@@ -48,17 +48,23 @@
   "map.kanonia": "Kanonie-Straße",
   "map.bramabot": "Gartentür des Botanischen Gartens",
   "map.kapitulna": "Kapitelstraße",
-  "quest.title1": "Quest 1: Finde alle Geheimnisse der Tumski-Insel",
-  "quest.task1": "Der geheimnisvolle Löwe, der die Kirche bewacht",
-  "quest.task2": "Liebesschlösser",
-  "quest.task3": "Der heilige Johannes Nepomuk",
-  "quest.task4": "Die Muttergottes mit dem Kind",
-  "quest.task5": "Aussichtsplattform auf dem Turm der Kathedrale",
-  "quest.task6": "Granate aus dem Zweiten Weltkrieg",
-  "quest.task7": "Heinrich, der zu Stein wurde",
-  "quest.task8": "Der Laternenanzünder",
-  "quest.task9": "Der Schwarzer Knödel",
-  "quest.task10": "Eingang zum Botanischen Garten",
-  "quest.task11": "Garten der Päpstlichen Theologischen Fakultät",
-  "quest.task12": "Statue der Maria Magdalena im Garten der Päpstlichen Theologischen Fakultät"
+  "quest": {
+    "title1": "Quest 1: Finde alle Geheimnisse der Tumski-Insel",
+    "intro": "Auf dem Dachboden eines verlassenen Hauses wurden Aquarelle entdeckt. Ein paar Dutzend. Die Blätter sind staubig, stellenweise vom Zahn der Zeit oder vielleicht von Mäusen angeknabbert (ich weiß nicht, wer von beiden sorgfältiger war), aber die Farben leben noch — so lebendig, dass es im Hals kratzt vom Geruch des Regens auf warmem Stein, wenn man zu lange hinsieht.\n\nDer Künstler? Unbekannt. Die Signatur ist unleserlich. Vielleicht ist es ein Name. Oder vielleicht — die Koordinaten einer anderen Wirklichkeit.\n\nAuf den Bildern: Orte. Straßen, Menschen, Fenster. Ein einsamer Laternenanzünder neben einer Säule. Ein Turm mit Vögeln auf dem Dach. Alles seltsam vertraut. Als hätte ich das schon einmal gesehen. Im Traum? In einem Buch? In jenem Leben, von dem mir nie jemand erzählt hat?\n\nUnd jetzt muss ich sie aus irgendeinem Grund finden. Alle. Einen nach dem anderen. Sie in der Wirklichkeit sehen.\n\nObwohl... wer weiß schon, was wirklich wirklich ist?",
+    "task1": "Der geheimnisvolle Löwe, der die Kirche bewacht",
+    "task2": "Liebesschlösser",
+    "task3": "Der heilige Johannes Nepomuk",
+    "task4": "Die Muttergottes mit dem Kind",
+    "task5": "Aussichtsplattform auf dem Turm der Kathedrale",
+    "task6": "Granate aus dem Zweiten Weltkrieg",
+    "task7": "Heinrich, der zu Stein wurde",
+    "task8": "Der Laternenanzünder",
+    "task9": "Der Schwarzer Knödel",
+    "task10": "Eingang zum Botanischen Garten",
+    "task11": "Garten der Päpstlichen Theologischen Fakultät",
+    "task12": "Statue der Maria Magdalena im Garten der Päpstlichen Theologischen Fakultät"
+  },
+  "music": {
+    "hint": "Klicken Sie irgendwo, um die Sounds zu starten"
+  }
 } 

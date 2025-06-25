@@ -10,7 +10,7 @@ const languageMenuStyles = `
         z-index: 1000;
     }
 
-    .language-menu-button {
+    .language-menu-button, .sound-menu-button {
         width: 64px;
         height: 64px;
         background: rgba(0, 0, 0, 0.7);
@@ -24,15 +24,19 @@ const languageMenuStyles = `
         justify-content: center;
     }
 
-    .language-menu-button:hover {
+    .language-menu-button:hover, .sound-menu-button:hover {
         background: rgba(0, 0, 0, 0.9);
     }
 
-    .language-menu-button img {
+    .language-menu-button img, .sound-menu-button img {
         width: 100%;
         height: 100%;
         object-fit: contain;
         border-radius: 4px;
+    }
+
+    .sound-menu-button.muted img {
+        opacity: 0.5;
     }
 
     .language-dropdown {
@@ -82,11 +86,20 @@ const LanguageMenu = {
         styleSheet.textContent = languageMenuStyles;
         document.head.appendChild(styleSheet);
 
+        // Восстанавливаем язык из localStorage, если есть
+        const savedLang = localStorage.getItem('selectedLanguage');
+        if (savedLang && window.i18n && window.i18n.getCurrentLang && window.i18n.getCurrentLang() !== savedLang) {
+            window.i18n.changeLang(savedLang);
+        }
+
         // Создаем структуру меню
         const menuHTML = `
             <div class="language-menu">
                 <button class="language-menu-button" onclick="LanguageMenu.toggleDropdown()">
                     <img src="media/local.jpg" alt="Language" class="language-icon">
+                </button>
+                <button class="sound-menu-button" onclick="LanguageMenu.toggleSound()">
+                    <img src="media/sound.jpg" alt="Sound" class="sound-icon">
                 </button>
                 <div class="language-dropdown">
                     <a href="#" class="language-option" data-lang="pl" onclick="LanguageMenu.changeLang('pl')">PL</a>
@@ -115,6 +128,60 @@ const LanguageMenu = {
 
         // Обновляем активный язык
         this.updateActiveLanguage();
+
+        // Инициализируем состояние звука
+        this.initSoundState();
+    },
+
+    initSoundState() {
+        // Проверяем сохраненное состояние звука
+        const isMuted = localStorage.getItem('soundMuted') === 'true';
+        const soundButton = document.querySelector('.sound-menu-button');
+        if (soundButton) {
+            if (isMuted) {
+                soundButton.classList.add('muted');
+                this.muteAllSounds();
+            }
+        }
+    },
+
+    toggleSound() {
+        const soundButton = document.querySelector('.sound-menu-button');
+        const isMuted = soundButton.classList.contains('muted');
+        
+        if (isMuted) {
+            soundButton.classList.remove('muted');
+            localStorage.setItem('soundMuted', 'false');
+            this.unmuteAllSounds();
+        } else {
+            soundButton.classList.add('muted');
+            localStorage.setItem('soundMuted', 'true');
+            this.muteAllSounds();
+        }
+    },
+
+    muteAllSounds() {
+        const sounds = document.querySelectorAll('audio');
+        sounds.forEach(sound => {
+            sound.muted = true;
+        });
+    },
+
+    unmuteAllSounds() {
+        const sounds = document.querySelectorAll('audio');
+        sounds.forEach(sound => {
+            sound.muted = false;
+        });
+        
+        // Пробуем запустить фоновую музыку, если она есть и не играет
+        const backgroundMusic = document.querySelector('#backgroundMusic');
+        if (backgroundMusic && backgroundMusic.paused) {
+            backgroundMusic.play().then(() => {
+                console.log('Фоновая музыка запущена через кнопку звука');
+            }).catch(err => {
+                console.log('Не удалось запустить фоновую музыку:', err);
+            });
+        }
     },
 
     toggleDropdown() {
@@ -124,6 +191,7 @@ const LanguageMenu = {
 
     async changeLang(lang) {
         await window.i18n.changeLang(lang);
+        localStorage.setItem('selectedLanguage', lang);
         document.querySelector('.language-dropdown').classList.remove('show');
         this.updateActiveLanguage();
 

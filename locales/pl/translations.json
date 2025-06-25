@@ -43,17 +43,23 @@
   "map.kanonia": "ul. Kanonia",
   "map.bramabot": "Furtka w ogrodzie botanicznym",
   "map.kapitulna": "ul. Kapitulna",
-  "quest.title1": "Quest 1: Znajdź wszystkie tajemnice Ostrowa Tumskiego",
-  "quest.task1": "Tajemniczy lew strzegący kościoła",
-  "quest.task2": "Zamki miłości",
-  "quest.task3": "Pomnik św. Jana Nepomucena",
-  "quest.task4": "Statua Matki Bożej",
-  "quest.task5": "Taras widokowy na wieży katedry",
-  "quest.task6": "Pocisk z II wojny światowej",
-  "quest.task7": "Henryk zamieniony w kamień",
-  "quest.task8": "Latarnik",
-  "quest.task9": "Czarna kluska",
-  "quest.task10": "Wejście do ogrodu botanicznego",
-  "quest.task11": "Ogród Papieskiego Wydziału Teologicznego",
-  "quest.task12": "Figura Marii Magdaleny w ogrodzie Papieskiego Wydziału Teologicznego"
+  "quest": {
+    "title1": "Quest 1: Odkryj wszystkie tajemnice Wyspy Tumskiej",
+    "intro": "Na strychu opuszczonego domu znaleziono akwarele. Kilkadziesiąt sztuk. Kartki zakurzone, miejscami nadgryzione przez czas albo myszy (nie wiem, kto z nich był bardziej precyzyjny), ale kolory wciąż żywe — aż w gardle drapie od zapachu deszczu na ciepłym kamieniu, jeśli patrzeć zbyt długo.\n\nAutor? Nieznany. Podpis nieczytelny. Może to imię. A może — współrzędne innej rzeczywistości.\n\nNa obrazach — miejsca. Ulice, ludzie, okna. Samotny latarnik przy kolumnie. Wieża z ptakami na dachu. Wszystko dziwnie znajome. Jakby już gdzieś to było. We śnie? W książce? W tym życiu, o którym zapomniano mi opowiedzieć?\n\nAle teraz z jakiegoś powodu muszę je odnaleźć. Wszystkie, co do jednej. Zobaczyć w rzeczywistości.\n\nChociaż... kto wie, czym naprawdę jest rzeczywistość?",
+    "task1": "Tajemniczy lew strzegący kościoła",
+    "task2": "Zamki miłości",
+    "task3": "Pomnik św. Jana Nepomucena",
+    "task4": "Statua Matki Bożej",
+    "task5": "Taras widokowy na wieży katedry",
+    "task6": "Pocisk z II wojny światowej",
+    "task7": "Henryk zamieniony w kamień",
+    "task8": "Latarnik",
+    "task9": "Czarna kluska",
+    "task10": "Wejście do ogrodu botanicznego",
+    "task11": "Ogród Papieskiego Wydziału Teologicznego",
+    "task12": "Figura Marii Magdaleny w ogrodzie Papieskiego Wydziału Teologicznego"
+  },
+  "music": {
+    "hint": "Kliknij w dowolnym miejscu, aby uruchomić dźwięki"
+  }
 } 

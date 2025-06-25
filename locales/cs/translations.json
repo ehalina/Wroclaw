@@ -48,17 +48,23 @@
   "map.kanonia": "Kanonická ulice",
   "map.bramabot": "Zahradní branka botanické zahrady",
   "map.kapitulna": "Kapitulní ulice",
-  "quest.title1": "Quest 1: Najdi všechna tajemství Tumského ostrova",
-  "quest.task1": "Tajemný lev střežící kostel",
-  "quest.task2": "Zámky lásky",
-  "quest.task3": "Svatý Jan Nepomucký",
-  "quest.task4": "Panna Maria s dítětem",
-  "quest.task5": "Vyhlídková plošina na věži katedrály",
-  "quest.task6": "Granát z druhé světové války",
-  "quest.task7": "Jindřich proměněný v kámen",
-  "quest.task8": "Rozsvěcovač lamp",
-  "quest.task9": "Černý knedlík",
-  "quest.task10": "Vstup do botanické zahrady",
-  "quest.task11": "Zahrada Papežské teologické fakulty",
-  "quest.task12": "Socha Marie Magdaleny v zahradě Papežské teologické fakulty"
+  "quest": {
+    "title1": "Quest 1: Najdi všechna tajemství Tumského ostrova",
+    "intro": "Na půdě opuštěného domu se našly akvarely. Několik desítek. Listy zaprášené, místy nahlodané časem nebo myšmi (nevím, kdo z nich byl pečlivější), ale barvy jsou pořád živé — tak živé, že vás z toho začne škrábat v krku od vůně deště na teplém kameni, když se díváte příliš dlouho.\n\nAutor? Neznámý. Podpis je nečitelný. Možná je to jméno. A možná — souřadnice jiné reality.\n\nNa obrazech jsou místa. Ulice, lidé, okna. Osamělý lampář u sloupu. Věž s ptáky na střeše. Všechno až podivně povědomé. Jako by to už někde bylo. Ve snu? V knize? V tom životě, o kterém mi zapomněli říct?\n\nA teď je z nějakého důvodu musím najít. Všechna ta místa. Jedno po druhém. Uvidět je ve skutečnosti.\n\nI když… kdo vlastně ví, co je doopravdy skutečné?",
+    "task1": "Tajemný lev střežící kostel",
+    "task2": "Zámky lásky",
+    "task3": "Svatý Jan Nepomucký",
+    "task4": "Panna Maria s dítětem",
+    "task5": "Vyhlídková plošina na věži katedrály",
+    "task6": "Granát z druhé světové války",
+    "task7": "Jindřich proměněný v kámen",
+    "task8": "Rozsvěcovač lamp",
+    "task9": "Černý knedlík",
+    "task10": "Vstup do botanické zahrady",
+    "task11": "Zahrada Papežské teologické fakulty",
+    "task12": "Socha Marie Magdaleny v zahradě Papežské teologické fakulty"
+  },
+  "music": {
+    "hint": "Klikněte kdekoli pro spuštění zvuky"
+  }
 } 

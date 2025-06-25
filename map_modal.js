@@ -675,12 +675,11 @@ const MapModal = {
                 
                 questTasksList.appendChild(listItem);
 
-                if (i === 1) {
-                    // Изображение льва теперь добавляется внутри book-content-area
+                // Добавляем изображение для каждого пункта
                     const taskImage = document.createElement('img');
-                    taskImage.src = 'media/watercolor/lev.jpg';
-                    taskImage.alt = 'Лев';
-                    taskImage.classList.add('task-image'); /* Добавляем класс */
+                taskImage.src = `media/watercolor/${i}.jpg`;
+                taskImage.alt = `Задание ${i}`;
+                taskImage.classList.add('task-image');
                     taskImage.style.width = '100%';
                     taskImage.style.maxWidth = '400px';
                     taskImage.style.marginTop = '20px';
@@ -688,29 +687,55 @@ const MapModal = {
                     taskImage.style.display = 'block';
                     taskImage.style.marginLeft = 'auto';
                     taskImage.style.marginRight = 'auto';
-                    taskImage.style.transform = 'rotate(-2deg)';
+                // Генерируем случайный угол от -5 до 5 градусов
+                const randomAngle = (Math.random() * 10 - 5).toFixed(1);
+                taskImage.style.transform = `rotate(${randomAngle}deg)`;
                     taskImage.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
                     taskImage.style.padding = '8px';
                     taskImage.style.background = '#fff';
                     taskImage.style.transition = 'all 0.3s ease';
                     taskImage.style.cursor = 'pointer';
+                
+                // Сохраняем случайный угол как атрибут для использования при наведении
+                taskImage.dataset.originalAngle = randomAngle;
                     
                     taskImage.onmouseover = function() {
                         this.style.transform = 'rotate(0deg) scale(1.02)';
                         this.style.boxShadow = '8px 8px 15px rgba(0,0,0,0.6)';
                     };
                     taskImage.onmouseout = function() {
-                        this.style.transform = 'rotate(-2deg)';
+                    this.style.transform = `rotate(${this.dataset.originalAngle}deg)`;
                         this.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
                     };
                     
-                    questTasksList.appendChild(taskImage); // Добавляем в questTasksList
-                }
+                questTasksList.appendChild(taskImage);
             }
 
             // Устанавливаем текст заголовка из локализации
             bookTitle.textContent = window.i18n ? window.i18n.t('quest.title1') : "Квест 1: Найди все тайны Тумского острова";
             bookTitle.style.display = 'block';
+
+            // Добавляем вводный текст
+            renderQuestIntro(bookContentArea, questTasksList);
+
+            // Добавляем картинку под заголовком, но перед вводным текстом
+            const titleImage = document.createElement('img');
+            titleImage.src = 'media/watercolor/tumski.jpeg';
+            titleImage.alt = 'Тумский остров';
+            titleImage.style.width = '100%';
+            titleImage.style.maxWidth = '500px';
+            titleImage.style.margin = '20px auto';
+            titleImage.style.display = 'block';
+            titleImage.style.borderRadius = '8px';
+            titleImage.style.boxShadow = '3px 3px 8px rgba(0,0,0,0.3)';
+            
+            // Вставляем картинку после заголовка, но перед вводным текстом
+            const questIntro = bookContentArea.querySelector('.quest-intro');
+            if (questIntro) {
+                bookContentArea.insertBefore(titleImage, questIntro);
+            } else {
+                bookContentArea.appendChild(titleImage);
+            }
 
             // Открываем модальное окно
             bookOverlay.style.display = 'flex';
@@ -763,6 +788,26 @@ const MapModal = {
         mapMarker.style.transform = 'translate(-50%, -50%)';
     }
 };
+
+function renderQuestIntro(bookContentArea, questTasksList) {
+    // Удалить старый intro, если есть
+    const oldIntro = bookContentArea.querySelector('.quest-intro');
+    if (oldIntro) oldIntro.remove();
+
+    const introText = document.createElement('div');
+    introText.className = 'quest-intro';
+    introText.style.fontFamily = "'Roboto', sans-serif";
+    introText.style.fontSize = "clamp(14px, 2vw, 18px)";
+    introText.style.lineHeight = "1.6";
+    introText.style.color = "#333";
+    introText.style.margin = "20px 0";
+    introText.style.padding = "0 40px";
+    introText.style.textAlign = "justify";
+    introText.style.fontStyle = "italic";
+    const introRaw = window.i18n ? window.i18n.t('quest.intro') : "";
+    introText.innerHTML = introRaw.split(/\n\n/).map(par => `<p>${par}</p>`).join('');
+    bookContentArea.insertBefore(introText, questTasksList);
+}
 
 // Экспортируем объект MapModal
 window.MapModal = MapModal; 
