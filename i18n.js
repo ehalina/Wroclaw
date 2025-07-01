@@ -54,6 +54,7 @@ function updatePageContent() {
     // Обновляем заголовки маркеров
     const mapMarkWyspa = document.getElementById('tumska_wyspa');
     const mapMarkMost = document.getElementById('tumski_most');
+    const mapMarkCathedral = document.getElementById('tumski_cathedral');
     const tumskiTexts = document.querySelectorAll('.tumski-text');
 
     if (mapMarkWyspa) {
@@ -64,13 +65,27 @@ function updatePageContent() {
         mapMarkMost.setAttribute('data-title', t('tumski_most.title'));
     }
 
+    if (mapMarkCathedral) {
+        mapMarkCathedral.setAttribute('data-title', t('tumski_cathedral.title'));
+    }
+
     // Обновляем содержимое книги
     const bookTitle = document.querySelector('.book-title');
     const bookText = document.querySelector('.book-text');
     if (bookTitle && bookText) {
         const clickedMarkId = document.activeElement?.id || 'tumska_wyspa';
-        const titleKey = clickedMarkId === 'tumski_most' ? 'tumski_most.title' : 'tumski.title';
-        const descriptionKey = clickedMarkId === 'tumski_most' ? 'tumski_most.description' : 'tumski.description';
+        let titleKey, descriptionKey;
+        
+        if (clickedMarkId === 'tumski_most') {
+            titleKey = 'tumski_most.title';
+            descriptionKey = 'tumski_most.description';
+        } else if (clickedMarkId === 'tumski_cathedral') {
+            titleKey = 'tumski_cathedral.title';
+            descriptionKey = 'tumski_cathedral.description';
+        } else {
+            titleKey = 'tumski.title';
+            descriptionKey = 'tumski.description';
+        }
         
         bookTitle.textContent = t(titleKey);
         bookText.textContent = t(descriptionKey);

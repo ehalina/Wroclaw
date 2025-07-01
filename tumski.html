@@ -216,19 +216,28 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            /* min-width: 280px;  если нужно ограничить ширину */
+            /* min-height: 80px;  если нужно ограничить высоту */
         }
 
         .papera-image {
             width: 280px;
             height: 80px;
+            object-fit: contain;
+            position: relative;
+            z-index: 1;
             opacity: 0;
             transition: opacity 0.3s ease;
-            object-fit: contain;
-            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+            /* уберите top, если был */
         }
 
         .tumski-text {
             position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            z-index: 2;
             font-family: 'Roboto', sans-serif;
             font-weight: 200;
             font-style: italic;
@@ -239,7 +248,7 @@
             transition: opacity 0.3s ease;
             cursor: pointer;
             text-align: center;
-            width: 100%;
+            pointer-events: auto;
         }
 
         .map-mark-area:hover .map-mark,
@@ -396,59 +405,6 @@
             font-style: italic;
         }
 
-        .most-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1001;
-        }
-
-        .most-container {
-            position: relative;
-            width: 90%;
-            height: 90vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .image-wrapper {
-            position: relative;
-            display: inline-block;
-            max-width: 100%;
-            max-height: 100%;
-        }
-
-        .most-image {
-            display: block;
-            max-width: 100%;
-            max-height: 90vh;
-            object-fit: contain;
-        }
-
-        .most-title {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-family: 'Roboto', sans-serif;
-            font-size: 32px;
-            font-weight: 200;
-            font-style: italic;
-            text-align: center;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 15px 30px;
-            border-radius: 10px;
-            white-space: nowrap;
-        }
-
         .hide-cursors {
             display: none !important;
             opacity: 0 !important;
@@ -549,56 +505,44 @@
     <script src="common_buttons.js"></script>
     <script src="language_menu.js"></script>
     <script src="map_modal.js"></script>
+    <script type="module" src="background_music.js"></script>
+    <script type="module" src="tumski_cathedral_handler.js"></script>
     <script type="module" src="map_points.js"></script>
 </head>
 <body>
+    <!-- Кастомный курсор для стрелки вправо -->
     <div class="custom-cursor"></div>
+    <!-- Область для появления кастомного курсора -->
     <div class="custom-cursor-area"></div>
+    <!-- Область иконки "стрелка прямо" в правом нижнем углу -->
     <div class="custom-cursor-prostoarea">
         <div class="custom-cursor-prosto"></div>
     </div>
-    <audio id="stepSound" src="media/step.wav"></audio>
-    <audio id="mapSound" src="media/zwyki/bb6f2b8ec908f28.mp3"></audio>
-    <audio id="backgroundMusic" src="media/zwyki/town.mp3" loop></audio>
-    <div id="musicHint" class="music-hint" data-i18n="music.hint">Кликните в любом месте для запуска музыки</div>
-    <div class="map-mark-area">
-        <div class="map-mark" id="tumska_wyspa"></div>
+    <!-- Подсказка для запуска музыки -->
+    <div id="musicHint" class="music-hint" data-i18n="music.hint"></div>
+    <!-- Геометка: Собор Святого Иоанна Крестителя (универсальная) -->
+    <div class="map-mark-area" style="top: 45%; right: 35%; width: auto; height: auto;">
+        <div class="map-mark" id="tumski_cathedral"></div>
         <div class="content-wrapper">
-            <img src="media/papera1.png" alt="Papera" class="papera-image">
-            <div id="tumski-text" class="tumski-text" data-i18n="tumski.title"></div>
+            <img class="papera-image" src="media/papera1.png" alt="Papera">
+            <div class="tumski-text" id="tumski-cathedral-text" data-i18n="tumski_cathedral.title"></div>
         </div>
-        <audio id="bookSound" src="media/opening-a-book.wav"></audio>
+        <audio id="bookSound3" src="media/opening-a-book.wav"></audio>
     </div>
-    <div class="map-mark-area" style="top: 30%; right: 15%; width: auto; height: auto;">
+    <!-- Геометка: Тумский мост -->
+    <div class="map-mark-area" style="top: 15%; right: 15%; width: auto; height: auto;">
         <div class="map-mark" id="tumski_most"></div>
         <div class="content-wrapper">
-            <img src="media/papera1.png" alt="Papera" class="papera-image">
+            <img class="papera-image" src="media/papera1.png" alt="Papera">
             <div class="tumski-text" id="tumski-most-text" data-i18n="tumski_most.title"></div>
         </div>
-        <audio id="bookSound" src="media/opening-a-book.wav"></audio>
     </div>
-    <div class="book-overlay">
-        <button class="close-button">×</button>
-        <div class="book-container">
-            <img src="" alt="Book" class="book-image" data-src="BOOK_IMAGE">
-            <div class="book-content">
-                <h2 class="book-title"></h2>
-                <img src="media/watercolor/tumski.png" alt="Тумский остров" class="content-image">
-                <p class="book-text"></p>
-            </div>
-            <div class="scroll-indicator"></div>
-        </div>
-    </div>
-
+    <!-- Универсальное модальное окно для геометок -->
     <div class="most-overlay">
         <button class="close-button">×</button>
         <div class="most-container">
             <div class="image-wrapper">
-                <img src="" alt="Тумский мост" class="most-image" data-src="BOOK_IMAGE_02">
-                <img src="" alt="Overlay Image" class="overlay-image" style="display: none;">
-                <img src="" alt="Additional Image" class="additional-image" style="display: none;">
-                <img src="" alt="Book 31" class="book-31-image" style="display: none;">
-                <img src="" alt="Book 32" class="book-32-image" style="display: none;">
+                <img src="" alt="Модальное изображение" class="most-image" data-src="BOOK_IMAGE_02">
                 <div class="book-zones right-zones">
                     <div class="book-zone zone-1" data-zone="1"></div>
                     <div class="book-zone zone-2" data-zone="2"></div>
@@ -613,9 +557,10 @@
                 </div>
             </div>
             <div class="most-title"></div>
+            <div class="most-description"></div>
         </div>
     </div>
-
+    <!-- Главная сцена с фоновым изображением и анимацией -->
     <div class="scene">
         <div class="image-container">
             <div class="image"></div>
@@ -624,291 +569,65 @@
     </div>
     <script>
         document.addEventListener('DOMContentLoaded', async function() {
-            // Загружаем переводы и инициализируем i18n
+            // 1. Загрузка переводов и обновление контента
             await window.i18n.loadTranslations();
             window.i18n.updatePageContent();
 
-            // Инициализируем языковое меню после загрузки i18n
+            // 2. Подключение обработчика для геометки собора
+            import('./tumski_cathedral_handler.js').then(mod => {
+                if (mod && typeof mod.setupUniversalGeoMarker === 'function') {
+                    // Геометка Катедра
+                    mod.setupUniversalGeoMarker({
+                        markerId: 'tumski_cathedral',
+                        i18nKey: 'tumski_cathedral',
+                        position: { top: '45%', right: '35%', width: 'auto', height: 'auto' }
+                    });
+                    // Геометка Тумский мост
+                    mod.setupUniversalGeoMarker({
+                        markerId: 'tumski_most',
+                        i18n: 'tumski_most',
+                        position: { top: '15%', right: '15%', width: 'auto', height: 'auto' }
+                    });
+                    // mod.setupUniversalGeoMarker({
+                    //     markerId: 'tumski',
+                    //     i18nKey: 'tumski',
+                    //     position: { top: '10%', right: '10%', width: 'auto', height: 'auto' }
+                    // });
+                }
+            });
+
+            // 4. Инициализация языкового меню
             LanguageMenu.init();
 
-            // Инициализируем модальное окно карты
+            // 5. Инициализация модального окна карты
             MapModal.init();
 
-            // Применяем общие стили кнопок
+            // 6. Применение общих стилей кнопок
             applyCommonButtonStyles();
 
-            // Автоматическое воспроизведение фоновой музыки
-            const backgroundMusic = document.querySelector('#backgroundMusic');
-            const musicHint = document.querySelector('#musicHint');
-            const isMuted = localStorage.getItem('soundMuted') === 'true';
-            
-            console.log('Фоновая музыка найдена:', !!backgroundMusic);
-            console.log('Звук отключен:', isMuted);
-            
-            if (backgroundMusic && !isMuted) {
-                backgroundMusic.volume = 0.5; // Устанавливаем громкость на 50%
-                
-                // Пробуем воспроизвести сразу
-                backgroundMusic.play().then(() => {
-                    console.log('Музыка успешно запущена');
-                }).catch(error => {
-                    console.log('Автовоспроизведение заблокировано браузером:', error);
-                    
-                    // Показываем подсказку пользователю
-                    if (musicHint) {
-                        musicHint.style.display = 'block';
-                        setTimeout(() => {
-                            musicHint.style.display = 'none';
-                        }, 6000);
-                    }
-                    
-                    // Пробуем воспроизвести при первом клике пользователя
-                    const startMusicOnClick = () => {
-                        backgroundMusic.play().then(() => {
-                            console.log('Музыка запущена при клике');
-                            document.removeEventListener('click', startMusicOnClick);
-                        }).catch(err => {
-                            console.log('Ошибка воспроизведения при клике:', err);
-                        });
-                    };
-                    
-                    document.addEventListener('click', startMusicOnClick, { once: true });
-                });
-            }
-
-            // Устанавливаем пути к изображениям книг
-            document.querySelector('.book-image').src = window.BookPaths.BOOK_IMAGE;
-            document.querySelector('.most-image').src = window.BookPaths.BOOK_IMAGE_02;
-
-            // Инициализируем дополнительные изображения
-            const overlayImg = document.querySelector('.overlay-image');
-            const additionalImg = document.querySelector('.additional-image');
-            const book31Img = document.querySelector('.book-31-image');
-            const book32Img = document.querySelector('.book-32-image');
-            const config = window.BookZonesConfig;
-
-            // Инициализация изображений для зоны 2
-            if (config.zones.right.ZONE_2.overlayImage) {
-                overlayImg.src = window.BookPaths[config.zones.right.ZONE_2.overlayImage.src];
-                Object.assign(overlayImg.style, config.zones.right.ZONE_2.overlayImage.style);
-            }
-
-            if (config.zones.right.ZONE_2.additionalImage) {
-                additionalImg.src = window.BookPaths[config.zones.right.ZONE_2.additionalImage.src];
-                Object.assign(additionalImg.style, config.zones.right.ZONE_2.additionalImage.style);
-            }
-
-            // Инициализация изображений для зоны 3
-            const zone3Config = config.zones.right.ZONE_3;
-            if (zone3Config.overlayImage) {
-                overlayImg.src = window.BookPaths[zone3Config.overlayImage.src];
-                Object.assign(overlayImg.style, zone3Config.overlayImage.style);
-            }
-
-            if (zone3Config.additionalImages) {
-                book31Img.src = window.BookPaths[zone3Config.additionalImages[0].src];
-                Object.assign(book31Img.style, zone3Config.additionalImages[0].style);
-                
-                book32Img.src = window.BookPaths[zone3Config.additionalImages[1].src];
-                Object.assign(book32Img.style, zone3Config.additionalImages[1].style);
-            }
-
-            const rightZones = document.querySelector('.right-zones');
-            Object.assign(rightZones.style, config.rightContainer);
-            Object.assign(rightZones.style, config.styles.container);
-
-            const leftZones = document.querySelector('.left-zones');
-            Object.assign(leftZones.style, config.leftContainer);
-            Object.assign(leftZones.style, config.styles.container);
-
-            function setupZones(container, side) {
-                container.querySelectorAll('.book-zone').forEach((zone, index) => {
-                    const zoneNumber = index + 1;
-                    const zoneConfig = config.zones[side][`ZONE_${zoneNumber}`];
-                    const zoneStyles = config.styles.zone;
-                    const zoneColor = config.styles.zoneColors[`ZONE_${zoneNumber}`];
-                    const bookSound = document.querySelector('#bookSound');
-                    
-                    Object.assign(zone.style, zoneStyles);
-                    zone.style.top = zoneConfig.top;
-                    zone.style.height = zoneConfig.height;
-                    zone.style.backgroundColor = zoneColor;
-
-                    zone.addEventListener('mouseenter', () => {
-                        zone.style.backgroundColor = config.styles.zoneHover.backgroundColor;
-                    });
-
-                    zone.addEventListener('mouseleave', () => {
-                        zone.style.backgroundColor = zoneColor;
-                    });
-
-                    zone.addEventListener('click', () => {
-                        if (zoneConfig.onClick) {
-                            zoneConfig.onClick(overlayImg, additionalImg, book31Img, book32Img, bookSound);
-                        }
-                    });
-                });
-            }
-
-            setupZones(rightZones, 'right');
-            setupZones(leftZones, 'left');
-
-            const container = document.querySelector(Common.COMMON_ELEMENTS.IMAGE_CONTAINER);
-            const cursor = document.querySelector(Common.COMMON_ELEMENTS.CURSOR);
-            const cursorArea = document.querySelector(Common.COMMON_ELEMENTS.CURSOR_AREA);
-            const cursorProsto = document.querySelector(Common.COMMON_ELEMENTS.CURSOR_PROSTO);
-            const cursorProstoArea = document.querySelector(Common.COMMON_ELEMENTS.CURSOR_PROSTO_AREA);
-            const mapMarkWyspa = document.querySelector('#tumska_wyspa');
-            const mapMarkMost = document.querySelector('#tumski_most');
-            const tumskiText = document.querySelectorAll('#tumski-text');
-            const tumskiTexts = document.querySelectorAll('.tumski-text');
-            const bookOverlay = document.querySelector(Common.COMMON_ELEMENTS.BOOK_OVERLAY);
-            const mostOverlay = document.querySelector(Common.COMMON_ELEMENTS.MOST_OVERLAY);
-            const closeButtons = document.querySelectorAll(Common.COMMON_ELEMENTS.CLOSE_BUTTON);
-            const bookSound = document.querySelector('#bookSound');
-            const stepSound = document.querySelector('#stepSound');
-            const bookContent = document.querySelector(Common.COMMON_ELEMENTS.BOOK_CONTENT);
-            const scrollIndicator = document.querySelector(Common.COMMON_ELEMENTS.SCROLL_INDICATOR);
-            const mostTitle = mostOverlay.querySelector('.most-title');
-
-            Common.setupResetAnimation(container);
-            Common.setupRightArrowHandler(cursor, cursorArea, stepSound, () => {
-                const imageContainer = document.querySelector('.image-container');
-                const currentImage = document.querySelector('.image');
-                const nextImageContainer = document.querySelector('.next-image-container');
-                
-                nextImageContainer.style.backgroundImage = "url('media/tumski/tumski_02.jpg')";
-                
-                imageContainer.style.animationPlayState = 'paused';
-                
-                imageContainer.classList.add('zoom-transition');
-                
-                setTimeout(() => {
-                    currentImage.classList.add('fade-out');
-                    nextImageContainer.classList.add('fade-in');
-                    
-                    setTimeout(() => {
-                        window.location.href = 'tumski_02.html';
-                    }, 500);
-                }, 1000);
-            });
-            setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, () => {
-                const imageContainer = document.querySelector('.image-container');
-                const currentImage = document.querySelector('.image');
-                const nextImageContainer = document.querySelector('.next-image-container');
-                
-                imageContainer.style.animationPlayState = 'paused';
-                
-                imageContainer.classList.add('zoom-transition');
-                
-                setTimeout(() => {
-                    currentImage.classList.add('fade-out');
-                    nextImageContainer.classList.add('fade-in');
-                    
-                    setTimeout(() => {
-                        window.location.href = 'tumski_03.html';
-                    }, 500);
-                }, 1000);
-            });
-
-            const { toggleScrollIndicator } = Common.setupScrollHandlers(bookContent, scrollIndicator);
-
-            const preloadImage = new Image();
-            preloadImage.src = 'media/tumski/tumski_03.jpg';
-            preloadImage.onload = function() {};
-            preloadImage.onerror = function() {};
-            
-            mapMarkWyspa.addEventListener('click', () => {
-                if (!bookOverlay.style.display || bookOverlay.style.display === 'none') {
-                    Common.openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator);
+            // 7. Запуск фоновой музыки (универсальный модуль)
+            import('./background_music.js').then(mod => {
+                if (mod && typeof mod.initBackgroundMusic === 'function') {
+                    mod.initBackgroundMusic();
                 }
             });
 
-            tumskiTxtX = document.querySelector('#tumski-text');
-            tumskiTxtX.addEventListener('click', () => {
-                if (!bookOverlay.style.display || bookOverlay.style.display === 'none') {
-                    Common.openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator);
-                }
-            });
-
-            const tumskiTextParent = tumskiTxtX?.parentElement;
-            if (tumskiTextParent) {
-                tumskiTextParent.addEventListener('click', () => {
-                    if (!bookOverlay.style.display || bookOverlay.style.display === 'none') {
-                        Common.openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator);
-                    }
-                });
+            // 8. Инициализация логики книги (универсальный модуль)
+            if (window.BookPaths && typeof window.BookPaths.initBookHandlers === 'function') {
+                window.BookPaths.initBookHandlers();
             }
-
-            tumskiTxt = document.querySelector('#tumski-most-text');
-            tumskiTxt.addEventListener('click', () => {
-                if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
-                    Common.openMost(bookSound, mostOverlay, container, mostTitle);
-                    mostTitle.style.display = 'none';
-                    setTimeout(() => {
-                        if (window.showInitialHighlight) {
-                            window.showInitialHighlight();
-                        }
-                    }, 500);
-                }
-            });
-
-            mapMarkMost.addEventListener('click', () => {
-                if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
-                    Common.openMost(bookSound, mostOverlay, container, mostTitle);
-                    mostTitle.style.display = 'none';
-                    setTimeout(() => {
-                        if (window.showInitialHighlight) {
-                            window.showInitialHighlight();
-                        }
-                    }, 500);
-                }
-            });
-
-            closeButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    Common.resumeAnimation(bookOverlay, mostOverlay, container);
-                    container.classList.remove('zoom-transition');
-                    container.style.animation = 'none';
-                    container.offsetHeight;
-                    container.style.animation = null;
-                });
-            });
-
-            [bookOverlay, mostOverlay].forEach(overlay => {
-                overlay.addEventListener('click', function(e) {
-                    if (e.target === overlay) {
-                        Common.resumeAnimation(bookOverlay, mostOverlay, container);
-                        container.classList.remove('zoom-transition');
-                        container.style.animation = 'none';
-                        container.offsetHeight;
-                        container.style.animation = null;
-                    }
-                });
-            });
-
-            // === Добавляем обработчик для стрелки вправо ===
-            const customCursor = document.querySelector('.custom-cursor');
-            const customCursorArea = document.querySelector('.custom-cursor-area');
-
-            // Позиционируем стрелку в правом нижнем углу
-            customCursor.style.right = '40px';
-            customCursor.style.bottom = '40px';
-            customCursor.style.left = 'auto';
-            customCursor.style.top = 'auto';
-
-            customCursorArea.addEventListener('mouseenter', () => {
-                customCursor.style.display = 'block';
-            });
-            customCursorArea.addEventListener('mouseleave', () => {
-                customCursor.style.display = 'none';
-            });
-            customCursorArea.addEventListener('click', () => {
-                window.location.href = 'tumski_02.html';
-            });
-            // Скрываем стрелку по умолчанию
-            customCursor.style.display = 'none';
         });
+
+        function createGeoMarker({ markerId, i18nKey, position }) {
+            // ...создаём .map-mark-area, .map-mark, .content-wrapper и т.д.
+            const papera = document.createElement('img');
+            papera.className = 'papera-image';
+            papera.src = 'media/papera1.png';
+            papera.alt = 'Papera';
+            // ...добавляем в content-wrapper
+            const contentWrapper = document.querySelector('.content-wrapper');
+            contentWrapper.appendChild(papera);
+        }
     </script>
 </body>
 </html> 

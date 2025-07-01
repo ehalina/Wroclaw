@@ -144,10 +144,7 @@ const BOOK_ZONES_CONFIG = {
                     }
                     if (book32Img) book32Img.style.display = 'none';
 
-                    if (bookSound) {
-                        bookSound.currentTime = 0;
-                        bookSound.play();
-                    }
+                    if (window.playMapSound) window.playMapSound();
 
                     // Обновляем видимость зон
                     const rightZones = document.querySelector('.right-zones');
@@ -205,10 +202,7 @@ const BOOK_ZONES_CONFIG = {
                         additionalImg.style.display = 'block';
                     }
                     
-                    if (bookSound) {
-                        bookSound.currentTime = 0;
-                        bookSound.play();
-                    }
+                    if (window.playMapSound) window.playMapSound();
 
                     // Обновляем видимость зон
                     const rightZones = document.querySelector('.right-zones');
@@ -282,10 +276,7 @@ const BOOK_ZONES_CONFIG = {
                     if (book31Img) book31Img.style.display = 'block';
                     if (book32Img) book32Img.style.display = 'block';
                     
-                    if (bookSound) {
-                        bookSound.currentTime = 0;
-                        bookSound.play();
-                    }
+                    if (window.playMapSound) window.playMapSound();
 
                     // Обновляем видимость зон
                     const rightZones = document.querySelector('.right-zones');
@@ -360,10 +351,7 @@ const BOOK_ZONES_CONFIG = {
                         additionalImg.style.display = 'block';
                     }
                     
-                    if (bookSound) {
-                        bookSound.currentTime = 0;
-                        bookSound.play();
-                    }
+                    if (window.playMapSound) window.playMapSound();
 
                     // Обновляем видимость зон
                     const rightZones = document.querySelector('.right-zones');
@@ -389,10 +377,7 @@ const BOOK_ZONES_CONFIG = {
                     }
                     if (book32Img) book32Img.style.display = 'none';
 
-                    if (bookSound) {
-                        bookSound.currentTime = 0;
-                        bookSound.play();
-                    }
+                    if (window.playMapSound) window.playMapSound();
 
                     // Обновляем видимость зон
                     const rightZones = document.querySelector('.right-zones');
@@ -450,10 +435,7 @@ const BOOK_ZONES_CONFIG = {
                         additionalImg.style.display = 'block';
                     }
                     
-                    if (bookSound) {
-                        bookSound.currentTime = 0;
-                        bookSound.play();
-                    }
+                    if (window.playMapSound) window.playMapSound();
 
                     // Обновляем видимость зон
                     const rightZones = document.querySelector('.right-zones');
@@ -527,10 +509,7 @@ const BOOK_ZONES_CONFIG = {
                     if (book31Img) book31Img.style.display = 'block';
                     if (book32Img) book32Img.style.display = 'block';
                     
-                    if (bookSound) {
-                        bookSound.currentTime = 0;
-                        bookSound.play();
-                    }
+                    if (window.playMapSound) window.playMapSound();
 
                     // Обновляем видимость зон
                     const rightZones = document.querySelector('.right-zones');
@@ -605,10 +584,7 @@ const BOOK_ZONES_CONFIG = {
                         additionalImg.style.display = 'block';
                     }
                     
-                    if (bookSound) {
-                        bookSound.currentTime = 0;
-                        bookSound.play();
-                    }
+                    if (window.playMapSound) window.playMapSound();
 
                     // Обновляем видимость зон
                     const rightZones = document.querySelector('.right-zones');
@@ -732,127 +708,120 @@ const BUTTONS_CONFIG = {
     }
 };
 
-// Конфигурация для отображения текста
-const BOOK_TEXT_CONFIG = {
-    container: {
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        width: '60%',
-        background: 'rgba(0, 0, 0, 0.8)',
-        color: 'white',
-        padding: '40px',
-        boxSizing: 'border-box',
-        overflowY: 'auto',
-        maxHeight: '80%',
-        borderRadius: '10px',
-        zIndex: 1001,
-        display: 'block'
-    },
-    title: {
-        fontSize: '28px',
-        marginBottom: '20px',
-        fontWeight: 'bold',
-        textAlign: 'center',
-        color: 'white'
-    },
-    text: {
-        fontSize: '18px',
-        lineHeight: '1.6',
-        whiteSpace: 'pre-line',
-        textAlign: 'justify',
-        color: 'white'
-    }
-};
-
 // Экспортируем константы
 window.BookPaths = BOOK_PATHS;
 window.BookZonesConfig = BOOK_ZONES_CONFIG;
 // Экспортируем конфигурацию кнопок
 window.ButtonsConfig = BUTTONS_CONFIG;
 
-// Функция для отображения текста
-function showBookText(container, textKey) {
-    const currentLang = document.documentElement.lang || 'ru';
-    fetch(`locales/${currentLang}/translations.json`)
-        .then(response => response.json())
-        .then(translations => {
-            const textData = translations[textKey].book02.zone1;
-            
-            const textContainer = document.createElement('div');
-            Object.assign(textContainer.style, BOOK_TEXT_CONFIG.container);
-            
-            const title = document.createElement('h2');
-            Object.assign(title.style, BOOK_TEXT_CONFIG.title);
-            title.textContent = textData.title;
-            
-            const text = document.createElement('p');
-            Object.assign(text.style, BOOK_TEXT_CONFIG.text);
-            text.textContent = textData.text;
-            
-            textContainer.appendChild(title);
-            textContainer.appendChild(text);
-            
-            // Удаляем предыдущий текстовый контейнер, если он существует
-            const existingTextContainer = container.querySelector('.book-text-container');
-            if (existingTextContainer) {
-                container.removeChild(existingTextContainer);
-            }
-            
-            textContainer.classList.add('book-text-container');
-            container.appendChild(textContainer);
-        })
-        .catch(error => {
-            console.error('Ошибка загрузки текста:', error);
+window.BookPaths.initBookHandlers = function() {
+    // Установка путей к изображениям книг
+    document.querySelector('.most-image').src = window.BookPaths.BOOK_IMAGE_02;
+
+    // Инициализация дополнительных изображений
+    const overlayImg = document.querySelector('.overlay-image');
+    const additionalImg = document.querySelector('.additional-image');
+    const book31Img = document.querySelector('.book-31-image');
+    const book32Img = document.querySelector('.book-32-image');
+    const config = window.BookZonesConfig;
+
+    // Инициализация изображений для зоны 2
+    if (config.zones.right.ZONE_2.overlayImage) {
+        overlayImg.src = window.BookPaths[config.zones.right.ZONE_2.overlayImage.src];
+        Object.assign(overlayImg.style, config.zones.right.ZONE_2.overlayImage.style);
+    }
+    if (config.zones.right.ZONE_2.additionalImage) {
+        additionalImg.src = window.BookPaths[config.zones.right.ZONE_2.additionalImage.src];
+        Object.assign(additionalImg.style, config.zones.right.ZONE_2.additionalImage.style);
+    }
+
+    // Инициализация изображений для зоны 3
+    const zone3Config = config.zones.right.ZONE_3;
+    if (zone3Config.overlayImage) {
+        overlayImg.src = window.BookPaths[zone3Config.overlayImage.src];
+        Object.assign(overlayImg.style, zone3Config.overlayImage.style);
+    }
+    if (zone3Config.additionalImages) {
+        book31Img.src = window.BookPaths[zone3Config.additionalImages[0].src];
+        Object.assign(book31Img.style, zone3Config.additionalImages[0].style);
+        book32Img.src = window.BookPaths[zone3Config.additionalImages[1].src];
+        Object.assign(book32Img.style, zone3Config.additionalImages[1].style);
+    }
+
+    // Стили контейнеров зон
+    const rightZones = document.querySelector('.right-zones');
+    Object.assign(rightZones.style, config.rightContainer);
+    Object.assign(rightZones.style, config.styles.container);
+    const leftZones = document.querySelector('.left-zones');
+    Object.assign(leftZones.style, config.leftContainer);
+    Object.assign(leftZones.style, config.styles.container);
+
+    // Функция для инициализации зон
+    function setupZones(container, side) {
+        container.querySelectorAll('.book-zone').forEach((zone, index) => {
+            const zoneNumber = index + 1;
+            const zoneConfig = config.zones[side][`ZONE_${zoneNumber}`];
+            const zoneStyles = config.styles.zone;
+            const zoneColor = config.styles.zoneColors[`ZONE_${zoneNumber}`];
+            const bookSound = document.querySelector(`#bookSound${zoneNumber}`);
+            Object.assign(zone.style, zoneStyles);
+            zone.style.top = zoneConfig.top;
+            zone.style.height = zoneConfig.height;
+            zone.style.backgroundColor = zoneColor;
+            zone.addEventListener('mouseenter', () => {
+                zone.style.backgroundColor = config.styles.zoneHover.backgroundColor;
+            });
+            zone.addEventListener('mouseleave', () => {
+                zone.style.backgroundColor = zoneColor;
+            });
+            zone.addEventListener('click', () => {
+                if (zoneConfig.onClick) {
+                    zoneConfig.onClick(overlayImg, additionalImg, book31Img, book32Img, bookSound);
+                }
+            });
         });
-}
+    }
+    setupZones(rightZones, 'right');
+    setupZones(leftZones, 'left');
 
-// Обновляем функцию открытия книги
-window.Common = window.Common || {};
-window.Common.openBook = function(event) {
-    const bookOverlay = document.createElement('div');
-    bookOverlay.style.position = 'fixed';
-    bookOverlay.style.top = '0';
-    bookOverlay.style.left = '0';
-    bookOverlay.style.width = '100%';
-    bookOverlay.style.height = '100%';
-    bookOverlay.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
-    bookOverlay.style.zIndex = '1000';
-    bookOverlay.style.display = 'flex';
-    bookOverlay.style.justifyContent = 'center';
-    bookOverlay.style.alignItems = 'center';
+    // Обработчики для модалок и закрытия
+    const bookOverlay = document.querySelector('.book-overlay');
+    const mostOverlay = document.querySelector('.most-overlay');
+    const closeButtons = document.querySelectorAll('.close-button');
+    const container = document.querySelector('.image-container');
+    closeButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            if (window.Common && typeof window.Common.resumeAnimation === 'function') {
+                window.Common.resumeAnimation(bookOverlay, mostOverlay, container);
+            }
+            container.classList.remove('zoom-transition');
+            container.style.animation = 'none';
+            container.offsetHeight;
+            container.style.animation = null;
+        });
+    });
+    [bookOverlay, mostOverlay].forEach(overlay => {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) {
+                if (window.Common && typeof window.Common.resumeAnimation === 'function') {
+                    window.Common.resumeAnimation(bookOverlay, mostOverlay, container);
+                }
+                container.classList.remove('zoom-transition');
+                container.style.animation = 'none';
+                container.offsetHeight;
+                container.style.animation = null;
+            }
+        });
+    });
 
-    const bookContainer = document.createElement('div');
-    bookContainer.style.position = 'relative';
-    bookContainer.style.width = '90%';
-    bookContainer.style.height = '90%';
+    // Скролл и индикатор
+    const bookContent = document.querySelector('.book-content');
+    const scrollIndicator = document.querySelector('.scroll-indicator');
+    if (window.Common && typeof window.Common.setupScrollHandlers === 'function') {
+        window.Common.setupScrollHandlers(bookContent, scrollIndicator);
+    }
 
-    const bookImage = document.createElement('img');
-    bookImage.src = window.BookPaths.BOOK_IMAGE_02;
-    bookImage.style.width = '100%';
-    bookImage.style.height = '100%';
-    bookImage.style.objectFit = 'contain';
-
-    const closeButton = document.createElement('button');
-    closeButton.innerHTML = '×';
-    closeButton.style.position = 'absolute';
-    closeButton.style.top = '20px';
-    closeButton.style.right = '20px';
-    closeButton.style.fontSize = '32px';
-    closeButton.style.color = 'white';
-    closeButton.style.background = 'none';
-    closeButton.style.border = 'none';
-    closeButton.style.cursor = 'pointer';
-    closeButton.style.zIndex = '1002';
-    
-    closeButton.onclick = () => document.body.removeChild(bookOverlay);
-    
-    bookContainer.appendChild(bookImage);
-    bookOverlay.appendChild(bookContainer);
-    bookOverlay.appendChild(closeButton);
-    document.body.appendChild(bookOverlay);
-    
-    // Показываем текст поверх изображения
-    showBookText(bookContainer, 'tumski_most');
+    // Прелоад следующего изображения (опционально)
+    const preloadImage = new Image();
+    preloadImage.src = 'media/tumski/tumski_03.jpg';
 }; 

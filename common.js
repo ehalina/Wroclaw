@@ -352,21 +352,29 @@ function setupUpArrowHandler(cursor, cursorArea, stepSound, nextPageCallback) {
 
 // Общие функции для работы с книгой
 function openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator) {
-    bookSound.currentTime = 0;
-    bookSound.play();
-    window.i18n.updatePageContent();
+    console.log('openBook вызван, src:', bookOverlay.querySelector('.book-image')?.src);
+    console.log('Функция openBook вызвана');
+    console.log('Параметры:', {
+        bookSound: !!bookSound,
+        bookOverlay: !!bookOverlay,
+        container: !!container,
+        bookContent: !!bookContent,
+        toggleScrollIndicator: !!toggleScrollIndicator
+    });
+    
+    if (window.playMapSound) window.playMapSound();
     bookOverlay.style.display = 'flex';
     container.style.animationPlayState = 'paused';
     bookContent.scrollTop = 0;
     setTimeout(toggleScrollIndicator, 100);
+    
+    console.log('Книга открыта, display установлен в flex');
 }
 
 function openMost(bookSound, mostOverlay, container, mostTitle) {
-    bookSound.currentTime = 0;
-    bookSound.play();
+    if (window.playMapSound) window.playMapSound();
     mostOverlay.style.display = 'flex';
     container.style.animationPlayState = 'paused';
-    mostTitle.textContent = window.i18n.t('tumski_most.title');
 }
 
 function resumeAnimation(bookOverlay, mostOverlay, container) {
@@ -497,6 +505,74 @@ window.updateMapTooltipText = function() {
     }
 };
 
+// Функция для обработки кликов по тексту и геометке "Тумский остров"
+function setupTumskiIslandHandler(tumskiText, tumskiMark, bookSound, bookOverlay, container, bookContent, toggleScrollIndicator) {
+    // Обработчик для текста "Тумский остров"
+    if (tumskiText) {
+        tumskiText.addEventListener('click', () => {
+            openTumskiIslandBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator);
+        });
+    }
+
+    // Обработчик для геометки "Тумский остров"
+    if (tumskiMark) {
+        tumskiMark.addEventListener('click', () => {
+            openTumskiIslandBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator);
+        });
+    }
+}
+
+// Функция для открытия книги "Тумский остров"
+function openTumskiIslandBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator) {
+    console.log('Открытие Тумский остров', {bookOverlay, bookSound});
+    if (!bookOverlay.style.display || bookOverlay.style.display === 'none') {
+        const bookTitle = bookOverlay.querySelector('.book-title');
+        const bookText = bookOverlay.querySelector('.book-text');
+        const bookImage = bookOverlay.querySelector('.book-image');
+        // Устанавливаем изображение книги
+        if (bookImage) {
+            bookImage.src = 'media/book/book.jpg';
+            console.log('bookImage.src установлен (остров):', bookImage.src);
+        }
+        // Устанавливаем заголовок и текст из переводов
+        if (window.i18n && typeof window.i18n.t === 'function') {
+            const titleText = window.i18n.t('tumski.title');
+            const descriptionText = window.i18n.t('tumski.description');
+            if (bookTitle) bookTitle.textContent = titleText;
+            if (bookText) bookText.textContent = descriptionText;
+            console.log('Текст установлен (остров):', {titleText, descriptionText});
+        }
+        Common.openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator);
+    }
+}
+
+// Функция для обработки кликов по тексту и геометке "Тумский мост"
+function setupTumskiMostHandler(tumskiMostText, tumskiMostMark, bookSound, mostOverlay, container, mostTitle) {
+    if (tumskiMostText) {
+        tumskiMostText.addEventListener('click', () => {
+            openTumskiMostOverlay(bookSound, mostOverlay, container, mostTitle);
+        });
+    }
+    if (tumskiMostMark) {
+        tumskiMostMark.addEventListener('click', () => {
+            openTumskiMostOverlay(bookSound, mostOverlay, container, mostTitle);
+        });
+    }
+}
+
+function openTumskiMostOverlay(bookSound, mostOverlay, container, mostTitle) {
+    console.log('Открытие Тумский мост', {mostOverlay, bookSound});
+    if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
+        // Устанавливаем заголовок из переводов
+        if (window.i18n && typeof window.i18n.t === 'function') {
+            const titleText = window.i18n.t('tumski_most.title');
+            if (mostTitle) mostTitle.textContent = titleText;
+            console.log('Текст установлен (мост):', {titleText});
+        }
+        Common.openMost(bookSound, mostOverlay, container, mostTitle);
+    }
+}
+
 // Экспорт функций и констант
 window.Common = {
     COMMON_ELEMENTS,
@@ -505,6 +581,8 @@ window.Common = {
     setupForwardArrowHandler,
     setupBackArrowHandler,
     setupUpArrowHandler,
+    setupTumskiIslandHandler,
+    setupTumskiMostHandler,
     openBook,
     openMost,
     resumeAnimation,
