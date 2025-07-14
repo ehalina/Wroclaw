@@ -25,22 +25,17 @@ function getNextZIndex() {
 // Функция для последовательной подсветки зон
 async function highlightZonesSequentially(zones, currentIndex) {
     if (!zones || zones.length === 0) {
-        console.warn('No zones provided for highlighting');
         return;
     }
 
     if (currentIndex >= zones.length) {
-        console.log('Highlight sequence completed');
         return;
     }
 
     const zone = zones[currentIndex];
-    console.log(`Highlighting zone ${currentIndex + 1}`, zone);
-    console.log('Zone classes before highlight:', zone.className);
     
     // Добавляем класс подсветки
     zone.classList.add('highlight');
-    console.log('Zone classes after adding highlight:', zone.className);
     
     // Запускаем следующую зону через 1200мс (до того, как текущая погаснет)
     if (currentIndex < zones.length - 1) {
@@ -52,37 +47,24 @@ async function highlightZonesSequentially(zones, currentIndex) {
     // Убираем подсветку текущей зоны через 1600мс
     setTimeout(() => {
         zone.classList.remove('highlight');
-        console.log(`Removed highlight from zone ${currentIndex + 1}`);
-        console.log('Zone classes after removing highlight:', zone.className);
     }, 1600);
 }
 
 // Экспортируем функцию для использования в HTML
 window.showInitialHighlight = function() {
-    console.log('Starting initial highlight animation');
     
     // Получаем зоны в правильном порядке (1, 2, 3, 4)
     const zones = [];
     for (let i = 1; i <= 4; i++) {
         const zone = document.querySelector(`.right-zones .book-zone.zone-${i}`);
-        console.log(`Looking for zone-${i}, found:`, zone?.className);
         if (zone) {
             zones.push(zone);
         }
     }
     
-    console.log('Zones array (classes):', zones.map(z => z.className));
-    console.log(`Found ${zones.length} right zones to highlight`);
-    
     if (zones.length === 0) {
-        console.warn('No right zones found for highlighting');
         return;
     }
-
-    // Проверяем, что зоны имеют правильные классы
-    zones.forEach((zone, index) => {
-        console.log(`Right zone ${index + 1} classes:`, zone.className);
-    });
 
     // Сбрасываем все подсветки перед началом анимации
     zones.forEach(zone => {
@@ -819,9 +801,5 @@ window.BookPaths.initBookHandlers = function() {
     const scrollIndicator = document.querySelector('.scroll-indicator');
     if (window.Common && typeof window.Common.setupScrollHandlers === 'function') {
         window.Common.setupScrollHandlers(bookContent, scrollIndicator);
-    }
-
-    // Прелоад следующего изображения (опционально)
-    const preloadImage = new Image();
-    preloadImage.src = 'media/tumski/tumski_03.jpg';
+    };
 }; 

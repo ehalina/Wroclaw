@@ -113,24 +113,27 @@ const mapStyles = `
         position: relative;
         width: 90vw;
         height: 90vh;
+        max-width: 100vw;
+        max-height: 100vh;
         display: flex;
         justify-content: center;
         align-items: flex-start;
-        overflow: hidden;
+        overflow: auto; /* Позволяет прокручивать, если что-то не влезает */
+        box-sizing: border-box;
     }
 
     .book-image-content-wrapper {
         position: relative;
         width: 50%;
         height: 100%;
+        max-width: 100%;
+        max-height: 100%;
         overflow-y: auto;
         display: flex;
         flex-direction: column;
         align-items: center;
-        background-color: #d2cdc4; /* Цвет фона для центральной части */
-        /* Удаляем padding, теперь верхнее и нижнее изображения в потоке */
-        /* padding-top: 150px; */
-        /* padding-bottom: 150px; */
+        background-color: #d2cdc4;
+        box-sizing: border-box;
     }
 
     .book-image {
@@ -144,8 +147,12 @@ const mapStyles = `
         /* z-index: 1; */ /* Убираем z-index */
         left: 0; /* Убираем позиционирование */
         width: 100%;
+        max-width: 100%;
         height: auto;
+        max-height: 30vh;
         display: block; /* Убедимся, что они блочные элементы */
+        object-fit: contain;
+        box-sizing: border-box;
     }
 
     .quest-top-image {
@@ -350,8 +357,8 @@ const mapStyles = `
         position: fixed;
         top: 0;
         left: 0;
-        width: 100%;
-        height: 100%;
+        width: 100vw;
+        height: 100vh;
         background: rgba(0, 0, 0, 0.8);
         display: none;
         justify-content: center;
@@ -359,44 +366,87 @@ const mapStyles = `
         z-index: 1001;
     }
 
-    .most-container {
-        position: relative;
-        width: 90%;
-        height: 90vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+.most-container {
+    aspect-ratio: 2 / 1.4;
+    width: min(90vw, 1100px, calc(100vh * 2 / 1.4));
+    height: min(90vh, calc(90vw * 1.4 / 2), 800px);
+    max-width: 1100px;
+    max-height: 90vh;
+    background: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    overflow: auto;
+}
 
-    .image-wrapper {
-        position: relative;
-        display: inline-block;
-        max-width: 100%;
-        max-height: 100%;
-    }
+.image-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    box-sizing: border-box;
+    position: relative;
+}
 
-    .most-image {
-        display: block;
-        max-width: 100%;
-        max-height: 90vh;
-        object-fit: contain;
-    }
+.most-image {
+    display: block;
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 16px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.2);
+}
 
-    .most-title {
+    .most-text-block {
         position: absolute;
-        bottom: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        color: white;
+        top: 8%;
+        right: 7%;
+        width: 43%;      /* ширина всегда % от image-wrapper */
+        height: 80%;     /* высота всегда % от image-wrapper */
+        min-width: 180px;
+        min-height: 80px;
+        max-width: 480px;
+        max-height: 520px;
+        overflow-y: auto;
+        background: rgba(255,255,255,0.0);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        z-index: 2;
+        padding: 16px 20px;
+        box-sizing: border-box;
+    }
+    .most-title, .most-description {
+        pointer-events: auto;
+    }
+
+    /* Оставляю только актуальные стили для .most-title и .most-description, отвечающие за модальное окно */
+    .most-title {
+        font-family: 'Marck Script', cursive;
+        font-size: 2.2vw;
+        font-weight: bold;
+        color: #222;
+        margin-bottom: 1.5vw;
+        text-align: left;
+        word-break: break-word;
+        width: 100%;
+    }
+
+    .most-description {
         font-family: 'Roboto', sans-serif;
-        font-size: 32px;
-        font-weight: 200;
-        font-style: italic;
-        text-align: center;
-        background: rgba(0, 0, 0, 0.7);
-        padding: 15px 30px;
-        border-radius: 10px;
-        white-space: nowrap;
+        font-size: 1.2vw;
+        color: #222;
+        text-align: left;
+        line-height: 1.5;
+        overflow-y: auto;
+        word-break: break-word;
+        width: 100%;
     }
 
     .overlay-image,
@@ -527,6 +577,10 @@ const MapModal = {
                         <img src="" alt="Additional Image" class="additional-image" style="display: none;">
                         <img src="" alt="Book 31" class="book-31-image" style="display: none;">
                         <img src="" alt="Book 32" class="book-32-image" style="display: none;">
+                        <div class="most-text-block">
+                            <div class="most-title"></div>
+                            <div class="most-description"></div>
+                        </div>
                         <div class="book-zones right-zones">
                             <div class="book-zone zone-1" data-zone="1"></div>
                             <div class="book-zone zone-2" data-zone="2"></div>
@@ -540,7 +594,6 @@ const MapModal = {
                             <div class="book-zone zone-4" data-zone="4"></div>
                         </div>
                     </div>
-                    <div class="most-title"></div>
                 </div>
             </div>
             <audio id="stepSound" src="media/step.wav"></audio>
@@ -551,6 +604,25 @@ const MapModal = {
 
         // Добавляем модальное окно и кнопки на страницу
         document.body.insertAdjacentHTML('afterbegin', modalHTML);
+
+        // === Автоматическая ширина most-container по ширине most-image ===
+        function adjustMostContainerWidth() {
+            const mostImage = document.querySelector('.most-image');
+            const mostContainer = document.querySelector('.most-container');
+            if (mostImage && mostContainer) {
+                const naturalWidth = mostImage.naturalWidth;
+                // Максимум 90vw, минимум — ширина картинки
+                const maxWidth = Math.min(window.innerWidth * 0.9, naturalWidth);
+                mostContainer.style.width = maxWidth + 'px';
+            }
+        }
+        // После загрузки изображения
+        const mostImage = document.querySelector('.most-image');
+        if (mostImage) {
+            mostImage.addEventListener('load', adjustMostContainerWidth);
+        }
+        // И при изменении размера окна
+        window.addEventListener('resize', adjustMostContainerWidth);
 
         // Получаем ссылки на элементы после их добавления в DOM
         const openMapBtn = document.getElementById('open-map-modal');
@@ -751,6 +823,17 @@ const MapModal = {
             if (contentImage) contentImage.style.display = 'none';
             if (bookText) bookText.style.display = 'none';
             if (scrollIndicator) scrollIndicator.style.display = 'none';
+
+            // Запускаем подсветку зон-кнопок только после появления их в DOM
+            function tryShowHighlight() {
+                const zones = document.querySelectorAll('.right-zones .book-zone');
+                if (zones.length > 0 && window.showInitialHighlight) {
+                    window.showInitialHighlight();
+                } else {
+                    setTimeout(tryShowHighlight, 50);
+                }
+            }
+            tryShowHighlight();
         });
 
         closeMapBtn.addEventListener('click', function() {
@@ -807,6 +890,13 @@ function renderQuestIntro(bookContentArea, questTasksList) {
     const introRaw = window.i18n ? window.i18n.t('quest.intro') : "";
     introText.innerHTML = introRaw.split(/\n\n/).map(par => `<p>${par}</p>`).join('');
     bookContentArea.insertBefore(introText, questTasksList);
+}
+
+// === Очистка инлайновых стилей у .most-title и .most-description при открытии модального окна ===
+function clearMostModalInlineStyles() {
+    document.querySelectorAll('.most-title, .most-description').forEach(el => {
+        el.removeAttribute('style');
+    });
 }
 
 // Экспортируем объект MapModal

@@ -17,6 +17,16 @@
       }
     }
   },
+  "tumski_cathedral": {
+    "title": "Katedrála svatého Jana Křtitele",
+    "description": "Katedrála svatého Jana Křtitele je hlavní katolický chrám Vratislavi a jedna z nejstarších gotických katedrál v Polsku. Postavená ve 13.-14. století je katedrála symbolem duchovního života města a důležitou architektonickou památkou. Její majestátní věže jsou viditelné z dálky a slouží jako orientační bod pro všechny návštěvníky ostrova Tumski.",
+    "book02": {
+      "zone1": {
+        "title": "Katedrála svatého Jana Křtitele",
+        "text": "Katedrála svatého Jana Křtitele není jen kostel, ale skutečná kamenná kronika Vratislavi. Její věže, směřující k nebi, jakoby vyprávěly historii města, které přežilo války, požáry a povodně, ale vždy se znovu zrodilo z popela. Uvnitř katedrály se nacházejí neocenitelná umělecká díla a její varhany jsou považovány za jedny z nejlepších v Evropě."
+      }
+    }
+  },
   "panorama": {
     "title": "Vyhlídková plošina"
   },

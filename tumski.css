@@ -1,0 +1,172 @@
+@keyframes zoomForward {
+    0% {
+        transform: translateZ(0) scale(1) translate(0, 0);
+    }
+    100% {
+        transform: translateZ(2000px) scale(2.5) translate(-35vw, -25vh);
+    }
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-image: url('media/tumski/tumski_01.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: black;
+    transition: opacity 0.1s ease-in;
+    backface-visibility: hidden;
+    will-change: transform;
+    transform-style: preserve-3d;
+    transform: translateZ(0);
+    overflow: hidden;
+    display: block;
+    pointer-events: none;
+}
+
+.next-image-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url('media/tumski/tumski_03.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: black;
+    opacity: 0;
+    transition: opacity 0.01s ease-in;
+    z-index: 2;
+    backface-visibility: hidden;
+    will-change: transform;
+    transform-style: preserve-3d;
+    transform: translateZ(0);
+    overflow: hidden;
+}
+
+@keyframes moveForward {
+    from {
+        transform: translateZ(0px) translateX(0);
+    }
+    to {
+        transform: translateZ(500px) translateX(0);
+    }
+}
+
+/* Позиционирование стрелок для страницы tumski */
+.custom-cursor-area {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    width: 50%; /* Четверть экрана */
+    height: 25%;
+    z-index: 999;
+    cursor: none;
+}
+
+.custom-cursor-prostoarea {
+    position: fixed;
+    right: 0;
+    bottom: 25%;
+    width: 50%;
+    height: 25%;
+    z-index: 999;
+    cursor: none;
+}
+
+/* Позиционирование mapmark для страницы tumski */
+.map-mark-area {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 50%;
+    height: 50%;
+    z-index: 998;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+@media (max-width: 700px) {
+    /* Геометки всегда видимы */
+    .map-mark-area, .map-mark {
+        opacity: 1 !important;
+        display: flex !important;
+        pointer-events: auto !important;
+    }
+    /* Скрыть подписи к геометкам, если нужно */
+    .tumski-text {
+        display: none !important;
+    }
+    /* Стрелки всегда видимы и активны */
+    .custom-cursor,
+    .custom-cursor-prosto,
+    .custom-cursor-area,
+    .custom-cursor-prostoarea {
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+    }
+    /* Убрать эффекты наведения для стрелок */
+    .custom-cursor-area:hover .custom-cursor,
+    .custom-cursor-prostoarea:hover .custom-cursor-prosto {
+        opacity: 1 !important;
+    }
+    /* Фиксированное положение стрелки вправо и области клика */
+    .custom-cursor {
+        left: auto !important;
+        right: 20px !important;
+        top: auto !important;
+        bottom: 20px !important;
+        z-index: 2000 !important;
+        position: fixed !important;
+    }
+    .custom-cursor-area {
+        left: auto !important;
+        right: 0 !important;
+        top: auto !important;
+        bottom: 0 !important;
+        width: 80px !important;
+        height: 80px !important;
+        position: fixed !important;
+        z-index: 2001 !important;
+        display: block !important;
+        pointer-events: auto !important;
+    }
+    .image {
+        min-width: 150vw !important;
+        width: 150vw !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        background-size: cover !important;
+        background-position: center !important;
+        position: relative !important;
+        left: 0 !important;
+        top: 0 !important;
+    }
+    .image-scroll-wrapper {
+        width: 100vw;
+        height: 100vh;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        position: relative;
+        touch-action: pan-x;
+    }
+    .scene,
+    .image-container {
+        overflow-x: auto;
+        overflow-y: auto;
+        width: max-content;
+        position: relative !important;
+        display: block !important;
+    }
+    body, html {
+        overflow-x: hidden !important;
+        overscroll-behavior-x: contain;
+    }
+} 
+

@@ -12,6 +12,16 @@
       }
     }
   },
+  "tumski_cathedral": {
+    "title": "Archikatedra św. Jana Chrzciciela",
+    "description": "Archikatedra św. Jana Chrzciciela to główna świątynia katolicka Wrocławia i jeden z najstarszych gotyckich katedr w Polsce. Zbudowana w XIII-XIV wieku, katedra jest symbolem życia duchowego miasta i ważnym zabytkiem architektonicznym. Jej majestatyczne wieże są widoczne z daleka i służą jako punkt orientacyjny dla wszystkich odwiedzających Ostrów Tumski.",
+    "book02": {
+      "zone1": {
+        "title": "Archikatedra św. Jana Chrzciciela",
+        "text": "Archikatedra św. Jana Chrzciciela to nie tylko kościół, ale prawdziwa kamienna kronika Wrocławia. Jej wieże, sięgające nieba, jakby opowiadały historię miasta, które przetrwało wojny, pożary i powodzie, ale zawsze odradzało się z popiołów. Wewnątrz katedry znajdują się bezcenne dzieła sztuki, a jej organy uważane są za jedne z najlepszych w Europie."
+      }
+    }
+  },
   "panorama": {
     "title": "Punkt widokowy"
   },

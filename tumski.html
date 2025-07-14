@@ -4,498 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Тумский остров - Вроцлав</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            position: fixed;
-        }
-
-        .scene {
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-            overflow: hidden;
-            perspective: 1000px;
-            transform-style: preserve-3d;
-            transform: translateZ(0);
-        }
-
-        @keyframes zoomForward {
-            0% {
-                transform: translateZ(0) scale(1) translate(0, 0);
-            }
-            100% {
-                transform: translateZ(2000px) scale(2.5) translate(-35vw, -25vh);
-            }
-        }
-
-        .zoom-transition {
-            animation: zoomForward 1.5s ease-in forwards !important;
-        }
-
-        .image-container {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            transform-style: preserve-3d;
-            transform-origin: center;
-            animation: moveForward 40s linear infinite;
-            backface-visibility: hidden;
-            will-change: transform;
-            transform: translateZ(0);
-            overflow: hidden;
-        }
-
-        .image-container.zoom-transition {
-            animation: zoomForward 1.5s ease-in forwards !important;
-        }
-
-        .image {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            background-image: url('media/tumski/tumski_01.jpg');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-color: black;
-            transition: opacity 0.1s ease-in;
-            backface-visibility: hidden;
-            will-change: transform;
-            transform-style: preserve-3d;
-            transform: translateZ(0);
-            overflow: hidden;
-        }
-
-        .image.fade-to-next {
-            transition: opacity 0.1s ease-in;
-            opacity: 0;
-        }
-
-        .next-image-container {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            background-image: url('media/tumski/tumski_03.jpg');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-color: black;
-            opacity: 0;
-            transition: opacity 0.01s ease-in;
-            z-index: 2;
-            backface-visibility: hidden;
-            will-change: transform;
-            transform-style: preserve-3d;
-            transform: translateZ(0);
-            overflow: hidden;
-        }
-
-        .fade-out {
-            opacity: 0;
-        }
-
-        .fade-in {
-            opacity: 1;
-        }
-
-        @keyframes moveForward {
-            from {
-                transform: translateZ(0px) translateX(0);
-            }
-            to {
-                transform: translateZ(500px) translateX(0);
-            }
-        }
-
-        .back-link {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            z-index: 1000;
-            background: none;
-            border-radius: 4px;
-            transition: background 0.3s ease;
-            width: 64px;
-            height: 64px;
-            display: block;
-        }
-
-        .back-link:hover {
-            background: rgba(0, 0, 0, 0.9);
-        }
-
-        .back-link img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
-            border: none;
-        }
-
-        .reset-animation {
-            animation: none !important;
-            transform: translateZ(0px) !important;
-        }
-
-        .custom-cursor-area {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            width: 50%; /* Четверть экрана */
-            height: 25%;
-            z-index: 999;
-            cursor: none;
-        }
-
-        /* Стрелка прямо */
-
-        .custom-cursor-prostoarea {
-            position: fixed;
-            right: 0;
-            bottom: 25%;
-            width: 50%;
-            height: 25%;
-            z-index: 999;
-            cursor: none;
-        }
-
-        .custom-cursor-prosto {
-            width: 64px;
-            height: 64px;
-            position: fixed;
-            background-image: url('media/strelka_prosto.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            z-index: 1000;
-            cursor: pointer;
-            pointer-events: auto;
-        }
-
-        .custom-cursor-prostoarea:hover .custom-cursor-prosto {
-            opacity: 1;
-        }
-
-        .map-mark-area {
-            position: fixed;
-            right: 0;
-            top: 0;
-            width: 50%;
-            height: 50%;
-            z-index: 998;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .map-mark {
-            width: 48px;
-            height: 48px;
-            background-image: url('media/mapmark.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .content-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            /* min-width: 280px;  если нужно ограничить ширину */
-            /* min-height: 80px;  если нужно ограничить высоту */
-        }
-
-        .papera-image {
-            width: 280px;
-            height: 80px;
-            object-fit: contain;
-            position: relative;
-            z-index: 1;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            /* уберите top, если был */
-        }
-
-        .tumski-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            z-index: 2;
-            font-family: 'Roboto', sans-serif;
-            font-weight: 200;
-            font-style: italic;
-            font-size: 28px;
-            color: #795f59;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            cursor: pointer;
-            text-align: center;
-            pointer-events: auto;
-        }
-
-        .map-mark-area:hover .map-mark,
-        .map-mark-area:hover .tumski-text,
-        .map-mark-area:hover .papera-image {
-            opacity: 1;
-        }
-
-        .book-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1001;
-        }
-
-        .book-container {
-            position: relative;
-            max-width: 100%;
-            max-height: 100vh;
-            overflow: hidden;
-        }
-
-        .book-image {
-            width: 100%;
-            height: 100vh;
-            object-fit: cover;
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #333;
-            font-size: 16px;
-            opacity: 0.7;
-            z-index: 1003;
-            cursor: pointer;
-            transition: opacity 0.3s ease;
-        }
-
-        .scroll-indicator:hover {
-            opacity: 1;
-        }
-
-        .scroll-indicator::after {
-            content: "▼";
-            display: block;
-        }
-
-        .book-content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            max-height: 80%;
-            overflow-y: hidden;
-            padding: 20px;
-            box-sizing: border-box;
-            text-align: center;
-            transition: overflow-y 0.3s ease;
-        }
-
-        .book-content.show-scrollbar {
-            overflow-y: auto;
-        }
-
-        .book-content::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .book-content::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 3px;
-        }
-
-        .book-content::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 3px;
-        }
-
-        .book-title {
-            font-family: 'Roboto', sans-serif;
-            font-weight: 200;
-            font-style: italic;
-            color: #333;
-            font-size: 32px;
-            margin: 10px 0 5px 0;
-        }
-
-        .book-text {
-            font-family: Arial, sans-serif;
-            color: #333;
-            font-size: 18px;
-            line-height: 1.6;
-            margin: 0;
-        }
-
-        .content-image {
-            max-width: 100%;
-            height: auto;
-            margin: 5px 0 20px 0;
-            border-radius: 8px;
-        }
-
-        .close-button {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 10px;
-            z-index: 1002;
-        }
-
-        .custom-cursor {
-            width: 64px;
-            height: 64px;
-            position: fixed;
-            pointer-events: none;
-            background-image: url('media/strelka.png');
-            background-size: contain;
-            background-repeat: no-repeat;
-            filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
-            display: none;
-            z-index: 1000;
-            cursor: pointer;
-        }
-
-        .arrow-click-area {
-            position: fixed;
-            right: 0;
-            bottom: 0;
-            width: 50%;
-            height: 50%;
-            z-index: 999;
-            cursor: none;
-        }
-
-        @font-face {
-            font-family: 'Roboto';
-            src: url('media/Roboto-ExtraLightItalic.ttf') format('truetype');
-            font-weight: 200;
-            font-style: italic;
-        }
-
-        .hide-cursors {
-            display: none !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
-
-        .book-zones {
-            position: absolute;
-            top: 0;
-            width: 10%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 2;
-        }
-
-        .right-zones {
-            right: 0;
-        }
-
-        .left-zones {
-            left: 0;
-        }
-
-        .book-zone {
-            position: absolute;
-            width: 100%;
-            background-color: transparent;
-            cursor: pointer;
-            pointer-events: auto;
-            transition: all 0.7s ease-in-out;
-        }
-
-        .right-zones .book-zone {
-            right: 0;
-        }
-
-        .left-zones .book-zone {
-            left: 0;
-        }
-
-        .book-zone:hover,
-        .book-zone.highlight {
-            background-color: rgba(255, 255, 255, 0.45);
-        }
-
-        @keyframes highlightPulse {
-            0% { 
-                background-color: rgba(255, 255, 255, 0);
-            }
-            100% { 
-                background-color: rgba(255, 255, 255, 0.45);
-            }
-        }
-
-        .book-zone.highlight {
-            animation: highlightPulse 0.5s ease-in-out forwards;
-        }
-
-        .zone {
-            transition: all 0.1s ease-in-out;
-        }
-        
-        .zone.highlight {
-            background-color: rgba(255, 255, 255, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-        }
-
-        .music-hint {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 20px 30px;
-            border-radius: 10px;
-            font-size: 18px;
-            text-align: center;
-            z-index: 2000;
-            display: none;
-            animation: fadeInOut 6s ease-in-out;
-        }
-
-        @keyframes fadeInOut {
-            0% { opacity: 0; }
-            15% { opacity: 1; }
-            85% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="tumski.css">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
     <script src="i18n.js"></script>
@@ -524,7 +34,7 @@
     <div class="map-mark-area" style="top: 45%; right: 35%; width: auto; height: auto;">
         <div class="map-mark" id="tumski_cathedral"></div>
         <div class="content-wrapper">
-            <img class="papera-image" src="media/papera1.png" alt="Papera">
+            <img class="papera-image" alt="Papera">
             <div class="tumski-text" id="tumski-cathedral-text" data-i18n="tumski_cathedral.title"></div>
         </div>
         <audio id="bookSound3" src="media/opening-a-book.wav"></audio>
@@ -533,7 +43,7 @@
     <div class="map-mark-area" style="top: 15%; right: 15%; width: auto; height: auto;">
         <div class="map-mark" id="tumski_most"></div>
         <div class="content-wrapper">
-            <img class="papera-image" src="media/papera1.png" alt="Papera">
+            <img class="papera-image" alt="Papera">
             <div class="tumski-text" id="tumski-most-text" data-i18n="tumski_most.title"></div>
         </div>
     </div>
@@ -543,6 +53,10 @@
         <div class="most-container">
             <div class="image-wrapper">
                 <img src="" alt="Модальное изображение" class="most-image" data-src="BOOK_IMAGE_02">
+                <div class="most-text-block">
+                <div class="most-title"></div>
+                <div class="most-description"></div>
+                </div>
                 <div class="book-zones right-zones">
                     <div class="book-zone zone-1" data-zone="1"></div>
                     <div class="book-zone zone-2" data-zone="2"></div>
@@ -556,14 +70,15 @@
                     <div class="book-zone zone-4" data-zone="4"></div>
                 </div>
             </div>
-            <div class="most-title"></div>
-            <div class="most-description"></div>
+            
         </div>
     </div>
     <!-- Главная сцена с фоновым изображением и анимацией -->
     <div class="scene">
         <div class="image-container">
-            <div class="image"></div>
+            <div class="image-scroll-wrapper">
+                <div class="image"></div>
+            </div>
         </div>
         <div class="next-image-container"></div>
     </div>
@@ -573,20 +88,30 @@
             await window.i18n.loadTranslations();
             window.i18n.updatePageContent();
 
+            // Set papera image source dynamically
+            const paperaImageMost = document.querySelector('#tumski_most').parentElement.querySelector('.papera-image');
+            const paperaImageCathedral = document.querySelector('#tumski_cathedral').parentElement.querySelector('.papera-image');
+
             // 2. Подключение обработчика для геометки собора
             import('./tumski_cathedral_handler.js').then(mod => {
                 if (mod && typeof mod.setupUniversalGeoMarker === 'function') {
+                    // Устанавливаем источники изображений papera
+                    if (mod.setPaperaImageSource) {
+                        mod.setPaperaImageSource(paperaImageMost);
+                        mod.setPaperaImageSource(paperaImageCathedral);
+                    }
+                    
                     // Геометка Катедра
                     mod.setupUniversalGeoMarker({
                         markerId: 'tumski_cathedral',
                         i18nKey: 'tumski_cathedral',
-                        position: { top: '45%', right: '35%', width: 'auto', height: 'auto' }
+                        position: { top: '30%', right: '15%', width: 'auto', height: 'auto' }
                     });
                     // Геометка Тумский мост
                     mod.setupUniversalGeoMarker({
                         markerId: 'tumski_most',
-                        i18n: 'tumski_most',
-                        position: { top: '15%', right: '15%', width: 'auto', height: 'auto' }
+                        i18nKey: 'tumski_most',
+                        position: { top: '40%', right: '20%', width: 'auto', height: 'auto' }
                     });
                     // mod.setupUniversalGeoMarker({
                     //     markerId: 'tumski',
@@ -616,18 +141,49 @@
             if (window.BookPaths && typeof window.BookPaths.initBookHandlers === 'function') {
                 window.BookPaths.initBookHandlers();
             }
+
+            // 9. Инициализация кастомных курсоров
+            const cursor = document.querySelector('.custom-cursor');
+            const cursorArea = document.querySelector('.custom-cursor-area');
+            const cursorProsto = document.querySelector('.custom-cursor-prosto');
+            const cursorProstoArea = document.querySelector('.custom-cursor-prostoarea');
+            
+            console.log('Элементы курсоров:', {
+                cursor: !!cursor,
+                cursorArea: !!cursorArea,
+                cursorProsto: !!cursorProsto,
+                cursorProstoArea: !!cursorProstoArea
+            });
+            
+            // Создаем звук шага
+            let stepSound;
+
+            // Инициализируем обработчики курсоров
+            import('./tumski_cathedral_handler.js').then(mod => {
+                if (mod.createStepSound) {
+                    stepSound = mod.createStepSound();
+                }
+                
+                if (cursor && cursorArea) {
+                    console.log('Инициализация стрелки вправо');
+                    setupRightArrowHandler(cursor, cursorArea, stepSound);
+                } else {
+                    console.error('Не найдены элементы для стрелки вправо');
+                }
+                
+                if (cursorProsto && cursorProstoArea) {
+                    console.log('Инициализация стрелки прямо');
+                    setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, () => {
+                        // Переход на следующую страницу
+                        window.location.href = 'tumski_02.html';
+                    });
+                } else {
+                    console.error('Не найдены элементы для стрелки прямо');
+                }
+            });
         });
 
-        function createGeoMarker({ markerId, i18nKey, position }) {
-            // ...создаём .map-mark-area, .map-mark, .content-wrapper и т.д.
-            const papera = document.createElement('img');
-            papera.className = 'papera-image';
-            papera.src = 'media/papera1.png';
-            papera.alt = 'Papera';
-            // ...добавляем в content-wrapper
-            const contentWrapper = document.querySelector('.content-wrapper');
-            contentWrapper.appendChild(papera);
-        }
+
     </script>
 </body>
 </html> 

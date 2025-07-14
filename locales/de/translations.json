@@ -17,6 +17,16 @@
       }
     }
   },
+  "tumski_cathedral": {
+    "title": "Dom St. Johannes des Täufers",
+    "description": "Der Dom St. Johannes des Täufers ist die Hauptkirche von Breslau und eine der ältesten gotischen Kathedralen in Polen. Erbaut im 13.-14. Jahrhundert, ist die Kathedrale ein Symbol des geistlichen Lebens der Stadt und ein wichtiges architektonisches Denkmal. Ihre majestätischen Türme sind von weitem sichtbar und dienen als Orientierungspunkt für alle, die die Tumski-Insel besuchen.",
+    "book02": {
+      "zone1": {
+        "title": "Dom St. Johannes des Täufers",
+        "text": "Der Dom St. Johannes des Täufers ist nicht nur eine Kirche, sondern eine wahre steinerne Chronik von Breslau. Seine Türme, die zum Himmel streben, erzählen gleichsam die Geschichte der Stadt, die Kriege, Brände und Überschwemmungen überstanden hat, aber immer wieder aus der Asche auferstanden ist. Im Inneren der Kathedrale befinden sich unschätzbare Kunstwerke, und ihre Orgel gilt als eine der besten in Europa."
+      }
+    }
+  },
   "panorama": {
     "title": "Aussichtsplattform"
   },

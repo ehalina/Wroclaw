@@ -1,3 +1,64 @@
+// Константы для медиафайлов
+const MEDIA_PATHS = {
+    PAPERA_IMAGE: 'media/papera1.png',
+    STEP_SOUND: 'media/step.wav'
+};
+
+// Функция для определения, находится ли геометка в правой половине экрана
+function isInRightHalf(position) {
+    if (!position) return false;
+    
+    // Проверяем различные варианты позиционирования
+    if (position.right !== undefined) {
+        const rightValue = parseFloat(position.right);
+        return rightValue <= 50; // Если right <= 50%, то это правая половина
+    }
+    
+    if (position.left !== undefined) {
+        const leftValue = parseFloat(position.left);
+        return leftValue >= 50; // Если left >= 50%, то это правая половина
+    }
+    
+    return false;
+}
+
+// Функция для изменения порядка элементов в зависимости от позиции
+function reorderGeoMarkerElements(contentWrapper, position) {
+    if (!contentWrapper) return;
+    
+    const textElem = contentWrapper.querySelector('.tumski-text');
+    const paperaImg = contentWrapper.querySelector('.papera-image');
+    const mapMark = contentWrapper.parentElement.querySelector('.map-mark');
+    
+    if (!textElem || !paperaImg || !mapMark) return;
+    
+    const isRightHalf = isInRightHalf(position);
+    
+    if (isRightHalf) {
+        // Для правой половины: текст → papera → геометка
+        // Сначала очищаем контейнер
+        contentWrapper.innerHTML = '';
+        
+        // Добавляем элементы в нужном порядке
+        contentWrapper.appendChild(textElem);
+        contentWrapper.appendChild(paperaImg);
+        
+        // Перемещаем геометку в конец
+        contentWrapper.parentElement.appendChild(mapMark);
+    } else {
+        // Для левой половины: геометка → papera → текст (стандартный порядок)
+        // Сначала очищаем контейнер
+        contentWrapper.innerHTML = '';
+        
+        // Перемещаем геометку в начало
+        contentWrapper.parentElement.insertBefore(mapMark, contentWrapper);
+        
+        // Добавляем элементы в стандартном порядке
+        contentWrapper.appendChild(paperaImg);
+        contentWrapper.appendChild(textElem);
+    }
+}
+
 // Обработчик для геометки "Собор Святого Иоанна Крестителя"
 export function setupTumskiCathedralHandler() {
     const tumskiCathedralTxt = document.querySelector('#tumski-cathedral-text');
@@ -16,6 +77,9 @@ export function setupTumskiCathedralHandler() {
                 // container.classList.add('zoom-transition'); // Зум убран для геометки
                 titleElem.textContent = window.i18n.t(i18nKey + '.title');
                 // Можно добавить описание, если нужно
+
+                // Добавить запуск подсветки зон:
+                if (window.showInitialHighlight) window.showInitialHighlight();
             });
         });
     }
@@ -44,28 +108,51 @@ export function setupUniversalGeoMarker({ markerId, i18nKey, position }) {
     if (!paperaImg) {
         paperaImg = document.createElement('img');
         paperaImg.className = 'papera-image';
-        paperaImg.src = 'media/papera1.png';
+        paperaImg.src = MEDIA_PATHS.PAPERA_IMAGE;
         paperaImg.alt = 'Papera';
         // Вставляем ПОД текстом
         contentWrapper.appendChild(paperaImg);
     }
-    // Стили для растяжения картинки по ширине текста
+    
+    // Изменяем порядок элементов в зависимости от позиции
+    reorderGeoMarkerElements(contentWrapper, position);
+  /*  // Стили для растяжения картинки по ширине текста
     paperaImg.style.width = textElem ? (textElem.offsetWidth + 'px') : '100%';
-    paperaImg.style.height = '40px';
+    paperaImg.style.height = '50px';
     paperaImg.style.display = 'block';
     paperaImg.style.objectFit = 'contain';
     paperaImg.style.margin = '0 auto';
     paperaImg.style.position = 'relative';
-    paperaImg.style.top = '8px';
+    paperaImg.style.top = '1px';
+*/
 
     // --- Обработчик клика ---
     function openModal() {
         mostOverlay.style.display = 'flex';
+        if (typeof window.clearMostModalInlineStyles === 'function') {
+            window.clearMostModalInlineStyles();
+        }
         if (window.i18n && typeof window.i18n.t === 'function') {
             mostTitle.textContent = window.i18n.t(i18nKey + '.title');
             mostDescription.textContent = window.i18n.t(i18nKey + '.description');
         }
+        // Добавляю запуск подсветки зон:
+        if (window.showInitialHighlight) window.showInitialHighlight();
     }
     marker.addEventListener('click', openModal);
     if (textElem) textElem.addEventListener('click', openModal);
+}
+
+// Функция для создания звука шага
+export function createStepSound() {
+    const stepSound = new Audio(MEDIA_PATHS.STEP_SOUND);
+    stepSound.volume = 0.3;
+    return stepSound;
+}
+
+// Функция для установки источника изображения papera
+export function setPaperaImageSource(element) {
+    if (element) {
+        element.src = MEDIA_PATHS.PAPERA_IMAGE;
+    }
 } 

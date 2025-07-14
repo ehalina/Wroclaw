@@ -16,14 +16,29 @@ function hideAllCursors() {
 function setupRightArrowHandler(cursor, cursorArea, stepSound) {
     // Обработчик движения мыши над областью курсора
     cursorArea.addEventListener('mousemove', function(e) {
-        cursor.style.display = 'block';
-        cursor.style.left = e.clientX - 32 + 'px';
-        cursor.style.top = e.clientY - 32 + 'px';
+        const rect = this.getBoundingClientRect();
+        if (e.clientX >= rect.left && e.clientX <= rect.right &&
+            e.clientY >= rect.top && e.clientY <= rect.bottom) {
+            cursor.style.opacity = '1';
+            cursor.style.left = e.clientX - 32 + 'px';
+            cursor.style.top = e.clientY - 32 + 'px';
+        } else {
+            cursor.style.opacity = '0';
+        }
+    });
+
+    // Обработчик движения мыши по всему документу
+    document.addEventListener('mousemove', function(e) {
+        const rect = cursorArea.getBoundingClientRect();
+        if (!(e.clientX >= rect.left && e.clientX <= rect.right &&
+            e.clientY >= rect.top && e.clientY <= rect.bottom)) {
+            cursor.style.opacity = '0';
+        }
     });
 
     // Скрываем курсор при уходе мыши из области
     cursorArea.addEventListener('mouseleave', function() {
-        cursor.style.display = 'none';
+        cursor.style.opacity = '0';
     });
 
     // Обработчик клика по стрелке вправо
@@ -168,4 +183,10 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
             onBackClick();
         }, 300);
     });
-} 
+}
+
+// Экспортируем функции в глобальную область видимости
+window.setupRightArrowHandler = setupRightArrowHandler;
+window.setupForwardArrowHandler = setupForwardArrowHandler;
+window.setupBackArrowHandler = setupBackArrowHandler;
+window.hideAllCursors = hideAllCursors; 
