@@ -20,18 +20,11 @@
     <script type="module" src="map_points.js"></script>
 </head>
 <body>
-    <!-- Кастомный курсор для стрелки вправо -->
-    <div class="custom-cursor"></div>
-    <!-- Область для появления кастомного курсора -->
-    <div class="custom-cursor-area"></div>
-    <!-- Область иконки "стрелка прямо" в правом нижнем углу -->
-    <div class="custom-cursor-prostoarea">
-        <div class="custom-cursor-prosto"></div>
-    </div>
+
     <!-- Подсказка для запуска музыки -->
     <div id="musicHint" class="music-hint" data-i18n="music.hint"></div>
     <!-- Геометка: Собор Святого Иоанна Крестителя (универсальная) -->
-    <div class="map-mark-area" style="top: 45%; right: 35%; width: auto; height: auto;">
+    <div class="map-mark-area" data-x-desktop="2200" data-y-desktop="300" data-x-mobile="2270" data-y-mobile=800">
         <div class="map-mark" id="tumski_cathedral"></div>
         <div class="content-wrapper">
             <img class="papera-image" alt="Papera">
@@ -40,12 +33,13 @@
         <audio id="bookSound3" src="media/opening-a-book.wav"></audio>
     </div>
     <!-- Геометка: Тумский мост -->
-    <div class="map-mark-area" style="top: 15%; right: 15%; width: auto; height: auto;">
+    <div class="map-mark-area" data-x-desktop="1800" data-y-desktop="800" data-x-mobile="1950" data-y-mobile="950">
         <div class="map-mark" id="tumski_most"></div>
         <div class="content-wrapper">
             <img class="papera-image" alt="Papera">
             <div class="tumski-text" id="tumski-most-text" data-i18n="tumski_most.title"></div>
         </div>
+        <audio id="bookSoundMost" src="media/opening-a-book.wav"></audio>
     </div>
     <!-- Универсальное модальное окно для геометок -->
     <div class="most-overlay">
@@ -78,6 +72,16 @@
         <div class="image-container">
             <div class="image-scroll-wrapper">
                 <div class="image">
+                        <!-- Кастомный курсор для стрелки вправо -->
+                          <div class="custom-cursor" data-x-desktop="2600" data-y-desktop="1700" data-x-mobile="1900" data-y-mobile="1500"></div>
+                          <!-- Область для появления кастомного курсора -->
+                          <div class="custom-cursor-area" data-x-desktop="2600" data-y-desktop="1700" data-x-mobile="1900" data-y-mobile="1400">
+                          </div>
+    
+                            <!-- Область иконки "стрелка прямо" в правом нижнем углу -->
+                        <div class="custom-cursor-prosto" data-x-desktop="2600" data-y-desktop="1200" data-x-mobile="1900" data-y-mobile="1250"></div>
+                        <div class="custom-cursor-prostoarea" data-x-desktop="2600" data-y-desktop="1200" data-x-mobile="1900" data-y-mobile="1250">
+            </div>
                 </div>
             </div>
         </div>
@@ -105,14 +109,12 @@
                     // Геометка Катедра
                     mod.setupUniversalGeoMarker({
                         markerId: 'tumski_cathedral',
-                        i18nKey: 'tumski_cathedral',
-                        position: { top: '30%', right: '15%', width: 'auto', height: 'auto' }
+                        i18nKey: 'tumski_cathedral'
                     });
                     // Геометка Тумский мост
                     mod.setupUniversalGeoMarker({
                         markerId: 'tumski_most',
-                        i18nKey: 'tumski_most',
-                        position: { top: '40%', right: '20%', width: 'auto', height: 'auto' }
+                        i18nKey: 'tumski_most'
                     });
                     // mod.setupUniversalGeoMarker({
                     //     markerId: 'tumski',
@@ -156,6 +158,29 @@
                 cursorProstoArea: !!cursorProstoArea
             });
             
+            // Дополнительная диагностика для мобильной версии
+            const isMobile = window.innerWidth <= 700;
+            console.log('Размер экрана:', window.innerWidth, 'x', window.innerHeight, 'isMobile:', isMobile);
+            
+            if (cursor) {
+                console.log('cursor styles:', {
+                    opacity: cursor.style.opacity,
+                    display: cursor.style.display,
+                    pointerEvents: cursor.style.pointerEvents
+                });
+            }
+            
+            if (cursorArea) {
+                console.log('cursorArea styles:', {
+                    opacity: cursorArea.style.opacity,
+                    display: cursorArea.style.display,
+                    pointerEvents: cursorArea.style.pointerEvents
+                });
+            }
+
+            //  Вызов функции возврата картинки из зума по двойному клику
+            setupResetAnimation(document.querySelector('.image-container'));
+            
             // Создаем звук шага
             let stepSound;
 
@@ -182,9 +207,27 @@
                     console.error('Не найдены элементы для стрелки прямо');
                 }
             });
+
+            // После всех инициализаций вызываем перенос геометок и стрелок
+            if (window.moveMarkersAndCursors) {
+                window.moveMarkersAndCursors();
+            }
+            
+            // Принудительное применение стилей для мобильной версии
+            if (window.innerWidth <= 700) {
+                setTimeout(() => {
+                    const cursors = document.querySelectorAll('.custom-cursor, .custom-cursor-prosto, .custom-cursor-area, .custom-cursor-prostoarea');
+                    cursors.forEach(cursor => {
+                        cursor.style.opacity = '1';
+                        cursor.style.display = 'block';
+                        cursor.style.pointerEvents = 'auto';
+                        cursor.style.visibility = 'visible';
+                        cursor.style.zIndex = '9999';
+                        console.log('Принудительно применены стили для:', cursor);
+                    });
+                }, 1000);
+            }
         });
-
-
     </script>
 </body>
 </html> 

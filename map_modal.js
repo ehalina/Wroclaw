@@ -37,6 +37,35 @@ const mapStyles = `
         border-radius: 4px;
     }
 
+    /* Адаптивные стили для кнопок */
+    @media (max-width: 768px) {
+        .map-and-quest-buttons {
+            top: 20px;
+            left: 20px;
+            gap: 10px;
+        }
+
+        .map-button, .quest-button {
+            width: 64px;
+            height: 64px;
+            border-radius: 4px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .map-and-quest-buttons {
+            top: 20px;
+            left: 20px;
+            gap: 10px;
+        }
+
+        .map-button, .quest-button {
+            width: 64px;
+            height: 64px;
+            border-radius: 4px;
+        }
+    }
+
     #map-modal {
         display: none;
         position: fixed;
@@ -92,6 +121,60 @@ const mapStyles = `
         font-size: 36px;
         cursor: pointer;
         z-index: 10;
+    }
+
+    /* Адаптивные стили для модального окна карты */
+    @media (max-width: 768px) {
+        #map-modal > div {
+            width: 95vw;
+            max-width: none;
+        }
+
+        #map-image {
+            border-radius: 8px;
+        }
+
+        #map-marker {
+            width: 32px;
+            height: 32px;
+        }
+
+        #map-tooltip {
+            font-size: 12px;
+            padding: 6px 10px;
+        }
+
+        #close-map-modal {
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        #map-modal > div {
+            width: 100vw;
+        }
+
+        #map-image {
+            border-radius: 4px;
+        }
+
+        #map-marker {
+            width: 24px;
+            height: 24px;
+        }
+
+        #map-tooltip {
+            font-size: 10px;
+            padding: 4px 8px;
+        }
+
+        #close-map-modal {
+            top: 8px;
+            right: 8px;
+            font-size: 20px;
+        }
     }
 
     /* Квест 1 */
@@ -395,7 +478,6 @@ const mapStyles = `
 .most-image {
     display: block;
     width: auto;
-    height: 100%;
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
@@ -406,21 +488,29 @@ const mapStyles = `
     .most-text-block {
         position: absolute;
         top: 8%;
-        right: 7%;
-        width: 43%;      /* ширина всегда % от image-wrapper */
+        width: 35%;      /* ширина всегда % от image-wrapper */
         height: 80%;     /* высота всегда % от image-wrapper */
-        min-width: 180px;
+        min-width: 150px;
         min-height: 80px;
-        max-width: 480px;
+        max-width: 400px;
         max-height: 520px;
         overflow-y: auto;
         background: rgba(255,255,255,0.0);
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        justify-content: flex-start;
         z-index: 2;
         padding: 16px 20px;
         box-sizing: border-box;
+    }
+
+    .most-text-block-left {
+        left: 12%;
+    }
+
+    .most-text-block-right {
+        right: 12%;
     }
     .most-title, .most-description {
         pointer-events: auto;
@@ -436,6 +526,7 @@ const mapStyles = `
         text-align: left;
         word-break: break-word;
         width: 100%;
+        flex-shrink: 0;
     }
 
     .most-description {
@@ -447,6 +538,8 @@ const mapStyles = `
         overflow-y: auto;
         word-break: break-word;
         width: 100%;
+        flex: 1;
+        min-height: 0;
     }
 
     .overlay-image,
@@ -519,6 +612,125 @@ const mapStyles = `
         box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     }
 
+    /* Адаптивные стили для модального окна геометок */
+    @media (max-width: 768px) {
+        .most-container {
+            width: 100vw;
+            height: 100vh;
+            max-width: 100vw;
+            max-height: 100vh;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        .image-wrapper {
+            width: 100%;
+            height: 100%;
+            align-items: flex-start;
+            justify-content: flex-start;
+            margin-top: 150px !important;
+        }
+
+        .most-image {
+            width: 100%;
+            height: auto;
+            max-width: 100vw;
+            max-height: 100vh;
+        }
+
+        .most-text-block {
+            top: 5%;
+            width: 38%;
+            height: 85%;
+            min-width: 120px;
+            min-height: 60px;
+            max-width: 250px;
+            max-height: 400px;
+            padding: 12px 15px;
+            justify-content: flex-start;
+        }
+
+        .most-text-block-left {
+            left: 8%;
+        }
+
+        .most-text-block-right {
+            right: 8%;
+        }
+
+        .most-title {
+            font-size: clamp(16px, 4vw, 20px);
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .most-description {
+            font-size: clamp(12px, 3vw, 14px);
+            line-height: 1.4;
+            flex: 1;
+            min-height: 0;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .most-container {
+            width: 100vw;
+            height: 100vh;
+            max-width: 100vw;
+            max-height: 100vh;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        .image-wrapper {
+            width: 100%;
+            height: 100%;
+            align-items: flex-start;
+            justify-content: flex-start;
+            margin-top: 100px !important;
+        }
+
+        .most-image {
+            width: 100%;
+            height: auto;
+            max-width: 100vw;
+            max-height: 100vh;
+        }
+
+        .most-text-block {
+            top: 3%;
+            width: 40%;
+            height: 90%;
+            min-width: 100px;
+            min-height: 50px;
+            max-width: 200px;
+            max-height: 350px;
+            padding: 8px 10px;
+            justify-content: flex-start;
+        }
+
+        .most-text-block-left {
+            left: 6%;
+        }
+
+        .most-text-block-right {
+            right: 6%;
+        }
+
+        .most-title {
+            font-size: clamp(14px, 5vw, 16px);
+            margin-bottom: 8px;
+            flex-shrink: 0;
+        }
+
+        .most-description {
+            font-size: clamp(10px, 3.5vw, 12px);
+            line-height: 1.3;
+            flex: 1;
+            min-height: 0;
+        }
+    }
+
 `;
 
 // Функционал модального окна карты
@@ -577,7 +789,11 @@ const MapModal = {
                         <img src="" alt="Additional Image" class="additional-image" style="display: none;">
                         <img src="" alt="Book 31" class="book-31-image" style="display: none;">
                         <img src="" alt="Book 32" class="book-32-image" style="display: none;">
-                        <div class="most-text-block">
+                        <div class="most-text-block most-text-block-left">
+                            <div class="most-title"></div>
+                            <div class="most-description"></div>
+                        </div>
+                        <div class="most-text-block most-text-block-right">
                             <div class="most-title"></div>
                             <div class="most-description"></div>
                         </div>
@@ -610,10 +826,16 @@ const MapModal = {
             const mostImage = document.querySelector('.most-image');
             const mostContainer = document.querySelector('.most-container');
             if (mostImage && mostContainer) {
-                const naturalWidth = mostImage.naturalWidth;
-                // Максимум 90vw, минимум — ширина картинки
-                const maxWidth = Math.min(window.innerWidth * 0.9, naturalWidth);
-                mostContainer.style.width = maxWidth + 'px';
+                const isMobile = window.innerWidth <= 768;
+                if (isMobile) {
+                    // На мобильных устройствах используем всю ширину экрана
+                    mostContainer.style.width = '100vw';
+                } else {
+                    const naturalWidth = mostImage.naturalWidth;
+                    // Максимум 90vw, минимум — ширина картинки
+                    const maxWidth = Math.min(window.innerWidth * 0.9, naturalWidth);
+                    mostContainer.style.width = maxWidth + 'px';
+                }
             }
         }
         // После загрузки изображения
@@ -811,6 +1033,67 @@ const MapModal = {
 
             // Открываем модальное окно
             bookOverlay.style.display = 'flex';
+
+            // Принудительное применение мобильных стилей
+            if (window.innerWidth <= 768) {
+                setTimeout(() => {
+                    const bookContainer = bookOverlay.querySelector('.book-container');
+                    const bookImageWrapper = bookOverlay.querySelector('.book-image-content-wrapper');
+                    const bookContentArea = bookOverlay.querySelector('.book-content-area');
+                    const bookTitle = bookOverlay.querySelector('.book-title');
+                    const questTasks = bookOverlay.querySelector('.quest-tasks');
+                    
+                    if (bookContainer) {
+                        bookContainer.style.width = '100vw';
+                        bookContainer.style.height = '100vh';
+                        bookContainer.style.flexDirection = 'column';
+                        bookContainer.style.alignItems = 'center';
+                        bookContainer.style.justifyContent = 'center';
+                    }
+                    
+                    if (bookImageWrapper) {
+                        bookImageWrapper.style.width = '100%';
+                        bookImageWrapper.style.height = '100vh';
+                        bookImageWrapper.style.maxHeight = '100vh';
+                        bookImageWrapper.style.flex = 'none';
+                        bookImageWrapper.style.position = 'relative';
+                        bookImageWrapper.style.display = 'flex';
+                        bookImageWrapper.style.flexDirection = 'column';
+                        bookImageWrapper.style.alignItems = 'center';
+                        bookImageWrapper.style.justifyContent = 'center';
+                    }
+                    
+                    if (bookContentArea) {
+                        bookContentArea.style.position = 'absolute';
+                        bookContentArea.style.top = '0';
+                        bookContentArea.style.left = '0';
+                        bookContentArea.style.width = '100%';
+                        bookContentArea.style.height = '100%';
+                        bookContentArea.style.zIndex = '2';
+                        bookContentArea.style.display = 'flex';
+                        bookContentArea.style.flexDirection = 'column';
+                        bookContentArea.style.alignItems = 'center';
+                        bookContentArea.style.justifyContent = 'center';
+                    }
+                    
+                    if (bookTitle) {
+                        bookTitle.style.position = 'absolute';
+                        bookTitle.style.top = window.innerWidth <= 480 ? '15%' : '20%';
+                        bookTitle.style.left = '50%';
+                        bookTitle.style.transform = 'translateX(-50%)';
+                        bookTitle.style.zIndex = '10';
+                    }
+                    
+                    if (questTasks) {
+                        questTasks.style.position = 'absolute';
+                        questTasks.style.top = window.innerWidth <= 480 ? '35%' : '40%';
+                        questTasks.style.left = '50%';
+                        questTasks.style.transform = 'translateX(-50%)';
+                        questTasks.style.zIndex = '10';
+                        questTasks.style.maxWidth = window.innerWidth <= 480 ? '85%' : '80%';
+                    }
+                }, 100);
+            }
 
             // Воспроизведение звука книги
             if (bookSound) bookSound.play();

@@ -91,15 +91,51 @@
 }
 
 @media (max-width: 700px) {
-    /* Геометки всегда видимы */
-    .map-mark-area, .map-mark {
+    /* Геометки и стрелки теперь позиционируются по left/top через JS */
+    .map-mark-area, .custom-cursor-area, .custom-cursor-prostoarea {
+        position: absolute !important;
+        z-index: 998 !important;
+        /* left/top выставляются через JS */
+        right: auto !important;
+        bottom: auto !important;
+        width: 80px !important;
+        height: 80px !important;
+        display: block !important;
+        pointer-events: auto !important;
         opacity: 1 !important;
-        display: flex !important;
+        /* Убираем все возможные конфликты позиционирования */
+        top: unset !important;
+        right: unset !important;
+        left: unset !important;
+        bottom: unset !important;
+        transform: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .map-mark, .content-wrapper, .tumski-text {
+        opacity: 1 !important;
+        display: block !important;
         pointer-events: auto !important;
     }
     /* Скрыть подписи к геометкам, если нужно */
     .tumski-text {
         display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+        opacity: 0 !important;
+    }
+    /* В мобильной версии полностью скрываем картинки papera */
+    .papera-image {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+        opacity: 0 !important;
     }
     /* Стрелки всегда видимы и активны */
     .custom-cursor,
@@ -109,32 +145,16 @@
         opacity: 1 !important;
         display: block !important;
         pointer-events: auto !important;
+        visibility: visible !important;
+        z-index: 9999 !important;
+        position: absolute !important;
+        width: 80px !important;
+        height: 80px !important;
     }
     /* Убрать эффекты наведения для стрелок */
     .custom-cursor-area:hover .custom-cursor,
     .custom-cursor-prostoarea:hover .custom-cursor-prosto {
         opacity: 1 !important;
-    }
-    /* Фиксированное положение стрелки вправо и области клика */
-    .custom-cursor {
-        left: auto !important;
-        right: 20px !important;
-        top: auto !important;
-        bottom: 20px !important;
-        z-index: 2000 !important;
-        position: fixed !important;
-    }
-    .custom-cursor-area {
-        left: auto !important;
-        right: 0 !important;
-        top: auto !important;
-        bottom: 0 !important;
-        width: 80px !important;
-        height: 80px !important;
-        position: fixed !important;
-        z-index: 2001 !important;
-        display: block !important;
-        pointer-events: auto !important;
     }
     html, body {
         margin: 0;
@@ -163,7 +183,7 @@
       }
   
       .image {
-        width: 200vw; /* делаем шире экрана, чтобы был скролл */
+        width: 300vw; /* делаем шире экрана, чтобы был скролл */
         height: 100vh;
         background-image: url("media/tumski/tumski_01.jpg");
         background-size: auto 100%;
@@ -184,11 +204,17 @@
       .image::after {
         content: '';
         display: block;
-        width: 200vw;
+        width: 300vw;
         height: 1px;
       }
       .next-image-container {
         pointer-events: none;
+    }
+    /* Геометки всегда видимы */
+    .map-mark {
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
     }
 } 
 
