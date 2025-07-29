@@ -614,6 +614,23 @@ const mapStyles = `
 
     /* Адаптивные стили для модального окна геометок */
     @media (max-width: 768px) {
+        .book-zones {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            justify-content: flex-start !important;
+        }
+        
+        .book-zone {
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            position: static !important;
+            top: auto !important;
+            left: auto !important;
+            right: auto !important;
+            bottom: auto !important;
+        }
         .most-container {
             width: 100vw;
             height: 100vh;
@@ -673,6 +690,24 @@ const mapStyles = `
     }
 
     @media (max-width: 480px) {
+        .book-zones {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            justify-content: flex-start !important;
+        }
+        
+        .book-zone {
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            position: static !important;
+            top: auto !important;
+            left: auto !important;
+            right: auto !important;
+            bottom: auto !important;
+        }
+        
         .most-container {
             width: 100vw;
             height: 100vh;
@@ -838,13 +873,39 @@ const MapModal = {
                 }
             }
         }
+
+        // === Автоматическая высота book-zone по высоте most-image ===
+        function adjustBookZonesHeight() {
+            if (window.innerWidth <= 768) {
+                const mostImage = document.querySelector('.most-image');
+                const bookZones = document.querySelectorAll('.book-zone');
+                
+                if (mostImage && bookZones.length > 0) {
+                    const imageHeight = mostImage.offsetHeight;
+                    const zoneHeight = imageHeight / 12;
+                    
+                    bookZones.forEach(zone => {
+                        zone.style.height = zoneHeight + 'px';
+                    });
+                }
+            }
+        }
+        
+        // Делаем функцию глобально доступной
+        window.adjustBookZonesHeight = adjustBookZonesHeight;
         // После загрузки изображения
         const mostImage = document.querySelector('.most-image');
         if (mostImage) {
-            mostImage.addEventListener('load', adjustMostContainerWidth);
+            mostImage.addEventListener('load', () => {
+                adjustMostContainerWidth();
+                adjustBookZonesHeight();
+            });
         }
         // И при изменении размера окна
-        window.addEventListener('resize', adjustMostContainerWidth);
+        window.addEventListener('resize', () => {
+            adjustMostContainerWidth();
+            adjustBookZonesHeight();
+        });
 
         // Получаем ссылки на элементы после их добавления в DOM
         const openMapBtn = document.getElementById('open-map-modal');

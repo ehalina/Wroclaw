@@ -147,6 +147,10 @@ export function setupUniversalGeoMarker({ markerId, i18nKey, position }) {
         if (typeof window.clearMostModalInlineStyles === 'function') {
             window.clearMostModalInlineStyles();
         }
+        // Вызываем функцию для расчета высоты зон
+        if (typeof window.adjustBookZonesHeight === 'function') {
+            setTimeout(() => window.adjustBookZonesHeight(), 100);
+        }
         if (window.i18n && typeof window.i18n.t === 'function') {
             // Обновляем оба текстовых блока (левый и правый)
             const mostTitles = mostOverlay.querySelectorAll('.most-title');
