@@ -16,6 +16,9 @@ let currentMaxZIndex = 3;
 // Флаг для отслеживания первого открытия
 let isFirstOpen = true;
 
+// Глобальная переменная для отслеживания активной геометки
+window.activeGeoMarker = null;
+
 // Функция для получения следующего z-index
 function getNextZIndex() {
     currentMaxZIndex = currentMaxZIndex >= 9 ? 3 : currentMaxZIndex + 1;
@@ -75,6 +78,156 @@ window.showInitialHighlight = function() {
     highlightZonesSequentially(zones, 0);
 };
 
+// Функция для обновления текста в модальном окне
+function updateModalText(zoneNumber) {
+    console.log('updateModalText вызвана с зоной:', zoneNumber);
+    console.log('Стек вызовов:', new Error().stack);
+    
+    let rightTextBlock = document.querySelector('.most-text-block-right');
+    let leftTextBlock = document.querySelector('.most-text-block-left');
+    
+    // Если блоки не найдены, попробуем найти их в модальном окне
+    if (!rightTextBlock || !leftTextBlock) {
+        const mostOverlay = document.querySelector('.most-overlay');
+        if (mostOverlay) {
+            const rightBlock = mostOverlay.querySelector('.most-text-block-right');
+            const leftBlock = mostOverlay.querySelector('.most-text-block-left');
+            if (rightBlock) rightTextBlock = rightBlock;
+            if (leftBlock) leftTextBlock = leftBlock;
+        }
+    }
+    
+    if (!rightTextBlock || !leftTextBlock) {
+        console.log('Текстовые блоки не найдены');
+        console.log('rightTextBlock:', rightTextBlock);
+        console.log('leftTextBlock:', leftTextBlock);
+        return;
+    }
+    
+    console.log('Структура правого блока:', rightTextBlock.innerHTML);
+    console.log('Структура левого блока:', leftTextBlock.innerHTML);
+    
+    // Получаем текущий язык
+    const currentLang = window.currentLanguage || 'ru';
+    
+    // Определяем, какая секция активна в зависимости от того, какая геометка была нажата
+    let section = 'tumski_most'; // по умолчанию
+    
+    // Используем глобальную переменную для определения активной геометки
+    if (window.activeGeoMarker) {
+        console.log('Активная геометка из глобальной переменной:', window.activeGeoMarker);
+        
+        if (window.activeGeoMarker === 'tumski_cathedral') {
+            section = 'tumski_cathedral';
+        } else if (window.activeGeoMarker === 'tumski_most') {
+            section = 'tumski_most';
+        } else if (window.activeGeoMarker === 'tumski') {
+            section = 'tumski';
+        }
+    } else {
+        // Fallback: проверяем DOM элементы
+        const activeMarker = document.querySelector('.map-mark-area.active') || 
+                            document.querySelector('.map-mark-area:hover') ||
+                            document.querySelector('#tumski_most') ||
+                            document.querySelector('#tumski_cathedral');
+        
+        if (activeMarker) {
+            const markerId = activeMarker.id || activeMarker.getAttribute('data-marker-id');
+            console.log('Активная геометка из DOM:', markerId);
+            
+            if (markerId === 'tumski_cathedral' || markerId === 'tumski_cathedral-text') {
+                section = 'tumski_cathedral';
+            } else if (markerId === 'tumski_most' || markerId === 'tumski_most-text') {
+                section = 'tumski_most';
+            } else if (markerId === 'tumski' || markerId === 'tumski-text') {
+                section = 'tumski';
+            }
+        }
+    }
+    
+    console.log('Используется секция переводов:', section);
+    
+    // Получаем переводы
+    let translations = null;
+    if (window.i18n && window.i18n.t) {
+        // Получаем переводы через функцию t
+        const testKey = 'tumski.title';
+        const testTranslation = window.i18n.t(testKey);
+        if (testTranslation !== testKey) {
+            // Если переводы загружены, используем их
+            translations = window.i18n.translations || {};
+        }
+    }
+    
+    // Если переводы не найдены, попробуем получить их напрямую
+    if (!translations) {
+        if (window.translations) {
+            translations = window.translations;
+        }
+    }
+    
+    if (translations && translations[section] && translations[section].book02) {
+        const bookData = translations[section].book02;
+        console.log('Найдены переводы для секции:', section, 'bookData:', bookData);
+        
+        // Обновляем правый текст
+        const rightZoneKey = `zone${zoneNumber}`;
+        console.log('Ищем правый ключ:', rightZoneKey);
+        if (bookData[rightZoneKey]) {
+            const rightTitle = rightTextBlock.querySelector('.most-title');
+            const rightText = rightTextBlock.querySelector('.most-description');
+            
+            console.log('Элементы правого блока:', { rightTitle, rightText });
+            console.log('Обновляем правый текст:', bookData[rightZoneKey]);
+            
+            if (rightTitle) {
+                rightTitle.textContent = bookData[rightZoneKey].title || '';
+                console.log('Правый заголовок обновлен:', rightTitle.textContent);
+            } else {
+                console.log('Правый заголовок не найден');
+            }
+            
+            if (rightText) {
+                rightText.textContent = bookData[rightZoneKey].text || '';
+                console.log('Правый текст обновлен:', rightText.textContent);
+            } else {
+                console.log('Правый текст не найден');
+            }
+        } else {
+            console.log('Правый ключ не найден:', rightZoneKey);
+        }
+        
+        // Обновляем левый текст
+        const leftZoneKey = `zone${zoneNumber}-2`;
+        console.log('Ищем левый ключ:', leftZoneKey);
+        if (bookData[leftZoneKey]) {
+            const leftTitle = leftTextBlock.querySelector('.most-title');
+            const leftText = leftTextBlock.querySelector('.most-description');
+            
+            console.log('Элементы левого блока:', { leftTitle, leftText });
+            console.log('Обновляем левый текст:', bookData[leftZoneKey]);
+            
+            if (leftTitle) {
+                leftTitle.textContent = bookData[leftZoneKey].title || '';
+                console.log('Левый заголовок обновлен:', leftTitle.textContent);
+            } else {
+                console.log('Левый заголовок не найден');
+            }
+            
+            if (leftText) {
+                leftText.textContent = bookData[leftZoneKey].text || '';
+                console.log('Левый текст обновлен:', leftText.textContent);
+            } else {
+                console.log('Левый текст не найден');
+            }
+        } else {
+            console.log('Левый ключ не найден:', leftZoneKey);
+        }
+    } else {
+        console.log('Переводы не найдены. translations:', translations, 'section:', section);
+    }
+}
+
 // Функция для управления видимостью зон
 function updateZonesVisibility(rightZones, leftZones, visibleZones) {
     // Скрываем все зоны
@@ -128,6 +281,9 @@ const BOOK_ZONES_CONFIG = {
 
                     if (window.playMapSound) window.playMapSound();
 
+                    // Обновляем текст для зоны 1
+                    updateModalText(1);
+
                     // Обновляем видимость зон
                     const rightZones = document.querySelector('.right-zones');
                     const leftZones = document.querySelector('.left-zones');
@@ -178,7 +334,19 @@ const BOOK_ZONES_CONFIG = {
                     if (book32Img) book32Img.style.display = 'none';
 
                     // Затем показываем только нужные
-                    if (overlayImg) overlayImg.style.display = 'block';
+                    if (overlayImg) {
+                        overlayImg.style.display = 'block';
+                        // Применяем правильные стили для мобильных устройств
+                        if (window.innerWidth <= 768) {
+                            overlayImg.style.height = 'auto';
+                            overlayImg.style.width = '100%';
+                            overlayImg.style.maxHeight = '100vh';
+                        } else {
+                            overlayImg.style.height = '100%';
+                            overlayImg.style.width = 'auto';
+                            overlayImg.style.maxHeight = '';
+                        }
+                    }
                     if (additionalImg) {
                         additionalImg.src = window.BookPaths.BOOK_IMAGE_22;
                         additionalImg.style.display = 'block';
@@ -186,12 +354,15 @@ const BOOK_ZONES_CONFIG = {
                     
                     if (window.playMapSound) window.playMapSound();
 
+                    // Обновляем текст для зоны 2
+                    updateModalText(2);
+
                     // Обновляем видимость зон
                     const rightZones = document.querySelector('.right-zones');
                     const leftZones = document.querySelector('.left-zones');
                     updateZonesVisibility(rightZones, leftZones, [
-                        { side: 'right', numbers: [2, 3, 4] }, // Справа видимы 2,3,4
-                        { side: 'left', numbers: [1] }         // Слева видима только 1
+                        { side: 'right', numbers: [1, 2, 3, 4] }, // Справа видимы все зоны на своих местах
+                        { side: 'left', numbers: [1] }             // Слева видима только 1
                     ]);
                 }
             },
@@ -264,8 +435,8 @@ const BOOK_ZONES_CONFIG = {
                     const rightZones = document.querySelector('.right-zones');
                     const leftZones = document.querySelector('.left-zones');
                     updateZonesVisibility(rightZones, leftZones, [
-                        { side: 'right', numbers: [3, 4] },    // Справа видимы 3,4
-                        { side: 'left', numbers: [1, 2] }      // Слева видимы 1,2
+                        { side: 'right', numbers: [1, 2, 3, 4] }, // Справа видимы все зоны на своих местах
+                        { side: 'left', numbers: [1, 2] }          // Слева видимы 1,2
                     ]);
                 }
             },
@@ -339,8 +510,8 @@ const BOOK_ZONES_CONFIG = {
                     const rightZones = document.querySelector('.right-zones');
                     const leftZones = document.querySelector('.left-zones');
                     updateZonesVisibility(rightZones, leftZones, [
-                        { side: 'right', numbers: [4] },        // Справа видима только 4
-                        { side: 'left', numbers: [1, 2, 3] }    // Слева видимы 1,2,3
+                        { side: 'right', numbers: [1, 2, 3, 4] }, // Справа видимы все зоны на своих местах
+                        { side: 'left', numbers: [1, 2, 3] }      // Слева видимы 1,2,3
                     ]);
                 }
             }
@@ -361,6 +532,9 @@ const BOOK_ZONES_CONFIG = {
 
                     if (window.playMapSound) window.playMapSound();
 
+                    // Обновляем текст для зоны 1
+                    updateModalText(1);
+
                     // Обновляем видимость зон
                     const rightZones = document.querySelector('.right-zones');
                     const leftZones = document.querySelector('.left-zones');
@@ -423,8 +597,8 @@ const BOOK_ZONES_CONFIG = {
                     const rightZones = document.querySelector('.right-zones');
                     const leftZones = document.querySelector('.left-zones');
                     updateZonesVisibility(rightZones, leftZones, [
-                        { side: 'right', numbers: [2, 3, 4] }, // Справа видимы 2,3,4
-                        { side: 'left', numbers: [1] }         // Слева видима только 1
+                        { side: 'right', numbers: [1, 2, 3, 4] }, // Справа видимы все зоны на своих местах
+                        { side: 'left', numbers: [1] }             // Слева видима только 1
                     ]);
                 }
             },
@@ -497,8 +671,8 @@ const BOOK_ZONES_CONFIG = {
                     const rightZones = document.querySelector('.right-zones');
                     const leftZones = document.querySelector('.left-zones');
                     updateZonesVisibility(rightZones, leftZones, [
-                        { side: 'right', numbers: [3, 4] },    // Справа видимы 3,4
-                        { side: 'left', numbers: [1, 2] }      // Слева видимы 1,2
+                        { side: 'right', numbers: [1, 2, 3, 4] }, // Справа видимы все зоны на своих местах
+                        { side: 'left', numbers: [1, 2] }          // Слева видимы 1,2
                     ]);
                 }
             },
@@ -572,8 +746,8 @@ const BOOK_ZONES_CONFIG = {
                     const rightZones = document.querySelector('.right-zones');
                     const leftZones = document.querySelector('.left-zones');
                     updateZonesVisibility(rightZones, leftZones, [
-                        { side: 'right', numbers: [4] },        // Справа видима только 4
-                        { side: 'left', numbers: [1, 2, 3] }    // Слева видимы 1,2,3
+                        { side: 'right', numbers: [1, 2, 3, 4] }, // Справа видимы все зоны на своих местах
+                        { side: 'left', numbers: [1, 2, 3] }      // Слева видимы 1,2,3
                     ]);
                 }
             }
@@ -695,10 +869,17 @@ window.BookPaths = BOOK_PATHS;
 window.BookZonesConfig = BOOK_ZONES_CONFIG;
 // Экспортируем конфигурацию кнопок
 window.ButtonsConfig = BUTTONS_CONFIG;
+// Экспортируем функцию обновления текста
+window.updateModalText = updateModalText;
 
 window.BookPaths.initBookHandlers = function() {
     // Установка путей к изображениям книг
     document.querySelector('.most-image').src = window.BookPaths.BOOK_IMAGE_02;
+
+            // Инициализируем текст для зоны 1 при открытии модального окна
+        setTimeout(() => {
+            updateModalText(1);
+        }, 100);
 
     // Инициализация дополнительных изображений
     const overlayImg = document.querySelector('.overlay-image');
@@ -710,7 +891,16 @@ window.BookPaths.initBookHandlers = function() {
     // Инициализация изображений для зоны 2
     if (config.zones.right.ZONE_2.overlayImage) {
         overlayImg.src = window.BookPaths[config.zones.right.ZONE_2.overlayImage.src];
-        Object.assign(overlayImg.style, config.zones.right.ZONE_2.overlayImage.style);
+        const overlayStyle = { ...config.zones.right.ZONE_2.overlayImage.style };
+        
+        // Для мобильных устройств изменяем стили
+        if (window.innerWidth <= 768) {
+            overlayStyle.height = 'auto';
+            overlayStyle.width = '100%';
+            overlayStyle.maxHeight = '100vh';
+        }
+        
+        Object.assign(overlayImg.style, overlayStyle);
     }
     if (config.zones.right.ZONE_2.additionalImage) {
         additionalImg.src = window.BookPaths[config.zones.right.ZONE_2.additionalImage.src];
@@ -766,6 +956,25 @@ window.BookPaths.initBookHandlers = function() {
     setupZones(rightZones, 'right');
     setupZones(leftZones, 'left');
 
+    // Обработчик изменения размера окна для overlay-image
+    function updateOverlayImageStyles() {
+        const overlayImg = document.querySelector('.overlay-image');
+        if (overlayImg && config.zones.right.ZONE_2.overlayImage) {
+            const overlayStyle = { ...config.zones.right.ZONE_2.overlayImage.style };
+            
+            // Для мобильных устройств изменяем стили
+            if (window.innerWidth <= 768) {
+                overlayStyle.height = 'auto';
+                overlayStyle.width = '100%';
+                overlayStyle.maxHeight = '100vh';
+            }
+            
+            Object.assign(overlayImg.style, overlayStyle);
+        }
+    }
+    
+    window.addEventListener('resize', updateOverlayImageStyles);
+
     // Обработчики для модалок и закрытия
     const bookOverlay = document.querySelector('.book-overlay');
     const mostOverlay = document.querySelector('.most-overlay');
@@ -773,6 +982,9 @@ window.BookPaths.initBookHandlers = function() {
     const container = document.querySelector('.image-container');
     closeButtons.forEach(button => {
         button.addEventListener('click', () => {
+            // Сбрасываем активную геометку при закрытии
+            window.activeGeoMarker = null;
+            
             if (window.Common && typeof window.Common.resumeAnimation === 'function') {
                 window.Common.resumeAnimation(bookOverlay, mostOverlay, container);
             }
@@ -785,6 +997,9 @@ window.BookPaths.initBookHandlers = function() {
     [bookOverlay, mostOverlay].forEach(overlay => {
         overlay.addEventListener('click', function(e) {
             if (e.target === overlay) {
+                // Сбрасываем активную геометку при закрытии
+                window.activeGeoMarker = null;
+                
                 if (window.Common && typeof window.Common.resumeAnimation === 'function') {
                     window.Common.resumeAnimation(bookOverlay, mostOverlay, container);
                 }
@@ -802,4 +1017,53 @@ window.BookPaths.initBookHandlers = function() {
     if (window.Common && typeof window.Common.setupScrollHandlers === 'function') {
         window.Common.setupScrollHandlers(bookContent, scrollIndicator);
     };
+
+    // Функция для обновления всех зон с вызовом updateModalText
+    function updateAllZonesWithText() {
+        console.log('updateAllZonesWithText вызвана');
+        // Обновляем ZONE_3 в секции right
+        const zone3Right = config.zones.right.ZONE_3;
+        const originalOnClick3 = zone3Right.onClick;
+        zone3Right.onClick = (overlayImg, additionalImg, book31Img, book32Img, bookSound) => {
+            console.log('ZONE_3 onClick вызван');
+            originalOnClick3(overlayImg, additionalImg, book31Img, book32Img, bookSound);
+            console.log('Вызываем updateModalText(3)');
+            updateModalText(3);
+        };
+
+        // Обновляем ZONE_4 в секции right
+        const zone4Right = config.zones.right.ZONE_4;
+        const originalOnClick4 = zone4Right.onClick;
+        zone4Right.onClick = (overlayImg, additionalImg, book31Img, book32Img, bookSound) => {
+            originalOnClick4(overlayImg, additionalImg, book31Img, book32Img, bookSound);
+            updateModalText(4);
+        };
+
+        // Обновляем ZONE_2 в секции left
+        const zone2Left = config.zones.left.ZONE_2;
+        const originalOnClick2Left = zone2Left.onClick;
+        zone2Left.onClick = (overlayImg, additionalImg, book31Img, book32Img, bookSound) => {
+            originalOnClick2Left(overlayImg, additionalImg, book31Img, book32Img, bookSound);
+            updateModalText(2);
+        };
+
+        // Обновляем ZONE_3 в секции left
+        const zone3Left = config.zones.left.ZONE_3;
+        const originalOnClick3Left = zone3Left.onClick;
+        zone3Left.onClick = (overlayImg, additionalImg, book31Img, book32Img, bookSound) => {
+            originalOnClick3Left(overlayImg, additionalImg, book31Img, book32Img, bookSound);
+            updateModalText(3);
+        };
+
+        // Обновляем ZONE_4 в секции left
+        const zone4Left = config.zones.left.ZONE_4;
+        const originalOnClick4Left = zone4Left.onClick;
+        zone4Left.onClick = (overlayImg, additionalImg, book31Img, book32Img, bookSound) => {
+            originalOnClick4Left(overlayImg, additionalImg, book31Img, book32Img, bookSound);
+            updateModalText(4);
+        };
+    }
+
+    // Вызываем функцию обновления
+    updateAllZonesWithText();
 }; 

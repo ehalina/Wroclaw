@@ -80,6 +80,19 @@ export function setupTumskiCathedralHandler() {
 
                 // Добавить запуск подсветки зон:
                 if (window.showInitialHighlight) window.showInitialHighlight();
+                
+                // Устанавливаем активную геометку
+                window.activeGeoMarker = 'tumski_cathedral';
+                
+                // Устанавливаем активную геометку
+                window.activeGeoMarker = 'tumski_cathedral';
+                
+                // Инициализируем текст для зоны 1 при открытии модального окна
+                if (typeof window.updateModalText === 'function') {
+                    setTimeout(() => {
+                        window.updateModalText(1);
+                    }, 100);
+                }
             });
         });
     }
@@ -166,6 +179,16 @@ export function setupUniversalGeoMarker({ markerId, i18nKey, position }) {
         }
         // Добавляю запуск подсветки зон:
         if (window.showInitialHighlight) window.showInitialHighlight();
+        
+        // Устанавливаем активную геометку на основе i18nKey
+        window.activeGeoMarker = i18nKey;
+        
+        // Инициализируем текст для зоны 1 при открытии модального окна
+        if (typeof window.updateModalText === 'function') {
+            setTimeout(() => {
+                window.updateModalText(1);
+            }, 100);
+        }
     }
     marker.addEventListener('click', openModal);
     if (textElem) textElem.addEventListener('click', openModal);
@@ -258,11 +281,139 @@ export function positionMarkersOnBg() {
     });
 }
 
+// Функция для применения трансформации зума к геометкам
+export function applyZoomTransformToMarkers() {
+    // Просто пересчитываем позиции геометок при любых изменениях
+    positionMarkersOnBg();
+    
+    // Для стрелок применяем трансформацию напрямую
+    const imageContainer = document.querySelector('.image-container');
+    if (!imageContainer) return;
+    
+    const transform = window.getComputedStyle(imageContainer).transform;
+    const arrows = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea');
+    
+    arrows.forEach(arrow => {
+        arrow.style.transform = transform;
+        
+        // Для мобильной версии не применяем трансформацию
+        if (window.innerWidth <= 700) {
+            arrow.style.transform = 'none';
+        }
+    });
+}
+
+// Функция для отслеживания изменений трансформации изображения
+export function setupZoomTracking() {
+    console.log('setupZoomTracking вызвана');
+    
+    const imageContainer = document.querySelector('.image-container');
+    if (!imageContainer) {
+        console.log('Элемент .image-container не найден');
+        return;
+    }
+    
+    console.log('Элемент .image-container найден:', imageContainer);
+    
+    // Создаем наблюдатель за изменениями стилей
+    const observer = new MutationObserver((mutations) => {
+        console.log('MutationObserver сработал, mutations:', mutations.length);
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                console.log('Изменение стиля обнаружено');
+                // Проверяем, изменилась ли трансформация
+                const currentTransform = imageContainer.style.transform;
+                console.log('Текущая трансформация:', currentTransform);
+                if (currentTransform && currentTransform !== 'none') {
+                    console.log('Вызываем applyZoomTransformToMarkers для стилей');
+                    applyZoomTransformToMarkers();
+                    // Также пересчитываем позиции геометок
+                    positionMarkersOnBg();
+                } else {
+                    console.log('Сбрасываем трансформацию');
+                    // Сбрасываем трансформацию стрелок
+                    const arrows = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea');
+                    arrows.forEach(arrow => {
+                        arrow.style.transform = 'none';
+                    });
+                    
+                    // Пересчитываем позиции геометок
+                    positionMarkersOnBg();
+                }
+            }
+        });
+    });
+    
+    // Начинаем наблюдение за изменениями стилей
+    observer.observe(imageContainer, {
+        attributes: true,
+        attributeFilter: ['style']
+    });
+    
+    // Также отслеживаем изменения через CSS классы
+    const classObserver = new MutationObserver((mutations) => {
+        console.log('ClassObserver сработал, mutations:', mutations.length);
+        mutations.forEach((mutation) => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                console.log('Изменение класса обнаружено');
+                const hasZoomClass = imageContainer.classList.contains('zoom-transition') || 
+                                   imageContainer.classList.contains('zoom-transition-Right') || 
+                                   imageContainer.classList.contains('zoom-transition-Up');
+                
+                console.log('Классы контейнера:', imageContainer.className);
+                console.log('Есть класс зума:', hasZoomClass);
+                
+                if (hasZoomClass) {
+                    console.log('Вызываем applyZoomTransformToMarkers для классов');
+                    // Применяем трансформацию с небольшой задержкой для завершения анимации
+                    setTimeout(() => {
+                        console.log('Выполняем applyZoomTransformToMarkers после задержки');
+                        applyZoomTransformToMarkers();
+                        // Также пересчитываем позиции геометок
+                        positionMarkersOnBg();
+                    }, 100);
+                } else {
+                    console.log('Сбрасываем трансформацию для классов');
+                    // Сбрасываем трансформацию
+                    const arrows = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea');
+                    arrows.forEach(arrow => {
+                        arrow.style.transform = 'none';
+                    });
+                    
+                    // Пересчитываем позиции геометок
+                    positionMarkersOnBg();
+                }
+            }
+        });
+    });
+    
+    // Начинаем наблюдение за изменениями классов
+    classObserver.observe(imageContainer, {
+        attributes: true,
+        attributeFilter: ['class']
+    });
+    console.log('Наблюдение за классами установлено');
+    
+    // Начинаем наблюдение за изменениями стилей
+    observer.observe(imageContainer, {
+        attributes: true,
+        attributeFilter: ['style']
+    });
+    console.log('Наблюдение за стилями установлено');
+}
+
+// Экспортируем функции в глобальную область видимости
+if (typeof window !== 'undefined') {
+    window.applyZoomTransformToMarkers = applyZoomTransformToMarkers;
+    window.setupZoomTracking = setupZoomTracking;
+    window.positionMarkersOnBg = positionMarkersOnBg;
+}
+
 // Функция для сброса зума/анимации
 export function setupMobileResetAnimation() {
     if (window.innerWidth > 700) return; // Только для мобильных
-    const image = document.querySelector('.image');
-    if (!image) return;
+    const imageContainer = document.querySelector('.image-container');
+    if (!imageContainer) return;
     // Сброс по одиночному тачу вне элементов управления
     document.addEventListener('touchend', function(e) {
         // Игнорируем, если тап по элементам управления
@@ -272,10 +423,20 @@ export function setupMobileResetAnimation() {
             e.target.closest('.book-overlay') ||
             e.target.closest('.most-overlay')
         ) return;
-        image.classList.remove('zoom-transition', 'zoom-transition-Right', 'zoom-transition-Up');
-        image.classList.add('reset-animation');
+        imageContainer.classList.remove('zoom-transition', 'zoom-transition-Right', 'zoom-transition-Up');
+        imageContainer.classList.add('reset-animation');
+        
+        // Сбрасываем трансформацию стрелок
+        const arrows = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea');
+        arrows.forEach(arrow => {
+            arrow.style.transform = 'none';
+        });
+        
+        // Пересчитываем позиции геометок
+        positionMarkersOnBg();
+        
         setTimeout(() => {
-            image.classList.remove('reset-animation');
+            imageContainer.classList.remove('reset-animation');
         }, 100);
     });
 }
@@ -288,12 +449,24 @@ if (typeof window !== 'undefined') {
         moveMarkersAndCursors();
         positionMarkersOnBg();
         setupMobileResetAnimation();
+        console.log('Вызываем setupZoomTracking');
+        setupZoomTracking(); // Добавляем отслеживание зума
+        
+        // Дополнительно пересчитываем позиции через небольшую задержку
+        setTimeout(() => {
+            positionMarkersOnBg();
+        }, 500);
     });
     window.addEventListener('resize', () => {
         if (typeof window.moveMarkersAndCursors === 'function') {
             window.moveMarkersAndCursors();
         }
         positionMarkersOnBg();
+        
+        // Дополнительно пересчитываем позиции через небольшую задержку
+        setTimeout(() => {
+            positionMarkersOnBg();
+        }, 100);
     });
 } 
 
@@ -305,6 +478,16 @@ if (typeof window !== 'undefined') {
             window.positionMarkersOnBg();
         } else if (typeof positionMarkersOnBg === 'function') {
             positionMarkersOnBg();
+        }
+        
+        // Также настраиваем отслеживание зума
+        console.log('Настраиваем отслеживание зума в updateGeoMarkersPosition');
+        if (typeof window.setupZoomTracking === 'function') {
+            console.log('Вызываем window.setupZoomTracking');
+            window.setupZoomTracking();
+        } else if (typeof setupZoomTracking === 'function') {
+            console.log('Вызываем setupZoomTracking');
+            setupZoomTracking();
         }
     }
     window.addEventListener('DOMContentLoaded', updateGeoMarkersPosition);

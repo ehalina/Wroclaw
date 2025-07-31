@@ -11,6 +11,12 @@ async function loadTranslations(lang = 'ru') {
         translations = await response.json();
         currentLang = lang;
         document.documentElement.lang = lang; // Обновляем атрибут lang у html
+        
+        // Обновляем глобальную переменную
+        if (window.i18n) {
+            window.i18n.translations = translations;
+        }
+        
         return translations;
     } catch (error) {
         console.error('Ошибка загрузки переводов:', error);
@@ -103,5 +109,6 @@ window.i18n = {
     t,
     changeLang,
     updatePageContent,
-    getCurrentLang: () => currentLang
+    getCurrentLang: () => currentLang,
+    translations: translations
 }; 

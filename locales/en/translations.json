@@ -9,6 +9,34 @@
       "zone1": {
         "title": "Tumski Bridge",
         "text": "If Wrocław is a fairy-tale city (and it undoubtedly is), then Tumski Bridge is that magical portal that leads to its most ancient and mysterious heart. Its name, of course, sounds grand and important — 'Cathedral Bridge', because it leads directly to the majestic Cathedral of St. John the Baptist. And also because old Tumski is not just a bridge, but a boundary between worlds: once secular and ecclesiastical powers met here, and they even erected a special pillar with two coats of arms to ensure no one forgot who was in charge (though this didn't help)."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone3": {
+        "title": "",
+        "text": ""
+      },
+      "zone3-3": {
+        "title": "",
+        "text": ""
+      },
+      "zone4": {
+        "title": "",
+        "text": ""
+      },
+      "zone4-2": {
+        "title": "",
+        "text": ""
       }
     }
   },

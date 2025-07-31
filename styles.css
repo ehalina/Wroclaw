@@ -226,6 +226,30 @@ body, html {
     margin: 10px 0 5px 0;
 }
 
+/* Мобильные стили для заголовка квеста */
+@media (max-width: 768px) {
+    .book-title {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        transform: none !important;
+        background: rgba(255, 255, 255, 0.9) !important;
+        padding: 15px !important;
+        margin: 0 0 20px 0 !important;
+        border-radius: 8px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+        z-index: 10 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .book-title {
+        font-size: 24px !important;
+        padding: 12px !important;
+        margin: 0 0 15px 0 !important;
+    }
+}
+
 .book-text {
     font-family: Arial, sans-serif;
     color: #333;

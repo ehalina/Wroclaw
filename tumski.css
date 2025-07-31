@@ -65,6 +65,10 @@
     height: 25%;
     z-index: 999;
     cursor: none;
+    /* Добавляем поддержку трансформаций для зума */
+    transform-origin: center center;
+    will-change: transform;
+    transition: transform 0.3s ease-out;
 }
 
 .custom-cursor-prostoarea {
@@ -75,6 +79,10 @@
     height: 25%;
     z-index: 999;
     cursor: none;
+    /* Добавляем поддержку трансформаций для зума */
+    transform-origin: center center;
+    will-change: transform;
+    transition: transform 0.3s ease-out;
 }
 
 /* Позиционирование mapmark для страницы tumski */
@@ -88,6 +96,9 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    /* Для геометок используем пересчет позиции вместо трансформации */
+    will-change: left, top;
+    transition: left 0.3s ease-out, top 0.3s ease-out;
 }
 
 @media (max-width: 700px) {

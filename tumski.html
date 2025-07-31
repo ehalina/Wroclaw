@@ -213,6 +213,20 @@
                 window.moveMarkersAndCursors();
             }
             
+            // Настраиваем отслеживание зума для геометок
+            console.log('Импортируем tumski_cathedral_handler.js для отслеживания зума');
+            import('./tumski_cathedral_handler.js').then(mod => {
+                console.log('Модуль загружен:', mod);
+                if (mod && typeof mod.setupZoomTracking === 'function') {
+                    console.log('Вызываем mod.setupZoomTracking');
+                    mod.setupZoomTracking();
+                } else {
+                    console.log('setupZoomTracking не найден в модуле');
+                }
+            }).catch(err => {
+                console.error('Ошибка импорта модуля:', err);
+            });
+            
             // Принудительное применение стилей для мобильной версии
             if (window.innerWidth <= 700) {
                 setTimeout(() => {

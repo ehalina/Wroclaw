@@ -94,7 +94,7 @@ const mapStyles = `
 
     #map-marker {
         position: absolute;
-        width: 48px;
+        width: 38px;
         height: 48px;
         pointer-events: none;
     }
@@ -123,20 +123,77 @@ const mapStyles = `
         z-index: 10;
     }
 
+    #toggle-tooltips {
+        position: absolute;
+        top: 16px;
+        right: 60px;
+        background: rgba(0,0,0,0.7);
+        border: none;
+        color: white;
+        font-size: 24px;
+        cursor: pointer;
+        z-index: 10;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     /* Адаптивные стили для модального окна карты */
     @media (max-width: 768px) {
+        #map-modal {
+            justify-content: flex-start;
+            align-items: flex-start;
+            overflow: hidden;
+        }
+        
         #map-modal > div {
-            width: 95vw;
+            width: 100vw;
+            height: 100vh;
             max-width: none;
+            position: relative;
+            overflow-x: auto;
+            overflow-y: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            touch-action: pan-x;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         #map-image {
-            border-radius: 8px;
+            border-radius: 0;
+            flex-shrink: 0;
+            /* Размеры будут установлены через JavaScript */
+            touch-action: pan-x;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
+        
+        /* Скрываем скроллбары на мобильных устройствах */
+        #map-modal > div::-webkit-scrollbar {
+            display: none;
+        }
+        
+        #map-modal > div {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            overscroll-behavior-x: contain;
         }
 
         #map-marker {
-            width: 32px;
-            height: 32px;
+            width: 76px;
+            height: 96px;
+            position: absolute;
+            z-index: 1002;
+            pointer-events: none;
+            display: block;
         }
 
         #map-tooltip {
@@ -148,21 +205,43 @@ const mapStyles = `
             top: 10px;
             right: 10px;
             font-size: 24px;
+            position: fixed;
+            z-index: 2010;
+        }
+
+        #toggle-tooltips {
+            top: 10px;
+            right: 50px;
+            font-size: 20px;
+            position: fixed;
+            z-index: 2010;
+            width: 36px;
+            height: 36px;
         }
     }
 
     @media (max-width: 480px) {
         #map-modal > div {
             width: 100vw;
+            height: 100vh;
         }
 
         #map-image {
-            border-radius: 4px;
+            border-radius: 0;
+            /* Размеры будут установлены через JavaScript */
+            touch-action: pan-x;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
         }
 
         #map-marker {
-            width: 24px;
-            height: 24px;
+            width: 52px;
+            height: 72px;
+            position: absolute;
+            z-index: 1002;
+            pointer-events: none;
+            display: block;
         }
 
         #map-tooltip {
@@ -174,6 +253,14 @@ const mapStyles = `
             top: 8px;
             right: 8px;
             font-size: 20px;
+        }
+
+        #toggle-tooltips {
+            top: 8px;
+            right: 44px;
+            font-size: 18px;
+            width: 32px;
+            height: 32px;
         }
     }
 
@@ -500,7 +587,7 @@ const mapStyles = `
         flex-direction: column;
         align-items: flex-start;
         justify-content: flex-start;
-        z-index: 2;
+        z-index: 10;
         padding: 16px 20px;
         box-sizing: border-box;
     }
@@ -548,6 +635,11 @@ const mapStyles = `
     .book-32-image {
         position: absolute;
         pointer-events: none;
+        z-index: 1;
+    }
+
+    .overlay-image {
+        object-position: left;
     }
 
     .book-zones {
@@ -556,7 +648,7 @@ const mapStyles = `
         width: 10%;
         height: 100%;
         pointer-events: none;
-        z-index: 2;
+        z-index: 15;
     }
 
     .right-zones {
@@ -631,6 +723,14 @@ const mapStyles = `
             right: auto !important;
             bottom: auto !important;
         }
+        
+        .overlay-image {
+            height: 100% !important;
+            width: 100% !important;
+            max-height: 100vh !important;
+            object-fit: contain !important;
+            object-position: left !important;
+        }
         .most-container {
             width: 100vw;
             height: 100vh;
@@ -642,7 +742,7 @@ const mapStyles = `
 
         .image-wrapper {
             width: 100%;
-            height: 100%;
+            height: auto;
             align-items: flex-start;
             justify-content: flex-start;
             margin-top: 150px !important;
@@ -656,23 +756,24 @@ const mapStyles = `
         }
 
         .most-text-block {
-            top: 5%;
-            width: 38%;
-            height: 85%;
-            min-width: 120px;
+            top: 8%;
+            width: 32%;
+            height: 80%;
+            min-width: 100px;
             min-height: 60px;
-            max-width: 250px;
-            max-height: 400px;
-            padding: 12px 15px;
+            max-width: 200px;
+            max-height: 350px;
+            padding: 10px 12px;
             justify-content: flex-start;
+            z-index: 10 !important;
         }
 
         .most-text-block-left {
-            left: 8%;
+            left: 12%;
         }
 
         .most-text-block-right {
-            right: 8%;
+            right: 15%;
         }
 
         .most-title {
@@ -708,6 +809,15 @@ const mapStyles = `
             bottom: auto !important;
         }
         
+        .overlay-image {
+            height: 100% !important;
+            width: 100% !important;
+            max-height: 100vh !important;
+            object-fit: contain !important;
+            object-position: left !important;
+            z-index: 1 !important;
+        }
+        
         .most-container {
             width: 100vw;
             height: 100vh;
@@ -719,7 +829,7 @@ const mapStyles = `
 
         .image-wrapper {
             width: 100%;
-            height: 100%;
+            height: auto;
             align-items: flex-start;
             justify-content: flex-start;
             margin-top: 100px !important;
@@ -733,23 +843,24 @@ const mapStyles = `
         }
 
         .most-text-block {
-            top: 3%;
-            width: 40%;
-            height: 90%;
-            min-width: 100px;
+            top: 6%;
+            width: 34%;
+            height: 85%;
+            min-width: 80px;
             min-height: 50px;
-            max-width: 200px;
-            max-height: 350px;
-            padding: 8px 10px;
+            max-width: 160px;
+            max-height: 300px;
+            padding: 6px 8px;
+            z-index: 10 !important;
             justify-content: flex-start;
         }
 
         .most-text-block-left {
-            left: 6%;
+            left: 15%;
         }
 
         .most-text-block-right {
-            right: 6%;
+            right: 10%;
         }
 
         .most-title {
@@ -792,6 +903,7 @@ const MapModal = {
                     <img id="map-marker" src="media/mapmark.png" alt="Маркер">
                     <div id="map-tooltip"></div>
                     <button id="close-map-modal">×</button>
+                    <button id="toggle-tooltips" style="display: none;">👁️</button>
                 </div>
             </div>
             <!-- Book Overlay HTML (moved from tumski.html) -->
@@ -905,6 +1017,27 @@ const MapModal = {
         window.addEventListener('resize', () => {
             adjustMostContainerWidth();
             adjustBookZonesHeight();
+            
+            // Пересчитываем размер карты при изменении размера окна
+            if (window.innerWidth <= 768) {
+                const mapImage = document.getElementById('map-image');
+                if (mapImage && mapImage.complete) {
+                    MapModal.calculateImageSize(mapImage);
+                }
+                
+                // Перепозиционируем маркер при изменении размера окна
+                setTimeout(async () => {
+                    try {
+                        const { getMapPointCoords } = await import('./map_points.js');
+                        const coords = getMapPointCoords(1);
+                        if (coords) {
+                            MapModal.positionMarker(coords);
+                        }
+                    } catch (error) {
+                        console.error('Ошибка при перепозиционировании маркера:', error);
+                    }
+                }, 200);
+            }
         });
 
         // Получаем ссылки на элементы после их добавления в DOM
@@ -912,12 +1045,13 @@ const MapModal = {
         const openQuestBtn = document.getElementById('open-quest');
         const mapModal = document.getElementById('map-modal');
         const closeMapBtn = document.getElementById('close-map-modal');
+        const toggleTooltipsBtn = document.getElementById('toggle-tooltips');
         const mapImage = document.getElementById('map-image');
         const mapMarker = document.getElementById('map-marker');
         const mapTooltip = document.getElementById('map-tooltip');
 
         // Проверяем, что все элементы найдены
-        if (!openMapBtn || !openQuestBtn || !mapModal || !closeMapBtn || !mapImage || !mapMarker || !mapTooltip) {
+        if (!openMapBtn || !openQuestBtn || !mapModal || !closeMapBtn || !toggleTooltipsBtn || !mapImage || !mapMarker || !mapTooltip) {
             console.error("Не удалось найти один или несколько элементов модального окна карты или кнопок.");
             return; // Прекращаем выполнение, если элементы не найдены
         }
@@ -947,7 +1081,27 @@ const MapModal = {
                 MapModal.positionMarker(coords);
             }
 
-            // === Исправленный обработчик движения мыши для подсказки ===
+            // Добавляем поддержку свайпов для мобильных устройств
+            if (window.innerWidth <= 768) {
+                MapModal.setupMobileSwipe();
+                MapModal.adjustMapImageSize();
+                
+                // Убеждаемся, что маркер отображается на мобильных устройствах
+                setTimeout(async () => {
+                    try {
+                        const { getMapPointCoords } = await import('./map_points.js');
+                        const coords = getMapPointCoords(1);
+                        if (coords) {
+                            MapModal.positionMarker(coords);
+                        }
+                    } catch (error) {
+                        console.error('Ошибка при позиционировании маркера:', error);
+                    }
+                }, 300);
+            }
+
+            // === Обработчик движения мыши для подсказки (только для десктопа) ===
+            if (window.innerWidth > 768) {
             // Сначала удалим старые обработчики, если они были
             mapImage.onmousemove = null;
             mapImage.onmouseleave = null;
@@ -982,6 +1136,18 @@ const MapModal = {
             mapImage.onmouseleave = function() {
                 mapTooltip.style.display = 'none';
             };
+            } else {
+                // Для мобильных устройств показываем кнопку переключения подсказок
+                const toggleButton = document.getElementById('toggle-tooltips');
+                if (toggleButton) {
+                    toggleButton.style.display = 'flex';
+                }
+                // Показываем все подсказки по умолчанию
+                console.log('Вызываем MapModal.showAllTooltips() для мобильных устройств');
+                setTimeout(() => {
+                    MapModal.showAllTooltips();
+                }, 100);
+            }
 
             // Добавляем обработчик изменения языка для обновления текста подсказки
             document.addEventListener('languageChanged', function() {
@@ -993,6 +1159,11 @@ const MapModal = {
                      mapTooltip.style.display = 'none'; // Скрываем при смене языка
                      // В более сложной реализации здесь нужно было бы заново определить
                      // под какой областью курсор и показать подсказку с новым текстом.
+                }
+                
+                // Обновляем мобильные подсказки при смене языка
+                if (window.innerWidth <= 768) {
+                    MapModal.showAllTooltips();
                 }
             });
         });
@@ -1186,6 +1357,32 @@ const MapModal = {
             const mapSound = document.getElementById('mapSound');
             if (mapSound) mapSound.pause();
             if (mapSound) mapSound.currentTime = 0;
+            
+            // Удаляем обработчики свайпа
+            const mapContainer = document.querySelector('#map-modal > div');
+            if (mapContainer && mapContainer._removeSwipeListeners) {
+                mapContainer._removeSwipeListeners();
+            }
+        });
+
+        // Обработчик для кнопки переключения подсказок
+        toggleTooltipsBtn.addEventListener('click', function() {
+            const tooltips = document.querySelectorAll('.mobile-tooltip');
+            const isVisible = tooltips.length > 0 && tooltips[0].style.display !== 'none';
+            
+            if (isVisible) {
+                // Скрываем подсказки
+                tooltips.forEach(tooltip => {
+                    tooltip.style.display = 'none';
+                });
+                toggleTooltipsBtn.textContent = '👁️‍🗨️';
+            } else {
+                // Показываем подсказки
+                tooltips.forEach(tooltip => {
+                    tooltip.style.display = 'block';
+                });
+                toggleTooltipsBtn.textContent = '👁️';
+            }
         });
 
         // Закрытие по клику вне карты
@@ -1196,6 +1393,12 @@ const MapModal = {
                 const mapSound = document.getElementById('mapSound');
                  if (mapSound) mapSound.pause();
                  if (mapSound) mapSound.currentTime = 0;
+                 
+                 // Удаляем обработчики свайпа
+                 const mapContainer = document.querySelector('#map-modal > div');
+                 if (mapContainer && mapContainer._removeSwipeListeners) {
+                     mapContainer._removeSwipeListeners();
+                 }
             }
         });
     },
@@ -1208,13 +1411,330 @@ const MapModal = {
             console.error("Не удалось найти маркер или изображение карты для позиционирования.");
             return;
         }
-        const rect = mapImage.getBoundingClientRect();
+        
+        // Показываем маркер
+        mapMarker.style.display = 'block';
+        
         // Координаты в процентах, маркер центрируем
         mapMarker.style.left = `${coords.x}%`;
         mapMarker.style.top = `${coords.y}%`;
         mapMarker.style.transform = 'translate(-50%, -50%)';
+        
+        // Для мобильных устройств убеждаемся, что маркер видим
+        if (window.innerWidth <= 768) {
+            mapMarker.style.position = 'absolute';
+            mapMarker.style.zIndex = '1002';
+            mapMarker.style.pointerEvents = 'none';
+        }
+    },
+
+    setupMobileSwipe() {
+        const mapContainer = document.querySelector('#map-modal > div');
+        const mapImage = document.getElementById('map-image');
+        
+        if (!mapContainer || !mapImage) return;
+        
+        let startX = 0;
+        let startY = 0;
+        let currentScrollLeft = 0;
+        let isDragging = false;
+        let lastTouchTime = 0;
+        
+        // Обработчик начала касания
+        const handleTouchStart = (e) => {
+            const touch = e.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+            currentScrollLeft = mapContainer.scrollLeft;
+            isDragging = true;
+            lastTouchTime = Date.now();
+            
+            // Останавливаем любые анимации прокрутки
+            mapContainer.style.scrollBehavior = 'auto';
+        };
+        
+        // Обработчик движения пальца
+        const handleTouchMove = (e) => {
+            if (!isDragging) return;
+            
+            const touch = e.touches[0];
+            const deltaX = startX - touch.clientX;
+            const deltaY = startY - touch.clientY;
+            
+            // Если движение больше по горизонтали, чем по вертикали, то это свайп
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                const newScrollLeft = currentScrollLeft + deltaX;
+                mapContainer.scrollLeft = newScrollLeft;
+                e.preventDefault();
+            }
+        };
+        
+        // Обработчик окончания касания
+        const handleTouchEnd = (e) => {
+            if (!isDragging) return;
+            
+            isDragging = false;
+            const touchEndTime = Date.now();
+            const touchDuration = touchEndTime - lastTouchTime;
+            
+            // Восстанавливаем плавную прокрутку
+            mapContainer.style.scrollBehavior = 'smooth';
+            
+            // Если касание было коротким, это может быть быстрый свайп
+            if (touchDuration < 300) {
+                const touch = e.changedTouches[0];
+                const deltaX = startX - touch.clientX;
+                
+                // Если свайп был достаточно быстрым и длинным, добавляем инерцию
+                if (Math.abs(deltaX) > 50) {
+                    const velocity = deltaX / touchDuration;
+                    const momentum = velocity * 100;
+                    const targetScroll = mapContainer.scrollLeft + momentum;
+                    
+                    // Плавно прокручиваем к целевой позиции
+                    mapContainer.scrollTo({
+                        left: targetScroll,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        };
+        
+        // Добавляем обработчики событий
+        mapContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
+        mapContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+        mapContainer.addEventListener('touchend', handleTouchEnd);
+        
+        // Удаляем обработчики при закрытии модального окна
+        const removeListeners = () => {
+            mapContainer.removeEventListener('touchstart', handleTouchStart);
+            mapContainer.removeEventListener('touchmove', handleTouchMove);
+            mapContainer.removeEventListener('touchend', handleTouchEnd);
+        };
+        
+        // Сохраняем функцию удаления для использования при закрытии
+        mapContainer._removeSwipeListeners = removeListeners;
+    },
+
+    adjustMapImageSize() {
+        const mapImage = document.getElementById('map-image');
+        if (!mapImage) return;
+        
+        // Ждем загрузки изображения
+        if (mapImage.complete) {
+            this.calculateImageSize(mapImage);
+        } else {
+            mapImage.onload = () => {
+                this.calculateImageSize(mapImage);
+            };
+        }
+    },
+
+    calculateImageSize(mapImage) {
+        const screenHeight = window.innerHeight;
+        const screenWidth = window.innerWidth;
+        const imageAspectRatio = mapImage.naturalWidth / mapImage.naturalHeight;
+        
+        // Рассчитываем высоту изображения, чтобы оно поместилось по высоте экрана
+        const targetHeight = screenHeight;
+        const targetWidth = targetHeight * imageAspectRatio;
+        
+        // Устанавливаем размеры
+        mapImage.style.height = targetHeight + 'px';
+        mapImage.style.width = targetWidth + 'px';
+        mapImage.style.maxWidth = 'none';
+        mapImage.style.maxHeight = 'none';
+        mapImage.style.objectFit = 'none';
+        mapImage.style.objectPosition = 'left center';
+        
+        // Перепозиционируем маркер после изменения размера изображения
+        setTimeout(async () => {
+            try {
+                const { getMapPointCoords } = await import('./map_points.js');
+                const coords = getMapPointCoords(1);
+                if (coords) {
+                    this.positionMarker(coords);
+                }
+            } catch (error) {
+                console.error('Ошибка при перепозиционировании маркера:', error);
+            }
+        }, 100);
+    },
+
+    async showAllTooltips() {
+        try {
+            const { tooltipPoints } = await import('./map_points.js');
+            const mapImage = document.getElementById('map-image');
+            const mapContainer = document.querySelector('#map-modal > div');
+            
+            if (!mapImage || !mapContainer || !tooltipPoints) {
+                console.error('Не удалось загрузить необходимые данные для подсказок');
+                return;
+            }
+            
+            // Очищаем старые подсказки
+            const oldTooltips = mapContainer.querySelectorAll('.mobile-tooltip');
+            oldTooltips.forEach(tooltip => tooltip.remove());
+            
+            // Создаем подсказки для всех точек
+            const createdTooltips = [];
+            
+            Object.entries(tooltipPoints).forEach(([key, coords]) => {
+                const tooltip = document.createElement('div');
+                tooltip.className = 'mobile-tooltip';
+                tooltip.style.position = 'absolute';
+                
+                // Пересчитываем координаты относительно реального размера карты
+                const xPercent = coords.x / 100;
+                const yPercent = coords.y / 100;
+                
+                // Сохраняем оригинальные координаты в data-атрибутах
+                tooltip.dataset.xPercent = xPercent;
+                tooltip.dataset.yPercent = yPercent;
+                
+                // Используем реальную ширину и высоту карты для расчета
+                const xPos = mapImage.offsetWidth * xPercent;
+                const yPos = (mapImage.offsetHeight * yPercent) + 25; // Опускаем подсказки на 15px ниже
+                
+                tooltip.style.left = `${xPos}px`;
+                tooltip.style.top = `${yPos}px`;
+                tooltip.style.transform = 'translate(-50%, -50%)';
+                tooltip.style.background = 'rgba(0,0,0,0.8)';
+                tooltip.style.color = 'white';
+                tooltip.style.padding = '8px 12px';
+                tooltip.style.borderRadius = '4px';
+                tooltip.style.fontSize = '12px';
+                tooltip.style.pointerEvents = 'none';
+                tooltip.style.zIndex = '1003';
+                tooltip.style.minWidth = '120px';
+                tooltip.style.maxWidth = '200px';
+                tooltip.style.textAlign = 'center';
+                tooltip.style.whiteSpace = 'normal';
+                tooltip.style.wordWrap = 'break-word';
+                tooltip.style.lineHeight = '1.2';
+                
+                // Получаем текст подсказки
+                const camelToSnake = (str) => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+                const keySnake = camelToSnake(key);
+                const tooltipText = window.i18n ? window.i18n.t('map.' + keySnake) : key;
+                tooltip.textContent = tooltipText;
+                
+                mapContainer.appendChild(tooltip);
+                createdTooltips.push(tooltip);
+            });
+            
+            // Проверяем и исправляем перекрытия
+            this.fixTooltipOverlaps(createdTooltips);
+            
+            console.log('Подсказки успешно созданы:', mapContainer.querySelectorAll('.mobile-tooltip').length);
+            
+            // Добавляем обработчик для обновления позиций при прокрутке
+            mapContainer.addEventListener('scroll', () => {
+                this.updateTooltipPositions();
+            });
+            
+            // Добавляем обработчик для обновления позиций при изменении размера окна
+            window.addEventListener('resize', () => {
+                setTimeout(() => {
+                    this.updateTooltipPositions();
+                }, 100);
+            });
+            
+        } catch (error) {
+            console.error('Ошибка при показе подсказок:', error);
+        }
+    },
+
+    updateTooltipPositions() {
+        const mapImage = document.getElementById('map-image');
+        const mapContainer = document.querySelector('#map-modal > div');
+        const tooltips = mapContainer.querySelectorAll('.mobile-tooltip');
+        
+        if (!mapImage || !mapContainer || tooltips.length === 0) return;
+        
+        tooltips.forEach(tooltip => {
+            // Получаем оригинальные координаты из data-атрибутов
+            const xPercent = parseFloat(tooltip.dataset.xPercent);
+            const yPercent = parseFloat(tooltip.dataset.yPercent);
+            
+            if (isNaN(xPercent) || isNaN(yPercent)) return;
+            
+            // Пересчитываем позицию относительно реального размера карты
+            const xPos = mapImage.offsetWidth * xPercent;
+            const yPos = (mapImage.offsetHeight * yPercent) + 25; // Опускаем подсказки на 25px ниже
+            
+            tooltip.style.left = `${xPos}px`;
+            tooltip.style.top = `${yPos}px`;
+        });
+        
+        // Проверяем и исправляем перекрытия после обновления позиций
+        this.fixTooltipOverlaps(Array.from(tooltips));
+    },
+
+    fixTooltipOverlaps(tooltips) {
+        if (tooltips.length < 2) return;
+        
+        // Функция для получения размеров и позиции подсказки
+        const getTooltipBounds = (tooltip) => {
+            const rect = tooltip.getBoundingClientRect();
+            const containerRect = tooltip.parentElement.getBoundingClientRect();
+            
+            return {
+                left: rect.left - containerRect.left,
+                top: rect.top - containerRect.top,
+                right: rect.right - containerRect.left,
+                bottom: rect.bottom - containerRect.top,
+                width: rect.width,
+                height: rect.height
+            };
+        };
+        
+        // Функция для проверки пересечения двух прямоугольников
+        const isOverlapping = (rect1, rect2) => {
+            return !(rect1.right < rect2.left || 
+                    rect1.left > rect2.right || 
+                    rect1.bottom < rect2.top || 
+                    rect1.top > rect2.bottom);
+        };
+        
+        // Проверяем каждую пару подсказок на перекрытие
+        for (let i = 0; i < tooltips.length; i++) {
+            for (let j = i + 1; j < tooltips.length; j++) {
+                const tooltip1 = tooltips[i];
+                const tooltip2 = tooltips[j];
+                
+                const bounds1 = getTooltipBounds(tooltip1);
+                const bounds2 = getTooltipBounds(tooltip2);
+                
+                if (isOverlapping(bounds1, bounds2)) {
+                    // Если есть перекрытие, сдвигаем вторую подсказку вниз
+                    const currentTop = parseFloat(tooltip2.style.top);
+                    const newTop = currentTop + bounds1.height + 10; // 10px отступ
+                    
+                    tooltip2.style.top = `${newTop}px`;
+                    
+                    // Обновляем границы для второй подсказки
+                    bounds2.top = newTop;
+                    bounds2.bottom = newTop + bounds2.height;
+                }
+            }
+        }
     }
 };
+
+// Экспортируем функции для использования в других модулях
+window.MapModal = MapModal;
+
+// Добавляем CSS стили для мобильных подсказок
+const style = document.createElement('style');
+style.textContent = `
+    .mobile-tooltip {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
+        backdrop-filter: blur(2px) !important;
+    }
+`;
+document.head.appendChild(style);
 
 function renderQuestIntro(bookContentArea, questTasksList) {
     // Удалить старый intro, если есть

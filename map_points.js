@@ -25,7 +25,7 @@ const mapPoints = {
 };
 
 // Координаты для всплывающих подсказок на карте
-const tooltipPoints = {
+export const tooltipPoints = {
   tumskiBridge: { x: 14, y: 56 },
   katedra: { x: 53, y: 72 },
   matka: { x: 48, y: 72 },
