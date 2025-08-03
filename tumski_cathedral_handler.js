@@ -11,8 +11,8 @@ function isInRightHalf(marker) {
     // Получаем координату X для десктопной версии
     const xDesktop = parseFloat(marker.dataset.xDesktop);
     
-    // Если координата X больше половины ширины оригинального изображения (2624/2 = 1312)
-    // то элемент находится в правой половине
+    // Для десктопа используем старые координаты, но проверяем относительно половины изображения (2624/2 = 1312)
+    // Если координата X больше половины ширины оригинального изображения, то элемент находится в правой половине
     return xDesktop > 1312;
 }
 
@@ -232,53 +232,231 @@ export function moveMarkersAndCursors() {
 
 // Универсальная функция для позиционирования геометок и стрелок по координатам картинки
 export function positionMarkersOnBg() {
-    const imageBlock = document.querySelector('.image');
-    if (!imageBlock) return;
+    console.log('=== positionMarkersOnBg НАЧАЛО ===');
+    console.log('positionMarkersOnBg вызвана, размер окна:', window.innerWidth, 'x', window.innerHeight);
     
-    // размеры оригинальной картинки (замени на свои реальные размеры)
-    const imgNaturalWidth = 2624;
-    const imgNaturalHeight = 1824;
-    // размеры блока
-    const blockWidth = imageBlock.clientWidth;
-    const blockHeight = imageBlock.clientHeight;
-    // при background-size: auto 100%, высота совпадает, ширина может быть больше блока
-    const scale = blockHeight / imgNaturalHeight;
-    const bgWidth = imgNaturalWidth * scale;
-    // background-position: left center
-    const bgLeft = 0; // если left, иначе (blockWidth - bgWidth) / 2 для center
-
+    // Добавляем глобальный обработчик для отслеживания изменений стилей
+    if (!window.markerStyleTracker) {
+        window.markerStyleTracker = new Map();
+        
+        // Перехватываем setProperty для отслеживания изменений
+        const originalSetProperty = CSSStyleDeclaration.prototype.setProperty;
+        CSSStyleDeclaration.prototype.setProperty = function(property, value, priority) {
+            if (property === 'left' || property === 'top') {
+                const element = this.ownerNode;
+                if (element && (element.classList.contains('map-mark-area') || element.classList.contains('custom-cursor-area'))) {
+                    console.warn(`ПЕРЕХВАЧЕНО изменение стиля ${property}=${value} для элемента:`, element.className, element);
+                }
+            }
+            return originalSetProperty.call(this, property, value, priority);
+        };
+    }
+    const imageBlock = document.querySelector('.image');
+    const imageContainer = document.querySelector('.image-container');
+    if (!imageBlock || !imageContainer) {
+        console.log('Не найдены imageBlock или imageContainer');
+        return;
+    }
+    
     // Определяем, мобильная ли версия
     const isMobile = window.innerWidth <= 700;
+    console.log('isMobile:', isMobile, 'Размеры контейнера:', imageContainer.clientWidth, 'x', imageContainer.clientHeight);
 
     // Геометки и стрелки должны иметь data-x-desktop/data-y-desktop или data-x-mobile/data-y-mobile
     const markers = document.querySelectorAll('[data-x-desktop][data-y-desktop], [data-x-mobile][data-y-mobile]');
+    console.log('Найдено маркеров:', markers.length);
+    
+    // Проверяем все элементы с атрибутами координат
+    const allElementsWithCoords = document.querySelectorAll('[data-x-desktop], [data-y-desktop], [data-x-mobile], [data-y-mobile]');
+    console.log('Всего элементов с координатами:', allElementsWithCoords.length);
+    allElementsWithCoords.forEach((el, index) => {
+        console.log(`Элемент ${index}:`, {
+            className: el.className,
+            id: el.id,
+            dataXDesktop: el.dataset.xDesktop,
+            dataYDesktop: el.dataset.yDesktop,
+            dataXMobile: el.dataset.xMobile,
+            dataYMobile: el.dataset.yMobile
+        });
+    });
     
     markers.forEach((marker, index) => {
-        // Выбираем координаты в зависимости от размера экрана
-        let x, y;
-        if (isMobile) {
-            x = parseFloat(marker.dataset.xMobile);
-            y = parseFloat(marker.dataset.yMobile);
-        } else {
-            x = parseFloat(marker.dataset.xDesktop);
-            y = parseFloat(marker.dataset.yDesktop);
-        }
-        
-        const left = bgLeft + (x * scale) - (marker.clientWidth / 2);
-        const top = (y * scale) - (marker.clientHeight / 2);
-        
-        // Применяем стили с !important через setProperty
-        marker.style.setProperty('left', left + 'px', 'important');
-        marker.style.setProperty('top', top + 'px', 'important');
-        
-        // Для map-mark-area элементов изменяем порядок элементов в зависимости от позиции
-        if (marker.classList.contains('map-mark-area') && !isMobile) {
-            const contentWrapper = marker.querySelector('.content-wrapper');
-            if (contentWrapper) {
-                reorderGeoMarkerElements(contentWrapper, marker);
+        try {
+            console.log(`=== Обработка маркера ${index} ===`);
+            
+            // Выводим информацию о маркере для отладки
+            console.log(`Маркер ${index}:`, {
+                className: marker.className,
+                id: marker.id,
+                tagName: marker.tagName
+            });
+            
+            // Выбираем координаты в зависимости от размера экрана
+            let x, y;
+            if (isMobile) {
+                // Для мобильных используем старую логику с размерами картинки
+                const imgNaturalWidth = 2624;
+                const imgNaturalHeight = 1824;
+                const blockWidth = imageBlock.clientWidth;
+                const blockHeight = imageBlock.clientHeight;
+                const scale = blockHeight / imgNaturalHeight;
+                const bgWidth = imgNaturalWidth * scale;
+                const bgLeft = 0;
+                
+                x = parseFloat(marker.dataset.xMobile);
+                y = parseFloat(marker.dataset.yMobile);
+                
+                const left = bgLeft + (x * scale) - (marker.clientWidth / 2);
+                const top = (y * scale) - (marker.clientHeight / 2);
+                
+                // Применяем стили с !important через setProperty
+                marker.style.setProperty('left', left + 'px', 'important');
+                marker.style.setProperty('top', top + 'px', 'important');
+                               } else {
+            // Для десктопа: новая логика позиционирования
+                           // 1. Получаем элемент .image
+            const imageElement = document.querySelector('.image');
+            if (!imageElement) {
+                console.log('Элемент .image не найден');
+                return;
             }
+            
+            // 2. Получаем размеры контейнера .image
+            const containerWidth = imageElement.clientWidth;
+            const containerHeight = imageElement.clientHeight;
+            
+            // Получаем позицию родительского элемента .scene
+            const sceneElement = document.querySelector('.scene');
+            const sceneRect = sceneElement ? sceneElement.getBoundingClientRect() : { left: 0, top: 0 };
+            
+            console.log(`Маркер ${index}: размеры контейнера: ${containerWidth}x${containerHeight}`);
+            console.log(`Маркер ${index}: позиция .scene: left=${sceneRect.left.toFixed(2)}, top=${sceneRect.top.toFixed(2)}`);
+            
+            // 3. Исходные размеры изображения и координаты
+            const originalWidth = 2624;
+            const originalHeight = 1824;
+            const originalX = parseFloat(marker.dataset.xDesktop);
+            const originalY = parseFloat(marker.dataset.yDesktop);
+            
+            console.log(`Маркер ${index}: исходные координаты: x=${originalX}, y=${originalY}`);
+            
+            // 4. Вычисляем масштаб для background-size: contain
+            const scaleX = containerWidth / originalWidth;
+            const scaleY = containerHeight / originalHeight;
+            const scale = Math.min(scaleX, scaleY);
+            
+            // 5. Реальные размеры отображаемой картинки
+            const realImageWidth = originalWidth * scale;
+            const realImageHeight = originalHeight * scale;
+                
+                                                       console.log(`Маркер ${index}: масштаб: ${scale.toFixed(4)}, реальные размеры картинки: ${realImageWidth.toFixed(2)}x${realImageHeight.toFixed(2)}`);
+            
+            // Дополнительная отладочная информация
+            console.log('Детали контейнеров:', {
+                imageContainer: `${imageContainer.clientWidth}x${imageContainer.clientHeight}`,
+                imageElement: `${imageElement.clientWidth}x${imageElement.clientHeight}`,
+                window: `${window.innerWidth}x${window.innerHeight}`
+            });
+                
+                // Дополнительная отладочная информация
+                console.log('Детали контейнеров:', {
+                    imageContainer: `${imageContainer.clientWidth}x${imageContainer.clientHeight}`,
+                    imageElement: `${imageElement.clientWidth}x${imageElement.clientHeight}`,
+                    window: `${window.innerWidth}x${window.innerHeight}`
+                });
+                
+                            // 6. Вычисляем координаты геометки для реального размера изображения
+            const scaledX = originalX * scale;
+            const scaledY = originalY * scale;
+            
+            console.log(`Маркер ${index}: координаты для реального размера: x=${scaledX.toFixed(2)}, y=${scaledY.toFixed(2)}`);
+            
+            // 7. Вычисляем отступ от левого края до картинки
+            const imageLeftOffset = (containerWidth - realImageWidth) / 2;
+            const imageTopOffset = (containerHeight - realImageHeight) / 2;
+            
+            console.log(`Маркер ${index}: отступы картинки: left=${imageLeftOffset.toFixed(2)}, top=${imageTopOffset.toFixed(2)}`);
+            
+            // 8. Финальные координаты геометки (относительно .scene)
+            const finalX = imageLeftOffset + scaledX;
+            const finalY = imageTopOffset + scaledY;
+            
+            // Корректируем координаты с учетом позиции .scene относительно окна
+            // Поскольку .scene имеет тот же размер, что и окно браузера, коррекция не нужна
+            const correctedX = finalX;
+            const correctedY = finalY;
+            
+            console.log(`Маркер ${index}: финальные координаты: x=${finalX.toFixed(2)}, y=${finalY.toFixed(2)}`);
+            console.log(`Маркер ${index}: скорректированные координаты: x=${correctedX.toFixed(2)}, y=${correctedY.toFixed(2)}`);
+            
+            // Проверяем, находится ли маркер на картинке
+            const isOnImageX = correctedX >= imageLeftOffset && correctedX <= (imageLeftOffset + realImageWidth);
+            const isOnImageY = correctedY >= imageTopOffset && correctedY <= (imageTopOffset + realImageHeight);
+            console.log(`Маркер ${index}: на картинке по X: ${isOnImageX}, по Y: ${isOnImageY}`);
+            console.log(`Маркер ${index}: границы картинки X: ${imageLeftOffset.toFixed(2)} - ${(imageLeftOffset + realImageWidth).toFixed(2)}, Y: ${imageTopOffset.toFixed(2)} - ${(imageTopOffset + realImageHeight).toFixed(2)}`);
+            
+            // 9. Находим сам маркер внутри блока
+            const markerElement = marker.querySelector('.map-mark') || marker;
+            
+            // 10. Позиционируем map-mark по центру (используем скорректированные координаты)
+            const markerLeft = correctedX - (markerElement.clientWidth / 2);
+            const markerTop = correctedY - (markerElement.clientHeight / 2);
+            
+            console.log(`Маркер ${index}: позиция map-mark: left=${markerLeft.toFixed(2)}, top=${markerTop.toFixed(2)}`);
+            
+            // 11. Позиционируем map-mark-area относительно map-mark
+            const areaLeft = markerLeft - (marker.clientWidth - markerElement.clientWidth) / 2;
+            const areaTop = markerTop - (marker.clientHeight - markerElement.clientHeight) / 2;
+            
+            console.log(`Маркер ${index}: позиция map-mark-area: left=${areaLeft.toFixed(2)}, top=${areaTop.toFixed(2)}`);
+            
+                            // 12. Применяем стили
+                marker.style.setProperty('position', 'absolute', 'important');
+                marker.style.setProperty('left', finalLeft + 'px', 'important');
+                marker.style.setProperty('top', finalTop + 'px', 'important');
+            
+                            console.log(`Маркер ${index}: применены стили: left=${finalLeft.toFixed(2)}px, top=${finalTop.toFixed(2)}px`);
+            
+            // Проверяем, не изменились ли стили после применения
+            setTimeout(() => {
+                const computedLeft = window.getComputedStyle(marker).left;
+                const computedTop = window.getComputedStyle(marker).top;
+                console.log(`Маркер ${index}: вычисленные стили через 100мс: left=${computedLeft}, top=${computedTop}`);
+                
+                if (computedLeft !== `${areaLeft}px` || computedTop !== `${areaTop}px`) {
+                    console.warn(`Маркер ${index}: СТИЛИ ПЕРЕОПРЕДЕЛЕНЫ! Ожидалось: left=${areaLeft}px, top=${areaTop}px, Получено: left=${computedLeft}, top=${computedTop}`);
+                    
+                    // Проверяем inline стили
+                    const inlineLeft = marker.style.left;
+                    const inlineTop = marker.style.top;
+                    console.warn(`Маркер ${index}: inline стили: left=${inlineLeft}, top=${inlineTop}`);
+                    
+                    // Проверяем CSS правила
+                    const cssRules = window.getComputedStyle(marker);
+                    console.warn(`Маркер ${index}: CSS position=${cssRules.position}, z-index=${cssRules.zIndex}`);
+                }
+            }, 100);
+            
+            // Дополнительная проверка через 500мс
+            setTimeout(() => {
+                const computedLeft = window.getComputedStyle(marker).left;
+                const computedTop = window.getComputedStyle(marker).top;
+                console.log(`Маркер ${index}: вычисленные стили через 500мс: left=${computedLeft}, top=${computedTop}`);
+            }, 500);
+            }
+            
+            // Для map-mark-area элементов изменяем порядок элементов в зависимости от позиции
+            if (marker.classList.contains('map-mark-area') && !isMobile) {
+                const contentWrapper = marker.querySelector('.content-wrapper');
+                if (contentWrapper) {
+                    reorderGeoMarkerElements(contentWrapper, marker);
+                }
+            }
+        } catch (error) {
+            console.error(`Ошибка позиционирования маркера ${index}:`, error);
         }
     });
+    console.log('=== positionMarkersOnBg КОНЕЦ ===');
 }
 
 // Функция для применения трансформации зума к геометкам
@@ -443,53 +621,11 @@ export function setupMobileResetAnimation() {
 
 // Для автоматического запуска из tumski.html
 if (typeof window !== 'undefined') {
-    window.addEventListener('DOMContentLoaded', () => {
-        if (typeof window.moveMarkersAndCursors === 'function') return;
-        window.moveMarkersAndCursors = moveMarkersAndCursors;
-        moveMarkersAndCursors();
-        positionMarkersOnBg();
-        setupMobileResetAnimation();
-        console.log('Вызываем setupZoomTracking');
-        setupZoomTracking(); // Добавляем отслеживание зума
-        
-        // Дополнительно пересчитываем позиции через небольшую задержку
-        setTimeout(() => {
-            positionMarkersOnBg();
-        }, 500);
-    });
-    window.addEventListener('resize', () => {
-        if (typeof window.moveMarkersAndCursors === 'function') {
-            window.moveMarkersAndCursors();
-        }
-        positionMarkersOnBg();
-        
-        // Дополнительно пересчитываем позиции через небольшую задержку
-        setTimeout(() => {
-            positionMarkersOnBg();
-        }, 100);
-    });
+    // Экспортируем функции в глобальную область видимости
+    window.moveMarkersAndCursors = moveMarkersAndCursors;
+    window.positionMarkersOnBg = positionMarkersOnBg;
+    window.setupMobileResetAnimation = setupMobileResetAnimation;
+    window.setupZoomTracking = setupZoomTracking;
 } 
 
-// Автоматически позиционируем геометки по data-x/data-y при загрузке и ресайзе
-if (typeof window !== 'undefined') {
-    function updateGeoMarkersPosition() {
-        // Используем ту же функцию, что и для стрелок (для всех размеров экрана)
-        if (typeof window.positionMarkersOnBg === 'function') {
-            window.positionMarkersOnBg();
-        } else if (typeof positionMarkersOnBg === 'function') {
-            positionMarkersOnBg();
-        }
-        
-        // Также настраиваем отслеживание зума
-        console.log('Настраиваем отслеживание зума в updateGeoMarkersPosition');
-        if (typeof window.setupZoomTracking === 'function') {
-            console.log('Вызываем window.setupZoomTracking');
-            window.setupZoomTracking();
-        } else if (typeof setupZoomTracking === 'function') {
-            console.log('Вызываем setupZoomTracking');
-            setupZoomTracking();
-        }
-    }
-    window.addEventListener('DOMContentLoaded', updateGeoMarkersPosition);
-    window.addEventListener('resize', updateGeoMarkersPosition);
-} 
+// Удаляем дублирующий блок, так как инициализация теперь происходит в HTML-файле 

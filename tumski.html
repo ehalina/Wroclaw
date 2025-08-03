@@ -24,7 +24,7 @@
     <!-- Подсказка для запуска музыки -->
     <div id="musicHint" class="music-hint" data-i18n="music.hint"></div>
     <!-- Геометка: Собор Святого Иоанна Крестителя (универсальная) -->
-    <div class="map-mark-area" data-x-desktop="2200" data-y-desktop="300" data-x-mobile="2270" data-y-mobile=800">
+    <div class="map-mark-area" data-x-desktop="1800" data-y-desktop="400" data-x-mobile="2270" data-y-mobile=800">
         <div class="map-mark" id="tumski_cathedral"></div>
         <div class="content-wrapper">
             <img class="papera-image" alt="Papera">
@@ -213,6 +213,22 @@
                 window.moveMarkersAndCursors();
             }
             
+            // Позиционируем геометки и стрелки
+            import('./tumski_cathedral_handler.js').then(mod => {
+                if (mod && typeof mod.positionMarkersOnBg === 'function') {
+                    console.log('Вызываем positionMarkersOnBg из HTML');
+                    mod.positionMarkersOnBg();
+                    
+                    // Дополнительно вызываем через небольшую задержку для гарантии
+                    setTimeout(() => {
+                        console.log('Повторный вызов positionMarkersOnBg через задержку');
+                        mod.positionMarkersOnBg();
+                    }, 500);
+                } else {
+                    console.log('positionMarkersOnBg не найден в модуле');
+                }
+            });
+            
             // Настраиваем отслеживание зума для геометок
             console.log('Импортируем tumski_cathedral_handler.js для отслеживания зума');
             import('./tumski_cathedral_handler.js').then(mod => {
@@ -241,6 +257,30 @@
                     });
                 }, 1000);
             }
+            
+            // Добавляем обработчик изменения размера окна с debouncing
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                console.log('Событие resize сработало, размер окна:', window.innerWidth, 'x', window.innerHeight);
+                
+                // Очищаем предыдущий таймаут
+                clearTimeout(resizeTimeout);
+                
+                // Устанавливаем новый таймаут для debouncing
+                resizeTimeout = setTimeout(() => {
+                    console.log('Выполняем пересчет позиций после resize');
+                    import('./tumski_cathedral_handler.js').then(mod => {
+                        if (mod && typeof mod.positionMarkersOnBg === 'function') {
+                            console.log('Пересчитываем позиции при изменении размера окна');
+                            mod.positionMarkersOnBg();
+                        } else {
+                            console.log('positionMarkersOnBg не найден в модуле при resize');
+                        }
+                    }).catch(err => {
+                        console.error('Ошибка импорта модуля при resize:', err);
+                    });
+                }, 100); // Задержка 100мс
+            });
         });
     </script>
 </body>
