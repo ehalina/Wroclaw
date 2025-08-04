@@ -56,55 +56,64 @@
     }
 }
 
-/* Класс для приостановки анимации moveForward */
-.map-mark-area.paused {
-    animation-play-state: paused;
-}
-
 /* Позиционирование стрелок для страницы tumski */
 .custom-cursor-area {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    width: 50%; /* Четверть экрана */
-    height: 25%;
+    position: absolute;
     z-index: 999;
     cursor: none;
     /* Добавляем поддержку трансформаций для зума */
     transform-origin: center center;
     will-change: transform;
     transition: transform 0.3s ease-out;
+    /* Убираем фиксированное позиционирование, чтобы JS мог управлять позицией */
+    right: auto;
+    bottom: auto;
+    width: 80px;
+    height: 80px;
 }
 
 .custom-cursor-prostoarea {
-    position: fixed;
-    right: 0;
-    bottom: 25%;
-    width: 50%;
-    height: 25%;
+    position: absolute;
     z-index: 999;
     cursor: none;
     /* Добавляем поддержку трансформаций для зума */
     transform-origin: center center;
     will-change: transform;
     transition: transform 0.3s ease-out;
+    /* Убираем фиксированное позиционирование, чтобы JS мог управлять позицией */
+    right: auto;
+    bottom: auto;
+    width: 80px;
+    height: 80px;
 }
 
 /* Позиционирование mapmark для страницы tumski */
 .map-mark-area {
-    position: absolute; /* Изменено с fixed на absolute для JavaScript позиционирования */
-    /* Убираем фиксированные позиции right: 0, top: 0 - они будут устанавливаться через JS */
-    width: 50%;
-    height: 50%;
+    position: absolute !important;
     z-index: 998;
     display: flex;
     align-items: center;
     gap: 10px;
-    /* Добавляем анимацию moveForward как у картинки */
-    animation: moveForward 40s linear infinite;
     /* Для геометок используем пересчет позиции вместо трансформации */
-    will-change: left, top, transform;
+    will-change: left, top;
     transition: left 0.3s ease-out, top 0.3s ease-out;
+    /* Убираем фиксированное позиционирование, чтобы JS мог управлять позицией */
+    right: auto !important;
+    top: auto !important;
+    width: auto;
+    height: auto;
+    /* Убираем все возможные конфликты позиционирования */
+    bottom: auto !important;
+    left: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Принудительное применение позиционирования через JS */
+.map-mark-area[style*="left"], .map-mark-area[style*="top"] {
+    position: absolute !important;
+    left: var(--js-left, auto) !important;
+    top: var(--js-top, auto) !important;
 }
 
 @media (max-width: 700px) {
@@ -126,7 +135,6 @@
         left: unset !important;
         bottom: unset !important;
         transform: none !important;
-        animation: none !important;
         margin: 0 !important;
         padding: 0 !important;
     }
