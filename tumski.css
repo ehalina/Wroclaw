@@ -56,6 +56,11 @@
     }
 }
 
+/* Класс для приостановки анимации moveForward */
+.map-mark-area.paused {
+    animation-play-state: paused;
+}
+
 /* Позиционирование стрелок для страницы tumski */
 .custom-cursor-area {
     position: fixed;
@@ -87,17 +92,18 @@
 
 /* Позиционирование mapmark для страницы tumski */
 .map-mark-area {
-    position: fixed;
-    right: 0;
-    top: 0;
+    position: absolute; /* Изменено с fixed на absolute для JavaScript позиционирования */
+    /* Убираем фиксированные позиции right: 0, top: 0 - они будут устанавливаться через JS */
     width: 50%;
     height: 50%;
     z-index: 998;
     display: flex;
     align-items: center;
     gap: 10px;
+    /* Добавляем анимацию moveForward как у картинки */
+    animation: moveForward 40s linear infinite;
     /* Для геометок используем пересчет позиции вместо трансформации */
-    will-change: left, top;
+    will-change: left, top, transform;
     transition: left 0.3s ease-out, top 0.3s ease-out;
 }
 
@@ -120,6 +126,7 @@
         left: unset !important;
         bottom: unset !important;
         transform: none !important;
+        animation: none !important;
         margin: 0 !important;
         padding: 0 !important;
     }

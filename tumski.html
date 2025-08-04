@@ -24,8 +24,8 @@
     <!-- Подсказка для запуска музыки -->
     <div id="musicHint" class="music-hint" data-i18n="music.hint"></div>
     <!-- Геометка: Собор Святого Иоанна Крестителя (универсальная) -->
-    <div class="map-mark-area" data-x-desktop="1800" data-y-desktop="400" data-x-mobile="2270" data-y-mobile=800">
-        <div class="map-mark" id="tumski_cathedral"></div>
+    <div class="map-mark-area">
+        <div class="map-mark" id="tumski_cathedral" data-x-desktop="1800" data-y-desktop="400" data-x-mobile="2270" data-y-mobile=800"></div>
         <div class="content-wrapper">
             <img class="papera-image" alt="Papera">
             <div class="tumski-text" id="tumski-cathedral-text" data-i18n="tumski_cathedral.title"></div>
@@ -33,8 +33,8 @@
         <audio id="bookSound3" src="media/opening-a-book.wav"></audio>
     </div>
     <!-- Геометка: Тумский мост -->
-    <div class="map-mark-area" data-x-desktop="1800" data-y-desktop="800" data-x-mobile="1950" data-y-mobile="950">
-        <div class="map-mark" id="tumski_most"></div>
+    <div class="map-mark-area" >
+        <div class="map-mark" id="tumski_most" data-x-desktop="1800" data-y-desktop="800" data-x-mobile="1950" data-y-mobile="950"></div>
         <div class="content-wrapper">
             <img class="papera-image" alt="Papera">
             <div class="tumski-text" id="tumski-most-text" data-i18n="tumski_most.title"></div>
@@ -224,6 +224,12 @@
                         console.log('Повторный вызов positionMarkersOnBg через задержку');
                         mod.positionMarkersOnBg();
                     }, 500);
+                    
+                    // Еще один вызов через 1 секунду для полной гарантии
+                    setTimeout(() => {
+                        console.log('Финальный вызов positionMarkersOnBg через 1 секунду');
+                        mod.positionMarkersOnBg();
+                    }, 1000);
                 } else {
                     console.log('positionMarkersOnBg не найден в модуле');
                 }
@@ -280,6 +286,21 @@
                         console.error('Ошибка импорта модуля при resize:', err);
                     });
                 }, 100); // Задержка 100мс
+            });
+            
+            // Добавляем обработчик события load для изображения
+            window.addEventListener('load', () => {
+                console.log('Событие load сработало, пересчитываем позиции');
+                import('./tumski_cathedral_handler.js').then(mod => {
+                    if (mod && typeof mod.positionMarkersOnBg === 'function') {
+                        setTimeout(() => {
+                            console.log('Пересчитываем позиции после полной загрузки страницы');
+                            mod.positionMarkersOnBg();
+                        }, 200);
+                    }
+                }).catch(err => {
+                    console.error('Ошибка импорта модуля при load:', err);
+                });
             });
         });
     </script>
