@@ -200,6 +200,14 @@ const LanguageMenu = {
         if (mapModal && mapModal.style.display === 'flex') {
             if (window.updateMapTooltipText) window.updateMapTooltipText();
         }
+        
+        // Дополнительно обновляем размеры контейнеров после смены языка
+        if (window.updateContentWrapperSizesAfterLanguageChange) {
+            // Увеличиваем задержку для гарантии, что все переводы загрузились
+            setTimeout(() => {
+                window.updateContentWrapperSizesAfterLanguageChange();
+            }, 200);
+        }
     },
 
     updateActiveLanguage() {

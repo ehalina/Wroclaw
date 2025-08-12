@@ -171,6 +171,12 @@
 .content-wrapper {
     max-width: none !important;
     overflow: visible !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
 
 /* Убираем конфликтующие правила для tumski-text - теперь используются стили из styles.css */
@@ -243,7 +249,10 @@
     /* В мобильной версии элементы накладываются друг на друга */
     .content-wrapper {
         flex-direction: column !important;
-        align-items: flex-start !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 100% !important;
+        min-height: 100% !important;
     }
     /* Стрелки всегда видимы и активны */
     .custom-cursor,

@@ -53,6 +53,84 @@ function reorderGeoMarkerElements(contentWrapper, marker) {
     }
 }
 
+// Функция для обновления размеров контейнеров после смены языка
+function updateContentWrapperSizesAfterLanguageChange() {
+    console.log('Обновляем размеры контейнеров после смены языка...');
+    
+    // Находим все map-mark-area
+    const mapMarkAreas = document.querySelectorAll('.map-mark-area');
+    
+    mapMarkAreas.forEach((mapMarkArea, index) => {
+        try {
+            // Находим map-mark и content-wrapper
+            const mapMark = mapMarkArea.querySelector('.map-mark');
+            const contentWrapper = mapMarkArea.querySelector('.content-wrapper');
+            
+            if (!mapMark || !contentWrapper) {
+                console.log(`Маркер ${index}: map-mark или content-wrapper не найден`);
+                return;
+            }
+            
+            // Получаем новый размер текста после смены языка
+            const textElem = contentWrapper.querySelector('.tumski-text');
+            if (!textElem) {
+                console.log(`Маркер ${index}: tumski-text не найден`);
+                return;
+            }
+            
+            const newTextWidth = textElem.offsetWidth;
+            const mapMarkHeight = mapMark.clientHeight;
+            
+            console.log(`Маркер ${index}: новый размер текста: ${newTextWidth}px, высота map-mark: ${mapMarkHeight}px`);
+            
+            // Обновляем размеры контейнера под новый текст
+            const containerWidth = newTextWidth + 20; // Ширина текста + небольшой отступ
+            
+            contentWrapper.style.setProperty('width', containerWidth + 'px', 'important');
+            contentWrapper.style.setProperty('min-width', containerWidth + 'px', 'important');
+            contentWrapper.style.setProperty('max-width', 'none', 'important');
+            contentWrapper.style.setProperty('overflow', 'visible', 'important');
+            
+            // Обновляем высоту контейнера равной высоте map-mark
+            contentWrapper.style.setProperty('height', mapMarkHeight + 'px', 'important');
+            contentWrapper.style.setProperty('min-height', mapMarkHeight + 'px', 'important');
+            
+            // Обновляем размеры изображения
+            const paperaImage = contentWrapper.querySelector('.papera-image');
+            if (paperaImage) {
+                paperaImage.style.setProperty('width', '100%', 'important');
+                paperaImage.style.setProperty('height', 'auto', 'important');
+                paperaImage.style.setProperty('min-width', '100%', 'important');
+                paperaImage.style.setProperty('max-width', 'none', 'important');
+            }
+            
+            console.log(`Маркер ${index}: контейнер обновлен до ${containerWidth}x${mapMarkHeight}px после смены языка`);
+            
+        } catch (error) {
+            console.error(`Ошибка при обновлении маркера ${index}:`, error);
+        }
+    });
+    
+    console.log('Обновление размеров контейнеров после смены языка завершено');
+}
+
+// Функция для принудительного обновления размеров контейнеров
+function forceUpdateContentWrapperSizes() {
+    console.log('Принудительно обновляем размеры контейнеров...');
+    
+    // Сначала обновляем позиции маркеров
+    if (window.positionMarkersOnBg) {
+        window.positionMarkersOnBg();
+    }
+    
+    // Затем обновляем размеры контейнеров
+    if (window.updateContentWrapperSizesAfterLanguageChange) {
+        setTimeout(() => {
+            window.updateContentWrapperSizesAfterLanguageChange();
+        }, 100);
+    }
+}
+
 // Обработчик для геометки "Собор Святого Иоанна Крестителя"
 export function setupTumskiCathedralHandler() {
     const tumskiCathedralTxt = document.querySelector('#tumski-cathedral-text');
@@ -251,6 +329,15 @@ export function stretchPaperaToTextWidth() {
             contentWrapper.style.setProperty('min-width', containerWidth + 'px', 'important');
             contentWrapper.style.setProperty('max-width', 'none', 'important');
             contentWrapper.style.setProperty('overflow', 'visible', 'important');
+            
+            // Устанавливаем высоту content-wrapper равной высоте map-mark
+            const mapMarkElement = contentWrapper.closest('.map-mark');
+            if (mapMarkElement) {
+                const mapMarkHeight = mapMarkElement.clientHeight;
+                contentWrapper.style.setProperty('height', mapMarkHeight + 'px', 'important');
+                contentWrapper.style.setProperty('min-height', mapMarkHeight + 'px', 'important');
+                console.log(`Маркер ${index}: content-wrapper установлена высота ${mapMarkHeight}px (равна map-mark)`);
+            }
             
             console.log(`Маркер ${index}: papera-image растянута до 100% ширины контейнера, контейнер расширен до ${containerWidth}px`);
             
@@ -534,6 +621,13 @@ export function positionContentWrapperRelativeToMapMark() {
             contentWrapper.style.setProperty('top', contentWrapperY + 'px', 'important');
             contentWrapper.style.setProperty('position', 'absolute', 'important');
             
+            // Устанавливаем высоту content-wrapper равной высоте map-mark
+            const mapMarkHeight = mapMark.clientHeight;
+            contentWrapper.style.setProperty('height', mapMarkHeight + 'px', 'important');
+            contentWrapper.style.setProperty('min-height', mapMarkHeight + 'px', 'important');
+            
+            console.log(`Маркер ${index}: content-wrapper установлена высота ${mapMarkHeight}px (равна map-mark)`);
+            
             // Убеждаемся, что papera-image видима в десктопной версии
             const paperaImage = contentWrapper.querySelector('.papera-image');
             if (paperaImage && window.innerWidth > 700) {
@@ -714,7 +808,21 @@ if (typeof window !== 'undefined') {
     window.positionMarkersOnBg = positionMarkersOnBg;
     window.positionContentWrapperRelativeToMapMark = positionContentWrapperRelativeToMapMark;
     window.stretchPaperaToTextWidth = stretchPaperaToTextWidth;
+    window.updateContentWrapperSizesAfterLanguageChange = updateContentWrapperSizesAfterLanguageChange;
+    window.forceUpdateContentWrapperSizes = forceUpdateContentWrapperSizes;
 }
+
+// Добавляем обработчик изменения размера окна
+window.addEventListener('resize', function() {
+    // Небольшая задержка для стабилизации размера
+    clearTimeout(window.resizeTimeout);
+    window.resizeTimeout = setTimeout(() => {
+        if (window.updateContentWrapperSizesAfterLanguageChange) {
+            console.log('Обновляем размеры контейнеров после изменения размера окна...');
+            window.updateContentWrapperSizesAfterLanguageChange();
+        }
+    }, 250);
+});
 
 // Функция для принудительного пересчета позиций при изменении размера окна
 export function recalculatePositionsOnResize() {

@@ -101,6 +101,14 @@ function updatePageContent() {
     document.querySelectorAll('.language-option').forEach(btn => {
         btn.classList.toggle('active', btn.getAttribute('data-lang') === currentLang);
     });
+    
+    // Обновляем размеры контейнеров после смены языка
+    if (window.updateContentWrapperSizesAfterLanguageChange) {
+        // Небольшая задержка для гарантии, что DOM обновился
+        setTimeout(() => {
+            window.updateContentWrapperSizesAfterLanguageChange();
+        }, 100);
+    }
 }
 
 // Экспортируем функции
