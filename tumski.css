@@ -116,6 +116,65 @@
     top: var(--js-top, auto) !important;
 }
 
+/* Стили для papera-image в десктопной версии */
+.papera-image {
+    width: 100%;
+    height: auto;
+    max-width: 280px;
+    opacity: 1 !important;
+    transition: opacity 0.3s ease;
+    object-fit: contain;
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+    display: block;
+}
+
+.map-mark-area:hover .papera-image {
+    opacity: 1;
+}
+
+/* Растягиваем content-wrapper по ширине содержимого для всех размеров экрана */
+.content-wrapper {
+    width: fit-content !important;
+    min-width: fit-content !important;
+    max-width: none !important;
+    overflow: visible !important;
+}
+
+/* Показываем papera-image при наведении на map-mark-area */
+.map-mark-area:hover .papera-image {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Показываем tumski-text при наведении на map-mark-area */
+.map-mark-area:hover .tumski-text {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Принудительно показываем papera-image */
+.papera-image {
+    opacity: 1 !important;
+    visibility: visible !important;
+    width: 100% !important;
+    height: auto !important;
+    min-width: 100% !important;
+    margin: 0 !important;
+    top: 0 !important;
+    position: relative !important;
+    flex-shrink: 0 !important;
+    z-index: 1 !important;
+    max-width: none !important;
+}
+
+/* Убираем ограничения по ширине для content-wrapper */
+.content-wrapper {
+    max-width: none !important;
+    overflow: visible !important;
+}
+
+/* Убираем конфликтующие правила для tumski-text - теперь используются стили из styles.css */
+
 @media (max-width: 700px) {
     /* Геометки и стрелки теперь позиционируются по left/top через JS */
     .map-mark-area, .custom-cursor-area, .custom-cursor-prostoarea {
@@ -153,15 +212,38 @@
         overflow: hidden !important;
         opacity: 0 !important;
     }
-    /* В мобильной версии полностью скрываем картинки papera */
+    /* В мобильной версии показываем картинки papera адаптивно */
     .papera-image {
-        display: none !important;
-        width: 0 !important;
-        height: 0 !important;
+        display: block !important;
+        width: 100% !important;
+        height: auto !important;
+        max-width: none !important;
+        min-width: 100% !important;
         padding: 0 !important;
         margin: 0 !important;
-        overflow: hidden !important;
-        opacity: 0 !important;
+        overflow: visible !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        top: 0 !important;
+        position: relative !important;
+        flex-shrink: 0 !important;
+    }
+    
+    /* В мобильной версии выравниваем текст */
+    .tumski-text {
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        margin: 0 !important;
+        flex-shrink: 0 !important;
+        z-index: 2 !important;
+    }
+    
+    /* В мобильной версии элементы накладываются друг на друга */
+    .content-wrapper {
+        flex-direction: column !important;
+        align-items: flex-start !important;
     }
     /* Стрелки всегда видимы и активны */
     .custom-cursor,

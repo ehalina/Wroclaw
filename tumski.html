@@ -213,22 +213,62 @@
                 window.moveMarkersAndCursors();
             }
             
+            // Дополнительно вызываем растягивание papera для всех геометок
+            import('./tumski_cathedral_handler.js').then(mod => {
+                if (mod && typeof mod.stretchPaperaToTextWidth === 'function') {
+                    console.log('Вызываем stretchPaperaToTextWidth для всех геометок');
+                    mod.stretchPaperaToTextWidth();
+                    
+                    // Повторный вызов через задержку для гарантии
+                    setTimeout(() => {
+                        console.log('Повторный вызов stretchPaperaToTextWidth через задержку');
+                        mod.stretchPaperaToTextWidth();
+                    }, 500);
+                } else {
+                    console.log('stretchPaperaToTextWidth не найден в модуле');
+                }
+            });
+            
             // Позиционируем геометки и стрелки
             import('./tumski_cathedral_handler.js').then(mod => {
                 if (mod && typeof mod.positionMarkersOnBg === 'function') {
                     console.log('Вызываем positionMarkersOnBg из HTML');
                     mod.positionMarkersOnBg();
                     
+                    // После позиционирования вызываем stretchPaperaToTextWidth
+                    if (mod && typeof mod.stretchPaperaToTextWidth === 'function') {
+                        setTimeout(() => {
+                            console.log('Вызываем stretchPaperaToTextWidth после positionMarkersOnBg');
+                            mod.stretchPaperaToTextWidth();
+                        }, 100);
+                    }
+                    
                     // Дополнительно вызываем через небольшую задержку для гарантии
                     setTimeout(() => {
                         console.log('Повторный вызов positionMarkersOnBg через задержку');
                         mod.positionMarkersOnBg();
+                        
+                        // И снова вызываем stretchPaperaToTextWidth
+                        if (mod && typeof mod.stretchPaperaToTextWidth === 'function') {
+                            setTimeout(() => {
+                                console.log('Повторный вызов stretchPaperaToTextWidth через задержку');
+                                mod.stretchPaperaToTextWidth();
+                            }, 100);
+                        }
                     }, 500);
                     
                     // Еще один вызов через 1 секунду для полной гарантии
                     setTimeout(() => {
                         console.log('Финальный вызов positionMarkersOnBg через 1 секунду');
                         mod.positionMarkersOnBg();
+                        
+                        // И финальный вызов stretchPaperaToTextWidth
+                        if (mod && typeof mod.stretchPaperaToTextWidth === 'function') {
+                            setTimeout(() => {
+                                console.log('Финальный вызов stretchPaperaToTextWidth через 1 секунду');
+                                mod.stretchPaperaToTextWidth();
+                            }, 100);
+                        }
                     }, 1000);
                 } else {
                     console.log('positionMarkersOnBg не найден в модуле');

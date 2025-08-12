@@ -135,7 +135,7 @@ export function setupUniversalGeoMarker({ markerId, i18nKey, position }) {
     if (position) {
         reorderGeoMarkerElements(contentWrapper, marker);
     }
-  /*  // Стили для растяжения картинки по ширине текста
+    // Стили для растяжения картинки по ширине текста
     paperaImg.style.width = textElem ? (textElem.offsetWidth + 'px') : '100%';
     paperaImg.style.height = '50px';
     paperaImg.style.display = 'block';
@@ -143,7 +143,6 @@ export function setupUniversalGeoMarker({ markerId, i18nKey, position }) {
     paperaImg.style.margin = '0 auto';
     paperaImg.style.position = 'relative';
     paperaImg.style.top = '1px';
-*/
 
     // --- Обработчик клика ---
     function openModal() {
@@ -206,6 +205,61 @@ export function setPaperaImageSource(element) {
     if (element) {
         element.src = MEDIA_PATHS.PAPERA_IMAGE;
     }
+}
+
+// Функция для растягивания картинки papera по размеру текста
+export function stretchPaperaToTextWidth() {
+    console.log('=== stretchPaperaToTextWidth НАЧАЛО ===');
+    
+    const mapMarkAreas = document.querySelectorAll('.map-mark-area');
+    
+    mapMarkAreas.forEach((mapMarkArea, index) => {
+        try {
+            const contentWrapper = mapMarkArea.querySelector('.content-wrapper');
+            const paperaImage = contentWrapper?.querySelector('.papera-image');
+            const textElem = contentWrapper?.querySelector('.tumski-text');
+            
+            if (!paperaImage || !textElem) {
+                console.log(`Маркер ${index}: papera-image или tumski-text не найден`);
+                return;
+            }
+            
+            // Получаем ширину текста и высоту map-mark
+            const textWidth = textElem.offsetWidth;
+            const mapMark = mapMarkArea.querySelector('.map-mark');
+            const mapMarkHeight = mapMark ? mapMark.offsetHeight : 80; // fallback к 80px если map-mark не найден
+            
+            console.log(`Маркер ${index}: ширина текста: ${textWidth}px, высота map-mark: ${mapMarkHeight}px`);
+            
+            // Растягиваем картинку по ширине контейнера, сохраняя пропорции
+            paperaImage.style.setProperty('width', '100%', 'important');
+            paperaImage.style.setProperty('height', 'auto', 'important');
+            paperaImage.style.setProperty('display', 'block', 'important');
+            paperaImage.style.setProperty('object-fit', 'contain', 'important');
+            paperaImage.style.setProperty('margin', '0', 'important');
+            paperaImage.style.setProperty('position', 'relative', 'important');
+            paperaImage.style.setProperty('top', '0', 'important');
+            paperaImage.style.setProperty('opacity', '1', 'important');
+            paperaImage.style.setProperty('flex-shrink', '0', 'important');
+            paperaImage.style.setProperty('z-index', '1', 'important');
+            paperaImage.style.setProperty('min-width', '100%', 'important');
+            paperaImage.style.setProperty('max-width', 'none', 'important');
+            
+            // Обновляем размеры контейнера чтобы он вмещал содержимое
+            const containerWidth = textWidth + 20; // Ширина изображения + небольшой отступ
+            contentWrapper.style.setProperty('width', containerWidth + 'px', 'important');
+            contentWrapper.style.setProperty('min-width', containerWidth + 'px', 'important');
+            contentWrapper.style.setProperty('max-width', 'none', 'important');
+            contentWrapper.style.setProperty('overflow', 'visible', 'important');
+            
+            console.log(`Маркер ${index}: papera-image растянута до 100% ширины контейнера, контейнер расширен до ${containerWidth}px`);
+            
+        } catch (error) {
+            console.error(`Ошибка растягивания papera для маркера ${index}:`, error);
+        }
+    });
+    
+    console.log('=== stretchPaperaToTextWidth КОНЕЦ ===');
 } 
 
 // Функция для перемещения геометок и стрелок внутрь .image на мобильных и обратно на десктопе
@@ -423,237 +477,95 @@ export function positionMarkersOnBg() {
             console.error(`Ошибка позиционирования маркера ${index}:`, error);
         }
     });
+    
+    // После позиционирования маркеров позиционируем content-wrapper относительно map-mark
+    positionContentWrapperRelativeToMapMark();
+    
+    // Растягиваем картинки papera по размеру текста
+    stretchPaperaToTextWidth();
+    
+    // Дополнительно вызываем stretchPaperaToTextWidth через небольшую задержку для гарантии
+    setTimeout(() => {
+        console.log('Дополнительный вызов stretchPaperaToTextWidth через задержку');
+        stretchPaperaToTextWidth();
+    }, 200);
+    
     console.log('=== positionMarkersOnBg КОНЕЦ ===');
 }
 
-
-/////////
-export function positionMarkersOnBg2() {
-    console.log('=== positionMarkersOnBg НАЧАЛО ===');
-    console.log('positionMarkersOnBg вызвана, размер окна:', window.innerWidth, 'x', window.innerHeight);
+// Функция для позиционирования content-wrapper относительно map-mark
+export function positionContentWrapperRelativeToMapMark() {
+    console.log('=== positionContentWrapperRelativeToMapMark НАЧАЛО ===');
     
-    // Добавляем глобальный обработчик для отслеживания изменений стилей
-    if (!window.markerStyleTracker) {
-        window.markerStyleTracker = new Map();
-        
-        // Перехватываем setProperty для отслеживания изменений
-        const originalSetProperty = CSSStyleDeclaration.prototype.setProperty;
-        CSSStyleDeclaration.prototype.setProperty = function(property, value, priority) {
-            if (property === 'left' || property === 'top') {
-                const element = this.ownerNode;
-                if (element && (element.classList.contains('map-mark-area') || element.classList.contains('custom-cursor-area'))) {
-                    console.warn(`ПЕРЕХВАЧЕНО изменение стиля ${property}=${value} для элемента:`, element.className, element);
-                }
-            }
-            return originalSetProperty.call(this, property, value, priority);
-        };
-    }
-    const imageBlock = document.querySelector('.image');
-    const imageContainer = document.querySelector('.image-container');
-    if (!imageBlock || !imageContainer) {
-        console.log('Не найдены imageBlock или imageContainer');
-        return;
-    }
+    // Находим все map-mark-area элементы
+    const mapMarkAreas = document.querySelectorAll('.map-mark-area');
     
-    // Определяем, мобильная ли версия
-    const isMobile = window.innerWidth <= 700;
-    console.log('isMobile:', isMobile, 'Размеры контейнера:', imageContainer.clientWidth, 'x', imageContainer.clientHeight);
-
-    // Геометки и стрелки должны иметь data-x-desktop/data-y-desktop или data-x-mobile/data-y-mobile
-    const markers = document.querySelectorAll('[data-x-desktop][data-y-desktop], [data-x-mobile][data-y-mobile]');
-    console.log('Найдено маркеров:', markers.length);
-    
-    // Проверяем все элементы с атрибутами координат
-    const allElementsWithCoords = document.querySelectorAll('[data-x-desktop], [data-y-desktop], [data-x-mobile], [data-y-mobile]');
-    console.log('Всего элементов с координатами:', allElementsWithCoords.length);
-    allElementsWithCoords.forEach((el, index) => {
-        console.log(`Элемент ${index}:`, {
-            className: el.className,
-            id: el.id,
-            dataXDesktop: el.dataset.xDesktop,
-            dataYDesktop: el.dataset.yDesktop,
-            dataXMobile: el.dataset.xMobile,
-            dataYMobile: el.dataset.yMobile
-        });
-    });
-    
-    markers.forEach((marker, index) => {
+    mapMarkAreas.forEach((mapMarkArea, index) => {
         try {
-            console.log(`=== Обработка маркера ${index} ===`);
+            // Находим map-mark внутри map-mark-area
+            const mapMark = mapMarkArea.querySelector('.map-mark');
+            const contentWrapper = mapMarkArea.querySelector('.content-wrapper');
             
-            // Выводим информацию о маркере для отладки
-            console.log(`Маркер ${index}:`, {
-                className: marker.className,
-                id: marker.id,
-                tagName: marker.tagName
-            });
-            
-            // Выбираем координаты в зависимости от размера экрана
-            let x, y;
-            if (isMobile) {
-                // Для мобильных используем старую логику с размерами картинки
-                const imgNaturalWidth = 2624;
-                const imgNaturalHeight = 1824;
-                const blockWidth = imageBlock.clientWidth;
-                const blockHeight = imageBlock.clientHeight;
-                const scale = blockHeight / imgNaturalHeight;
-                const bgWidth = imgNaturalWidth * scale;
-                const bgLeft = 0;
-                
-                x = parseFloat(marker.dataset.xMobile);
-                y = parseFloat(marker.dataset.yMobile);
-                
-                const left = bgLeft + (x * scale) - (marker.clientWidth / 2);
-                const top = (y * scale) - (marker.clientHeight / 2);
-                
-                // Применяем стили с !important через setProperty
-                marker.style.setProperty('left', left + 'px', 'important');
-                marker.style.setProperty('top', top + 'px', 'important');
-                               } else {
-            // Для десктопа: новая логика позиционирования
-                           // 1. Получаем элемент .image
-            const imageElement = document.querySelector('.image');
-            if (!imageElement) {
-                console.log('Элемент .image не найден');
+            if (!mapMark || !contentWrapper) {
+                console.log(`Маркер ${index}: map-mark или content-wrapper не найден`);
                 return;
             }
             
-            // 2. Получаем размеры контейнера .image
-            const containerWidth = imageElement.clientWidth;
-            const containerHeight = imageElement.clientHeight;
+            // Получаем координаты map-mark
+            const mapMarkRect = mapMark.getBoundingClientRect();
+            const mapMarkAreaRect = mapMarkArea.getBoundingClientRect();
             
-            // Получаем позицию родительского элемента .scene
-            const sceneElement = document.querySelector('.scene');
-            const sceneRect = sceneElement ? sceneElement.getBoundingClientRect() : { left: 0, top: 0 };
+            // Вычисляем относительную позицию map-mark внутри map-mark-area
+            const mapMarkX = mapMarkRect.left - mapMarkAreaRect.left;
+            const mapMarkY = mapMarkRect.top - mapMarkAreaRect.top;
+            const mapMarkWidth = mapMark.clientWidth;
             
-            console.log(`Маркер ${index}: размеры контейнера: ${containerWidth}x${containerHeight}`);
-            console.log(`Маркер ${index}: позиция .scene: left=${sceneRect.left.toFixed(2)}, top=${sceneRect.top.toFixed(2)}`);
+            // Небольшой отступ (например, 10px)
+            const offset = 10;
             
-            // 3. Исходные размеры изображения и координаты
-            const originalWidth = 2624;
-            const originalHeight = 1824;
-            const originalX = parseFloat(marker.dataset.xDesktop);
-            const originalY = parseFloat(marker.dataset.yDesktop);
+            // Вычисляем координаты для content-wrapper
+            const contentWrapperX = mapMarkX + mapMarkWidth + offset;
+            const contentWrapperY = mapMarkY; // Такая же Y координата, как у map-mark
             
-            console.log(`Маркер ${index}: исходные координаты: x=${originalX}, y=${originalY}`);
+            console.log(`Маркер ${index}: map-mark X: ${mapMarkX}, Y: ${mapMarkY}, ширина: ${mapMarkWidth}, content-wrapper X: ${contentWrapperX}, Y: ${contentWrapperY}`);
             
-            // 4. Вычисляем масштаб для background-size: contain
-            const scaleX = containerWidth / originalWidth;
-            const scaleY = containerHeight / originalHeight;
-            const scale = Math.min(scaleX, scaleY);
+            // Применяем позиционирование к content-wrapper
+            contentWrapper.style.setProperty('left', contentWrapperX + 'px', 'important');
+            contentWrapper.style.setProperty('top', contentWrapperY + 'px', 'important');
+            contentWrapper.style.setProperty('position', 'absolute', 'important');
             
-            // 5. Реальные размеры отображаемой картинки
-            const realImageWidth = originalWidth * scale;
-            const realImageHeight = originalHeight * scale;
-                
-                                                       console.log(`Маркер ${index}: масштаб: ${scale.toFixed(4)}, реальные размеры картинки: ${realImageWidth.toFixed(2)}x${realImageHeight.toFixed(2)}`);
-            
-            // Дополнительная отладочная информация
-            console.log('Детали контейнеров:', {
-                imageContainer: `${imageContainer.clientWidth}x${imageContainer.clientHeight}`,
-                imageElement: `${imageElement.clientWidth}x${imageElement.clientHeight}`,
-                window: `${window.innerWidth}x${window.innerHeight}`
-            });
-                
-                // Дополнительная отладочная информация
-                console.log('Детали контейнеров:', {
-                    imageContainer: `${imageContainer.clientWidth}x${imageContainer.clientHeight}`,
-                    imageElement: `${imageElement.clientWidth}x${imageElement.clientHeight}`,
-                    window: `${window.innerWidth}x${window.innerHeight}`
-                });
-                
-                            // 6. Вычисляем координаты геометки для реального размера изображения
-            const scaledX = originalX * scale;
-            const scaledY = originalY * scale;
-            
-            console.log(`Маркер ${index}: координаты для реального размера: x=${scaledX.toFixed(2)}, y=${scaledY.toFixed(2)}`);
-            
-            // 7. Вычисляем отступ от левого края до картинки
-            const imageLeftOffset = (containerWidth - realImageWidth) / 2;
-            const imageTopOffset = (containerHeight - realImageHeight) / 2;
-            
-            console.log(`Маркер ${index}: отступы картинки: left=${imageLeftOffset.toFixed(2)}, top=${imageTopOffset.toFixed(2)}`);
-            
-            // 8. Финальные координаты геометки (относительно .scene)
-            const finalX = imageLeftOffset + scaledX;
-            const finalY = imageTopOffset + scaledY;
-            
-            // Корректируем координаты с учетом позиции .scene относительно окна
-            // Поскольку .scene имеет тот же размер, что и окно браузера, коррекция не нужна
-            const correctedX = finalX;
-            const correctedY = finalY;
-            
-            console.log(`Маркер ${index}: финальные координаты: x=${finalX.toFixed(2)}, y=${finalY.toFixed(2)}`);
-            console.log(`Маркер ${index}: скорректированные координаты: x=${correctedX.toFixed(2)}, y=${correctedY.toFixed(2)}`);
-            
-            // Проверяем, находится ли маркер на картинке
-            const isOnImageX = correctedX >= imageLeftOffset && correctedX <= (imageLeftOffset + realImageWidth);
-            const isOnImageY = correctedY >= imageTopOffset && correctedY <= (imageTopOffset + realImageHeight);
-            console.log(`Маркер ${index}: на картинке по X: ${isOnImageX}, по Y: ${isOnImageY}`);
-            console.log(`Маркер ${index}: границы картинки X: ${imageLeftOffset.toFixed(2)} - ${(imageLeftOffset + realImageWidth).toFixed(2)}, Y: ${imageTopOffset.toFixed(2)} - ${(imageTopOffset + realImageHeight).toFixed(2)}`);
-            
-            // 9. Находим сам маркер внутри блока
-            const markerElement = marker.querySelector('.map-mark') || marker;
-            
-            // 10. Позиционируем map-mark по центру (используем скорректированные координаты)
-            const markerLeft = correctedX - (markerElement.clientWidth / 2);
-            const markerTop = correctedY - (markerElement.clientHeight / 2);
-            
-            console.log(`Маркер ${index}: позиция map-mark: left=${markerLeft.toFixed(2)}, top=${markerTop.toFixed(2)}`);
-            
-            // 11. Позиционируем map-mark-area относительно map-mark
-            const areaLeft = markerLeft - (marker.clientWidth - markerElement.clientWidth) / 2;
-            const areaTop = markerTop - (marker.clientHeight - markerElement.clientHeight) / 2;
-            
-            console.log(`Маркер ${index}: позиция map-mark-area: left=${areaLeft.toFixed(2)}, top=${areaTop.toFixed(2)}`);
-            
-                            // 12. Применяем стили
-                marker.style.setProperty('position', 'absolute', 'important');
-                marker.style.setProperty('left', finalLeft + 'px', 'important');
-                marker.style.setProperty('top', finalTop + 'px', 'important');
-            
-                            console.log(`Маркер ${index}: применены стили: left=${finalLeft.toFixed(2)}px, top=${finalTop.toFixed(2)}px`);
-            
-            // Проверяем, не изменились ли стили после применения
-            setTimeout(() => {
-                const computedLeft = window.getComputedStyle(marker).left;
-                const computedTop = window.getComputedStyle(marker).top;
-                console.log(`Маркер ${index}: вычисленные стили через 100мс: left=${computedLeft}, top=${computedTop}`);
-                
-                if (computedLeft !== `${areaLeft}px` || computedTop !== `${areaTop}px`) {
-                    console.warn(`Маркер ${index}: СТИЛИ ПЕРЕОПРЕДЕЛЕНЫ! Ожидалось: left=${areaLeft}px, top=${areaTop}px, Получено: left=${computedLeft}, top=${computedTop}`);
-                    
-                    // Проверяем inline стили
-                    const inlineLeft = marker.style.left;
-                    const inlineTop = marker.style.top;
-                    console.warn(`Маркер ${index}: inline стили: left=${inlineLeft}, top=${inlineTop}`);
-                    
-                    // Проверяем CSS правила
-                    const cssRules = window.getComputedStyle(marker);
-                    console.warn(`Маркер ${index}: CSS position=${cssRules.position}, z-index=${cssRules.zIndex}`);
+            // Убеждаемся, что papera-image видима в десктопной версии
+            const paperaImage = contentWrapper.querySelector('.papera-image');
+            if (paperaImage && window.innerWidth > 700) {
+                // Не перезаписываем ширину, если она уже установлена по размеру текста
+                if (!paperaImage.style.width || paperaImage.style.width === '280px' || paperaImage.style.width === '0px') {
+                    paperaImage.style.setProperty('width', '100%', 'important');
                 }
-            }, 100);
-            
-            // Дополнительная проверка через 500мс
-            setTimeout(() => {
-                const computedLeft = window.getComputedStyle(marker).left;
-                const computedTop = window.getComputedStyle(marker).top;
-                console.log(`Маркер ${index}: вычисленные стили через 500мс: left=${computedLeft}, top=${computedTop}`);
-            }, 500);
+                paperaImage.style.setProperty('height', 'auto', 'important');
+                paperaImage.style.setProperty('object-fit', 'contain', 'important');
+                paperaImage.style.setProperty('opacity', '1', 'important');
+                paperaImage.style.setProperty('margin', '0', 'important');
+                paperaImage.style.setProperty('top', '0', 'important');
+                paperaImage.style.setProperty('z-index', '1', 'important');
+                paperaImage.style.setProperty('min-width', '100%', 'important');
+                paperaImage.style.setProperty('max-width', 'none', 'important');
+                
+                // Обновляем размеры контейнера чтобы он вмещал содержимое
+                const textElem = contentWrapper.querySelector('.tumski-text');
+                const textWidth = textElem ? textElem.offsetWidth : 280;
+                const containerWidth = textWidth + 20; // Ширина изображения + небольшой отступ
+                contentWrapper.style.setProperty('width', containerWidth + 'px', 'important');
+                contentWrapper.style.setProperty('min-width', containerWidth + 'px', 'important');
+                contentWrapper.style.setProperty('max-width', 'none', 'important');
+                contentWrapper.style.setProperty('overflow', 'visible', 'important');
             }
             
-            // Для map-mark-area элементов изменяем порядок элементов в зависимости от позиции
-            if (marker.classList.contains('map-mark-area') && !isMobile) {
-                const contentWrapper = marker.querySelector('.content-wrapper');
-                if (contentWrapper) {
-                    reorderGeoMarkerElements(contentWrapper, marker);
-                }
-            }
         } catch (error) {
-            console.error(`Ошибка позиционирования маркера ${index}:`, error);
+            console.error(`Ошибка позиционирования content-wrapper для маркера ${index}:`, error);
         }
     });
-    console.log('=== positionMarkersOnBg КОНЕЦ ===');
+    
+    console.log('=== positionContentWrapperRelativeToMapMark КОНЕЦ ===');
 }
 
 // Функция для применения трансформации зума к геометкам
@@ -800,6 +712,8 @@ if (typeof window !== 'undefined') {
     window.applyZoomTransformToMarkers = applyZoomTransformToMarkers;
     window.setupZoomTracking = setupZoomTracking;
     window.positionMarkersOnBg = positionMarkersOnBg;
+    window.positionContentWrapperRelativeToMapMark = positionContentWrapperRelativeToMapMark;
+    window.stretchPaperaToTextWidth = stretchPaperaToTextWidth;
 }
 
 // Функция для принудительного пересчета позиций при изменении размера окна
@@ -856,6 +770,8 @@ if (typeof window !== 'undefined') {
     // Экспортируем функции в глобальную область видимости
     window.moveMarkersAndCursors = moveMarkersAndCursors;
     window.positionMarkersOnBg = positionMarkersOnBg;
+    window.positionContentWrapperRelativeToMapMark = positionContentWrapperRelativeToMapMark;
+    window.stretchPaperaToTextWidth = stretchPaperaToTextWidth;
     window.setupMobileResetAnimation = setupMobileResetAnimation;
     window.setupZoomTracking = setupZoomTracking;
 } 

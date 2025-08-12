@@ -88,13 +88,14 @@ body, html {
 .content-wrapper {
     position: relative;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    background-image: url('media/papera1.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
     opacity: 0;
+    width: fit-content !important;
+    min-width: fit-content !important;
+    max-width: none !important;
+    overflow: visible !important;
 }
 
 .content-wrapper:hover {
@@ -102,22 +103,25 @@ body, html {
 }
 
 .papera-image {
-    width: 100%;
-    height: 80px;
+    width: 100% !important;
+    height: auto !important;
     object-fit: contain;
     position: relative;
     z-index: 1;
-    opacity: 0;
+    opacity: 1 !important;
     transition: opacity 0.3s ease;
+    min-width: 100% !important;
+    max-width: none !important;
 }
 
 .tumski-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100%;
-    z-index: 2;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: fit-content;
+    padding: 0 20px;
+    z-index: 2 !important;
     font-family: 'Roboto', sans-serif;
     font-weight: 200;
     font-style: italic;
@@ -129,6 +133,8 @@ body, html {
     cursor: pointer;
     text-align: center;
     pointer-events: auto;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
 }
 
 .map-mark-area:hover .map-mark,
