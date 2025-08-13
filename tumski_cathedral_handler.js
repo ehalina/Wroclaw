@@ -99,9 +99,12 @@ function updateContentWrapperSizesAfterLanguageChange() {
             const paperaImage = contentWrapper.querySelector('.papera-image');
             if (paperaImage) {
                 paperaImage.style.setProperty('width', '100%', 'important');
-                paperaImage.style.setProperty('height', 'auto', 'important');
+                paperaImage.style.setProperty('height', '100%', 'important');
                 paperaImage.style.setProperty('min-width', '100%', 'important');
+                paperaImage.style.setProperty('min-height', '100%', 'important');
                 paperaImage.style.setProperty('max-width', 'none', 'important');
+                paperaImage.style.setProperty('max-height', 'none', 'important');
+                paperaImage.style.setProperty('object-fit', 'cover', 'important');
             }
             
             console.log(`Маркер ${index}: контейнер обновлен до ${containerWidth}x${mapMarkHeight}px после смены языка`);
@@ -129,6 +132,127 @@ function forceUpdateContentWrapperSizes() {
             window.updateContentWrapperSizesAfterLanguageChange();
         }, 100);
     }
+}
+
+// Функция для создания расширенной области вокруг геометки
+function createExtendedHoverArea() {
+    console.log('Создаем расширенные области для геометок...');
+    
+    const mapMarks = document.querySelectorAll('.map-mark');
+    
+    mapMarks.forEach((mapMark, index) => {
+        try {
+            // Проверяем, есть ли уже расширенная область
+            let extendedArea = mapMark.querySelector('.extended-hover-area');
+            
+            if (!extendedArea) {
+                // Создаем расширенную область
+                extendedArea = document.createElement('div');
+                extendedArea.className = 'extended-hover-area';
+                
+                // Получаем размеры map-mark для правильного позиционирования
+                const mapMarkWidth = mapMark.offsetWidth;
+                const mapMarkHeight = mapMark.offsetHeight;
+                
+                // Вычисляем размеры расширенной области
+                const extendedSize = window.innerWidth > 700 ? 80 : 60; // Размер расширения в зависимости от устройства
+                
+                extendedArea.style.cssText = `
+                    position: absolute;
+                    top: -${extendedSize}px;
+                    left: -${extendedSize}px;
+                    width: ${mapMarkWidth + (extendedSize * 2)}px;
+                    height: ${mapMarkHeight + (extendedSize * 2)}px;
+                    background: transparent;
+                    border-radius: 50%;
+                    pointer-events: auto;
+                    z-index: 997;
+                    transition: background 0.3s ease;
+                    cursor: pointer;
+                `;
+                
+                // Добавляем в начало map-mark
+                mapMark.insertBefore(extendedArea, mapMark.firstChild);
+                
+                // Добавляем обработчики событий
+                extendedArea.addEventListener('mouseenter', () => {
+                    // Показываем геометрию при наведении на расширенную область
+                    const tumskiText = mapMark.closest('.map-mark-area')?.querySelector('.tumski-text');
+                    const paperaImage = mapMark.closest('.map-mark-area')?.querySelector('.papera-image');
+                    
+                    if (tumskiText) tumskiText.style.opacity = '1';
+                    if (paperaImage) paperaImage.style.opacity = '1';
+                    
+                    // Добавляем визуальный эффект
+                    extendedArea.style.background = 'rgba(255, 255, 255, 0.08)';
+                });
+                
+                extendedArea.addEventListener('mouseleave', () => {
+                    // Скрываем геометрию при уходе курсора
+                    const tumskiText = mapMark.closest('.map-mark-area')?.querySelector('.tumski-text');
+                    const paperaImage = mapMark.closest('.map-mark-area')?.querySelector('.papera-image');
+                    
+                    if (tumskiText) tumskiText.style.opacity = '0';
+                    if (paperaImage) paperaImage.style.opacity = '0';
+                    
+                    // Убираем визуальный эффект
+                    extendedArea.style.background = 'transparent';
+                });
+                
+                console.log(`Маркер ${index}: создана расширенная область для активации`);
+            }
+            
+        } catch (error) {
+            console.error(`Ошибка при создании расширенной области для маркера ${index}:`, error);
+        }
+    });
+    
+    console.log('Создание расширенных областей для геометок завершено');
+}
+
+// Функция для принудительного обновления расширенных областей
+function forceUpdateExtendedHoverAreas() {
+    console.log('Принудительно обновляем расширенные области для геометок...');
+    
+    // Удаляем все существующие расширенные области
+    const existingAreas = document.querySelectorAll('.extended-hover-area');
+    existingAreas.forEach(area => area.remove());
+    
+    // Создаем новые расширенные области
+    createExtendedHoverArea();
+    
+    console.log('Обновление расширенных областей завершено');
+}
+
+// Функция для обновления размеров расширенных областей
+function updateExtendedHoverAreaSizes() {
+    console.log('Обновляем размеры расширенных областей...');
+    
+    const extendedAreas = document.querySelectorAll('.extended-hover-area');
+    
+    extendedAreas.forEach((extendedArea, index) => {
+        try {
+            const mapMark = extendedArea.closest('.map-mark');
+            if (!mapMark) return;
+            
+            const mapMarkWidth = mapMark.offsetWidth;
+            const mapMarkHeight = mapMark.offsetHeight;
+            const extendedSize = window.innerWidth > 700 ? 80 : 60; // Размер расширения в зависимости от устройства
+            
+            // Обновляем размеры и позиционирование
+            extendedArea.style.top = `-${extendedSize}px`;
+            extendedArea.style.left = `-${extendedSize}px`;
+            extendedArea.style.width = `${mapMarkWidth + (extendedSize * 2)}px`;
+            extendedArea.style.height = `${mapMarkHeight + (extendedSize * 2)}px`;
+            
+            console.log(`Область ${index}: обновлены размеры до ${mapMarkWidth + (extendedSize * 2)}x${mapMarkHeight + (extendedSize * 2)}px`);
+            
+        } catch (error) {
+            console.error(`Ошибка при обновлении области ${index}:`, error);
+        }
+    });
+    
+    console.log('Обновление размеров расширенных областей завершено');
 }
 
 // Обработчик для геометки "Собор Святого Иоанна Крестителя"
@@ -309,11 +433,11 @@ export function stretchPaperaToTextWidth() {
             
             console.log(`Маркер ${index}: ширина текста: ${textWidth}px, высота map-mark: ${mapMarkHeight}px`);
             
-            // Растягиваем картинку по ширине контейнера, сохраняя пропорции
+            // Растягиваем картинку по ширине и высоте контейнера
             paperaImage.style.setProperty('width', '100%', 'important');
-            paperaImage.style.setProperty('height', 'auto', 'important');
+            paperaImage.style.setProperty('height', '100%', 'important');
             paperaImage.style.setProperty('display', 'block', 'important');
-            paperaImage.style.setProperty('object-fit', 'contain', 'important');
+            paperaImage.style.setProperty('object-fit', 'cover', 'important');
             paperaImage.style.setProperty('margin', '0', 'important');
             paperaImage.style.setProperty('position', 'relative', 'important');
             paperaImage.style.setProperty('top', '0', 'important');
@@ -321,7 +445,9 @@ export function stretchPaperaToTextWidth() {
             paperaImage.style.setProperty('flex-shrink', '0', 'important');
             paperaImage.style.setProperty('z-index', '1', 'important');
             paperaImage.style.setProperty('min-width', '100%', 'important');
+            paperaImage.style.setProperty('min-height', '100%', 'important');
             paperaImage.style.setProperty('max-width', 'none', 'important');
+            paperaImage.style.setProperty('max-height', 'none', 'important');
             
             // Обновляем размеры контейнера чтобы он вмещал содержимое
             const containerWidth = textWidth + 20; // Ширина изображения + небольшой отступ
@@ -577,6 +703,12 @@ export function positionMarkersOnBg() {
         stretchPaperaToTextWidth();
     }, 200);
     
+    // Перемещаем геометки и стрелки в зависимости от размера экрана
+    moveMarkersAndCursors();
+    
+    // Создаем расширенные области для геометок после позиционирования
+    createExtendedHoverArea();
+    
     console.log('=== positionMarkersOnBg КОНЕЦ ===');
 }
 
@@ -635,14 +767,16 @@ export function positionContentWrapperRelativeToMapMark() {
                 if (!paperaImage.style.width || paperaImage.style.width === '280px' || paperaImage.style.width === '0px') {
                     paperaImage.style.setProperty('width', '100%', 'important');
                 }
-                paperaImage.style.setProperty('height', 'auto', 'important');
-                paperaImage.style.setProperty('object-fit', 'contain', 'important');
+                paperaImage.style.setProperty('height', '100%', 'important');
+                paperaImage.style.setProperty('object-fit', 'cover', 'important');
                 paperaImage.style.setProperty('opacity', '1', 'important');
                 paperaImage.style.setProperty('margin', '0', 'important');
                 paperaImage.style.setProperty('top', '0', 'important');
                 paperaImage.style.setProperty('z-index', '1', 'important');
                 paperaImage.style.setProperty('min-width', '100%', 'important');
+                paperaImage.style.setProperty('min-height', '100%', 'important');
                 paperaImage.style.setProperty('max-width', 'none', 'important');
+                paperaImage.style.setProperty('max-height', 'none', 'important');
                 
                 // Обновляем размеры контейнера чтобы он вмещал содержимое
                 const textElem = contentWrapper.querySelector('.tumski-text');
@@ -810,6 +944,8 @@ if (typeof window !== 'undefined') {
     window.stretchPaperaToTextWidth = stretchPaperaToTextWidth;
     window.updateContentWrapperSizesAfterLanguageChange = updateContentWrapperSizesAfterLanguageChange;
     window.forceUpdateContentWrapperSizes = forceUpdateContentWrapperSizes;
+    window.forceUpdateExtendedHoverAreas = forceUpdateExtendedHoverAreas;
+    window.updateExtendedHoverAreaSizes = updateExtendedHoverAreaSizes;
 }
 
 // Добавляем обработчик изменения размера окна
@@ -820,6 +956,10 @@ window.addEventListener('resize', function() {
         if (window.updateContentWrapperSizesAfterLanguageChange) {
             console.log('Обновляем размеры контейнеров после изменения размера окна...');
             window.updateContentWrapperSizesAfterLanguageChange();
+        }
+        if (window.updateExtendedHoverAreaSizes) {
+            console.log('Обновляем размеры расширенных областей после изменения размера окна...');
+            window.updateExtendedHoverAreaSizes();
         }
     }, 250);
 });
@@ -873,8 +1013,13 @@ export function setupMobileResetAnimation() {
     });
 }
 
-// Для автоматического запуска из tumski.html
-if (typeof window !== 'undefined') {
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('tumski_cathedral_handler.js: DOM загружен, инициализируем...');
+    
+    // Создаем расширенные области для геометок
+    createExtendedHoverArea();
+    
     // Экспортируем функции в глобальную область видимости
     window.moveMarkersAndCursors = moveMarkersAndCursors;
     window.positionMarkersOnBg = positionMarkersOnBg;
@@ -882,6 +1027,6 @@ if (typeof window !== 'undefined') {
     window.stretchPaperaToTextWidth = stretchPaperaToTextWidth;
     window.setupMobileResetAnimation = setupMobileResetAnimation;
     window.setupZoomTracking = setupZoomTracking;
-} 
+});
 
 // Удаляем дублирующий блок, так как инициализация теперь происходит в HTML-файле 

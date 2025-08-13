@@ -109,6 +109,40 @@
     padding: 0 !important;
 }
 
+/* Создаем расширенную область вокруг геометки для легкой активации */
+.map-mark::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    right: -50px;
+    bottom: -50px;
+    background: transparent;
+    border-radius: 50%;
+    pointer-events: auto;
+    z-index: 997;
+    /* Добавляем невидимую границу для отладки (можно убрать) */
+    /* border: 1px solid rgba(255, 0, 0, 0.1); */
+}
+
+/* При наведении на расширенную область показываем геометрию */
+.map-mark:hover::before {
+    background: rgba(255, 255, 255, 0.05);
+    transition: background 0.3s ease;
+}
+
+/* Убеждаемся, что расширенная область позиционируется относительно map-mark */
+.map-mark {
+    position: relative !important;
+}
+
+/* Стили для JavaScript-созданных расширенных областей */
+.extended-hover-area {
+    position: absolute !important;
+    z-index: 997 !important;
+    pointer-events: auto !important;
+}
+
 /* Принудительное применение позиционирования через JS */
 .map-mark-area[style*="left"], .map-mark-area[style*="top"] {
     position: absolute !important;
@@ -157,14 +191,17 @@
     opacity: 1 !important;
     visibility: visible !important;
     width: 100% !important;
-    height: auto !important;
+    height: 100% !important;
     min-width: 100% !important;
+    min-height: 100% !important;
     margin: 0 !important;
     top: 0 !important;
     position: relative !important;
     flex-shrink: 0 !important;
     z-index: 1 !important;
     max-width: none !important;
+    max-height: none !important;
+    object-fit: cover !important;
 }
 
 /* Убираем ограничения по ширине для content-wrapper */
@@ -222,9 +259,11 @@
     .papera-image {
         display: block !important;
         width: 100% !important;
-        height: auto !important;
+        height: 100% !important;
         max-width: none !important;
+        max-height: none !important;
         min-width: 100% !important;
+        min-height: 100% !important;
         padding: 0 !important;
         margin: 0 !important;
         overflow: visible !important;
@@ -233,6 +272,7 @@
         top: 0 !important;
         position: relative !important;
         flex-shrink: 0 !important;
+        object-fit: cover !important;
     }
     
     /* В мобильной версии выравниваем текст */
@@ -253,6 +293,22 @@
         justify-content: center !important;
         height: 100% !important;
         min-height: 100% !important;
+    }
+    
+    /* В мобильной версии расширенная область меньше для удобства */
+    .map-mark::before {
+        top: -40px;
+        left: -40px;
+        right: -40px;
+        bottom: -40px;
+    }
+    
+    /* Также применяем к JavaScript-созданным областям */
+    .extended-hover-area {
+        top: -60px !important;
+        left: -60px !important;
+        right: -60px !important;
+        bottom: -60px !important;
     }
     /* Стрелки всегда видимы и активны */
     .custom-cursor,

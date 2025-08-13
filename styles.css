@@ -106,14 +106,16 @@ body, html {
 
 .papera-image {
     width: 100% !important;
-    height: auto !important;
-    object-fit: contain;
+    height: 100% !important;
+    object-fit: cover !important;
     position: relative;
     z-index: 1;
     opacity: 1 !important;
     transition: opacity 0.3s ease;
     min-width: 100% !important;
+    min-height: 100% !important;
     max-width: none !important;
+    max-height: none !important;
 }
 
 .tumski-text {
@@ -143,6 +145,33 @@ body, html {
 .map-mark-area:hover .tumski-text,
 .map-mark-area:hover .papera-image {
     opacity: 1;
+}
+
+/* Создаем расширенную область вокруг геометки для легкой активации */
+.map-mark::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    right: -50px;
+    bottom: -50px;
+    background: transparent;
+    border-radius: 50%;
+    pointer-events: auto;
+    z-index: 997;
+    /* Добавляем невидимую границу для отладки (можно убрать) */
+    /* border: 1px solid rgba(255, 0, 0, 0.1); */
+}
+
+/* При наведении на расширенную область показываем геометрию */
+.map-mark:hover::before {
+    background: rgba(255, 255, 255, 0.05);
+    transition: background 0.3s ease;
+}
+
+/* Убеждаемся, что расширенная область позиционируется относительно map-mark */
+.map-mark {
+    position: relative !important;
 }
 
 .book-overlay {
