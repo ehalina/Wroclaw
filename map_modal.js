@@ -915,6 +915,7 @@ const MapModal = {
                         <div class="book-content-area">
                             <h2 class="book-title"></h2>
                             <ul class="quest-tasks"></ul>
+                            
                             <!-- Изображение льва теперь добавляется динамически в book-content-area -->
                         </div>
                         <img src="media/book/quest_02.jpg" alt="Квест низ" class="quest-bottom-image">
@@ -1262,6 +1263,15 @@ const MapModal = {
             } else {
                 bookContentArea.appendChild(titleImage);
             }
+            
+            // Для мобильной версии меняем порядок: сначала картинка, потом заголовок
+            if (window.innerWidth <= 768) {
+                // Перемещаем заголовок после картинки
+                const bookTitle = bookContentArea.querySelector('.book-title');
+                if (bookTitle && titleImage) {
+                    titleImage.parentNode.insertBefore(bookTitle, titleImage.nextSibling);
+                }
+            }
 
             // Открываем модальное окно
             bookOverlay.style.display = 'flex';
@@ -1300,7 +1310,6 @@ const MapModal = {
                         bookContentArea.style.top = '0';
                         bookContentArea.style.left = '0';
                         bookContentArea.style.width = '100%';
-                        bookContentArea.style.height = '100%';
                         bookContentArea.style.zIndex = '2';
                         bookContentArea.style.display = 'flex';
                         bookContentArea.style.flexDirection = 'column';
@@ -1314,13 +1323,12 @@ const MapModal = {
                         bookTitle.style.left = '50%';
                         bookTitle.style.transform = 'translateX(-50%)';
                         bookTitle.style.zIndex = '10';
+                        bookTitle.style.marginTop = '40px';
                     }
                     
                     if (questTasks) {
-                        questTasks.style.position = 'absolute';
                         questTasks.style.top = window.innerWidth <= 480 ? '35%' : '40%';
                         questTasks.style.left = '50%';
-                        questTasks.style.transform = 'translateX(-50%)';
                         questTasks.style.zIndex = '10';
                         questTasks.style.maxWidth = window.innerWidth <= 480 ? '85%' : '80%';
                     }
