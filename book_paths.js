@@ -121,6 +121,8 @@ function updateModalText(zoneNumber) {
             section = 'tumski_cathedral';
         } else if (window.activeGeoMarker === 'tumski_most') {
             section = 'tumski_most';
+        } else if (window.activeGeoMarker === 'katedra_koscielna') {
+            section = 'katedra_koscielna';
         } else if (window.activeGeoMarker === 'tumski') {
             section = 'tumski';
         }
@@ -139,6 +141,8 @@ function updateModalText(zoneNumber) {
                 section = 'tumski_cathedral';
             } else if (markerId === 'tumski_most' || markerId === 'tumski_most-text') {
                 section = 'tumski_most';
+            } else if (markerId === 'katedra_koscielna' || markerId === 'katedra_koscielna-text') {
+                section = 'katedra_koscielna';
             } else if (markerId === 'tumski' || markerId === 'tumski-text') {
                 section = 'tumski';
             }

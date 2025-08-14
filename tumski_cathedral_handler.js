@@ -258,6 +258,7 @@ function updateExtendedHoverAreaSizes() {
 // Обработчик для геометки "Собор Святого Иоанна Крестителя"
 export function setupTumskiCathedralHandler() {
     const tumskiCathedralTxt = document.querySelector('#tumski-cathedral-text');
+    const katedrakoscielnaTxt = document.querySelector('#katedrakoscielna-text');
     const mapMarkCathedral = document.querySelector('#tumski_cathedral');
     const bookSound3 = document.querySelector('#bookSound3');
     const mostOverlay = document.querySelector('.most-overlay');
@@ -302,6 +303,113 @@ export function setupTumskiCathedralHandler() {
     setupCustomHandler(tumskiCathedralTxt, mapMarkCathedral, bookSound3, mostOverlay, container, mostTitle, 'tumski_cathedral');
 }
 
+// Обработчик для геометки "Соборная церковь Святого Креста и Св. Варфоломея"
+export function setupKatedraKoscielnaHandler() {
+    const katedraKoscielnaTxt = document.querySelector('#katedra-koscielna-text');
+    const mapMarkKatedraKoscielna = document.querySelector('#katedra_koscielna');
+    const bookSoundKatedraKoscielna = document.querySelector('#katedra_koscielna').parentElement.querySelector('audio');
+    const bookSound3 = document.querySelector('#bookSound3');
+    const mostOverlay = document.querySelector('.most-overlay');
+    const container = document.querySelector('.image-container');
+    const mostTitle = mostOverlay.querySelector('.most-title');
+
+    function setupCustomHandler(textElem, markElem, soundElem, overlay, container, titleElem, i18nKey) {
+        if (!textElem || !markElem) return;
+        [textElem, markElem].forEach(el => {
+            el.addEventListener('click', () => {
+                if (soundElem) soundElem.play();
+                overlay.style.display = 'flex';
+                // container.classList.add('zoom-transition'); // Зум убран для геометки
+                
+                // Обновляем оба текстовых блока (левый и правый)
+                const mostTitles = overlay.querySelectorAll('.most-title');
+                mostTitles.forEach(title => {
+                    title.textContent = window.i18n.t(i18nKey + '.title');
+                });
+                
+                // Можно добавить описание, если нужно
+
+                // Добавить запуск подсветки зон:
+                if (window.showInitialHighlight) window.showInitialHighlight();
+                
+                // Устанавливаем активную геометку
+                window.activeGeoMarker = 'katedra_koscielna';
+                
+                // Устанавливаем активную геометку
+                window.activeGeoMarker = 'katedra_koscielna';
+                
+                // Инициализируем текст для зоны 1 при открытии модального окна
+                if (typeof window.updateModalText === 'function') {
+                    setTimeout(() => {
+                        window.updateModalText(1);
+                    }, 100);
+                }
+            });
+        });
+    }
+
+    setupCustomHandler(katedraKoscielnaTxt, mapMarkKatedraKoscielna, bookSoundKatedraKoscielna, mostOverlay, container, 'katedra_koscielna');
+}
+/*
+// Специальный обработчик для геометки "Соборная церковь Святого Креста и Св. Варфоломея"
+export function setupKatedraKoscielnaHandler() {
+    const katedraKoscielnaTxt = document.querySelector('#katedra-koscielna-text');
+    const mapMarkKatedraKoscielna = document.querySelector('#katedra_koscielna');
+    const bookSoundKatedraKoscielna = document.querySelector('#katedra_koscielna').parentElement.querySelector('audio');
+    const mostOverlay = document.querySelector('.most-overlay');
+    const container = document.querySelector('.image-container');
+
+    function setupCustomHandler(textElem, markElem, soundElem, overlay, container, i18nKey) {
+        if (!textElem || !markElem) return;
+        [textElem, markElem].forEach(el => {
+            el.addEventListener('click', () => {
+                if (soundElem) {
+                    soundElem.currentTime = 0;
+                    soundElem.play();
+                }
+                overlay.style.display = 'flex';
+                
+                // Очищаем inline стили модального окна
+                if (typeof window.clearMostModalInlineStyles === 'function') {
+                    window.clearMostModalInlineStyles();
+                }
+                
+                // Обновляем оба текстовых блока (левый и правый)
+                const mostTitles = overlay.querySelectorAll('.most-title');
+                const mostDescriptions = overlay.querySelectorAll('.most-description');
+                
+                mostTitles.forEach(title => {
+                    title.textContent = window.i18n.t(i18nKey + '.title');
+                });
+                
+                mostDescriptions.forEach(description => {
+                    description.textContent = window.i18n.t(i18nKey + '.description');
+                });
+                
+                // Запускаем подсветку зон
+                if (window.showInitialHighlight) window.showInitialHighlight();
+                
+                // Устанавливаем активную геометку
+                window.activeGeoMarker = i18nKey;
+                
+                // Инициализируем текст для зоны 1 при открытии модального окна
+                if (typeof window.updateModalText === 'function') {
+                    setTimeout(() => {
+                        window.updateModalText(1);
+                    }, 100);
+                }
+                
+                // Вызываем функцию для расчета высоты зон
+                if (typeof window.adjustBookZonesHeight === 'function') {
+                    setTimeout(() => window.adjustBookZonesHeight(), 100);
+                }
+            });
+        });
+    }
+
+    setupCustomHandler(katedraKoscielnaTxt, mapMarkKatedraKoscielna, bookSoundKatedraKoscielna, mostOverlay, container, 'katedra_koscielna');
+}
+*/
 // Универсальный обработчик для геометок
 export function setupUniversalGeoMarker({ markerId, i18nKey, position }) {
     const marker = document.getElementById(markerId);
@@ -946,6 +1054,7 @@ if (typeof window !== 'undefined') {
     window.forceUpdateContentWrapperSizes = forceUpdateContentWrapperSizes;
     window.forceUpdateExtendedHoverAreas = forceUpdateExtendedHoverAreas;
     window.updateExtendedHoverAreaSizes = updateExtendedHoverAreaSizes;
+    window.setupKatedraKoscielnaHandler = setupKatedraKoscielnaHandler;
 }
 
 // Добавляем обработчик изменения размера окна
@@ -1027,6 +1136,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.stretchPaperaToTextWidth = stretchPaperaToTextWidth;
     window.setupMobileResetAnimation = setupMobileResetAnimation;
     window.setupZoomTracking = setupZoomTracking;
+    window.setupKatedraKoscielnaHandler = setupKatedraKoscielnaHandler;
 });
 
 // Удаляем дублирующий блок, так как инициализация теперь происходит в HTML-файле 

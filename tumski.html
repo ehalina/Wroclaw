@@ -25,7 +25,7 @@
     <div id="musicHint" class="music-hint" data-i18n="music.hint"></div>
     <!-- Геометка: Собор Святого Иоанна Крестителя (универсальная) -->
     <div class="map-mark-area">
-        <div class="map-mark" id="tumski_cathedral" data-x-desktop="1800" data-y-desktop="400" data-x-mobile="2270" data-y-mobile=800"></div>
+        <div class="map-mark" id="tumski_cathedral" data-x-desktop="2200" data-y-desktop="400" data-x-mobile="2270" data-y-mobile=800"></div>
         <div class="content-wrapper">
             <img class="papera-image" alt="Papera">
             <div class="tumski-text" id="tumski-cathedral-text" data-i18n="tumski_cathedral.title"></div>
@@ -41,6 +41,15 @@
         </div>
         <audio id="bookSoundMost" src="media/opening-a-book.wav"></audio>
     </div>
+        <!-- Геометка: Соборная церковь Святого Креста и Св. Варфоломея -->
+        <div class="map-mark-area" >
+            <div class="map-mark" id="katedra_koscielna" data-x-desktop="1200" data-y-desktop="600" data-x-mobile="1950" data-y-mobile="950"></div>
+            <div class="content-wrapper">
+                <img class="papera-image" alt="Papera">
+                <div class="tumski-text" id="katedra-koscielna-text" data-i18n="katedra_koscielna.title"></div>
+            </div>
+            <audio id="bookSoundMost" src="media/opening-a-book.wav"></audio>
+        </div>
     <!-- Универсальное модальное окно для геометок -->
     <div class="most-overlay">
         <button class="close-button">×</button>
@@ -96,6 +105,7 @@
             // Set papera image source dynamically
             const paperaImageMost = document.querySelector('#tumski_most').parentElement.querySelector('.papera-image');
             const paperaImageCathedral = document.querySelector('#tumski_cathedral').parentElement.querySelector('.papera-image');
+            const paperaImageKatedraKoscielna = document.querySelector('#katedra_koscielna').parentElement.querySelector('.papera-image');
 
             // 2. Подключение обработчика для геометки собора
             import('./tumski_cathedral_handler.js').then(mod => {
@@ -104,6 +114,7 @@
                     if (mod.setPaperaImageSource) {
                         mod.setPaperaImageSource(paperaImageMost);
                         mod.setPaperaImageSource(paperaImageCathedral);
+                        mod.setPaperaImageSource(paperaImageKatedraKoscielna);
                     }
                     
                     // Геометка Катедра
@@ -115,6 +126,11 @@
                     mod.setupUniversalGeoMarker({
                         markerId: 'tumski_most',
                         i18nKey: 'tumski_most'
+                    });
+                    // Геометка Соборная церковь Святого Креста и Св. Варфоломея
+                    mod.setupUniversalGeoMarker({
+                        markerId: 'katedra_koscielna',
+                        i18nKey: 'katedra_koscielna'
                     });
                     // mod.setupUniversalGeoMarker({
                     //     markerId: 'tumski',
