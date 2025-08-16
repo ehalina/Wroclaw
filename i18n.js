@@ -54,7 +54,7 @@ function updatePageContent() {
     // Обновляем все элементы с атрибутом data-i18n
     document.querySelectorAll('[data-i18n]').forEach(element => {
         const key = element.getAttribute('data-i18n');
-        element.textContent = t(key);
+                    element.innerHTML = t(key);
     });
 
     // Обновляем заголовки маркеров
@@ -93,8 +93,8 @@ function updatePageContent() {
             descriptionKey = 'tumski.description';
         }
         
-        bookTitle.textContent = t(titleKey);
-        bookText.textContent = t(descriptionKey);
+        bookTitle.innerHTML = t(titleKey);
+        bookText.innerHTML = t(descriptionKey);
     }
 
     // Обновляем активный класс у кнопок переключения языка

@@ -276,7 +276,7 @@ export function setupTumskiCathedralHandler() {
                 // Обновляем оба текстовых блока (левый и правый)
                 const mostTitles = overlay.querySelectorAll('.most-title');
                 mostTitles.forEach(title => {
-                    title.textContent = window.i18n.t(i18nKey + '.title');
+                    title.innerHTML = window.i18n.t(i18nKey + '.title');
                 });
                 
                 // Можно добавить описание, если нужно
@@ -324,7 +324,7 @@ export function setupKatedraKoscielnaHandler() {
                 // Обновляем оба текстовых блока (левый и правый)
                 const mostTitles = overlay.querySelectorAll('.most-title');
                 mostTitles.forEach(title => {
-                    title.textContent = window.i18n.t(i18nKey + '.title');
+                    title.innerHTML = window.i18n.t(i18nKey + '.title');
                 });
                 
                 // Можно добавить описание, если нужно
@@ -411,7 +411,7 @@ export function setupKatedraKoscielnaHandler() {
 }
 */
 // Универсальный обработчик для геометок
-export function setupUniversalGeoMarker({ markerId, i18nKey, position }) {
+export function setupUniversalGeoMarker({ markerId, i18nKey, position }) {ч
     const marker = document.getElementById(markerId);
     const mostOverlay = document.querySelector('.most-overlay');
     const mostTitle = mostOverlay.querySelector('.most-title');
@@ -479,11 +479,11 @@ export function setupUniversalGeoMarker({ markerId, i18nKey, position }) {
             const mostDescriptions = mostOverlay.querySelectorAll('.most-description');
             
             mostTitles.forEach(title => {
-                title.textContent = window.i18n.t(i18nKey + '.title');
+                title.innerHTML = window.i18n.t(i18nKey + '.title');
             });
             
             mostDescriptions.forEach(description => {
-                description.textContent = window.i18n.t(i18nKey + '.description');
+                description.innerHTML = window.i18n.t(i18nKey + '.description');
             });
         }
         // Добавляю запуск подсветки зон:

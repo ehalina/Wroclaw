@@ -68,8 +68,8 @@
     /* Убираем фиксированное позиционирование, чтобы JS мог управлять позицией */
     right: auto;
     bottom: auto;
-    width: 80px;
-    height: 80px;
+    width: 40%;
+    height: 20%;
 }
 
 .custom-cursor-prostoarea {
@@ -83,8 +83,8 @@
     /* Убираем фиксированное позиционирование, чтобы JS мог управлять позицией */
     right: auto;
     bottom: auto;
-    width: 80px;
-    height: 80px;
+    width: 40%;
+    height: 15%;
 }
 
 /* Позиционирование mapmark для страницы tumski */

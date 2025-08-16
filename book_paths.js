@@ -56,6 +56,11 @@ async function highlightZonesSequentially(zones, currentIndex) {
 // Экспортируем функцию для использования в HTML
 window.showInitialHighlight = function() {
     
+    // Принудительно открываем книгу на ZONE_1 при запуске подсветки
+    if (window.forceOpenBookOnZone1) {
+        window.forceOpenBookOnZone1();
+    }
+    
     // Получаем зоны в правильном порядке (1, 2, 3, 4)
     const zones = [];
     for (let i = 1; i <= 4; i++) {
@@ -185,15 +190,15 @@ function updateModalText(zoneNumber) {
             console.log('Обновляем правый текст:', bookData[rightZoneKey]);
             
             if (rightTitle) {
-                rightTitle.textContent = bookData[rightZoneKey].title || '';
-                console.log('Правый заголовок обновлен:', rightTitle.textContent);
+                rightTitle.innerHTML = bookData[rightZoneKey].title || '';
+                console.log('Правый заголовок обновлен:', rightTitle.innerHTML);
             } else {
                 console.log('Правый заголовок не найден');
             }
             
             if (rightText) {
-                rightText.textContent = bookData[rightZoneKey].text || '';
-                console.log('Правый текст обновлен:', rightText.textContent);
+                rightText.innerHTML = bookData[rightZoneKey].text || '';
+                console.log('Правый текст обновлен:', rightText.innerHTML);
             } else {
                 console.log('Правый текст не найден');
             }
@@ -212,15 +217,15 @@ function updateModalText(zoneNumber) {
             console.log('Обновляем левый текст:', bookData[leftZoneKey]);
             
             if (leftTitle) {
-                leftTitle.textContent = bookData[leftZoneKey].title || '';
-                console.log('Левый заголовок обновлен:', leftTitle.textContent);
+                leftTitle.innerHTML = bookData[leftZoneKey].title || '';
+                console.log('Левый заголовок обновлен:', leftTitle.innerHTML);
             } else {
                 console.log('Левый заголовок не найден');
             }
             
             if (leftText) {
-                leftText.textContent = bookData[leftZoneKey].text || '';
-                console.log('Левый текст обновлен:', leftText.textContent);
+                leftText.innerHTML = bookData[leftZoneKey].text || '';
+                console.log('Левый текст обновлен:', leftText.innerHTML);
             } else {
                 console.log('Левый текст не найден');
             }
@@ -230,6 +235,40 @@ function updateModalText(zoneNumber) {
     } else {
         console.log('Переводы не найдены. translations:', translations, 'section:', section);
     }
+}
+
+// Функция для принудительного открытия книги на ZONE_1 при открытии любой геометки
+function forceOpenBookOnZone1() {
+    console.log('forceOpenBookOnZone1: Принудительно открываем книгу на ZONE_1');
+    
+    // Скрываем все изображения, чтобы показать базовое изображение книги
+    const overlayImg = document.querySelector('.overlay-image');
+    const additionalImg = document.querySelector('.additional-image');
+    const book31Img = document.querySelector('.book-31-image');
+    const book32Img = document.querySelector('.book-32-image');
+    
+    if (overlayImg) overlayImg.style.display = 'none';
+    if (additionalImg) additionalImg.style.display = 'none';
+    if (book31Img) {
+        book31Img.style.display = 'none';
+        book31Img.src = window.BookPaths.BOOK_IMAGE_31;
+    }
+    if (book32Img) book32Img.style.display = 'none';
+    
+    // Обновляем видимость зон - показываем только правые зоны, левые скрываем
+    const rightZones = document.querySelector('.right-zones');
+    const leftZones = document.querySelector('.left-zones');
+    if (rightZones && leftZones) {
+        updateZonesVisibility(rightZones, leftZones, [
+            { side: 'right', numbers: [1, 2, 3, 4] }, // Справа видимы все зоны
+            { side: 'left', numbers: [] }             // Слева все скрыты
+        ]);
+    }
+    
+    // Обновляем текст для зоны 1
+    updateModalText(1);
+    
+    console.log('forceOpenBookOnZone1: Книга открыта на ZONE_1');
 }
 
 // Функция для управления видимостью зон
@@ -875,15 +914,17 @@ window.BookZonesConfig = BOOK_ZONES_CONFIG;
 window.ButtonsConfig = BUTTONS_CONFIG;
 // Экспортируем функцию обновления текста
 window.updateModalText = updateModalText;
+// Экспортируем функцию принудительного открытия на ZONE_1
+window.forceOpenBookOnZone1 = forceOpenBookOnZone1;
 
 window.BookPaths.initBookHandlers = function() {
     // Установка путей к изображениям книг
     document.querySelector('.most-image').src = window.BookPaths.BOOK_IMAGE_02;
 
-            // Инициализируем текст для зоны 1 при открытии модального окна
-        setTimeout(() => {
-            updateModalText(1);
-        }, 100);
+    // Принудительно открываем книгу на ZONE_1 при инициализации
+    setTimeout(() => {
+        forceOpenBookOnZone1();
+    }, 100);
 
     // Инициализация дополнительных изображений
     const overlayImg = document.querySelector('.overlay-image');
@@ -1014,6 +1055,29 @@ window.BookPaths.initBookHandlers = function() {
             }
         });
     });
+    
+    // Добавляем обработчик для автоматического сброса к ZONE_1 при открытии модального окна
+    if (mostOverlay) {
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+                    const display = mostOverlay.style.display;
+                    if (display === 'flex') {
+                        console.log('Модальное окно открыто, сбрасываем к ZONE_1');
+                        // Небольшая задержка для корректного отображения
+                        setTimeout(() => {
+                            forceOpenBookOnZone1();
+                        }, 50);
+                    }
+                }
+            });
+        });
+        
+        observer.observe(mostOverlay, {
+            attributes: true,
+            attributeFilter: ['style']
+        });
+    }
 
     // Скролл и индикатор
     const bookContent = document.querySelector('.book-content');
@@ -1065,6 +1129,23 @@ window.BookPaths.initBookHandlers = function() {
         zone4Left.onClick = (overlayImg, additionalImg, book31Img, book32Img, bookSound) => {
             originalOnClick4Left(overlayImg, additionalImg, book31Img, book32Img, bookSound);
             updateModalText(4);
+        };
+        
+        // Обновляем ZONE_1 в обеих секциях, чтобы они сбрасывали к базовому состоянию
+        const zone1Right = config.zones.right.ZONE_1;
+        const originalOnClick1Right = zone1Right.onClick;
+        zone1Right.onClick = (overlayImg, additionalImg, book31Img, book32Img, bookSound) => {
+            originalOnClick1Right(overlayImg, additionalImg, book31Img, book32Img, bookSound);
+            // При клике на ZONE_1 сбрасываем к базовому состоянию
+            forceOpenBookOnZone1();
+        };
+        
+        const zone1Left = config.zones.left.ZONE_1;
+        const originalOnClick1Left = zone1Left.onClick;
+        zone1Left.onClick = (overlayImg, additionalImg, book31Img, book32Img, bookSound) => {
+            originalOnClick1Left(overlayImg, additionalImg, book31Img, book32Img, bookSound);
+            // При клике на ZONE_1 сбрасываем к базовому состоянию
+            forceOpenBookOnZone1();
         };
     }
 

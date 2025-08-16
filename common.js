@@ -501,7 +501,7 @@ window.updateMapTooltipText = function() {
         if (window.i18n && typeof window.i18n.t === 'function') {
             tooltipText = window.i18n.t('map.tumski_bridge');
         }
-        mapTooltip.textContent = tooltipText;
+        mapTooltip.innerHTML = tooltipText;
     }
 };
 
@@ -538,8 +538,8 @@ function openTumskiIslandBook(bookSound, bookOverlay, container, bookContent, to
         if (window.i18n && typeof window.i18n.t === 'function') {
             const titleText = window.i18n.t('tumski.title');
             const descriptionText = window.i18n.t('tumski.description');
-            if (bookTitle) bookTitle.textContent = titleText;
-            if (bookText) bookText.textContent = descriptionText;
+                    if (bookTitle) bookTitle.innerHTML = titleText;
+        if (bookText) bookText.innerHTML = descriptionText;
             console.log('Текст установлен (остров):', {titleText, descriptionText});
         }
         Common.openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator);
@@ -566,7 +566,7 @@ function openTumskiMostOverlay(bookSound, mostOverlay, container, mostTitle) {
         // Устанавливаем заголовок из переводов
         if (window.i18n && typeof window.i18n.t === 'function') {
             const titleText = window.i18n.t('tumski_most.title');
-            if (mostTitle) mostTitle.textContent = titleText;
+            if (mostTitle) mostTitle.innerHTML = titleText;
             console.log('Текст установлен (мост):', {titleText});
         }
         Common.openMost(bookSound, mostOverlay, container, mostTitle);
