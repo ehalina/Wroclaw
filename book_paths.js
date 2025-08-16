@@ -130,6 +130,8 @@ function updateModalText(zoneNumber) {
             section = 'katedra_koscielna';
         } else if (window.activeGeoMarker === 'tumski') {
             section = 'tumski';
+        } else if (window.activeGeoMarker === 'swieta_jadwiga') {
+            section = 'swieta_jadwiga';
         }
     } else {
         // Fallback: проверяем DOM элементы
@@ -150,6 +152,8 @@ function updateModalText(zoneNumber) {
                 section = 'katedra_koscielna';
             } else if (markerId === 'tumski' || markerId === 'tumski-text') {
                 section = 'tumski';
+            } else if (markerId === 'swieta_jadwiga' || markerId === 'swieta_jadwiga-text') {
+                section = 'swieta_jadwiga';
             }
         }
     }

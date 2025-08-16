@@ -23,6 +23,24 @@
 
     <!-- Подсказка для запуска музыки -->
     <div id="musicHint" class="music-hint" data-i18n="music.hint"></div>
+    <!-- Геометка: Святая Ядвига -->
+    <div class="map-mark-area">
+        <div class="map-mark" id="swieta_jadwiga" data-x-desktop="100" data-y-desktop="500" data-x-mobile="200" data-y-mobile="500"></div>
+        <div class="content-wrapper">
+            <img class="papera-image" alt="Papera">
+            <div class="tumski-text" id="swieta-jadwiga-text" data-i18n="swieta_jadwiga.title"></div>
+        </div>
+        <audio id="bookSoundJadwiga" src="media/opening-a-book.wav"></audio>
+    </div>
+    <!-- Геометка: Тумский остров -->
+    <div class="map-mark-area">
+        <div class="map-mark" id="tumski" data-x-desktop="1500" data-y-desktop="100" data-x-mobile="1500" data-y-mobile="200"></div>
+        <div class="content-wrapper">
+            <img class="papera-image" alt="Papera">
+            <div class="tumski-text" id="tumski-text" data-i18n="tumski.title"></div>
+        </div>
+        <audio id="bookSoundTumski" src="media/opening-a-book.wav"></audio>
+    </div>
     <!-- Геометка: Собор Святого Иоанна Крестителя (универсальная) -->
     <div class="map-mark-area">
         <div class="map-mark" id="tumski_cathedral" data-x-desktop="2200" data-y-desktop="400" data-x-mobile="2270" data-y-mobile=800"></div>
@@ -103,6 +121,8 @@
             window.i18n.updatePageContent();
 
             // Set papera image source dynamically
+            const paperaImageJadwiga = document.querySelector('#swieta_jadwiga').parentElement.querySelector('.papera-image');
+            const paperaImageTumski = document.querySelector('#tumski').parentElement.querySelector('.papera-image');
             const paperaImageMost = document.querySelector('#tumski_most').parentElement.querySelector('.papera-image');
             const paperaImageCathedral = document.querySelector('#tumski_cathedral').parentElement.querySelector('.papera-image');
             const paperaImageKatedraKoscielna = document.querySelector('#katedra_koscielna').parentElement.querySelector('.papera-image');
@@ -112,11 +132,23 @@
                 if (mod && typeof mod.setupUniversalGeoMarker === 'function') {
                     // Устанавливаем источники изображений papera
                     if (mod.setPaperaImageSource) {
+                        mod.setPaperaImageSource(paperaImageJadwiga);
+                        mod.setPaperaImageSource(paperaImageTumski);
                         mod.setPaperaImageSource(paperaImageMost);
                         mod.setPaperaImageSource(paperaImageCathedral);
                         mod.setPaperaImageSource(paperaImageKatedraKoscielna);
                     }
                     
+                    // Геометка Святая Ядвига
+                    mod.setupUniversalGeoMarker({
+                        markerId: 'swieta_jadwiga',
+                        i18nKey: 'swieta_jadwiga'
+                    });
+                    // Геометка Тумский остров
+                    mod.setupUniversalGeoMarker({
+                        markerId: 'tumski',
+                        i18nKey: 'tumski'
+                    });
                     // Геометка Катедра
                     mod.setupUniversalGeoMarker({
                         markerId: 'tumski_cathedral',

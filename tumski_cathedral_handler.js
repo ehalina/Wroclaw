@@ -411,7 +411,7 @@ export function setupKatedraKoscielnaHandler() {
 }
 */
 // Универсальный обработчик для геометок
-export function setupUniversalGeoMarker({ markerId, i18nKey, position }) {ч
+export function setupUniversalGeoMarker({ markerId, i18nKey, position }) {
     const marker = document.getElementById(markerId);
     const mostOverlay = document.querySelector('.most-overlay');
     const mostTitle = mostOverlay.querySelector('.most-title');
