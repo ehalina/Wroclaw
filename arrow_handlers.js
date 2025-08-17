@@ -141,42 +141,63 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
 
     // Обработчик клика по стрелке прямо
     cursorProstoArea.addEventListener('click', function(e) {
+        console.log('🟡 Клик по стрелке прямо - обработчик из arrow_handlers.js запущен');
         e.preventDefault();
         e.stopPropagation();
 
         try {
+            console.log('🟡 Скрываем все курсоры');
             hideAllCursors();
             
             if (stepSound) {
+                console.log('🟡 Воспроизводим звук шага');
                 stepSound.currentTime = 0;
                 stepSound.play();
             }
             
             // Получаем элементы для анимации
+            console.log('🟡 Ищем элементы для анимации...');
             const imageContainer = document.querySelector('.image-container');
             const currentImage = document.querySelector('.image');
             const nextImageContainer = document.querySelector('.next-image-container');
             
+            console.log('🟡 Найденные элементы:', {
+                imageContainer: !!imageContainer,
+                currentImage: !!currentImage,
+                nextImageContainer: !!nextImageContainer
+            });
+            
             if (!imageContainer || !currentImage || !nextImageContainer) {
+                console.error('❌ Не все элементы найдены, прерываем выполнение');
                 return;
             }
 
-            // Запускаем анимацию перехода
+            console.log('🟡 Запускаем анимацию перехода (zoom-transition)');
+            // Сначала запускаем анимацию перехода
             imageContainer.style.animationPlayState = 'paused';
             imageContainer.classList.add('zoom-transition');
             
-            // Запускаем анимацию fade
+            console.log('🟡 Запускаем анимацию fade через 1000мс');
+            // Через 1000мс начинаем показывать следующее изображение
             setTimeout(() => {
-                currentImage.classList.add('fade-out');
-                nextImageContainer.classList.add('fade-in');
+                console.log('🟡 Таймер fade сработал, показываем next-image-container');
+                // Показываем следующее изображение
+                nextImageContainer.style.opacity = '1';
                 
-                // Вызываем callback для перехода на следующую страницу
+                console.log('🟡 Запускаем таймер для перехода на следующую страницу через 500мс');
+                // Еще через 500мс переходим на следующую страницу
                 setTimeout(() => {
-                    onForwardClick();
+                    console.log('🟡 Таймер сработал, вызываем onForwardClick callback');
+                    if (typeof onForwardClick === 'function') {
+                        onForwardClick();
+                    } else {
+                        console.warn('⚠️ onForwardClick не является функцией');
+                    }
                 }, 500);
             }, 1000);
+            
         } catch (error) {
-            // Ошибка при обработке клика
+            console.error('❌ Ошибка при обработке клика по стрелке прямо:', error);
         }
     });
     
@@ -192,6 +213,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
             e.stopPropagation();
             
             try {
+                console.log('🟡 Касание по стрелке прямо - обработчик из arrow_handlers.js запущен');
                 hideAllCursors();
                 
                 if (stepSound) {
@@ -204,27 +226,38 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
                 const currentImage = document.querySelector('.image');
                 const nextImageContainer = document.querySelector('.next-image-container');
                 
-                            if (!imageContainer || !currentImage || !nextImageContainer) {
-                return;
-            }
+                if (!imageContainer || !currentImage || !nextImageContainer) {
+                    console.error('❌ Не все элементы найдены, прерываем выполнение');
+                    return;
+                }
 
-                // Запускаем анимацию перехода
+                console.log('🟡 Запускаем анимацию перехода (zoom-transition)');
+                // Сначала запускаем анимацию перехода
                 imageContainer.style.animationPlayState = 'paused';
                 imageContainer.classList.add('zoom-transition');
                 
-                // Запускаем анимацию fade
+                console.log('🟡 Запускаем анимацию fade через 1000мс');
+                // Через 1000мс начинаем показывать следующее изображение
                 setTimeout(() => {
-                    currentImage.classList.add('fade-out');
-                    nextImageContainer.classList.add('fade-in');
+                    console.log('🟡 Таймер fade сработал, показываем next-image-container');
+                    // Показываем следующее изображение
+                    nextImageContainer.style.opacity = '1';
                     
-                    // Вызываем callback для перехода на следующую страницу
+                    console.log('🟡 Запускаем таймер для перехода на следующую страницу через 500мс');
+                    // Еще через 500мс переходим на следующую страницу
                     setTimeout(() => {
-                        onForwardClick();
+                        console.log('🟡 Таймер сработал, вызываем onForwardClick callback');
+                        if (typeof onForwardClick === 'function') {
+                            onForwardClick();
+                        } else {
+                            console.warn('⚠️ onForwardClick не является функцией');
+                        }
                     }, 500);
                 }, 1000);
-                    } catch (error) {
-            // Ошибка при обработке касания
-        }
+                
+            } catch (error) {
+                console.error('❌ Ошибка при обработке касания по стрелке прямо:', error);
+            }
         });
     }
 }

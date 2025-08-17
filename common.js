@@ -118,79 +118,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, nextPageCallback)
     });
 }
 
-function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, nextPageCallback) {
-    // Проверяем наличие необходимых элементов
-    if (!cursorProsto || !cursorProstoArea) {
-        return;
-    }
 
-    // Обработчик движения мыши над областью курсора
-    cursorProstoArea.addEventListener('mousemove', function(e) {
-        const rect = this.getBoundingClientRect();
-        if (e.clientX >= rect.left && e.clientX <= rect.right &&
-            e.clientY >= rect.top && e.clientY <= rect.bottom) {
-            cursorProsto.style.opacity = '1';
-            cursorProsto.style.left = e.clientX - 32 + 'px';
-            cursorProsto.style.top = e.clientY - 32 + 'px';
-        } else {
-            cursorProsto.style.opacity = '0';
-        }
-    });
-
-    // Обработчик движения мыши по всему документу
-    document.addEventListener('mousemove', function(e) {
-        const rect = cursorProstoArea.getBoundingClientRect();
-        if (!(e.clientX >= rect.left && e.clientX <= rect.right &&
-            e.clientY >= rect.top && e.clientY <= rect.bottom)) {
-            cursorProsto.style.opacity = '0';
-        }
-    });
-
-    // Скрываем курсор при уходе мыши из области
-    cursorProstoArea.addEventListener('mouseleave', function() {
-        cursorProsto.style.opacity = '0';
-    });
-
-    // Обработчик клика по стрелке прямо
-    cursorProstoArea.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        try {
-            hideAllCursors();
-            
-            if (stepSound) {
-                stepSound.currentTime = 0;
-                stepSound.play();
-            }
-            
-            // Получаем элементы для анимации
-            const imageContainer = document.querySelector('.image-container');
-            const currentImage = document.querySelector('.image');
-            const nextImageContainer = document.querySelector('.next-image-container');
-            
-            if (!imageContainer || !currentImage || !nextImageContainer) {
-                return;
-            }
-
-            // Показываем следующее изображение
-            nextImageContainer.style.opacity = '1';
-            
-            // Добавляем класс для анимации
-            imageContainer.classList.add('zoom-transition');
-            
-            // После завершения анимации переходим на следующую страницу
-            setTimeout(() => {
-                if (typeof nextPageCallback === 'function') {
-                    nextPageCallback();
-                }
-            }, 1500);
-            
-        } catch (error) {
-            // Ошибка при обработке клика по стрелке прямо
-        }
-    });
-}
 
 function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, prevPageCallback) {
     // Обработчик движения мыши над областью курсора
@@ -516,7 +444,6 @@ window.Common = {
     COMMON_ELEMENTS,
     setupResetAnimation,
     setupRightArrowHandler,
-    setupForwardArrowHandler,
     setupBackArrowHandler,
     setupUpArrowHandler,
     setupTumskiIslandHandler,

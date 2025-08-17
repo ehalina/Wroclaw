@@ -1115,7 +1115,12 @@ document.addEventListener('DOMContentLoaded', async function() {
             //  console.log('Инициализация стрелки прямо');
             setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, () => {
                 // Переход на следующую страницу
-                window.location.href = 'tumski_02.html';
+                const nextPage = cursorProsto.getAttribute('data-next-page');
+                if (nextPage) {
+                    window.location.href = nextPage;
+                } else {
+                    console.error('Не указана следующая страница в атрибуте data-next-page');
+                }
             });
         } else {
             //  console.error('Не найдены элементы для стрелки прямо');
