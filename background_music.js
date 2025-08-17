@@ -17,6 +17,7 @@ export function initBackgroundMusic() {
     const stepSound = ensureAudioElement('stepSound', 'media/step.wav');
     const mapSound = ensureAudioElement('mapSound', 'media/zwyki/bb6f2b8ec908f28.mp3');
     const musicHint = document.querySelector('#musicHint');
+    const animationHint = document.querySelector('#animationHint');
     const isMuted = localStorage.getItem('soundMuted') === 'true';
 
     // Устанавливаем громкость для всех звуков
@@ -36,6 +37,13 @@ export function initBackgroundMusic() {
                 musicHint.style.display = 'block';
                 setTimeout(() => {
                     musicHint.style.display = 'none';
+                    // После скрытия подсказки музыки показываем подсказку анимации
+                    if (animationHint) {
+                        animationHint.style.display = 'block';
+                        setTimeout(() => {
+                            animationHint.style.display = 'none';
+                        }, 6000);
+                    }
                 }, 6000);
             }
             // Пробуем воспроизвести при первом клике пользователя

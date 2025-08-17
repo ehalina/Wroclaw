@@ -119,6 +119,19 @@ document.addEventListener('DOMContentLoaded', async function() {
                 });
             }
         }
+        
+        // Добавляем обработчик для стрелки назад
+        const cursorBack = document.querySelector('.custom-cursor-back');
+        const cursorBackArea = document.querySelector('.custom-cursor-backarea');
+        
+        if (cursorBack && cursorBackArea) {
+            if (typeof window.setupBackArrowHandler === 'function') {
+                window.setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, () => {
+                    // Переход на предыдущую страницу
+                    window.location.href = 'tumski.html';
+                });
+            }
+        }
     });
 
     // 9. После всех инициализаций вызываем перенос геометок и стрелок

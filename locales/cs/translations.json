@@ -234,5 +234,8 @@
   },
   "music": {
     "hint": "Klikni kdekoli pro spuštění zvuků"
+  },
+  "animation": {
+    "hint": "Pro návrat k animaci dvakrát klikněte na volné místo na obrazovce"
   }
 } 

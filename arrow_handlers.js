@@ -256,10 +256,10 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
                 const currentImage = document.querySelector('.image');
                 const nextImageContainer = document.querySelector('.next-image-container');
                 
-                if (!imageContainer || !currentImage || !nextImageContainer) {
+                            if (!imageContainer || !currentImage || !nextImageContainer) {
                     console.error('❌ Не все элементы найдены, прерываем выполнение');
-                    return;
-                }
+                return;
+            }
 
                 console.log('🟡 Запускаем анимацию перехода (zoom-transition)');
                 // Сначала запускаем анимацию перехода
@@ -315,9 +315,9 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
                     }
                 }, 1500);
                 
-            } catch (error) {
+                    } catch (error) {
                 console.error('❌ Ошибка при обработке касания по стрелке прямо:', error);
-            }
+        }
         });
     }
 }
@@ -330,9 +330,11 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
  * @param {Function} onBackClick - Callback-функция для обработки клика
  */
 function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClick) {
+    
     // Обработчик движения мыши над областью курсора
     cursorBackArea.addEventListener('mousemove', function(e) {
         const rect = this.getBoundingClientRect();
+        
         if (e.clientX >= rect.left && e.clientX <= rect.right &&
             e.clientY >= rect.top && e.clientY <= rect.bottom) {
             cursorBack.style.opacity = '1';

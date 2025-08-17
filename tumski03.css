@@ -92,6 +92,42 @@
     height: 15%;
 }
 
+/* Стрелка назад */
+.custom-cursor-backarea {
+    position: absolute;
+    z-index: 999;
+    cursor: none;
+    /* Добавляем поддержку трансформаций для зума */
+    transform-origin: center center;
+    will-change: transform;
+    transition: transform 0.3s ease-out;
+    /* Убираем фиксированное позиционирование, чтобы JS мог управлять позицией */
+    left: auto;
+    bottom: auto;
+    width: 60%; /* Увеличиваем с 40% до 60% */
+    height: 25%; /* Увеличиваем с 15% до 25% */
+}
+
+.custom-cursor-back {
+    width: 64px;
+    height: 64px;
+    position: absolute;
+    background-image: url('media/strelka_back.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+    cursor: pointer;
+    pointer-events: auto;
+
+}
+
+.custom-cursor-backarea:hover .custom-cursor-back {
+    opacity: 1;
+}
+
 /* Позиционирование mapmark для страницы tumski */
 .map-mark-area {
     position: absolute !important;

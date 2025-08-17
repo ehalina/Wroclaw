@@ -234,5 +234,8 @@
   },
   "music": {
     "hint": "Click anywhere to start sounds"
+  },
+  "animation": {
+    "hint": "To return to animation, double-click in a free area of the screen"
   }
 } 
