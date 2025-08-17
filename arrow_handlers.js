@@ -331,8 +331,13 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
  */
 function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClick) {
     
-    // Обработчик движения мыши над областью курсора
+    // Обработчик движения мыши над областью курсора (только для десктопа)
     cursorBackArea.addEventListener('mousemove', function(e) {
+        // На мобильных устройствах отключаем mouse события
+        if (window.innerWidth <= 700) {
+            return;
+        }
+        
         const rect = this.getBoundingClientRect();
         
         if (e.clientX >= rect.left && e.clientX <= rect.right &&
@@ -345,8 +350,13 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
         }
     });
 
-    // Обработчик движения мыши по всему документу
+    // Обработчик движения мыши по всему документу (только для десктопа)
     document.addEventListener('mousemove', function(e) {
+        // На мобильных устройствах отключаем mouse события
+        if (window.innerWidth <= 700) {
+            return;
+        }
+        
         const rect = cursorBackArea.getBoundingClientRect();
         if (!(e.clientX >= rect.left && e.clientX <= rect.right &&
             e.clientY >= rect.top && e.clientY <= rect.bottom)) {
@@ -354,13 +364,37 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
         }
     });
 
-    // Скрываем курсор при уходе мыши из области
+    // Скрываем курсор при уходе мыши из области (только для десктопа)
     cursorBackArea.addEventListener('mouseleave', function() {
+        // На мобильных устройствах отключаем mouse события
+        if (window.innerWidth <= 700) {
+            return;
+        }
+        
         cursorBack.style.opacity = '0';
     });
 
-    // Обработчик клика по стрелке назад
-    cursorBackArea.addEventListener('click', function() {
+    // Обработчик клика по стрелке назад (только для десктопа)
+    cursorBackArea.addEventListener('click', function(e) {
+        // На мобильных устройствах отключаем click событие
+        if (window.innerWidth <= 700) {
+            return;
+        }
+        
+        hideAllCursors();
+        if (stepSound) {
+            stepSound.currentTime = 0;
+            stepSound.play();
+        }
+        
+        setTimeout(() => {
+            onBackClick();
+        }, 300);
+    });
+    
+    // Обработчик touch по стрелке назад (мобильные устройства)
+    cursorBack.addEventListener('touchend', function(e) {
+        e.preventDefault(); // Предотвращаем стандартное поведение
         hideAllCursors();
         if (stepSound) {
             stepSound.currentTime = 0;
