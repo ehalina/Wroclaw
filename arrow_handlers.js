@@ -177,6 +177,40 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
             imageContainer.style.animationPlayState = 'paused';
             imageContainer.classList.add('zoom-transition');
             
+            // Определяем следующую страницу и загружаем соответствующее изображение
+            const nextPage = cursorProsto.getAttribute('data-next-page');
+            console.log('🟡 Следующая страница:', nextPage);
+            
+            if (nextPage === 'tumski03.html') {
+                // Для tumski03.html загружаем соответствующее изображение
+                if (isMobile) {
+                    // В мобильной версии загружаем левую часть изображения, растянутую по высоте
+                    nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_03.jpg")';
+                    nextImageContainer.style.backgroundPosition = 'left center';
+                    nextImageContainer.style.backgroundSize = 'auto 100%';
+                    console.log('🟡 Мобильная версия: загружена левая часть tumski_03.jpg');
+                } else {
+                    // В десктопной версии загружаем полное изображение
+                    nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_03.jpg")';
+                    nextImageContainer.style.backgroundPosition = 'center center';
+                    nextImageContainer.style.backgroundSize = 'cover';
+                    console.log('🟡 Десктопная версия: загружено полное изображение tumski_03.jpg');
+                }
+            } else if (nextPage === 'tumski_02.html') {
+                // Для tumski_02.html загружаем соответствующее изображение
+                if (isMobile) {
+                    nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_02.jpg")';
+                    nextImageContainer.style.backgroundPosition = 'left center';
+                    nextImageContainer.style.backgroundSize = 'auto 100%';
+                    console.log('🟡 Мобильная версия: загружена левая часть tumski_02.jpg');
+                } else {
+                    nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_02.jpg")';
+                    nextImageContainer.style.backgroundPosition = 'center center';
+                    nextImageContainer.style.backgroundSize = 'cover';
+                    console.log('🟡 Десктопная версия: загружено полное изображение tumski_02.jpg');
+                }
+            }
+            
             console.log('🟡 Сразу начинаем плавно показывать next-image-container');
             // Сразу начинаем плавно показывать следующее изображение
             nextImageContainer.style.opacity = '1';
@@ -231,6 +265,40 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
                 // Сначала запускаем анимацию перехода
                 imageContainer.style.animationPlayState = 'paused';
                 imageContainer.classList.add('zoom-transition');
+                
+                // Определяем следующую страницу и загружаем соответствующее изображение
+                const nextPage = cursorProsto.getAttribute('data-next-page');
+                console.log('🟡 Следующая страница (touchend):', nextPage);
+                
+                if (nextPage === 'tumski03.html') {
+                    // Для tumski03.html загружаем соответствующее изображение
+                    if (isMobile) {
+                        // В мобильной версии загружаем левую часть изображения, растянутую по высоте
+                        nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_03.jpg")';
+                        nextImageContainer.style.backgroundPosition = 'left center';
+                        nextImageContainer.style.backgroundSize = 'auto 100%';
+                        console.log('🟡 Мобильная версия (touchend): загружена левая часть tumski_03.jpg');
+                    } else {
+                        // В десктопной версии загружаем полное изображение
+                        nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_03.jpg")';
+                        nextImageContainer.style.backgroundPosition = 'center center';
+                        nextImageContainer.style.backgroundSize = 'cover';
+                        console.log('🟡 Десктопная версия (touchend): загружено полное изображение tumski_03.jpg');
+                    }
+                } else if (nextPage === 'tumski_02.html') {
+                    // Для tumski_02.html загружаем соответствующее изображение
+                    if (isMobile) {
+                        nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_02.jpg")';
+                        nextImageContainer.style.backgroundPosition = 'left center';
+                        nextImageContainer.style.backgroundSize = 'auto 100%';
+                        console.log('🟡 Мобильная версия (touchend): загружена левая часть tumski_02.jpg');
+                    } else {
+                        nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_02.jpg")';
+                        nextImageContainer.style.backgroundPosition = 'center center';
+                        nextImageContainer.style.backgroundSize = 'cover';
+                        console.log('🟡 Десктопная версия (touchend): загружено полное изображение tumski_02.jpg');
+                    }
+                }
                 
                 console.log('🟡 Сразу начинаем плавно показывать next-image-container');
                 // Сразу начинаем плавно показывать следующее изображение
