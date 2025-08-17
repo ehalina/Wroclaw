@@ -19,7 +19,7 @@ async function loadTranslations(lang = 'ru') {
         
         return translations;
     } catch (error) {
-        console.error('Ошибка загрузки переводов:', error);
+        // Ошибка загрузки переводов
         return {};
     }
 }

@@ -44,7 +44,6 @@ function setupResetAnimation(container) {
 function setupRightArrowHandler(cursor, cursorArea, stepSound, nextPageCallback) {
     // Проверяем наличие необходимых элементов
     if (!cursor || !cursorArea) {
-        console.error('Элементы стрелки вправо не найдены');
         return;
     }
 
@@ -93,43 +92,28 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, nextPageCallback)
             const currentImage = document.querySelector('.image');
             const nextImageContainer = document.querySelector('.next-image-container-Right');
             
-            console.log('Элементы для анимации:', {
-                imageContainer: !!imageContainer,
-                currentImage: !!currentImage,
-                nextImageContainer: !!nextImageContainer,
-                nextImageContainerStyle: nextImageContainer ? window.getComputedStyle(nextImageContainer) : null,
-                nextImageContainerBackground: nextImageContainer ? window.getComputedStyle(nextImageContainer).backgroundImage : null
-            });
+
 
             if (!imageContainer || !currentImage || !nextImageContainer) {
-                console.error('Не все элементы для анимации найдены');
                 return;
             }
 
             // Показываем следующее изображение
             nextImageContainer.style.opacity = '1';
-            console.log('Установлена opacity = 1 для nextImageContainer');
             
             // Запускаем анимацию перехода
             imageContainer.style.animationPlayState = 'paused';
             imageContainer.classList.add('zoom-transition-Right');
-            console.log('Добавлен класс zoom-transition-Right');
             
             // После завершения анимации переходим на следующую страницу
             setTimeout(() => {
-                console.log('Текущее состояние элементов:', {
-                    imageContainerClass: imageContainer.className,
-                    nextImageContainerOpacity: window.getComputedStyle(nextImageContainer).opacity,
-                    nextImageContainerVisibility: window.getComputedStyle(nextImageContainer).visibility
-                });
-                
                 if (typeof nextPageCallback === 'function') {
                     nextPageCallback();
                 }
             }, 1500);
             
         } catch (error) {
-            console.error('Ошибка при обработке клика:', error);
+            // Ошибка при обработке клика
         }
     });
 }
@@ -137,7 +121,6 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, nextPageCallback)
 function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, nextPageCallback) {
     // Проверяем наличие необходимых элементов
     if (!cursorProsto || !cursorProstoArea) {
-        console.error('Элементы стрелки прямо не найдены');
         return;
     }
 
@@ -187,7 +170,6 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, nex
             const nextImageContainer = document.querySelector('.next-image-container');
             
             if (!imageContainer || !currentImage || !nextImageContainer) {
-                console.error('Не все элементы для анимации найдены');
                 return;
             }
 
@@ -205,7 +187,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, nex
             }, 1500);
             
         } catch (error) {
-            console.error('Ошибка при обработке клика по стрелке прямо:', error);
+            // Ошибка при обработке клика по стрелке прямо
         }
     });
 }
@@ -257,44 +239,24 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, prevPageCa
 function setupUpArrowHandler(cursor, cursorArea, stepSound, nextPageCallback) {
     // Проверяем наличие необходимых элементов
     if (!cursor || !cursorArea) {
-        console.error('Элементы стрелки вверх не найдены');
         return;
     }
 
-    console.log('Инициализация обработчика стрелки вверх:', {
-        cursor: cursor,
-        cursorArea: cursorArea
-    });
-
     // Обработчик движения мыши над областью курсора
-    cursorArea.addEventListener('mousemove', function(e) {
-        const rect = this.getBoundingClientRect();
-        console.log('Движение мыши в области стрелки вверх:', {
-            mouseX: e.clientX,
-            mouseY: e.clientY,
-            rectLeft: rect.left,
-            rectRight: rect.right,
-            rectTop: rect.top,
-            rectBottom: rect.bottom
-        });
+            cursorArea.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
 
-        if (e.clientX >= rect.left && e.clientX <= rect.right &&
-            e.clientY >= rect.top && e.clientY <= rect.bottom) {
-            cursor.style.opacity = '1';
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            console.log('Стрелка вверх показана:', {
-                left: cursor.style.left,
-                top: cursor.style.top,
-                opacity: cursor.style.opacity
-            });
-        }
-    });
+            if (e.clientX >= rect.left && e.clientX <= rect.right &&
+                e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                cursor.style.opacity = '1';
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            }
+        });
 
     // Скрываем курсор при уходе мыши из области
     cursorArea.addEventListener('mouseleave', function() {
         cursor.style.opacity = '0';
-        console.log('Курсор скрыт при выходе из области');
     });
 
     // Обработчик клика
@@ -304,7 +266,6 @@ function setupUpArrowHandler(cursor, cursorArea, stepSound, nextPageCallback) {
     function handleClick(e) {
         e.preventDefault();
         e.stopPropagation();
-        console.log('Клик по стрелке вверх');
 
         try {
             hideAllCursors();
@@ -319,14 +280,7 @@ function setupUpArrowHandler(cursor, cursorArea, stepSound, nextPageCallback) {
             const currentImage = document.querySelector('.image');
             const nextImageContainer = document.querySelector('.next-image-container-Up');
             
-            console.log('Элементы для анимации вверх:', {
-                imageContainer: !!imageContainer,
-                currentImage: !!currentImage,
-                nextImageContainer: !!nextImageContainer
-            });
-
             if (!imageContainer || !currentImage || !nextImageContainer) {
-                console.error('Не все элементы для анимации вверх найдены');
                 return;
             }
 
@@ -345,30 +299,19 @@ function setupUpArrowHandler(cursor, cursorArea, stepSound, nextPageCallback) {
             }, 1500);
             
         } catch (error) {
-            console.error('Ошибка при обработке клика:', error);
+            // Ошибка при обработке клика
         }
     }
 }
 
 // Общие функции для работы с книгой
 function openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator) {
-    console.log('openBook вызван, src:', bookOverlay.querySelector('.book-image')?.src);
-    console.log('Функция openBook вызвана');
-    console.log('Параметры:', {
-        bookSound: !!bookSound,
-        bookOverlay: !!bookOverlay,
-        container: !!container,
-        bookContent: !!bookContent,
-        toggleScrollIndicator: !!toggleScrollIndicator
-    });
     
     if (window.playMapSound) window.playMapSound();
     bookOverlay.style.display = 'flex';
     container.style.animationPlayState = 'paused';
     bookContent.scrollTop = 0;
     setTimeout(toggleScrollIndicator, 100);
-    
-    console.log('Книга открыта, display установлен в flex');
 }
 
 function openMost(bookSound, mostOverlay, container, mostTitle) {
@@ -524,7 +467,6 @@ function setupTumskiIslandHandler(tumskiText, tumskiMark, bookSound, bookOverlay
 
 // Функция для открытия книги "Тумский остров"
 function openTumskiIslandBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator) {
-    console.log('Открытие Тумский остров', {bookOverlay, bookSound});
     if (!bookOverlay.style.display || bookOverlay.style.display === 'none') {
         const bookTitle = bookOverlay.querySelector('.book-title');
         const bookText = bookOverlay.querySelector('.book-text');
@@ -532,7 +474,6 @@ function openTumskiIslandBook(bookSound, bookOverlay, container, bookContent, to
         // Устанавливаем изображение книги
         if (bookImage) {
             bookImage.src = 'media/book/book.jpg';
-            console.log('bookImage.src установлен (остров):', bookImage.src);
         }
         // Устанавливаем заголовок и текст из переводов
         if (window.i18n && typeof window.i18n.t === 'function') {
@@ -540,7 +481,6 @@ function openTumskiIslandBook(bookSound, bookOverlay, container, bookContent, to
             const descriptionText = window.i18n.t('tumski.description');
                     if (bookTitle) bookTitle.innerHTML = titleText;
         if (bookText) bookText.innerHTML = descriptionText;
-            console.log('Текст установлен (остров):', {titleText, descriptionText});
         }
         Common.openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator);
     }
@@ -561,13 +501,11 @@ function setupTumskiMostHandler(tumskiMostText, tumskiMostMark, bookSound, mostO
 }
 
 function openTumskiMostOverlay(bookSound, mostOverlay, container, mostTitle) {
-    console.log('Открытие Тумский мост', {mostOverlay, bookSound});
     if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
         // Устанавливаем заголовок из переводов
         if (window.i18n && typeof window.i18n.t === 'function') {
             const titleText = window.i18n.t('tumski_most.title');
             if (mostTitle) mostTitle.innerHTML = titleText;
-            console.log('Текст установлен (мост):', {titleText});
         }
         Common.openMost(bookSound, mostOverlay, container, mostTitle);
     }

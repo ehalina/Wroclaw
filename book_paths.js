@@ -85,8 +85,8 @@ window.showInitialHighlight = function() {
 
 // Функция для обновления текста в модальном окне
 function updateModalText(zoneNumber) {
-    console.log('updateModalText вызвана с зоной:', zoneNumber);
-    console.log('Стек вызовов:', new Error().stack);
+    // console.log('updateModalText вызвана с зоной:', zoneNumber);
+    // console.log('Стек вызовов:', new Error().stack);
     
     let rightTextBlock = document.querySelector('.most-text-block-right');
     let leftTextBlock = document.querySelector('.most-text-block-left');
@@ -103,14 +103,14 @@ function updateModalText(zoneNumber) {
     }
     
     if (!rightTextBlock || !leftTextBlock) {
-        console.log('Текстовые блоки не найдены');
-        console.log('rightTextBlock:', rightTextBlock);
-        console.log('leftTextBlock:', leftTextBlock);
+        // console.log('Текстовые блоки не найдены');
+        // console.log('rightTextBlock:', rightTextBlock);
+        // console.log('leftTextBlock:', leftTextBlock);
         return;
     }
     
-    console.log('Структура правого блока:', rightTextBlock.innerHTML);
-    console.log('Структура левого блока:', leftTextBlock.innerHTML);
+    // console.log('Структура правого блока:', rightTextBlock.innerHTML);
+    // console.log('Структура левого блока:', leftTextBlock.innerHTML);
     
     // Получаем текущий язык
     const currentLang = window.currentLanguage || 'ru';
@@ -120,7 +120,7 @@ function updateModalText(zoneNumber) {
     
     // Используем глобальную переменную для определения активной геометки
     if (window.activeGeoMarker) {
-        console.log('Активная геометка из глобальной переменной:', window.activeGeoMarker);
+        // console.log('Активная геометка из глобальной переменной:', window.activeGeoMarker);
         
         if (window.activeGeoMarker === 'tumski_cathedral') {
             section = 'tumski_cathedral';
@@ -142,7 +142,7 @@ function updateModalText(zoneNumber) {
         
         if (activeMarker) {
             const markerId = activeMarker.id || activeMarker.getAttribute('data-marker-id');
-            console.log('Активная геометка из DOM:', markerId);
+            // console.log('Активная геометка из DOM:', markerId);
             
             if (markerId === 'tumski_cathedral' || markerId === 'tumski_cathedral-text') {
                 section = 'tumski_cathedral';
@@ -158,7 +158,7 @@ function updateModalText(zoneNumber) {
         }
     }
     
-    console.log('Используется секция переводов:', section);
+    // console.log('Используется секция переводов:', section);
     
     // Получаем переводы
     let translations = null;
@@ -181,69 +181,69 @@ function updateModalText(zoneNumber) {
     
     if (translations && translations[section] && translations[section].book02) {
         const bookData = translations[section].book02;
-        console.log('Найдены переводы для секции:', section, 'bookData:', bookData);
+        // console.log('Найдены переводы для секции:', section, 'bookData:', bookData);
         
         // Обновляем правый текст
         const rightZoneKey = `zone${zoneNumber}`;
-        console.log('Ищем правый ключ:', rightZoneKey);
+        // console.log('Ищем правый ключ:', rightZoneKey);
         if (bookData[rightZoneKey]) {
             const rightTitle = rightTextBlock.querySelector('.most-title');
             const rightText = rightTextBlock.querySelector('.most-description');
             
-            console.log('Элементы правого блока:', { rightTitle, rightText });
-            console.log('Обновляем правый текст:', bookData[rightZoneKey]);
+            // console.log('Элементы правого блока:', { rightTitle, rightText });
+            // console.log('Обновляем правый текст:', bookData[rightZoneKey]);
             
             if (rightTitle) {
                 rightTitle.innerHTML = bookData[rightZoneKey].title || '';
-                console.log('Правый заголовок обновлен:', rightTitle.innerHTML);
+                // console.log('Правый заголовок обновлен:', rightTitle.innerHTML);
             } else {
-                console.log('Правый заголовок не найден');
+                // console.log('Правый заголовок не найден');
             }
             
             if (rightText) {
                 rightText.innerHTML = bookData[rightZoneKey].text || '';
-                console.log('Правый текст обновлен:', rightText.innerHTML);
+                // console.log('Правый текст обновлен:', rightText.innerHTML);
             } else {
-                console.log('Правый текст не найден');
+                // console.log('Правый текст не найден');
             }
         } else {
-            console.log('Правый ключ не найден:', rightZoneKey);
+            // console.log('Правый ключ не найден:', rightZoneKey);
         }
         
         // Обновляем левый текст
         const leftZoneKey = `zone${zoneNumber}-2`;
-        console.log('Ищем левый ключ:', leftZoneKey);
+        // console.log('Ищем левый ключ:', leftZoneKey);
         if (bookData[leftZoneKey]) {
             const leftTitle = leftTextBlock.querySelector('.most-title');
             const leftText = leftTextBlock.querySelector('.most-description');
             
-            console.log('Элементы левого блока:', { leftTitle, leftText });
-            console.log('Обновляем левый текст:', bookData[leftZoneKey]);
+            // console.log('Элементы левого блока:', { leftTitle, leftText });
+            // console.log('Обновляем левый текст:', bookData[leftZoneKey]);
             
             if (leftTitle) {
                 leftTitle.innerHTML = bookData[leftZoneKey].title || '';
-                console.log('Левый заголовок обновлен:', leftTitle.innerHTML);
+                // console.log('Левый заголовок обновлен:', leftTitle.innerHTML);
             } else {
-                console.log('Левый заголовок не найден');
+                // console.log('Левый заголовок не найден');
             }
             
             if (leftText) {
                 leftText.innerHTML = bookData[leftZoneKey].text || '';
-                console.log('Левый текст обновлен:', leftText.innerHTML);
+                // console.log('Левый текст обновлен:', leftText.innerHTML);
             } else {
-                console.log('Левый текст не найден');
+                // console.log('Левый текст не найден');
             }
         } else {
-            console.log('Левый ключ не найден:', leftZoneKey);
+            // console.log('Левый ключ не найден:', leftZoneKey);
         }
     } else {
-        console.log('Переводы не найдены. translations:', translations, 'section:', section);
+        // console.log('Переводы не найдены. translations:', translations, 'section:', section);
     }
 }
 
 // Функция для принудительного открытия книги на ZONE_1 при открытии любой геометки
 function forceOpenBookOnZone1() {
-    console.log('forceOpenBookOnZone1: Принудительно открываем книгу на ZONE_1');
+    // console.log('forceOpenBookOnZone1: Принудительно открываем книгу на ZONE_1');
     
     // Скрываем все изображения, чтобы показать базовое изображение книги
     const overlayImg = document.querySelector('.overlay-image');
@@ -272,7 +272,7 @@ function forceOpenBookOnZone1() {
     // Обновляем текст для зоны 1
     updateModalText(1);
     
-    console.log('forceOpenBookOnZone1: Книга открыта на ZONE_1');
+    // console.log('forceOpenBookOnZone1: Книга открыта на ZONE_1');
 }
 
 // Функция для управления видимостью зон
@@ -1067,7 +1067,7 @@ window.BookPaths.initBookHandlers = function() {
                 if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
                     const display = mostOverlay.style.display;
                     if (display === 'flex') {
-                        console.log('Модальное окно открыто, сбрасываем к ZONE_1');
+                        // console.log('Модальное окно открыто, сбрасываем к ZONE_1');
                         // Небольшая задержка для корректного отображения
                         setTimeout(() => {
                             forceOpenBookOnZone1();
@@ -1092,14 +1092,14 @@ window.BookPaths.initBookHandlers = function() {
 
     // Функция для обновления всех зон с вызовом updateModalText
     function updateAllZonesWithText() {
-        console.log('updateAllZonesWithText вызвана');
+        // console.log('updateAllZonesWithText вызвана');
         // Обновляем ZONE_3 в секции right
         const zone3Right = config.zones.right.ZONE_3;
         const originalOnClick3 = zone3Right.onClick;
         zone3Right.onClick = (overlayImg, additionalImg, book31Img, book32Img, bookSound) => {
-            console.log('ZONE_3 onClick вызван');
+            // console.log('ZONE_3 onClick вызван');
             originalOnClick3(overlayImg, additionalImg, book31Img, book32Img, bookSound);
-            console.log('Вызываем updateModalText(3)');
+            // console.log('Вызываем updateModalText(3)');
             updateModalText(3);
         };
 

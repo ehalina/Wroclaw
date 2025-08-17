@@ -55,8 +55,6 @@ function reorderGeoMarkerElements(contentWrapper, marker) {
 
 // Функция для обновления размеров контейнеров после смены языка
 function updateContentWrapperSizesAfterLanguageChange() {
-    console.log('Обновляем размеры контейнеров после смены языка...');
-    
     // Находим все map-mark-area
     const mapMarkAreas = document.querySelectorAll('.map-mark-area');
     
@@ -67,21 +65,17 @@ function updateContentWrapperSizesAfterLanguageChange() {
             const contentWrapper = mapMarkArea.querySelector('.content-wrapper');
             
             if (!mapMark || !contentWrapper) {
-                console.log(`Маркер ${index}: map-mark или content-wrapper не найден`);
                 return;
             }
             
             // Получаем новый размер текста после смены языка
             const textElem = contentWrapper.querySelector('.tumski-text');
             if (!textElem) {
-                console.log(`Маркер ${index}: tumski-text не найден`);
                 return;
             }
             
             const newTextWidth = textElem.offsetWidth;
             const mapMarkHeight = mapMark.clientHeight;
-            
-            console.log(`Маркер ${index}: новый размер текста: ${newTextWidth}px, высота map-mark: ${mapMarkHeight}px`);
             
             // Обновляем размеры контейнера под новый текст
             const containerWidth = newTextWidth + 20; // Ширина текста + небольшой отступ
@@ -107,20 +101,14 @@ function updateContentWrapperSizesAfterLanguageChange() {
                 paperaImage.style.setProperty('object-fit', 'cover', 'important');
             }
             
-            console.log(`Маркер ${index}: контейнер обновлен до ${containerWidth}x${mapMarkHeight}px после смены языка`);
-            
         } catch (error) {
-            console.error(`Ошибка при обновлении маркера ${index}:`, error);
+            // Ошибка при обновлении маркера
         }
     });
-    
-    console.log('Обновление размеров контейнеров после смены языка завершено');
 }
 
 // Функция для принудительного обновления размеров контейнеров
 function forceUpdateContentWrapperSizes() {
-    console.log('Принудительно обновляем размеры контейнеров...');
-    
     // Сначала обновляем позиции маркеров
     if (window.positionMarkersOnBg) {
         window.positionMarkersOnBg();
@@ -136,8 +124,6 @@ function forceUpdateContentWrapperSizes() {
 
 // Функция для создания расширенной области вокруг геометки
 function createExtendedHoverArea() {
-    console.log('Создаем расширенные области для геометок...');
-    
     const mapMarks = document.querySelectorAll('.map-mark');
     
     mapMarks.forEach((mapMark, index) => {
@@ -198,36 +184,26 @@ function createExtendedHoverArea() {
                     // Убираем визуальный эффект
                     extendedArea.style.background = 'transparent';
                 });
-                
-                console.log(`Маркер ${index}: создана расширенная область для активации`);
             }
             
         } catch (error) {
-            console.error(`Ошибка при создании расширенной области для маркера ${index}:`, error);
+            // Ошибка при создании расширенной области для маркера
         }
     });
-    
-    console.log('Создание расширенных областей для геометок завершено');
 }
 
 // Функция для принудительного обновления расширенных областей
 function forceUpdateExtendedHoverAreas() {
-    console.log('Принудительно обновляем расширенные области для геометок...');
-    
     // Удаляем все существующие расширенные области
     const existingAreas = document.querySelectorAll('.extended-hover-area');
     existingAreas.forEach(area => area.remove());
     
     // Создаем новые расширенные области
     createExtendedHoverArea();
-    
-    console.log('Обновление расширенных областей завершено');
 }
 
 // Функция для обновления размеров расширенных областей
 function updateExtendedHoverAreaSizes() {
-    console.log('Обновляем размеры расширенных областей...');
-    
     const extendedAreas = document.querySelectorAll('.extended-hover-area');
     
     extendedAreas.forEach((extendedArea, index) => {
@@ -245,14 +221,10 @@ function updateExtendedHoverAreaSizes() {
             extendedArea.style.width = `${mapMarkWidth + (extendedSize * 2)}px`;
             extendedArea.style.height = `${mapMarkHeight + (extendedSize * 2)}px`;
             
-            console.log(`Область ${index}: обновлены размеры до ${mapMarkWidth + (extendedSize * 2)}x${mapMarkHeight + (extendedSize * 2)}px`);
-            
         } catch (error) {
-            console.error(`Ошибка при обновлении области ${index}:`, error);
+            // Ошибка при обновлении области
         }
     });
-    
-    console.log('Обновление размеров расширенных областей завершено');
 }
 
 // Обработчик для геометки "Собор Святого Иоанна Крестителя"
@@ -307,7 +279,7 @@ export function setupTumskiCathedralHandler() {
 export function setupKatedraKoscielnaHandler() {
     const katedraKoscielnaTxt = document.querySelector('#katedra-koscielna-text');
     const mapMarkKatedraKoscielna = document.querySelector('#katedra_koscielna');
-    const bookSoundKatedraKoscielna = document.querySelector('#katedra_koscielna').parentElement.querySelector('audio');
+    const bookSoundKatedraKoscielna = document.querySelector('#bookSoundKoscielna');
     const bookSound3 = document.querySelector('#bookSound3');
     const mostOverlay = document.querySelector('.most-overlay');
     const container = document.querySelector('.image-container');
@@ -348,7 +320,7 @@ export function setupKatedraKoscielnaHandler() {
         });
     }
 
-    setupCustomHandler(katedraKoscielnaTxt, mapMarkKatedraKoscielna, bookSoundKatedraKoscielna, mostOverlay, container, 'katedra_koscielna');
+    setupCustomHandler(katedraKoscielnaTxt, mapMarkKatedraKoscielna, bookSoundKatedraKoscielna, mostOverlay, container, mostTitle, 'katedra_koscielna');
 }
 /*
 // Специальный обработчик для геометки "Соборная церковь Святого Креста и Св. Варфоломея"
@@ -519,8 +491,6 @@ export function setPaperaImageSource(element) {
 
 // Функция для растягивания картинки papera по размеру текста
 export function stretchPaperaToTextWidth() {
-    console.log('=== stretchPaperaToTextWidth НАЧАЛО ===');
-    
     const mapMarkAreas = document.querySelectorAll('.map-mark-area');
     
     mapMarkAreas.forEach((mapMarkArea, index) => {
@@ -530,7 +500,6 @@ export function stretchPaperaToTextWidth() {
             const textElem = contentWrapper?.querySelector('.tumski-text');
             
             if (!paperaImage || !textElem) {
-                console.log(`Маркер ${index}: papera-image или tumski-text не найден`);
                 return;
             }
             
@@ -538,8 +507,6 @@ export function stretchPaperaToTextWidth() {
             const textWidth = textElem.offsetWidth;
             const mapMark = mapMarkArea.querySelector('.map-mark');
             const mapMarkHeight = mapMark ? mapMark.offsetHeight : 80; // fallback к 80px если map-mark не найден
-            
-            console.log(`Маркер ${index}: ширина текста: ${textWidth}px, высота map-mark: ${mapMarkHeight}px`);
             
             // Растягиваем картинку по ширине и высоте контейнера
             paperaImage.style.setProperty('width', '100%', 'important');
@@ -570,17 +537,12 @@ export function stretchPaperaToTextWidth() {
                 const mapMarkHeight = mapMarkElement.clientHeight;
                 contentWrapper.style.setProperty('height', mapMarkHeight + 'px', 'important');
                 contentWrapper.style.setProperty('min-height', mapMarkHeight + 'px', 'important');
-                console.log(`Маркер ${index}: content-wrapper установлена высота ${mapMarkHeight}px (равна map-mark)`);
             }
             
-            console.log(`Маркер ${index}: papera-image растянута до 100% ширины контейнера, контейнер расширен до ${containerWidth}px`);
-            
         } catch (error) {
-            console.error(`Ошибка растягивания papera для маркера ${index}:`, error);
+            // Ошибка растягивания papera для маркера
         }
     });
-    
-    console.log('=== stretchPaperaToTextWidth КОНЕЦ ===');
 } 
 
 // Функция для перемещения геометок и стрелок внутрь .image на мобильных и обратно на десктопе
@@ -607,26 +569,18 @@ export function moveMarkersAndCursors() {
 
 // Универсальная функция для позиционирования геометок и стрелок по координатам картинки
 export function positionMarkersOnBg() {
-    console.log('=== positionMarkersOnBg НАЧАЛО ===');
-    console.log('positionMarkersOnBg вызвана, размер окна:', window.innerWidth, 'x', window.innerHeight);
-    
     const imageBlock = document.querySelector('.image');
-    console.log('Размеры контейнера YYY:', imageBlock.clientWidth, 'x', imageBlock.clientHeight);
-
     const imageContainer = document.querySelector('.image-container');
     if (!imageBlock || !imageContainer) {
-        console.log('Не найдены imageBlock или imageContainer');
         return;
     }
     
     // Проверяем, что изображение загружено
     const computedStyle = window.getComputedStyle(imageBlock);
     const backgroundImage = computedStyle.backgroundImage;
-    //console.log('Фоновое изображение:', backgroundImage);
     
     // Если изображение еще не загружено, ждем немного и повторяем
     if (backgroundImage === 'none' || backgroundImage === '') {
-        console.log('Изображение еще не загружено, повторяем через 100мс');
         setTimeout(() => {
             positionMarkersOnBg();
         }, 100);
@@ -635,24 +589,12 @@ export function positionMarkersOnBg() {
     
     // Определяем, мобильная ли версия
     const isMobile = window.innerWidth <= 700;
-    //console.log('isMobile:', isMobile, 'Размеры контейнера:', imageContainer.clientWidth, 'x', imageContainer.clientHeight);
 
     // Геометки и стрелки должны иметь data-x-desktop/data-y-desktop или data-x-mobile/data-y-mobile
     const markers = document.querySelectorAll('[data-x-desktop][data-y-desktop], [data-x-mobile][data-y-mobile]');
-    //console.log('Найдено маркеров:', markers.length);
     
     markers.forEach((marker, index) => {
         try {
-            /*
-            console.log(`=== Обработка маркера ${index} ===`);
-                        
-            // Выводим информацию о маркере для отладки
-            console.log(`Маркер ${index}:`, {
-                className: marker.className,
-                id: marker.id,
-                tagName: marker.tagName
-            });
-            */
             // Выбираем координаты в зависимости от размера экрана
             let x, y;
             if (isMobile) {
@@ -675,23 +617,19 @@ export function positionMarkersOnBg() {
                 marker.style.setProperty('left', left + 'px', 'important');
                 marker.style.setProperty('top', top + 'px', 'important');
             } else {
-                console.log('НОВЫЙ МАРКЕР:', index);
                 // Для десктопа: улучшенная логика позиционирования
                 // 1. Получаем элемент .image
                 const imageElement = document.querySelector('.image');
                 if (!imageElement) {
-                    console.log('Элемент .image не найден');
                     return;
                 }
                 
                 // Получаем фоновое изображение
                 const computedStyle = window.getComputedStyle(imageElement);
                 const backgroundImage = computedStyle.backgroundImage;
-                console.log('Фоновое изображение:', backgroundImage);
                 
                 // Проверяем, что фоновое изображение загружено
                 if (backgroundImage === 'none' || backgroundImage === '') {
-                    console.log('Фоновое изображение еще не загружено');
                     return;
                 }
                 
@@ -704,45 +642,25 @@ export function positionMarkersOnBg() {
                 const originalHeight = 1824;
                 const originalX = parseFloat(marker.dataset.xDesktop);
                 const originalY = parseFloat(marker.dataset.yDesktop);
-                //const originalX = parseFloat(marker.getBoundingClientRect().left.toFixed(2));
-                //const originalY = parseFloat(marker.getBoundingClientRect().top.toFixed(2));
-                
-                console.log('Позиция Маркера {index} QQQ:', originalX, 'x', originalY);
-
-                console.log('Размеры контейнера XXX:', containerWidth, 'x', containerHeight);
-                console.log(`Маркер ${index}: исходные координаты: x=${originalX}, y=${originalY}`);
-                //console.log(`Маркер ${index}: размеры контейнера: ${containerWidth}x${containerHeight}`);
                 
                 // 4. Вычисляем масштаб для background-size: contain
-                //const scaleX = containerWidth / originalWidth;
-                //const scaleY = containerHeight / originalHeight;
                 const scale = containerHeight / originalHeight;
                 
                 // 5. Реальные размеры отображаемой картинки
                 const realImageWidth = originalWidth * scale;
                 const realImageHeight = originalHeight * scale;
                 
-                console.log(`Маркер ${index}: масштаб scale: ${scale}`);
-                //console.log(`Маркер ${index}:  масштаб: ${scale.toFixed(4)}, реальные размеры картинки: ${realImageWidth.toFixed(2)}x${realImageHeight.toFixed(2)}`);
-                
                 // 6. Вычисляем координаты геометки для реального размера изображения
                 const scaledX = originalX * scale;
                 const scaledY = originalY * scale;
-                
-                console.log(`Маркер ZZZ ${index}: координаты для реального размера: x=${scaledX.toFixed(2)}, y=${scaledY.toFixed(2)}`);
-                if (index == 2) {
-                    const b = true;
-                }
 
                 // 7. Вычисляем отступ от левого края до картинки (улучшенная логика)
                 const imageLeftOffset = (containerWidth - realImageWidth) / 2;
                 const imageTopOffset = (containerHeight - realImageHeight) / 2;
                 
-                //console.log(`Маркер ${index}: отступы картинки: left=${imageLeftOffset.toFixed(2)}, top=${imageTopOffset.toFixed(2)}`);
-                
                 // 8. Проверяем, что отступы корректны
                 if (imageLeftOffset < 0 || imageTopOffset < 0) {
-                    console.warn(`Маркер ${index}: Отрицательные отступы! left=${imageLeftOffset}, top=${imageTopOffset}`);
+                    // Отрицательные отступы
                 }
                 
                 // 9. Финальные координаты геометки
@@ -752,39 +670,6 @@ export function positionMarkersOnBg() {
                 marker.style.setProperty('position', 'absolute', 'important');
                 marker.style.setProperty('left', Math.max(0, finalX) + 'px', 'important');
                 marker.style.setProperty('top', Math.max(0, finalY) + 'px', 'important');
-
-
-                console.log(`Маркер ${index}: финальные координаты: x=${finalX.toFixed(2)}, y=${finalY.toFixed(2)}`);
-
-                /*                
-                // 10. Проверяем, что координаты находятся в пределах контейнера
-                if (finalX < 0 || finalX > containerWidth || finalY < 0 || finalY > containerHeight) {
-                    console.warn(`Маркер ${index}: Координаты вне контейнера! x=${finalX}, y=${finalY}, контейнер: ${containerWidth}x${containerHeight}`);
-                }
-                
-                // 11. Находим сам маркер внутри блока
-                const markerElement = marker.querySelector('.map-mark') || marker;
-                
-                // 12. Позиционируем map-mark по центру
-                const markerLeft = finalX - (markerElement.clientWidth / 2);
-                const markerTop = finalY - (markerElement.clientHeight / 2);
-                
-                console.log(`Маркер ${index}: позиция map-mark: left=${markerLeft.toFixed(2)}, top=${markerTop.toFixed(2)}`);
-                
-                // 13. Позиционируем map-mark-area относительно map-mark
-                const areaLeft = markerLeft - (marker.clientWidth - markerElement.clientWidth);// / 2;
-                const areaTop = markerTop - (marker.clientHeight - markerElement.clientHeight);// / 2;
-                
-                console.log(`Маркер ${index}: позиция map-mark-area: left=${areaLeft.toFixed(2)}, top=${areaTop.toFixed(2)}`);
-                
-                // 14. Применяем стили с дополнительными проверками
-                marker.style.setProperty('position', 'absolute', 'important');
-                marker.style.setProperty('left', Math.max(0, areaLeft) + 'px', 'important');
-                marker.style.setProperty('top', Math.max(0, areaTop) + 'px', 'important');
-
-                console.log(`Маркер ${index}: применены стили: left=${Math.max(0, areaLeft).toFixed(2)}px, top=${Math.max(0, areaTop).toFixed(2)}px`);
-                */
-                
             }
             
             // Для map-mark-area элементов изменяем порядок элементов в зависимости от позиции
@@ -795,7 +680,7 @@ export function positionMarkersOnBg() {
                 }
             }
         } catch (error) {
-            console.error(`Ошибка позиционирования маркера ${index}:`, error);
+            // Ошибка позиционирования маркера
         }
     });
     
@@ -807,7 +692,6 @@ export function positionMarkersOnBg() {
     
     // Дополнительно вызываем stretchPaperaToTextWidth через небольшую задержку для гарантии
     setTimeout(() => {
-        console.log('Дополнительный вызов stretchPaperaToTextWidth через задержку');
         stretchPaperaToTextWidth();
     }, 200);
     
@@ -816,14 +700,10 @@ export function positionMarkersOnBg() {
     
     // Создаем расширенные области для геометок после позиционирования
     createExtendedHoverArea();
-    
-    console.log('=== positionMarkersOnBg КОНЕЦ ===');
 }
 
 // Функция для позиционирования content-wrapper относительно map-mark
 export function positionContentWrapperRelativeToMapMark() {
-    console.log('=== positionContentWrapperRelativeToMapMark НАЧАЛО ===');
-    
     // Находим все map-mark-area элементы
     const mapMarkAreas = document.querySelectorAll('.map-mark-area');
     
@@ -834,7 +714,6 @@ export function positionContentWrapperRelativeToMapMark() {
             const contentWrapper = mapMarkArea.querySelector('.content-wrapper');
             
             if (!mapMark || !contentWrapper) {
-                console.log(`Маркер ${index}: map-mark или content-wrapper не найден`);
                 return;
             }
             
@@ -854,8 +733,6 @@ export function positionContentWrapperRelativeToMapMark() {
             const contentWrapperX = mapMarkX + mapMarkWidth + offset;
             const contentWrapperY = mapMarkY; // Такая же Y координата, как у map-mark
             
-            console.log(`Маркер ${index}: map-mark X: ${mapMarkX}, Y: ${mapMarkY}, ширина: ${mapMarkWidth}, content-wrapper X: ${contentWrapperX}, Y: ${contentWrapperY}`);
-            
             // Применяем позиционирование к content-wrapper
             contentWrapper.style.setProperty('left', contentWrapperX + 'px', 'important');
             contentWrapper.style.setProperty('top', contentWrapperY + 'px', 'important');
@@ -865,8 +742,6 @@ export function positionContentWrapperRelativeToMapMark() {
             const mapMarkHeight = mapMark.clientHeight;
             contentWrapper.style.setProperty('height', mapMarkHeight + 'px', 'important');
             contentWrapper.style.setProperty('min-height', mapMarkHeight + 'px', 'important');
-            
-            console.log(`Маркер ${index}: content-wrapper установлена высота ${mapMarkHeight}px (равна map-mark)`);
             
             // Убеждаемся, что papera-image видима в десктопной версии
             const paperaImage = contentWrapper.querySelector('.papera-image');
@@ -897,11 +772,9 @@ export function positionContentWrapperRelativeToMapMark() {
             }
             
         } catch (error) {
-            console.error(`Ошибка позиционирования content-wrapper для маркера ${index}:`, error);
+            // Ошибка позиционирования content-wrapper для маркера
         }
     });
-    
-    console.log('=== positionContentWrapperRelativeToMapMark КОНЕЦ ===');
 }
 
 // Функция для применения трансформации зума к геометкам
@@ -934,32 +807,22 @@ export function applyZoomTransformToMarkers() {
 
 // Функция для отслеживания изменений трансформации изображения
 export function setupZoomTracking() {
-    console.log('setupZoomTracking вызвана');
-    
     const imageContainer = document.querySelector('.image-container');
     if (!imageContainer) {
-        console.log('Элемент .image-container не найден');
         return;
     }
     
-    console.log('Элемент .image-container найден:', imageContainer);
-    
     // Создаем наблюдатель за изменениями стилей
     const observer = new MutationObserver((mutations) => {
-        console.log('MutationObserver сработал, mutations:', mutations.length);
         mutations.forEach((mutation) => {
             if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-                console.log('Изменение стиля обнаружено');
                 // Проверяем, изменилась ли трансформация
                 const currentTransform = imageContainer.style.transform;
-                console.log('Текущая трансформация:', currentTransform);
                 if (currentTransform && currentTransform !== 'none') {
-                    console.log('Вызываем applyZoomTransformToMarkers для стилей');
                     applyZoomTransformToMarkers();
                     // Также пересчитываем позиции геометок
                     positionMarkersOnBg();
                 } else {
-                    console.log('Сбрасываем трансформацию');
                     // Сбрасываем трансформацию стрелок
                     const arrows = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea');
                     arrows.forEach(arrow => {
@@ -987,28 +850,20 @@ export function setupZoomTracking() {
     
     // Также отслеживаем изменения через CSS классы
     const classObserver = new MutationObserver((mutations) => {
-        console.log('ClassObserver сработал, mutations:', mutations.length);
         mutations.forEach((mutation) => {
             if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                console.log('Изменение класса обнаружено');
                 const hasZoomClass = imageContainer.classList.contains('zoom-transition') || 
                                    imageContainer.classList.contains('zoom-transition-Right') || 
                                    imageContainer.classList.contains('zoom-transition-Up');
                 
-                console.log('Классы контейнера:', imageContainer.className);
-                console.log('Есть класс зума:', hasZoomClass);
-                
                 if (hasZoomClass) {
-                    console.log('Вызываем applyZoomTransformToMarkers для классов');
                     // Применяем трансформацию с небольшой задержкой для завершения анимации
                     setTimeout(() => {
-                        console.log('Выполняем applyZoomTransformToMarkers после задержки');
                         applyZoomTransformToMarkers();
                         // Также пересчитываем позиции геометок
                         positionMarkersOnBg();
                     }, 100);
                 } else {
-                    console.log('Сбрасываем трансформацию для классов');
                     // Сбрасываем трансформацию
                     const arrows = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea');
                     arrows.forEach(arrow => {
@@ -1033,14 +888,6 @@ export function setupZoomTracking() {
         attributes: true,
         attributeFilter: ['class']
     });
-    console.log('Наблюдение за классами установлено');
-    
-    // Начинаем наблюдение за изменениями стилей
-    observer.observe(imageContainer, {
-        attributes: true,
-        attributeFilter: ['style']
-    });
-    console.log('Наблюдение за стилями установлено');
 }
 
 // Экспортируем функции в глобальную область видимости
@@ -1063,11 +910,9 @@ window.addEventListener('resize', function() {
     clearTimeout(window.resizeTimeout);
     window.resizeTimeout = setTimeout(() => {
         if (window.updateContentWrapperSizesAfterLanguageChange) {
-            console.log('Обновляем размеры контейнеров после изменения размера окна...');
             window.updateContentWrapperSizesAfterLanguageChange();
         }
         if (window.updateExtendedHoverAreaSizes) {
-            console.log('Обновляем размеры расширенных областей после изменения размера окна...');
             window.updateExtendedHoverAreaSizes();
         }
     }, 250);
@@ -1075,11 +920,8 @@ window.addEventListener('resize', function() {
 
 // Функция для принудительного пересчета позиций при изменении размера окна
 export function recalculatePositionsOnResize() {
-    console.log('recalculatePositionsOnResize вызвана');
-    
     // Ждем немного, чтобы браузер успел перерисовать
     setTimeout(() => {
-        console.log('Выполняем пересчет позиций после изменения размера');
         positionMarkersOnBg();
     }, 50);
 }
@@ -1124,8 +966,6 @@ export function setupMobileResetAnimation() {
 
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('tumski_cathedral_handler.js: DOM загружен, инициализируем...');
-    
     // Создаем расширенные области для геометок
     createExtendedHoverArea();
     
@@ -1140,3 +980,280 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Удаляем дублирующий блок, так как инициализация теперь происходит в HTML-файле 
+
+document.addEventListener('DOMContentLoaded', async function() {
+    // 1. Загрузка переводов и обновление контента
+    await window.i18n.loadTranslations();
+    window.i18n.updatePageContent();
+
+    // Set papera image source dynamically
+    const paperaImageJadwiga = document.querySelector('#swieta_jadwiga').parentElement.querySelector('.papera-image');
+    const paperaImageTumski = document.querySelector('#tumski').parentElement.querySelector('.papera-image');
+    const paperaImageMost = document.querySelector('#tumski_most').parentElement.querySelector('.papera-image');
+    const paperaImageCathedral = document.querySelector('#tumski_cathedral').parentElement.querySelector('.papera-image');
+    const paperaImageKatedraKoscielna = document.querySelector('#katedra_koscielna').parentElement.querySelector('.papera-image');
+
+    // 2. Подключение обработчика для геометки собора
+    import('./tumski_cathedral_handler.js').then(mod => {
+        if (mod && typeof mod.setupUniversalGeoMarker === 'function') {
+            // Устанавливаем источники изображений papera
+            if (mod.setPaperaImageSource) {
+                mod.setPaperaImageSource(paperaImageJadwiga);
+                mod.setPaperaImageSource(paperaImageTumski);
+                mod.setPaperaImageSource(paperaImageMost);
+                mod.setPaperaImageSource(paperaImageCathedral);
+                mod.setPaperaImageSource(paperaImageKatedraKoscielna);
+            }
+            
+            // Геометка Святая Ядвига
+            mod.setupUniversalGeoMarker({
+                markerId: 'swieta_jadwiga',
+                i18nKey: 'swieta_jadwiga'
+            });
+            // Геометка Тумский остров
+            mod.setupUniversalGeoMarker({
+                markerId: 'tumski',
+                i18nKey: 'tumski'
+            });
+            // Геометка Катедра
+            mod.setupUniversalGeoMarker({
+                markerId: 'tumski_cathedral',
+                i18nKey: 'tumski_cathedral'
+            });
+            // Геометка Тумский мост
+            mod.setupUniversalGeoMarker({
+                markerId: 'tumski_most',
+                i18nKey: 'tumski_most'
+            });
+            // Геометка Соборная церковь Святого Креста и Св. Варфоломея
+            mod.setupUniversalGeoMarker({
+                markerId: 'katedra_koscielna',
+                i18nKey: 'katedra_koscielna'
+            });
+            // mod.setupUniversalGeoMarker({
+            //     markerId: 'tumski',
+            //     i18nKey: 'tumski',
+            //     position: { top: '10%', right: '10%', width: 'auto', height: 'auto' }
+            // });
+        }
+    });
+
+    // 4. Инициализация языкового меню
+    LanguageMenu.init();
+
+    // 5. Инициализация модального окна карты
+    MapModal.init();
+
+    // 6. Применение общих стилей кнопок
+    applyCommonButtonStyles();
+
+    // 7. Запуск фоновой музыки (универсальный модуль)
+    import('./background_music.js').then(mod => {
+        if (mod && typeof mod.initBackgroundMusic === 'function') {
+            mod.initBackgroundMusic();
+        }
+    });
+
+    // 8. Инициализация логики книги (универсальный модуль)
+    if (window.BookPaths && typeof window.BookPaths.initBookHandlers === 'function') {
+        window.BookPaths.initBookHandlers();
+    }
+
+    // 9. Инициализация кастомных курсоров
+    const cursor = document.querySelector('.custom-cursor');
+    const cursorArea = document.querySelector('.custom-cursor-area');
+    const cursorProsto = document.querySelector('.custom-cursor-prosto');
+    const cursorProstoArea = document.querySelector('.custom-cursor-prostoarea');
+    
+    // console.log('Элементы курсоров:', {
+    //     cursor: !!cursor,
+    //     cursorArea: !!cursorArea,
+    //     cursorProsto: !!cursorProsto,
+    //     cursorProstoArea: !!cursorProstoArea
+    // });
+    
+    // Дополнительная диагностика для мобильной версии
+    const isMobile = window.innerWidth <= 700;
+    // console.log('Размер экрана:', window.innerWidth, 'x', window.innerHeight, 'isMobile:', isMobile);
+    
+    if (cursor) {
+        // console.log('cursor styles:', {
+        //     opacity: cursor.style.opacity,
+        //     display: cursor.style.display,
+        //     pointerEvents: cursor.style.pointerEvents
+        // });
+    }
+    
+    if (cursorArea) {
+        // console.log('cursorArea styles:', {
+        //     opacity: cursorArea.style.opacity,
+        //     display: cursorArea.style.display,
+        //     pointerEvents: cursorArea.style.pointerEvents
+        // });
+    }
+
+    //  Вызов функции возврата картинки из зума по двойному клику
+    setupResetAnimation(document.querySelector('.image-container'));
+    
+    // Создаем звук шага
+    let stepSound;
+
+    // Инициализируем обработчики курсоров
+    import('./tumski_cathedral_handler.js').then(mod => {
+        if (mod.createStepSound) {
+            stepSound = mod.createStepSound();
+        }
+        
+        if (cursor && cursorArea) {
+            // console.log('Инициализация стрелки вправо');
+            setupRightArrowHandler(cursor, cursorArea, stepSound);
+        } else {
+            // console.error('Не найдены элементы для стрелки вправо');
+        }
+        
+        if (cursorProsto && cursorProstoArea) {
+            //  console.log('Инициализация стрелки прямо');
+            setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, () => {
+                // Переход на следующую страницу
+                window.location.href = 'tumski_02.html';
+            });
+        } else {
+            //  console.error('Не найдены элементы для стрелки прямо');
+        }
+    });
+
+    // После всех инициализаций вызываем перенос геометок и стрелок
+    if (window.moveMarkersAndCursors) {
+        window.moveMarkersAndCursors();
+    }
+    
+    // Дополнительно вызываем растягивание papera для всех геометок
+    import('./tumski_cathedral_handler.js').then(mod => {
+        if (mod && typeof mod.stretchPaperaToTextWidth === 'function') {
+            //   console.log('Вызываем stretchPaperaToTextWidth для всех геометок');
+            mod.stretchPaperaToTextWidth();
+            
+            // Повторный вызов через задержку для гарантии
+            setTimeout(() => {
+                // console.log('Повторный вызов stretchPaperaToTextWidth через задержку');
+                mod.stretchPaperaToTextWidth();
+            }, 500);
+        } else {
+            //  console.log('stretchPaperaToTextWidth не найден в модуле');
+        }
+    });
+    
+    // Позиционируем геометки и стрелки
+    import('./tumski_cathedral_handler.js').then(mod => {
+        if (mod && typeof mod.positionMarkersOnBg === 'function') {
+            // console.log('Вызываем positionMarkersOnBg из HTML');
+            mod.positionMarkersOnBg();
+            
+            // После позиционирования вызываем stretchPaperaToTextWidth
+            if (mod && typeof mod.stretchPaperaToTextWidth === 'function') {
+                setTimeout(() => {
+                    // console.log('Вызываем stretchPaperaToTextWidth после positionMarkersOnBg');
+                    mod.stretchPaperaToTextWidth();
+                }, 100);
+            }
+            
+            // Дополнительно вызываем через небольшую задержку для гарантии
+            setTimeout(() => {
+                // console.log('Повторный вызов positionMarkersOnBg через задержку');
+                mod.positionMarkersOnBg();
+                
+                // И снова вызываем stretchPaperaToTextWidth
+                if (mod && typeof mod.stretchPaperaToTextWidth === 'function') {
+                    setTimeout(() => {
+                        // console.log('Повторный вызов stretchPaperaToTextWidth через задержку');
+                        mod.stretchPaperaToTextWidth();
+                    }, 100);
+                }
+            }, 500);
+            
+            // Еще один вызов через 1 секунду для полной гарантии
+            setTimeout(() => {
+                // console.log('Финальный вызов positionMarkersOnBg через 1 секунду');
+                mod.positionMarkersOnBg();
+                
+                // И финальный вызов stretchPaperaToTextWidth
+                if (mod && typeof mod.stretchPaperaToTextWidth === 'function') {
+                    setTimeout(() => {
+                        // console.log('Финальный вызов stretchPaperaToTextWidth через 1 секунду');
+                        mod.stretchPaperaToTextWidth();
+                    }, 100);
+                }
+            }, 1000);
+        } else {
+            // console.log('positionMarkersOnBg не найден в модуле');
+        }
+    });
+    
+    // Настраиваем отслеживание зума для геометок
+    // console.log('Импортируем tumski_cathedral_handler.js для отслеживания зума');
+    import('./tumski_cathedral_handler.js').then(mod => {
+        // console.log('Модуль загружен:', mod);
+        if (mod && typeof mod.setupZoomTracking === 'function') {
+            // console.log('Вызываем mod.setupZoomTracking');
+            mod.setupZoomTracking();
+        } else {
+            // console.log('setupZoomTracking не найден в модуле');
+        }
+    }).catch(err => {
+        // console.error('Ошибка импорта модуля:', err);
+    });
+    
+    // Принудительное применение стилей для мобильной версии
+    if (window.innerWidth <= 700) {
+        setTimeout(() => {
+            const cursors = document.querySelectorAll('.custom-cursor, .custom-cursor-prosto, .custom-cursor-area, .custom-cursor-prostoarea');
+            cursors.forEach(cursor => {
+                cursor.style.opacity = '1';
+                cursor.style.display = 'block';
+                cursor.style.pointerEvents = 'auto';
+                cursor.style.visibility = 'visible';
+                cursor.style.zIndex = '9999';
+                // console.log('Принудительно применены стили для:', cursor);
+            });
+        }, 1000);
+    }
+    
+    // Добавляем обработчик изменения размера окна с debouncing
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        // console.log('Событие resize сработало, размер окна:', window.innerWidth, 'x', window.innerHeight);
+        
+        // Очищаем предыдущий таймаут
+        clearTimeout(resizeTimeout);
+        
+        // Устанавливаем новый таймаут для debouncing
+        resizeTimeout = setTimeout(() => {
+            // console.log('Выполняем пересчет позиций после resize');
+            import('./tumski_cathedral_handler.js').then(mod => {
+                if (mod && typeof mod.positionMarkersOnBg === 'function') {
+                    // console.log('Пересчитываем позиции при изменении размера окна');
+                    mod.positionMarkersOnBg();
+                } else {
+                    // console.log('positionMarkersOnBg не найден в модуле при resize');
+                }
+            }).catch(err => {
+                // console.error('Ошибка импорта модуля при resize:', err);
+            });
+        }, 100); // Задержка 100мс
+    });
+    
+    // Добавляем обработчик события load для изображения
+    window.addEventListener('load', () => {
+        // console.log('Событие load сработало, пересчитываем позиции');
+        import('./tumski_cathedral_handler.js').then(mod => {
+            if (mod && typeof mod.positionMarkersOnBg === 'function') {
+                setTimeout(() => {
+                    // console.log('Пересчитываем позиции после полной загрузки страницы');
+                    mod.positionMarkersOnBg();
+                }, 200);
+            }
+        }).catch(err => {
+            // console.error('Ошибка импорта модуля при load:', err);
+        });
+    });
+});

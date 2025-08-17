@@ -16,10 +16,6 @@ function hideAllCursors() {
 function setupRightArrowHandler(cursor, cursorArea, stepSound) {
     const isMobile = window.innerWidth <= 700;
     
-    console.log('setupRightArrowHandler - isMobile:', isMobile);
-    console.log('cursor:', cursor);
-    console.log('cursorArea:', cursorArea);
-    
     if (!isMobile) {
         // Обработчик движения мыши над областью курсора
         cursorArea.addEventListener('mousemove', function(e) {
@@ -55,12 +51,10 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound) {
         cursorArea.style.opacity = '1';
         cursorArea.style.display = 'block';
         
-        console.log('Мобильная версия - курсор установлен видимым');
     }
 
     // Обработчик клика по стрелке вправо (работает и на десктопе, и на мобильных)
     cursorArea.addEventListener('click', function(e) {
-        console.log('Клик по стрелке вправо');
         e.preventDefault();
         hideAllCursors();
         if (stepSound) {
@@ -75,13 +69,11 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound) {
     // Добавляем обработчик касания для мобильных устройств
     if (isMobile) {
         cursorArea.addEventListener('touchstart', function(e) {
-            console.log('touchstart по стрелке вправо');
             e.preventDefault();
             cursor.style.opacity = '1';
         });
         
         cursorArea.addEventListener('touchend', function(e) {
-            console.log('touchend по стрелке вправо');
             e.preventDefault();
             hideAllCursors();
             if (stepSound) {
@@ -105,15 +97,10 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound) {
 function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onForwardClick) {
     // Проверяем наличие необходимых элементов
     if (!cursorProsto || !cursorProstoArea) {
-        console.error('Элементы стрелки прямо не найдены');
         return;
     }
 
     const isMobile = window.innerWidth <= 700;
-    
-    console.log('setupForwardArrowHandler - isMobile:', isMobile);
-    console.log('cursorProsto:', cursorProsto);
-    console.log('cursorProstoArea:', cursorProstoArea);
     
     if (!isMobile) {
         // Обработчик движения мыши над областью курсора
@@ -150,12 +137,10 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
         cursorProstoArea.style.opacity = '1';
         cursorProstoArea.style.display = 'block';
         
-        console.log('Мобильная версия - курсор прямо установлен видимым');
     }
 
     // Обработчик клика по стрелке прямо
     cursorProstoArea.addEventListener('click', function(e) {
-        console.log('Клик по стрелке прямо');
         e.preventDefault();
         e.stopPropagation();
 
@@ -173,7 +158,6 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
             const nextImageContainer = document.querySelector('.next-image-container');
             
             if (!imageContainer || !currentImage || !nextImageContainer) {
-                console.error('Не все элементы для анимации найдены');
                 return;
             }
 
@@ -192,20 +176,18 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
                 }, 500);
             }, 1000);
         } catch (error) {
-            console.error('Ошибка при обработке клика:', error);
+            // Ошибка при обработке клика
         }
     });
     
     // Добавляем обработчик касания для мобильных устройств
     if (isMobile) {
         cursorProstoArea.addEventListener('touchstart', function(e) {
-            console.log('touchstart по стрелке прямо');
             e.preventDefault();
             cursorProsto.style.opacity = '1';
         });
         
         cursorProstoArea.addEventListener('touchend', function(e) {
-            console.log('touchend по стрелке прямо');
             e.preventDefault();
             e.stopPropagation();
             
@@ -222,10 +204,9 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
                 const currentImage = document.querySelector('.image');
                 const nextImageContainer = document.querySelector('.next-image-container');
                 
-                if (!imageContainer || !currentImage || !nextImageContainer) {
-                    console.error('Не все элементы для анимации найдены');
-                    return;
-                }
+                            if (!imageContainer || !currentImage || !nextImageContainer) {
+                return;
+            }
 
                 // Запускаем анимацию перехода
                 imageContainer.style.animationPlayState = 'paused';
@@ -241,9 +222,9 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
                         onForwardClick();
                     }, 500);
                 }, 1000);
-            } catch (error) {
-                console.error('Ошибка при обработке касания:', error);
-            }
+                    } catch (error) {
+            // Ошибка при обработке касания
+        }
         });
     }
 }

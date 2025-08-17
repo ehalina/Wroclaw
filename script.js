@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Функция для воспроизведения звука
     function playAudio() {
         audio.play().catch(error => {
-            console.log('Ошибка воспроизведения:', error);
+            // console.log('Ошибка воспроизведения:', error);
         });
     }
 

@@ -1035,7 +1035,7 @@ const MapModal = {
                             MapModal.positionMarker(coords);
                         }
                     } catch (error) {
-                        console.error('Ошибка при перепозиционировании маркера:', error);
+                        // Ошибка при перепозиционировании маркера
                     }
                 }, 200);
             }
@@ -1053,7 +1053,6 @@ const MapModal = {
 
         // Проверяем, что все элементы найдены
         if (!openMapBtn || !openQuestBtn || !mapModal || !closeMapBtn || !toggleTooltipsBtn || !mapImage || !mapMarker || !mapTooltip) {
-            console.error("Не удалось найти один или несколько элементов модального окна карты или кнопок.");
             return; // Прекращаем выполнение, если элементы не найдены
         }
 
@@ -1096,7 +1095,7 @@ const MapModal = {
                             MapModal.positionMarker(coords);
                         }
                     } catch (error) {
-                        console.error('Ошибка при позиционировании маркера:', error);
+                        // Ошибка при позиционировании маркера
                     }
                 }, 300);
             }
@@ -1144,7 +1143,6 @@ const MapModal = {
                     toggleButton.style.display = 'flex';
                 }
                 // Показываем все подсказки по умолчанию
-                console.log('Вызываем MapModal.showAllTooltips() для мобильных устройств');
                 setTimeout(() => {
                     MapModal.showAllTooltips();
                 }, 100);
@@ -1181,7 +1179,6 @@ const MapModal = {
             const bookContentArea = bookOverlay.querySelector('.book-content-area');
 
             if (!bookOverlay || !bookContainer || !bookTitle || !bookSound || !container || !questTasksList || !bookImageContentWrapper || !bookContentArea) {
-                console.error("Не удалось найти элементы для открытия модального окна книги или списка заданий.");
                 return;
             }
 
@@ -1416,7 +1413,6 @@ const MapModal = {
         const mapImage = document.getElementById('map-image');
         // Проверяем, что элементы существуют
         if (!mapMarker || !mapImage) {
-            console.error("Не удалось найти маркер или изображение карты для позиционирования.");
             return;
         }
         
@@ -1564,7 +1560,7 @@ const MapModal = {
                     this.positionMarker(coords);
                 }
             } catch (error) {
-                console.error('Ошибка при перепозиционировании маркера:', error);
+                // Ошибка при перепозиционировании маркера
             }
         }, 100);
     },
@@ -1576,7 +1572,6 @@ const MapModal = {
             const mapContainer = document.querySelector('#map-modal > div');
             
             if (!mapImage || !mapContainer || !tooltipPoints) {
-                console.error('Не удалось загрузить необходимые данные для подсказок');
                 return;
             }
             
@@ -1634,8 +1629,6 @@ const MapModal = {
             // Проверяем и исправляем перекрытия
             this.fixTooltipOverlaps(createdTooltips);
             
-            console.log('Подсказки успешно созданы:', mapContainer.querySelectorAll('.mobile-tooltip').length);
-            
             // Добавляем обработчик для обновления позиций при прокрутке
             mapContainer.addEventListener('scroll', () => {
                 this.updateTooltipPositions();
@@ -1649,7 +1642,7 @@ const MapModal = {
             });
             
         } catch (error) {
-            console.error('Ошибка при показе подсказок:', error);
+            // Ошибка при показе подсказок
         }
     },
 

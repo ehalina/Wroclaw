@@ -177,9 +177,9 @@ const LanguageMenu = {
         const backgroundMusic = document.querySelector('#backgroundMusic');
         if (backgroundMusic && backgroundMusic.paused) {
             backgroundMusic.play().then(() => {
-                console.log('Фоновая музыка запущена через кнопку звука');
+                // console.log('Фоновая музыка запущена через кнопку звука');
             }).catch(err => {
-                console.log('Не удалось запустить фоновую музыку:', err);
+                // console.log('Не удалось запустить фоновую музыку:', err);
             });
         }
     },
