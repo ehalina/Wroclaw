@@ -1,19 +1,10 @@
 {
-  "title": {
-    "tumski": "Tumski-Insel",
-    "tumski_most": "Tumski-Brücke"
-  },
   "tumski": {
     "title": "Tumski-Insel",
-    "description": "Die Tumski-Insel ist nicht nur ein Ort auf der Karte, sondern ein echtes Zeitportal, das direkt in die Tiefen der Jahrhunderte führt. Wenn Breslau ein altes Buch wäre, würde sein erstes Kapitel genau hier beginnen, im 10. Jahrhundert, zwischen Nebel, Glockengeläut und geheimnisvollen Silhouetten.\n\nDiese Insel ist nicht nur ein Stadtteil, sondern eine ganze Enzyklopädie der Wunder. Hier stehen uralte Tempel neben skurrilen Legenden, die Straßen flüstern von der Vergangenheit, und abends erscheint wie durch Zauberei ein Laternenanzünder. Ja, ein echter, in einem langen Mantel, mit einer Laterne und einem speziellen Stock. Und jede Nacht zündet er die alten Gaslaternen von Hand an, als wollte er die Stadt daran erinnern, dass die Magie noch lebt.\n\nAlso machen Sie sich bereit. Wir beginnen unseren Spaziergang an der Tumski-Brücke und werden Schritt für Schritt die Geheimnisse des mittelalterlichen Breslaus enträtseln. Und wenn Sie plötzlich das Flüstern der alten Mauern hören – keine Angst. Die Insel erzählt Ihnen nur ihre Geschichten."
-  },
-  "tumski_most": {
-    "title": "Tumski-Brücke",
-    "description": "Die Tumski-Brücke ist eine Fußgängerbrücke, die die Tumski-Insel mit dem Festland von Breslau verbindet. Die Brücke ist bekannt für ihre Liebesschlösser, die Paare als Zeichen ihrer Liebe an die Geländer hängen. Es ist ein beliebter Ort für romantische Spaziergänge und Fotoshootings.",
     "book02": {
       "zone1": {
-        "title": "Tumski-Brücke",
-        "text": "Wenn Breslau eine Märchenstadt ist (und das ist es zweifellos), dann ist die Tumski-Brücke genau dieses magische Portal, das zu seinem ältesten und geheimnisvollsten Herzen führt. Ihr Name ist natürlich klangvoll und bedeutend – 'Dombrücke', weil sie direkt zum majestätischen Dom St. Johannes des Täufers führt. Und auch, weil die alte Tumski-Brücke nicht nur eine Brücke ist, sondern eine Grenze zwischen Welten: Hier trafen einst weltliche und kirchliche Macht aufeinander, und sogar eine spezielle Säule mit zwei Wappen wurde aufgestellt, damit niemand vergisst, wer hier das Sagen hat (was allerdings nicht half)."
+        "title": "Tumski-Insel",
+        "text": "Die Tumski-Insel ist nicht nur ein Ort auf der Karte, sondern ein wahres Zeitportal, das direkt in die Tiefen der Jahrhunderte führt. Wenn Breslau ein altes Buch wäre, würde sein erstes Kapitel genau hier beginnen, im 10. Jahrhundert, zwischen Nebeln, Glockengeläut und mysteriösen Silhouetten. <br>Diese Insel ist nicht nur ein Stadtteil, sondern eine ganze Enzyklopädie der Wunder. Hier grenzen alte Tempel an skurrile Legenden, Straßen flüstern über die Vergangenheit, und abends erscheint, als ob durch Zauberei, ein Laternenanzünder. Ja, ja, ein echter, in einem langen Mantel, mit einer Laterne und einem speziellen Stock. Und jede Nacht zündet er manuell die alten Gaslaternen an, als ob er die Stadt daran erinnern würde, dass Magie noch lebendig ist.<br>Also macht euch bereit. Wir beginnen unseren Spaziergang von der Tumski-Brücke und werden Schritt für Schritt die Geheimnisse des mittelalterlichen Breslaus entschlüsseln. Und wenn ihr plötzlich das Flüstern alter Mauern hört — fürchtet euch nicht. Es ist nur die Insel, die euch ihre Geschichten erzählt."
       },
       "zone1-2": {
         "title": "",
@@ -21,37 +12,73 @@
       },
       "zone2": {
         "title": "",
-        "text": ""
+        "text": "Im 10.-11. Jahrhundert verwandelte sich die Insel in die Residenz der ersten Piasten-Dynastie: eine hölzerne Burg wurde von Erdwällen umgeben, und die Kapelle des Heiligen Martin, aus Stein erbaut, wurde allmählich zu einem Symbol der Stärke unter dem wackeligen Holz. Bis zum 12. Jahrhundert gehörte der östliche Teil von Tumski bereits dem Bischof, und der erste Dom ersetzte die bescheidene Kirche, als ob er leise flüsterte, dass die Insel zu einem Ort wurde, wo Macht und Glaube sich treffen."
       },
       "zone2-2": {
-        "title": "",
-        "text": ""
+        "title": "Geschichte",
+        "text": "Die Tumski-Insel, so scheint es, war zunächst nur eine Kette von Holzhäusern, die sich gemütlich am Ufer niedergelassen hatten. Im 11. Jahrhundert stand die fürstliche Kapelle des Heiligen Martin bereits mutig zwischen befestigten Mauern, und der Fluss Oder umschlang träge die Insel, versorgte die Bewohner mit Nahrung und diente als natürlicher Schutz. Damals lebten hier etwa anderthalbtausend Menschen, und jeder von ihnen wusste sicher, wo der beste Fisch versteckt war und welcher Wind einen Sturm ankündigte."
       },
       "zone3": {
-        "title": "",
-        "text": ""
+        "title": "Eine Insel?",
+        "text": "Einst war Tumski eine echte Insel, stolz durch Brücken mit der Welt verbunden — eine in Richtung Piasek, eine andere in Richtung des rechten Oderufers. Aber Breslau langweilte sich einmal an seinen eigenen Befestigungen: 1807 wurden sie einmütig abgerissen, Gräben wurden zugeschüttet, und Tumski blieb nur dem Namen nach eine Insel. Seitdem hat sie nur noch eine Inselreliquie — einen Teich im Botanischen Garten, ein bescheidenes Fragment des einst lärmenden Flussbettes."
       },
-      "zone3-3": {
-        "title": "",
-        "text": ""
+      "zone3-2": {
+        "title": "Interessante Fakten",
+        "text": "1315 wechselte Tumski endgültig die Besitzer und verwandelte sich in einen kleinen, aber stolzen 'Kirchenstaat', wo weltliche Gesetze nicht mehr galten, und stattdessen herrschten Regeln, die, wie es scheint, ausschließlich zum Vergnügen der Regeln selbst erfunden wurden. Zum Beispiel war jeder, der die Tumski-Brücke betrat, verpflichtet, seinen Kopfschmuck abzunehmen — und es spielte keine Rolle, ob es ein einfacher Schuhmacher oder eine gekrönte Person war —, weil das die lokale Ordnung war. Und es kam nicht einmal den verzweifeltsten Rebellen in den Sinn, sie zu verletzen: Wer weiß, was diese Geistlichen noch in der Charta geschrieben hatten, was, wenn die nächste Regel war, auf einem Bein zu stehen und Psalmen beim Betreten der Insel zu singen?"
       },
       "zone4": {
         "title": "",
-        "text": ""
+        "text": "Und dann, zweieinhalb Jahrhunderte später, kam Giacomo Casanova hierher. Ja, ja, derjenige, an den alle sofort dasselbe denken. 1766 hielt er bei Vater Bastiani auf der Tumski-Insel — und wer weiß, was den großen Abenteurer mehr beeindruckte: die Gastfreundschaft des Gastgebers, der Breslauer Wein oder die alten Mauern, die Kopernikus' Geheimnisse bewahren? Allerdings wusste die Tumski-Insel immer, wie sie ihre Gäste überraschen konnte."
       },
       "zone4-2": {
+        "title": "Berühmte Persönlichkeiten",
+        "text": "Beim Spaziergang über die Tumski-Insel ist es leicht vorstellbar, dass unter diesen Häusern und Türmen Nikolaus Kopernikus selbst wandelte. Stellt euch vor: Ein Genie, das die Erde aus dem Zentrum des Universums verschob, ging einst durch diese Straßen, rannte in die Kirche des Heiligen Kreuzes, wo er von 1503 bis 1538 Geistlicher war. Sicher hob er manchmal seine Augen zu den Sternen über den Domtürmen und dachte über sein eigenes — über den Himmel, der sich nicht um uns dreht, über den Platz unserer Erde unter diesen Sternen."
+      }
+    }
+  },
+  "tumski_most": {
+    "title": "Tumski-Brücke",
+    "book02": {
+      "zone1": {
+        "title": "Tumski-Brücke",
+        "text": "In einer Stadt gibt es manchmal Orte, die einem irgendwie lebendig erscheinen. Nicht weil Menschen ständig darauf gehen oder Katzen vorbeilaufen. Lebendig in einem anderen Sinne. <br> Wie ein Gesprächspartner, der sich längst in seinem Wissen erfüllt hat. Und nicht mehr nach Eitelkeit strebt. <br> In Breslau ist das die Tumski-Brücke. Sie steht da, eisern und grün, verbindet zwei Inseln. Und es scheint nichts Besonderes zu sein, wenn man nicht weiß, dass manchmal auch Brücken Geheimnisse zu bewahren wissen."
+      },
+      "zone1-2": {
         "title": "",
         "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Dann kam das 19. Jahrhundert und sagte: 'Genug Romantik, lasst uns endlich etwas Ernstes machen.' So erschien 1889 eine stählerne Schönheit mit Nieten, gebaut unter dem wachsamen Auge des Ingenieurs von Scholz. Die Brücke überlebte Kriege, Reparaturen und sogar eine Zeit, in der jemand ständig Schlösser mit Herzen daran hing. All das ertrug sie mit derselben philosophischen Ruhe, mit der alte Katzen eine weitere Umstellung der Möbel ertragen."
+      },
+      "zone2-2": {
+        "title": "Geschichte",
+        "text": "Einst gab es hier eine gewöhnliche Holzbrücke. So alt, dass sie sich an die Geburt der Stadt erinnerte. Sie verband zwei völlig verschiedene Welten: eine Welt war bei der Kirche, die andere — bei den Laien. Und, wie es gewöhnlich geschieht, wurde die Brücke zum einzigen Ort, wo Welten ohne Ansprüche und unnötige Fragen kreuzen konnten."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Gerberträger, Stahl, Nieten, ordentliche Proportionen — all das ist Ingenieurpoesie. Und um sie zusammenzubauen, wurden Teile auf Lastkähnen über das Wasser gebracht. Als ob es nicht nur ein Projekt wäre, sondern eine Art magisches Ritual, bei dem jede Schraube den Fluss hinuntersegeln musste. <br> Damit die Brücke friedlicher an ihrem Platz leben konnte."
+      },
+      "zone3-2": {
+        "title": "Konstruktion",
+        "text": "Auf den ersten Blick — nur eine eiserne Brücke, 52 Meter lang. Zwei Felder, Gehwege, Fahrbahn, und all das unter einem ordentlichen neugotischen 'Hut', der, ehrlich gesagt, nur für die Schönheit benötigt wird. Beim zweiten Blick — sie ähnelt einem Musikinstrument: jedes Feld ist wie eine Saite, und wenn man genau hinhört (und noch besser, nachts kommt), kann man ihre nachdenklichen Melodien hören."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Und die Brücke hat auch einen Freund-Laternenanzünder. Einen echten, lebendigen. Jeden Abend zündet er die Gaslaternen auf der Tumski-Insel an. Es scheint, als ob er etwas weiß, das ihr und ich nie erfahren werden. Vielleicht bewahrt er sogar gemeinsame Geheimnisse mit der Brücke. Und wenn ihr eines Tages etwas länger an diesem Ort verweilt als geplant, kann die Brücke sie euch durchaus erzählen. Nur leise. <br> Damit niemand sonst es erfährt."
+      },
+      "zone4-2": {
+        "title": "Interessante Fakten",
+        "text": "Zu Beginn des 21. Jahrhunderts wurde sie zur Brücke der Liebenden. Menschen hängten Schlösser auf, warfen Schlüssel in die Oder und gingen, überzeugt, dass ihre Liebe jetzt ewig sein würde. Die Brücke schwieg natürlich und versprach nichts. Dann beschlossen die Behörden, dass es für ein eisernes Herz zu schwer war, und entfernten all diese Güte. Seitdem verschwinden neue Schlösser genauso schnell wie Illusionen nach dem morgendlichen Kaffee."
       }
     }
   },
   "tumski_cathedral": {
-    "title": "Dom St. Johannes des Täufers",
-    "description": "Der Dom St. Johannes des Täufers ist die Hauptkirche von Breslau und eine der ältesten gotischen Kathedralen in Polen. Erbaut im 13.-14. Jahrhundert, ist die Kathedrale ein Symbol des geistlichen Lebens der Stadt und ein wichtiges architektonisches Denkmal. Ihre majestätischen Türme sind von weitem sichtbar und dienen als Orientierungspunkt für alle, die die Tumski-Insel besuchen.",
+    "title": "Kathedrale des Heiligen Johannes des Täufers",
     "book02": {
       "zone1": {
-        "title": "Dom St. Johannes des Täufers",
-        "text": "Der Dom St. Johannes des Täufers ist nicht nur eine Kirche, sondern eine wahre steinerne Chronik von Breslau. Seine Türme, die zum Himmel streben, erzählen gleichsam die Geschichte der Stadt, die Kriege, Brände und Überschwemmungen überstanden hat, aber immer wieder aus der Asche auferstanden ist. Im Inneren der Kathedrale befinden sich unschätzbare Kunstwerke, und ihre Orgel gilt als eine der besten in Europa."
+        "title": "Kathedrale des Heiligen Johannes des Täufers",
+        "text": "Dies ist kein Tempel, sondern ein riesiges Buch, geschrieben in Stein und Ziegel. Seine Türme strecken sich in den Himmel, als ob sie selbst erzählen wollten, dass Breslau bereits alles gesehen hat: und Kriege, und Brände, und Wasser bis zu den Knien, und trotzdem stand es jedes Mal auf, schüttelte sich ab und ging weiter. Im Inneren der Kathedrale — nicht nur Glasmalereien und Altäre, sondern ein ganzes Museum, versteckt hinter dem Gebet. Und die Orgel… die Orgel klingt, als ob die Luft selbst plötzlich daran erinnerte, dass sie singen kann, und singt besser als alle in Europa."
       },
       "zone1-2": {
         "title": "",
@@ -59,40 +86,115 @@
       },
       "zone2": {
         "title": "",
-        "text": ""
+        "text": "Seitdem brannte sie viele Male, stürzte ein und stand wieder auf. Brände im 16. und 18. Jahrhundert, neugotische Restaurierung im 19., die Schrecken des Zweiten Weltkriegs, als fast drei Viertel der Kathedrale zu einem Steinhaufen wurden… Aber sie stand wieder auf. Bis 1951 wurde sie restauriert, und die Türme mit Kupferkuppeln kehrten erst 1991 zurück, als ob sie zum letzten Mal erinnern würden: diese Kathedrale kann alles überleben. Und steht weiterhin — das steinerne Herz der Stadt, das bereits seit tausend Jahren schlägt."
       },
       "zone2-2": {
-        "title": "",
-        "text": ""
+        "title": "Geschichte",
+        "text": "Auf der Tumski-Insel steht die Kathedrale des Heiligen Johannes des Täufers so lange, dass es scheint, als ob sie selbst bereits vergessen hätte, wie oft sie wiedergeboren wurde. Die erste Holzkirche erschien hier bereits im 10. Jahrhundert — und jetzt erinnern nur noch geisterhafte Spuren im Boden daran, die nur mit Hilfe eines cleveren Georadars gesehen werden können. Dann ersetzten romanische Tempel sie: einer stürzte während der tschechischen Invasion ein, ein anderer hielt der Zeit nicht stand. Und erst im 13.-14. Jahrhundert wuchs an diesem Ort der heutige Steingigant — das erste wirklich gotische Gebäude auf polnischem Boden."
       },
       "zone3": {
         "title": "",
-        "text": ""
+        "text": "Und innen ist es noch erstaunlicher: Die Luft hängt dort nicht, sondern schwebt unter den Gewölben, und die Glasmalereien brechen das Licht in Stücke, als ob jemand farbiges Glas im Saal verstreut hätte. In den Kapellen lauern gotische und barocke Geschichten: irgendwo strenge steinerne Linien, und irgendwo Barock, verschüttet mit Fresken und Engeln. Und die Orgel — ein separates Kapitel: 1913 installiert, klingt sie immer noch so, als ob die gesamte Kathedrale zu einem riesigen Musikinstrument würde. Und in einem bestimmten Moment versteht man, dass dies nicht Musik ist, sondern die Erinnerung der Stadt selbst, die plötzlich mit Klang sprach."
       },
-      "zone3-3": {
-        "title": "",
-        "text": ""
+      "zone3-2": {
+        "title": "Architektur",
+        "text": "Eine Kathedrale in der Gotik ist nicht nur ein Gebäude, sondern ein wahrer Steinfokus: eine dreischiffige Basilika, gestreckt, als ob sie den Himmel erreichen wollte, mit einer Galerie, damit man den Altar umgehen kann, als ob man das Zentrum der Welt umgehen würde. Zwei Türme, fast hundert Meter hoch, zwinkern der Stadt zu: einer steht einfach, der andere lädt ein, hinaufzusteigen und Breslau von oben zu betrachten, wie ein Spielzeugmodell, wo die Oder ein silbernes Band ist und die Dächer rote Dachziegelquadrate. Die Fassade begegnet mit Portalen und Skulpturen so großzügig, dass es scheint, als ob die Wand selbst beschlossen hätte, ein Märchen zu erzählen."
       },
       "zone4": {
-        "title": "",
-        "text": ""
+        "title": "Echo des Krieges",
+        "text": "Als über Breslau ein Sturm von Artilleriegeschossen tobte, gelang es einer Granate, in die Wand der Kathedrale des Heiligen Johannes des Täufers zu treffen und dort stecken zu bleiben — nicht ganz, aber auch nicht genug, um sie herauszuziehen. Und hier ist sie, dieses Stück Krieg, immer noch da. Wie eine steinerne Erinnerung daran, dass Zeit Wunden heilen kann. <br> Aber Narben nicht auslöscht."
       },
       "zone4-2": {
-        "title": "",
-        "text": ""
+        "title": "Steinerne Grimasse an der Fassade",
+        "text": "Viele gehen vorbei und schauen auf die Türme, die zum Himmel streben, das Portal und die Kapellen. Aber richtet euren Blick auf eine der Wände — dort, an den Türmchen, als ob sie sich im Schatten versteckten, irgendwo zwischen Erzengeln und Schnitzereien, sitzt ein menschliches Gesicht mit offenem Mund, als ob es gerade etwas Schreckliches gesehen hätte und nicht schweigen kann. Dies ist nicht nur Stein — dies ist eine steinerne Grimasse, hinterlassen von einem Meister, der sich einen Flüsterer und ein Lächeln leisten konnte, selbst in der Gotik."
       }
     }
   },
+  "swieta_jadwiga": {
+    "title": "Heilige Hedwig",
+    "book02": {
+      "zone1": {
+        "title": "Heilige Hedwig",
+        "text": "Eines der bemerkenswertesten Phänomene auf der Tumski-Brücke sind überhaupt nicht die Touristenmassen mit Kameras, sondern eine steinerne Dame, die majestätisch auf einem neugotischen Sockel am Eingang von der Sandinsel-Seite thront. Dies ist die Heilige Hedwig, die Schutzpatronin Schlesiens, die, wie es scheint, nicht so sehr auf die Stadt schaut als durch sie hindurch — dorthin, wo ihre eigene ewige Geschichte weitergeht."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Hedwig ist, wie es sich gehört, in einen langen Mantel und eine Mitra gekleidet und hält in der Hand einen winzigen Tempel — ein Modell der Trzebnica-Kirche. Es sieht so aus, als ob sie ihn gleich einem Passanten anbieten würde: hier, nimm ihn, er ist für dich, verlier ihn nur nicht."
+      },
+      "zone2-2": {
+        "title": "Heiliger Johannes der Täufer",
+        "text": "Gegenüber der Straße hält der Heilige Johannes der Täufer ihr Gesellschaft — auch nicht der letzte Mensch in der himmlischen Hierarchie und der offizielle Beschützer Breslaus und seiner Kathedrale. Der Autor der Skulptur, Gustav Grünberg, ließ ihn hier 1893 zurück, und seitdem bewachen beide Heiligen fröhlich die Brücke, wie Wächter zwischen den Welten."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Das Herzogschloss, wo Hedwig einst lebte, ist längst verschwunden — aus dem Gesicht der Erde gelöscht bereits im 14. Jahrhundert. Aber etwas überlebte hartnäckig die Zeit. Im westlichen Teil der ehemaligen Insel kann man auf das Kloster der Notre-Dame-Schulschwestern in der St. Martin-Straße 12 stoßen. Dort erinnern sich sogar die Wände an mehr, als sie erzählen: Überreste eines gotischen Zimmers mit einem winzigen Fenster, aus dem, wie man sagt, die Prinzessin selbst Essen an die Armen verteilte. Stellt euch vor: Ein Fenster öffnet sich, und zusammen mit einem Stück Brot sickert ein wenig himmlisches Licht in die Welt."
+      },
+      "zone3-2": {
+        "title": "Geschichte",
+        "text": "Hedwig wurde irgendwo um 1174 geboren, in Ungarn, aber es scheint, als ob das Schicksal selbst sofort eine Eintrittskarte nach Schlesien für sie vorbereitet hätte. Mit zwölf wurde sie mit Heinrich dem Bärtigen verheiratet — es klingt, als ob dem Mädchen einfach ein bärtiger Ehemann in einer hübschen Schachtel mit Schleife geschenkt wurde. Aber, glücklicherweise, erwies sich das Geschenk nicht als Enttäuschung: ihre Verbindung war erstaunlich glücklich und fruchtbar, und zusammen regierten sie das Land, bauten Klöster, Kirchen und stärkten das Christentum, als ob sie sich nicht mit Politik beschäftigten, sondern mit etwas wie Gartenarbeit."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Seitdem wird sie erinnert und verehrt: jedes Jahr am 16. Oktober erinnert sich Schlesien an seine heilige Schutzpatronin. In Trzebnica werden ihre Reliquien aufbewahrt, dorthin ziehen Pilger, und ihr Bild inspiriert immer noch Künstler. Normalerweise ist sie auf Gemälden in klösterlicher Kleidung mit einer Krone — und das ist sehr genau: gleichzeitig eine bescheidene Dienerin und eine Prinzessin, ein Symbol der Barmherzigkeit und Stärke. Allerdings, wenn man genau hinschaut, kann man in ihrem steinernen Blick ein leichtes mysteriöses Lächeln einfangen — dasjenige, das bei denen bleibt, die viel mehr wissen, als sie bereit sind zu erzählen."
+      },
+      "zone4-2": {
+        "title": "",
+        "text": "Als Heinrich 1238 starb, verlor Hedwig nicht den Kopf — sie beschloss, sich vollständig Gott zu widmen. Sie gründete ein Zisterzienserkloster in Trzebnica, siedelte sich dort selbst an und fühlte sich, wie man sagt, völlig an ihrem Platz. Drei Jahrzehnte nach ihrem Tod bestätigte Papst Clemens IV. offiziell: ja, das ist eine Heilige, kein Zweifel. So wurde Hedwig die erste kanonisierte Heilige polnischer Herkunft und erhielt einen ewigen himmlischen Titel, viel ehrenvoller als der fürstliche."
+      }
+    }
+  },
+  "katedra_koscielna": {
+    "title": "Kirche des Heiligen Kreuzes und des Heiligen Bartholomäus",
+    "book02": {
+      "zone1": {
+        "title": "Kirche des Heiligen Kreuzes und des Heiligen Bartholomäus",
+        "text": "Dieser Tempel ist ein wahres architektonisches Wunder, eine zweistöckige Kirche, wo jede Ebene ihre eigene Geschichte erzählt. Das untere Stockwerk ist dem Heiligen Bartholomäus gewidmet, und das obere — dem Heiligen Kreuz. Hier schafft gotische Architektur einen einzigartigen Raum, wo Licht und Schatten ihre eigene Symphonie spielen, und jeder Stein bewahrt die Erinnerung an vergangene Jahrhunderte."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Im Laufe der Zeit erlebte der Tempel alles, was nur möglich war: sein unteres Stockwerk verwandelte sich in ein Lager, dann in einen Stall, dann in einen Unterschlupf. Das obere hingegen, wie ein stolzer älterer Bruder, bewahrte weiterhin Gebete und Orgelakkorde. Kriege, Brände, Restaurierungen — all das hinterließ Spuren, aber zerstörte es nicht endgültig. Selbst nach dem Zweiten Weltkrieg, als viele Heiligtümer in Trümmern lagen, stand es wieder auf — und steht jetzt als steinerner Zeuge dafür, dass das Leben trotzdem stärker ist als die Zerstörung."
+      },
+      "zone2-2": {
+        "title": "Geschichte",
+        "text": "Diese Kirche wurde aus einem hartnäckigen Wunsch geboren, Fürst Heinrich IV. Probus und Bischof Thomas II. zu versöhnen. Ende des 13. Jahrhunderts beschlossen beide, müde von gegenseitigen Beschwerden, einen Tempel zu bauen — um Gott zu gefallen und sich miteinander zu versöhnen. So wurde 1288-1295 das Fundament gelegt, und bis zur Mitte des 14. Jahrhunderts, unter der Aufsicht von Meister Wiland, streckten sich die Wände bereits zum Himmel."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Und das obere Niveau, dem Heiligen Kreuz gewidmet, ist im Gegenteil ganz aus Luft und Licht gewebt. Riesige Fenster lassen die Sonne herein, Gewölbe streben zum Himmel, und es entsteht der Eindruck, dass der Tempel selbst singt. Hier saßen einst Kanoniker, und hier fließt auch jetzt die Orgelmusik, als ob die Wände atmen könnten."
+      },
+      "zone3-2": {
+        "title": "Konstruktion",
+        "text": "Das Erstaunlichste an dieser Kirche ist ihre doppelte Natur. Das untere Niveau, dem Heiligen Bartholomäus gewidmet, sieht streng und substantiell aus, wie eine Festung, bereit, jedem Ansturm standzuhalten. Hier sind niedrige Gewölbe und dunkle Ecken, wo man flüstern möchte, nicht laut sprechen."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Und mehr: Im Gegensatz zu vielen Tempeln, wo der Raum streng vertikal ist — von der Erde zum Himmel, ist hier alles gleichzeitig horizontal-vertikal angeordnet. Zwei Stockwerke, zwei Charaktere, zwei Wege. Als ob der Tempel nicht zwischen Licht und Dunkelheit wählen würde, sondern jedem seinen Platz gäbe. Und, vielleicht, deshalb scheint er lebendig — weil er im Menschen sowohl das Irdische als auch das Himmlische auf einmal erkennt."
+      },
+      "zone4-2": {
+        "title": "Interessante Fakten",
+        "text": "Es gibt auch ein kleines Geheimnis in dieser Kirche, würdig einer guten städtischen Legende. Fürst Heinrich IV. wollte genau hier begraben werden, im unteren Tempel, 'bis ein Mausoleum gebaut wird.' Aber das Schicksal erwies sich als spöttisch: Das Mausoleum erschien nie, und während des Zweiten Weltkriegs verschwanden seine Überreste irgendwo. Einige sagen — die Deutschen nahmen sie weg, andere flüstern — er ging selbst, um nicht mehr auf Kriege zu schauen."
+      }
+    }
+  },
+
   "panorama": {
     "title": "Aussichtsplattform"
   },
   "map.tumski_bridge": "Tumski-Brücke",
-  "map.katedra": "Dom St. Johannes des Täufers",
-  "map.matka": "Marienstatue",
-  "map.sobor": "Kreuzkirche und St. Bartholomäus",
-  "map.jan": "Denkmal für Johannes Nepomuk",
-  "map.kostel": "Kirche St. Maria auf dem Sande",
-  "map.platan": "Ahornblättrige Platane. Naturdenkmal",
+  "map.katedra": "Kathedrale des Johannes des Täufers",
+  "map.matka": "Statue der Jungfrau Maria",
+  "map.sobor": "Domkirche des Heiligen Kreuzes und des Heiligen Bartholomäus",
+  "map.jan": "Denkmal für Jan Nepomuk",
+  "map.kostel": "Kirche der Heiligen Maria auf dem Sand",
+  "map.platan": "Ahornblättriger Platan. Naturdenkmal",
   "map.ogrod": "Garten der Päpstlichen Theologischen Fakultät",
   "map.ogrodbot1": "Botanischer Garten der Universität Breslau",
   "map.ogrodbot2": "Botanischer Garten der Universität Breslau",
@@ -103,7 +205,7 @@
   "map.odra2": "Oder",
   "map.odra3": "Oder",
   "map.mlynski": "Mühlenbrücke",
-  "map.panny": "Marienstraße",
+  "map.panny": "Straße der Allerheiligsten Jungfrau Maria",
   "map.piasek": "Sandinsel",
   "map.katedralna1": "Domstraße",
   "map.katedralna2": "Domplatz",
@@ -111,26 +213,26 @@
   "map.katedralna4": "Domplatz",
   "map.katedralna5": "Domplatz",
   "map.brama": "Kluska-Tor",
-  "map.kanonia": "Kanonie-Straße",
-  "map.bramabot": "Gartentür des Botanischen Gartens",
+  "map.kanonia": "Kanonikerstraße",
+  "map.bramabot": "Botanischer Garten Tor",
   "map.kapitulna": "Kapitelstraße",
   "quest": {
     "title1": "Quest 1: Finde alle Geheimnisse der Tumski-Insel",
-    "intro": "Auf dem Dachboden eines verlassenen Hauses wurden Aquarelle entdeckt. Ein paar Dutzend. Die Blätter sind staubig, stellenweise vom Zahn der Zeit oder vielleicht von Mäusen angeknabbert (ich weiß nicht, wer von beiden sorgfältiger war), aber die Farben leben noch — so lebendig, dass es im Hals kratzt vom Geruch des Regens auf warmem Stein, wenn man zu lange hinsieht.\n\nDer Künstler? Unbekannt. Die Signatur ist unleserlich. Vielleicht ist es ein Name. Oder vielleicht — die Koordinaten einer anderen Wirklichkeit.\n\nAuf den Bildern: Orte. Straßen, Menschen, Fenster. Ein einsamer Laternenanzünder neben einer Säule. Ein Turm mit Vögeln auf dem Dach. Alles seltsam vertraut. Als hätte ich das schon einmal gesehen. Im Traum? In einem Buch? In jenem Leben, von dem mir nie jemand erzählt hat?\n\nUnd jetzt muss ich sie aus irgendeinem Grund finden. Alle. Einen nach dem anderen. Sie in der Wirklichkeit sehen.\n\nObwohl... wer weiß schon, was wirklich wirklich ist?",
-    "task1": "Der geheimnisvolle Löwe, der die Kirche bewacht",
+    "intro": "Im Dachboden eines verlassenen Hauses wurden Aquarelle entdeckt. Mehrere Dutzend. Die Blätter sind staubig, hier und da von Zeit oder Mäusen angenagt (ich weiß nicht, wer von ihnen ordentlicher war), aber die Farben sind noch lebendig — solche, dass im Hals vom Geruch des Regens auf warmem Stein kitzelt, wenn man zu lange schaut. \n\nAutor? Unbekannt. Die Unterschrift ist unleserlich. Vielleicht ist es ein Name. Oder vielleicht — Koordinaten einer anderen Realität. \n\nAuf den Gemälden sind Orte. Straßen, Menschen, Fenster. Ein einsamer Laternenanzünder an einer Säule. Ein Turm mit Vögeln auf dem Dach. Alles ist seltsam vertraut. Als ob es bereits irgendwo existiert hätte. Im Traum? In einem Buch? In jenem Leben, von dem mir vergessen wurde zu erzählen? \n\nAber jetzt muss ich sie aus irgendeinem Grund finden. Alle. In der Realität sehen. \n\nObwohl wer weiß, was wirklich real ist?",
+    "task1": "Mysteriöser Löwe, der die Kirche bewacht",
     "task2": "Liebesschlösser",
-    "task3": "Der heilige Johannes Nepomuk",
-    "task4": "Die Muttergottes mit dem Kind",
-    "task5": "Aussichtsplattform auf dem Turm der Kathedrale",
-    "task6": "Granate aus dem Zweiten Weltkrieg",
-    "task7": "Heinrich, der zu Stein wurde",
-    "task8": "Der Laternenanzünder",
-    "task9": "Der Schwarzer Knödel",
-    "task10": "Eingang zum Botanischen Garten",
+    "task3": "Heiliger Jan Nepomuk",
+    "task4": "Madonna mit Kind",
+    "task5": "Aussichtsplattform auf dem Domturm",
+    "task6": "Granate des Zweiten Weltkriegs",
+    "task7": "Heinrich, zu Stein verwandelt",
+    "task8": "Laternenanzünder",
+    "task9": "Schwarze Kluska",
+    "task10": "Eingang zum botanischen Garten",
     "task11": "Garten der Päpstlichen Theologischen Fakultät",
-    "task12": "Statue der Maria Magdalena im Garten der Päpstlichen Theologischen Fakultät"
+    "task12": "Statue der Maria Magdalena im Garten der päpstlichen theologischen Fakultät"
   },
   "music": {
-    "hint": "Klicken Sie irgendwo, um die Sounds zu starten"
+    "hint": "Klicke irgendwo, um die Klänge zu starten"
   }
 } 

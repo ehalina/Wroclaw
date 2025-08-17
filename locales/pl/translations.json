@@ -1,14 +1,47 @@
 {
   "tumski": {
     "title": "Ostrów Tumski",
-    "description": "Ostrów Tumski to nie tylko punkt na mapie, ale prawdziwy portal czasowy prowadzący prosto w głębiny wieków. Gdyby Wrocław był starożytną księgą, jego pierwszy rozdział zaczynałby się właśnie tutaj, w X wieku, pośród mgieł, dźwięku dzwonów i tajemniczych sylwetek.\n\nTa wyspa to nie zwykła dzielnica, ale prawdziwa encyklopedia cudów. Tutaj starożytne świątynie sąsiadują z fascynującymi legendami, ulice szepczą o przeszłości, a wieczorami, jak za dotknięciem czarodziejskiej różdżki, pojawia się latarnik. Tak, prawdziwy latarnik w długim płaszczu, z latarnią i specjalnym kijkiem. Każdej nocy ręcznie zapala stare gazowe latarnie, jakby przypominając miastu, że magia wciąż żyje.\n\nBądźcie gotowi. Rozpoczniemy naszą przechadzkę od Mostu Tumskiego i krok po kroku będziemy odkrywać tajemnice średniowiecznego Wrocławia. A jeśli usłyszycie szept starych murów - nie bójcie się. To po prostu wyspa opowiada wam swoje historie."
+    "book02": {
+      "zone1": {
+        "title": "Ostrów Tumski",
+        "text": "Ostrów Tumski to nie tylko miejsce na mapie, ale prawdziwy portal czasowy prowadzący prosto w głębiny wieków. Gdyby Wrocław był starożytną księgą, jego pierwszy rozdział zaczynałby się właśnie tutaj, w X wieku, pośród mgieł, dźwięku dzwonów i tajemniczych sylwetek. <br>Ta wyspa to nie tylko dzielnica, ale cała encyklopedia cudów. Tutaj starożytne świątynie sąsiadują z dziwacznymi legendami, ulice szepczą o przeszłości, a wieczorami, jakby za sprawą magii, pojawia się latarnik. Tak, tak, prawdziwy, w długim płaszczu, z latarnią i specjalnym kijkiem. I każdej nocy ręcznie zapala stare gazowe latarnie, jakby przypominając miastu, że magia wciąż żyje.<br>Więc przygotujcie się. Rozpoczniemy nasz spacer od Mostu Tumskiego i krok po kroku będziemy odkrywać tajemnice średniowiecznego Wrocławia. A jeśli nagle usłyszycie szept starych murów — nie bójcie się. To po prostu wyspa opowiada wam swoje historie."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "W X-XI wieku wyspa stała się rezydencją pierwszej dynastii Piastów: drewniany zamek obrastał ziemnymi wałami, a kaplica św. Marcina, wzniesiona z kamienia, stopniowo stawała się symbolem siły pośród chwiejnego drewna. Do XII wieku wschodnia część Tumskiego już należała do biskupa, a pierwsza katedra zastąpiła skromny kościół, jakby cicho szeptając, że wyspa staje się miejscem, gdzie spotykają się władza i wiara."
+      },
+      "zone2-2": {
+        "title": "Historia",
+        "text": "Ostrów Tumski, jak się wydaje, początkowo był tylko łańcuchem drewnianych domów, wygodnie usadowionych na brzegu. W XI wieku książęca kaplica św. Marcina już odważnie stała pośród umocnionych murów, a rzeka Odra leniwie owijała wyspę, zaopatrując mieszkańców w żywność i występując jako naturalna ochrona. Wtedy mieszkało tu około półtora tysiąca ludzi, i każdy z nich, na pewno, wiedział, gdzie ukrywa się najlepsza ryba i który wiatr zapowiada burzę."
+      },
+      "zone3": {
+        "title": "Wyspa?",
+        "text": "Kiedyś Tumski był prawdziwą wyspą, dumnie połączoną ze światem mostami — jednym w kierunku Piasku, drugim w kierunku prawego brzegu Odry. Ale Wrocławowi raz znudziły się własne umocnienia: w 1807 roku zostały zgodnie zburzone, rowy zasypane, a Tumski pozostał wyspą tylko z nazwy. Od tego czasu ma tylko jedną wyspiarską relikwię — staw w Ogrodzie Botanicznym, skromny fragment kiedyś hałaśliwego koryta rzeki."
+      },
+      "zone3-2": {
+        "title": "Ciekawe fakty",
+        "text": "W 1315 roku Tumski ostatecznie zmienił właścicieli i przekształcił się w małe, ale dumne 'państwo kościelne', gdzie świeckie prawa już nie obowiązywały, a zamiast nich panowały zasady, wymyślone, jak się wydaje, wyłącznie dla przyjemności samych zasad. Na przykład, każdy wjeżdżający na Most Tumski był obowiązany zdjąć nakrycie głowy — i nie miało znaczenia, czy to prosty szewc, czy ukoronowana osoba — bo taki był miejscowy porządek. I nie przychodziło do głowy nawet najbardziej zdesperowanym buntownikom, żeby go naruszyć: kto wie, co jeszcze ci duchowni mieli zapisane w statucie, a co jeśli następna zasada to stanie na jednej nodze i śpiewanie psalmów przy wejściu na wyspę?"
+      },
+      "zone4": {
+        "title": "",
+        "text": "A potem, dwa i pół wieku później, przybył tu Giacomo Casanova. Tak, tak, ten sam, o którym wszyscy od razu myślą to samo. W 1766 roku zatrzymał się u ojca Bastianiego na Ostrowie Tumskim — i kto wie, co bardziej zaimponowało wielkiemu awanturnikowi: gościnność gospodarza, wrocławskie wino czy stare mury, przechowujące sekrety Kopernika? Zresztą, Ostrów Tumski zawsze umiał zaskakiwać swoich gości."
+      },
+      "zone4-2": {
+        "title": "Znane osobistości",
+        "text": "Spacerując po Ostrowie Tumskim, nietrudno wyobrazić sobie, że pośród tych domów i wież błąkał się sam Mikołaj Kopernik. Wyobraźcie sobie: geniusz, który przesunął Ziemię ze środka wszechświata, kiedyś chodził tymi uliczkami, wpadał do Kościoła Świętego Krzyża, gdzie od 1503 do 1538 roku był duchownym. Na pewno czasami podnosił oczy do gwiazd nad katedralnymi wieżami i myślał o swoim — o niebie, które nie kręci się wokół nas, o miejscu naszej Ziemi wśród tych gwiazd."
+      }
+    }
   },
   "tumski_most": {
     "title": "Most Tumski",
     "book02": {
       "zone1": {
         "title": "Most Tumski",
-        "text": "Jeśli Wrocław jest miastem z bajki (a bez wątpienia tak jest), to Most Tumski jest tym magicznym portalem, który prowadzi do jego najstarszego i najbardziej tajemniczego serca. Jego nazwa brzmi oczywiście dostojnie i ważnie — 'katedralny', bo prowadzi prosto do majestatycznej Katedry św. Jana Chrzciciela. A także dlatego, że stary Tumski to nie tylko most, ale granica między światami: kiedyś spotykała się tu władza świecka i kościelna, a nawet postawiono specjalny słup z dwoma herbami, żeby nikt nie zapomniał, kto tu rządzi (choć to nie pomogło)."
+        "text": "W mieście czasami są miejsca, które z jakiegoś powodu wydają się żywe. Nie dlatego, że ludzie stale po nich chodzą lub koty przebiegają. Żywe w innym sensie. <br> Jak rozmówca, który dawno w swoim poznaniu się wypełnił. I nie dąży już do próżności. <br> We Wrocławiu to Most Tumski. Stoi sobie, żelazny i zielony, łączy dwie wyspy. I wydaje się niczym szczególnym, jeśli nie wiedzieć, że czasami mosty też umieją przechowywać sekrety."
       },
       "zone1-2": {
         "title": "",
@@ -16,37 +49,36 @@
       },
       "zone2": {
         "title": "",
-        "text": ""
+        "text": "Potem przyszedł XIX wiek i powiedział: 'Dość romantyzmu, zróbmy już coś poważnego.' Tak w 1889 roku pojawił się stalowy piękniś z nitami, zbudowany pod czujnym okiem inżyniera von Scholza. Most przetrwał wojny, remonty i nawet okres, gdy ktoś wiecznie wieszał na nim zamki z serduszkami. Wszystko to znosił z tym samym filozoficznym spokojem, z jaką stare koty znoszą kolejną zmianę ustawienia mebli."
       },
       "zone2-2": {
-        "title": "",
-        "text": ""
+        "title": "Historia",
+        "text": "Kiedyś był tu zwykły drewniany most. Tak stary, że pamiętał narodziny miasta. Łączył dwa zupełnie różne światy: jeden świat był u kościoła, drugi — u świeckich. I, jak to zwykle bywa, most stał się jedynym miejscem, gdzie światy mogły się krzyżować bez pretensji i zbędnych pytań."
       },
       "zone3": {
         "title": "",
-        "text": ""
+        "text": "Dźwigar Gerbera, stal, nity, staranne proporcje — wszystko to to poezja inżynieryjna. A żeby go złożyć, części przywożono wodą na barkach. Jakby to nie był zwykły projekt, ale jakiś magiczny rytuał, gdzie każda śruba musiała przypłynąć rzeką. <br> Żeby mostowi było spokojniej żyć na swoim miejscu."
       },
-      "zone3-3": {
-        "title": "",
-        "text": ""
+      "zone3-2": {
+        "title": "Konstrukcja",
+        "text": "Na pierwszy rzut oka — po prostu żelazny most długości 52 metrów. Dwa przęsła, chodniki, jezdnia, i wszystko to pod staranną neogotycką 'czapką', która, szczerze mówiąc, potrzebna jest tylko dla piękna. Na drugi rzut oka — przypomina instrument muzyczny: każde przęsło jak struna, i jeśli dobrze się przysłuchać (a jeszcze lepiej, przyjść nocą), można usłyszeć jego zamyślone melodie."
       },
       "zone4": {
         "title": "",
-        "text": ""
+        "text": "A jeszcze most ma przyjaciela-latarnika. Prawdziwego, żywego. Każdego wieczoru zapala gazowe latarnie na Ostrowie Tumskim. Wydaje się, że wie coś, czego my z wami nigdy się nie dowiemy. Może nawet przechowuje wspólne sekrety z mostem. I jeśli pewnego dnia zatrzymacie się w tym miejscu trochę dłużej niż planowaliście, most może wam je opowiedzieć. Tylko cicho. <br> Żeby nikt więcej się nie dowiedział."
       },
       "zone4-2": {
-        "title": "",
-        "text": ""
+        "title": "Ciekawe fakty",
+        "text": "Na początku XXI wieku stał się mostem zakochanych. Ludzie wieszali kłódki, rzucali klucze do Odry i odchodzili, pewni, że teraz ich miłość będzie wieczna. Most, oczywiście, milczał i niczego nie obiecywał. Potem władze zdecydowały, że dla żelaznego serca to za ciężko, i zdjęli całe to dobro. Od tego czasu nowe zamki znikają równie szybko jak iluzje po porannej kawie."
       }
     }
   },
   "tumski_cathedral": {
-    "title": "Archikatedra św. Jana Chrzciciela",
-    "description": "Archikatedra św. Jana Chrzciciela to główna świątynia katolicka Wrocławia i jeden z najstarszych gotyckich katedr w Polsce. Zbudowana w XIII-XIV wieku, katedra jest symbolem życia duchowego miasta i ważnym zabytkiem architektonicznym. Jej majestatyczne wieże są widoczne z daleka i służą jako punkt orientacyjny dla wszystkich odwiedzających Ostrów Tumski.",
+    "title": "Katedra św. Jana Chrzciciela",
     "book02": {
       "zone1": {
-        "title": "Archikatedra św. Jana Chrzciciela",
-        "text": "Archikatedra św. Jana Chrzciciela to nie tylko kościół, ale prawdziwa kamienna kronika Wrocławia. Jej wieże, sięgające nieba, jakby opowiadały historię miasta, które przetrwało wojny, pożary i powodzie, ale zawsze odradzało się z popiołów. Wewnątrz katedry znajdują się bezcenne dzieła sztuki, a jej organy uważane są za jedne z najlepszych w Europie."
+        "title": "Katedra św. Jana Chrzciciela",
+        "text": "To nie świątynia, ale ogromna księga napisana w kamieniu i cegle. Jej wieże ciągną się w niebo, jakby same chciały opowiedzieć, że Wrocław już widział wszystko: i wojny, i pożary, i wodę po kolana, i wciąż za każdym razem wstawał, otrząsał się i szedł dalej. Wewnątrz katedry — nie tylko witraże i ołtarze, ale całe muzeum, ukryte za modlitwą. A organ… organ brzmi, jakby powietrze nagle przypomniało sobie, że umie śpiewać, i śpiewa lepiej niż wszyscy w Europie."
       },
       "zone1-2": {
         "title": "",
@@ -54,40 +86,115 @@
       },
       "zone2": {
         "title": "",
-        "text": ""
+        "text": "Od tego czasu wiele razy płonęła, zawalała się i wstawała ponownie. Pożary w XVI i XVIII wieku, neogotycka renowacja w XIX, okropności II wojny światowej, gdy prawie trzy czwarte katedry zamieniło się w stos kamieni… Ale znowu wstała. Do 1951 roku została odrestaurowana, a wieże z miedzianymi kopułami wróciły dopiero w 1991, jakby po raz ostatni przypominając: ta katedra może przetrwać wszystko. I nadal stoi — kamienne serce miasta, które bije już od tysiąca lat."
       },
       "zone2-2": {
-        "title": "",
-        "text": ""
+        "title": "Historia",
+        "text": "Na Ostrowie Tumskim katedra św. Jana Chrzciciela stoi tak długo, że wydaje się, że sama już zapomniała, ile razy się odradzała. Pierwszy drewniany kościół pojawił się tu już w X wieku — i teraz przypominają o nim tylko upiorne ślady w ziemi, które można zobaczyć tylko za pomocą sprytnego georadaru. Potem zastępowały go kościoły romańskie: jeden zawalił się podczas czeskiej inwazji, drugi nie wytrzymał czasu. I dopiero w XIII-XIV wieku na tym miejscu wyrósł obecny kamienny olbrzym — pierwsza naprawdę gotycka budowla na polskich ziemiach."
       },
       "zone3": {
         "title": "",
-        "text": ""
+        "text": "A wewnątrz jest jeszcze bardziej zadziwiająco: powietrze tam nie wisi, ale unosi się pod sklepieniami, i witraże rozkładają światło na kawałki, jakby ktoś rozsypał po sali kolorowe szkło. W kaplicach czają się gotyckie i barokowe historie: gdzieś surowe kamienne linie, a gdzieś barok, rozlany freskami i aniołami. A organ — osobny rozdział: zainstalowany w 1913, wciąż brzmi, jakby cała katedra stawała się ogromnym instrumentem muzycznym. I w pewnym momencie rozumiecie, że to nie muzyka, ale sama pamięć miasta, która nagle przemówiła dźwiękiem."
       },
-      "zone3-3": {
-        "title": "",
-        "text": ""
+      "zone3-2": {
+        "title": "Architektura",
+        "text": "Katedra w gotyku to nie tylko budynek, ale prawdziwy kamienny fokus: trójnawowa bazylika, rozciągnięta, jakby dążyła do nieba, z galerią, żeby można było obejść ołtarz, jakby obejść centrum świata. Dwie wieże prawie po sto metrów wysokości mrugają do miasta: jedna po prostu stoi, druga zaprasza, żeby wejść i spojrzeć na Wrocław z góry, jak na zabawkową makietę, gdzie Odra to srebrna wstążka, a dachy to czerwone dachówkowe kwadraciki. Fasada spotyka portalami i rzeźbami tak hojnie, że wydaje się, jakby sama ściana zdecydowała opowiedzieć bajkę."
       },
       "zone4": {
-        "title": "",
-        "text": ""
+        "title": "Echo wojny",
+        "text": "Gdy nad Wrocławiem szalała burza salw artyleryjskich, jeden pocisk zdołał trafić w ścianę Katedry św. Jana Chrzciciela i utknąć tam — nie do końca, ale też nie na tyle, żeby go wyciągnąć. I oto jest, ten kawałek wojny, wciąż tam. Jak kamienne przypomnienie, że czas może leczyć rany. <br> Ale nie wymazuje blizn."
       },
       "zone4-2": {
-        "title": "",
-        "text": ""
+        "title": "Kamienny grymas na fasadzie",
+        "text": "Wielu przechodzi obok, patrząc na wieże sięgające nieba, portal i kaplice. Ale skierujcie wzrok na jedną ze ścian — tam przy wieżyczkach, jakby ukrywając się w cieniu, gdzieś między archaniołami i rzeźbą, siedzi ludzka twarz z otwartymi ustami, jakby właśnie zobaczyła coś strasznego i nie może milczeć. To nie tylko kamień — to kamienna grymas, pozostawiona przez mistrza, który mógł sobie pozwolić na szept i uśmiech nawet w epoce gotyku."
       }
     }
   },
+  "swieta_jadwiga": {
+    "title": "Święta Jadwiga",
+    "book02": {
+      "zone1": {
+        "title": "Święta Jadwiga",
+        "text": "Jednym z najbardziej godnych uwagi zjawisk na Moście Tumskim wcale nie są tłumy turystów z aparatami, ale kamienna dama, majestatycznie wznosząca się na neogotyckim cokole przy wejściu od strony Wyspy Piaskowej. To święta Jadwiga, patronka Śląska, która, jak się wydaje, patrzy nie tyle na miasto, co przez nie — tam, gdzie trwa jej własna wieczna historia."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Jadwiga, jak przystało, jest ubrana w długi płaszcz i mitrę, a w ręce trzyma maleńką świątynię — model kościoła trzebnickiego. Wygląda, jakby zaraz miała zaproponować ją przechodniowi: masz, to dla ciebie, tylko nie zgub."
+      },
+      "zone2-2": {
+        "title": "Święty Jan Chrzciciel",
+        "text": "Przez ulicę dotrzymuje jej towarzystwa święty Jan Chrzciciel — też nie ostatni człowiek w niebiańskiej hierarchii i oficjalny obrońca Wrocławia i jego katedry. Autor rzeźby, Gustav Grünberg, zostawił go tu w 1893 roku, i od tego czasu obaj święci wesoło strzegą mostu, jak strażnicy między światami."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Zamek książęcy, gdzie Jadwiga kiedyś mieszkała, już dawno nie istnieje — zniknął z powierzchni ziemi już w XIV wieku. Ale coś uparcie przetrwało czas. W zachodniej części byłej wyspy można natknąć się na klasztor sióstr szkoły Notre Dame przy ul. św. Marcina 12. Tam nawet mury pamiętają więcej, niż opowiadają: pozostałości gotyckiego pokoju z maleńkim okienkiem, z którego, jak mówią, sama księżna rozdawała jedzenie ubogim. Wyobraźcie sobie: otwiera się okienko, i wraz z kawałkiem chleba w świat przesącza się trochę niebiańskiego światła."
+      },
+      "zone3-2": {
+        "title": "Historia",
+        "text": "Jadwiga urodziła się gdzieś około 1174 roku, na Węgrzech, ale, jak się wydaje, samo przeznaczenie od razu przygotowało jej bilet na Śląsk. W wieku dwunastu lat została wydana za mąż za Henryka Brodatego — brzmi to, jakby dziewczynce po prostu podarowano brodatego męża w pięknym pudełku z wstążką. Ale, na szczęście, prezent okazał się nie rozczarowaniem: ich związek był zadziwiająco szczęśliwy i owocny, i razem rządzili ziemią, budowali klasztory, kościoły i umacniali chrześcijaństwo, jakby zajmowali się nie polityką, a czymś w rodzaju ogrodnictwa."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Od tego czasu jest pamiętana i czczona: każdego roku 16 października Śląsk wspomina swoją świętą patronkę. W Trzebnicy przechowywane są jej relikwie, tam ciągną pielgrzymi, a jej obraz wciąż inspiruje artystów. Zwykle na obrazach jest w zakonnym stroju z koroną — i to bardzo dokładnie: jednocześnie skromna służebnica i księżniczka, symbol miłosierdzia i siły. Zresztą, jeśli przyjrzeć się dokładnie, w jej kamiennym spojrzeniu można uchwycić lekki tajemniczy uśmiech — ten sam, który pozostaje u tych, którzy wiedzą znacznie więcej, niż są gotowi opowiedzieć."
+      },
+      "zone4-2": {
+        "title": "",
+        "text": "Gdy Henryk umarł w 1238 roku, Jadwiga nie straciła głowy — postanowiła całkowicie poświęcić się Bogu. Założyła klasztor cysterski w Trzebnicy, osiedliła się tam sama i, jak mówią, czuła się całkowicie na swoim miejscu. Trzy dekady po jej śmierci papież Klemens IV oficjalnie potwierdził: tak, to święta, nie ma wątpliwości. Tak Jadwiga stała się pierwszą kanonizowaną świętą polskiego pochodzenia i otrzymała wieczny niebiański tytuł, znacznie bardziej honorowy niż książęcy."
+      }
+    }
+  },
+  "katedra_koscielna": {
+    "title": "Kościół św. Krzyża i św. Bartłomieja",
+    "book02": {
+      "zone1": {
+        "title": "Kościół św. Krzyża i św. Bartłomieja",
+        "text": "Ta świątynia to prawdziwy cud architektoniczny, dwupiętrowy kościół, gdzie każdy poziom opowiada swoją historię. Dolne piętro jest poświęcone św. Bartłomiejowi, a górne — św. Krzyżowi. Tutaj gotycka architektura tworzy unikalną przestrzeń, gdzie światło i cień grają swoją własną symfonię, a każdy kamień przechowuje pamięć o minionych wiekach."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Z czasem świątynia zdążyła przeżyć wszystko, co tylko możliwe: jej dolne piętro zamieniało się to w magazyn, to w stajnię, to w schronienie. Górne zaś, jak dumny starszy brat, nadal przechowywało modlitwy i akordy organowe. Wojny, pożary, renowacje — wszystko to zostawiło ślady, ale nie zniszczyło go ostatecznie. Nawet po II wojnie światowej, gdy wiele świątyń leżało w ruinach, znowu się podniosła — i teraz stoi jako kamienny świadek, że życie i tak jest silniejsze od zniszczeń."
+      },
+      "zone2-2": {
+        "title": "Historia",
+        "text": "Ten kościół narodził się z upartego pragnienia pojednania księcia Henryka IV Probusa i biskupa Tomasza II. Pod koniec XIII wieku obaj, zmęczeni wzajemnymi urazami, postanowili zbudować świątynię — żeby zadowolić Boga i pogodzić się ze sobą. Tak w 1288-1295 założono fundamenty, a do połowy XIV wieku, pod nadzorem mistrza Wilanda, mury już ciągnęły się ku niebu."
+      },
+      "zone3": {
+        "title": "",
+        "text": "A górny poziom, poświęcony św. Krzyżowi, przeciwnie, jest całkowicie utkany z powietrza i światła. Ogromne okna wpuszczają słońce, sklepienia dążą ku niebu, i tworzy się wrażenie, że świątynia sama śpiewa. Tu kiedyś siedzieli kanonicy, tu też i teraz muzyka organów rozlewa się tak, jakby mury umiały oddychać."
+      },
+      "zone3-2": {
+        "title": "Konstrukcja",
+        "text": "Najbardziej zadziwiające w tym kościele to jego podwójna natura. Dolny poziom, poświęcony św. Bartłomiejowi, wygląda surowo i solidnie, jak forteca, gotowa wytrzymać każdy atak. Tu niskie sklepienia i ciemne kąty, gdzie chce się szeptać, nie rozmawiać głośno."
+      },
+      "zone4": {
+        "title": "",
+        "text": "I jeszcze: w przeciwieństwie do wielu świątyń, gdzie przestrzeń jest ściśle pionowa — od ziemi ku niebu, tu wszystko jest urządzone jednocześnie poziomo-pionowo. Dwa piętra, dwa charaktery, dwie drogi. Jakby świątynia nie wybierała między światłem a ciemnością, a dawała każdemu swoje miejsce. I, być może, dlatego wydaje się żywa — bo rozpoznaje w człowieku i ziemskie, i niebiańskie od razu."
+      },
+      "zone4-2": {
+        "title": "Ciekawe fakty",
+        "text": "Jest w tym kościele i mała zagadka, godna dobrej miejskiej legendy. Książę Henryk IV chciał być pochowany właśnie tu, w dolnej świątyni, 'dopóki nie zbudują mauzoleum.' Ale los okazał się szyderczy: mauzoleum nigdy się nie pojawiło, a podczas II wojny światowej jego szczątki gdzieś zniknęły. Jedni mówią — wywieźli Niemcy, inni szepczą — sam odszedł, żeby nie patrzeć więcej na wojny."
+      }
+    }
+  },
+
   "panorama": {
-    "title": "Punkt widokowy"
+    "title": "Platforma widokowa"
   },
   "map.tumski_bridge": "Most Tumski",
-  "map.katedra": "Archikatedra św. Jana Chrzciciela",
+  "map.katedra": "Katedra Jana Chrzciciela",
   "map.matka": "Statua Matki Bożej",
-  "map.sobor": "Kolegiata Świętego Krzyża i św. Bartłomieja",
-  "map.jan": "Pomnik św. Jana Nepomucena",
-  "map.kostel": "Kościół Rzymskokatolicki pw. NMP na Piasku",
-  "map.platan": "Platan klonolistny. Pomnik Przyrody",
+  "map.sobor": "Kolegiata św. Krzyża i św. Bartłomieja",
+  "map.jan": "Pomnik Jana Nepomucena",
+  "map.kostel": "Kościół św. Marii na Piasku",
+  "map.platan": "Platan klonolistny. Pomnik przyrody",
   "map.ogrod": "Ogród Papieskiego Wydziału Teologicznego",
   "map.ogrodbot1": "Ogród Botaniczny Uniwersytetu Wrocławskiego",
   "map.ogrodbot2": "Ogród Botaniczny Uniwersytetu Wrocławskiego",
@@ -98,34 +205,34 @@
   "map.odra2": "Odra",
   "map.odra3": "Odra",
   "map.mlynski": "Most Młyński",
-  "map.panny": "ul. Najświętszej Marii Panny",
-  "map.piasek": "Wyspa Piasek",
-  "map.katedralna1": "ul. Katedralna",
+  "map.panny": "Ulica Najświętszej Marii Panny",
+  "map.piasek": "Wyspa Piaskowa",
+  "map.katedralna1": "Ulica Katedralna",
   "map.katedralna2": "Plac Katedralny",
   "map.katedralna3": "Plac Katedralny",
   "map.katedralna4": "Plac Katedralny",
   "map.katedralna5": "Plac Katedralny",
   "map.brama": "Brama Kluskowa",
-  "map.kanonia": "ul. Kanonia",
-  "map.bramabot": "Furtka w ogrodzie botanicznym",
-  "map.kapitulna": "ul. Kapitulna",
+  "map.kanonia": "Ulica Kanonia",
+  "map.bramabot": "Brama Ogrodu Botanicznego",
+  "map.kapitulna": "Ulica Kapitulna",
   "quest": {
-    "title1": "Quest 1: Odkryj wszystkie tajemnice Wyspy Tumskiej",
-    "intro": "Na strychu opuszczonego domu znaleziono akwarele. Kilkadziesiąt sztuk. Kartki zakurzone, miejscami nadgryzione przez czas albo myszy (nie wiem, kto z nich był bardziej precyzyjny), ale kolory wciąż żywe — aż w gardle drapie od zapachu deszczu na ciepłym kamieniu, jeśli patrzeć zbyt długo.\n\nAutor? Nieznany. Podpis nieczytelny. Może to imię. A może — współrzędne innej rzeczywistości.\n\nNa obrazach — miejsca. Ulice, ludzie, okna. Samotny latarnik przy kolumnie. Wieża z ptakami na dachu. Wszystko dziwnie znajome. Jakby już gdzieś to było. We śnie? W książce? W tym życiu, o którym zapomniano mi opowiedzieć?\n\nAle teraz z jakiegoś powodu muszę je odnaleźć. Wszystkie, co do jednej. Zobaczyć w rzeczywistości.\n\nChociaż... kto wie, czym naprawdę jest rzeczywistość?",
-    "task1": "Tajemniczy lew strzegący kościoła",
+    "title1": "Quest 1: Znajdź wszystkie tajemnice Ostrowa Tumskiego",
+    "intro": "Na strychu opuszczonego domu odkryto akwarele. Kilkadziesiąt. Kartki są zakurzone, tu i tam podgryzione przez czas lub myszy (nie wiem, który z nich był staranniejszy), ale kolory wciąż żyją — takie, że w gardle łaskocze od zapachu deszczu na ciepłym kamieniu, jeśli patrzy się za długo. \n\nAutor? Nieznany. Podpis nieczytelny. Może to imię. A może — współrzędne innej rzeczywistości. \n\nNa obrazach są miejsca. Ulice, ludzie, okna. Samotny latarnik przy kolumnie. Wieża z ptakami na dachu. Wszystko jest dziwnie znajome. Jakby już gdzieś istniało. We śnie? W książce? W tym życiu, o którym zapomniano mi opowiedzieć? \n\nAle teraz z jakiegoś powodu muszę je znaleźć. Wszystkie. Zobaczyć w rzeczywistości. \n\nChociaż kto wie, co naprawdę jest rzeczywiste?",
+    "task1": "Tajemniczy lew strzegący Kościoła",
     "task2": "Zamki miłości",
-    "task3": "Pomnik św. Jana Nepomucena",
-    "task4": "Statua Matki Bożej",
-    "task5": "Taras widokowy na wieży katedry",
-    "task6": "Pocisk z II wojny światowej",
-    "task7": "Henryk zamieniony w kamień",
+    "task3": "Święty Jan Nepomucen",
+    "task4": "Madonna z dzieckiem",
+    "task5": "Platforma widokowa na wieży Katedry",
+    "task6": "Pocisk II wojny światowej",
+    "task7": "Henryk, zamieniony w kamień",
     "task8": "Latarnik",
     "task9": "Czarna kluska",
     "task10": "Wejście do ogrodu botanicznego",
     "task11": "Ogród Papieskiego Wydziału Teologicznego",
-    "task12": "Figura Marii Magdaleny w ogrodzie Papieskiego Wydziału Teologicznego"
+    "task12": "Statua Marii Magdaleny w ogrodzie papieskiego wydziału teologicznego"
   },
   "music": {
-    "hint": "Kliknij w dowolnym miejscu, aby uruchomić dźwięki"
+    "hint": "Kliknij gdziekolwiek, żeby uruchomić dźwięki"
   }
 } 
