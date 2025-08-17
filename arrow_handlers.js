@@ -177,24 +177,20 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
             imageContainer.style.animationPlayState = 'paused';
             imageContainer.classList.add('zoom-transition');
             
-            console.log('🟡 Запускаем анимацию fade через 1000мс');
-            // Через 1000мс начинаем показывать следующее изображение
+            console.log('🟡 Сразу начинаем плавно показывать next-image-container');
+            // Сразу начинаем плавно показывать следующее изображение
+            nextImageContainer.style.opacity = '1';
+            
+            console.log('🟡 Запускаем таймер для перехода на следующую страницу через 1500мс');
+            // Через 1500мс (время анимации) переходим на следующую страницу
             setTimeout(() => {
-                console.log('🟡 Таймер fade сработал, показываем next-image-container');
-                // Показываем следующее изображение
-                nextImageContainer.style.opacity = '1';
-                
-                console.log('🟡 Запускаем таймер для перехода на следующую страницу через 500мс');
-                // Еще через 500мс переходим на следующую страницу
-                setTimeout(() => {
-                    console.log('🟡 Таймер сработал, вызываем onForwardClick callback');
-                    if (typeof onForwardClick === 'function') {
-                        onForwardClick();
-                    } else {
-                        console.warn('⚠️ onForwardClick не является функцией');
-                    }
-                }, 500);
-            }, 1000);
+                console.log('🟡 Таймер сработал, вызываем onForwardClick callback');
+                if (typeof onForwardClick === 'function') {
+                    onForwardClick();
+                } else {
+                    console.warn('⚠️ onForwardClick не является функцией');
+                }
+            }, 1500);
             
         } catch (error) {
             console.error('❌ Ошибка при обработке клика по стрелке прямо:', error);
@@ -236,24 +232,20 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
                 imageContainer.style.animationPlayState = 'paused';
                 imageContainer.classList.add('zoom-transition');
                 
-                console.log('🟡 Запускаем анимацию fade через 1000мс');
-                // Через 1000мс начинаем показывать следующее изображение
+                console.log('🟡 Сразу начинаем плавно показывать next-image-container');
+                // Сразу начинаем плавно показывать следующее изображение
+                nextImageContainer.style.opacity = '1';
+                
+                console.log('🟡 Запускаем таймер для перехода на следующую страницу через 1500мс');
+                // Через 1500мс (время анимации) переходим на следующую страницу
                 setTimeout(() => {
-                    console.log('🟡 Таймер fade сработал, показываем next-image-container');
-                    // Показываем следующее изображение
-                    nextImageContainer.style.opacity = '1';
-                    
-                    console.log('🟡 Запускаем таймер для перехода на следующую страницу через 500мс');
-                    // Еще через 500мс переходим на следующую страницу
-                    setTimeout(() => {
-                        console.log('🟡 Таймер сработал, вызываем onForwardClick callback');
-                        if (typeof onForwardClick === 'function') {
-                            onForwardClick();
-                        } else {
-                            console.warn('⚠️ onForwardClick не является функцией');
-                        }
-                    }, 500);
-                }, 1000);
+                    console.log('🟡 Таймер сработал, вызываем onForwardClick callback');
+                    if (typeof onForwardClick === 'function') {
+                        onForwardClick();
+                    } else {
+                        console.warn('⚠️ onForwardClick не является функцией');
+                    }
+                }, 1500);
                 
             } catch (error) {
                 console.error('❌ Ошибка при обработке касания по стрелке прямо:', error);

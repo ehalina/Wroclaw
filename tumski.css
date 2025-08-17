@@ -43,7 +43,7 @@
     background-position: center;
     background-color: black;
     opacity: 0;
-    transition: opacity 0.01s ease-in;
+    transition: opacity 1.5s ease-in;
     z-index: 2;
     backface-visibility: hidden;
     will-change: transform;
