@@ -120,7 +120,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         
         if (cursor && cursorArea) {
             if (typeof window.setupRightArrowHandler === 'function') {
-                window.setupRightArrowHandler(cursor, cursorArea, stepSound);
+                window.setupRightArrowHandler(cursor, cursorArea, stepSound, () => {
+                    // Переход на предыдущую страницу
+                    const prevPage = cursor.getAttribute('data-prev-page');
+                    if (prevPage) {
+                        window.location.href = prevPage;
+                    } else {
+                        console.error('Не указана предыдущая страница в атрибуте data-prev-page');
+                    }
+                });
             }
         }
         

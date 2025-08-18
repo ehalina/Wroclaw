@@ -413,9 +413,9 @@
         width: 300vw; /* делаем шире экрана, чтобы был скролл */
         height: 100vh;
         background-image: url("media/tumski/tumski_03.jpg");
-        background-size: auto 100%;
+        background-size: auto 100%; /* Вписываем по высоте, позволяя горизонтальную прокрутку */
         background-repeat: no-repeat;
-        background-position: left center;
+        background-position: left top; /* Позиционируем в левом верхнем углу */
         display: block;
         position: relative;
         transition: opacity 0.1s ease-in;
@@ -436,6 +436,15 @@
       }
       .next-image-container {
         pointer-events: none;
+        background-size: auto 100% !important; /* Вписываем по высоте, позволяя горизонтальную прокрутку */
+        background-position: left top !important; /* Позиционируем в левом верхнем углу */
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
     /* Геометки всегда видимы */
     .map-mark {

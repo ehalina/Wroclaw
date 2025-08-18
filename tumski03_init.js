@@ -128,7 +128,12 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (typeof window.setupBackArrowHandler === 'function') {
                 window.setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, () => {
                     // Переход на предыдущую страницу
-                    window.location.href = 'tumski.html';
+                    const prevPage = cursorBack.getAttribute('data-prev-page');
+                    if (prevPage) {
+                        window.location.href = prevPage;
+                    } else {
+                        console.error('Не указана предыдущая страница в атрибуте data-prev-page');
+                    }
                 });
             }
         }

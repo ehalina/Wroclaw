@@ -1,7 +1,7 @@
-// Инициализация для tumski03.html
+// Инициализация для tumski04.html
 // Этот файл передает в tumski_cathedral_handler.js только существующие геометки
 
-console.log('🟡 tumski03_init.js загружен');
+console.log('🟡 tumski04_init.js загружен');
 
 // Проверяем наличие основных элементов
 document.addEventListener('DOMContentLoaded', () => {
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', async function() {
-    console.log('🟡 tumski03_init.js: DOMContentLoaded сработал');
+    console.log('🟡 tumski04_init.js: DOMContentLoaded сработал');
     
     // 1. Загрузка переводов и обновление контента
     try {
@@ -128,7 +128,12 @@ document.addEventListener('DOMContentLoaded', async function() {
             if (typeof window.setupBackArrowHandler === 'function') {
                 window.setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, () => {
                     // Переход на предыдущую страницу
-                    window.location.href = 'tumski.html';
+                    const prevPage = cursorBack.getAttribute('data-prev-page');
+                    if (prevPage) {
+                        window.location.href = prevPage;
+                    } else {
+                        console.error('Не указана предыдущая страница в атрибуте data-prev-page');
+                    }
                 });
             }
         }
