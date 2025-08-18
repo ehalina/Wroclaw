@@ -530,7 +530,7 @@ const mapStyles = `
         width: 100vw;
         height: 100vh;
         background: rgba(0, 0, 0, 0.8);
-        display: none;
+        display: none; /* по умолчанию скрыто, показываем через JS display:flex */
         justify-content: center;
         align-items: center;
         z-index: 1001;
@@ -968,6 +968,8 @@ const MapModal = {
 
         // Добавляем модальное окно и кнопки на страницу
         document.body.insertAdjacentHTML('afterbegin', modalHTML);
+
+        // Удалены принудительные скрытия most-overlay, чтобы клики по геометкам могли открывать модалку
 
         // === Автоматическая ширина most-container по ширине most-image ===
         function adjustMostContainerWidth() {

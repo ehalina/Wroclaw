@@ -44,12 +44,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                 markerId: 'tumski_cathedral',
                 i18nKey: 'tumski_cathedral'
             });
-            
-            // Геометка Соборная церковь Святого Креста и Св. Варфоломея
-            mod.setupUniversalGeoMarker({
-                markerId: 'katedra_koscielna',
-                i18nKey: 'katedra_koscielna'
-            });
         }
     });
 
