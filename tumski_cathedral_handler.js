@@ -573,7 +573,7 @@ export function moveMarkersAndCursors() {
     const image = document.querySelector('.image');
     const scene = document.querySelector('.scene');
     // Собираем все map-mark-area и cursor-areas
-    const elements = Array.from(document.querySelectorAll('.map-mark-area, .custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-backarea'));
+    const elements = Array.from(document.querySelectorAll('.map-mark-area, .custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-backarea, .custom-cursor-leftarea'));
     if (isMobile) {
         elements.forEach(el => {
             if (el && el.parentElement !== image) {

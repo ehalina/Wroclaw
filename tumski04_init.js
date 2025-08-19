@@ -124,6 +124,82 @@ document.addEventListener('DOMContentLoaded', async function() {
         const cursorBack = document.querySelector('.custom-cursor-back');
         const cursorBackArea = document.querySelector('.custom-cursor-backarea');
         
+        // Добавляем обработчик для стрелки влево
+        const cursorLeft = document.querySelector('.custom-cursor-left');
+        const cursorLeftArea = document.querySelector('.custom-cursor-leftarea');
+        
+        console.log('🟡 Элементы стрелки влево:', {
+            cursorLeft: !!cursorLeft,
+            cursorLeftArea: !!cursorLeftArea
+        });
+        
+        if (cursorLeftArea) {
+            console.log('🟡 Стили cursorLeftArea:', {
+                display: window.getComputedStyle(cursorLeftArea).display,
+                visibility: window.getComputedStyle(cursorLeftArea).visibility,
+                opacity: window.getComputedStyle(cursorLeftArea).opacity,
+                position: window.getComputedStyle(cursorLeftArea).position,
+                zIndex: window.getComputedStyle(cursorLeftArea).zIndex,
+                width: window.getComputedStyle(cursorLeftArea).width,
+                height: window.getComputedStyle(cursorLeftArea).height
+            });
+        }
+        
+        if (cursorLeft && cursorLeftArea) {
+            console.log('🟡 Настройка стрелки влево:', {
+                cursorLeft: {
+                    width: cursorLeft.offsetWidth,
+                    height: cursorLeft.offsetHeight,
+                    offsetLeft: cursorLeft.offsetLeft,
+                    offsetTop: cursorLeft.offsetTop,
+                    display: window.getComputedStyle(cursorLeft).display,
+                    position: window.getComputedStyle(cursorLeft).position,
+                    left: window.getComputedStyle(cursorLeft).left,
+                    top: window.getComputedStyle(cursorLeft).top,
+                    zIndex: window.getComputedStyle(cursorLeft).zIndex
+                },
+                cursorLeftArea: {
+                    width: cursorLeftArea.offsetWidth,
+                    height: cursorLeftArea.offsetHeight,
+                    offsetLeft: cursorLeftArea.offsetLeft,
+                    offsetTop: cursorLeftArea.offsetTop,
+                    display: window.getComputedStyle(cursorLeftArea).display,
+                    position: window.getComputedStyle(cursorLeftArea).position,
+                    left: window.getComputedStyle(cursorLeftArea).left,
+                    top: window.getComputedStyle(cursorLeftArea).top,
+                    zIndex: window.getComputedStyle(cursorLeftArea).zIndex
+                }
+            });
+            
+            // Принудительно устанавливаем позицию для области стрелки
+            const leftAreaRect = cursorLeftArea.getBoundingClientRect();
+            console.log('🟡 Позиция cursorLeftArea на экране:', {
+                left: leftAreaRect.left,
+                top: leftAreaRect.top,
+                right: leftAreaRect.right,
+                bottom: leftAreaRect.bottom,
+                width: leftAreaRect.width,
+                height: leftAreaRect.height
+            });
+
+            if (typeof window.setupLeftArrowHandler === 'function') {
+                window.setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, () => {
+                    console.log('🟡 Клик по стрелке влево');
+                    // Переход на следующую страницу
+                    const nextPage = cursorLeft.getAttribute('data-next-page');
+                    if (nextPage) {
+                        window.location.href = nextPage;
+                    } else {
+                        console.error('❌ Не указана следующая страница в атрибуте data-next-page');
+                    }
+                });
+            } else {
+                console.error('❌ Функция setupLeftArrowHandler не найдена');
+            }
+        } else {
+            console.error('❌ Элементы стрелки влево не найдены:', { cursorLeft, cursorLeftArea });
+        }
+
         if (cursorBack && cursorBackArea) {
             if (typeof window.setupBackArrowHandler === 'function') {
                 window.setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, () => {

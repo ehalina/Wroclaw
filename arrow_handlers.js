@@ -2,7 +2,7 @@
  * Скрывает все курсоры на странице, добавляя класс hide-cursors
  */
 function hideAllCursors() {
-    document.querySelectorAll('.custom-cursor, .custom-cursor-area, .custom-cursor-prosto, .custom-cursor-prostoarea, .custom-cursor-back, .custom-cursor-backarea').forEach(element => {
+    document.querySelectorAll('.custom-cursor, .custom-cursor-area, .custom-cursor-prosto, .custom-cursor-prostoarea, .custom-cursor-back, .custom-cursor-backarea, .custom-cursor-left, .custom-cursor-leftarea').forEach(element => {
         element.classList.add('hide-cursors');
     });
 }
@@ -405,6 +405,129 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
 }
 
 /**
+ * Настраивает обработчик для стрелки влево
+ * @param {HTMLElement} cursorLeft - Элемент курсора влево
+ * @param {HTMLElement} cursorLeftArea - Область курсора влево
+ * @param {HTMLAudioElement} stepSound - Звук шага
+ * @param {Function} onLeftClick - Callback-функция для обработки клика
+ */
+function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClick) {
+    const isMobile = window.innerWidth <= 700;
+    
+    if (!isMobile) {
+        console.log('🟡 Настройка обработчиков для десктопной версии стрелки влево');
+        
+        // Обработчик движения мыши над областью курсора
+        cursorLeftArea.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            console.log('🟡 Движение мыши над областью стрелки влево:', {
+                mouseX: e.clientX,
+                mouseY: e.clientY,
+                area: {
+                    left: rect.left,
+                    right: rect.right,
+                    top: rect.top,
+                    bottom: rect.bottom
+                }
+            });
+            
+            if (e.clientX >= rect.left && e.clientX <= rect.right &&
+                e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                cursorLeft.style.opacity = '1';
+                cursorLeft.style.left = e.clientX - 32 + 'px';
+                cursorLeft.style.top = e.clientY - 32 + 'px';
+                cursorLeft.style.display = 'block';
+                cursorLeft.style.visibility = 'visible';
+                cursorLeft.style.pointerEvents = 'auto';
+            } else {
+                cursorLeft.style.opacity = '0';
+            }
+        });
+
+        // Глобальный обработчик движения мыши
+        const mouseMoveHandler = function(e) {
+            const rect = cursorLeftArea.getBoundingClientRect();
+            if (!(e.clientX >= rect.left && e.clientX <= rect.right &&
+                e.clientY >= rect.top && e.clientY <= rect.bottom)) {
+                cursorLeft.style.opacity = '0';
+            }
+        };
+        
+        document.addEventListener('mousemove', mouseMoveHandler);
+
+        // Скрываем курсор при уходе мыши из области
+        cursorLeftArea.addEventListener('mouseleave', function() {
+            cursorLeft.style.opacity = '0';
+        });
+
+        // Очистка обработчиков при уничтожении
+        window.addEventListener('unload', function() {
+            document.removeEventListener('mousemove', mouseMoveHandler);
+        });
+    } else {
+        // Для мобильных устройств показываем курсор всегда
+        cursorLeft.style.opacity = '1';
+        cursorLeft.style.display = 'block';
+        cursorLeftArea.style.pointerEvents = 'auto';
+        cursorLeftArea.style.opacity = '1';
+        cursorLeftArea.style.display = 'block';
+    }
+
+    // Обработчик клика по стрелке влево
+    cursorLeftArea.addEventListener('click', function(e) {
+        e.preventDefault();
+        hideAllCursors();
+        if (stepSound) {
+            stepSound.currentTime = 0;
+            stepSound.play();
+        }
+        setTimeout(() => {
+            if (onLeftClick && typeof onLeftClick === 'function') {
+                onLeftClick();
+            } else {
+                // Fallback: используем атрибут data-next-page или переходим на index.html
+                const nextPage = cursorLeft.getAttribute('data-next-page');
+                if (nextPage) {
+                    window.location.href = nextPage;
+                } else {
+                    window.location.href = 'index.html';
+                }
+            }
+        }, 300);
+    });
+    
+    // Добавляем обработчик касания для мобильных устройств
+    if (isMobile) {
+        cursorLeftArea.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            cursorLeft.style.opacity = '1';
+        });
+        
+        cursorLeftArea.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            hideAllCursors();
+            if (stepSound) {
+                stepSound.currentTime = 0;
+                stepSound.play();
+            }
+            setTimeout(() => {
+                if (onLeftClick && typeof onLeftClick === 'function') {
+                    onLeftClick();
+                } else {
+                    // Fallback: используем атрибут data-next-page или переходим на index.html
+                    const nextPage = cursorLeft.getAttribute('data-next-page');
+                    if (nextPage) {
+                        window.location.href = nextPage;
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                }
+            }, 300);
+        });
+    }
+}
+
+/**
  * Настраивает обработчик для стрелки назад
  * @param {HTMLElement} cursorBack - Элемент курсора назад
  * @param {HTMLElement} cursorBackArea - Область курсора назад
@@ -493,18 +616,29 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
 window.setupRightArrowHandler = setupRightArrowHandler;
 window.setupForwardArrowHandler = setupForwardArrowHandler;
 window.setupBackArrowHandler = setupBackArrowHandler;
+window.setupLeftArrowHandler = setupLeftArrowHandler;
 window.hideAllCursors = hideAllCursors;
 
 // Обработчик изменения размера окна для корректной работы на мобильных устройствах
 window.addEventListener('resize', function() {
     const isMobile = window.innerWidth <= 700;
-    const cursors = document.querySelectorAll('.custom-cursor, .custom-cursor-prosto');
+    const cursors = document.querySelectorAll('.custom-cursor, .custom-cursor-prosto, .custom-cursor-left');
+    const cursorAreas = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-leftarea');
     
     cursors.forEach(cursor => {
         if (isMobile) {
             cursor.style.opacity = '1';
+            cursor.style.display = 'block';
         } else {
             cursor.style.opacity = '0';
+        }
+    });
+
+    cursorAreas.forEach(area => {
+        if (isMobile) {
+            area.style.pointerEvents = 'auto';
+            area.style.opacity = '1';
+            area.style.display = 'block';
         }
     });
 }); 
