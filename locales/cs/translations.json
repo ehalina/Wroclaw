@@ -184,6 +184,43 @@
       }
     }
   },
+  "jan_nepomuk": {
+    "title": "Jan Nepomucký",
+    "book02": {
+      "zone1": {
+        "title": "Jan Nepomucký",
+        "text": "Na Tumském ostrově, kde kámen uchovává více příběhů, než lidské uši mohou snést, stojí skutečný obr mezi pomníky — monument svatému Janu Nepomuckému. Byl postaven v 18. století podle návrhu Christopha Tausche. V květnu 1732 byl pomník slavnostně odhalen a hrdě oznámeno světu, že je to největší pomník Jana Nepomuckého na světě. A musí se přiznat, že skromností tu ani nevoní: téměř deset metrů vysoký, barokní patos, celá armáda kamenných andělů a hvězdy nad světcovou hlavou."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Král Václav IV. chtěl přetvořit církevní moc podle svých potřeb, a Nepomucký se mu postavil do cesty. Byl zatčen spolu s dalšími kněžími, mučen ve sklepeních, pak svázán, umlčen a shozen z Karlova mostu do studených vod Vltavy. Tělo bylo vyloveno ráno, pohřbeno, později přeneseno do katedrály sv. Víta, a po staletích dokonce ozdobeno stříbrným náhrobkem, jako by chtěli odčinit krutou smrt."
+      },
+      "zone2-2": {
+        "title": "",
+        "text": "Jan Nepomucký se narodil někdy mezi lety 1340 a 1346 v Pomuku — malém městečku, které sotva tušilo, že daruje světu jednoho z nejslavnějších mučedníků Evropy. Jeho otec Welflin sloužil jako prefekt, a sám Jan se dosti rychle ocitl v církevní kanceláři, kde jeho ruka psala písmena a mysl vstřebávala zákony nebeské i pozemské. Studoval v Praze, pak v Padově, obhájil doktorát z kanonického práva, stal se kanovníkem, vikářem arcibiskupa, archijáhnem — zkrátka, stoupal po kariérním žebříčku velmi rychle. Ale spolu se skvělou učeností uměl to hlavní — být tím člověkem, za kterým lidé přicházejí s tajemstvím zpovědi."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Ale zasáhla Gotfriedova žena, a s ní — sám malý viník 'lysého skandálu'. Urbański pohlédl na dítě, na jeho důvěřivý úsměv — a mistrovo srdce roztálo. Učně vrátili, a pro symetrii nařídili vytesat ještě jednu lysou hlavu na protější straně. Takže nyní světce obklopuje společnost andělů s vlasy i bez, jako by dokazovali, že nebesa přijímají všechny stejně."
+      },
+      "zone3-2": {
+        "title": "Legenda",
+        "text": "Říká se, že mistr Urbański svěřil vytesání posledních hlav andělů svému učni jménem Gotfried. Ten, inspirován narozením syna, vzal a zvěčnil v kameni tvář nemluvněte — kulatou, hladkou a naprosto lysou. Mistr se rozzuřil, vyhnal učně pryč a přikázal mu, aby se už nikdy neukazoval."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Říká se, že Jan Nepomucký zemřel, protože odmítl prozradit tajemství zpovědi královny Žofie Bavorské, a tato verze, kupodivu, zní mnohem přesvědčivěji než politické intriky. Tak či onak, právě z tohoto tajemství a této smrti vyrostl kult: jezuité roznesli jeho jméno po celé Evropě, a v roce 1729 byl kanonizován, upevňujíc svou roli nebeského patrona Čech a Slezska. Od té doby 21. května v kostelích čtou jeho jméno, a na mostech Evropy jeho kamenné sochy stále hledí na řeky — jako by kontrolovaly, zda voda neskrývá ještě jedno nevyřčené tajemství."
+      },
+      "zone4-2": {
+        "title": "Zajímavé fakty",
+        "text": "Podle kroniky byl pomník svatého Jana Nepomuckého ve Vratislavi slavnostně odhalen v květnu 1732. Na celou záležitost padlo přesně 2049 florinů. V 18. století byl 'florin' ve střední Evropě zlatou mincí o váze asi 3,5 gramu. To znamená, že 2049 je přibližně 7,2 kg čistého zlata. Při současné tržní ceně zlata kolem € 91 900 za kg dostáváme současnou hodnotu pomníku — € 662 tisíc.<br>Je to největší pomník Jana Nepomuckého na světě."
+      }
+    }
+  },
 
   "panorama": {
     "title": "Vyhlídková plošina"

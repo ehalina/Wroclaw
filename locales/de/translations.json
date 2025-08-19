@@ -184,6 +184,43 @@
       }
     }
   },
+  "jan_nepomuk": {
+    "title": "Johannes von Nepomuk",
+    "book02": {
+      "zone1": {
+        "title": "Johannes von Nepomuk",
+        "text": "Auf der Tumski-Insel, wo der Stein mehr Geschichten bewahrt, als menschliche Ohren ertragen können, steht ein wahrer Riese unter den Denkmälern — das Monument des heiligen Johannes von Nepomuk. Es wurde im 18. Jahrhundert nach dem Entwurf von Christoph Tausch errichtet. Im Mai 1732 wurde das Denkmal feierlich enthüllt und der Welt stolz verkündet, dass dies das größte Denkmal für Johannes von Nepomuk auf der Welt sei. Und man muss zugeben, dass hier nicht einmal ein Hauch von Bescheidenheit zu spüren ist: fast zehn Meter hoch, barocker Pathos, eine ganze Armee steinerner Engel und Sterne über dem Haupt des Heiligen."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "König Wenzel IV. wollte die kirchliche Macht nach seinen Bedürfnissen umgestalten, und Nepomuk stellte sich ihm in den Weg. Er wurde zusammen mit anderen Priestern verhaftet, in Kellern gefoltert, dann gefesselt, geknebelt und von der Karlsbrücke in die kalten Wasser der Moldau geworfen. Der Leichnam wurde am Morgen geborgen, begraben, später in den Veitsdom überführt und nach Jahrhunderten sogar mit einem silbernen Grabmal geschmückt, als wollte man die Schuld für den grausamen Tod sühnen."
+      },
+      "zone2-2": {
+        "title": "",
+        "text": "Johannes von Nepomuk wurde irgendwann zwischen 1340 und 1346 in Pomuk geboren — einer kleinen Stadt, die kaum ahnte, dass sie der Welt einen der berühmtesten Märtyrer Europas schenken würde. Sein Vater Welflin diente als Präfekt, und Johannes selbst fand sich recht schnell in der kirchlichen Kanzlei wieder, wo seine Hand Buchstaben zeichnete und sein Geist himmlische und irdische Gesetze aufnahm. Er studierte in Prag, dann in Padua, verteidigte seinen Doktortitel im kanonischen Recht, wurde Kanoniker, Vikar des Erzbischofs, Archidiakon — kurz gesagt, er stieg die Karriereleiter sehr schnell hinauf. Aber zusammen mit der brillanten Gelehrsamkeit beherrschte er das Wichtigste — der Mensch zu sein, zu dem man mit dem Geheimnis der Beichte kommt."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Aber Gotfrieds Frau griff ein, und mit ihr — der kleine Verursacher des 'Glatzen-Skandals' selbst. Urbański blickte auf das Kind, auf sein vertrauensvolles Lächeln — und das Herz des Meisters schmolz. Der Lehrling wurde zurückgeholt, und für die Symmetrie wurde befohlen, noch einen kahlen Kopf auf der gegenüberliegenden Seite zu schnitzen. So wird der Heilige nun von einer Gesellschaft von Engeln mit und ohne Haare umgeben, als Beweis dafür, dass der Himmel alle gleich aufnimmt."
+      },
+      "zone3-2": {
+        "title": "Legende",
+        "text": "Man sagt, Meister Urbański vertraute das Schnitzen der letzten Engelköpfe seinem Lehrling namens Gotfried an. Dieser, inspiriert von der Geburt seines Sohnes, nahm und verewigte das Gesicht des Säuglings in Stein — rund, glatt und absolut kahl. Der Meister geriet in Wut, jagte den Lehrling fort und befahl ihm, sich nie wieder blicken zu lassen."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Man sagt, Johannes von Nepomuk starb, weil er sich weigerte, das Beichtgeheimnis der Königin Sophie von Bayern zu verraten, und diese Version klingt seltsamerweise viel überzeugender als politische Intrigen. Wie auch immer, gerade aus diesem Geheimnis und diesem Tod erwuchs der Kult: Die Jesuiten verbreiteten seinen Namen in ganz Europa, und 1729 wurde er heiliggesprochen, wodurch seine Rolle als himmlischer Schutzpatron Böhmens und Schlesiens gefestigt wurde. Seitdem wird am 21. Mai in den Kirchen sein Name gelesen, und auf den Brücken Europas blicken seine steinernen Figuren immer noch auf die Flüsse — als ob sie prüfen würden, ob das Wasser noch ein unausgesprochenes Geheimnis bewahrt."
+      },
+      "zone4-2": {
+        "title": "Interessante Fakten",
+        "text": "Laut Chronik wurde das Denkmal des heiligen Johannes von Nepomuk in Breslau im Mai 1732 feierlich enthüllt. Das ganze Vergnügen kostete genau 2049 Florin. Im 18. Jahrhundert war der 'Florin' in Mitteleuropa eine Goldmünze mit einem Gewicht von etwa 3,5 Gramm. Das bedeutet, 2049 sind etwa 7,2 kg reines Gold. Beim aktuellen Börsenkurs von Gold um € 91.900 pro kg erhalten wir den heutigen Wert des Denkmals — € 662 Tausend.<br>Es ist das größte Denkmal für Johannes von Nepomuk auf der Welt."
+      }
+    }
+  },
 
   "panorama": {
     "title": "Aussichtsplattform"

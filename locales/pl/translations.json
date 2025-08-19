@@ -184,6 +184,43 @@
       }
     }
   },
+  "jan_nepomuk": {
+    "title": "Jan Nepomucen",
+    "book02": {
+      "zone1": {
+        "title": "Jan Nepomucen",
+        "text": "Na Ostrowie Tumskim, gdzie kamień przechowuje więcej historii, niż ludzkie uszy mogą znieść, stoi prawdziwy gigant wśród pomników — monument świętego Jana Nepomucena. Wzniesiono go w XVIII wieku według projektu Christopha Tauscha. W maju 1732 roku pomnik uroczyście odsłonięto i dumnie ogłoszono światu, że to największy pomnik Jana Nepomucena na świecie. I trzeba przyznać, że skromnością tu nawet nie pachnie: prawie dziesięć metrów wysokości, barokowy patos, cała armia kamiennych aniołów i gwiazdy nad głową świętego."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Król Wacław IV chciał przekształcić władzę kościelną pod swoje potrzeby, a Nepomucen stanął mu na drodze. Aresztowano go wraz z innymi kapłanami, torturowano w lochach, a potem związano, zakneblowano i zrzucono z Mostu Karola w zimne wody Wełtawy. Ciało wydobyto rankiem, pochowano, później przeniesiono do katedry św. Wita, a po wiekach nawet ozdobiono srebrnym grobowcem, jakby chciano zadośćuczynić za okrutną śmierć."
+      },
+      "zone2-2": {
+        "title": "",
+        "text": "Jan Nepomucen przyszedł na świat gdzieś między 1340 a 1346 rokiem w Pomuku — małym miasteczku, które chyba nie podejrzewało, że podaruje światu jednego z najsłynniejszych męczenników Europy. Jego ojciec Welflin służył jako prefekt, a sam Jan dość szybko znalazł się w kancelarii kościelnej, gdzie jego ręka kreśliła litery, a umysł chłonął prawa niebiańskie i ziemskie. Studiował w Pradze, potem w Padwie, obronił doktorat z prawa kanonicznego, został kanonikiem, wikariuszem arcybiskupa, archidiakonem — słowem, wspinał się po drabinie kariery bardzo szybko. Ale wraz ze świetną uczonością umiał najważniejsze — być tym człowiekiem, do którego przychodzi się z tajemnicą spowiedzi."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Ale wtrąciła się żona Gotfryda, a wraz z nią — sam mały winowajca 'łysego skandalu'. Urbański spojrzał na dziecko, na jego ufny uśmiech — i serce mistrza stopniało. Ucznia przywrócono, a dla symetrii kazano wyrzeźbić jeszcze jedną łysą głowę po przeciwnej stronie. Tak więc teraz świętego otacza kompania aniołów z włosami i bez, jakby na dowód, że niebiosa przyjmują wszystkich jednakowo."
+      },
+      "zone3-2": {
+        "title": "Legenda",
+        "text": "Podobno mistrz Urbański powierzył wyrzeźbienie ostatnich głów aniołów swojemu uczniowi o imieniu Gotfryd. Ten, zainspirowany narodzinami syna, wziął i uwiecznił w kamieniu twarz niemowlęcia — okrągłą, gładką i absolutnie łysą. Mistrz wpadł w gniew, wygnał ucznia precz i kazał więcej nie pokazywać się na oczy."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Mówią, że Jan Nepomucen zginął, bo odmówił wyjawienia tajemnicy spowiedzi królowej Zofii Bawarskiej, i ta wersja, dziwnym trafem, brzmi znacznie bardziej przekonująco niż polityczne intrygi. Tak czy inaczej, właśnie z tej tajemnicy i tej śmierci wyrósł kult: jezuici roznieśli jego imię po całej Europie, a w 1729 roku został kanonizowany, utrwalając swoją rolę jako niebiańskiego patrona Czech i Śląska. Od tego czasu 21 maja w kościołach czytają jego imię, a na mostach Europy jego kamienne figury wciąż patrzą na rzeki — jakby sprawdzały, czy woda nie kryje jeszcze jednej niewypowiedzianej tajemnicy."
+      },
+      "zone4-2": {
+        "title": "Ciekawe fakty",
+        "text": "Według kroniki, pomnik świętego Jana Nepomucena we Wrocławiu uroczyście odsłonięto w maju 1732 roku. Na całą przyjemność poszło dokładnie 2049 florenów. W XVIII wieku 'floren' w Europie Środkowej był złotą monetą o wadze około 3,5 grama. To znaczy, 2049 to około 7,2 kg czystego złota. Przy obecnej cenie giełdowej złota około € 91 900 za kg otrzymujemy współczesną wartość pomnika — € 662 tys.<br>To największy pomnik Jana Nepomucena na świecie."
+      }
+    }
+  },
 
   "panorama": {
     "title": "Platforma widokowa"
