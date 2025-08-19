@@ -18,12 +18,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // 2. Подключение обработчика для всех геометок
     import('./tumski_cathedral_handler.js').then(mod => {
         if (mod && typeof mod.setupUniversalGeoMarker === 'function') {
-            // Геометка Святая Ядвига
-            mod.setupUniversalGeoMarker({
-                markerId: 'swieta_jadwiga',
-                i18nKey: 'swieta_jadwiga'
-            });
-            
+
             // Геометка Тумский остров
             mod.setupUniversalGeoMarker({
                 markerId: 'tumski',
@@ -78,10 +73,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     // 8. Инициализация кастомных курсоров
-    const cursor = document.querySelector('.custom-cursor');
-    const cursorArea = document.querySelector('.custom-cursor-area');
-    const cursorProsto = document.querySelector('.custom-cursor-prosto');
-    const cursorProstoArea = document.querySelector('.custom-cursor-prostoarea');
+    const cursorLeft = document.querySelector('.custom-cursor-left');
+    const cursorLeftArea = document.querySelector('.custom-cursor-leftarea');
     
     // Вызов функции возврата картинки из зума по двойному клику
     if (typeof window.setupResetAnimation === 'function') {
@@ -97,29 +90,13 @@ document.addEventListener('DOMContentLoaded', async function() {
             stepSound = mod.createStepSound();
         }
         
-        if (cursor && cursorArea) {
-            if (typeof window.setupRightArrowHandler === 'function') {
-                window.setupRightArrowHandler(cursor, cursorArea, stepSound, () => {
-                    // Переход на предыдущую страницу
-                    const prevPage = cursor.getAttribute('data-prev-page');
-                    if (prevPage) {
-                        window.location.href = prevPage;
-                    } else {
-
-                    }
-                });
-            }
-        }
-        
-        if (cursorProsto && cursorProstoArea) {
-            if (typeof window.setupForwardArrowHandler === 'function') {
-                window.setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, () => {
+        if (cursorLeft && cursorLeftArea) {
+            if (typeof window.setupLeftArrowHandler === 'function') {
+                window.setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, () => {
                     // Переход на следующую страницу
-                    const nextPage = cursorProsto.getAttribute('data-next-page');
+                    const nextPage = cursorLeft.getAttribute('data-next-page');
                     if (nextPage) {
                         window.location.href = nextPage;
-                    } else {
-
                     }
                 });
             }
@@ -221,7 +198,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // 10. Принудительное применение стилей для мобильной версии
     if (window.innerWidth <= 700) {
         setTimeout(() => {
-            const cursors = document.querySelectorAll('.custom-cursor, .custom-cursor-prosto, .custom-cursor-area, .custom-cursor-prostoarea');
+            const cursors = document.querySelectorAll('.custom-cursor-left, .custom-cursor-leftarea');
             cursors.forEach(cursor => {
                 cursor.style.opacity = '1';
                 cursor.style.display = 'block';

@@ -491,27 +491,15 @@ export function setPaperaImageSource(element) {
 
 // Функция для растягивания картинки papera по размеру текста
 export function stretchPaperaToTextWidth() {
-    console.log('🟡 stretchPaperaToTextWidth: начало выполнения');
-    
     const mapMarkAreas = document.querySelectorAll('.map-mark-area');
-    console.log('🟡 Найдено map-mark-area:', mapMarkAreas.length);
     
     mapMarkAreas.forEach((mapMarkArea, index) => {
         try {
-            console.log(`🟡 Обрабатываем map-mark-area ${index}:`, mapMarkArea.id || 'без ID');
-            
             const contentWrapper = mapMarkArea.querySelector('.content-wrapper');
             const paperaImage = contentWrapper?.querySelector('.papera-image');
             const textElem = contentWrapper?.querySelector('.tumski-text');
             
-            console.log(`🟡 map-mark-area ${index} элементы:`, {
-                contentWrapper: !!contentWrapper,
-                paperaImage: !!paperaImage,
-                textElem: !!textElem
-            });
-            
             if (!paperaImage || !textElem) {
-                console.log(`🟡 map-mark-area ${index}: пропускаем - нет paperaImage или textElem`);
                 return;
             }
             
@@ -519,12 +507,6 @@ export function stretchPaperaToTextWidth() {
             const textWidth = textElem.offsetWidth;
             const mapMark = mapMarkArea.querySelector('.map-mark');
             const mapMarkHeight = mapMark ? mapMark.offsetHeight : 80;
-            
-            console.log(`🟡 map-mark-area ${index} размеры:`, {
-                textWidth,
-                mapMarkHeight,
-                paperaImageSrc: paperaImage.src
-            });
             
             // Растягиваем картинку по ширине и высоте контейнера
             paperaImage.style.setProperty('width', '100%', 'important');
@@ -556,15 +538,11 @@ export function stretchPaperaToTextWidth() {
                 contentWrapper.style.setProperty('height', mapMarkHeight + 'px', 'important');
                 contentWrapper.style.setProperty('min-height', mapMarkHeight + 'px', 'important');
             }
-            
-            console.log(`🟡 map-mark-area ${index}: обработка завершена`);
-            
+
         } catch (error) {
-            console.error(`❌ Ошибка растягивания papera для маркера ${index}:`, error);
+            // Ошибка растягивания papera
         }
     });
-    
-    console.log('🟡 stretchPaperaToTextWidth: выполнение завершено');
 } 
 
 // Функция для перемещения геометок и стрелок внутрь .image на мобильных и обратно на десктопе

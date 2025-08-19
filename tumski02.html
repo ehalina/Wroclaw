@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Тумский остров - Вроцлав</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="tumski.css">
+    <link rel="stylesheet" href="tumski02.css">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
     <script src="i18n.js"></script>
@@ -25,15 +25,7 @@
     <div id="musicHint" class="music-hint" data-i18n="music.hint"></div>
     <!-- Подсказка для возврата анимации -->
     <div id="animationHint" class="animation-hint" data-i18n="animation.hint"></div>
-    <!-- Геометка: Святая Ядвига -->
-    <div class="map-mark-area">
-        <div class="map-mark" id="swieta_jadwiga" data-x-desktop="100" data-y-desktop="500" data-x-mobile="200" data-y-mobile="500"></div>
-        <div class="content-wrapper">
-            <img class="papera-image" alt="Papera">
-            <div class="tumski-text" id="swieta-jadwiga-text" data-i18n="swieta_jadwiga.title"></div>
-        </div>
-        <audio id="bookSoundJadwiga" src="media/opening-a-book.wav"></audio>
-    </div>
+
     <!-- Геометка: Тумский остров -->
     <div class="map-mark-area">
         <div class="map-mark" id="tumski" data-x-desktop="1500" data-y-desktop="100" data-x-mobile="1500" data-y-mobile="200"></div>
@@ -45,7 +37,7 @@
     </div>
     <!-- Геометка: Собор Святого Иоанна Крестителя (универсальная) -->
     <div class="map-mark-area">
-        <div class="map-mark" id="tumski_cathedral" data-x-desktop="2200" data-y-desktop="400" data-x-mobile="2270" data-y-mobile=800"></div>
+        <div class="map-mark" id="tumski_cathedral" data-x-desktop="2200" data-y-desktop="400" data-x-mobile="2270" data-y-mobile=500"></div>
         <div class="content-wrapper">
             <img class="papera-image" alt="Papera">
             <div class="tumski-text" id="tumski-cathedral-text" data-i18n="tumski_cathedral.title"></div>
@@ -54,7 +46,7 @@
     </div>
     <!-- Геометка: Тумский мост -->
     <div class="map-mark-area" >
-        <div class="map-mark" id="tumski_most" data-x-desktop="1800" data-y-desktop="800" data-x-mobile="1950" data-y-mobile="950"></div>
+        <div class="map-mark" id="tumski_most" data-x-desktop="400" data-y-desktop="600" data-x-mobile="300" data-y-mobile="800"></div>
         <div class="content-wrapper">
             <img class="papera-image" alt="Papera">
             <div class="tumski-text" id="tumski-most-text" data-i18n="tumski_most.title"></div>
@@ -63,7 +55,7 @@
     </div>
         <!-- Геометка: Соборная церковь Святого Креста и Св. Варфоломея -->
         <div class="map-mark-area" >
-            <div class="map-mark" id="katedra_koscielna" data-x-desktop="1200" data-y-desktop="600" data-x-mobile="1400" data-y-mobile="600"></div>
+            <div class="map-mark" id="katedra_koscielna" data-x-desktop="1400" data-y-desktop="600" data-x-mobile="1600" data-y-mobile="600"></div>
             <div class="content-wrapper">
                 <img class="papera-image" alt="Papera">
                 <div class="tumski-text" id="katedra-koscielna-text" data-i18n="katedra_koscielna.title"></div>
@@ -75,22 +67,16 @@
     <div class="scene">
         <div class="image-container">
             <div class="image-scroll-wrapper">
-                <div class="image">
-                        <!-- Кастомный курсор для стрелки вправо -->
-                          <div class="custom-cursor" data-x-desktop="1400" data-y-desktop="1500" data-x-mobile="1900" data-y-mobile="1500" data-prev-page="tumski02.html"></div>
-                          <!-- Область для появления кастомного курсора -->
-                          <div class="custom-cursor-area" data-x-desktop="1400" data-y-desktop="1500" data-x-mobile="1900" data-y-mobile="1400">
-                          </div>
-    
-                            <!-- Область иконки "стрелка прямо" в правом нижнем углу -->
-                        <div class="custom-cursor-prosto" data-x-desktop="1400" data-y-desktop="1000" data-x-mobile="1900" data-y-mobile="1250" data-next-page="tumski03.html"></div>
-                        <div class="custom-cursor-prostoarea" data-x-desktop="1400" data-y-desktop="1000" data-x-mobile="1900" data-y-mobile="1250">
-                        </div>
+                <div class="image"></div>
+                
+                <!-- Стрелка влево -->
+                <div class="custom-cursor-left" data-x-desktop="350" data-y-desktop="1200" data-x-mobile="400" data-y-mobile="1400" data-next-page="tumski.html"></div>
+                <div class="custom-cursor-leftarea" data-x-desktop="0" data-y-desktop="1000" data-x-mobile="400" data-y-mobile="1400">
                 </div>
             </div>
         </div>
        <div class="next-image-container"></div>
     </div>
-    <script type="module" src="tumski_init.js"></script>
+    <script type="module" src="tumski02_init.js"></script>
 </body>
 </html> 

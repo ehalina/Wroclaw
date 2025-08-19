@@ -1,39 +1,18 @@
 // Инициализация для tumski04.html
 // Этот файл передает в tumski_cathedral_handler.js только существующие геометки
 
-console.log('🟡 tumski04_init.js загружен');
 
-// Проверяем наличие основных элементов
-document.addEventListener('DOMContentLoaded', () => {
-    const imageElement = document.querySelector('.image');
-    const nextImageContainer = document.querySelector('.next-image-container');
-    const scene = document.querySelector('.scene');
-    
-    console.log('🟡 Основные элементы найдены:', {
-        image: !!imageElement,
-        nextImageContainer: !!nextImageContainer,
-        scene: !!scene
-    });
-    
-    if (imageElement) {
-        console.log('🟡 .image найден, стили:', {
-            width: imageElement.style.width,
-            height: imageElement.style.height,
-            backgroundImage: window.getComputedStyle(imageElement).backgroundImage
-        });
-    }
-});
 
 document.addEventListener('DOMContentLoaded', async function() {
-    console.log('🟡 tumski04_init.js: DOMContentLoaded сработал');
+
     
     // 1. Загрузка переводов и обновление контента
     try {
         await window.i18n.loadTranslations();
         window.i18n.updatePageContent();
-        console.log('🟡 Переводы загружены и контент обновлен');
+
     } catch (error) {
-        console.error('❌ Ошибка загрузки переводов:', error);
+
     }
 
     // 2. Подключение обработчика для существующих геометок
@@ -114,7 +93,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     if (nextPage) {
                         window.location.href = nextPage;
                     } else {
-                        console.error('Не указана следующая страница в атрибуте data-next-page');
+
                     }
                 });
             }
@@ -128,76 +107,31 @@ document.addEventListener('DOMContentLoaded', async function() {
         const cursorLeft = document.querySelector('.custom-cursor-left');
         const cursorLeftArea = document.querySelector('.custom-cursor-leftarea');
         
-        console.log('🟡 Элементы стрелки влево:', {
-            cursorLeft: !!cursorLeft,
-            cursorLeftArea: !!cursorLeftArea
-        });
+
         
-        if (cursorLeftArea) {
-            console.log('🟡 Стили cursorLeftArea:', {
-                display: window.getComputedStyle(cursorLeftArea).display,
-                visibility: window.getComputedStyle(cursorLeftArea).visibility,
-                opacity: window.getComputedStyle(cursorLeftArea).opacity,
-                position: window.getComputedStyle(cursorLeftArea).position,
-                zIndex: window.getComputedStyle(cursorLeftArea).zIndex,
-                width: window.getComputedStyle(cursorLeftArea).width,
-                height: window.getComputedStyle(cursorLeftArea).height
-            });
-        }
+
         
         if (cursorLeft && cursorLeftArea) {
-            console.log('🟡 Настройка стрелки влево:', {
-                cursorLeft: {
-                    width: cursorLeft.offsetWidth,
-                    height: cursorLeft.offsetHeight,
-                    offsetLeft: cursorLeft.offsetLeft,
-                    offsetTop: cursorLeft.offsetTop,
-                    display: window.getComputedStyle(cursorLeft).display,
-                    position: window.getComputedStyle(cursorLeft).position,
-                    left: window.getComputedStyle(cursorLeft).left,
-                    top: window.getComputedStyle(cursorLeft).top,
-                    zIndex: window.getComputedStyle(cursorLeft).zIndex
-                },
-                cursorLeftArea: {
-                    width: cursorLeftArea.offsetWidth,
-                    height: cursorLeftArea.offsetHeight,
-                    offsetLeft: cursorLeftArea.offsetLeft,
-                    offsetTop: cursorLeftArea.offsetTop,
-                    display: window.getComputedStyle(cursorLeftArea).display,
-                    position: window.getComputedStyle(cursorLeftArea).position,
-                    left: window.getComputedStyle(cursorLeftArea).left,
-                    top: window.getComputedStyle(cursorLeftArea).top,
-                    zIndex: window.getComputedStyle(cursorLeftArea).zIndex
-                }
-            });
+
             
-            // Принудительно устанавливаем позицию для области стрелки
-            const leftAreaRect = cursorLeftArea.getBoundingClientRect();
-            console.log('🟡 Позиция cursorLeftArea на экране:', {
-                left: leftAreaRect.left,
-                top: leftAreaRect.top,
-                right: leftAreaRect.right,
-                bottom: leftAreaRect.bottom,
-                width: leftAreaRect.width,
-                height: leftAreaRect.height
-            });
+
 
             if (typeof window.setupLeftArrowHandler === 'function') {
                 window.setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, () => {
-                    console.log('🟡 Клик по стрелке влево');
+
                     // Переход на следующую страницу
                     const nextPage = cursorLeft.getAttribute('data-next-page');
                     if (nextPage) {
                         window.location.href = nextPage;
                     } else {
-                        console.error('❌ Не указана следующая страница в атрибуте data-next-page');
+
                     }
                 });
             } else {
-                console.error('❌ Функция setupLeftArrowHandler не найдена');
+
             }
         } else {
-            console.error('❌ Элементы стрелки влево не найдены:', { cursorLeft, cursorLeftArea });
+
         }
 
         if (cursorBack && cursorBackArea) {
@@ -208,7 +142,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     if (prevPage) {
                         window.location.href = prevPage;
                     } else {
-                        console.error('Не указана предыдущая страница в атрибуте data-prev-page');
+
                     }
                 });
             }
@@ -217,49 +151,49 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     // 9. После всех инициализаций вызываем перенос геометок и стрелок
     import('./tumski_cathedral_handler.js').then(mod => {
-        console.log('🟡 tumski_cathedral_handler.js загружен:', mod);
+
         
         if (mod && typeof mod.moveMarkersAndCursors === 'function') {
             mod.moveMarkersAndCursors();
-            console.log('🟡 moveMarkersAndCursors выполнен');
+
         }
         
         // Позиционируем геометки и стрелки
         if (mod && typeof mod.positionMarkersOnBg === 'function') {
             mod.positionMarkersOnBg();
-            console.log('🟡 positionMarkersOnBg выполнен');
+
             
             // После позиционирования вызываем stretchPaperaToTextWidth
             if (mod && typeof mod.stretchPaperaToTextWidth === 'function') {
                 setTimeout(() => {
                     mod.stretchPaperaToTextWidth();
-                    console.log('🟡 stretchPaperaToTextWidth после positionMarkersOnBg');
+
                 }, 100);
             }
             
             // Дополнительные вызовы для гарантии
             setTimeout(() => {
                 mod.positionMarkersOnBg();
-                console.log('🟡 positionMarkersOnBg повторно выполнен через 500мс');
+
                 
                 // И снова вызываем stretchPaperaToTextWidth
                 if (mod && typeof mod.stretchPaperaToTextWidth === 'function') {
                     setTimeout(() => {
                         mod.stretchPaperaToTextWidth();
-                        console.log('🟡 stretchPaperaToTextWidth повторно после positionMarkersOnBg');
+
                     }, 100);
                 }
             }, 500);
             
             setTimeout(() => {
                 mod.positionMarkersOnBg();
-                console.log('🟡 positionMarkersOnBg повторно выполнен через 1000мс');
+
                 
                 // И финальный вызов stretchPaperaToTextWidth
                 if (mod && typeof mod.stretchPaperaToTextWidth === 'function') {
                     setTimeout(() => {
                         mod.stretchPaperaToTextWidth();
-                        console.log('🟡 Финальный stretchPaperaToTextWidth');
+
                     }, 100);
                 }
             }, 1000);
@@ -268,63 +202,43 @@ document.addEventListener('DOMContentLoaded', async function() {
         // Настраиваем отслеживание зума для геометок
         if (mod && typeof mod.setupZoomTracking === 'function') {
             mod.setupZoomTracking();
-            console.log('🟡 setupZoomTracking выполнен');
+
         }
         
         // Растягиваем изображения papera по размеру текста
         if (mod && typeof mod.stretchPaperaToTextWidth === 'function') {
             // Диагностика элементов papera перед вызовом
             const paperaImages = document.querySelectorAll('.papera-image');
-            console.log('🟡 Найдено элементов papera-image:', paperaImages.length);
+
             
             // Устанавливаем источник изображения для всех элементов papera
             paperaImages.forEach((img, index) => {
                 if (!img.src || img.src === '') {
                     img.src = 'media/papera1.png';
-                    console.log(`🟡 Установлен src для papera-image ${index}:`, img.src);
+
                 }
             });
             
             paperaImages.forEach((img, index) => {
-                console.log(`🟡 papera-image ${index}:`, {
-                    src: img.src,
-                    alt: img.alt,
-                    width: img.style.width,
-                    height: img.style.height,
-                    display: img.style.display,
-                    opacity: img.style.opacity,
-                    visibility: img.style.visibility,
-                    zIndex: img.style.zIndex
-                });
+
             });
             
             mod.stretchPaperaToTextWidth();
-            console.log('🟡 stretchPaperaToTextWidth выполнен');
+
             
             // Проверяем элементы papera после вызова
             setTimeout(() => {
-                console.log('🟡 Проверяем papera после stretchPaperaToTextWidth:');
-                paperaImages.forEach((img, index) => {
-                    console.log(`🟡 papera-image ${index} после обработки:`, {
-                        src: img.src,
-                        width: img.style.width,
-                        height: img.style.height,
-                        display: img.style.display,
-                        opacity: img.style.opacity,
-                        visibility: img.style.visibility,
-                        zIndex: img.style.zIndex
-                    });
-                });
+
             }, 100);
             
             // Повторный вызов через задержку для гарантии
             setTimeout(() => {
                 mod.stretchPaperaToTextWidth();
-                console.log('🟡 stretchPaperaToTextWidth повторно выполнен через 500мс');
+
             }, 500);
         }
     }).catch(error => {
-        console.error('❌ Ошибка загрузки tumski_cathedral_handler.js:', error);
+
     });
     
     // 10. Принудительное применение стилей для мобильной версии
@@ -352,14 +266,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                     mod.positionMarkersOnBg();
                 }
             }).catch(err => {
-                console.error('Ошибка импорта модуля при resize:', err);
+
             });
         }, 100);
     });
     
     // 12. Добавляем обработчик события load для изображения
     window.addEventListener('load', () => {
-        console.log('🟡 Событие load сработало');
+
         
         // Проверяем загрузку изображений
         const imageElement = document.querySelector('.image');
@@ -368,24 +282,24 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (imageElement) {
             const computedStyle = window.getComputedStyle(imageElement);
             const backgroundImage = computedStyle.backgroundImage;
-            console.log('🟡 Фоновое изображение .image:', backgroundImage);
+
         }
         
         if (nextImageContainer) {
             const computedStyle = window.getComputedStyle(nextImageContainer);
             const backgroundImage = computedStyle.backgroundImage;
-            console.log('🟡 Фоновое изображение .next-image-container:', backgroundImage);
+
         }
         
         import('./tumski_cathedral_handler.js').then(mod => {
             if (mod && typeof mod.positionMarkersOnBg === 'function') {
                 setTimeout(() => {
                     mod.positionMarkersOnBg();
-                    console.log('🟡 positionMarkersOnBg выполнен после load');
+
                 }, 200);
             }
         }).catch(err => {
-            console.error('❌ Ошибка импорта модуля при load:', err);
+
         });
     });
 });
