@@ -184,6 +184,43 @@
       }
     }
   },
+  "jan_nepomuk": {
+    "title": "John of Nepomuk",
+    "book02": {
+      "zone1": {
+        "title": "John of Nepomuk",
+        "text": "On Tumski Island, where stone preserves more stories than human ears can bear, stands a true giant among monuments — the monument to Saint John of Nepomuk. It was erected in the 18th century according to the design of Christopher Tausch. In May 1732, the monument was solemnly unveiled and proudly announced to the world that this was the largest monument to John of Nepomuk in the world. And it must be admitted, there's not even a whiff of modesty here: almost ten meters high, baroque pathos, a whole army of stone angels and stars above the saint's head."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "King Wenceslaus IV wanted to reshape church power to suit his needs, and Nepomuk stood in his way. He was arrested along with other priests, tortured in basements, then bound, gagged, and thrown from Charles Bridge into the cold waters of the Vltava. The body was retrieved the next morning, buried, later transferred to St. Vitus Cathedral, and centuries later even decorated with a silver tomb, as if they wanted to atone for the cruel death."
+      },
+      "zone2-2": {
+        "title": "",
+        "text": "John of Nepomuk was born somewhere between 1340 and 1346 in Pomuk — a small town that hardly suspected it would give the world one of Europe's most famous martyrs. His father Welflin served as prefect, and John himself quite quickly found himself in the church chancellery, where his hand traced letters and his mind absorbed heavenly and earthly laws. He studied in Prague, then in Padua, defended his doctoral degree in canon law, became a canon, vicar of the archbishop, archdeacon — in short, moved up the career ladder very rapidly. But along with brilliant scholarship, he knew the main thing — how to be that very person to whom people come for the secret of confession."
+      },
+      "zone3": {
+        "title": "",
+        "text": "But Gotfried's wife intervened, and with her — the little culprit of the 'bald scandal' himself. Urbański looked at the child, at his trusting smile — and the master's heart melted. The apprentice was returned, and for symmetry they ordered another bald head to be carved on the opposite side. So now the saint is surrounded by a company of angels with and without hair, as if proving that heaven accepts everyone equally."
+      },
+      "zone3-2": {
+        "title": "Legend",
+        "text": "They say master Urbański entrusted the carving of the last angel heads to his apprentice named Gotfried. Inspired by his son's birth, he took and immortalized the baby's face in stone — round, smooth, and absolutely bald. The master flew into a rage, drove the apprentice away and ordered him never to show his face again."
+      },
+      "zone4": {
+        "title": "",
+        "text": "They say John of Nepomuk died because he refused to reveal the secret of Queen Sophia of Bavaria's confession, and this version, strangely enough, sounds much more convincing than political intrigues. Either way, it was from this secret and this death that the cult grew: Jesuits spread his name throughout Europe, and in 1729 he was canonized, securing his role as heavenly patron of Bohemia and Silesia. Since then, on May 21, churches read his name, and on European bridges his stone figures still look at rivers — as if checking whether the water holds yet another unspoken secret."
+      },
+      "zone4-2": {
+        "title": "Interesting Facts",
+        "text": "According to the chronicle, the monument to Saint John of Nepomuk in Wrocław was solemnly unveiled in May 1732. The whole pleasure cost exactly 2049 florins. In the 18th century, the 'florin' in Central Europe was a gold coin weighing about 3.5 grams. That is, 2049 florins is approximately 7.2 kg of pure gold. At the current market price of gold around €91,900 per kg, we get the modern cost of the monument — €662 thousand.<br>This is the largest monument to John of Nepomuk in the world."
+      }
+    }
+  },
 
   "panorama": {
     "title": "Observation Deck"
