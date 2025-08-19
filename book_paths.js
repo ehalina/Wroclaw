@@ -132,6 +132,8 @@ function updateModalText(zoneNumber) {
             section = 'tumski';
         } else if (window.activeGeoMarker === 'swieta_jadwiga') {
             section = 'swieta_jadwiga';
+        } else if (window.activeGeoMarker === 'jan_nepomuk') {
+            section = 'jan_nepomuk';
         }
     } else {
         // Fallback: проверяем DOM элементы
@@ -154,6 +156,8 @@ function updateModalText(zoneNumber) {
                 section = 'tumski';
             } else if (markerId === 'swieta_jadwiga' || markerId === 'swieta_jadwiga-text') {
                 section = 'swieta_jadwiga';
+            } else if (markerId === 'jan_nepomuk' || markerId === 'jan-nepomuk-text' || markerId === 'jan_nepomuk-text') {
+                section = 'jan_nepomuk';
             }
         }
     }

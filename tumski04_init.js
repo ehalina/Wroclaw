@@ -44,6 +44,12 @@ document.addEventListener('DOMContentLoaded', async function() {
                 markerId: 'tumski_cathedral',
                 i18nKey: 'tumski_cathedral'
             });
+            
+            // Геометка Ян Непомуцкий
+            mod.setupUniversalGeoMarker({
+                markerId: 'jan_nepomuk',
+                i18nKey: 'jan_nepomuk'
+            });
         }
     });
 
