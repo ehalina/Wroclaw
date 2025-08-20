@@ -3,8 +3,19 @@
 
 
 
-document.addEventListener('DOMContentLoaded', async function() {
+import { getMapPointCoords } from './map_points.js';
 
+document.addEventListener('DOMContentLoaded', async function() {
+    // Получаем номер точки для текущей страницы
+    const imageContainer = document.querySelector('.image-container');
+    const mapPoint = parseInt(imageContainer.getAttribute('data-map-point'));
+    const coords = getMapPointCoords(mapPoint);
+    if (coords) {
+        console.log(`Current map point coordinates: x=${coords.x}, y=${coords.y}`);
+        // Сохраняем координаты в data-атрибутах для использования в других модулях
+        imageContainer.setAttribute('data-map-x', coords.x);
+        imageContainer.setAttribute('data-map-y', coords.y);
+    }
     
     // 1. Загрузка переводов и обновление контента
     try {

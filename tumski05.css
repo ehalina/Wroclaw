@@ -16,7 +16,7 @@
     width: 100%;
     height: 100%;
     position: absolute;
-    background-image: url('media/tumski/tumski_04.jpg');
+    background-image: url('media/tumski/tumski_05.jpg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -37,7 +37,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url('media/tumski/tumski_05.jpg');
+    background-image: url('media/tumski/tumski_06.jpg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -92,50 +92,6 @@
     height: 15%;
 }
 
-
-/* Стрелка влево */
-.custom-cursor-leftarea {
-    position: absolute !important;
-    z-index: 999 !important;
-    cursor: none;
-    display: block !important;
-    visibility: visible !important;
-    pointer-events: auto !important;
-    /* Добавляем поддержку трансформаций для зума */
-    transform-origin: center center;
-    will-change: transform;
-    transition: transform 0.3s ease-out;
-    /* Убираем фиксированное позиционирование, чтобы JS мог управлять позицией */
-    left: auto;
-    bottom: auto;
-    width: 350px;
-    height: 500px;
-}
-
-.custom-cursor-left {
-    width: 64px;
-    height: 64px;
-    position: absolute;
-    background-image: url('media/strelka_rev.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 1000;
-    cursor: pointer;
-    pointer-events: none;
-    transform: translateX(-50%) translateY(-50%);
-    left: 50%;
-    top: 50%;
-}
-
-/* Показываем стрелку при наведении на область */
-.custom-cursor-leftarea:hover .custom-cursor-left {
-    opacity: 1;
-    pointer-events: auto;
-}
-
 /* Стрелка назад */
 .custom-cursor-backarea {
     position: absolute;
@@ -172,68 +128,16 @@
     opacity: 1;
 }
 
-/* Стрелка прямо */
-.custom-cursor-prosto {
-    width: 64px;
-    height: 64px;
-    position: absolute;
-    background-image: url('media/strelka_prosto.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
-    opacity: 1; /* Показываем стрелку по умолчанию */
-    transition: opacity 0.3s ease;
-    z-index: 1000;
-    cursor: pointer;
-    pointer-events: auto; /* Разрешаем взаимодействие */
-    /* Возвращаем правильное позиционирование */
-    transform: translateX(-50%) translateY(-50%);
-    left: 50%;
-    top: 50%;
-}
-
-.custom-cursor-prostoarea:hover .custom-cursor-prosto {
-    opacity: 1;
-    pointer-events: auto;
-}
-
 /* На мобильных устройствах показываем стрелку всегда */
 @media (max-width: 700px) {
-    .custom-cursor-left,
-    .custom-cursor-back,
-    .custom-cursor-prosto {
+    .custom-cursor-back {
         opacity: 1 !important;
-        pointer-events: auto !important;
-        visibility: visible !important;
     }
     
-    .custom-cursor-backarea,
-    .custom-cursor-leftarea,
-    .custom-cursor-prostoarea {
+    .custom-cursor-backarea {
         /* Увеличиваем область для лучшего взаимодействия на мобильных */
-        width: 80px !important;
-        height: 80px !important;
-        pointer-events: auto !important;
-    }
-    
-    /* Принудительно показываем стрелку прямо на мобильных */
-    .custom-cursor-prostoarea .custom-cursor-prosto {
-        opacity: 1 !important;
-        pointer-events: auto !important;
-        visibility: visible !important;
-        display: block !important;
-        /* Исправляем позиционирование на мобильных */
-        position: absolute !important;
-        left: 50% !important;
-        top: 50% !important;
-        transform: translateX(-50%) translateY(-50%) !important;
-        width: 64px !important;
-        height: 64px !important;
-    }
-    
-    /* Убираем эффект наведения для стрелки прямо на мобильных */
-    .custom-cursor-prostoarea:hover .custom-cursor-prosto {
-        opacity: 1 !important;
+        width: 80%;
+        height: 30%;
     }
 }
 
@@ -369,11 +273,6 @@
 /* Убираем конфликтующие правила для tumski-text - теперь используются стили из styles.css */
 
 @media (max-width: 700px) {
-    /* Убираем все отступы по умолчанию */
-    * {
-        box-sizing: border-box;
-    }
-    
     /* Геометки и стрелки теперь позиционируются по left/top через JS */
     .map-mark-area, .custom-cursor-area, .custom-cursor-prostoarea {
         position: absolute !important;
@@ -468,9 +367,7 @@
     /* Стрелки всегда видимы и активны */
     .custom-cursor,
     .custom-cursor-prosto,
-    .custom-cursor-left,
     .custom-cursor-area,
-    .custom-cursor-leftarea,
     .custom-cursor-prostoarea {
         opacity: 1 !important;
         display: block !important;
@@ -481,125 +378,46 @@
         width: 80px !important;
         height: 80px !important;
     }
-
-    /* Отдельные стили для стрелки влево на мобильных устройствах */
-    .custom-cursor-left {
-        opacity: 1 !important;
-        width: 64px !important;
-        height: 64px !important;
-        display: block !important;
-        pointer-events: auto !important;
-        visibility: visible !important;
-        position: absolute !important;
-        z-index: 9999 !important;
-        transform: translate(-50%, -50%) !important;
-        left: 50% !important;
-        top: 50% !important;
-    }
-    
-    .custom-cursor-leftarea {
-        width: 100px !important;
-        height: 100px !important;
-        position: absolute !important;
-        display: block !important;
-        pointer-events: auto !important;
-        visibility: visible !important;
-        z-index: 9999 !important;
-        transform: translate(-50%, -50%) !important;
-        left: 50% !important;
-        top: 50% !important;
-    }
     /* Убрать эффекты наведения для стрелок */
     .custom-cursor-area:hover .custom-cursor,
     .custom-cursor-prostoarea:hover .custom-cursor-prosto {
         opacity: 1 !important;
     }
-    
-    /* Исправляем проблему с обрезанием фонового изображения в мобильной версии */
     html, body {
-        margin: 0 !important;
-        padding: 0 !important;
+        margin: 0;
+        padding: 0;
         height: 100vh;
-        width: 100vw;
         overflow-x: auto;
         overscroll-behavior-x: contain;
-        position: relative !important;
-    }
-    
-    html {
-        overflow: hidden !important;
-    }
-    
-    body {
-        overflow: hidden !important;
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-    }
+      }
   
-    .scene {
+      .scene {
         height: 100vh;
-        margin: 0 !important;
-        padding: 0 !important;
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        width: 100vw !important;
-        overflow: hidden !important;
-    }
+      }
   
-    /* Принудительно отключаем анимацию moveForward в мобильной версии */
-    .image-container {
-        height: 100vh !important;
-        width: 100vw !important;
-        animation: none !important;
-        transform: none !important;
-        overflow: visible !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-    }
+      .image-container {
+        height: 100vh;
+      }
   
-    .image-scroll-wrapper {
+      .image-scroll-wrapper {
         width: 100vw;
         height: 100vh;
         overflow-x: auto;
-        overflow-y: visible !important; /* Принудительно показываем по вертикали */
+        overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
         touch-action: pan-x;
         white-space: nowrap;
-        margin: 0 !important;
-        padding: 0 !important;
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-    }
+      }
   
-    .image {
+      .image {
         width: 300vw; /* делаем шире экрана, чтобы был скролл */
-        height: 100vh !important;
-        min-height: 100vh !important;
-        max-height: none !important;
-        background-image: url("media/tumski/tumski_04.jpg");
+        height: 100vh;
+        background-image: url("media/tumski/tumski_05.jpg");
         background-size: auto 100%; /* Вписываем по высоте, позволяя горизонтальную прокрутку */
         background-repeat: no-repeat;
         background-position: left top; /* Позиционируем в левом верхнем углу */
         display: block;
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: auto !important;
-        bottom: auto !important;
+        position: relative;
         transition: opacity 0.1s ease-in;
         backface-visibility: hidden;
         will-change: transform;
@@ -607,25 +425,17 @@
         transform: translateZ(0);
         pointer-events: auto !important;
         /* Для анимации */
-        overflow: visible !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
+      }
   
-    /* Вспомогательный блок для создания физического контента шириной 300vw */
-    .image::after {
+      /* Вспомогательный блок для создания физического контента шириной 200vw */
+      .image::after {
         content: '';
         display: block;
         width: 300vw;
-        height: 100vh !important; /* Увеличиваем высоту для предотвращения обрезания */
-        min-height: 100vh !important;
-    }
-    
-    .next-image-container {
+        height: 1px;
+      }
+      .next-image-container {
         pointer-events: none;
-        height: 100vh !important;
-        min-height: 100vh !important;
-        width: 100vw !important;
         background-size: auto 100% !important; /* Вписываем по высоте, позволяя горизонтальную прокрутку */
         background-position: left top !important; /* Позиционируем в левом верхнем углу */
         position: absolute !important;
@@ -636,7 +446,6 @@
         margin: 0 !important;
         padding: 0 !important;
     }
-    
     /* Геометки всегда видимы */
     .map-mark {
         opacity: 1 !important;

@@ -2,26 +2,86 @@
 // Координаты точек указаны в процентах относительно размеров карты
 
 const mapPoints = {
-  1: { x: 9, y: 52},
-  2: { x: 13, y: 44 },
-  3: { x: 25, y: 34 },
-  4: { x: 32, y: 36 },
-  5: { x: 36, y: 46 },
-  6: { x: 44, y: 56 },
-  7: { x: 48, y: 66 },
-  8: { x: 60, y: 66 },
-  9: { x: 74, y: 62 },
-  10: { x: 72, y: 50 },
-  11: { x: 66, y: 46 },
-  12: { x: 56, y: 46 },
-  13: { x: 54, y: 60 },
-  14: { x: 68, y: 38 },
-  15: { x: 62, y: 30 },
-  16: { x: 58, y: 36 },
-  17: { x: 82, y: 18 },
-  18: { x: 38, y: 86 },
-  19: { x: 32, y: 88 },
-  20: { x: 28, y: 40 },
+  1: { 
+    desktop: { x: 9, y: 52 },
+    mobile: { x: 9, y: 59 }
+  },
+  2: { 
+    desktop: { x: 12, y: 62 },
+    mobile: { x: 12, y: 69 }
+  },
+  3: { 
+    desktop: { x: 18, y: 54 },
+    mobile: { x: 18, y: 60 }
+  },
+  4: { 
+    desktop: { x: 21, y: 55 },
+    mobile: { x: 21, y: 61 }
+  },
+  5: { 
+    desktop: { x: 29, y: 62 },
+    mobile: { x: 29, y: 67 }
+  },
+  6: { 
+    desktop: { x: 44, y: 56 },
+    mobile: { x: 50, y: 56 }
+  },
+  7: { 
+    desktop: { x: 48, y: 66 },
+    mobile: { x: 55, y: 66 }
+  },
+  8: { 
+    desktop: { x: 60, y: 66 },
+    mobile: { x: 65, y: 66 }
+  },
+  9: { 
+    desktop: { x: 74, y: 62 },
+    mobile: { x: 80, y: 62 }
+  },
+  10: { 
+    desktop: { x: 72, y: 50 },
+    mobile: { x: 78, y: 50 }
+  },
+  11: { 
+    desktop: { x: 66, y: 46 },
+    mobile: { x: 72, y: 46 }
+  },
+  12: { 
+    desktop: { x: 56, y: 46 },
+    mobile: { x: 62, y: 46 }
+  },
+  13: { 
+    desktop: { x: 54, y: 60 },
+    mobile: { x: 60, y: 60 }
+  },
+  14: { 
+    desktop: { x: 68, y: 38 },
+    mobile: { x: 74, y: 38 }
+  },
+  15: { 
+    desktop: { x: 62, y: 30 },
+    mobile: { x: 68, y: 30 }
+  },
+  16: { 
+    desktop: { x: 58, y: 36 },
+    mobile: { x: 64, y: 36 }
+  },
+  17: { 
+    desktop: { x: 82, y: 18 },
+    mobile: { x: 88, y: 18 }
+  },
+  18: { 
+    desktop: { x: 38, y: 86 },
+    mobile: { x: 45, y: 86 }
+  },
+  19: { 
+    desktop: { x: 32, y: 88 },
+    mobile: { x: 38, y: 88 }
+  },
+  20: { 
+    desktop: { x: 28, y: 40 },
+    mobile: { x: 35, y: 40 }
+  },
 };
 
 // Координаты для всплывающих подсказок на карте
@@ -63,7 +123,14 @@ export const tooltipPoints = {
  * @returns {{x: number, y: number} | null}
  */
 export function getMapPointCoords(pointNumber) {
-  return mapPoints[pointNumber] || null;
+  const point = mapPoints[pointNumber];
+  if (!point) return null;
+  
+  // Определяем тип устройства
+  const isMobile = window.innerWidth <= 768;
+  
+  // Возвращаем соответствующие координаты
+  return isMobile ? point.mobile : point.desktop;
 }
 
 /**

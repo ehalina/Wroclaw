@@ -386,6 +386,37 @@
         position: absolute !important;
         width: 80px !important;
         height: 80px !important;
+        transform: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Отдельные стили для стрелки влево на мобильных устройствах */
+    .custom-cursor-left {
+        opacity: 1 !important;
+        width: 64px !important;
+        height: 64px !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+        position: absolute !important;
+        z-index: 9999 !important;
+        transform: translate(-50%, -50%) !important;
+        left: 50% !important;
+        top: 50% !important;
+    }
+    
+    .custom-cursor-leftarea {
+        width: 100px !important;
+        height: 100px !important;
+        position: absolute !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+        z-index: 9999 !important;
+        transform: translate(-50%, -50%) !important;
+        left: 50% !important;
+        top: 50% !important;
     }
     /* Убрать эффекты наведения для стрелок */
     .custom-cursor-area:hover .custom-cursor,

@@ -93,10 +93,14 @@ document.addEventListener('DOMContentLoaded', async function() {
                     if (nextPage) {
                         window.location.href = nextPage;
                     } else {
-
+                        console.log('Страница для перехода не указана');
                     }
                 });
+            } else {
+                console.log('Функция setupForwardArrowHandler не найдена');
             }
+        } else {
+            console.log('Элементы стрелки прямо не найдены:', { cursorProsto, cursorProstoArea });
         }
         
         // Добавляем обработчик для стрелки назад
@@ -112,37 +116,68 @@ document.addEventListener('DOMContentLoaded', async function() {
 
         
         if (cursorLeft && cursorLeftArea) {
+            // Добавляем прямой обработчик клика для мобильных устройств
+            const handleLeftClick = () => {
+                const nextPage = cursorLeft.getAttribute('data-next-page');
+                if (nextPage) {
+                    if (stepSound) {
+                        stepSound.play().then(() => {
+                            window.location.href = nextPage;
+                        }).catch(() => {
+                            window.location.href = nextPage;
+                        });
+                    } else {
+                        window.location.href = nextPage;
+                    }
+                }
+            };
 
-            
+            // Добавляем обработчики для обоих элементов
+            cursorLeft.addEventListener('click', handleLeftClick);
+            cursorLeft.addEventListener('touchend', handleLeftClick);
+            cursorLeftArea.addEventListener('click', handleLeftClick);
+            cursorLeftArea.addEventListener('touchend', handleLeftClick);
 
-
+            // Оставляем оригинальный обработчик для десктопа
             if (typeof window.setupLeftArrowHandler === 'function') {
                 window.setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, () => {
-
-                    // Переход на следующую страницу
                     const nextPage = cursorLeft.getAttribute('data-next-page');
                     if (nextPage) {
                         window.location.href = nextPage;
-                    } else {
-
                     }
                 });
-            } else {
-
             }
-        } else {
-
         }
 
         if (cursorBack && cursorBackArea) {
+            // Добавляем прямой обработчик клика для мобильных устройств
+            const handleBackClick = () => {
+                const prevPage = cursorBack.getAttribute('data-prev-page');
+                if (prevPage) {
+                    if (stepSound) {
+                        stepSound.play().then(() => {
+                            window.location.href = prevPage;
+                        }).catch(() => {
+                            window.location.href = prevPage;
+                        });
+                    } else {
+                        window.location.href = prevPage;
+                    }
+                }
+            };
+
+            // Добавляем обработчики для обоих элементов
+            cursorBack.addEventListener('click', handleBackClick);
+            cursorBack.addEventListener('touchend', handleBackClick);
+            cursorBackArea.addEventListener('click', handleBackClick);
+            cursorBackArea.addEventListener('touchend', handleBackClick);
+
+            // Оставляем оригинальный обработчик для десктопа
             if (typeof window.setupBackArrowHandler === 'function') {
                 window.setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, () => {
-                    // Переход на предыдущую страницу
                     const prevPage = cursorBack.getAttribute('data-prev-page');
                     if (prevPage) {
                         window.location.href = prevPage;
-                    } else {
-
                     }
                 });
             }

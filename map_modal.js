@@ -879,6 +879,14 @@ const mapStyles = `
 
 `;
 
+// Функция для получения координат текущей точки на карте
+async function getCurrentMapPoint() {
+    const imageContainer = document.querySelector('.image-container');
+    const mapPoint = imageContainer ? parseInt(imageContainer.getAttribute('data-map-point')) : 1;
+    const { getMapPointCoords } = await import('./map_points.js');
+    return getMapPointCoords(mapPoint || 1);
+}
+
 // Функционал модального окна карты
 const MapModal = {
     init() {
@@ -1031,8 +1039,7 @@ const MapModal = {
                 // Перепозиционируем маркер при изменении размера окна
                 setTimeout(async () => {
                     try {
-                        const { getMapPointCoords } = await import('./map_points.js');
-                        const coords = getMapPointCoords(1);
+                        const coords = await getCurrentMapPoint();
                         if (coords) {
                             MapModal.positionMarker(coords);
                         }
@@ -1069,9 +1076,12 @@ const MapModal = {
             const bookSound = document.getElementById('bookSound');
             if (bookSound) bookSound.play();
             
-            // Получаем координаты точки 1
+            // Получаем номер точки из data-атрибута
+            const imageContainer = document.querySelector('.image-container');
+            const mapPoint = imageContainer ? parseInt(imageContainer.getAttribute('data-map-point')) : 1;
+            
             const { getMapPointCoords, checkTooltipArea } = await import('./map_points.js');
-            const coords = getMapPointCoords(1);
+            const coords = getMapPointCoords(mapPoint || 1); // Используем точку 1 как fallback
             
             // После загрузки изображения корректно позиционируем маркер
             mapImage.onload = function() {
@@ -1091,8 +1101,7 @@ const MapModal = {
                 // Убеждаемся, что маркер отображается на мобильных устройствах
                 setTimeout(async () => {
                     try {
-                        const { getMapPointCoords } = await import('./map_points.js');
-                        const coords = getMapPointCoords(1);
+                        const coords = await getCurrentMapPoint();
                         if (coords) {
                             MapModal.positionMarker(coords);
                         }
@@ -1421,16 +1430,33 @@ const MapModal = {
         // Показываем маркер
         mapMarker.style.display = 'block';
         
-        // Координаты в процентах, маркер центрируем
-        mapMarker.style.left = `${coords.x}%`;
-        mapMarker.style.top = `${coords.y}%`;
-        mapMarker.style.transform = 'translate(-50%, -50%)';
-        
-        // Для мобильных устройств убеждаемся, что маркер видим
         if (window.innerWidth <= 768) {
+            // Для мобильных устройств
+            const imageWidth = mapImage.offsetWidth;
+            const imageHeight = mapImage.offsetHeight;
+            
+            // Преобразуем проценты в пиксели
+            const markerX = (coords.x / 100) * imageWidth;
+            const markerY = (coords.y / 100) * imageHeight;
+            
             mapMarker.style.position = 'absolute';
+            mapMarker.style.left = `${markerX}px`;
+            mapMarker.style.top = `${markerY}px`;
+            mapMarker.style.transform = 'translate(-50%, -50%)';
             mapMarker.style.zIndex = '1002';
             mapMarker.style.pointerEvents = 'none';
+            
+            // Убеждаемся, что маркер виден в области просмотра
+            const container = document.querySelector('#map-modal > div');
+            if (container) {
+                const scrollLeft = Math.max(0, markerX - (window.innerWidth / 2));
+                container.scrollLeft = scrollLeft;
+            }
+        } else {
+            // Для десктопа оставляем процентное позиционирование
+            mapMarker.style.left = `${coords.x}%`;
+            mapMarker.style.top = `${coords.y}%`;
+            mapMarker.style.transform = 'translate(-50%, -50%)';
         }
     },
 
