@@ -3,7 +3,21 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
     const marker = document.getElementById(markerId);
     if (!marker) return;
 
-    marker.addEventListener('click', async () => {
+    // Находим родительский элемент map-mark-area и в нем ищем название геометки
+    const markArea = marker.closest('.map-mark-area');
+    const markerTitle = markArea ? markArea.querySelector('.tumski-text') : null;
+
+    // Добавляем обработчик на значок геометки
+    marker.addEventListener('click', openQuest);
+
+    // Добавляем обработчик на название геометки, если оно найдено
+    if (markerTitle) {
+        markerTitle.style.cursor = 'pointer';
+        markerTitle.addEventListener('click', openQuest);
+    }
+
+    // Функция обработчик для открытия квеста
+    async function openQuest() {
         const bookOverlay = document.querySelector('.book-overlay');
         const bookContainer = bookOverlay.querySelector('.book-container');
         const bookTitle = bookOverlay.querySelector('.book-title');
@@ -21,79 +35,79 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
 
         // Заполняем список заданий
         for (let i = 1; i <= 12; i++) {
-                           const listItem = document.createElement('li');
+            const listItem = document.createElement('li');
                
-               // Создаем контейнер для галочки
-               const checkboxContainer = document.createElement('div');
-               checkboxContainer.style.display = 'inline-block';
-               checkboxContainer.style.position = 'relative';
-               checkboxContainer.style.width = '20px';
-               checkboxContainer.style.height = '20px';
-               checkboxContainer.style.marginRight = '10px';
-               checkboxContainer.style.verticalAlign = 'middle';
+            // Создаем контейнер для галочки
+            const checkboxContainer = document.createElement('div');
+            checkboxContainer.style.display = 'inline-block';
+            checkboxContainer.style.position = 'relative';
+            checkboxContainer.style.width = '20px';
+            checkboxContainer.style.height = '20px';
+            checkboxContainer.style.marginRight = '10px';
+            checkboxContainer.style.verticalAlign = 'middle';
 
-               // Создаем обе галочки (обычную и яркую)
-               const checkboxImg = document.createElement('img');
-               checkboxImg.src = 'media/checkbox0.png';
-               checkboxImg.alt = 'Checkbox';
-               checkboxImg.style.position = i === questNumber ? 'absolute' : 'relative';
-               checkboxImg.style.width = '100%';
-               checkboxImg.style.height = '100%';
-               checkboxImg.style.transition = 'opacity 3s ease-in';
-               
-               if (i === questNumber) {
-                   const brightCheckbox = document.createElement('img');
-                   brightCheckbox.src = 'media/checkbox1.jpg';
-                   brightCheckbox.alt = 'Bright Checkbox';
-                   brightCheckbox.style.position = 'relative';
-                   brightCheckbox.style.width = '100%';
-                   brightCheckbox.style.height = '100%';
-                   brightCheckbox.style.opacity = '0';
-                   brightCheckbox.style.transition = 'opacity 3s ease-in';
-                   brightCheckbox.dataset.brightCheckbox = 'true';
-                   
-                   checkboxContainer.appendChild(checkboxImg);
-                   checkboxContainer.appendChild(brightCheckbox);
-               } else {
-                   checkboxContainer.appendChild(checkboxImg);
-               }
-               
-               listItem.appendChild(checkboxContainer);
+            // Создаем обе галочки (обычную и яркую)
+            const checkboxImg = document.createElement('img');
+            checkboxImg.src = 'media/checkbox0.png';
+            checkboxImg.alt = 'Checkbox';
+            checkboxImg.style.position = i === questNumber ? 'absolute' : 'relative';
+            checkboxImg.style.width = '100%';
+            checkboxImg.style.height = '100%';
+            checkboxImg.style.transition = 'opacity 3s ease-in';
+            
+            if (i === questNumber) {
+                const brightCheckbox = document.createElement('img');
+                brightCheckbox.src = 'media/checkbox1.jpg';
+                brightCheckbox.alt = 'Bright Checkbox';
+                brightCheckbox.style.position = 'relative';
+                brightCheckbox.style.width = '100%';
+                brightCheckbox.style.height = '100%';
+                brightCheckbox.style.opacity = '0';
+                brightCheckbox.style.transition = 'opacity 3s ease-in';
+                brightCheckbox.dataset.brightCheckbox = 'true';
+                
+                checkboxContainer.appendChild(checkboxImg);
+                checkboxContainer.appendChild(brightCheckbox);
+            } else {
+                checkboxContainer.appendChild(checkboxImg);
+            }
+            
+            listItem.appendChild(checkboxContainer);
 
-               // Создаем контейнер для текста
-               const taskTextContainer = document.createElement('div');
-               taskTextContainer.style.display = 'inline-block';
-               taskTextContainer.style.position = 'relative';
-               taskTextContainer.style.verticalAlign = 'middle';
+            // Создаем контейнер для текста
+            const taskTextContainer = document.createElement('div');
+            taskTextContainer.style.display = 'inline-block';
+            taskTextContainer.style.position = 'relative';
+            taskTextContainer.style.verticalAlign = 'middle';
 
-               // Создаем оба текста (обычный и жирный)
-               const taskTextSpan = document.createElement('span');
-               taskTextSpan.textContent = window.i18n ? window.i18n.t(`quest.task${i}`) : `Задание ${i}`;
-               taskTextSpan.style.position = i === questNumber ? 'absolute' : 'relative';
-               taskTextSpan.style.transition = 'opacity 3s ease-in';
-               
-               if (i === questNumber) {
-                   const brightTextSpan = document.createElement('span');
-                   brightTextSpan.textContent = window.i18n ? window.i18n.t(`quest.task${i}`) : `Задание ${i}`;
-                   brightTextSpan.style.position = 'relative';
-                   brightTextSpan.style.fontWeight = 'bold';
-                   brightTextSpan.style.color = '#000';
-                   brightTextSpan.style.opacity = '0';
-                   brightTextSpan.style.transition = 'opacity 3s ease-in';
-                   brightTextSpan.dataset.brightText = 'true';
-                   
-                   taskTextContainer.appendChild(taskTextSpan);
-                   taskTextContainer.appendChild(brightTextSpan);
-               } else {
-                   taskTextContainer.appendChild(taskTextSpan);
-               }
-               
-               listItem.appendChild(taskTextContainer);
-               
-               // Если это целевой пункт, сохраняем ссылку для анимации
-               if (i === questNumber) {
-                   listItem.dataset.targetItem = 'true';
-               }
+            // Создаем оба текста (обычный и жирный)
+            const taskTextSpan = document.createElement('span');
+            taskTextSpan.textContent = window.i18n ? window.i18n.t(`quest.task${i}`) : `Задание ${i}`;
+            taskTextSpan.style.position = i === questNumber ? 'absolute' : 'relative';
+            taskTextSpan.style.transition = 'opacity 3s ease-in';
+            
+            if (i === questNumber) {
+                const brightTextSpan = document.createElement('span');
+                brightTextSpan.textContent = window.i18n ? window.i18n.t(`quest.task${i}`) : `Задание ${i}`;
+                brightTextSpan.style.position = 'relative';
+                brightTextSpan.style.fontWeight = 'bold';
+                brightTextSpan.style.color = '#000';
+                brightTextSpan.style.opacity = '0';
+                brightTextSpan.style.transition = 'opacity 3s ease-in';
+                brightTextSpan.dataset.brightText = 'true';
+                
+                taskTextContainer.appendChild(taskTextSpan);
+                taskTextContainer.appendChild(brightTextSpan);
+            } else {
+                taskTextContainer.appendChild(taskTextSpan);
+            }
+            
+            listItem.appendChild(taskTextContainer);
+            
+            // Если это целевой пункт, сохраняем ссылку для анимации
+            if (i === questNumber) {
+                listItem.dataset.targetItem = 'true';
+            }
             
             questTasksList.appendChild(listItem);
 
@@ -167,7 +181,18 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
             questTasksList.appendChild(imageContainer);
         }
 
-        // Устанавливаем текст заголовка из локализации
+        // Если ранее уже оборачивали заголовок, разворачиваем контейнер, чтобы не дублировать элементы
+        const existingTitleContainer = bookContentArea.querySelector('.book-title-container');
+        if (existingTitleContainer) {
+            const existingTitle = existingTitleContainer.querySelector('.book-title');
+            if (existingTitle) {
+                existingTitleContainer.replaceWith(existingTitle);
+            } else {
+                existingTitleContainer.remove();
+            }
+        }
+
+        // Обновляем текст заголовка (без кнопки звука)
         bookTitle.textContent = window.i18n ? window.i18n.t('quest.title1') : "Квест 1: Найди все тайны Тумского острова";
         bookTitle.style.display = 'block';
 
@@ -199,19 +224,28 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
             bookContentArea.appendChild(titleImage);
         }
 
-        // Открываем модальное окно
-        bookOverlay.style.display = 'flex';
-
-        // Сбрасываем прокрутку контента к началу
-        bookImageContentWrapper.scrollTop = 0;
-        bookContentArea.scrollTop = 0;
-
-        // Воспроизводим звук книги
-        if (bookSound) bookSound.play();
+        // Проверяем состояние общего звука на странице
+        const mainSoundButton = document.querySelector('.sound-menu-button');
+        const isSoundMuted = mainSoundButton ? mainSoundButton.classList.contains('muted') : false;
 
         // Создаем аудио элемент для звука квеста
         const questSound = new Audio('media/zwyki/quest.mp3');
         questSound.loop = true; // Зацикливаем воспроизведение
+
+        // Открываем модальное окно
+        bookOverlay.style.display = 'flex';
+
+        // Сбрасываем прокрутку контента к началу после того, как окно стало видимым
+        setTimeout(() => {
+            bookImageContentWrapper.scrollTop = 0;
+            bookContentArea.scrollTop = 0;
+        }, 0);
+
+        // Воспроизводим звуки только если звук не выключен глобально
+        if (!isSoundMuted) {
+            if (bookSound) bookSound.play();
+            questSound.play();
+        }
 
         // Функция для остановки звука
         const stopQuestSound = () => {
@@ -240,19 +274,8 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                 // Прокручиваем так, чтобы изображение было в центре
                 targetContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 
-                // Начинаем воспроизведение звука после прокрутки
-                questSound.play();
-                
                 //Добавляем дополнительную прокрутку, чтобы показать и текст пункта сверху
                 setTimeout(() => {
-                   /*  const wrapper = targetContainer.closest('.book-image-content-wrapper');
-                     if (wrapper) {
-                        wrapper.scrollBy({
-                            top: -100,
-                            behavior: 'smooth'
-                        });
-                    } */ 
-
                     // Запускаем анимацию проявления изображения
                     const targetImage = targetContainer.querySelector('img:last-child');
                     if (targetImage) {
@@ -295,6 +318,43 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                         setTimeout(() => {
                                             span.style.opacity = '1';
                                         }, 100 * index);
+                                    });
+
+                                    // Создаем кнопку звука рядом с заголовком целевого пункта
+                                    const localSoundButton = document.createElement('button');
+                                    localSoundButton.className = 'quest-sound-button';
+                                    localSoundButton.innerHTML = '🔊';
+                                    localSoundButton.style.opacity = '0';
+                                    localSoundButton.style.transition = 'opacity 0.5s ease';
+                                    localSoundButton.style.background = 'none';
+                                    localSoundButton.style.border = 'none';
+                                    localSoundButton.style.fontSize = '20px';
+                                    localSoundButton.style.cursor = 'pointer';
+                                    localSoundButton.style.padding = '4px';
+                                    localSoundButton.style.marginLeft = '8px';
+
+                                    // Вставляем кнопку сразу после brightText
+                                    if (brightText.parentElement) {
+                                        brightText.parentElement.insertBefore(localSoundButton, brightText.nextSibling);
+                                    }
+
+                                    // Показываем кнопку после окончания анимации букв
+                                    setTimeout(() => {
+                                        localSoundButton.style.opacity = '1';
+                                    }, Math.max(0, text.length * 100 - 100));
+
+                                    // Обработчик клика по кнопке звука
+                                    localSoundButton.addEventListener('click', () => {
+                                        const mainSoundButton = document.querySelector('.sound-menu-button');
+                                        const isGloballyMuted = mainSoundButton ? mainSoundButton.classList.contains('muted') : false;
+                                        if (isGloballyMuted) return;
+                                        if (questSound.paused) {
+                                            questSound.play();
+                                            localSoundButton.innerHTML = '🔊';
+                                        } else {
+                                            questSound.pause();
+                                            localSoundButton.innerHTML = '🔈';
+                                        }
                                     });
                                     
                                     // Плавно скрываем старый текст
@@ -362,5 +422,5 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                 }
             }, 100);
         }
-    });
+    }
 }
