@@ -15,32 +15,44 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     }
 
-    // 2. Подключение обработчика для всех геометок
-    import('./tumski_cathedral_handler.js').then(mod => {
-        if (mod && typeof mod.setupUniversalGeoMarker === 'function') {
-
+    // 2. Подключение обработчиков для всех геометок
+    Promise.all([
+        import('./tumski_cathedral_handler.js'),
+        import('./quest_marker_handler.js')
+    ]).then(([cathedralMod, questMod]) => {
+        if (cathedralMod && typeof cathedralMod.setupUniversalGeoMarker === 'function') {
             // Геометка Тумский остров
-            mod.setupUniversalGeoMarker({
+            cathedralMod.setupUniversalGeoMarker({
                 markerId: 'tumski',
                 i18nKey: 'tumski'
             });
             
             // Геометка Собор Святого Иоанна Крестителя
-            mod.setupUniversalGeoMarker({
+            cathedralMod.setupUniversalGeoMarker({
                 markerId: 'tumski_cathedral',
                 i18nKey: 'tumski_cathedral'
             });
             
             // Геометка Тумский мост
-            mod.setupUniversalGeoMarker({
+            cathedralMod.setupUniversalGeoMarker({
                 markerId: 'tumski_most',
                 i18nKey: 'tumski_most'
             });
             
             // Геометка Соборная церковь Святого Креста и Св. Варфоломея
-            mod.setupUniversalGeoMarker({
+            cathedralMod.setupUniversalGeoMarker({
                 markerId: 'katedra_koscielna',
                 i18nKey: 'katedra_koscielna'
+            });
+        }
+
+        // Инициализация геометки с квестом
+        const loveLocks = document.getElementById('love_locks');
+        if (loveLocks && questMod && typeof questMod.setupQuestGeoMarker === 'function') {
+            questMod.setupQuestGeoMarker({
+                markerId: 'love_locks',
+                questNumber: parseInt(loveLocks.getAttribute('data-quest-number')),
+                questImage: loveLocks.getAttribute('data-quest-image')
             });
         }
     });

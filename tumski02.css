@@ -197,6 +197,16 @@
     position: relative !important;
 }
 
+/* Стили для геометки с замками любви */
+#love_locks {
+    background-image: url('media/mapmarknb.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+}
+
 /* Стили для JavaScript-созданных расширенных областей */
 .extended-hover-area {
     position: absolute !important;

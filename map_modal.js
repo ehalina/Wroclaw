@@ -1196,6 +1196,22 @@ const MapModal = {
             // Очищаем список перед заполнением
             questTasksList.innerHTML = '';
 
+            // Удаляем предыдущее изображение tumski.jpeg, если оно есть
+            const existingTitleImages = bookContentArea.querySelectorAll('img[src="media/watercolor/tumski.jpeg"]');
+            existingTitleImages.forEach(img => img.remove());
+
+            // Показываем модальное окно и сбрасываем прокрутку
+            bookOverlay.style.display = 'flex';
+            
+            // Сбрасываем прокрутку контента к началу после того, как окно стало видимым
+            setTimeout(() => {
+                bookImageContentWrapper.scrollTop = 0;
+                bookContentArea.scrollTop = 0;
+            }, 0);
+
+            // Воспроизводим звук книги
+            if (bookSound) bookSound.play();
+
             // Заполняем список заданий
             for (let i = 1; i <= 12; i++) {
                 const listItem = document.createElement('li');
