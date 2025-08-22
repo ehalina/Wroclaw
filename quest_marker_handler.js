@@ -88,6 +88,10 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
             taskTextSpan.textContent = window.i18n ? window.i18n.t(`quest.task${i}`) : `Задание ${i}`;
             taskTextSpan.style.position = i === questNumber ? 'absolute' : 'relative';
             taskTextSpan.style.transition = `opacity ${revealDurationMs}ms ease-in-out`;
+            if (i === questNumber) {
+                // Скрываем чёрный текст для целевого пункта: будет только коричневая анимация
+                taskTextSpan.style.display = 'none';
+            }
             
             if (i === questNumber) {
                 const brightTextSpan = document.createElement('span');
@@ -313,16 +317,14 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                     brightText.textContent = ''; // Очищаем текст
                                     brightText.style.opacity = '1';
                                     
-                                    // Создаем span для каждой буквы
+                                    // Проявляем только коричневые буквы по одной
                                     [...text].forEach((char, index) => {
                                         const span = document.createElement('span');
                                         span.textContent = char;
-                                        span.style.color = '#8B4513'; // Коричневый цвет
+                                        span.style.color = '#8B4513';
                                         span.style.opacity = '0';
                                         span.style.transition = 'opacity 0.3s ease';
                                         brightText.appendChild(span);
-                                        
-                                        // Анимируем каждую букву с задержкой
                                         setTimeout(() => {
                                             span.style.opacity = '1';
                                         }, 100 * index);
@@ -332,23 +334,21 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                     const localSoundButton = document.createElement('button');
                                     localSoundButton.className = 'quest-sound-button';
                                     localSoundButton.style.opacity = '0';
-                                    localSoundButton.style.transition = 'opacity 0.5s ease, transform 120ms ease, box-shadow 120ms ease';
-                                    localSoundButton.style.background = '#fdfaf5';
-                                    localSoundButton.style.border = '1px solid rgba(0,0,0,0.1)';
-                                    localSoundButton.style.color = '#5b4636';
+                                    localSoundButton.style.transition = 'opacity 0.5s ease, transform 120ms ease';
+                                    localSoundButton.style.background = 'none';
+                                    localSoundButton.style.border = 'none';
                                     localSoundButton.style.cursor = 'pointer';
-                                    localSoundButton.style.padding = '4px 8px';
-                                    localSoundButton.style.marginLeft = '8px';
-                                    localSoundButton.style.borderRadius = '5px';
-                                    localSoundButton.style.boxShadow = 'inset 0 0 0 2px rgba(0,0,0,0.05)';
-                                    localSoundButton.style.fontFamily = 'serif';
+                                    localSoundButton.style.padding = '0';
+                                    localSoundButton.style.marginLeft = '12px';
+                                    localSoundButton.style.display = 'flex';
+                                    localSoundButton.style.alignItems = 'center';
 
                                     // Иконка звука (ретро)
                                     const soundIcon = document.createElement('img');
                                     soundIcon.src = 'media/sound.jpg';
                                     soundIcon.alt = 'Звук';
-                                    soundIcon.style.width = '20px';
-                                    soundIcon.style.height = '20px';
+                                    soundIcon.style.width = '28px';
+                                    soundIcon.style.height = '28px';
                                     soundIcon.style.display = 'block';
                                     soundIcon.style.objectFit = 'contain';
                                     soundIcon.style.filter = 'sepia(0.6) saturate(0.9) hue-rotate(330deg)';
@@ -358,32 +358,39 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                     const flipButton = document.createElement('button');
                                     flipButton.className = 'quest-flip-button';
                                     flipButton.style.opacity = '0';
-                                    flipButton.style.transition = 'opacity 0.5s ease, transform 120ms ease, box-shadow 120ms ease';
-                                    flipButton.style.background = '#fdfaf5';
-                                    flipButton.style.border = '1px solid rgba(0,0,0,0.1)';
-                                    flipButton.style.color = '#5b4636';
+                                    flipButton.style.transition = 'opacity 0.5s ease, transform 120ms ease';
+                                    flipButton.style.background = 'none';
+                                    flipButton.style.border = 'none';
                                     flipButton.style.cursor = 'pointer';
-                                    flipButton.style.padding = '4px 8px';
-                                    flipButton.style.marginLeft = '6px';
-                                    flipButton.style.borderRadius = '5px';
-                                    flipButton.style.boxShadow = 'inset 0 0 0 2px rgba(0,0,0,0.05)';
-                                    flipButton.style.fontFamily = 'serif';
+                                    flipButton.style.padding = '0';
+                                    flipButton.style.marginLeft = '8px';
+                                    flipButton.style.display = 'flex';
+                                    flipButton.style.alignItems = 'center';
 
                                     // Иконка переворота (ретро)
                                     const flipIcon = document.createElement('img');
-                                    flipIcon.src = 'media/strelka_rev_new.png';
+                                    flipIcon.src = 'media/revers.jpg';
                                     flipIcon.alt = 'Перевернуть';
-                                    flipIcon.style.width = '20px';
-                                    flipIcon.style.height = '20px';
+                                    flipIcon.style.width = '28px';
+                                    flipIcon.style.height = '28px';
                                     flipIcon.style.display = 'block';
                                     flipIcon.style.objectFit = 'contain';
                                     flipIcon.style.filter = 'sepia(0.6) saturate(0.9) hue-rotate(330deg)';
                                     flipButton.appendChild(flipIcon);
 
-                                    // Вставляем кнопки сразу после brightText
+                                    // Создаем контейнер для заголовка и кнопок в одну линию
+                                    const titleButtonsContainer = document.createElement('div');
+                                    titleButtonsContainer.style.display = 'flex';
+                                    titleButtonsContainer.style.alignItems = 'center';
+                                    titleButtonsContainer.style.gap = '8px';
+                                    
+                                    // Перемещаем brightText в контейнер
                                     if (brightText.parentElement) {
-                                        brightText.parentElement.insertBefore(localSoundButton, brightText.nextSibling);
-                                        brightText.parentElement.insertBefore(flipButton, localSoundButton.nextSibling);
+                                        const parent = brightText.parentElement;
+                                        titleButtonsContainer.appendChild(brightText);
+                                        titleButtonsContainer.appendChild(localSoundButton);
+                                        titleButtonsContainer.appendChild(flipButton);
+                                        parent.appendChild(titleButtonsContainer);
                                     }
 
                                     // Показываем кнопки после окончания анимации букв
@@ -601,17 +608,30 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                                 ratioBox.appendChild(flipCard);
                                             }
 
+                                            // Звук переворота открытки
+                                            const flipSound = new Audio('media/opening-a-book.wav');
+                                            const playFlipSound = () => {
+                                                const mainSoundButton = document.querySelector('.sound-menu-button');
+                                                const isGloballyMuted = mainSoundButton ? mainSoundButton.classList.contains('muted') : false;
+                                                if (!isGloballyMuted) {
+                                                    flipSound.currentTime = 0;
+                                                    flipSound.play();
+                                                }
+                                            };
+
                                             // Обработчик переворота по клику
                                             let flipped = false;
                                             flipCard.addEventListener('click', () => {
                                                 flipped = !flipped;
                                                 flipCard.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+                                                playFlipSound();
                                             });
 
                                             // Клик по кнопке переворота делает то же, что и клик по карточке
                                             flipButton.addEventListener('click', () => {
                                                 flipped = !flipped;
                                                 flipCard.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+                                                playFlipSound();
                                             });
 
                                             // Hover-эффекты для ретро-кнопок
