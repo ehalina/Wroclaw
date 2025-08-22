@@ -33,6 +33,9 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         // Очищаем список перед заполнением
         questTasksList.innerHTML = '';
 
+        // Единая длительность плавного проявления (в мс)
+        const revealDurationMs = 5000;
+
         // Заполняем список заданий
         for (let i = 1; i <= 12; i++) {
             const listItem = document.createElement('li');
@@ -53,17 +56,17 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
             checkboxImg.style.position = i === questNumber ? 'absolute' : 'relative';
             checkboxImg.style.width = '100%';
             checkboxImg.style.height = '100%';
-            checkboxImg.style.transition = 'opacity 3s ease-in';
+            checkboxImg.style.transition = `opacity ${revealDurationMs}ms ease-in-out`;
             
             if (i === questNumber) {
                 const brightCheckbox = document.createElement('img');
-                brightCheckbox.src = 'media/checkbox1.jpg';
+                brightCheckbox.src = 'media/checkbox1.png';
                 brightCheckbox.alt = 'Bright Checkbox';
                 brightCheckbox.style.position = 'relative';
                 brightCheckbox.style.width = '100%';
                 brightCheckbox.style.height = '100%';
                 brightCheckbox.style.opacity = '0';
-                brightCheckbox.style.transition = 'opacity 3s ease-in';
+                brightCheckbox.style.transition = `opacity ${revealDurationMs}ms ease-in-out`;
                 brightCheckbox.dataset.brightCheckbox = 'true';
                 
                 checkboxContainer.appendChild(checkboxImg);
@@ -84,7 +87,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
             const taskTextSpan = document.createElement('span');
             taskTextSpan.textContent = window.i18n ? window.i18n.t(`quest.task${i}`) : `Задание ${i}`;
             taskTextSpan.style.position = i === questNumber ? 'absolute' : 'relative';
-            taskTextSpan.style.transition = 'opacity 3s ease-in';
+            taskTextSpan.style.transition = `opacity ${revealDurationMs}ms ease-in-out`;
             
             if (i === questNumber) {
                 const brightTextSpan = document.createElement('span');
@@ -93,7 +96,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                 brightTextSpan.style.fontWeight = 'bold';
                 brightTextSpan.style.color = '#000';
                 brightTextSpan.style.opacity = '0';
-                brightTextSpan.style.transition = 'opacity 3s ease-in';
+                brightTextSpan.style.transition = `opacity ${revealDurationMs}ms ease-in-out`;
                 brightTextSpan.dataset.brightText = 'true';
                 
                 taskTextContainer.appendChild(taskTextSpan);
@@ -127,6 +130,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                 img.style.width = '100%';
                 img.style.display = 'block';
                 img.style.padding = '8px';
+                img.style.boxSizing = 'border-box';
                 img.style.background = '#fff';
                 img.style.borderRadius = '5px';
             };
@@ -148,7 +152,9 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                 applyImageStyles(targetImage);
                 targetImage.style.position = 'relative';
                 targetImage.style.opacity = '0';
-                targetImage.style.transition = 'opacity 3s ease-in';
+                targetImage.style.filter = 'blur(8px)';
+                targetImage.style.transform = 'scale(0.985)';
+                targetImage.style.transition = `opacity ${revealDurationMs}ms cubic-bezier(0.22, 0.61, 0.36, 1), filter ${revealDurationMs}ms cubic-bezier(0.22, 0.61, 0.36, 1), transform ${revealDurationMs}ms cubic-bezier(0.22, 0.61, 0.36, 1)`;
 
                 imageContainer.appendChild(baseImage);
                 imageContainer.appendChild(targetImage);
@@ -283,6 +289,8 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                         setTimeout(() => {
                             // Проявляем новое изображение
                             targetImage.style.opacity = '1';
+                            targetImage.style.filter = 'blur(0)';
+                            targetImage.style.transform = 'scale(1)';
                             
                             // Находим целевой пункт списка и запускаем анимацию текста и галочки
                             const targetListItem = questTasksList.querySelector('li[data-target-item="true"]');
@@ -323,24 +331,65 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                     // Создаем кнопку звука рядом с заголовком целевого пункта
                                     const localSoundButton = document.createElement('button');
                                     localSoundButton.className = 'quest-sound-button';
-                                    localSoundButton.innerHTML = '🔊';
                                     localSoundButton.style.opacity = '0';
-                                    localSoundButton.style.transition = 'opacity 0.5s ease';
-                                    localSoundButton.style.background = 'none';
-                                    localSoundButton.style.border = 'none';
-                                    localSoundButton.style.fontSize = '20px';
+                                    localSoundButton.style.transition = 'opacity 0.5s ease, transform 120ms ease, box-shadow 120ms ease';
+                                    localSoundButton.style.background = '#fdfaf5';
+                                    localSoundButton.style.border = '1px solid rgba(0,0,0,0.1)';
+                                    localSoundButton.style.color = '#5b4636';
                                     localSoundButton.style.cursor = 'pointer';
-                                    localSoundButton.style.padding = '4px';
+                                    localSoundButton.style.padding = '4px 8px';
                                     localSoundButton.style.marginLeft = '8px';
+                                    localSoundButton.style.borderRadius = '5px';
+                                    localSoundButton.style.boxShadow = 'inset 0 0 0 2px rgba(0,0,0,0.05)';
+                                    localSoundButton.style.fontFamily = 'serif';
 
-                                    // Вставляем кнопку сразу после brightText
+                                    // Иконка звука (ретро)
+                                    const soundIcon = document.createElement('img');
+                                    soundIcon.src = 'media/sound.jpg';
+                                    soundIcon.alt = 'Звук';
+                                    soundIcon.style.width = '20px';
+                                    soundIcon.style.height = '20px';
+                                    soundIcon.style.display = 'block';
+                                    soundIcon.style.objectFit = 'contain';
+                                    soundIcon.style.filter = 'sepia(0.6) saturate(0.9) hue-rotate(330deg)';
+                                    localSoundButton.appendChild(soundIcon);
+
+                                    // Кнопка переворота рядом со звуком
+                                    const flipButton = document.createElement('button');
+                                    flipButton.className = 'quest-flip-button';
+                                    flipButton.style.opacity = '0';
+                                    flipButton.style.transition = 'opacity 0.5s ease, transform 120ms ease, box-shadow 120ms ease';
+                                    flipButton.style.background = '#fdfaf5';
+                                    flipButton.style.border = '1px solid rgba(0,0,0,0.1)';
+                                    flipButton.style.color = '#5b4636';
+                                    flipButton.style.cursor = 'pointer';
+                                    flipButton.style.padding = '4px 8px';
+                                    flipButton.style.marginLeft = '6px';
+                                    flipButton.style.borderRadius = '5px';
+                                    flipButton.style.boxShadow = 'inset 0 0 0 2px rgba(0,0,0,0.05)';
+                                    flipButton.style.fontFamily = 'serif';
+
+                                    // Иконка переворота (ретро)
+                                    const flipIcon = document.createElement('img');
+                                    flipIcon.src = 'media/strelka_rev_new.png';
+                                    flipIcon.alt = 'Перевернуть';
+                                    flipIcon.style.width = '20px';
+                                    flipIcon.style.height = '20px';
+                                    flipIcon.style.display = 'block';
+                                    flipIcon.style.objectFit = 'contain';
+                                    flipIcon.style.filter = 'sepia(0.6) saturate(0.9) hue-rotate(330deg)';
+                                    flipButton.appendChild(flipIcon);
+
+                                    // Вставляем кнопки сразу после brightText
                                     if (brightText.parentElement) {
                                         brightText.parentElement.insertBefore(localSoundButton, brightText.nextSibling);
+                                        brightText.parentElement.insertBefore(flipButton, localSoundButton.nextSibling);
                                     }
 
-                                    // Показываем кнопку после окончания анимации букв
+                                    // Показываем кнопки после окончания анимации букв
                                     setTimeout(() => {
                                         localSoundButton.style.opacity = '1';
+                                        flipButton.style.opacity = '1';
                                     }, Math.max(0, text.length * 100 - 100));
 
                                     // Обработчик клика по кнопке звука
@@ -350,12 +399,236 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                         if (isGloballyMuted) return;
                                         if (questSound.paused) {
                                             questSound.play();
-                                            localSoundButton.innerHTML = '🔊';
+                                            // активный вид
+                                            soundIcon.style.opacity = '1';
+                                            soundIcon.style.filter = 'sepia(0.6) saturate(0.9) hue-rotate(330deg)';
                                         } else {
                                             questSound.pause();
-                                            localSoundButton.innerHTML = '🔈';
+                                            // «приглушённый» вид
+                                            soundIcon.style.opacity = '0.6';
+                                            soundIcon.style.filter = 'grayscale(0.3) sepia(0.4) saturate(0.6) hue-rotate(330deg)';
                                         }
                                     });
+
+                                    // Подготовка эффекта переворота открытки после проявления картинки и текста
+                                    const flipHost = targetContainer; // используем контейнер целевого изображения
+                                    if (flipHost && !flipHost.dataset.flipPrepared) {
+                                        flipHost.dataset.flipPrepared = 'true';
+
+                                        const totalRevealDelayMs = Math.max(800, text.length * 100 + 500);
+
+                                        setTimeout(() => {
+                                            // Создаем обертку для 3D-переворота
+                                            const flipScene = document.createElement('div');
+                                            flipScene.style.position = 'relative';
+                                            // Сохраняем адаптивную ширину как у исходного контейнера
+                                            const originalWidthPx = flipHost.offsetWidth;
+                                            const originalHeightPx = flipHost.offsetHeight;
+                                            const aspectRatio = originalWidthPx > 0 ? (originalHeightPx / originalWidthPx) : 1;
+                                            flipScene.style.width = '100%';
+                                            flipScene.style.maxWidth = flipHost.style.maxWidth || '';
+                                            flipScene.style.margin = flipHost.style.margin || '20px auto';
+                                            flipScene.style.perspective = '1000px';
+
+                                            // Восстанавливаем визуальные эффекты (тот же наклон, тени, hover)
+                                            const originalAngle = flipHost.dataset.originalAngle || '0';
+                                            flipScene.style.transform = `rotate(${originalAngle}deg)`;
+                                            flipScene.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
+                                            flipScene.style.transition = 'all 0.3s ease';
+                                            flipScene.dataset.originalAngle = originalAngle;
+                                            flipScene.addEventListener('mouseover', function() {
+                                                this.style.transform = 'rotate(0deg) scale(1.02)';
+                                                this.style.boxShadow = '8px 8px 15px rgba(0,0,0,0.6)';
+                                            });
+                                            flipScene.addEventListener('mouseout', function() {
+                                                this.style.transform = `rotate(${this.dataset.originalAngle}deg)`;
+                                                this.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
+                                            });
+
+                                            // Внутренняя обертка с сохранением соотношения сторон
+                                            const ratioBox = document.createElement('div');
+                                            ratioBox.style.position = 'relative';
+                                            ratioBox.style.width = '100%';
+                                            ratioBox.style.paddingTop = (aspectRatio * 100) + '%';
+
+                                            const flipCard = document.createElement('div');
+                                            flipCard.style.position = 'absolute';
+                                            flipCard.style.top = '0';
+                                            flipCard.style.left = '0';
+                                            flipCard.style.right = '0';
+                                            flipCard.style.bottom = '0';
+                                            flipCard.style.transformStyle = 'preserve-3d';
+                                            flipCard.style.transition = 'transform 0.8s ease';
+                                            flipCard.style.cursor = 'pointer';
+
+                                            // Лицевая сторона (используем уже проявленное цветное изображение)
+                                            const front = document.createElement('div');
+                                            front.style.position = 'absolute';
+                                            front.style.top = '0';
+                                            front.style.left = '0';
+                                            front.style.right = '0';
+                                            front.style.bottom = '0';
+                                            front.style.backfaceVisibility = 'hidden';
+
+                                            const frontImg = document.createElement('img');
+                                            frontImg.src = questImage;
+                                            frontImg.alt = targetImage.alt || 'Открытка (лицевая сторона)';
+                                            frontImg.style.width = '100%';
+                                            frontImg.style.height = '100%';
+                                            frontImg.style.objectFit = 'contain';
+                                            frontImg.style.display = 'block';
+                                            frontImg.style.padding = '8px';
+                                            frontImg.style.boxSizing = 'border-box';
+                                            frontImg.style.background = '#fff';
+                                            frontImg.style.borderRadius = '5px';
+                                            front.appendChild(frontImg);
+
+                                            // Обратная сторона (как оборот открытки)
+                                            const back = document.createElement('div');
+                                            back.style.position = 'absolute';
+                                            back.style.top = '0';
+                                            back.style.left = '0';
+                                            back.style.right = '0';
+                                            back.style.bottom = '0';
+                                            back.style.transform = 'rotateY(180deg)';
+                                            back.style.backfaceVisibility = 'hidden';
+                                            back.style.overflow = 'hidden';
+
+        							// Блок текста (старый текст сверху)
+                                            const backCard = document.createElement('div');
+                                            backCard.style.position = 'absolute';
+                                            backCard.style.top = '0';
+                                            backCard.style.left = '0';
+                                            backCard.style.right = '0';
+                                            backCard.style.zIndex = '2';
+                                            backCard.style.width = '100%';
+                                            backCard.style.display = 'flex';
+                                            backCard.style.flexDirection = 'column';
+                                            backCard.style.alignItems = 'center';
+                                            backCard.style.justifyContent = 'flex-start';
+                                            backCard.style.background = 'transparent';
+                                            backCard.style.border = 'none';
+                                            backCard.style.borderRadius = '0';
+                                            backCard.style.boxShadow = 'none';
+                                            backCard.style.padding = '8px';
+                                            backCard.style.boxSizing = 'border-box';
+                                            backCard.style.fontFamily = 'serif';
+                                            backCard.style.color = '#5b4636';
+                                            backCard.style.textAlign = 'center';
+                                            backCard.style.pointerEvents = 'none';
+
+                                            const backText = document.createElement('div');
+                                            backText.textContent = (window.i18n ? window.i18n.t(`quest.back${questNumber}`) : '') || `Задание ${questNumber}: подробности и заметки.`;
+                                            backText.style.lineHeight = '1.4';
+                                            backText.style.fontSize = '20px';
+                                            backText.style.fontFamily = '"Marck Script", cursive, serif';
+                                            backText.style.fontWeight = 'normal';
+
+                                            backCard.appendChild(backText);
+                                            // Картинка oldcard.jpg снизу, без белых полей
+                                            const questImgPath = questImage || '';
+                                            const lastSlashIndex = questImgPath.lastIndexOf('/');
+                                            const baseDir = lastSlashIndex >= 0 ? questImgPath.slice(0, lastSlashIndex) : '';
+                                            const backImg = document.createElement('img');
+                                            backImg.alt = 'Открытка (оборот)';
+                                            backImg.style.position = 'absolute';
+                                            backImg.style.top = '0';
+                                            backImg.style.left = '0';
+                                            backImg.style.width = '100%';
+                                            backImg.style.height = '100%';
+                                            backImg.style.objectFit = 'contain';
+                                            backImg.style.display = 'block';
+                                            backImg.style.padding = '0';
+                                            backImg.style.boxSizing = 'border-box';
+                                            backImg.style.background = 'transparent';
+                                            backImg.style.borderRadius = '0';
+                                            backImg.style.zIndex = '1';
+                                            backImg.src = (baseDir ? baseDir + '/' : '') + 'oldcard.jpg';
+                                            back.appendChild(backImg);
+                                            back.appendChild(backCard);
+
+                                            // Адаптивный текст: всегда вписывается в открытку
+                                            backText.style.whiteSpace = 'normal';
+                                            backText.style.wordBreak = 'break-word';
+                                            backText.style.hyphens = 'auto';
+                                            backText.style.maxWidth = '92%';
+                                            backText.style.margin = '8px auto 0';
+
+                                            const fitBackText = () => {
+                                                const minPx = 10;
+                                                const computed = parseFloat(window.getComputedStyle(backText).fontSize) || 20;
+                                                const maxPx = Math.max(minPx, Math.round(computed));
+                                                let low = minPx;
+                                                let high = maxPx;
+                                                let best = minPx;
+                                                const padding = 16;
+                                                const availableHeight = Math.max(0, back.clientHeight - padding);
+                                                const availableWidth = Math.max(0, back.clientWidth - padding);
+                                                while (low <= high) {
+                                                    const mid = Math.floor((low + high) / 2);
+                                                    backText.style.fontSize = mid + 'px';
+                                                    const fits = backText.scrollHeight <= availableHeight && backText.scrollWidth <= availableWidth;
+                                                    if (fits) {
+                                                        best = mid;
+                                                        low = mid + 1;
+                                                    } else {
+                                                        high = mid - 1;
+                                                    }
+                                                }
+                                                backText.style.fontSize = best + 'px';
+                                            };
+                                            // Инициализация после вставки в DOM
+                                            setTimeout(fitBackText, 0);
+                                            // Подгон после загрузки изображения оборота
+                                            backImg.addEventListener('load', fitBackText);
+                                            if (backImg.complete) setTimeout(fitBackText, 0);
+                                            if (typeof ResizeObserver !== 'undefined') {
+                                                const ro = new ResizeObserver(() => fitBackText());
+                                                ro.observe(back);
+                                            } else {
+                                                window.addEventListener('resize', fitBackText);
+                                            }
+
+                                            // Собираем карточку
+                                            flipCard.appendChild(front);
+                                            flipCard.appendChild(back);
+                                            
+                                            // Заменяем текущий imageContainer на flip-сцену (сохраняем внешний стиль)
+                                            const parentForCard = flipHost.parentNode;
+                                            if (parentForCard) {
+                                                parentForCard.replaceChild(flipScene, flipHost);
+                                                flipScene.appendChild(ratioBox);
+                                                ratioBox.appendChild(flipCard);
+                                            }
+
+                                            // Обработчик переворота по клику
+                                            let flipped = false;
+                                            flipCard.addEventListener('click', () => {
+                                                flipped = !flipped;
+                                                flipCard.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+                                            });
+
+                                            // Клик по кнопке переворота делает то же, что и клик по карточке
+                                            flipButton.addEventListener('click', () => {
+                                                flipped = !flipped;
+                                                flipCard.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+                                            });
+
+                                            // Hover-эффекты для ретро-кнопок
+                                            const addRetroHover = (btn) => {
+                                                btn.addEventListener('mouseover', () => {
+                                                    btn.style.transform = 'translateY(-1px)';
+                                                    btn.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15), inset 0 0 0 2px rgba(0,0,0,0.05)';
+                                                });
+                                                btn.addEventListener('mouseout', () => {
+                                                    btn.style.transform = 'translateY(0)';
+                                                    btn.style.boxShadow = 'inset 0 0 0 2px rgba(0,0,0,0.05)';
+                                                });
+                                            };
+                                            addRetroHover(localSoundButton);
+                                            addRetroHover(flipButton);
+                                        }, totalRevealDelayMs);
+                                    }
                                     
                                     // Плавно скрываем старый текст
                                     const oldText = brightText.previousElementSibling;
