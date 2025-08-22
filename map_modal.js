@@ -1196,6 +1196,18 @@ const MapModal = {
             // Очищаем список перед заполнением
             questTasksList.innerHTML = '';
 
+            // Определяем номер и изображение активного квеста на странице (если есть)
+            const activeQuestMark = document.querySelector('.map-mark[data-quest-number]');
+            const loadQuestState = () => { try { const raw = JSON.parse(sessionStorage.getItem('questState') || '{}'); if (!raw.tasks) raw.tasks = {}; return raw; } catch (_) { return { tasks: {} }; } };
+            const questState = loadQuestState();
+            // Берем номер из активной метки, иначе fallback к последнему подготовленному или 1
+            const currentQuestNumber = activeQuestMark ? parseInt(activeQuestMark.getAttribute('data-quest-number')) : (questState.__lastPreparedNumber || 1);
+            const currentQuestImage = activeQuestMark ? activeQuestMark.getAttribute('data-quest-image') : '';
+
+            // Загрузка состояния квестов из sessionStorage
+            const isPrepared = !!(questState && questState.tasks && (questState.tasks[currentQuestNumber] === true || (questState.tasks[currentQuestNumber] && questState.tasks[currentQuestNumber].prepared)));
+            const preparedImage = questState && questState.tasks && questState.tasks[currentQuestNumber] && questState.tasks[currentQuestNumber].image;
+
             // Удаляем предыдущее изображение tumski.jpeg, если оно есть
             const existingTitleImages = bookContentArea.querySelectorAll('img[src="media/watercolor/tumski.jpeg"]');
             existingTitleImages.forEach(img => img.remove());
@@ -1215,56 +1227,341 @@ const MapModal = {
             // Заполняем список заданий
             for (let i = 1; i <= 12; i++) {
                 const listItem = document.createElement('li');
+
+                // Чекбоксы (обычный и яркий) с учетом состояния
+                const checkboxContainer = document.createElement('div');
+                checkboxContainer.style.display = 'inline-block';
+                checkboxContainer.style.position = 'relative';
+                checkboxContainer.style.width = '20px';
+                checkboxContainer.style.height = '20px';
+                checkboxContainer.style.marginRight = '10px';
+                checkboxContainer.style.verticalAlign = 'middle';
+
                 const checkboxImg = document.createElement('img');
                 checkboxImg.src = 'media/checkbox0.png';
                 checkboxImg.alt = 'Checkbox';
-                listItem.appendChild(checkboxImg);
-                
+                checkboxImg.style.position = i === currentQuestNumber ? 'absolute' : 'relative';
+                checkboxImg.style.width = '100%';
+                checkboxImg.style.height = '100%';
+
+                if (i === currentQuestNumber) {
+                    const brightCheckbox = document.createElement('img');
+                    brightCheckbox.src = 'media/checkbox1.png';
+                    brightCheckbox.alt = 'Bright Checkbox';
+                    brightCheckbox.style.position = 'relative';
+                    brightCheckbox.style.width = '100%';
+                    brightCheckbox.style.height = '100%';
+                    brightCheckbox.style.opacity = isPrepared ? '1' : '0';
+                    brightCheckbox.dataset.brightCheckbox = 'true';
+                    checkboxContainer.appendChild(checkboxImg);
+                    checkboxContainer.appendChild(brightCheckbox);
+                    if (isPrepared) checkboxImg.style.opacity = '0';
+                } else {
+                    checkboxContainer.appendChild(checkboxImg);
+                }
+
+                listItem.appendChild(checkboxContainer);
+
+                // Текст задания с учетом состояния
                 const taskTextSpan = document.createElement('span');
                 taskTextSpan.textContent = window.i18n ? window.i18n.t(`quest.task${i}`) : `Задание ${i}`;
+                if ((i === currentQuestNumber && isPrepared) || questState.tasks[i]) {
+                    taskTextSpan.style.color = '#8B4513';
+                    taskTextSpan.style.fontWeight = 'bold';
+                }
                 listItem.appendChild(taskTextSpan);
                 
                 questTasksList.appendChild(listItem);
 
-                // Добавляем изображение для каждого пункта
-                    const taskImage = document.createElement('img');
-                taskImage.src = `media/watercolor/${i}.jpg`;
+                // Изображение
+                const taskImage = document.createElement('img');
+                const baseSrc = `media/watercolor/${i}.jpg`;
+                const preparedSrc = (i === currentQuestNumber && currentQuestImage) ? currentQuestImage : baseSrc;
+                taskImage.src = isPrepared ? preparedSrc : baseSrc;
                 taskImage.alt = `Задание ${i}`;
                 taskImage.classList.add('task-image');
-                    taskImage.style.width = '100%';
-                    taskImage.style.maxWidth = '400px';
-                    taskImage.style.marginTop = '20px';
-                    taskImage.style.marginBottom = '20px';
-                    taskImage.style.display = 'block';
-                    taskImage.style.marginLeft = 'auto';
-                    taskImage.style.marginRight = 'auto';
-                // Генерируем случайный угол от -5 до 5 градусов
+                taskImage.style.width = '100%';
+                taskImage.style.maxWidth = '400px';
+                taskImage.style.marginTop = '20px';
+                taskImage.style.marginBottom = '20px';
+                taskImage.style.display = 'block';
+                taskImage.style.marginLeft = 'auto';
+                taskImage.style.marginRight = 'auto';
+                // Рандомный угол
                 const randomAngle = (Math.random() * 10 - 5).toFixed(1);
                 taskImage.style.transform = `rotate(${randomAngle}deg)`;
-                    taskImage.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
-                    taskImage.style.padding = '8px';
-                    taskImage.style.background = '#fff';
-                    taskImage.style.transition = 'all 0.3s ease';
-                    taskImage.style.cursor = 'pointer';
-                
-                // Сохраняем случайный угол как атрибут для использования при наведении
+                taskImage.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
+                taskImage.style.padding = '8px';
+                taskImage.style.background = '#fff';
+                taskImage.style.transition = 'all 0.3s ease';
+                taskImage.style.cursor = 'pointer';
                 taskImage.dataset.originalAngle = randomAngle;
-                    
-                    taskImage.onmouseover = function() {
-                        this.style.transform = 'rotate(0deg) scale(1.02)';
-                        this.style.boxShadow = '8px 8px 15px rgba(0,0,0,0.6)';
-                    };
-                    taskImage.onmouseout = function() {
+                taskImage.onmouseover = function() {
+                    this.style.transform = 'rotate(0deg) scale(1.02)';
+                    this.style.boxShadow = '8px 8px 15px rgba(0,0,0,0.6)';
+                };
+                taskImage.onmouseout = function() {
                     this.style.transform = `rotate(${this.dataset.originalAngle}deg)`;
-                        this.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
-                    };
-                    
+                    this.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
+                };
                 questTasksList.appendChild(taskImage);
+                
+                // Если это подготовленный пункт — сразу показываем кнопки и flip-карточку
+                if (i === currentQuestNumber && isPrepared) {
+                    // Кнопки звука и переворота рядом с текстом
+                    const localSoundButton = document.createElement('button');
+                    localSoundButton.className = 'quest-sound-button';
+                    localSoundButton.style.opacity = '1';
+                    localSoundButton.style.transition = 'opacity 0.5s ease, transform 120ms ease';
+                    localSoundButton.style.background = 'none';
+                    localSoundButton.style.border = 'none';
+                    localSoundButton.style.cursor = 'pointer';
+                    localSoundButton.style.padding = '0';
+                    localSoundButton.style.marginLeft = '12px';
+                    localSoundButton.style.display = 'inline-flex';
+                    localSoundButton.style.verticalAlign = 'middle';
+                    const soundIcon = document.createElement('img');
+                    soundIcon.src = 'media/sound.jpg';
+                    soundIcon.alt = 'Звук';
+                    soundIcon.style.width = '28px';
+                    soundIcon.style.height = '28px';
+                    soundIcon.style.objectFit = 'contain';
+                    soundIcon.style.filter = 'sepia(0.6) saturate(0.9) hue-rotate(330deg)';
+                    localSoundButton.appendChild(soundIcon);
+
+                    const flipButton = document.createElement('button');
+                    flipButton.className = 'quest-flip-button';
+                    flipButton.style.opacity = '1';
+                    flipButton.style.transition = 'opacity 0.5s ease, transform 120ms ease';
+                    flipButton.style.background = 'none';
+                    flipButton.style.border = 'none';
+                    flipButton.style.cursor = 'pointer';
+                    flipButton.style.padding = '0';
+                    flipButton.style.marginLeft = '8px';
+                    flipButton.style.display = 'inline-flex';
+                    flipButton.style.verticalAlign = 'middle';
+                    const flipIcon = document.createElement('img');
+                    flipIcon.src = 'media/revers.jpg';
+                    flipIcon.alt = 'Перевернуть';
+                    flipIcon.style.width = '28px';
+                    flipIcon.style.height = '28px';
+                    flipIcon.style.objectFit = 'contain';
+                    flipIcon.style.filter = 'sepia(0.6) saturate(0.9) hue-rotate(330deg)';
+                    flipButton.appendChild(flipIcon);
+
+                    // Вставляем кнопки после текста пункта
+                    listItem.appendChild(localSoundButton);
+                    listItem.appendChild(flipButton);
+
+                    // Готовим flip-карточку взамен taskImage после загрузки изображения
+                    const questImageSrc = preparedImage || currentQuestImage || `media/watercolor/${i}.jpg`;
+                    const onTaskImageReady = () => {
+                        const host = taskImage;
+                        const aspectRatio = host.naturalWidth > 0 ? (host.naturalHeight / host.naturalWidth) : 0.66;
+                        const flipScene = document.createElement('div');
+                        flipScene.style.position = 'relative';
+                        flipScene.style.width = '100%';
+                        flipScene.style.maxWidth = host.style.maxWidth || '400px';
+                        flipScene.style.marginTop = host.style.marginTop || '20px';
+                        flipScene.style.marginBottom = host.style.marginBottom || '20px';
+                        flipScene.style.marginLeft = host.style.marginLeft || 'auto';
+                        flipScene.style.marginRight = host.style.marginRight || 'auto';
+                        flipScene.style.perspective = '1000px';
+                        flipScene.style.transform = host.style.transform || '';
+                        flipScene.style.boxShadow = host.style.boxShadow || '5px 5px 10px rgba(0,0,0,0.5)';
+                        flipScene.style.transition = 'all 0.3s ease';
+                        flipScene.dataset.originalAngle = host.dataset.originalAngle || '0';
+                        flipScene.addEventListener('mouseover', function() {
+                            this.style.transform = 'rotate(0deg) scale(1.02)';
+                            this.style.boxShadow = '8px 8px 15px rgba(0,0,0,0.6)';
+                        });
+                        flipScene.addEventListener('mouseout', function() {
+                            this.style.transform = `rotate(${this.dataset.originalAngle}deg)`;
+                            this.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
+                        });
+
+                        const ratioBox = document.createElement('div');
+                        ratioBox.style.position = 'relative';
+                        ratioBox.style.width = '100%';
+                        ratioBox.style.paddingTop = (aspectRatio * 100) + '%';
+
+                        const flipCard = document.createElement('div');
+                        flipCard.style.position = 'absolute';
+                        flipCard.style.top = '0';
+                        flipCard.style.left = '0';
+                        flipCard.style.right = '0';
+                        flipCard.style.bottom = '0';
+                        flipCard.style.transformStyle = 'preserve-3d';
+                        flipCard.style.transition = 'transform 0.8s ease';
+                        flipCard.style.cursor = 'pointer';
+
+                        const front = document.createElement('div');
+                        front.style.position = 'absolute';
+                        front.style.top = '0';
+                        front.style.left = '0';
+                        front.style.right = '0';
+                        front.style.bottom = '0';
+                        front.style.backfaceVisibility = 'hidden';
+                        const frontImg = document.createElement('img');
+                        frontImg.src = questImageSrc;
+                        frontImg.alt = 'Открытка (лицевая сторона)';
+                        frontImg.style.width = '100%';
+                        frontImg.style.height = '100%';
+                        frontImg.style.objectFit = 'contain';
+                        frontImg.style.display = 'block';
+                        frontImg.style.padding = '8px';
+                        frontImg.style.boxSizing = 'border-box';
+                        frontImg.style.background = '#fff';
+                        frontImg.style.borderRadius = '5px';
+                        front.appendChild(frontImg);
+
+                        const back = document.createElement('div');
+                        back.style.position = 'absolute';
+                        back.style.top = '0';
+                        back.style.left = '0';
+                        back.style.right = '0';
+                        back.style.bottom = '0';
+                        back.style.transform = 'rotateY(180deg)';
+                        back.style.backfaceVisibility = 'hidden';
+                        back.style.overflow = 'hidden';
+                        const backImg = document.createElement('img');
+                        const baseDir = questImageSrc.substring(0, questImageSrc.lastIndexOf('/'));
+                        backImg.src = (baseDir ? baseDir + '/' : '') + 'oldcard.jpg';
+                        backImg.alt = 'Открытка (оборот)';
+                        backImg.style.position = 'absolute';
+                        backImg.style.top = '0';
+                        backImg.style.left = '0';
+                        backImg.style.width = '100%';
+                        backImg.style.height = '100%';
+                        backImg.style.objectFit = 'contain';
+                        backImg.style.display = 'block';
+                        backImg.style.padding = '0';
+                        backImg.style.boxSizing = 'border-box';
+                        backImg.style.background = 'transparent';
+                        backImg.style.borderRadius = '0';
+                        back.appendChild(backImg);
+
+                        // Добавим сверху текст (quest.back) поверх оборота, как в основном обработчике
+                        const backCard = document.createElement('div');
+                        backCard.style.position = 'absolute';
+                        backCard.style.top = '0';
+                        backCard.style.left = '0';
+                        backCard.style.right = '0';
+                        backCard.style.zIndex = '2';
+                        backCard.style.width = '100%';
+                        backCard.style.display = 'flex';
+                        backCard.style.flexDirection = 'column';
+                        backCard.style.alignItems = 'center';
+                        backCard.style.justifyContent = 'flex-start';
+                        backCard.style.background = 'transparent';
+                        backCard.style.border = 'none';
+                        backCard.style.borderRadius = '0';
+                        backCard.style.boxShadow = 'none';
+                        backCard.style.padding = '8px';
+                        backCard.style.boxSizing = 'border-box';
+                        backCard.style.fontFamily = 'serif';
+                        backCard.style.color = '#5b4636';
+                        backCard.style.textAlign = 'center';
+                        backCard.style.pointerEvents = 'none';
+                        const backText = document.createElement('div');
+                        backText.textContent = (window.i18n ? window.i18n.t(`quest.back${currentQuestNumber}`) : '') || `Задание ${currentQuestNumber}: подробности и заметки.`;
+                        backText.style.lineHeight = '1.4';
+                        backText.style.fontSize = '20px';
+                        backText.style.fontFamily = '"Marck Script", cursive, serif';
+                        backText.style.fontWeight = 'normal';
+                        backText.style.whiteSpace = 'normal';
+                        backText.style.wordBreak = 'break-word';
+                        backText.style.hyphens = 'auto';
+                        backText.style.maxWidth = '92%';
+                        backText.style.margin = '8px auto 0';
+                        back.appendChild(backImg);
+                        back.appendChild(backCard);
+                        backCard.appendChild(backText);
+
+                        flipCard.appendChild(front);
+                        flipCard.appendChild(back);
+
+                        // Заменяем изображение списке на flip-сцену
+                        const parent = host.parentNode;
+                        if (parent) {
+                            parent.replaceChild(flipScene, host);
+                            flipScene.appendChild(ratioBox);
+                            ratioBox.appendChild(flipCard);
+                        }
+
+                        // Звук и обработчики
+                        const questSound = new Audio('media/zwyki/quest.mp3');
+                        questSound.loop = true;
+                        const flipSound = new Audio('media/opening-a-book.wav');
+                        const isGloballyMuted = () => {
+                            const mainSoundButton = document.querySelector('.sound-menu-button');
+                            return mainSoundButton ? mainSoundButton.classList.contains('muted') : false;
+                        };
+                        localSoundButton.addEventListener('click', () => {
+                            if (isGloballyMuted()) return;
+                            if (questSound.paused) {
+                                questSound.play();
+                                soundIcon.style.opacity = '1';
+                            } else {
+                                questSound.pause();
+                                soundIcon.style.opacity = '0.6';
+                            }
+                        });
+                        let flipped = false;
+                        const doFlip = () => {
+                            flipped = !flipped;
+                            flipCard.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+                            if (!isGloballyMuted()) { flipSound.currentTime = 0; flipSound.play(); }
+                        };
+                        flipCard.addEventListener('click', doFlip);
+                        flipButton.addEventListener('click', doFlip);
+                    };
+                    if (taskImage.complete) onTaskImageReady(); else taskImage.addEventListener('load', onTaskImageReady);
+                }
             }
 
             // Устанавливаем текст заголовка из локализации
             bookTitle.textContent = window.i18n ? window.i18n.t('quest.title1') : "Квест 1: Найди все тайны Тумского острова";
             bookTitle.style.display = 'block';
+            // Добавляем кнопку очистки квеста рядом с заголовком
+            (function ensureResetButton() {
+                const parent = bookTitle.parentNode;
+                if (!parent) return;
+                const titleWrapper = document.createElement('div');
+                titleWrapper.className = 'book-title-container';
+                titleWrapper.style.display = 'flex';
+                titleWrapper.style.alignItems = 'center';
+                titleWrapper.style.justifyContent = 'center';
+                titleWrapper.style.gap = '12px';
+                const existingReset = titleWrapper.querySelector('.quest-reset-button');
+                if (existingReset) existingReset.remove();
+                const resetBtn = document.createElement('button');
+                resetBtn.className = 'quest-reset-button';
+                resetBtn.textContent = (window.i18n ? window.i18n.t('quest.clearButton') : '') || 'Очистить квест';
+                resetBtn.style.background = 'none';
+                resetBtn.style.border = '1px solid rgba(0,0,0,0.2)';
+                resetBtn.style.borderRadius = '6px';
+                resetBtn.style.padding = '6px 10px';
+                resetBtn.style.cursor = 'pointer';
+                resetBtn.style.fontFamily = 'serif';
+                resetBtn.style.color = '#5b4636';
+                resetBtn.style.boxShadow = 'inset 0 0 0 2px rgba(0,0,0,0.05)';
+                resetBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    try { sessionStorage.removeItem('questState'); } catch (_) {}
+                    // Перерисовать модалку без закрытия и без анимаций/звуков
+                    try {
+                        questTasksList.innerHTML = '';
+                        window.__quest_suppress_effects = true;
+                        openQuestBtn.click();
+                        setTimeout(() => { window.__quest_suppress_effects = false; }, 0);
+                    } catch (_) {}
+                });
+
+                parent.replaceChild(titleWrapper, bookTitle);
+                titleWrapper.appendChild(bookTitle);
+                titleWrapper.appendChild(resetBtn);
+            })();
 
             // Добавляем вводный текст
             renderQuestIntro(bookContentArea, questTasksList);

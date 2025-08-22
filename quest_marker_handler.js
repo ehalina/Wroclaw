@@ -18,6 +18,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
 
     // Функция обработчик для открытия квеста
     async function openQuest() {
+        const suppressEffects = !!window.__quest_suppress_effects;
         const bookOverlay = document.querySelector('.book-overlay');
         const bookContainer = bookOverlay.querySelector('.book-container');
         const bookTitle = bookOverlay.querySelector('.book-title');
@@ -29,6 +30,23 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         if (!bookOverlay || !bookContainer || !bookTitle || !bookSound || !questTasksList || !bookImageContentWrapper || !bookContentArea) {
             return;
         }
+
+        // Состояние квеста в сессии (сохранение готовности для повторных открытий)
+        const loadQuestState = () => {
+            try {
+                const raw = JSON.parse(sessionStorage.getItem('questState') || '{}');
+                if (!raw.tasks) {
+                    raw.tasks = {};
+                }
+                return raw;
+            } catch (_) { return { tasks: {} }; }
+        };
+        const saveQuestState = (state) => {
+            try { sessionStorage.setItem('questState', JSON.stringify(state)); } catch (_) {}
+        };
+        const questState = loadQuestState();
+        const tasksPrepared = questState.tasks || {};
+        const isPrepared = !!tasksPrepared[questNumber];
 
         // Очищаем список перед заполнением
         questTasksList.innerHTML = '';
@@ -58,19 +76,24 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
             checkboxImg.style.height = '100%';
             checkboxImg.style.transition = `opacity ${revealDurationMs}ms ease-in-out`;
             
-            if (i === questNumber) {
+            if (i === questNumber || tasksPrepared[i]) {
                 const brightCheckbox = document.createElement('img');
                 brightCheckbox.src = 'media/checkbox1.png';
                 brightCheckbox.alt = 'Bright Checkbox';
                 brightCheckbox.style.position = 'relative';
                 brightCheckbox.style.width = '100%';
                 brightCheckbox.style.height = '100%';
-                brightCheckbox.style.opacity = '0';
-                brightCheckbox.style.transition = `opacity ${revealDurationMs}ms ease-in-out`;
+                const isThisPrepared = i === questNumber ? isPrepared : !!tasksPrepared[i];
+                brightCheckbox.style.opacity = isThisPrepared ? '1' : (i === questNumber ? '0' : '0');
+                brightCheckbox.style.transition = isThisPrepared || i !== questNumber ? 'none' : `opacity ${revealDurationMs}ms ease-in-out`;
                 brightCheckbox.dataset.brightCheckbox = 'true';
                 
                 checkboxContainer.appendChild(checkboxImg);
                 checkboxContainer.appendChild(brightCheckbox);
+                if (isThisPrepared) {
+                    checkboxImg.style.opacity = '0';
+                    checkboxImg.style.transition = 'none';
+                }
             } else {
                 checkboxContainer.appendChild(checkboxImg);
             }
@@ -98,15 +121,23 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                 brightTextSpan.textContent = window.i18n ? window.i18n.t(`quest.task${i}`) : `Задание ${i}`;
                 brightTextSpan.style.position = 'relative';
                 brightTextSpan.style.fontWeight = 'bold';
-                brightTextSpan.style.color = '#000';
-                brightTextSpan.style.opacity = '0';
-                brightTextSpan.style.transition = `opacity ${revealDurationMs}ms ease-in-out`;
+                brightTextSpan.style.color = isPrepared ? '#8B4513' : '#000';
+                brightTextSpan.style.opacity = isPrepared ? '1' : '0';
+                brightTextSpan.style.transition = isPrepared ? 'none' : `opacity ${revealDurationMs}ms ease-in-out`;
                 brightTextSpan.dataset.brightText = 'true';
                 
                 taskTextContainer.appendChild(taskTextSpan);
                 taskTextContainer.appendChild(brightTextSpan);
+                if (isPrepared) {
+                    // Скрываем чёрный текст во избежание дублирования
+                    taskTextSpan.style.display = 'none';
+                }
             } else {
                 taskTextContainer.appendChild(taskTextSpan);
+                if (tasksPrepared[i]) {
+                    taskTextSpan.style.color = '#8B4513';
+                    taskTextSpan.style.fontWeight = 'bold';
+                }
             }
             
             listItem.appendChild(taskTextContainer);
@@ -155,10 +186,10 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                 targetImage.alt = `Задание ${i} (цветное)`;
                 applyImageStyles(targetImage);
                 targetImage.style.position = 'relative';
-                targetImage.style.opacity = '0';
-                targetImage.style.filter = 'blur(8px)';
-                targetImage.style.transform = 'scale(0.985)';
-                targetImage.style.transition = `opacity ${revealDurationMs}ms cubic-bezier(0.22, 0.61, 0.36, 1), filter ${revealDurationMs}ms cubic-bezier(0.22, 0.61, 0.36, 1), transform ${revealDurationMs}ms cubic-bezier(0.22, 0.61, 0.36, 1)`;
+                targetImage.style.opacity = isPrepared ? '1' : '0';
+                targetImage.style.filter = isPrepared ? 'blur(0)' : 'blur(8px)';
+                targetImage.style.transform = isPrepared ? 'scale(1)' : 'scale(0.985)';
+                targetImage.style.transition = isPrepared ? 'none' : `opacity ${revealDurationMs}ms cubic-bezier(0.22, 0.61, 0.36, 1), filter ${revealDurationMs}ms cubic-bezier(0.22, 0.61, 0.36, 1), transform ${revealDurationMs}ms cubic-bezier(0.22, 0.61, 0.36, 1)`;
 
                 imageContainer.appendChild(baseImage);
                 imageContainer.appendChild(targetImage);
@@ -206,6 +237,45 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         bookTitle.textContent = window.i18n ? window.i18n.t('quest.title1') : "Квест 1: Найди все тайны Тумского острова";
         bookTitle.style.display = 'block';
 
+        // Добавляем кнопку очистки квеста рядом с заголовком
+        (function ensureResetButton() {
+            const parent = bookTitle.parentNode;
+            if (!parent) return;
+            // Упаковываем заголовок и кнопку в общий контейнер
+            const titleWrapper = document.createElement('div');
+            titleWrapper.className = 'book-title-container';
+            titleWrapper.style.display = 'flex';
+            titleWrapper.style.alignItems = 'center';
+            titleWrapper.style.justifyContent = 'center';
+            titleWrapper.style.gap = '12px';
+
+            const existingReset = titleWrapper.querySelector('.quest-reset-button');
+            if (existingReset) existingReset.remove();
+            const resetBtn = document.createElement('button');
+            resetBtn.className = 'quest-reset-button';
+            resetBtn.textContent = (window.i18n ? window.i18n.t('quest.clearButton') : '') || 'Очистить квест';
+            resetBtn.style.background = 'none';
+            resetBtn.style.border = '1px solid rgba(0,0,0,0.2)';
+            resetBtn.style.borderRadius = '6px';
+            resetBtn.style.padding = '6px 10px';
+            resetBtn.style.cursor = 'pointer';
+            resetBtn.style.fontFamily = 'serif';
+            resetBtn.style.color = '#5b4636';
+            resetBtn.style.boxShadow = 'inset 0 0 0 2px rgba(0,0,0,0.05)';
+            resetBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                try { sessionStorage.removeItem('questState'); } catch (_) {}
+                // Перерисовываем содержимое без закрытия модалки и без анимаций/звуков
+                if (questTasksList) questTasksList.innerHTML = '';
+                window.__quest_suppress_effects = true;
+                openQuest().finally(() => { window.__quest_suppress_effects = false; });
+            });
+
+            parent.replaceChild(titleWrapper, bookTitle);
+            titleWrapper.appendChild(bookTitle);
+            titleWrapper.appendChild(resetBtn);
+        })();
+
         // Добавляем вводный текст
         if (typeof renderQuestIntro === 'function') {
             renderQuestIntro(bookContentArea, questTasksList);
@@ -252,7 +322,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         }, 0);
 
         // Воспроизводим звуки только если звук не выключен глобально
-        if (!isSoundMuted) {
+        if (!isSoundMuted && !suppressEffects) {
             if (bookSound) bookSound.play();
             questSound.play();
         }
@@ -278,7 +348,9 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         });
 
         // После открытия окна прокручиваем к нужному пункту и запускаем анимацию
-        setTimeout(() => {
+        if (suppressEffects) {
+            // Не запускаем прокрутку и анимации при тихом сбросе
+        } else setTimeout(() => {
             const targetContainer = questTasksList.children[questNumber * 2 - 1]; // Получаем контейнер с изображениями
             if (targetContainer && targetContainer.dataset.targetImage) {
                 // Прокручиваем так, чтобы изображение было в центре
@@ -302,11 +374,11 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                 // Анимируем галочку
                                 const brightCheckbox = targetListItem.querySelector('img[data-bright-checkbox="true"]');
                                 if (brightCheckbox) {
-                                    brightCheckbox.style.opacity = '1';
+                                    if (!isPrepared) brightCheckbox.style.opacity = '1';
                                     // Плавно скрываем старую галочку
                                     const oldCheckbox = brightCheckbox.previousElementSibling;
                                     if (oldCheckbox) {
-                                        oldCheckbox.style.opacity = '0';
+                                        if (!isPrepared) oldCheckbox.style.opacity = '0';
                                     }
                                 }
                                 
@@ -317,11 +389,12 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                     brightText.textContent = ''; // Очищаем текст
                                     brightText.style.opacity = '1';
                                     
-                                    // Проявляем только коричневые буквы по одной
+                                    if (!isPrepared) {
+                                        // Проявляем только коричневые буквы по одной
                                     [...text].forEach((char, index) => {
                                         const span = document.createElement('span');
                                         span.textContent = char;
-                                        span.style.color = '#8B4513';
+                                            span.style.color = '#8B4513';
                                         span.style.opacity = '0';
                                         span.style.transition = 'opacity 0.3s ease';
                                         brightText.appendChild(span);
@@ -329,6 +402,12 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                             span.style.opacity = '1';
                                         }, 100 * index);
                                     });
+                                    } else {
+                                        const span = document.createElement('span');
+                                        span.textContent = text;
+                                        span.style.color = '#8B4513';
+                                        brightText.appendChild(span);
+                                    }
 
                                     // Создаем кнопку звука рядом с заголовком целевого пункта
                                     const localSoundButton = document.createElement('button');
@@ -393,11 +472,12 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                         parent.appendChild(titleButtonsContainer);
                                     }
 
-                                    // Показываем кнопки после окончания анимации букв
+                                    // Показываем кнопки после окончания анимации букв или сразу если уже подготовлено
+                                    const buttonsDelay = isPrepared ? 0 : Math.max(0, text.length * 100 - 100);
                                     setTimeout(() => {
                                         localSoundButton.style.opacity = '1';
                                         flipButton.style.opacity = '1';
-                                    }, Math.max(0, text.length * 100 - 100));
+                                    }, buttonsDelay);
 
                                     // Обработчик клика по кнопке звука
                                     localSoundButton.addEventListener('click', () => {
@@ -648,6 +728,13 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                             addRetroHover(localSoundButton);
                                             addRetroHover(flipButton);
                                         }, totalRevealDelayMs);
+                                        
+                                        // Сохраняем состояние как подготовленное и запоминаем последний подготовленный пункт
+                                        const current = loadQuestState();
+                                        current.tasks = current.tasks || {};
+                                        current.tasks[questNumber] = { prepared: true, image: questImage };
+                                        current.__lastPreparedNumber = questNumber;
+                                        saveQuestState(current);
                                     }
                                     
                                     // Плавно скрываем старый текст
