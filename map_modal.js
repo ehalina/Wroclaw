@@ -1328,18 +1328,22 @@ const MapModal = {
                 checkboxImg.style.width = '100%';
                 checkboxImg.style.height = '100%';
 
-                if (i === currentQuestNumber) {
+                // Состояние подготовленности для конкретного пункта
+                const isPreparedItemCheckbox = !!(questState && questState.tasks && (questState.tasks[i] === true || (questState.tasks[i] && questState.tasks[i].prepared)));
+
+                // Всегда показываем яркую галочку для подготовленных пунктов
+                if (isPreparedItemCheckbox || (i === currentQuestNumber && isPrepared)) {
                     const brightCheckbox = document.createElement('img');
                     brightCheckbox.src = 'media/checkbox1.png';
                     brightCheckbox.alt = 'Bright Checkbox';
                     brightCheckbox.style.position = 'relative';
                     brightCheckbox.style.width = '100%';
                     brightCheckbox.style.height = '100%';
-                    brightCheckbox.style.opacity = isPrepared ? '1' : '0';
+                    brightCheckbox.style.opacity = '1';
                     brightCheckbox.dataset.brightCheckbox = 'true';
                     checkboxContainer.appendChild(checkboxImg);
                     checkboxContainer.appendChild(brightCheckbox);
-                    if (isPrepared) checkboxImg.style.opacity = '0';
+                    checkboxImg.style.opacity = '0';
                 } else {
                     checkboxContainer.appendChild(checkboxImg);
                 }
@@ -1349,7 +1353,7 @@ const MapModal = {
                 // Текст задания с учетом состояния
                 const taskTextSpan = document.createElement('span');
                 taskTextSpan.textContent = window.i18n ? window.i18n.t(`quest.task${i}`) : `Задание ${i}`;
-                if ((i === currentQuestNumber && isPrepared) || questState.tasks[i]) {
+                if ((i === currentQuestNumber && isPrepared) || (questState && questState.tasks && questState.tasks[i])) {
                     taskTextSpan.style.color = '#8B4513';
                     taskTextSpan.style.fontWeight = 'bold';
                 }
@@ -1357,41 +1361,49 @@ const MapModal = {
                 
                 questTasksList.appendChild(listItem);
 
-                // Изображение
-                const taskImage = document.createElement('img');
+                // Определяем состояние подготовленности пункта
                 const baseSrc = `media/watercolor/${i}.jpg`;
-                const preparedSrc = (i === currentQuestNumber && currentQuestImage) ? currentQuestImage : baseSrc;
-                taskImage.src = isPrepared ? preparedSrc : baseSrc;
-                taskImage.alt = `Задание ${i}`;
-                taskImage.classList.add('task-image');
-                taskImage.style.width = '100%';
-                taskImage.style.maxWidth = '400px';
-                taskImage.style.marginTop = '20px';
-                taskImage.style.marginBottom = '20px';
-                taskImage.style.display = 'block';
-                taskImage.style.marginLeft = 'auto';
-                taskImage.style.marginRight = 'auto';
-                // Рандомный угол
-                const randomAngle = (Math.random() * 10 - 5).toFixed(1);
-                taskImage.style.transform = `rotate(${randomAngle}deg)`;
-                taskImage.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
-                taskImage.style.padding = '8px';
-                taskImage.style.background = '#fff';
-                taskImage.style.transition = 'all 0.3s ease';
-                taskImage.style.cursor = 'pointer';
-                taskImage.dataset.originalAngle = randomAngle;
-                taskImage.onmouseover = function() {
-                    this.style.transform = 'rotate(0deg) scale(1.02)';
-                    this.style.boxShadow = '8px 8px 15px rgba(0,0,0,0.6)';
-                };
-                taskImage.onmouseout = function() {
-                    this.style.transform = `rotate(${this.dataset.originalAngle}deg)`;
-                    this.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
-                };
-                questTasksList.appendChild(taskImage);
+                const preparedImageItem = questState && questState.tasks && questState.tasks[i] && questState.tasks[i].image;
+                const isPreparedItem = !!(questState && questState.tasks && (questState.tasks[i] === true || (questState.tasks[i] && questState.tasks[i].prepared)));
+                const chosenImage = isPreparedItem ? (preparedImageItem || baseSrc) : baseSrc;
                 
-                // Если это подготовленный пункт — сразу показываем кнопки и flip-карточку
-                if (i === currentQuestNumber && isPrepared) {
+                // Рандомный угол для изображения
+                const randomAngle = (Math.random() * 10 - 5).toFixed(1);
+
+                // Если пункт уже подготовлен - сразу создаем flip-карточку, иначе обычное изображение
+                if (!isPreparedItem) {
+                    // Обычное изображение для неподготовленных пунктов
+                    const taskImage = document.createElement('img');
+                    taskImage.src = chosenImage;
+                    taskImage.alt = `Задание ${i}`;
+                    taskImage.classList.add('task-image');
+                    taskImage.style.width = '100%';
+                    taskImage.style.maxWidth = '400px';
+                    taskImage.style.marginTop = '20px';
+                    taskImage.style.marginBottom = '20px';
+                    taskImage.style.display = 'block';
+                    taskImage.style.marginLeft = 'auto';
+                    taskImage.style.marginRight = 'auto';
+                    taskImage.style.transform = `rotate(${randomAngle}deg)`;
+                    taskImage.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
+                    taskImage.style.padding = '8px';
+                    taskImage.style.background = '#fff';
+                    taskImage.style.transition = 'all 0.3s ease';
+                    taskImage.style.cursor = 'pointer';
+                    taskImage.dataset.originalAngle = randomAngle;
+                    taskImage.onmouseover = function() {
+                        this.style.transform = 'rotate(0deg) scale(1.02)';
+                        this.style.boxShadow = '8px 8px 15px rgba(0,0,0,0.6)';
+                    };
+                    taskImage.onmouseout = function() {
+                        this.style.transform = `rotate(${this.dataset.originalAngle}deg)`;
+                        this.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
+                    };
+                    questTasksList.appendChild(taskImage);
+                }
+                
+                // Если это подготовленный пункт — сразу создаем кнопки и flip-карточку
+                if (isPreparedItem) {
                     // Кнопки звука и переворота рядом с текстом
                     const localSoundButton = document.createElement('button');
                     localSoundButton.className = 'quest-sound-button';
@@ -1437,24 +1449,28 @@ const MapModal = {
                     listItem.appendChild(localSoundButton);
                     listItem.appendChild(flipButton);
 
-                    // Готовим flip-карточку взамен taskImage после загрузки изображения
-                    const questImageSrc = preparedImage || currentQuestImage || `media/watercolor/${i}.jpg`;
-                    const onTaskImageReady = () => {
-                        const host = taskImage;
-                        const aspectRatio = host.naturalWidth > 0 ? (host.naturalHeight / host.naturalWidth) : 0.66;
+                    // Создаем flip-карточку сразу
+                    const questImageSrc = chosenImage;
+                    
+                    // Создаем временное изображение для получения пропорций (fallback к квадрату)
+                    const tempImg = document.createElement('img');
+                    tempImg.src = questImageSrc;
+                    const buildFlip = (naturalW, naturalH) => {
+                        const aspectRatio = naturalW > 0 ? (naturalH / naturalW) : 1;
+                        
                         const flipScene = document.createElement('div');
                         flipScene.style.position = 'relative';
                         flipScene.style.width = '100%';
-                        flipScene.style.maxWidth = host.style.maxWidth || '400px';
-                        flipScene.style.marginTop = host.style.marginTop || '20px';
-                        flipScene.style.marginBottom = host.style.marginBottom || '20px';
-                        flipScene.style.marginLeft = host.style.marginLeft || 'auto';
-                        flipScene.style.marginRight = host.style.marginRight || 'auto';
+                        flipScene.style.maxWidth = '400px';
+                        flipScene.style.marginTop = '20px';
+                        flipScene.style.marginBottom = '20px';
+                        flipScene.style.marginLeft = 'auto';
+                        flipScene.style.marginRight = 'auto';
                         flipScene.style.perspective = '1000px';
-                        flipScene.style.transform = host.style.transform || '';
-                        flipScene.style.boxShadow = host.style.boxShadow || '5px 5px 10px rgba(0,0,0,0.5)';
+                        flipScene.style.transform = `rotate(${randomAngle}deg)`;
+                        flipScene.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
                         flipScene.style.transition = 'all 0.3s ease';
-                        flipScene.dataset.originalAngle = host.dataset.originalAngle || '0';
+                        flipScene.dataset.originalAngle = randomAngle;
                         flipScene.addEventListener('mouseover', function() {
                             this.style.transform = 'rotate(0deg) scale(1.02)';
                             this.style.boxShadow = '8px 8px 15px rgba(0,0,0,0.6)';
@@ -1509,8 +1525,7 @@ const MapModal = {
                         back.style.backfaceVisibility = 'hidden';
                         back.style.overflow = 'hidden';
                         const backImg = document.createElement('img');
-                        const baseDir = questImageSrc.substring(0, questImageSrc.lastIndexOf('/'));
-                        backImg.src = (baseDir ? baseDir + '/' : '') + 'oldcard.jpg';
+                        backImg.src = 'media/watercolor/oldcard.jpg';
                         backImg.alt = 'Открытка (оборот)';
                         backImg.style.position = 'absolute';
                         backImg.style.top = '0';
@@ -1525,7 +1540,7 @@ const MapModal = {
                         backImg.style.borderRadius = '0';
                         back.appendChild(backImg);
 
-                        // Добавим сверху текст (quest.back) поверх оборота, как в основном обработчике
+                        // Добавим сверху текст (quest.back) поверх оборота
                         const backCard = document.createElement('div');
                         backCard.style.position = 'absolute';
                         backCard.style.top = '0';
@@ -1548,7 +1563,7 @@ const MapModal = {
                         backCard.style.textAlign = 'center';
                         backCard.style.pointerEvents = 'none';
                         const backText = document.createElement('div');
-                        backText.textContent = (window.i18n ? window.i18n.t(`quest.back${currentQuestNumber}`) : '') || `Задание ${currentQuestNumber}: подробности и заметки.`;
+                        backText.textContent = (window.i18n ? window.i18n.t(`quest.back${i}`) : '') || `Задание ${i}: подробности и заметки.`;
                         backText.style.lineHeight = '1.4';
                         backText.style.fontSize = '20px';
                         backText.style.fontFamily = '"Marck Script", cursive, serif';
@@ -1565,13 +1580,10 @@ const MapModal = {
                         flipCard.appendChild(front);
                         flipCard.appendChild(back);
 
-                        // Заменяем изображение списке на flip-сцену
-                        const parent = host.parentNode;
-                        if (parent) {
-                            parent.replaceChild(flipScene, host);
-                            flipScene.appendChild(ratioBox);
-                            ratioBox.appendChild(flipCard);
-                        }
+                        // Добавляем flip-сцену в список задач
+                        flipScene.appendChild(ratioBox);
+                        ratioBox.appendChild(flipCard);
+                        questTasksList.appendChild(flipScene);
 
                         // Звук и обработчики
                         const questSound = new Audio('media/zwyki/quest.mp3');
@@ -1582,7 +1594,6 @@ const MapModal = {
                             return mainSoundButton ? mainSoundButton.classList.contains('muted') : false;
                         };
                         localSoundButton.addEventListener('click', () => {
-                            if (isGloballyMuted()) return;
                             if (questSound.paused) {
                                 questSound.play();
                                 soundIcon.style.opacity = '1';
@@ -1600,7 +1611,14 @@ const MapModal = {
                         flipCard.addEventListener('click', doFlip);
                         flipButton.addEventListener('click', doFlip);
                     };
-                    if (taskImage.complete) onTaskImageReady(); else taskImage.addEventListener('load', onTaskImageReady);
+                    if (tempImg.complete) {
+                        buildFlip(tempImg.naturalWidth, tempImg.naturalHeight);
+                    } else {
+                        tempImg.onload = () => buildFlip(tempImg.naturalWidth, tempImg.naturalHeight);
+                        tempImg.onerror = () => buildFlip(0, 0);
+                        // Fallback: если событие не пришло, строим квадрат
+                        setTimeout(() => { if (!tempImg.complete) buildFlip(0, 0); }, 500);
+                    }
                 }
             }
 
@@ -1639,9 +1657,9 @@ const MapModal = {
                     const confirmText = window.i18n ? window.i18n.t('quest.clearConfirm') : 'Вы точно хотите очистить результаты квеста?';
                     const confirmed = await window.showQuestConfirmDialog(confirmText);
                     if (confirmed) {
-                        try { sessionStorage.removeItem('questState'); } catch (_) {}
-                        // Перерисовать модалку без закрытия и без анимаций/звуков
-                        try {
+                    try { sessionStorage.removeItem('questState'); } catch (_) {}
+                    // Перерисовать модалку без закрытия и без анимаций/звуков
+                    try {
                             // Находим текущий активный пункт перед очисткой
                             const activeItem = questTasksList.querySelector('li[data-target-item="true"]');
                             if (activeItem) {
@@ -1655,10 +1673,10 @@ const MapModal = {
                                 }
                                 if (brightText) brightText.remove();
                             }
-                            window.__quest_suppress_effects = true;
-                            openQuestBtn.click();
-                            setTimeout(() => { window.__quest_suppress_effects = false; }, 0);
-                        } catch (_) {}
+                        window.__quest_suppress_effects = true;
+                        openQuestBtn.click();
+                        setTimeout(() => { window.__quest_suppress_effects = false; }, 0);
+                    } catch (_) {}
                     }
                 });
 

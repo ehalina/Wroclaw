@@ -1,0 +1,517 @@
+@keyframes zoomForward {
+    0% {
+        transform: translateZ(0) scale(1) translate(0, 0);
+    }
+    100% {
+        transform: translateZ(2000px) scale(2.5) translate(-35vw, -25vh);
+    }
+}
+
+/* Класс для анимации перехода */
+.zoom-transition {
+    animation: zoomForward 1.5s ease-in forwards !important;
+} 
+
+.image {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-image: url('media/tumski/tumski_17.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: black;
+    transition: opacity 0.1s ease-in;
+    backface-visibility: hidden;
+    will-change: transform;
+    transform-style: preserve-3d;
+    transform: translateZ(0);
+    overflow: hidden;
+    display: block;
+    pointer-events: none;
+}
+
+.next-image-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url('media/tumski/tumski_04.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: black;
+    opacity: 0;
+    transition: opacity 1.5s ease-in;
+    z-index: 2;
+    backface-visibility: hidden;
+    will-change: transform;
+    transform-style: preserve-3d;
+    transform: translateZ(0);
+    overflow: hidden;
+}
+
+@keyframes moveForward {
+    from {
+        transform: translateZ(0px) translateX(0);
+    }
+    to {
+        transform: translateZ(500px) translateX(0);
+    }
+}
+
+/* Позиционирование стрелок для страницы tumski */
+.custom-cursor-area {
+    position: absolute;
+    z-index: 999;
+    cursor: none;
+    /* Добавляем поддержку трансформаций для зума */
+    transform-origin: center center;
+    will-change: transform;
+    transition: transform 0.3s ease-out;
+    /* Убираем фиксированное позиционирование, чтобы JS мог управлять позицией */
+    right: auto;
+    bottom: auto;
+    width: 40%;
+    height: 20%;
+}
+
+.custom-cursor-prostoarea {
+    position: absolute;
+    z-index: 999;
+    cursor: none;
+    /* Добавляем поддержку трансформаций для зума */
+    transform-origin: center center;
+    will-change: transform;
+    transition: transform 0.3s ease-out;
+    /* Убираем фиксированное позиционирование, чтобы JS мог управлять позицией */
+    right: auto;
+    bottom: auto;
+    width: 40%;
+    height: 15%;
+}
+
+/* Стрелка влево */
+.custom-cursor-leftarea {
+    position: absolute !important;
+    z-index: 999 !important;
+    cursor: none;
+    display: block !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    /* Добавляем поддержку трансформаций для зума */
+    transform-origin: center center;
+    will-change: transform;
+    transition: transform 0.3s ease-out;
+    /* Убираем фиксированное позиционирование, чтобы JS мог управлять позицией */
+    left: auto;
+    bottom: auto;
+    width: 350px;
+    height: 500px;
+}
+.custom-cursor-left {
+    width: 64px;
+    height: 64px;
+    position: absolute;
+    background-image: url('media/strelka_rev.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+    cursor: pointer;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(-50%);
+    left: 50%;
+    top: 50%;
+}
+
+/* Показываем стрелку при наведении на область */
+.custom-cursor-leftarea:hover .custom-cursor-left {
+    opacity: 1 !important;
+    pointer-events: auto;
+}
+
+/* На мобильных устройствах показываем стрелку всегда */
+@media (max-width: 700px) {
+    .custom-cursor-left {
+        opacity: 1 !important;
+    }
+    
+    .custom-cursor-leftarea {
+        /* Увеличиваем область для лучшего взаимодействия на мобильных */
+        width: 80px !important;
+        height: 80px !important;
+        pointer-events: auto !important;
+    }
+}
+
+/* Позиционирование mapmark для страницы tumski */
+.map-mark-area {
+    position: absolute !important;
+    z-index: 998;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* Для геометок используем пересчет позиции вместо трансформации */
+    will-change: left, top;
+    transition: left 0.3s ease-out, top 0.3s ease-out;
+    /* Убираем фиксированное позиционирование, чтобы JS мог управлять позицией */
+    right: auto !important;
+    top: auto !important;
+    width: auto;
+    height: auto;
+    /* Убираем все возможные конфликты позиционирования */
+    bottom: auto !important;
+    left: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Создаем расширенную область вокруг геометки для легкой активации */
+.map-mark::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    left: -50px;
+    right: -50px;
+    bottom: -50px;
+    background: transparent;
+    border-radius: 50%;
+    pointer-events: auto;
+    z-index: 997;
+    /* Добавляем невидимую границу для отладки (можно убрать) */
+    /* border: 1px solid rgba(255, 0, 0, 0.1); */
+}
+
+/* При наведении на расширенную область показываем геометрию */
+.map-mark:hover::before {
+    background: rgba(255, 255, 255, 0.05);
+    transition: background 0.3s ease;
+}
+
+/* Убеждаемся, что расширенная область позиционируется относительно map-mark */
+.map-mark {
+    position: relative !important;
+}
+
+/* Стили для геометки с замками любви */
+#love_locks {
+    background-image: url('media/mapmarknb.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+/* Стили для JavaScript-созданных расширенных областей */
+.extended-hover-area {
+    position: absolute !important;
+    z-index: 997 !important;
+    pointer-events: auto !important;
+}
+
+/* Принудительное применение позиционирования через JS */
+.map-mark-area[style*="left"], .map-mark-area[style*="top"] {
+    position: absolute !important;
+    left: var(--js-left, auto) !important;
+    top: var(--js-top, auto) !important;
+}
+
+/* Стили для papera-image в десктопной версии */
+.papera-image {
+    width: 100%;
+    height: auto;
+    max-width: 280px;
+    opacity: 1 !important;
+    transition: opacity 0.3s ease;
+    object-fit: contain;
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
+    display: block;
+}
+
+.map-mark-area:hover .papera-image {
+    opacity: 1;
+}
+
+/* Растягиваем content-wrapper по ширине содержимого для всех размеров экрана */
+.content-wrapper {
+    width: fit-content !important;
+    min-width: fit-content !important;
+    max-width: none !important;
+    overflow: visible !important;
+}
+
+/* Показываем papera-image при наведении на map-mark-area */
+.map-mark-area:hover .papera-image {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Показываем tumski-text при наведении на map-mark-area */
+.map-mark-area:hover .tumski-text {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* Принудительно показываем papera-image */
+.papera-image {
+    opacity: 1 !important;
+    visibility: visible !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 100% !important;
+    min-height: 100% !important;
+    margin: 0 !important;
+    top: 0 !important;
+    position: relative !important;
+    flex-shrink: 0 !important;
+    z-index: 1 !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: cover !important;
+}
+
+/* Убираем ограничения по ширине для content-wrapper */
+.content-wrapper {
+    max-width: none !important;
+    overflow: visible !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+/* Убираем конфликтующие правила для tumski-text - теперь используются стили из styles.css */
+
+@media (max-width: 700px) {
+    /* Геометки и стрелки теперь позиционируются по left/top через JS */
+    .map-mark-area, .custom-cursor-area, .custom-cursor-prostoarea {
+        position: absolute !important;
+        z-index: 998 !important;
+        /* left/top выставляются через JS */
+        right: auto !important;
+        bottom: auto !important;
+        width: 80px !important;
+        height: 80px !important;
+        display: block !important;
+        pointer-events: auto !important;
+        opacity: 1 !important;
+        /* Убираем все возможные конфликты позиционирования */
+        top: unset !important;
+        right: unset !important;
+        left: unset !important;
+        bottom: unset !important;
+        transform: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    .map-mark, .content-wrapper, .tumski-text {
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+    }
+    /* Скрыть подписи к геометкам, если нужно */
+    .tumski-text {
+        display: none !important;
+        width: 0 !important;
+        height: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: hidden !important;
+        opacity: 0 !important;
+    }
+    /* В мобильной версии показываем картинки papera адаптивно */
+    .papera-image {
+        display: block !important;
+        width: 100% !important;
+        height: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
+        min-width: 100% !important;
+        min-height: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        top: 0 !important;
+        position: relative !important;
+        flex-shrink: 0 !important;
+        object-fit: cover !important;
+    }
+    
+    /* В мобильной версии выравниваем текст */
+    .tumski-text {
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        margin: 0 !important;
+        flex-shrink: 0 !important;
+        z-index: 2 !important;
+    }
+    
+    /* В мобильной версии элементы накладываются друг на друга */
+    .content-wrapper {
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 100% !important;
+        min-height: 100% !important;
+    }
+    
+    /* В мобильной версии расширенная область меньше для удобства */
+    .map-mark::before {
+        top: -40px;
+        left: -40px;
+        right: -40px;
+        bottom: -40px;
+    }
+    
+    /* Также применяем к JavaScript-созданным областям */
+    .extended-hover-area {
+        top: -60px !important;
+        left: -60px !important;
+        right: -60px !important;
+        bottom: -60px !important;
+    }
+    /* Стрелки всегда видимы и активны */
+    .custom-cursor,
+    .custom-cursor-prosto,
+    .custom-cursor-left,
+    .custom-cursor-area,
+    .custom-cursor-leftarea,
+    .custom-cursor-prostoarea {
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+        z-index: 9999 !important;
+        position: absolute !important;
+        width: 80px !important;
+        height: 80px !important;
+        transform: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Отдельные стили для стрелки влево на мобильных устройствах */
+    .custom-cursor-left {
+        opacity: 1 !important;
+        width: 64px !important;
+        height: 64px !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+        position: absolute !important;
+        z-index: 9999 !important;
+        transform: translate(-50%, -50%) !important;
+        left: 50% !important;
+        top: 50% !important;
+    }
+    
+    .custom-cursor-leftarea {
+        width: 100px !important;
+        height: 100px !important;
+        position: absolute !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+        z-index: 9999 !important;
+        transform: translate(-50%, -50%) !important;
+        left: 50% !important;
+        top: 50% !important;
+    }
+    /* Убрать эффекты наведения для стрелок */
+    .custom-cursor-area:hover .custom-cursor,
+    .custom-cursor-prostoarea:hover .custom-cursor-prosto {
+        opacity: 1 !important;
+    }
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+      }
+  
+      .scene {
+        height: 100vh;
+      }
+  
+      .image-container {
+        height: 100vh;
+      }
+  
+      .image-scroll-wrapper {
+        width: 100vw;
+        height: 100vh;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-x;
+        white-space: nowrap;
+      }
+  
+      .image {
+        width: 300vw; /* делаем шире экрана, чтобы был скролл */
+        height: 100vh;
+        background-image: url("media/tumski/tumski_17.jpg");
+        background-size: auto 100%; /* Вписываем по высоте, позволяя горизонтальную прокрутку */
+        background-repeat: no-repeat;
+        background-position: left top; /* Позиционируем в левом верхнем углу */
+        display: block;
+        position: relative;
+        transition: opacity 0.1s ease-in;
+        backface-visibility: hidden;
+        will-change: transform;
+        transform-style: preserve-3d;
+        transform: translateZ(0);
+        pointer-events: auto !important;
+        /* Для анимации */
+      }
+  
+      /* Вспомогательный блок для создания физического контента шириной 200vw */
+      .image::after {
+        content: '';
+        display: block;
+        width: 300vw;
+        height: 1px;
+      }
+      .next-image-container {
+        pointer-events: none;
+        background-size: auto 100% !important; /* Вписываем по высоте, позволяя горизонтальную прокрутку */
+        background-position: left top !important; /* Позиционируем в левом верхнем углу */
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    /* Геометки всегда видимы */
+    .map-mark {
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+    }
+    
+    /* Скрываем content-wrapper для геометок в мобильной версии */
+    .map-mark-area .content-wrapper {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+    }
+} 
+

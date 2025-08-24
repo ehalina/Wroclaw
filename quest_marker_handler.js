@@ -135,6 +135,65 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                 if (tasksPrepared[i]) {
                     taskTextSpan.style.color = '#8B4513';
                     taskTextSpan.style.fontWeight = 'bold';
+
+                    // Показываем кнопки звука и переворота рядом с названием для уже подготовленных пунктов
+                    const localSoundButton = document.createElement('button');
+                    localSoundButton.className = 'quest-sound-button';
+                    localSoundButton.style.opacity = '1';
+                    localSoundButton.style.transition = 'opacity 0.5s ease, transform 120ms ease';
+                    localSoundButton.style.background = 'none';
+                    localSoundButton.style.border = 'none';
+                    localSoundButton.style.cursor = 'pointer';
+                    localSoundButton.style.padding = '0';
+                    localSoundButton.style.marginLeft = '12px';
+                    localSoundButton.style.display = 'inline-flex';
+                    localSoundButton.style.verticalAlign = 'middle';
+                    const soundIcon = document.createElement('img');
+                    soundIcon.src = 'media/sound.jpg';
+                    soundIcon.alt = 'Звук';
+                    soundIcon.style.width = '28px';
+                    soundIcon.style.height = '28px';
+                    soundIcon.style.objectFit = 'contain';
+                    soundIcon.style.filter = 'sepia(0.6) saturate(0.9) hue-rotate(330deg)';
+                    localSoundButton.appendChild(soundIcon);
+
+                    const flipButton = document.createElement('button');
+                    flipButton.className = 'quest-flip-button';
+                    flipButton.style.opacity = '1';
+                    flipButton.style.transition = 'opacity 0.5s ease, transform 120ms ease';
+                    flipButton.style.background = 'none';
+                    flipButton.style.border = 'none';
+                    flipButton.style.cursor = 'pointer';
+                    flipButton.style.padding = '0';
+                    flipButton.style.marginLeft = '8px';
+                    flipButton.style.display = 'inline-flex';
+                    flipButton.style.verticalAlign = 'middle';
+                    const flipIcon = document.createElement('img');
+                    flipIcon.src = 'media/revers.jpg';
+                    flipIcon.alt = 'Перевернуть';
+                    flipIcon.style.width = '28px';
+                    flipIcon.style.height = '28px';
+                    flipIcon.style.objectFit = 'contain';
+                    flipIcon.style.filter = 'sepia(0.6) saturate(0.9) hue-rotate(330deg)';
+                    flipButton.appendChild(flipIcon);
+
+                    taskTextContainer.appendChild(localSoundButton);
+                    taskTextContainer.appendChild(flipButton);
+
+                    // Локальная логика звука: независимо от глобального mute
+                    localSoundButton.addEventListener('click', () => {
+                        if (questSound.paused) {
+                            questSound.play();
+                            soundIcon.style.opacity = '1';
+                            soundIcon.style.filter = 'sepia(0.6) saturate(0.9) hue-rotate(330deg)';
+                        } else {
+                            questSound.pause();
+                            soundIcon.style.opacity = '0.6';
+                            soundIcon.style.filter = 'grayscale(0.3) sepia(0.4) saturate(0.6) hue-rotate(330deg)';
+                        }
+                    });
+                    // Сохраняем ссылки на кнопки для дальнейшей привязки к flip-карточке ниже
+                    taskTextContainer.dataset.hasPreparedControls = 'true';
                 }
             }
             
@@ -188,14 +247,196 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                 targetImage.style.filter = isPrepared ? 'blur(0)' : 'blur(8px)';
                 targetImage.style.transform = isPrepared ? 'scale(1)' : 'scale(0.985)';
                 targetImage.style.transition = isPrepared ? 'none' : `opacity ${revealDurationMs}ms cubic-bezier(0.22, 0.61, 0.36, 1), filter ${revealDurationMs}ms cubic-bezier(0.22, 0.61, 0.36, 1), transform ${revealDurationMs}ms cubic-bezier(0.22, 0.61, 0.36, 1)`;
-
-                imageContainer.appendChild(baseImage);
+                // Для уже подготовленного пункта не показываем старую картинку
+                if (!isPrepared) {
+                    imageContainer.appendChild(baseImage);
+                }
                 imageContainer.appendChild(targetImage);
 
                 // Сохраняем ссылку на целевое изображение для последующей анимации
                 imageContainer.dataset.targetImage = 'true';
             } else {
-                imageContainer.appendChild(baseImage);
+                // Для уже подготовленных пунктов: показываем цветную картинку и готовим flip-карточку
+                if (tasksPrepared[i]) {
+                    const preparedInfo = tasksPrepared[i];
+                    const preparedSrc = (preparedInfo && preparedInfo.image) ? preparedInfo.image : `media/watercolor/${i}.jpg`;
+
+                    const preparedImg = document.createElement('img');
+                    preparedImg.src = preparedSrc;
+                    preparedImg.alt = `Задание ${i} (цветное)`;
+                    preparedImg.classList.add('task-image');
+                    preparedImg.style.width = '100%';
+                    preparedImg.style.display = 'block';
+                    preparedImg.style.padding = '8px';
+                    preparedImg.style.boxSizing = 'border-box';
+                    preparedImg.style.background = '#fff';
+                    preparedImg.style.borderRadius = '5px';
+                    preparedImg.style.position = 'relative';
+                    preparedImg.style.opacity = '1';
+                    preparedImg.style.filter = 'blur(0)';
+                    preparedImg.style.transform = 'scale(1)';
+
+                    // Не добавляем базовую картинку, сразу показываем цветную
+                    imageContainer.appendChild(preparedImg);
+
+                    // После вставки заменяем на flip-карточку
+                    const buildFlipFrom = () => {
+                        const host = preparedImg;
+                        const aspectRatio = host.naturalWidth > 0 ? (host.naturalHeight / host.naturalWidth) : 0.66;
+                        const flipScene = document.createElement('div');
+                        flipScene.style.position = 'relative';
+                        flipScene.style.width = '100%';
+                        flipScene.style.maxWidth = imageContainer.style.maxWidth || '400px';
+                        flipScene.style.marginTop = imageContainer.style.marginTop || '20px';
+                        flipScene.style.marginBottom = imageContainer.style.marginBottom || '20px';
+                        flipScene.style.marginLeft = imageContainer.style.marginLeft || 'auto';
+                        flipScene.style.marginRight = imageContainer.style.marginRight || 'auto';
+                        flipScene.style.perspective = '1000px';
+                        const originalAngle = imageContainer.dataset.originalAngle || '0';
+                        flipScene.style.transform = `rotate(${originalAngle}deg)`;
+                        flipScene.style.boxShadow = imageContainer.style.boxShadow || '5px 5px 10px rgba(0,0,0,0.5)';
+                        flipScene.style.transition = 'all 0.3s ease';
+                        flipScene.dataset.originalAngle = originalAngle;
+                        flipScene.addEventListener('mouseover', function() {
+                            this.style.transform = 'rotate(0deg) scale(1.02)';
+                            this.style.boxShadow = '8px 8px 15px rgba(0,0,0,0.6)';
+                        });
+                        flipScene.addEventListener('mouseout', function() {
+                            this.style.transform = `rotate(${this.dataset.originalAngle}deg)`;
+                            this.style.boxShadow = '5px 5px 10px rgba(0,0,0,0.5)';
+                        });
+
+                        const ratioBox = document.createElement('div');
+                        ratioBox.style.position = 'relative';
+                        ratioBox.style.width = '100%';
+                        ratioBox.style.paddingTop = (aspectRatio * 100) + '%';
+
+                        const flipCard = document.createElement('div');
+                        flipCard.style.position = 'absolute';
+                        flipCard.style.top = '0';
+                        flipCard.style.left = '0';
+                        flipCard.style.right = '0';
+                        flipCard.style.bottom = '0';
+                        flipCard.style.transformStyle = 'preserve-3d';
+                        flipCard.style.transition = 'transform 0.8s ease';
+                        flipCard.style.cursor = 'pointer';
+
+                        const front = document.createElement('div');
+                        front.style.position = 'absolute';
+                        front.style.top = '0';
+                        front.style.left = '0';
+                        front.style.right = '0';
+                        front.style.bottom = '0';
+                        front.style.backfaceVisibility = 'hidden';
+                        const frontImg = document.createElement('img');
+                        frontImg.src = preparedSrc;
+                        frontImg.alt = 'Открытка (лицевая сторона)';
+                        frontImg.style.width = '100%';
+                        frontImg.style.height = '100%';
+                        frontImg.style.objectFit = 'contain';
+                        frontImg.style.display = 'block';
+                        frontImg.style.padding = '8px';
+                        frontImg.style.boxSizing = 'border-box';
+                        frontImg.style.background = '#fff';
+                        frontImg.style.borderRadius = '5px';
+                        front.appendChild(frontImg);
+
+                        const back = document.createElement('div');
+                        back.style.position = 'absolute';
+                        back.style.top = '0';
+                        back.style.left = '0';
+                        back.style.right = '0';
+                        back.style.bottom = '0';
+                        back.style.transform = 'rotateY(180deg)';
+                        back.style.backfaceVisibility = 'hidden';
+                        back.style.overflow = 'hidden';
+                        const backImg = document.createElement('img');
+                        backImg.src = 'media/watercolor/oldcard.jpg';
+                        backImg.alt = 'Открытка (оборот)';
+                        backImg.style.position = 'absolute';
+                        backImg.style.top = '0';
+                        backImg.style.left = '0';
+                        backImg.style.width = '100%';
+                        backImg.style.height = '100%';
+                        backImg.style.objectFit = 'contain';
+                        backImg.style.display = 'block';
+                        backImg.style.padding = '0';
+                        backImg.style.boxSizing = 'border-box';
+                        backImg.style.background = 'transparent';
+                        backImg.style.borderRadius = '0';
+
+                        const backCard = document.createElement('div');
+                        backCard.style.position = 'absolute';
+                        backCard.style.top = '0';
+                        backCard.style.left = '0';
+                        backCard.style.right = '0';
+                        backCard.style.zIndex = '2';
+                        backCard.style.width = '100%';
+                        backCard.style.display = 'flex';
+                        backCard.style.flexDirection = 'column';
+                        backCard.style.alignItems = 'center';
+                        backCard.style.justifyContent = 'flex-start';
+                        backCard.style.background = 'transparent';
+                        backCard.style.border = 'none';
+                        backCard.style.borderRadius = '0';
+                        backCard.style.boxShadow = 'none';
+                        backCard.style.padding = '8px';
+                        backCard.style.boxSizing = 'border-box';
+                        backCard.style.fontFamily = 'serif';
+                        backCard.style.color = '#5b4636';
+                        backCard.style.textAlign = 'center';
+                        backCard.style.pointerEvents = 'none';
+                        const backText = document.createElement('div');
+                        backText.textContent = (window.i18n ? window.i18n.t(`quest.back${i}`) : '') || `Задание ${i}: подробности и заметки.`;
+                        backText.style.lineHeight = '1.4';
+                        backText.style.fontSize = '20px';
+                        backText.style.fontFamily = '"Marck Script", cursive, serif';
+                        backText.style.fontWeight = 'normal';
+                        backText.style.whiteSpace = 'normal';
+                        backText.style.wordBreak = 'break-word';
+                        backText.style.hyphens = 'auto';
+                        backText.style.maxWidth = '92%';
+                        backText.style.margin = '8px auto 0';
+                        back.appendChild(backImg);
+                        back.appendChild(backCard);
+                        backCard.appendChild(backText);
+
+                        flipCard.appendChild(front);
+                        flipCard.appendChild(back);
+
+                        // Заменяем контейнер картинок на flip-сцену
+                        const parentForCard = imageContainer.parentNode;
+                        if (parentForCard) {
+                            parentForCard.replaceChild(flipScene, imageContainer);
+                            flipScene.appendChild(ratioBox);
+                            ratioBox.appendChild(flipCard);
+                        }
+
+                        // Звуки
+                        const flipSound = new Audio('media/opening-a-book.wav');
+                        let flipped = false;
+                        const doFlip = () => {
+                            flipped = !flipped;
+                            flipCard.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+                            flipSound.currentTime = 0;
+                            flipSound.play();
+                        };
+                        flipCard.addEventListener('click', doFlip);
+
+                        // Найдем кнопки рядом с текстом (если мы их уже создали) и привяжем к flip
+                        const possibleContainer = taskTextContainer;
+                        if (possibleContainer && possibleContainer.dataset.hasPreparedControls === 'true') {
+                            const soundBtn = possibleContainer.querySelector('.quest-sound-button');
+                            const flipBtn = possibleContainer.querySelector('.quest-flip-button');
+                            if (flipBtn) {
+                                flipBtn.addEventListener('click', doFlip);
+                            }
+                        }
+                    };
+                    if (preparedImg.complete) buildFlipFrom(); else preparedImg.addEventListener('load', buildFlipFrom);
+                } else {
+                    imageContainer.appendChild(baseImage);
+                }
             }
 
             // Применяем стили к контейнеру
@@ -503,9 +744,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
 
                                     // Обработчик клика по кнопке звука
                                     localSoundButton.addEventListener('click', () => {
-                                        const mainSoundButton = document.querySelector('.sound-menu-button');
-                                        const isGloballyMuted = mainSoundButton ? mainSoundButton.classList.contains('muted') : false;
-                                        if (isGloballyMuted) return;
+                                        // Игнорируем глобальные настройки звука - кнопка всегда работает
                                         if (questSound.paused) {
                                             questSound.play();
                                             // активный вид
@@ -524,7 +763,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                     if (flipHost && !flipHost.dataset.flipPrepared) {
                                         flipHost.dataset.flipPrepared = 'true';
 
-                                        const totalRevealDelayMs = Math.max(800, text.length * 100 + 500);
+                                        const totalRevealDelayMs = isPrepared ? 0 : Math.max(800, text.length * 100 + 500);
 
                                         setTimeout(() => {
                                             // Создаем обертку для 3D-переворота
@@ -737,18 +976,22 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                             });
 
                                             // Hover-эффекты для ретро-кнопок
-                                            const addRetroHover = (btn) => {
+                                            const addRetroHover = (btn, withBorder = true) => {
                                                 btn.addEventListener('mouseover', () => {
                                                     btn.style.transform = 'translateY(-1px)';
-                                                    btn.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15), inset 0 0 0 2px rgba(0,0,0,0.05)';
+                                                    if (withBorder) {
+                                                        btn.style.boxShadow = '0 2px 6px rgba(0,0,0,0.15), inset 0 0 0 2px rgba(0,0,0,0.05)';
+                                                    }
                                                 });
                                                 btn.addEventListener('mouseout', () => {
                                                     btn.style.transform = 'translateY(0)';
-                                                    btn.style.boxShadow = 'inset 0 0 0 2px rgba(0,0,0,0.05)';
+                                                    if (withBorder) {
+                                                        btn.style.boxShadow = 'inset 0 0 0 2px rgba(0,0,0,0.05)';
+                                                    }
                                                 });
                                             };
-                                            addRetroHover(localSoundButton);
-                                            addRetroHover(flipButton);
+                                            addRetroHover(localSoundButton, false); // без обводки
+                                            addRetroHover(flipButton, true); // с обводкой
                                         }, totalRevealDelayMs);
                                         
                                         // Сохраняем состояние как подготовленное и запоминаем последний подготовленный пункт
