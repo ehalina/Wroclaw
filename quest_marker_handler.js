@@ -111,26 +111,24 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
             taskTextSpan.textContent = window.i18n ? window.i18n.t(`quest.task${i}`) : `Задание ${i}`;
             taskTextSpan.style.position = i === questNumber ? 'absolute' : 'relative';
             taskTextSpan.style.transition = `opacity ${revealDurationMs}ms ease-in-out`;
+
             if (i === questNumber) {
-                // Скрываем чёрный текст для целевого пункта: будет только коричневая анимация
-                taskTextSpan.style.display = 'none';
-            }
-            
-            if (i === questNumber) {
-                const brightTextSpan = document.createElement('span');
-                brightTextSpan.textContent = window.i18n ? window.i18n.t(`quest.task${i}`) : `Задание ${i}`;
-                brightTextSpan.style.position = 'relative';
-                brightTextSpan.style.fontWeight = 'bold';
-                brightTextSpan.style.color = isPrepared ? '#8B4513' : '#000';
-                brightTextSpan.style.opacity = isPrepared ? '1' : '0';
-                brightTextSpan.style.transition = isPrepared ? 'none' : `opacity ${revealDurationMs}ms ease-in-out`;
-                brightTextSpan.dataset.brightText = 'true';
-                
-                taskTextContainer.appendChild(taskTextSpan);
-                taskTextContainer.appendChild(brightTextSpan);
-                if (isPrepared) {
-                    // Скрываем чёрный текст во избежание дублирования
+                // Если подавляем эффекты (очистка) и пункт не подготовлен — показываем чёрный текст без анимации
+                if (suppressEffects && !isPrepared) {
+                    taskTextContainer.appendChild(taskTextSpan);
+                } else {
+                    // Нормальный сценарий: прячем чёрный текст и анимируем коричневый
                     taskTextSpan.style.display = 'none';
+                    const brightTextSpan = document.createElement('span');
+                    brightTextSpan.textContent = window.i18n ? window.i18n.t(`quest.task${i}`) : `Задание ${i}`;
+                    brightTextSpan.style.position = 'relative';
+                    brightTextSpan.style.fontWeight = 'bold';
+                    brightTextSpan.style.color = isPrepared ? '#8B4513' : '#000';
+                    brightTextSpan.style.opacity = isPrepared ? '1' : '0';
+                    brightTextSpan.style.transition = isPrepared ? 'none' : `opacity ${revealDurationMs}ms ease-in-out`;
+                    brightTextSpan.dataset.brightText = 'true';
+                    taskTextContainer.appendChild(taskTextSpan);
+                    taskTextContainer.appendChild(brightTextSpan);
                 }
             } else {
                 taskTextContainer.appendChild(taskTextSpan);
@@ -247,28 +245,52 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
             titleWrapper.style.display = 'flex';
             titleWrapper.style.alignItems = 'center';
             titleWrapper.style.justifyContent = 'center';
-            titleWrapper.style.gap = '12px';
+            titleWrapper.style.gap = '0';
 
-            const existingReset = titleWrapper.querySelector('.quest-reset-button');
+            const existingReset = parent.querySelector('.quest-reset-button');
             if (existingReset) existingReset.remove();
             const resetBtn = document.createElement('button');
             resetBtn.className = 'quest-reset-button';
             resetBtn.textContent = (window.i18n ? window.i18n.t('quest.clearButton') : '') || 'Очистить квест';
-            resetBtn.style.background = 'none';
-            resetBtn.style.border = '1px solid rgba(0,0,0,0.2)';
+            resetBtn.style.background = 'url("media/clear.jpg") center/contain no-repeat';
+            resetBtn.style.width = '64px';
+            resetBtn.style.height = '64px';
+            resetBtn.style.fontSize = '0';
+            resetBtn.style.border = 'none';
             resetBtn.style.borderRadius = '6px';
             resetBtn.style.padding = '6px 10px';
             resetBtn.style.cursor = 'pointer';
             resetBtn.style.fontFamily = 'serif';
             resetBtn.style.color = '#5b4636';
             resetBtn.style.boxShadow = 'inset 0 0 0 2px rgba(0,0,0,0.05)';
-            resetBtn.addEventListener('click', (e) => {
+            resetBtn.style.transition = 'none';
+            resetBtn.style.transitionDelay = '0s';
+            resetBtn.title = (window.i18n ? window.i18n.t('quest.clearTooltip') : '') || 'Очистить результаты квеста';
+            resetBtn.addEventListener('click', async (e) => {
                 e.stopPropagation();
-                try { sessionStorage.removeItem('questState'); } catch (_) {}
-                // Перерисовываем содержимое без закрытия модалки и без анимаций/звуков
-                if (questTasksList) questTasksList.innerHTML = '';
-                window.__quest_suppress_effects = true;
-                openQuest().finally(() => { window.__quest_suppress_effects = false; });
+                const confirmText = window.i18n ? window.i18n.t('quest.clearConfirm') : 'Вы точно хотите очистить результаты квеста?';
+                const confirmed = await window.showQuestConfirmDialog(confirmText);
+                if (confirmed) {
+                    try { sessionStorage.removeItem('questState'); } catch (_) {}
+                    // Перерисовываем содержимое без закрытия модалки и без анимаций/звуков
+                    if (questTasksList) {
+                        // Находим текущий активный пункт перед очисткой
+                        const activeItem = questTasksList.querySelector('li[data-target-item="true"]');
+                        if (activeItem) {
+                            // Ищем коричневый текст и его чёрный сосед до перерисовки
+                            const brightText = activeItem.querySelector('span[data-bright-text="true"]');
+                            const normalText = brightText ? brightText.previousElementSibling : activeItem.querySelector('span');
+                            if (normalText) {
+                                normalText.style.display = '';
+                                normalText.style.position = 'relative';
+                                normalText.style.opacity = '1';
+                            }
+                            if (brightText) brightText.remove();
+                        }
+                    }
+                    window.__quest_suppress_effects = true;
+                    openQuest().finally(() => { window.__quest_suppress_effects = false; });
+                }
             });
 
             parent.replaceChild(titleWrapper, bookTitle);

@@ -1,5 +1,67 @@
 // Стили для кнопки карты и модального окна
 const mapStyles = `
+    .quest-confirm-dialog {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2000;
+        width: 400px;
+        max-width: 90vw;
+        background: url('media/watercolor/oldcard.jpg') center/cover;
+        border-radius: 8px;
+        box-shadow: 0 4px 32px rgba(0,0,0,0.4);
+        padding: 30px;
+        text-align: center;
+        font-family: "Marck Script", cursive, serif;
+        color: #5b4636;
+        display: none;
+    }
+
+    .quest-confirm-dialog .dialog-text {
+        font-size: 24px;
+        margin-bottom: 25px;
+        line-height: 1.4;
+    }
+
+    .quest-confirm-dialog .dialog-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .quest-confirm-dialog button {
+        padding: 10px 20px;
+        border: 1px solid rgba(91, 70, 54, 0.2);
+        border-radius: 6px;
+        background: none;
+        font-family: serif;
+        color: #5b4636;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 18px;
+    }
+
+    .quest-confirm-dialog button:hover {
+        background: rgba(91, 70, 54, 0.1);
+        transform: translateY(-1px);
+    }
+
+    .quest-confirm-dialog-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1999;
+        display: none;
+    }
+
+    .quest-reset-button {
+        transition: none !important;
+        transition-delay: 0s !important;
+    }
     .map-and-quest-buttons {
         position: fixed;
         top: 20px;
@@ -972,6 +1034,14 @@ const MapModal = {
             <audio id="mapSound" src="media/zwyki/bb6f2b8ec908f28.mp3"></audio>
             <audio id="bookSound" src="media/opening-a-book.wav"></audio>
             <audio id="sceneSound"></audio>
+            <div class="quest-confirm-dialog-overlay"></div>
+            <div class="quest-confirm-dialog">
+                <div class="dialog-text"></div>
+                <div class="dialog-buttons">
+                    <button class="confirm-yes"></button>
+                    <button class="confirm-no"></button>
+                </div>
+            </div>
         `;
 
         // Добавляем модальное окно и кнопки на страницу
@@ -1532,30 +1602,50 @@ const MapModal = {
                 titleWrapper.style.display = 'flex';
                 titleWrapper.style.alignItems = 'center';
                 titleWrapper.style.justifyContent = 'center';
-                titleWrapper.style.gap = '12px';
-                const existingReset = titleWrapper.querySelector('.quest-reset-button');
+                titleWrapper.style.gap = '0';
+                const existingReset = parent.querySelector('.quest-reset-button');
                 if (existingReset) existingReset.remove();
                 const resetBtn = document.createElement('button');
                 resetBtn.className = 'quest-reset-button';
                 resetBtn.textContent = (window.i18n ? window.i18n.t('quest.clearButton') : '') || 'Очистить квест';
-                resetBtn.style.background = 'none';
-                resetBtn.style.border = '1px solid rgba(0,0,0,0.2)';
+                resetBtn.style.background = 'url("media/clear.jpg") center/contain no-repeat';
+                resetBtn.style.width = '64px';
+                resetBtn.style.height = '64px';
+                resetBtn.style.fontSize = '0';
+                resetBtn.style.border = 'none';
                 resetBtn.style.borderRadius = '6px';
                 resetBtn.style.padding = '6px 10px';
                 resetBtn.style.cursor = 'pointer';
                 resetBtn.style.fontFamily = 'serif';
                 resetBtn.style.color = '#5b4636';
                 resetBtn.style.boxShadow = 'inset 0 0 0 2px rgba(0,0,0,0.05)';
-                resetBtn.addEventListener('click', (e) => {
+                resetBtn.title = (window.i18n ? window.i18n.t('quest.clearTooltip') : '') || 'Очистить результаты квеста';
+                resetBtn.addEventListener('click', async (e) => {
                     e.stopPropagation();
-                    try { sessionStorage.removeItem('questState'); } catch (_) {}
-                    // Перерисовать модалку без закрытия и без анимаций/звуков
-                    try {
-                        questTasksList.innerHTML = '';
-                        window.__quest_suppress_effects = true;
-                        openQuestBtn.click();
-                        setTimeout(() => { window.__quest_suppress_effects = false; }, 0);
-                    } catch (_) {}
+                    const confirmText = window.i18n ? window.i18n.t('quest.clearConfirm') : 'Вы точно хотите очистить результаты квеста?';
+                    const confirmed = await window.showQuestConfirmDialog(confirmText);
+                    if (confirmed) {
+                        try { sessionStorage.removeItem('questState'); } catch (_) {}
+                        // Перерисовать модалку без закрытия и без анимаций/звуков
+                        try {
+                            // Находим текущий активный пункт перед очисткой
+                            const activeItem = questTasksList.querySelector('li[data-target-item="true"]');
+                            if (activeItem) {
+                                // Ищем коричневый текст и его чёрный сосед до перерисовки
+                                const brightText = activeItem.querySelector('span[data-bright-text="true"]');
+                                const normalText = brightText ? brightText.previousElementSibling : activeItem.querySelector('span');
+                                if (normalText) {
+                                    normalText.style.display = '';
+                                    normalText.style.position = 'relative';
+                                    normalText.style.opacity = '1';
+                                }
+                                if (brightText) brightText.remove();
+                            }
+                            window.__quest_suppress_effects = true;
+                            openQuestBtn.click();
+                            setTimeout(() => { window.__quest_suppress_effects = false; }, 0);
+                        } catch (_) {}
+                    }
                 });
 
                 parent.replaceChild(titleWrapper, bookTitle);
@@ -2104,6 +2194,68 @@ function clearMostModalInlineStyles() {
         el.removeAttribute('style');
     });
 }
+
+// Функция для показа кастомного диалога подтверждения
+async function showQuestConfirmDialog(message) {
+    return new Promise((resolve) => {
+        const dialog = document.querySelector('.quest-confirm-dialog');
+        const overlay = document.querySelector('.quest-confirm-dialog-overlay');
+        const textEl = dialog.querySelector('.dialog-text');
+        const yesBtn = dialog.querySelector('.confirm-yes');
+        const noBtn = dialog.querySelector('.confirm-no');
+
+        // Устанавливаем текст
+        textEl.textContent = message;
+        yesBtn.textContent = window.i18n ? window.i18n.t('quest.clearConfirmYes') : 'Да';
+        noBtn.textContent = window.i18n ? window.i18n.t('quest.clearConfirmNo') : 'Нет';
+
+        // Показываем диалог
+        overlay.style.display = 'block';
+        dialog.style.display = 'block';
+
+        // Воспроизводим звук открытия книги
+        const bookSound = document.getElementById('bookSound');
+        if (bookSound) {
+            bookSound.currentTime = 0;
+            bookSound.play();
+        }
+
+        // Обработчики кнопок
+        const handleYes = () => {
+            cleanup();
+            resolve(true);
+        };
+
+        const handleNo = () => {
+            cleanup();
+            resolve(false);
+        };
+
+        const handleOverlayClick = (e) => {
+            if (e.target === overlay) {
+                cleanup();
+                resolve(false);
+            }
+        };
+
+        // Функция очистки
+        const cleanup = () => {
+            dialog.style.display = 'none';
+            overlay.style.display = 'none';
+            yesBtn.removeEventListener('click', handleYes);
+            noBtn.removeEventListener('click', handleNo);
+            overlay.removeEventListener('click', handleOverlayClick);
+        };
+
+        // Добавляем обработчики
+        yesBtn.addEventListener('click', handleYes);
+        noBtn.addEventListener('click', handleNo);
+        overlay.addEventListener('click', handleOverlayClick);
+    });
+}
+
+// Делаем функцию глобально доступной
+window.showQuestConfirmDialog = showQuestConfirmDialog;
 
 // Экспортируем объект MapModal
 window.MapModal = MapModal; 
