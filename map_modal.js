@@ -58,6 +58,20 @@ const mapStyles = `
         display: none;
     }
 
+    .quest-flip-button {
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+    }
+
+    .quest-flip-button:focus,
+    .quest-flip-button:focus-visible,
+    .quest-flip-button:active {
+        outline: none !important;
+        box-shadow: none !important;
+        border: none !important;
+    }
+
     .quest-reset-button {
         transition: none !important;
         transition-delay: 0s !important;

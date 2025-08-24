@@ -54,6 +54,62 @@ document.addEventListener('DOMContentLoaded', async function() {
                 questNumber: parseInt(loveLocks.getAttribute('data-quest-number')),
                 questImage: loveLocks.getAttribute('data-quest-image')
             });
+            // Добавляем эффект свечения для геометки квеста
+            try {
+                const styleId = 'quest-marker-glow-styles';
+                if (!document.getElementById(styleId)) {
+                    const s = document.createElement('style');
+                    s.id = styleId;
+                    s.textContent = `
+                        @keyframes markerGlowPulse {
+                            0% { transform: scale(1); }
+                            50% { transform: scale(1.04); }
+                            100% { transform: scale(1); }
+                        }
+
+                        @keyframes markerHaloPulse {
+                            0% { box-shadow: 0 0 14px rgba(139, 69, 19, 0.45), 0 0 26px rgba(139, 69, 19, 0.25); }
+                            50% { box-shadow: 0 0 24px rgba(139, 69, 19, 0.85), 0 0 44px rgba(139, 69, 19, 0.55); }
+                            100% { box-shadow: 0 0 14px rgba(139, 69, 19, 0.45), 0 0 26px rgba(139, 69, 19, 0.25); }
+                        }
+
+                        .quest-marker-glow {
+                            position: relative;
+                            animation: markerGlowPulse 1.8s ease-in-out infinite;
+                            display: inline-block;
+                            background-position: center center;
+                            background-repeat: no-repeat;
+                            background-size: contain;
+                        }
+
+                        .quest-marker-glow::after {
+                            content: '';
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            width: calc(100% + 20px);
+                            height: calc(100% + 20px);
+                            transform: translate(-50%, -50%);
+                            border-radius: 50%;
+                            pointer-events: none;
+                            animation: markerHaloPulse 1.8s ease-in-out infinite;
+                        }
+
+                        @media (prefers-reduced-motion: reduce) {
+                            .quest-marker-glow, .quest-marker-glow::after {
+                                animation: none !important;
+                            }
+                        }
+                    `;
+                    document.head.appendChild(s);
+                }
+                const loveLocksMarker = document.getElementById('love_locks');
+                if (loveLocksMarker) {
+                    loveLocksMarker.classList.add('quest-marker-glow');
+                }
+            } catch (e) {
+                // no-op
+            }
         }
     });
 
