@@ -158,35 +158,19 @@ document.addEventListener('DOMContentLoaded', async function() {
             stepSound = mod.createStepSound();
         }
         
-        if (cursorLeft && cursorLeftArea) {
-            // Добавляем прямой обработчик клика для мобильных устройств
-            const handleLeftClick = () => {
-                const nextPage = cursorLeft.getAttribute('data-next-page');
-                if (nextPage) {
-                    if (stepSound) {
-                        stepSound.play().then(() => {
-                            window.location.href = nextPage;
-                        }).catch(() => {
-                            window.location.href = nextPage;
-                        });
+        // Добавляем обработчик для стрелки назад
+        const cursorBack = document.querySelector('.custom-cursor-back');
+        const cursorBackArea = document.querySelector('.custom-cursor-backarea');
+        
+        if (cursorBack && cursorBackArea) {
+            if (typeof window.setupBackArrowHandler === 'function') {
+                window.setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, () => {
+                    // Переход на предыдущую страницу
+                    const prevPage = cursorBack.getAttribute('data-prev-page');
+                    if (prevPage) {
+                        window.location.href = prevPage;
                     } else {
-                        window.location.href = nextPage;
-                    }
-                }
-            };
-
-            // Добавляем обработчики для обоих элементов
-            cursorLeft.addEventListener('click', handleLeftClick);
-            cursorLeft.addEventListener('touchend', handleLeftClick);
-            cursorLeftArea.addEventListener('click', handleLeftClick);
-            cursorLeftArea.addEventListener('touchend', handleLeftClick);
-
-            // Оставляем оригинальный обработчик для десктопа
-            if (typeof window.setupLeftArrowHandler === 'function') {
-                window.setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, () => {
-                    const nextPage = cursorLeft.getAttribute('data-next-page');
-                    if (nextPage) {
-                        window.location.href = nextPage;
+                        console.log('No previous page specified');
                     }
                 });
             }
@@ -288,7 +272,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // 10. Принудительное применение стилей для мобильной версии
     if (window.innerWidth <= 700) {
         setTimeout(() => {
-            const cursors = document.querySelectorAll('.custom-cursor-left, .custom-cursor-leftarea');
+            const cursors = document.querySelectorAll('.custom-cursor-back, .custom-cursor-backarea');
             cursors.forEach(cursor => {
                 cursor.style.opacity = '1';
                 cursor.style.display = 'block';

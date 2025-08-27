@@ -92,14 +92,11 @@
     height: 15%;
 }
 
-/* Стрелка влево */
-.custom-cursor-leftarea {
-    position: absolute !important;
-    z-index: 999 !important;
+/* Стрелка назад */
+.custom-cursor-backarea {
+    position: absolute;
+    z-index: 999;
     cursor: none;
-    display: block !important;
-    visibility: visible !important;
-    pointer-events: auto !important;
     /* Добавляем поддержку трансформаций для зума */
     transform-origin: center center;
     will-change: transform;
@@ -107,14 +104,15 @@
     /* Убираем фиксированное позиционирование, чтобы JS мог управлять позицией */
     left: auto;
     bottom: auto;
-    width: 350px;
-    height: 500px;
+    width: 60%; /* Увеличиваем с 40% до 60% */
+    height: 25%; /* Увеличиваем с 15% до 25% */
 }
-.custom-cursor-left {
+
+.custom-cursor-back {
     width: 64px;
     height: 64px;
     position: absolute;
-    background-image: url('media/strelka_rev.png');
+    background-image: url('media/strelka_back.png');
     background-size: contain;
     background-repeat: no-repeat;
     filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
@@ -122,17 +120,26 @@
     transition: opacity 0.3s ease;
     z-index: 1000;
     cursor: pointer;
-    pointer-events: none;
-    transform: translateX(-50%) translateY(-50%);
-    left: 50%;
-    top: 50%;
-}
-
-/* Показываем стрелку при наведении на область */
-.custom-cursor-leftarea:hover .custom-cursor-left {
-    opacity: 1 !important;
     pointer-events: auto;
 }
+
+.custom-cursor-backarea:hover .custom-cursor-back {
+    opacity: 1;
+}
+
+/* На мобильных устройствах показываем стрелку всегда */
+@media (max-width: 700px) {
+    .custom-cursor-back {
+        opacity: 1 !important;
+    }
+    
+    .custom-cursor-backarea {
+        /* Увеличиваем область для лучшего взаимодействия на мобильных */
+        width: 80%;
+        height: 30%;
+    }
+}
+
 
 /* На мобильных устройствах показываем стрелку всегда */
 @media (max-width: 700px) {
@@ -384,9 +391,9 @@
     /* Стрелки всегда видимы и активны */
     .custom-cursor,
     .custom-cursor-prosto,
-    .custom-cursor-left,
+    .custom-cursor-back,
     .custom-cursor-area,
-    .custom-cursor-leftarea,
+    .custom-cursor-backarea,
     .custom-cursor-prostoarea {
         opacity: 1 !important;
         display: block !important;
@@ -401,33 +408,7 @@
         padding: 0 !important;
     }
     
-    /* Отдельные стили для стрелки влево на мобильных устройствах */
-    .custom-cursor-left {
-        opacity: 1 !important;
-        width: 64px !important;
-        height: 64px !important;
-        display: block !important;
-        pointer-events: auto !important;
-        visibility: visible !important;
-        position: absolute !important;
-        z-index: 9999 !important;
-        transform: translate(-50%, -50%) !important;
-        left: 50% !important;
-        top: 50% !important;
-    }
-    
-    .custom-cursor-leftarea {
-        width: 100px !important;
-        height: 100px !important;
-        position: absolute !important;
-        display: block !important;
-        pointer-events: auto !important;
-        visibility: visible !important;
-        z-index: 9999 !important;
-        transform: translate(-50%, -50%) !important;
-        left: 50% !important;
-        top: 50% !important;
-    }
+
     /* Убрать эффекты наведения для стрелок */
     .custom-cursor-area:hover .custom-cursor,
     .custom-cursor-prostoarea:hover .custom-cursor-prosto {
