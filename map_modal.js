@@ -8,7 +8,8 @@ const mapStyles = `
         z-index: 2000;
         width: 400px;
         max-width: 90vw;
-        background: url('media/watercolor/oldcard.jpg') center/cover;
+        background: url('media/watercolor/oldcard.jpg') center/center/ no-repeat;
+        background-size: 100% 100%;
         border-radius: 8px;
         box-shadow: 0 4px 32px rgba(0,0,0,0.4);
         padding: 30px;
@@ -1532,7 +1533,7 @@ const MapModal = {
                         backImg.style.left = '0';
                         backImg.style.width = '100%';
                         backImg.style.height = '100%';
-                        backImg.style.objectFit = 'contain';
+                        backImg.style.objectFit = 'fill';
                         backImg.style.display = 'block';
                         backImg.style.padding = '0';
                         backImg.style.boxSizing = 'border-box';

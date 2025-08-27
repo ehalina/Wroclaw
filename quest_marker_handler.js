@@ -358,7 +358,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                         backImg.style.left = '0';
                         backImg.style.width = '100%';
                         backImg.style.height = '100%';
-                        backImg.style.objectFit = 'contain';
+                        backImg.style.objectFit = 'fill';
                         backImg.style.display = 'block';
                         backImg.style.padding = '0';
                         backImg.style.boxSizing = 'border-box';
@@ -896,7 +896,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                             backImg.style.left = '0';
                                             backImg.style.width = '100%';
                                             backImg.style.height = '100%';
-                                            backImg.style.objectFit = 'contain';
+                                            backImg.style.objectFit = 'fill';
                                             backImg.style.display = 'block';
                                             backImg.style.padding = '0';
                                             backImg.style.boxSizing = 'border-box';
