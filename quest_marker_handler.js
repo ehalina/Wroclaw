@@ -71,10 +71,17 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
             const checkboxImg = document.createElement('img');
             checkboxImg.src = 'media/checkbox0.png';
             checkboxImg.alt = 'Checkbox';
-            checkboxImg.style.position = i === questNumber ? 'absolute' : 'relative';
+            // Для текущего квеста и уже анимированных пунктов checkbox0 должен быть absolute (чтобы быть под checkbox1)
+            // Для неактивных пунктов - relative
+            const shouldBeAbsolute = i === questNumber || tasksPrepared[i];
+            checkboxImg.style.position = shouldBeAbsolute ? 'absolute' : 'relative';
+            
+
             checkboxImg.style.width = '100%';
             checkboxImg.style.height = '100%';
             checkboxImg.style.transition = `opacity ${revealDurationMs}ms ease-in-out`;
+            
+
             
             if (i === questNumber || tasksPrepared[i]) {
                 const brightCheckbox = document.createElement('img');

@@ -8,8 +8,7 @@ const mapStyles = `
         z-index: 2000;
         width: 400px;
         max-width: 90vw;
-        background: url('media/watercolor/oldcard.jpg') center/center/ no-repeat;
-        background-size: 100% 100%;
+        background: url('media/watercolor/oldcard.jpg') center/cover;
         border-radius: 8px;
         box-shadow: 0 4px 32px rgba(0,0,0,0.4);
         padding: 30px;
