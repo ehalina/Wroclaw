@@ -1581,6 +1581,12 @@ const MapModal = {
                         flipCard.appendChild(back);
 
                         // Добавляем flip-сцену в список задач
+                        // Гарантируем кликабельность всей сцены
+                        flipScene.style.pointerEvents = 'auto';
+                        flipScene.style.cursor = 'pointer';
+                        frontImg.style.pointerEvents = 'auto';
+                        backImg.style.pointerEvents = 'auto';
+
                         flipScene.appendChild(ratioBox);
                         ratioBox.appendChild(flipCard);
                         questTasksList.appendChild(flipScene);
@@ -1609,6 +1615,10 @@ const MapModal = {
                             if (!isGloballyMuted()) { flipSound.currentTime = 0; flipSound.play(); }
                         };
                         flipCard.addEventListener('click', doFlip);
+                        // Дополнительно реагируем на клик по всей сцене и по картинкам
+                        flipScene.addEventListener('click', doFlip);
+                        frontImg.addEventListener('click', (e) => { e.stopPropagation(); doFlip(); });
+                        backImg.addEventListener('click', (e) => { e.stopPropagation(); doFlip(); });
                         flipButton.addEventListener('click', doFlip);
                     };
                     if (tempImg.complete) {

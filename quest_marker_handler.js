@@ -408,6 +408,11 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                         const parentForCard = imageContainer.parentNode;
                         if (parentForCard) {
                             parentForCard.replaceChild(flipScene, imageContainer);
+                            // Гарантируем кликабельность всей сцены
+                            flipScene.style.pointerEvents = 'auto';
+                            flipScene.style.cursor = 'pointer';
+                            frontImg.style.pointerEvents = 'auto';
+                            backImg.style.pointerEvents = 'auto';
                             flipScene.appendChild(ratioBox);
                             ratioBox.appendChild(flipCard);
                         }
@@ -418,10 +423,18 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                         const doFlip = () => {
                             flipped = !flipped;
                             flipCard.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
-                            flipSound.currentTime = 0;
-                            flipSound.play();
+                            const mainSoundButton = document.querySelector('.sound-menu-button');
+                            const isGloballyMuted = mainSoundButton ? mainSoundButton.classList.contains('muted') : false;
+                            if (!isGloballyMuted) {
+                                flipSound.currentTime = 0;
+                                flipSound.play();
+                            }
                         };
                         flipCard.addEventListener('click', doFlip);
+                        // Переворот по клику в любой точке сцены и по самим изображениям
+                        flipScene.addEventListener('click', doFlip);
+                        frontImg.addEventListener('click', (e) => { e.stopPropagation(); doFlip(); });
+                        backImg.addEventListener('click', (e) => { e.stopPropagation(); doFlip(); });
 
                         // Найдем кнопки рядом с текстом (если мы их уже создали) и привяжем к flip
                         const possibleContainer = taskTextContainer;
@@ -770,9 +783,11 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                             const flipScene = document.createElement('div');
                                             flipScene.style.position = 'relative';
                                             // Сохраняем адаптивную ширину как у исходного контейнера
-                                            const originalWidthPx = flipHost.offsetWidth;
-                                            const originalHeightPx = flipHost.offsetHeight;
-                                            const aspectRatio = originalWidthPx > 0 ? (originalHeightPx / originalWidthPx) : 1;
+                                            // Вычисляем соотношение сторон по натуральным размерам целевого изображения
+                        const targetImgEl = targetContainer.querySelector('img:last-child');
+                        const naturalW = targetImgEl && targetImgEl.naturalWidth ? targetImgEl.naturalWidth : 0;
+                        const naturalH = targetImgEl && targetImgEl.naturalHeight ? targetImgEl.naturalHeight : 0;
+                        const aspectRatio = naturalW > 0 ? (naturalH / naturalW) : 1;
                                             flipScene.style.width = '100%';
                                             flipScene.style.maxWidth = flipHost.style.maxWidth || '';
                                             flipScene.style.margin = flipHost.style.margin || '20px auto';
@@ -874,9 +889,6 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
 
                                             backCard.appendChild(backText);
                                             // Картинка oldcard.jpg снизу, без белых полей
-                                            const questImgPath = questImage || '';
-                                            const lastSlashIndex = questImgPath.lastIndexOf('/');
-                                            const baseDir = lastSlashIndex >= 0 ? questImgPath.slice(0, lastSlashIndex) : '';
                                             const backImg = document.createElement('img');
                                             backImg.alt = 'Открытка (оборот)';
                                             backImg.style.position = 'absolute';
@@ -891,7 +903,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                             backImg.style.background = 'transparent';
                                             backImg.style.borderRadius = '0';
                                             backImg.style.zIndex = '1';
-                                            backImg.src = (baseDir ? baseDir + '/' : '') + 'oldcard.jpg';
+                                            backImg.src = 'media/watercolor/oldcard.jpg';
                                             back.appendChild(backImg);
                                             back.appendChild(backCard);
 
@@ -960,6 +972,12 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                                 }
                                             };
 
+                                            // Гарантируем кликабельность всей сцены
+                                            flipScene.style.pointerEvents = 'auto';
+                                            flipScene.style.cursor = 'pointer';
+                                            frontImg.style.pointerEvents = 'auto';
+                                            backImg.style.pointerEvents = 'auto';
+
                                             // Обработчик переворота по клику
                                             let flipped = false;
                                             flipCard.addEventListener('click', () => {
@@ -967,6 +985,15 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                                 flipCard.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
                                                 playFlipSound();
                                             });
+
+                                            // Переворот по клику в любой точке сцены и по самим изображениям
+                                            flipScene.addEventListener('click', () => {
+                                                flipped = !flipped;
+                                                flipCard.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+                                                playFlipSound();
+                                            });
+                                            frontImg.addEventListener('click', (e) => { e.stopPropagation(); flipped = !flipped; flipCard.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)'; playFlipSound(); });
+                                            backImg.addEventListener('click', (e) => { e.stopPropagation(); flipped = !flipped; flipCard.style.transform = flipped ? 'rotateY(180deg)' : 'rotateY(0deg)'; playFlipSound(); });
 
                                             // Клик по кнопке переворота делает то же, что и клик по карточке
                                             flipButton.addEventListener('click', () => {
