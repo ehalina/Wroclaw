@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Тумский остров - Вроцлав</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="tumski17.css">
+    <link rel="stylesheet" href="tumski06.css">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
     <script src="i18n.js"></script>
@@ -29,41 +29,46 @@
 
 
 
-        <!-- Геометка: Соборная церковь Святого Креста и Св. Варфоломея -->
-        <div class="map-mark-area" >
-            <div class="map-mark" id="katedra_koscielna" data-x-desktop="1600" data-y-desktop="300" data-x-mobile="1600" data-y-mobile="600"></div>
-            <div class="content-wrapper">
-                <img class="papera-image" alt="Papera">
-                <div class="tumski-text" id="katedra-koscielna-text" data-i18n="katedra_koscielna.title"></div>
-            </div>
-            <audio id="bookSoundKoscielna" src="media/opening-a-book.wav"></audio>
+    <!-- Геометка: Собор Святого Иоанна Крестителя (универсальная) -->
+    <div class="map-mark-area">
+        <div class="map-mark" id="tumski_cathedral" data-x-desktop="1200" data-y-desktop="300" data-x-mobile="1100" data-y-mobile=300></div>
+        <div class="content-wrapper">
+            <img class="papera-image" alt="Papera">
+            <div class="tumski-text" id="tumski-cathedral-text" data-i18n="tumski_cathedral.title"></div>
         </div>
+        <audio id="bookSound3" src="media/opening-a-book.wav"></audio>
+    </div>
 
 
-                <!-- Геометка: Святой Ян Непомуцкий Квест -->
+                <!-- Геометка: Богоматерь с младенцем Квест -->
                 <div class="map-mark-area">
-                    <div class="map-mark" id="jan_nepomuk_quest" data-x-desktop="1200" data-y-desktop="1300" data-x-mobile="1500" data-y-mobile="1200" data-quest-number="3" data-quest-image="media/tumski/tumski_17.jpg"></div>
+                    <div class="map-mark" id="bogomater_quest" data-x-desktop="1100" data-y-desktop="1300" data-x-mobile="1400" data-y-mobile="1200" data-quest-number="4" data-quest-image="media/watercolor/42.jpg"></div>
                     <div class="content-wrapper">
                         <img class="papera-image" src="media/papera1.png" alt="Papera">
-                        <div class="tumski-text" data-i18n="quest.task3"></div>
+                        <div class="tumski-text" data-i18n="quest.task4"></div>
                     </div>
-                    <audio id="bookSoundLocks" src="media/opening-a-book.wav"></audio>
+                    <audio id="bookSoundBogomater" src="media/opening-a-book.wav"></audio>
                 </div>
 
     <!-- Главная сцена с фоновым изображением и анимацией -->
     <div class="scene">
-        <div class="image-container" data-map-point="17">
+        <div class="image-container" data-map-point="6">
             <div class="image-scroll-wrapper">
                 <div class="image"></div>
                 
                 <!-- Стрелка назад -->
-                <div class="custom-cursor-back" data-x-desktop="100" data-y-desktop="1400" data-x-mobile="1100" data-y-mobile="1400" data-prev-page="tumski04.html"></div>
-                <div class="custom-cursor-backarea" data-x-desktop="100" data-y-desktop="1400" data-x-mobile="1100" data-y-mobile="1400">
+                <div class="custom-cursor-back" data-x-desktop="100" data-y-desktop="1500" data-x-mobile="1100" data-y-mobile="1450" data-prev-page="tumski05.html"></div>
+                <div class="custom-cursor-backarea" data-x-desktop="100" data-y-desktop="1500" data-x-mobile="1100" data-y-mobile="1450">
+                </div>
+                
+                <!-- Стрелка влево -->
+                <div class="custom-cursor-left" data-x-desktop="1350" data-y-desktop="1300" data-x-mobile="400" data-y-mobile="1400" data-next-page="tumski18.html"></div>
+                <div class="custom-cursor-leftarea" data-x-desktop="1350" data-y-desktop="1300" data-x-mobile="400" data-y-mobile="1400">
                 </div>
             </div>
         </div>
        <div class="next-image-container"></div>
     </div>
-    <script type="module" src="tumski17_init.js"></script>
+    <script type="module" src="tumski06_init.js"></script>
 </body>
 </html> 

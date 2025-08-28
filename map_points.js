@@ -23,8 +23,8 @@ const mapPoints = {
     mobile: { x: 29, y: 67 }
   },
   6: { 
-    desktop: { x: 44, y: 56 },
-    mobile: { x: 50, y: 56 }
+    desktop: { x: 42, y: 69 },
+    mobile: { x: 42, y: 74 }
   },
   7: { 
     desktop: { x: 48, y: 66 },
@@ -67,8 +67,8 @@ const mapPoints = {
     mobile: { x: 64, y: 36 }
   },
   17: { 
-    desktop: { x: 82, y: 18 },
-    mobile: { x: 88, y: 18 }
+    desktop: { x: 28, y: 55 },
+    mobile: { x: 28, y: 61 }
   },
   18: { 
     desktop: { x: 38, y: 86 },
