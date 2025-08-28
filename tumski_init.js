@@ -26,8 +26,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                     handlerType: 'setupRightArrowHandler',
                     callback: () => {
                         const prevPage = document.querySelector('.custom-cursor').getAttribute('data-prev-page');
-                        if (prevPage) {
-                            window.location.href = prevPage;
+                    if (prevPage) {
+                        window.location.href = prevPage;
                         }
                     }
                 },
@@ -38,8 +38,8 @@ document.addEventListener('DOMContentLoaded', async function() {
                     handlerType: 'setupForwardArrowHandler',
                     callback: () => {
                         const nextPage = document.querySelector('.custom-cursor-prosto').getAttribute('data-next-page');
-                        if (nextPage) {
-                            window.location.href = nextPage;
+                    if (nextPage) {
+                        window.location.href = nextPage;
                         }
                     }
                 }

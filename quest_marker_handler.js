@@ -358,7 +358,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                         back.style.backfaceVisibility = 'hidden';
                         back.style.overflow = 'hidden';
                         const backImg = document.createElement('img');
-                        backImg.src = 'media/watercolor/oldcard.jpg';
+                        backImg.src = (markerId === 'mysterious_lion_quest' || questNumber === 1 || (questImage && questImage.indexOf('lev') !== -1)) ? 'media/watercolor/lev.jpg' : 'media/watercolor/oldcard.jpg';
                         backImg.alt = 'Открытка (оборот)';
                         backImg.style.position = 'absolute';
                         backImg.style.top = '0';
@@ -910,7 +910,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                             backImg.style.background = 'transparent';
                                             backImg.style.borderRadius = '0';
                                             backImg.style.zIndex = '1';
-                                            backImg.src = 'media/watercolor/oldcard.jpg';
+                                            backImg.src = (markerId === 'mysterious_lion_quest' || questNumber === 1 || (questImage && questImage.indexOf('lev') !== -1)) ? 'media/watercolor/lev.jpg' : 'media/watercolor/oldcard.jpg';
                                             back.appendChild(backImg);
                                             back.appendChild(backCard);
 
