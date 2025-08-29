@@ -11,11 +11,12 @@ function ensureAudioElement(id, src, loop = false) {
     return audio;
 }
 
+let mapSound = null;
+
 export function initBackgroundMusic() {
-    // Создаём аудио-элементы, если их нет
+    // Создаём только основные аудио-элементы
     const backgroundMusic = ensureAudioElement('backgroundMusic', 'media/zwyki/town.mp3', true);
     const stepSound = ensureAudioElement('stepSound', 'media/step.wav');
-    const mapSound = ensureAudioElement('mapSound', 'media/zwyki/bb6f2b8ec908f28.mp3');
     const musicHint = document.querySelector('#musicHint');
     const animationHint = document.querySelector('#animationHint');
     const isMuted = localStorage.getItem('soundMuted') === 'true';
@@ -66,5 +67,13 @@ export function initBackgroundMusic() {
 
     // Глобальные функции для воспроизведения шагов и карты
     window.playStepSound = () => playSound(stepSound);
-    window.playMapSound = () => playSound(mapSound);
+    window.playMapSound = () => {
+        // Создаем звук карты только при первом вызове
+        if (!mapSound) {
+            mapSound = ensureAudioElement('mapSound', 'media/zwyki/bb6f2b8ec908f28.mp3');
+            mapSound.volume = 0.7;
+            mapSound.muted = isMuted;
+        }
+        playSound(mapSound);
+    };
 } 

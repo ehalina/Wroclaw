@@ -330,7 +330,7 @@ const BOOK_ZONES_CONFIG = {
                     }
                     if (book32Img) book32Img.style.display = 'none';
 
-                    if (window.playMapSound) window.playMapSound();
+
 
                     // Обновляем текст для зоны 1
                     updateModalText(1);
@@ -403,7 +403,7 @@ const BOOK_ZONES_CONFIG = {
                         additionalImg.style.display = 'block';
                     }
                     
-                    if (window.playMapSound) window.playMapSound();
+
 
                     // Обновляем текст для зоны 2
                     updateModalText(2);
@@ -480,7 +480,7 @@ const BOOK_ZONES_CONFIG = {
                     if (book31Img) book31Img.style.display = 'block';
                     if (book32Img) book32Img.style.display = 'block';
                     
-                    if (window.playMapSound) window.playMapSound();
+
 
                     // Обновляем видимость зон
                     const rightZones = document.querySelector('.right-zones');
@@ -555,7 +555,7 @@ const BOOK_ZONES_CONFIG = {
                         additionalImg.style.display = 'block';
                     }
                     
-                    if (window.playMapSound) window.playMapSound();
+
 
                     // Обновляем видимость зон
                     const rightZones = document.querySelector('.right-zones');
@@ -581,7 +581,7 @@ const BOOK_ZONES_CONFIG = {
                     }
                     if (book32Img) book32Img.style.display = 'none';
 
-                    if (window.playMapSound) window.playMapSound();
+
 
                     // Обновляем текст для зоны 1
                     updateModalText(1);
@@ -642,7 +642,7 @@ const BOOK_ZONES_CONFIG = {
                         additionalImg.style.display = 'block';
                     }
                     
-                    if (window.playMapSound) window.playMapSound();
+
 
                     // Обновляем видимость зон
                     const rightZones = document.querySelector('.right-zones');
@@ -716,7 +716,7 @@ const BOOK_ZONES_CONFIG = {
                     if (book31Img) book31Img.style.display = 'block';
                     if (book32Img) book32Img.style.display = 'block';
                     
-                    if (window.playMapSound) window.playMapSound();
+
 
                     // Обновляем видимость зон
                     const rightZones = document.querySelector('.right-zones');
@@ -791,7 +791,7 @@ const BOOK_ZONES_CONFIG = {
                         additionalImg.style.display = 'block';
                     }
                     
-                    if (window.playMapSound) window.playMapSound();
+
 
                     // Обновляем видимость зон
                     const rightZones = document.querySelector('.right-zones');
