@@ -158,6 +158,44 @@ document.addEventListener('DOMContentLoaded', async function() {
             stepSound = mod.createStepSound();
         }
         
+        // Добавляем обработчик для стрелки прямо
+        const cursorProsto = document.querySelector('.custom-cursor-prosto');
+        const cursorProstoArea = document.querySelector('.custom-cursor-prostoarea');
+        
+        if (cursorProsto && cursorProstoArea) {
+            // Добавляем прямой обработчик клика для мобильных устройств
+            const handleForwardClick = () => {
+                const nextPage = cursorProsto.getAttribute('data-next-page');
+                if (nextPage) {
+                    if (stepSound) {
+                        stepSound.play().then(() => {
+                            window.location.href = nextPage;
+                        }).catch(() => {
+                            window.location.href = nextPage;
+                        });
+                    } else {
+                        window.location.href = nextPage;
+                    }
+                }
+            };
+
+            // Добавляем обработчики для обоих элементов
+            cursorProsto.addEventListener('click', handleForwardClick);
+            cursorProsto.addEventListener('touchend', handleForwardClick);
+            cursorProstoArea.addEventListener('click', handleForwardClick);
+            cursorProstoArea.addEventListener('touchend', handleForwardClick);
+
+            // Оставляем оригинальный обработчик для десктопа
+            if (typeof window.setupForwardArrowHandler === 'function') {
+                window.setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, () => {
+                    const nextPage = cursorProsto.getAttribute('data-next-page');
+                    if (nextPage) {
+                        window.location.href = nextPage;
+                    }
+                });
+            }
+        }
+
         // Добавляем обработчик для стрелки назад
         const cursorBack = document.querySelector('.custom-cursor-back');
         const cursorBackArea = document.querySelector('.custom-cursor-backarea');
@@ -272,7 +310,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     // 10. Принудительное применение стилей для мобильной версии
     if (window.innerWidth <= 700) {
         setTimeout(() => {
-            const cursors = document.querySelectorAll('.custom-cursor-back, .custom-cursor-backarea');
+            const cursors = document.querySelectorAll('.custom-cursor, .custom-cursor-prosto, .custom-cursor-area, .custom-cursor-prostoarea');
             cursors.forEach(cursor => {
                 cursor.style.opacity = '1';
                 cursor.style.display = 'block';

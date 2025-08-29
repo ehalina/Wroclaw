@@ -1525,19 +1525,28 @@ const MapModal = {
                         back.style.backfaceVisibility = 'hidden';
                         back.style.overflow = 'hidden';
                         const backImg = document.createElement('img');
-                        backImg.src = 'media/watercolor/oldcard.jpg';
+                        backImg.src = (i === 1) ? 'media/watercolor/lev.jpg' : 'media/watercolor/oldcard.jpg';
                         backImg.alt = 'Открытка (оборот)';
                         backImg.style.position = 'absolute';
                         backImg.style.top = '0';
                         backImg.style.left = '0';
                         backImg.style.width = '100%';
                         backImg.style.height = '100%';
-                        backImg.style.objectFit = 'fill';
                         backImg.style.display = 'block';
-                        backImg.style.padding = '0';
                         backImg.style.boxSizing = 'border-box';
-                        backImg.style.background = 'transparent';
-                        backImg.style.borderRadius = '0';
+                        
+                        // Для lev.jpg добавляем белые поля, как у lev_02.jpg
+                        if (i === 1) {
+                            backImg.style.objectFit = 'contain';
+                            backImg.style.padding = '8px';
+                            backImg.style.background = '#fff';
+                            backImg.style.borderRadius = '5px';
+                        } else {
+                            backImg.style.objectFit = 'fill';
+                            backImg.style.padding = '0';
+                            backImg.style.background = 'transparent';
+                            backImg.style.borderRadius = '0';
+                        }
                         back.appendChild(backImg);
 
                         // Добавим сверху текст (quest.back) поверх оборота
@@ -1577,6 +1586,44 @@ const MapModal = {
                         back.appendChild(backCard);
                         backCard.appendChild(backText);
 
+                        // Функция подгонки размера текста
+                        const fitBackText = () => {
+                            const minPx = 8;
+                            const maxPx = 24;
+                            let best = minPx;
+                            const padding = 20; // увеличиваем отступы
+                            
+                            // Ждем, пока элементы получат размеры
+                            if (!back.clientHeight || !back.clientWidth) {
+                                setTimeout(fitBackText, 50);
+                                return;
+                            }
+                            
+                            const availableHeight = Math.max(0, back.clientHeight - padding);
+                            const availableWidth = Math.max(0, back.clientWidth - padding);
+                            
+                            // Бинарный поиск оптимального размера шрифта
+                            let low = minPx;
+                            let high = maxPx;
+                            
+                            while (low <= high) {
+                                const mid = Math.floor((low + high) / 2);
+                                backText.style.fontSize = mid + 'px';
+                                
+                                // Принудительно пересчитываем layout
+                                backText.offsetHeight;
+                                
+                                const fits = backText.scrollHeight <= availableHeight && backText.scrollWidth <= availableWidth;
+                                if (fits) {
+                                    best = mid;
+                                    low = mid + 1;
+                                } else {
+                                    high = mid - 1;
+                                }
+                            }
+                            backText.style.fontSize = best + 'px';
+                        };
+
                         flipCard.appendChild(front);
                         flipCard.appendChild(back);
 
@@ -1590,6 +1637,19 @@ const MapModal = {
                         flipScene.appendChild(ratioBox);
                         ratioBox.appendChild(flipCard);
                         questTasksList.appendChild(flipScene);
+
+                        // Запускаем подгонку размера текста после вставки в DOM
+                        setTimeout(() => {
+                            fitBackText();
+                            // Подгон после загрузки изображения оборота
+                            if (backImg.complete) {
+                                fitBackText();
+                            } else {
+                                backImg.addEventListener('load', () => {
+                                    setTimeout(fitBackText, 50);
+                                });
+                            }
+                        }, 100);
 
                         // Звук и обработчики
                         const questSound = new Audio('media/zwyki/quest.mp3');

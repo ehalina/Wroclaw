@@ -127,6 +127,31 @@
     opacity: 1;
 }
 
+/* Стрелка прямо */
+.custom-cursor-prosto {
+    width: 64px;
+    height: 64px;
+    position: absolute;
+    background-image: url('media/strelka_prosto.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
+    opacity: 1; /* Показываем стрелку по умолчанию */
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+    cursor: pointer;
+    pointer-events: auto; /* Разрешаем взаимодействие */
+    /* Возвращаем правильное позиционирование */
+    transform: translateX(-50%) translateY(-50%);
+    left: 50%;
+    top: 50%;
+}
+
+.custom-cursor-prostoarea:hover .custom-cursor-prosto {
+    opacity: 1;
+    pointer-events: auto;
+}
+
 /* На мобильных устройствах показываем стрелку всегда */
 @media (max-width: 700px) {
     .custom-cursor-back {
@@ -137,6 +162,39 @@
         /* Увеличиваем область для лучшего взаимодействия на мобильных */
         width: 80%;
         height: 30%;
+    }
+    
+    .custom-cursor-prosto {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+    }
+    
+    .custom-cursor-prostoarea {
+        /* Увеличиваем область для лучшего взаимодействия на мобильных */
+        width: 80px !important;
+        height: 80px !important;
+        pointer-events: auto !important;
+    }
+    
+    /* Принудительно показываем стрелку прямо на мобильных */
+    .custom-cursor-prostoarea .custom-cursor-prosto {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+        display: block !important;
+        /* Исправляем позиционирование на мобильных */
+        position: absolute !important;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translateX(-50%) translateY(-50%) !important;
+        width: 64px !important;
+        height: 64px !important;
+    }
+    
+    /* Убираем эффект наведения для стрелки прямо на мобильных */
+    .custom-cursor-prostoarea:hover .custom-cursor-prosto {
+        opacity: 1 !important;
     }
 }
 
@@ -390,7 +448,6 @@
     }
     /* Стрелки всегда видимы и активны */
     .custom-cursor,
-    .custom-cursor-prosto,
     .custom-cursor-back,
     .custom-cursor-area,
     .custom-cursor-backarea,
@@ -404,6 +461,23 @@
         width: 80px !important;
         height: 80px !important;
         transform: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    /* Стрелка прямо */
+    .custom-cursor-prosto {
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+        z-index: 9999 !important;
+        position: absolute !important;
+        width: 64px !important;
+        height: 64px !important;
+        transform: translateX(-50%) translateY(-50%) !important;
+        left: 50% !important;
+        top: 50% !important;
         margin: 0 !important;
         padding: 0 !important;
     }

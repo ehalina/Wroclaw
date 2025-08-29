@@ -17,7 +17,9 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
     }
 
     // Функция обработчик для открытия квеста
-    async function openQuest() {
+    async function openQuest(e) {
+        // Определяем, открыто ли через клик по map-mark с эффектом свечения (quest-marker-glow)
+        const openedViaGlowMarker = !!(e && e.currentTarget === marker && marker.classList && marker.classList.contains('quest-marker-glow'));
         const suppressEffects = !!window.__quest_suppress_effects;
         const bookOverlay = document.querySelector('.book-overlay');
         const bookContainer = bookOverlay.querySelector('.book-container');
@@ -358,19 +360,28 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                         back.style.backfaceVisibility = 'hidden';
                         back.style.overflow = 'hidden';
                         const backImg = document.createElement('img');
-                        backImg.src = (markerId === 'mysterious_lion_quest' || questNumber === 1 || (questImage && questImage.indexOf('lev') !== -1)) ? 'media/watercolor/lev.jpg' : 'media/watercolor/oldcard.jpg';
+                        backImg.src = (i === 1) ? 'media/watercolor/lev.jpg' : 'media/watercolor/oldcard.jpg';
                         backImg.alt = 'Открытка (оборот)';
                         backImg.style.position = 'absolute';
                         backImg.style.top = '0';
                         backImg.style.left = '0';
                         backImg.style.width = '100%';
                         backImg.style.height = '100%';
-                        backImg.style.objectFit = 'fill';
                         backImg.style.display = 'block';
-                        backImg.style.padding = '0';
                         backImg.style.boxSizing = 'border-box';
-                        backImg.style.background = 'transparent';
-                        backImg.style.borderRadius = '0';
+                        
+                        // Для lev.jpg добавляем белые поля, как у lev_02.jpg
+                        if (i === 1) {
+                            backImg.style.objectFit = 'contain';
+                            backImg.style.padding = '8px';
+                            backImg.style.background = '#fff';
+                            backImg.style.borderRadius = '5px';
+                        } else {
+                            backImg.style.objectFit = 'fill';
+                            backImg.style.padding = '0';
+                            backImg.style.background = 'transparent';
+                            backImg.style.borderRadius = '0';
+                        }
 
                         const backCard = document.createElement('div');
                         backCard.style.position = 'absolute';
@@ -408,12 +419,55 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                         back.appendChild(backCard);
                         backCard.appendChild(backText);
 
+                        // Функция подгонки размера текста
+                        const fitBackText = () => {
+                            const minPx = 8;
+                            const maxPx = 24;
+                            let best = minPx;
+                            const padding = 20; // увеличиваем отступы
+                            
+                            // Ждем, пока элементы получат размеры
+                            if (!back.clientHeight || !back.clientWidth) {
+                                setTimeout(fitBackText, 50);
+                                return;
+                            }
+                            
+                            const availableHeight = Math.max(0, back.clientHeight - padding);
+                            const availableWidth = Math.max(0, back.clientWidth - padding);
+                            
+                            // Бинарный поиск оптимального размера шрифта
+                            let low = minPx;
+                            let high = maxPx;
+                            
+                            while (low <= high) {
+                                const mid = Math.floor((low + high) / 2);
+                                backText.style.fontSize = mid + 'px';
+                                
+                                // Принудительно пересчитываем layout
+                                backText.offsetHeight;
+                                
+                                const fits = backText.scrollHeight <= availableHeight && backText.scrollWidth <= availableWidth;
+                                if (fits) {
+                                    best = mid;
+                                    low = mid + 1;
+                                } else {
+                                    high = mid - 1;
+                                }
+                            }
+                            backText.style.fontSize = best + 'px';
+                        };
+
                         flipCard.appendChild(front);
                         flipCard.appendChild(back);
 
-                        // Заменяем контейнер картинок на flip-сцену
-                        const parentForCard = imageContainer.parentNode;
-                        if (parentForCard) {
+                        // Заменяем контейнер картинок на flip-сцену. Если контейнер ещё не в DOM (кэш сделал preparedImg.complete=true
+                        // и buildFlipFrom вызвался синхронно до appendChild), повторяем попытку на следующем тике.
+                        const attemptReplace = () => {
+                            const parentForCard = imageContainer.parentNode;
+                            if (!parentForCard) {
+                                setTimeout(attemptReplace, 0);
+                                return;
+                            }
                             parentForCard.replaceChild(flipScene, imageContainer);
                             // Гарантируем кликабельность всей сцены
                             flipScene.style.pointerEvents = 'auto';
@@ -422,7 +476,19 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                             backImg.style.pointerEvents = 'auto';
                             flipScene.appendChild(ratioBox);
                             ratioBox.appendChild(flipCard);
-                        }
+                        };
+                        attemptReplace();
+
+                        // Запускаем подгонку размера текста после вставки в DOM
+                        setTimeout(() => {
+                            fitBackText();
+                            // Подгон после загрузки изображения оборота
+                            if (backImg.complete) {
+                                fitBackText();
+                            } else {
+                                backImg.addEventListener('load', fitBackText);
+                            }
+                        }, 100);
 
                         // Звуки
                         const flipSound = new Audio('media/opening-a-book.wav');
@@ -895,7 +961,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                             backText.style.fontWeight = 'normal';
 
                                             backCard.appendChild(backText);
-                                            // Картинка oldcard.jpg снизу, без белых полей
+                                            // Картинка оборота с условными стилями
                                             const backImg = document.createElement('img');
                                             backImg.alt = 'Открытка (оборот)';
                                             backImg.style.position = 'absolute';
@@ -903,14 +969,23 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                             backImg.style.left = '0';
                                             backImg.style.width = '100%';
                                             backImg.style.height = '100%';
-                                            backImg.style.objectFit = 'fill';
                                             backImg.style.display = 'block';
-                                            backImg.style.padding = '0';
                                             backImg.style.boxSizing = 'border-box';
-                                            backImg.style.background = 'transparent';
-                                            backImg.style.borderRadius = '0';
                                             backImg.style.zIndex = '1';
-                                            backImg.src = (markerId === 'mysterious_lion_quest' || questNumber === 1 || (questImage && questImage.indexOf('lev') !== -1)) ? 'media/watercolor/lev.jpg' : 'media/watercolor/oldcard.jpg';
+                                            backImg.src = (questNumber === 1) ? 'media/watercolor/lev.jpg' : 'media/watercolor/oldcard.jpg';
+                                            
+                                            // Для lev.jpg добавляем белые поля, как у lev_02.jpg
+                                            if (questNumber === 1) {
+                                                backImg.style.objectFit = 'contain';
+                                                backImg.style.padding = '8px';
+                                                backImg.style.background = '#fff';
+                                                backImg.style.borderRadius = '5px';
+                                            } else {
+                                                backImg.style.objectFit = 'fill';
+                                                backImg.style.padding = '0';
+                                                backImg.style.background = 'transparent';
+                                                backImg.style.borderRadius = '0';
+                                            }
                                             back.appendChild(backImg);
                                             back.appendChild(backCard);
 
@@ -922,18 +997,31 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                             backText.style.margin = '8px auto 0';
 
                                             const fitBackText = () => {
-                                                const minPx = 10;
-                                                const computed = parseFloat(window.getComputedStyle(backText).fontSize) || 20;
-                                                const maxPx = Math.max(minPx, Math.round(computed));
-                                                let low = minPx;
-                                                let high = maxPx;
+                                                const minPx = 8;
+                                                const maxPx = 24;
                                                 let best = minPx;
-                                                const padding = 16;
+                                                const padding = 20; // увеличиваем отступы
+                                                
+                                                // Ждем, пока элементы получат размеры
+                                                if (!back.clientHeight || !back.clientWidth) {
+                                                    setTimeout(fitBackText, 50);
+                                                    return;
+                                                }
+                                                
                                                 const availableHeight = Math.max(0, back.clientHeight - padding);
                                                 const availableWidth = Math.max(0, back.clientWidth - padding);
+                                                
+                                                // Бинарный поиск оптимального размера шрифта
+                                                let low = minPx;
+                                                let high = maxPx;
+                                                
                                                 while (low <= high) {
                                                     const mid = Math.floor((low + high) / 2);
                                                     backText.style.fontSize = mid + 'px';
+                                                    
+                                                    // Принудительно пересчитываем layout
+                                                    backText.offsetHeight;
+                                                    
                                                     const fits = backText.scrollHeight <= availableHeight && backText.scrollWidth <= availableWidth;
                                                     if (fits) {
                                                         best = mid;
@@ -945,10 +1033,12 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                                 backText.style.fontSize = best + 'px';
                                             };
                                             // Инициализация после вставки в DOM
-                                            setTimeout(fitBackText, 0);
+                                            setTimeout(fitBackText, 100);
                                             // Подгон после загрузки изображения оборота
-                                            backImg.addEventListener('load', fitBackText);
-                                            if (backImg.complete) setTimeout(fitBackText, 0);
+                                            backImg.addEventListener('load', () => {
+                                                setTimeout(fitBackText, 50);
+                                            });
+                                            if (backImg.complete) setTimeout(fitBackText, 100);
                                             if (typeof ResizeObserver !== 'undefined') {
                                                 const ro = new ResizeObserver(() => fitBackText());
                                                 ro.observe(back);
