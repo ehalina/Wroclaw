@@ -1,0 +1,56 @@
+// Универсальный обработчик для геометок с квестами
+export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
+    const marker = document.getElementById(markerId);
+    if (!marker) return;
+
+    // Находим родительский элемент map-mark-area и в нем ищем название геометки
+    const markArea = marker.closest('.map-mark-area');
+    const markerTitle = markArea ? markArea.querySelector('.tumski-text') : null;
+
+    // Добавляем обработчик на значок геометки
+    marker.addEventListener('click', openQuest);
+
+    // Добавляем обработчик на название геометки, если оно найдено
+    if (markerTitle) {
+        markerTitle.style.cursor = 'pointer';
+        markerTitle.addEventListener('click', openQuest);
+    }
+
+    // Функция обработчик для открытия квеста
+    async function openQuest(e) {
+        // ... остальной код без изменений ...
+
+        // В месте, где создается flip-карточка:
+        if (questNumber === 1) {
+            // Добавляем текст "Ожидание:" на лицевую сторону
+            const expectationText = document.createElement('div');
+            expectationText.textContent = window.i18n ? window.i18n.t('quest.expectation') : 'Ожидание:';
+            expectationText.style.position = 'absolute';
+            expectationText.style.top = '10px';
+            expectationText.style.left = '30%';
+            expectationText.style.transform = 'translateX(-50%)';
+            expectationText.style.color = '#5b4636';
+            expectationText.style.fontSize = '20px';
+            expectationText.style.fontFamily = '"Marck Script", cursive, serif';
+            expectationText.style.fontWeight = 'normal';
+            expectationText.style.zIndex = '2';
+            front.appendChild(expectationText);
+
+            // Добавляем текст "Реальность:" на обратную сторону
+            const realityText = document.createElement('div');
+            realityText.textContent = window.i18n ? window.i18n.t('quest.reality') : 'Реальность:';
+            realityText.style.position = 'absolute';
+            realityText.style.top = '10px';
+            realityText.style.left = '30%';
+            realityText.style.transform = 'translateX(-50%)';
+            realityText.style.color = '#5b4636';
+            realityText.style.fontSize = '20px';
+            realityText.style.fontFamily = '"Marck Script", cursive, serif';
+            realityText.style.fontWeight = 'normal';
+            realityText.style.zIndex = '2';
+            back.appendChild(realityText);
+        }
+
+        // ... остальной код без изменений ...
+    }
+}

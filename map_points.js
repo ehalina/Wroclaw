@@ -71,8 +71,8 @@ const mapPoints = {
     mobile: { x: 28, y: 61 }
   },
   18: { 
-    desktop: { x: 38, y: 86 },
-    mobile: { x: 45, y: 86 }
+    desktop: { x: 48, y: 70 },
+    mobile: { x: 45, y: 75 }
   },
   19: { 
     desktop: { x: 32, y: 88 },

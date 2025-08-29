@@ -14,10 +14,7 @@
     height: 25%;
 }
 
-.custom-cursor-leftarea {
-    width: 150px;
-    height: 150px;
-}
+
 
 /* Уникальная квест‑метка */
 #bogomater_quest {
@@ -28,4 +25,5 @@
     height: 50px;
     cursor: pointer;
 }
+
 

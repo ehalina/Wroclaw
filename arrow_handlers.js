@@ -596,8 +596,21 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
             onBackClick();
         }, 300);
     });
-    
+
     // Обработчик touch по стрелке назад (мобильные устройства)
+    cursorBackArea.addEventListener('touchend', function(e) {
+        e.preventDefault(); // Предотвращаем стандартное поведение
+        hideAllCursors();
+        if (stepSound) {
+            stepSound.currentTime = 0;
+            stepSound.play();
+        }
+        
+        setTimeout(() => {
+            onBackClick();
+        }, 300);
+    });
+
     cursorBack.addEventListener('touchend', function(e) {
         e.preventDefault(); // Предотвращаем стандартное поведение
         hideAllCursors();

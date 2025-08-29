@@ -413,6 +413,34 @@
         top: 50% !important;
     }
     
+    /* Отдельные стили для стрелки назад */
+    .custom-cursor-back {
+        opacity: 1 !important;
+        width: 64px !important;
+        height: 64px !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+        position: absolute !important;
+        z-index: 9999 !important;
+        transform: translate(-50%, -50%) !important;
+        left: 50% !important;
+        top: 50% !important;
+    }
+    
+    .custom-cursor-backarea {
+        width: 80px !important;
+        height: 80px !important;
+        position: absolute !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+        z-index: 9999 !important;
+        transform: translate(-50%, -50%) !important;
+        left: 50% !important;
+        top: 50% !important;
+    }
+    
     /* Убрать эффекты наведения */
     .custom-cursor-area:hover .custom-cursor,
     .custom-cursor-prostoarea:hover .custom-cursor-prosto,

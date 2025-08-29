@@ -1152,10 +1152,13 @@ const MapModal = {
         openMapBtn.addEventListener('click', async function(e) {
             e.preventDefault();
             mapModal.style.display = 'flex';
-            // Воспроизводим звук карты
-            const mapSound = document.getElementById('mapSound');
-            if (mapSound) mapSound.play();
-            
+            // Проверяем глобальный mute
+            const soundMenuBtn = document.querySelector('.sound-menu-button');
+            const isMuted = soundMenuBtn && soundMenuBtn.classList.contains('muted');
+            // Воспроизводим звук карты только если не muted
+            if (!isMuted && window.playMapSound) {
+                window.playMapSound();
+            }
             // Воспроизводим звук открытия книги
             const bookSound = document.getElementById('bookSound');
             if (bookSound) bookSound.play();
@@ -1653,7 +1656,7 @@ const MapModal = {
 
                         // Звук и обработчики
                         const questSound = new Audio('media/zwyki/quest.mp3');
-                        questSound.loop = true;
+                        questSound.volume = 0.4;
                         const flipSound = new Audio('media/opening-a-book.wav');
                         const isGloballyMuted = () => {
                             const mainSoundButton = document.querySelector('.sound-menu-button');
