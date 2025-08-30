@@ -8,4 +8,40 @@ document.addEventListener('DOMContentLoaded', async function() {
     } catch (_) {}
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    const playButton = document.getElementById('play-button');
+    const video = document.getElementById('background-video');
+    const image = document.querySelector('.image');
+    
+    console.log('Инициализация кнопки play:', { playButton: !!playButton, video: !!video, image: !!image });
+    
+    if (playButton && video && image) {
+        playButton.addEventListener('click', () => {
+            console.log('Клик по кнопке play зарегистрирован');
+            video.style.opacity = '1';
+            video.playbackRate = 0.2; // Установить скорость воспроизведения на 0.5
+            video.play().then(() => {
+                console.log('Видео начало воспроизведение');
+            }).catch(err => {
+                console.error('Ошибка при воспроизведении видео:', err);
+            });
+            image.style.zIndex = '0';
+            video.style.zIndex = '1';
+            playButton.style.display = 'none';
+        });
+        
+        playButton.addEventListener('mousedown', () => {
+            console.log('mousedown на кнопке play');
+        });
+        
+        playButton.addEventListener('mouseup', () => {
+            console.log('mouseup на кнопке play');
+        });
+        
+        console.log('Обработчик клика для кнопки play добавлен');
+    } else {
+        console.error('Не все элементы найдены для кнопки play');
+    }
+});
+
 

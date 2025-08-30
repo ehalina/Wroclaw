@@ -15,8 +15,8 @@
 }
 
 /* Индивидуальные размеры области стрелки назад */
-.custom-cursor-backarea {
+    .custom-cursor-backarea {
     width: 60%;
     height: 25%;
-}
+} 
 

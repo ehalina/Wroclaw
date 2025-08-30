@@ -1,0 +1,16 @@
+/* Уникальные стили страницы tumski02 */
+
+.image {
+    background-image: url('media/tumski/tumski_19.jpg');
+}
+
+.next-image-container {
+    background-image: url('media/tumski/tumski_20.jpg');
+}
+
+/* Индивидуальный размер области стрелки влево */
+.custom-cursor-leftarea {
+    width: 350px;
+    height: 500px;
+}
+

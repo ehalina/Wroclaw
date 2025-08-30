@@ -62,7 +62,9 @@
     transform-style: preserve-3d;
     transform: translateZ(0);
     overflow: hidden;
+    animation: moveForward 40s linear infinite;
 }
+
 
 /* ===== СТРЕЛКИ ===== */
 /* Общие стили для всех стрелок */
@@ -464,8 +466,13 @@
     
     .image-container {
         height: 100vh;
+        animation: moveForward 40s linear infinite;
     }
     
+    .zoom-transition {
+        animation: zoomForward 1.5s ease-in forwards !important;
+    }
+
     .image-scroll-wrapper {
         width: 100vw;
         height: 100vh;

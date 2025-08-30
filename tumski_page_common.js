@@ -200,7 +200,7 @@ function setupAllArrows(stepSound) {
                 const next = cursorProsto.getAttribute('data-next-page');
                 if (next) window.location.href = next;
             });
-            attachDirectNav(cursorProsto, areaProsto, 'data-next-page');
+            // attachDirectNav(cursorProsto, areaProsto, 'data-next-page'); // Удалено: мешало анимации перехода
         }
 
         // Назад (data-prev-page на .custom-cursor-back)

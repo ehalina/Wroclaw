@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тумский остров - Вроцлав</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="common_tumski.css">
+    <link rel="stylesheet" href="tumski21.css">
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
+    <script src="i18n.js"></script>
+    <script src="common.js"></script>
+    <script src="arrow_handlers.js"></script>
+    <script src="book_paths.js"></script>
+    <script src="common_buttons.js"></script>
+    <script src="language_menu.js"></script>
+    <script src="map_modal.js"></script>
+    <script type="module" src="background_music.js"></script>
+    <script type="module" src="tumski_cathedral_handler.js"></script>
+    <script type="module" src="map_points.js"></script>
+</head>
+<body>
+
+    <!-- Подсказка для запуска музыки -->
+    <div id="musicHint" class="music-hint" data-i18n="music.hint"></div>
+    <!-- Подсказка для возврата анимации -->
+    <div id="animationHint" class="animation-hint" data-i18n="animation.hint"></div>
+
+    <!-- Главная сцена с фоновым изображением и анимацией -->
+    <div class="scene">
+        <div class="image-container" data-map-point="19">
+            <!-- Видео на заднем плане -->
+            <video id="background-video" src="media/tumski/sunset.mp4" loop muted playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s ease;"></video>
+            
+            <div class="image-scroll-wrapper">
+                <div class="image">
+                    <!-- Стрелка назад -->
+                    <div class="custom-cursor-back" data-x-desktop="1000" data-y-desktop="1600" data-x-mobile="400" data-y-mobile="1500" data-prev-page="tumski06.html"></div>
+                    <div class="custom-cursor-backarea" data-x-desktop="1000" data-y-desktop="1600" data-x-mobile="400" data-y-mobile="1500">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="next-image-container"></div>
+        <!-- Кнопка play перемещена на уровень scene -->
+        <div id="play-button" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 80px; cursor: pointer; color: white; opacity: 0.7; transition: opacity 0.3s; z-index: 10000;">▶️</div>
+    </div>
+    <script type="module" src="tumski_init.js"></script>
+</body>
+</html> 

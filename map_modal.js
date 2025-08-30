@@ -1518,6 +1518,22 @@ const MapModal = {
                         frontImg.style.borderRadius = '5px';
                         front.appendChild(frontImg);
 
+                        // Если пункт 1 уже активирован — добавляем подпись "Ожидание" на лицевую сторону
+                        if (i === 1 && isPreparedItem) {
+                            const expectationText = document.createElement('div');
+                            expectationText.textContent = (window.i18n ? window.i18n.t('quest.expectation') : 'Ожидание');
+                            expectationText.style.position = 'absolute';
+                            expectationText.style.bottom = '8px';
+                            expectationText.style.left = '50%';
+                            expectationText.style.transform = 'translateX(-50%)';
+                            expectationText.style.color = '#e8dba3';
+                            expectationText.style.fontSize = '30px';
+                            expectationText.style.fontFamily = '"Marck Script", cursive, serif';
+                            expectationText.style.fontWeight = 'normal';
+                            expectationText.style.zIndex = '2';
+                            front.appendChild(expectationText);
+                        }
+
                         const back = document.createElement('div');
                         back.style.position = 'absolute';
                         back.style.top = '0';
@@ -1588,6 +1604,22 @@ const MapModal = {
                         back.appendChild(backImg);
                         back.appendChild(backCard);
                         backCard.appendChild(backText);
+
+                        // Если пункт 1 уже активирован — добавляем подпись "Реальность" на оборот
+                        if (i === 1 && isPreparedItem) {
+                            const realityText = document.createElement('div');
+                            realityText.textContent = (window.i18n ? window.i18n.t('quest.reality') : 'Реальность');
+                            realityText.style.position = 'absolute';
+                            realityText.style.bottom = '8px';
+                            realityText.style.left = '50%';
+                            realityText.style.transform = 'translateX(-50%)';
+                            realityText.style.color = '#e8dba3';
+                            realityText.style.fontSize = '30px';
+                            realityText.style.fontFamily = '"Marck Script", cursive, serif';
+                            realityText.style.fontWeight = 'normal';
+                            realityText.style.zIndex = '2';
+                            back.appendChild(realityText);
+                        }
 
                         // Функция подгонки размера текста
                         const fitBackText = () => {
