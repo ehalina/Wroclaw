@@ -8,11 +8,6 @@
     background-image: url('media/tumski/tumski_19.jpg');
 }
 
-/* Стрелка прямо на этой странице должна быть всегда видимой и кликабельной */
-.custom-cursor-prosto {
-    opacity: 1;
-    pointer-events: auto;
-}
 
 /* Индивидуальные размеры области стрелки назад */
     .custom-cursor-backarea {

@@ -40,24 +40,6 @@ body {
     position: relative;
     overflow: hidden;
     background: #000;
-    aspect-ratio: 1120 / 832;
-}
-
-/* Добавление анимации для изменения границ page-container при зуме */
-.page-container {
-    transition: width 0.5s ease, height 0.5s ease;
-}
-
-/* Пример изменения размеров при увеличении зума */
-.page-container.zoom-in {
-    width: 110vw;
-    height: 110vh;
-}
-
-/* Пример изменения размеров при уменьшении зума */
-.page-container.zoom-out {
-    width: 100vw;
-    height: 100vh;
 }
 
 .parallax-container {
@@ -66,7 +48,6 @@ body {
     height: 100vh;
     overflow: hidden;
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    transition: border-width 0.5s ease;
 }
 
 /* Дополнительный слой для заполнения возможных дыр */
@@ -188,12 +169,12 @@ body {
     z-index: 1000;
 }
 
-@media (max-width: 768px) {
-    .page-container {
+  @media (max-width: 768px) {
+     .page-container {
         width: auto;
         height: 100vh;
         max-width: 100vw;
-    }
+    } 
     
     .controls {
         top: 10px;
@@ -209,7 +190,7 @@ body {
         font-size: 11px;
         max-width: 250px;
     }
-}
+}  
 
 .image {
     background-image: url('');

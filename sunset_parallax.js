@@ -6,6 +6,8 @@ class SunsetParallax {
         this.initialScale = 1.2;
         this.maxScale = 3.0;
         
+        this.pageContainer = document.querySelector('.page-container');
+        this.parallaxContainer = document.querySelector('.parallax-container');
         this.layers = {
             sky: document.querySelector('.layer-sky'),
             horizon: document.querySelector('.layer-horizon'),
@@ -80,6 +82,8 @@ class SunsetParallax {
 
     startAnimation() {
         // Устанавливаем начальные масштабы для полного покрытия экрана
+        gsap.set(this.pageContainer, { scale: 1.0, transformOrigin: '50% 50%' });
+        gsap.set(this.parallaxContainer, { scale: 1.0, transformOrigin: '50% 50%' });
         gsap.set(this.layers.sky, { scale: 1.0 });
         gsap.set(this.layers.horizon, { scale: 1.0 });
         gsap.set(this.layers.buildings, { scale: 1.0 });
@@ -113,6 +117,7 @@ class SunsetParallax {
         const skyScale = this.direction === 1 ? [1.0, 2.0] : [2.0, 1.0];
         const horizonScale = this.direction === 1 ? [1.0, 2.5] : [2.5, 1.0];
         const buildingsScale = this.direction === 1 ? [1.0, 3.0] : [3.0, 1.0];
+        const containerScale = this.direction === 1 ? [1.0, 1.6] : [1.6, 1.0];
 
         // Анимация для неба (почти статично)
         this.timeline.to(this.layers.sky, {
