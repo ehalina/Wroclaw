@@ -181,6 +181,79 @@
             z-index: 1000;
         }
 
+/*
+        /* Стили для модального окна квеста 
+        .book-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .book-container {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+            background: #f5f5dc;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .book-image-content-wrapper {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .book-content-area {
+            width: 100%;
+            text-align: center;
+        }
+
+        .book-title {
+            font-family: 'Marck Script', cursive;
+            font-size: 28px;
+            color: #8B4513;
+            margin-bottom: 20px;
+        }
+
+        .quest-tasks {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .quest-tasks li {
+            margin-bottom: 15px;
+            text-align: left;
+            font-family: serif;
+            color: #5b4636;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 30px;
+            color: #8B4513;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .close-button:hover {
+            color: #654321;
+        }
+*/
         @media (max-width: 768px) {
            .page-container {
             width: 280vw;
@@ -299,14 +372,212 @@
                             </div>
                         </div>
                     </div>
+                                    <!-- Стрелка назад -->
+                <div class="custom-cursor-back" data-x-desktop="1000" data-y-desktop="1600" data-x-mobile="400" data-y-mobile="1500" data-prev-page="tumski06.html"></div>
+                <div class="custom-cursor-backarea" data-x-desktop="1000" data-y-desktop="1600" data-x-mobile="400" data-y-mobile="1500">
+                 </div>
+
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Модальное окно квеста -->
+    <div class="book-overlay">
+        <button class="close-button">×</button>
+        <div class="book-container">
+            <div class="book-image-content-wrapper">
+                <div class="book-content-area">
+                    <h2 class="book-title"></h2>
+                    <ul class="quest-tasks"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <audio id="bookSound" src="media/opening-a-book.wav"></audio>
+
     <script type="module" src="tumski_init.js"></script>
     
     <script>
+        // Кастомная логика для стрелки назад на tumski21
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 DOM загружен, начинаем инициализацию кастомной стрелки назад');
+            
+            // Проверяем наличие модального окна квеста на странице
+            const bookOverlay = document.querySelector('.book-overlay');
+            console.log('🔍 Проверка модального окна квеста на странице:');
+            console.log('  - bookOverlay найден:', !!bookOverlay);
+            if (bookOverlay) {
+                console.log('  - display:', bookOverlay.style.display);
+                console.log('  - visibility:', bookOverlay.style.visibility);
+                
+                // Добавляем обработчик закрытия модального окна
+                const closeButton = bookOverlay.querySelector('.close-button');
+                if (closeButton) {
+                    closeButton.addEventListener('click', () => {
+                        console.log('🚪 Кнопка закрытия нажата');
+                        bookOverlay.style.display = 'none';
+                    });
+                    console.log('✅ Обработчик закрытия добавлен');
+                }
+                
+                // Закрытие по клику вне модального окна
+                bookOverlay.addEventListener('click', (e) => {
+                    if (e.target === bookOverlay) {
+                        console.log('🚪 Клик вне модального окна - закрываем');
+                        bookOverlay.style.display = 'none';
+                    }
+                });
+            } else {
+                console.log('❌ Модальное окно квеста НЕ НАЙДЕНО на странице!');
+                console.log('🔍 Ищем альтернативные элементы:');
+                console.log('  - .book-container:', !!document.querySelector('.book-container'));
+                console.log('  - .quest-overlay:', !!document.querySelector('.quest-overlay'));
+                console.log('  - [class*="book"]:', document.querySelectorAll('[class*="book"]'));
+                console.log('  - [class*="quest"]:', document.querySelectorAll('[class*="quest"]'));
+            }
+            
+            // Импортируем функцию setupQuestGeoMarker
+            import('./quest_marker_handler.js').then(module => {
+                console.log('✅ quest_marker_handler.js успешно загружен');
+                console.log('📦 Доступные функции модуля:', Object.keys(module));
+                
+                const { setupQuestGeoMarker } = module;
+                console.log('🎯 setupQuestGeoMarker функция:', typeof setupQuestGeoMarker);
+                
+                // Находим стрелку назад
+                const backArrow = document.querySelector('.custom-cursor-back');
+                const backArea = document.querySelector('.custom-cursor-backarea');
+                
+                console.log('🔍 Найденные элементы стрелки:');
+                console.log('  - backArrow:', backArrow);
+                console.log('  - backArea:', backArea);
+                
+                if (backArrow && backArea) {
+                    console.log('✅ Оба элемента стрелки найдены');
+                    
+                    // Удаляем стандартные обработчики
+                    backArrow.removeAttribute('data-prev-page');
+                    backArea.removeAttribute('data-prev-page');
+                    console.log('🗑️ Удалены стандартные атрибуты data-prev-page');
+                    
+                    // Добавляем кастомный обработчик
+                    const handleBackClick = () => {
+                        console.log('🖱️ Клик по стрелке назад зарегистрирован!');
+                        
+                        try {
+                            console.log('🎮 Запускаем setupQuestGeoMarker с параметрами:');
+                            console.log('  - markerId: quest-marker-5');
+                            console.log('  - questNumber: 5');
+                            console.log('  - questImage: media/watercolor/5.jpg');
+                            
+                            // Запускаем квест для task5
+                            console.log('🎯 Вызываем setupQuestGeoMarker...');
+                            
+                            // Создаем временный маркер для квеста
+                            const tempMarker = document.createElement('div');
+                            tempMarker.id = 'quest-marker-5';
+                            tempMarker.style.display = 'none';
+                            document.body.appendChild(tempMarker);
+                            
+                            // Настраиваем обработчик квеста
+                            setupQuestGeoMarker({
+                                markerId: 'quest-marker-5',
+                                questNumber: 5,
+                                questImage: 'media/watercolor/5.jpg'
+                            });
+                            
+                            // Симулируем клик по маркеру для запуска квеста
+                            console.log('🔧 DEBUG: Симулируем клик по маркеру квеста');
+                            const marker = document.getElementById('quest-marker-5');
+                            if (marker) {
+                                // Находим обработчик клика и вызываем его напрямую
+                                const clickEvent = new Event('click');
+                                marker.dispatchEvent(clickEvent);
+                                console.log('🔧 DEBUG: Клик по маркеру отправлен');
+                            } else {
+                                console.error('❌ Маркер квеста не найден');
+                            }
+                            
+                            // Удаляем временный маркер
+                            setTimeout(() => {
+                                if (tempMarker.parentNode) {
+                                    tempMarker.parentNode.removeChild(tempMarker);
+                                }
+                            }, 1000);
+                            
+                            console.log('✅ setupQuestGeoMarker вызван успешно');
+                            
+                            // Проверяем, есть ли модальное окно квеста
+                            setTimeout(() => {
+                                const bookOverlay = document.querySelector('.book-overlay');
+                                console.log('🔍 Проверка модального окна через 100мс:');
+                                console.log('  - bookOverlay найден:', !!bookOverlay);
+                                console.log('  - display:', bookOverlay?.style.display);
+                                console.log('  - visibility:', bookOverlay?.style.visibility);
+                                console.log('  - opacity:', bookOverlay?.style.opacity);
+                                
+                                if (bookOverlay) {
+                                    console.log('📋 Все элементы модального окна:');
+                                    console.log('  - bookContainer:', !!bookOverlay.querySelector('.book-container'));
+                                    console.log('  - bookTitle:', !!bookOverlay.querySelector('.book-title'));
+                                    console.log('  - bookSound:', !!document.getElementById('bookSound'));
+                                    console.log('  - questTasksList:', !!bookOverlay.querySelector('.quest-tasks'));
+                                }
+                            }, 100);
+                            
+                            // Слушаем закрытие модального окна квеста
+                            const checkQuestClosed = () => {
+                                const bookOverlay = document.querySelector('.book-overlay');
+                                console.log('🔍 Проверяем состояние модального окна квеста:', bookOverlay?.style.display);
+                                
+                                if (bookOverlay && bookOverlay.style.display === 'none') {
+                                    console.log('🚪 Квест закрыт, выполняем переход на tumski06.html');
+                                    // Квест закрыт, выполняем переход назад
+                                    window.location.href = 'tumski06.html';
+                                } else {
+                                    // Проверяем снова через 100мс
+                                    setTimeout(checkQuestClosed, 100);
+                                }
+                            };
+                            
+                            // Начинаем проверку через небольшую задержку
+                            setTimeout(checkQuestClosed, 500);
+                            console.log('⏰ Запущен мониторинг закрытия квеста');
+                            
+                        } catch (error) {
+                            console.error('❌ Ошибка при вызове setupQuestGeoMarker:', error);
+                        }
+                    };
+                    
+                    // Добавляем обработчики клика
+                    backArrow.addEventListener('click', handleBackClick);
+                    backArea.addEventListener('click', handleBackClick);
+                    console.log('🎯 Обработчики клика добавлены на оба элемента');
+                    
+                } else {
+                    console.error('❌ Не найдены элементы стрелки назад');
+                    console.log('🔍 Доступные элементы с классом custom-cursor:', document.querySelectorAll('.custom-cursor'));
+                }
+            }).catch(error => {
+                console.error('❌ Ошибка загрузки quest_marker_handler.js:', error);
+                console.log('🔄 Переключаемся на fallback поведение');
+                
+                // Fallback: стандартное поведение
+                const backArrow = document.querySelector('.custom-cursor-back');
+                const backArea = document.querySelector('.custom-cursor-backarea');
+                if (backArrow) {
+                    backArrow.setAttribute('data-prev-page', 'tumski06.html');
+                    console.log('🔄 Fallback: добавлен data-prev-page на backArrow');
+                }
+                if (backArea) {
+                    backArea.setAttribute('data-prev-page', 'tumski06.html');
+                    console.log('🔄 Fallback: добавлен data-prev-page на backArea');
+                }
+            });
+        });
+        
         // Улучшенный тач-скролл для мобильных устройств
         document.addEventListener('DOMContentLoaded', function() {
             const parallaxContainer = document.querySelector('.parallax-container');

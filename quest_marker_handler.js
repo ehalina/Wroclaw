@@ -18,18 +18,30 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
 
     // Функция обработчик для открытия квеста
     async function openQuest(e) {
+        console.log('🔧 DEBUG: openQuest вызвана с параметрами:', { questNumber, questImage, markerId });
+        
         // Определяем, открыто ли через клик по map-mark с эффектом свечения (quest-marker-glow)
         const openedViaGlowMarker = !!(e && e.currentTarget === marker && marker.classList && marker.classList.contains('quest-marker-glow'));
         const suppressEffects = !!window.__quest_suppress_effects;
         const bookOverlay = document.querySelector('.book-overlay');
-        const bookContainer = bookOverlay.querySelector('.book-container');
-        const bookTitle = bookOverlay.querySelector('.book-title');
+        const bookContainer = bookOverlay?.querySelector('.book-container');
+        const bookTitle = bookOverlay?.querySelector('.book-title');
         const bookSound = document.getElementById('bookSound');
-        const questTasksList = bookOverlay.querySelector('.quest-tasks');
-        const bookImageContentWrapper = bookOverlay.querySelector('.book-image-content-wrapper');
-        const bookContentArea = bookOverlay.querySelector('.book-content-area');
+        const questTasksList = bookOverlay?.querySelector('.quest-tasks');
+        const bookImageContentWrapper = bookOverlay?.querySelector('.book-image-content-wrapper');
+        const bookContentArea = bookOverlay?.querySelector('.book-content-area');
+
+        console.log('🔧 DEBUG: Проверка элементов модального окна:');
+        console.log('  - bookOverlay:', !!bookOverlay);
+        console.log('  - bookContainer:', !!bookContainer);
+        console.log('  - bookTitle:', !!bookTitle);
+        console.log('  - bookSound:', !!bookSound);
+        console.log('  - questTasksList:', !!questTasksList);
+        console.log('  - bookImageContentWrapper:', !!bookImageContentWrapper);
+        console.log('  - bookContentArea:', !!bookContentArea);
 
         if (!bookOverlay || !bookContainer || !bookTitle || !bookSound || !questTasksList || !bookImageContentWrapper || !bookContentArea) {
+            console.log('❌ DEBUG: Не все элементы найдены, выходим из функции');
             return;
         }
 
@@ -725,7 +737,11 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         questSound.loop = true; // Зацикливаем воспроизведение
 
         // Открываем модальное окно
+        console.log('🔧 DEBUG: Открываем модальное окно квеста');
+        console.log('  - bookOverlay до открытия:', bookOverlay.style.display);
         bookOverlay.style.display = 'flex';
+        console.log('  - bookOverlay после открытия:', bookOverlay.style.display);
+        console.log('  - computed display:', getComputedStyle(bookOverlay).display);
 
         // Сбрасываем прокрутку контента к началу после того, как окно стало видимым
         setTimeout(() => {
