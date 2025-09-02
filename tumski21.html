@@ -73,6 +73,12 @@
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
         }
 
+        .parallax-scroll-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
         .parallax-container::after {
             content: '';
             position: absolute;
@@ -177,7 +183,7 @@
 
         @media (max-width: 768px) {
            .page-container {
-            width: 300vw;
+            width: 280vw;
         height: 100vh;
         background-size: auto 100%;
         background-repeat: no-repeat;
@@ -239,6 +245,34 @@
         width: 300vw;
         height: 1px;
     }
+    
+    /* Исправление для parallax слоев в мобильной версии */
+    .parallax-container {
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        -webkit-overflow-scrolling: touch;
+        touch-action: pan-x;
+        /* Скрываем полосы прокрутки */
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+    }
+    
+    .parallax-container::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+    }
+    
+    .parallax-scroll-wrapper {
+        /* Вычисляем ширину на основе реальных размеров изображений (2464x1856) */
+        width: calc(100vh * 2464 / 1856) !important;
+        height: 100% !important;
+        position: relative;
+    }
+    
+    .parallax-layer {
+        background-size: auto 100% !important;
+        background-position: left top !important;
+        width: calc(100vh * 2464 / 1856) !important;
+    }
         }
     </style>
 </head>
@@ -258,9 +292,11 @@
                 <div class="image">
                     <div class="page-container">
                         <div class="parallax-container">
-                            <div class="parallax-layer layer-sky"></div>
-                            <div class="parallax-layer layer-horizon"></div>
-                            <div class="parallax-layer layer-buildings"></div>
+                            <div class="parallax-scroll-wrapper">
+                                <div class="parallax-layer layer-sky"></div>
+                                <div class="parallax-layer layer-horizon"></div>
+                                <div class="parallax-layer layer-buildings"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -269,6 +305,63 @@
     </div>
 
     <script type="module" src="tumski_init.js"></script>
+    
+    <script>
+        // Улучшенный тач-скролл для мобильных устройств
+        document.addEventListener('DOMContentLoaded', function() {
+            const parallaxContainer = document.querySelector('.parallax-container');
+            
+            if (window.innerWidth <= 768 && parallaxContainer) {
+                let isScrolling = false;
+                let startX = 0;
+                let scrollLeft = 0;
+                
+                // Вычисляем максимальную ширину прокрутки на основе реальных размеров изображений
+                const imageAspectRatio = 2464 / 1856; // Реальные размеры всех изображений (2464x1856)
+                const containerHeight = parallaxContainer.clientHeight;
+                const maxScrollWidth = Math.max(0, (containerHeight * imageAspectRatio) - window.innerWidth);
+                
+                // Обработка тач-событий
+                parallaxContainer.addEventListener('touchstart', function(e) {
+                    isScrolling = true;
+                    startX = e.touches[0].pageX - parallaxContainer.offsetLeft;
+                    scrollLeft = parallaxContainer.scrollLeft;
+                });
+                
+                parallaxContainer.addEventListener('touchmove', function(e) {
+                    if (!isScrolling) return;
+                    e.preventDefault();
+                    const x = e.touches[0].pageX - parallaxContainer.offsetLeft;
+                    const walk = (x - startX) * 2; // Увеличиваем чувствительность
+                    const newScrollLeft = scrollLeft - walk;
+                    
+                    // Ограничиваем прокрутку границами изображения
+                    parallaxContainer.scrollLeft = Math.max(0, Math.min(newScrollLeft, maxScrollWidth));
+                });
+                
+                parallaxContainer.addEventListener('touchend', function() {
+                    isScrolling = false;
+                });
+                
+                // Плавная прокрутка к началу при загрузке
+                setTimeout(() => {
+                    parallaxContainer.scrollTo({
+                        left: 0,
+                        behavior: 'smooth'
+                    });
+                }, 100);
+                
+                // Обработка изменения размера окна
+                window.addEventListener('resize', function() {
+                    const newMaxScrollWidth = Math.max(0, (parallaxContainer.clientHeight * imageAspectRatio) - window.innerWidth);
+                    if (parallaxContainer.scrollLeft > newMaxScrollWidth) {
+                        parallaxContainer.scrollLeft = newMaxScrollWidth;
+                    }
+                });
+            }
+        });
+    </script>
+    
     <audio id="backgroundMusic" loop autoplay hidden>
         <source src="media/zwyki/hang.mp3" type="audio/mpeg">
         Ваш браузер не поддерживает элемент audio.
