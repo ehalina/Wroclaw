@@ -382,6 +382,7 @@
         </div>
     </div>
 
+
     <!-- Модальное окно квеста -->
     <div class="book-overlay">
         <button class="close-button">×</button>
@@ -407,14 +408,14 @@
             if (bookOverlay) {
                 // Функция возобновления основной музыки
                 const resumeBackgroundMusic = () => {
-                    const backgroundMusic = document.getElementById('backgroundMusic');
-                    if (backgroundMusic && backgroundMusic.paused) {
+                    const iframe = window.musicIframe;
+                    if (iframe && iframe.contentWindow && iframe.contentWindow.musicAPI) {
                         // Проверяем, не заглушена ли музыка глобально
                         const soundButton = document.querySelector('.sound-menu-button');
                         const isMuted = soundButton ? soundButton.classList.contains('muted') : false;
                         
                         if (!isMuted) {
-                            backgroundMusic.play().then(() => {
+                            iframe.contentWindow.musicAPI.play().then(() => {
                             }).catch(error => {
                             });
                         }
@@ -454,10 +455,10 @@
                     
                     // Добавляем кастомный обработчик
                     const handleBackClick = () => {
-                        // Останавливаем основную музыку
-                        const backgroundMusic = document.getElementById('backgroundMusic');
-                        if (backgroundMusic) {
-                            backgroundMusic.pause();
+                        // Останавливаем основную музыку через iframe API
+                        const iframe = window.musicIframe;
+                        if (iframe && iframe.contentWindow && iframe.contentWindow.musicAPI) {
+                            iframe.contentWindow.musicAPI.pause();
                         }
                         
                         try {
@@ -495,14 +496,14 @@
                                 const bookOverlay = document.querySelector('.book-overlay');
                                 
                                 if (bookOverlay && bookOverlay.style.display === 'none') {
-                                    // Возобновляем основную музыку
-                                    const backgroundMusic = document.getElementById('backgroundMusic');
-                                    if (backgroundMusic) {
+                                    // Возобновляем основную музыку через iframe API
+                                    const iframe = window.musicIframe;
+                                    if (iframe && iframe.contentWindow && iframe.contentWindow.musicAPI) {
                                         const soundButton = document.querySelector('.sound-menu-button');
                                         const isMuted = soundButton ? soundButton.classList.contains('muted') : false;
                                         
                                         if (!isMuted) {
-                                            backgroundMusic.play();
+                                            iframe.contentWindow.musicAPI.play();
                                         }
                                     }
                                     

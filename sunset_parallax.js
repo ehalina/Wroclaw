@@ -5,6 +5,7 @@ class SunsetParallax {
         this.zoomSpeed = 0.3;
         this.initialScale = 1.2;
         this.maxScale = 3.0;
+        this.animationStarted = false;
         
         this.pageContainer = document.querySelector('.page-container');
         this.parallaxContainer = document.querySelector('.parallax-container');
@@ -14,96 +15,154 @@ class SunsetParallax {
             buildings: document.querySelector('.layer-buildings')
         };
         
+        this.parallaxScrollWrapper = document.querySelector('.parallax-scroll-wrapper');
+        
+        // Отключаем конфликтующий код
+        this.disableConflictingStyles();
+        
         this.init();
+    }
+    
+    disableConflictingStyles() {
+        // Отключаем все CSS-анимации на всех уровнях
+        const elementsToCheck = [
+            this.parallaxContainer,
+            this.parallaxScrollWrapper,
+            ...Object.values(this.layers),
+            document.querySelector('.image-container'),
+            document.querySelector('.image-scroll-wrapper'),
+            document.querySelector('.image')
+        ];
+        
+        elementsToCheck.forEach(element => {
+            if (element) {
+                // Отключаем CSS-анимации
+                element.style.setProperty('animation', 'none', 'important');
+                element.style.setProperty('animation-name', 'none', 'important');
+                element.style.setProperty('animation-duration', 'none', 'important');
+                element.style.setProperty('animation-timing-function', 'none', 'important');
+                element.style.setProperty('animation-delay', 'none', 'important');
+                element.style.setProperty('animation-iteration-count', 'none', 'important');
+                element.style.setProperty('animation-direction', 'none', 'important');
+                element.style.setProperty('animation-fill-mode', 'none', 'important');
+                element.style.setProperty('animation-play-state', 'paused', 'important');
+                
+                // Удаляем конфликтующие классы
+                element.classList.remove('zoom-transition', 'zoom-transition-Right', 'zoom-transition-Up');
+                
+                // Отключаем overflow и touch-action
+                element.style.setProperty('overflow-x', 'hidden', 'important');
+                element.style.setProperty('overflow-y', 'hidden', 'important');
+                element.style.setProperty('touch-action', 'none', 'important');
+                element.style.setProperty('-webkit-overflow-scrolling', 'auto', 'important');
+                element.style.setProperty('scroll-behavior', 'auto', 'important');
+                
+                // Сбрасываем scroll позиции
+                if (element.scrollLeft !== undefined) element.scrollLeft = 0;
+                if (element.scrollTop !== undefined) element.scrollTop = 0;
+            }
+        });
+        
+        // Специально для слоев параллакса
+        Object.values(this.layers).forEach(layer => {
+            if (layer) {
+                layer.style.setProperty('width', '100%', 'important');
+                layer.style.setProperty('height', '100%', 'important');
+                layer.style.setProperty('background-size', 'cover', 'important');
+                layer.style.setProperty('background-position', 'center', 'important');
+                layer.style.setProperty('transform-origin', 'center center', 'important');
+                layer.style.setProperty('will-change', 'transform', 'important');
+            }
+        });
     }
 
     init() {
         this.setupControls();
         this.preloadImages();
-        this.startAnimation();
     }
 
     setupControls() {
-        const zoomSpeedSlider = document.getElementById('zoomSpeed');
-        const zoomSpeedValue = document.getElementById('zoomSpeedValue');
-        const pauseBtn = document.getElementById('pauseBtn');
-        const resetBtn = document.getElementById('resetBtn');
-        const directionBtn = document.getElementById('directionBtn');
+        // Создаем кнопки управления
+        const controlsContainer = document.createElement('div');
+        controlsContainer.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        `;
 
-        if (zoomSpeedSlider) {
-            zoomSpeedSlider.addEventListener('input', (e) => {
-                this.zoomSpeed = parseFloat(e.target.value);
-                if (zoomSpeedValue) {
-                    zoomSpeedValue.textContent = this.zoomSpeed.toFixed(1);
-                }
-                this.updateAnimation();
-            });
-        }
+        const directionBtn = document.createElement('button');
+        directionBtn.textContent = '🔄';
+        directionBtn.style.cssText = `
+            padding: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        `;
+        directionBtn.onclick = () => this.toggleDirection();
 
-        if (pauseBtn) {
-            pauseBtn.addEventListener('click', () => {
-                this.togglePause();
-            });
-        }
+        const speedBtn = document.createElement('button');
+        speedBtn.textContent = '⚡';
+        speedBtn.style.cssText = directionBtn.style.cssText;
+        speedBtn.onclick = () => this.updateAnimation();
 
-        if (resetBtn) {
-            resetBtn.addEventListener('click', () => {
-                this.resetAnimation();
-            });
-        }
+        controlsContainer.appendChild(directionBtn);
+        controlsContainer.appendChild(speedBtn);
+        document.body.appendChild(controlsContainer);
 
-        if (directionBtn) {
-            directionBtn.addEventListener('click', () => {
-                this.toggleDirection();
-            });
-            directionBtn.textContent = this.direction === 1 ? 'Вперед' : 'Назад';
-        }
+        this.directionBtn = directionBtn;
     }
 
     preloadImages() {
-        const images = [
+        const imageUrls = [
             'media/tumski/sunset/sunset1.png',
             'media/tumski/sunset/sunset2.png',
-            'media/tumski/sunset/sunset3.jpg'
+            'media/tumski/sunset/sunset3.png'
         ];
 
         let loadedCount = 0;
-        const totalImages = images.length;
+        const totalImages = imageUrls.length;
 
-        images.forEach(src => {
+        imageUrls.forEach(url => {
             const img = new Image();
             img.onload = () => {
                 loadedCount++;
                 if (loadedCount === totalImages) {
-                    document.querySelector('.loading').style.display = 'none';
                     this.startAnimation();
                 }
             };
-            img.onerror = () => {
-                console.error(`Ошибка загрузки изображения: ${src}`);
-                loadedCount++;
-                if (loadedCount === totalImages) {
-                    document.querySelector('.loading').style.display = 'none';
-                    this.startAnimation();
-                }
-            };
-            img.src = src;
+            img.src = url;
         });
     }
 
     startAnimation() {
-        // Устанавливаем начальные масштабы для полного покрытия экрана
-        gsap.set(this.pageContainer, { scale: 1.0, transformOrigin: '50% 50%' });
-        gsap.set(this.parallaxContainer, { scale: 1.0, transformOrigin: '50% 50%' });
-        gsap.set(this.layers.sky, { scale: 1.0 });
-        gsap.set(this.layers.horizon, { scale: 1.0 });
-        gsap.set(this.layers.buildings, { scale: 1.0 });
+        if (this.animationStarted) return;
+        this.animationStarted = true;
+
+        // Сбрасываем scroll позиции
+        if (this.parallaxContainer) {
+            this.parallaxContainer.scrollLeft = 0;
+            this.parallaxContainer.scrollTop = 0;
+        }
+
+        // Принудительно отключаем все конфликтующие стили
+        this.disableConflictingStyles();
+
+        // Устанавливаем начальные масштабы
+        Object.values(this.layers).forEach(layer => {
+            if (layer) {
+                gsap.set(layer, { scale: 1.0 });
+            }
+        });
 
         this.createTimeline();
     }
 
     createTimeline() {
-        // Очищаем предыдущую анимацию
         if (this.timeline) {
             this.timeline.kill();
         }
@@ -111,106 +170,64 @@ class SunsetParallax {
         this.timeline = gsap.timeline({
             ease: "none",
             repeat: -1,
-            yoyo: true,
-            onRepeat: () => {
-                // Переключаем направление при достижении максимального/минимального зума
+            onUpdate: () => {
+                // Без логов
+            },
+            onComplete: () => {
                 this.direction *= -1;
-                const directionBtn = document.getElementById('directionBtn');
-                if (directionBtn) {
-                    directionBtn.textContent = this.direction === 1 ? 'Вперед' : 'Назад';
-                }
+                this.directionBtn.textContent = this.direction === 1 ? '🔄' : '🔄';
+                this.createTimeline();
             }
         });
 
-        // Определяем начальные и конечные значения масштаба в зависимости от направления
-        const skyScale = this.direction === 1 ? [1.0, 2.0] : [2.0, 1.0];
-        const horizonScale = this.direction === 1 ? [1.0, 2.5] : [2.5, 1.0];
-        const buildingsScale = this.direction === 1 ? [1.0, 3.0] : [3.0, 1.0];
-        const containerScale = this.direction === 1 ? [1.0, 1.6] : [1.6, 1.0];
+        // Определяем масштабы в зависимости от направления
+        const skyScale = this.direction === 1 ? [1, 2] : [2, 1];
+        const horizonScale = this.direction === 1 ? [1, 2.5] : [2.5, 1];
+        const buildingsScale = this.direction === 1 ? [1, 3] : [3, 1];
 
-        // Анимация для неба (почти статично)
+        // Создаем анимацию для каждого слоя
         this.timeline.to(this.layers.sky, {
             scale: skyScale[1],
-            duration: 20 / this.zoomSpeed,
+            duration: 66.67,
             ease: "none"
         }, 0);
 
-        // Анимация для горизонта (медленнее)
         this.timeline.to(this.layers.horizon, {
             scale: horizonScale[1],
-            duration: 20 / this.zoomSpeed,
+            duration: 66.67,
             ease: "none"
         }, 0);
 
-        // Анимация для зданий (быстрее всего)
         this.timeline.to(this.layers.buildings, {
             scale: buildingsScale[1],
-            duration: 20 / this.zoomSpeed,
+            duration: 66.67,
             ease: "none"
         }, 0);
 
-        // Устанавливаем направление воспроизведения согласно текущему состоянию
-        this.timeline.reversed(this.direction === -1);
-
-        if (this.isPaused) {
-            this.timeline.pause();
-        }
+        this.timeline.play();
     }
 
     updateAnimation() {
-        if (this.timeline) {
-            this.createTimeline();
-        }
-    }
-
-    togglePause() {
-        this.isPaused = !this.isPaused;
-        const pauseBtn = document.getElementById('pauseBtn');
-        
-        if (this.isPaused) {
-            this.timeline.pause();
-            pauseBtn.textContent = 'Продолжить';
-        } else {
-            this.timeline.resume();
-            pauseBtn.textContent = 'Пауза';
-        }
-    }
-
-    resetAnimation() {
-        this.timeline.restart();
-        this.timeline.pause();
-        this.isPaused = true;
-        document.getElementById('pauseBtn').textContent = 'Продолжить';
-    }
-    
-    restartParallax() {
-        this.timeline.restart();
-        this.isPaused = false;
-        document.getElementById('pauseBtn').textContent = 'Пауза';
+        this.zoomSpeed = this.zoomSpeed === 0.3 ? 0.6 : 0.3;
+        this.createTimeline();
     }
 
     toggleDirection() {
         this.direction *= -1;
-        const directionBtn = document.getElementById('directionBtn');
-        
-        if (this.direction === 1) {
-            directionBtn.textContent = 'Вперед';
-        } else {
-            directionBtn.textContent = 'Назад';
-        }
-        
-        // Меняем направление без пересоздания анимации
+        this.directionBtn.textContent = this.direction === 1 ? '🔄' : '🔄';
+        this.createTimeline();
+    }
+
+    restartParallax() {
+        this.animationStarted = false;
         if (this.timeline) {
-            this.timeline.reversed(this.direction === -1);
-        } else {
-            this.createTimeline();
+            this.timeline.kill();
         }
+        this.startAnimation();
     }
 }
 
-// Инициализация после загрузки страницы
+// Инициализация
 document.addEventListener('DOMContentLoaded', () => {
     window.sunsetParallax = new SunsetParallax();
 });
-
-
