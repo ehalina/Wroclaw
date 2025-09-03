@@ -77,44 +77,7 @@ class SunsetParallax {
     }
 
     init() {
-        this.setupControls();
         this.preloadImages();
-    }
-
-    setupControls() {
-        // Создаем кнопки управления
-        const controlsContainer = document.createElement('div');
-        controlsContainer.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            display: flex;
-            gap: 10px;
-        `;
-
-        const directionBtn = document.createElement('button');
-        directionBtn.textContent = '🔄';
-        directionBtn.style.cssText = `
-            padding: 10px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        `;
-        directionBtn.onclick = () => this.toggleDirection();
-
-        const speedBtn = document.createElement('button');
-        speedBtn.textContent = '⚡';
-        speedBtn.style.cssText = directionBtn.style.cssText;
-        speedBtn.onclick = () => this.updateAnimation();
-
-        controlsContainer.appendChild(directionBtn);
-        controlsContainer.appendChild(speedBtn);
-        document.body.appendChild(controlsContainer);
-
-        this.directionBtn = directionBtn;
     }
 
     preloadImages() {
@@ -175,7 +138,6 @@ class SunsetParallax {
             },
             onComplete: () => {
                 this.direction *= -1;
-                this.directionBtn.textContent = this.direction === 1 ? '🔄' : '🔄';
                 this.createTimeline();
             }
         });
@@ -214,7 +176,6 @@ class SunsetParallax {
 
     toggleDirection() {
         this.direction *= -1;
-        this.directionBtn.textContent = this.direction === 1 ? '🔄' : '🔄';
         this.createTimeline();
     }
 

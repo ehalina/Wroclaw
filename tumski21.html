@@ -420,6 +420,17 @@
                             });
                         }
                     }
+                    
+                    // Возобновляем прямую музыку hang.mp3
+                    const backgroundMusic = document.getElementById('backgroundMusic');
+                    const soundButton = document.querySelector('.sound-menu-button');
+                    const isMuted = soundButton ? soundButton.classList.contains('muted') : false;
+                    
+                    if (backgroundMusic && !isMuted) {
+                        backgroundMusic.play().catch(error => {
+                            // Игнорируем ошибки автовоспроизведения
+                        });
+                    }
                 };
                 
                 // Добавляем обработчик закрытия модального окна
@@ -455,10 +466,24 @@
                     
                     // Добавляем кастомный обработчик
                     const handleBackClick = () => {
+                        // Останавливаем анимацию параллакса
+                        if (window.sunsetParallax) {
+                            if (window.sunsetParallax.timeline) {
+                                window.sunsetParallax.timeline.pause();
+                            }
+                            window.sunsetParallax.isPaused = true;
+                        }
+                        
                         // Останавливаем основную музыку через iframe API
                         const iframe = window.musicIframe;
                         if (iframe && iframe.contentWindow && iframe.contentWindow.musicAPI) {
                             iframe.contentWindow.musicAPI.pause();
+                        }
+                        
+                        // Останавливаем прямую музыку hang.mp3
+                        const backgroundMusic = document.getElementById('backgroundMusic');
+                        if (backgroundMusic) {
+                            backgroundMusic.pause();
                         }
                         
                         try {
@@ -472,7 +497,7 @@
                             setupQuestGeoMarker({
                                 markerId: 'quest-marker-5',
                                 questNumber: 5,
-                                questImage: 'media/watercolor/5.jpg'
+                                questImage: 'media/watercolor/52.jpg'
                             });
                             
                             // Симулируем клик по маркеру для запуска квеста
@@ -507,6 +532,17 @@
                                         }
                                     }
                                     
+                                    // Возобновляем прямую музыку hang.mp3
+                                    const backgroundMusic = document.getElementById('backgroundMusic');
+                                    const soundButton = document.querySelector('.sound-menu-button');
+                                    const isMuted = soundButton ? soundButton.classList.contains('muted') : false;
+                                    
+                                    if (backgroundMusic && !isMuted) {
+                                        backgroundMusic.play().catch(error => {
+                                            // Игнорируем ошибки автовоспроизведения
+                                        });
+                                    }
+                                    
                                     // Квест закрыт, выполняем переход назад
                                     setTimeout(() => {
                                         window.location.href = 'tumski06.html';
@@ -524,9 +560,19 @@
                         }
                     };
                     
-                    // Добавляем обработчики клика
+                    // Добавляем обработчики клика и touch для мобильных устройств
                     backArrow.addEventListener('click', handleBackClick);
                     backArea.addEventListener('click', handleBackClick);
+                    
+                    // Добавляем touch события для мобильных устройств
+                    backArrow.addEventListener('touchend', function(e) {
+                        e.preventDefault();
+                        handleBackClick();
+                    });
+                    backArea.addEventListener('touchend', function(e) {
+                        e.preventDefault();
+                        handleBackClick();
+                    });
                     
                 } else {
                 }

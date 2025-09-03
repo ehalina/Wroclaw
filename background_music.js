@@ -65,6 +65,7 @@ function createMusicIframe() {
                     setVolume: (vol) => audio.volume = vol,
                     setMuted: (muted) => audio.muted = muted,
                     getCurrentTime: () => audio.currentTime,
+                    setCurrentTime: (time) => { audio.currentTime = time; },
                     isPaused: () => audio.paused
                 };
             </script>
@@ -158,6 +159,19 @@ export function initBackgroundMusic() {
     // Принудительно выставляем mute для всех аудио-элементов
     if (stepSound) stepSound.muted = isMuted;
     if (mapSound) mapSound.muted = isMuted;
+    
+    // Добавляем глобальные функции для управления iframe музыкой
+    window.muteIframeMusic = () => {
+        if (musicIframe && musicIframe.contentWindow && musicIframe.contentWindow.musicAPI) {
+            musicIframe.contentWindow.musicAPI.setMuted(true);
+        }
+    };
+    
+    window.unmuteIframeMusic = () => {
+        if (musicIframe && musicIframe.contentWindow && musicIframe.contentWindow.musicAPI) {
+            musicIframe.contentWindow.musicAPI.setMuted(false);
+        }
+    };
 
     // Управляем музыкой через iframe API
     const controlMusic = () => {
@@ -165,7 +179,15 @@ export function initBackgroundMusic() {
             const api = musicIframe.contentWindow.musicAPI;
             api.setMuted(isMuted);
             
-            if (!isMuted) {
+            // Восстанавливаем состояние при обновлении страницы
+            const savedTime = localStorage.getItem('bgMusicTime');
+            const savedPaused = localStorage.getItem('bgMusicPaused');
+            
+            if (savedTime && !isNaN(parseFloat(savedTime))) {
+                api.setCurrentTime(parseFloat(savedTime));
+            }
+            
+            if (!isMuted && savedPaused !== '1') {
                 api.play().catch(() => {
                     if (musicHint) {
                         musicHint.style.display = 'block';

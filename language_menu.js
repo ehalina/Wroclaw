@@ -165,6 +165,11 @@ const LanguageMenu = {
         sounds.forEach(sound => {
             sound.muted = true;
         });
+        
+        // Отключаем iframe музыку
+        if (window.muteIframeMusic) {
+            window.muteIframeMusic();
+        }
     },
 
     unmuteAllSounds() {
@@ -172,6 +177,11 @@ const LanguageMenu = {
         sounds.forEach(sound => {
             sound.muted = false;
         });
+        
+        // Включаем iframe музыку
+        if (window.unmuteIframeMusic) {
+            window.unmuteIframeMusic();
+        }
         
         // Пробуем запустить фоновую музыку, если она есть и не играет
         const backgroundMusic = document.querySelector('#backgroundMusic');
