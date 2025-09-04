@@ -171,6 +171,9 @@ function setupAllArrows(stepSound) {
         const areaBack = document.querySelector('.custom-cursor-backarea');
         const cursorLeft = document.querySelector('.custom-cursor-left');
         const areaLeft = document.querySelector('.custom-cursor-leftarea');
+        const cursorProstoLeft = document.querySelector('.custom-cursor-prosto-left');
+        const areaProstoLeft = document.querySelector('.custom-cursor-prosto-leftarea');
+        
 
         // Fallback обработчик клика (для мобильных), читает data-* со стрелки
         const attachDirectNav = (cursorEl, areaEl, attrName) => {
@@ -220,6 +223,14 @@ function setupAllArrows(stepSound) {
             });
             attachDirectNav(cursorLeft, areaLeft, 'data-next-page');
         }
+
+        // Прямо влево (data-next-page на .custom-cursor-prosto-left)
+        if (cursorProstoLeft && areaProstoLeft && typeof window.setupForwardLeftArrowHandler === 'function') {
+            window.setupForwardLeftArrowHandler(cursorProstoLeft, areaProstoLeft, stepSound, () => {
+                const next = cursorProstoLeft.getAttribute('data-next-page');
+                if (next) window.location.href = next;
+            });
+        }
     } catch (_) {}
 }
 
@@ -229,6 +240,7 @@ function forceShowCursorsOnMobile() {
         const selectors = [
             '.custom-cursor', '.custom-cursor-area',
             '.custom-cursor-prosto', '.custom-cursor-prostoarea',
+            '.custom-cursor-prosto-left', '.custom-cursor-prosto-leftarea',
             '.custom-cursor-back', '.custom-cursor-backarea',
             '.custom-cursor-left', '.custom-cursor-leftarea'
         ];

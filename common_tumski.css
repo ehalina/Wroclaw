@@ -70,6 +70,7 @@
 /* Общие стили для всех стрелок */
 .custom-cursor-area,
 .custom-cursor-prostoarea,
+.custom-cursor-prosto-leftarea,
 .custom-cursor-backarea,
 .custom-cursor-leftarea {
     position: absolute;
@@ -104,6 +105,14 @@
     height: 25%;
 }
 
+/* Стрелка прямо влево */
+.custom-cursor-prosto-leftarea {
+    right: auto;
+    bottom: auto;
+    width: 40%;
+    height: 15%;
+}
+
 /* Стрелка влево */
 .custom-cursor-leftarea {
     position: absolute !important;
@@ -121,6 +130,7 @@
 /* Иконки стрелок */
 .custom-cursor,
 .custom-cursor-prosto,
+.custom-cursor-prosto-left,
 .custom-cursor-back,
 .custom-cursor-left {
     width: 64px;
@@ -148,6 +158,10 @@
     background-image: url('media/strelka_prosto.png');
 }
 
+.custom-cursor-prosto-left {
+    background-image: url('media/strelka_prosto_l.png');
+}
+
 .custom-cursor-back {
     background-image: url('media/strelka_back.png');
 }
@@ -159,6 +173,7 @@
 /* Показываем стрелки при наведении на область */
 .custom-cursor-area:hover .custom-cursor,
 .custom-cursor-prostoarea:hover .custom-cursor-prosto,
+.custom-cursor-prosto-leftarea:hover .custom-cursor-prosto-left,
 .custom-cursor-backarea:hover .custom-cursor-back,
 .custom-cursor-leftarea:hover .custom-cursor-left {
     opacity: 1 !important;
@@ -274,7 +289,7 @@
 /* ===== МОБИЛЬНЫЕ СТИЛИ ===== */
 @media (max-width: 700px) {
     /* Геометки и стрелки */
-    .map-mark-area, .custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-backarea, .custom-cursor-leftarea {
+    .map-mark-area, .custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-prosto-leftarea, .custom-cursor-backarea, .custom-cursor-leftarea {
         position: absolute !important;
         z-index: 998 !important;
         right: auto !important;
@@ -368,9 +383,11 @@
     /* Стрелки всегда видимы */
     .custom-cursor,
     .custom-cursor-prosto,
+    .custom-cursor-prosto-left,
     .custom-cursor-back,
     .custom-cursor-left,
     .custom-cursor-area,
+    .custom-cursor-prosto-leftarea,
     .custom-cursor-backarea,
     .custom-cursor-leftarea,
     .custom-cursor-prostoarea {
@@ -446,6 +463,7 @@
     /* Убрать эффекты наведения */
     .custom-cursor-area:hover .custom-cursor,
     .custom-cursor-prostoarea:hover .custom-cursor-prosto,
+    .custom-cursor-prosto-leftarea:hover .custom-cursor-prosto-left,
     .custom-cursor-backarea:hover .custom-cursor-back,
     .custom-cursor-leftarea:hover .custom-cursor-left {
         opacity: 1 !important;

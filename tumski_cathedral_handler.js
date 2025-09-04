@@ -551,7 +551,7 @@ export function moveMarkersAndCursors() {
     const image = document.querySelector('.image');
     const scene = document.querySelector('.scene');
     // Собираем все map-mark-area и cursor-areas
-    const elements = Array.from(document.querySelectorAll('.map-mark-area, .custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-backarea, .custom-cursor-leftarea'));
+    const elements = Array.from(document.querySelectorAll('.map-mark-area, .custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-prosto-leftarea, .custom-cursor-backarea, .custom-cursor-leftarea'));
     if (isMobile) {
         elements.forEach(el => {
             if (el && el.parentElement !== image) {
@@ -793,7 +793,7 @@ export function applyZoomTransformToMarkers() {
     if (!imageContainer) return;
     
     const transform = window.getComputedStyle(imageContainer).transform;
-    const arrows = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea');
+    const arrows = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-prosto-leftarea');
     
     arrows.forEach(arrow => {
         arrow.style.transform = transform;
@@ -824,7 +824,7 @@ export function setupZoomTracking() {
                     positionMarkersOnBg();
                 } else {
                     // Сбрасываем трансформацию стрелок
-                    const arrows = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea');
+                    const arrows = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-prosto-leftarea');
                     arrows.forEach(arrow => {
                         arrow.style.transform = 'none';
                     });
@@ -865,7 +865,7 @@ export function setupZoomTracking() {
                     }, 100);
                 } else {
                     // Сбрасываем трансформацию
-                    const arrows = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea');
+                    const arrows = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-prosto-leftarea');
                     arrows.forEach(arrow => {
                         arrow.style.transform = 'none';
                     });
@@ -944,7 +944,7 @@ export function setupMobileResetAnimation() {
         imageContainer.classList.add('reset-animation');
         
         // Сбрасываем трансформацию стрелок
-        const arrows = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea');
+        const arrows = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-prosto-leftarea');
         arrows.forEach(arrow => {
             arrow.style.transform = 'none';
         });
