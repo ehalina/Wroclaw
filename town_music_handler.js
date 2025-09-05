@@ -1,9 +1,9 @@
-// Обработчик для страницы ogrod02.html - переключение музыки на town.mp3
-import { initBackgroundMusic } from './background_music.js';
+// Универсальный обработчик для страниц с town.mp3
+// Используется на страницах, где должна играть town.mp3
 
 // Функция для переключения музыки на town.mp3
 function switchToTownMusic() {
-    console.log('🏘️ Переключение музыки на town.mp3 для страницы ogrod02');
+    console.log('🏘️ Переключение музыки на town.mp3');
     
     // Используем глобальную функцию для плавного переключения
     if (window.switchMusicSource) {
@@ -16,7 +16,7 @@ function switchToTownMusic() {
 
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🏘️ Страница ogrod02 загружена, переключаем музыку на town.mp3');
+    console.log('🏘️ Страница загружена, переключаем музыку на town.mp3');
     
     // Небольшая задержка для инициализации основного background_music.js
     setTimeout(() => {

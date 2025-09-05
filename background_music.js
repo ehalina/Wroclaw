@@ -310,6 +310,52 @@ export function initBackgroundMusic() {
     window.addEventListener('beforeunload', saveBackgroundMusicState);
 }
 
+// Функция для плавного переключения музыки без прерывания
+function switchMusicSource(newSrc) {
+    console.log('🎵 Переключение музыки на:', newSrc);
+    
+    const musicIframe = window.musicIframe;
+    if (musicIframe && musicIframe.contentWindow && musicIframe.contentWindow.musicAPI) {
+        try {
+            const api = musicIframe.contentWindow.musicAPI;
+            
+            // Сохраняем текущее состояние
+            const currentTime = api.getCurrentTime();
+            const isPaused = api.isPaused();
+            const isMuted = localStorage.getItem('soundMuted') === 'true';
+            
+            // Обновляем источник музыки в iframe
+            const audio = musicIframe.contentDocument.getElementById('persistentMusic');
+            if (audio) {
+                // Плавно переключаем на новый источник
+                audio.src = newSrc;
+                audio.load(); // Перезагружаем аудио с новым источником
+                
+                // Восстанавливаем состояние после загрузки
+                audio.addEventListener('loadedmetadata', () => {
+                    audio.currentTime = currentTime;
+                    audio.muted = isMuted;
+                    
+                    if (!isPaused && !isMuted) {
+                        audio.play().catch(console.log);
+                    }
+                }, { once: true });
+                
+                console.log('🎵 Музыка переключена на', newSrc, 'без прерывания');
+            } else {
+                console.log('🎵 Аудио элемент не найден в iframe');
+            }
+        } catch (error) {
+            console.error('🎵 Ошибка при переключении музыки:', error);
+        }
+    } else {
+        console.log('🎵 iframe API недоступен для переключения музыки');
+    }
+}
+
+// Глобальная функция для переключения музыки
+window.switchMusicSource = switchMusicSource;
+
 // --- Глобальное сохранение состояния музыки при переходах ---
 function globalMusicStateSaver(e) {
     let el = e.target;
