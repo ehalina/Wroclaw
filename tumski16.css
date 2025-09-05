@@ -1,0 +1,27 @@
+/* Уникальные стили страницы tumski04 */
+
+.image {
+    background-image: url('media/tumski/tumski_16.jpg');
+}
+
+.next-image-container {
+    background-image: url('media/tumski/tumski_17.jpg');
+}
+
+/* Стрелка прямо на этой странице должна быть всегда видимой и кликабельной */
+.custom-cursor-prosto {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Индивидуальные размеры областей стрелок */
+.custom-cursor-leftarea {
+    width: 350px;
+    height: 500px;
+}
+
+.custom-cursor-backarea {
+    width: 60%;
+    height: 25%;
+} 
+

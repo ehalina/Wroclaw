@@ -134,13 +134,16 @@ function updateModalText(zoneNumber) {
             section = 'swieta_jadwiga';
         } else if (window.activeGeoMarker === 'jan_nepomuk') {
             section = 'jan_nepomuk';
+        } else if (window.activeGeoMarker === 'ogrod_papieski') {
+            section = 'ogrod_papieski';
         }
     } else {
         // Fallback: проверяем DOM элементы
         const activeMarker = document.querySelector('.map-mark-area.active') || 
                             document.querySelector('.map-mark-area:hover') ||
                             document.querySelector('#tumski_most') ||
-                            document.querySelector('#tumski_cathedral');
+                            document.querySelector('#tumski_cathedral') ||
+                            document.querySelector('#ogrod_papieski');
         
         if (activeMarker) {
             const markerId = activeMarker.id || activeMarker.getAttribute('data-marker-id');
@@ -158,6 +161,8 @@ function updateModalText(zoneNumber) {
                 section = 'swieta_jadwiga';
             } else if (markerId === 'jan_nepomuk' || markerId === 'jan-nepomuk-text' || markerId === 'jan_nepomuk-text') {
                 section = 'jan_nepomuk';
+            } else if (markerId === 'ogrod_papieski' || markerId === 'ogrod-papieski-text') {
+                section = 'ogrod_papieski';
             }
         }
     }

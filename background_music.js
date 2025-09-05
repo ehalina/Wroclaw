@@ -13,7 +13,11 @@ function ensureAudioElement(id, src, loop = false) {
 
 // Создание iframe для непрерывного воспроизведения музыки
 function createMusicIframe() {
-    if (window.musicIframe) return window.musicIframe;
+    if (window.musicIframe) {
+        console.log('🎵 iframe уже существует, возвращаем существующий');
+        return window.musicIframe;
+    }
+    console.log('🎵 Создаем новый iframe для музыки');
     
     const iframe = document.createElement('iframe');
     iframe.style.display = 'none';
@@ -41,6 +45,7 @@ function createMusicIframe() {
                 // Восстанавливаем состояние при загрузке
                 const savedTime = localStorage.getItem('bgMusicTime');
                 const savedPaused = localStorage.getItem('bgMusicPaused');
+                console.log('🎵 iframe: восстановление состояния', { savedTime, savedPaused });
                 
                 if (savedTime) {
                     audio.addEventListener('loadedmetadata', () => {
@@ -48,8 +53,14 @@ function createMusicIframe() {
                     });
                 }
                 
+                // Пытаемся запустить музыку, если она не была явно поставлена на паузу
                 if (savedPaused !== '1') {
-                    audio.play().catch(() => {});
+                    console.log('🎵 iframe: пытаемся запустить музыку');
+                    audio.play().catch((error) => {
+                        console.log('🎵 iframe: ошибка воспроизведения', error);
+                    });
+                } else {
+                    console.log('🎵 iframe: музыка была на паузе, не запускаем');
                 }
                 
                 // Сохраняем состояние каждые 2 секунды
@@ -60,14 +71,30 @@ function createMusicIframe() {
                 
                 // API для управления из родительского окна
                 window.musicAPI = {
-                    play: () => audio.play(),
-                    pause: () => audio.pause(),
-                    setVolume: (vol) => audio.volume = vol,
-                    setMuted: (muted) => audio.muted = muted,
+                    play: () => {
+                        console.log('🎵 iframe API: play вызван');
+                        return audio.play();
+                    },
+                    pause: () => {
+                        console.log('🎵 iframe API: pause вызван');
+                        return audio.pause();
+                    },
+                    setVolume: (vol) => {
+                        console.log('🎵 iframe API: setVolume', vol);
+                        audio.volume = vol;
+                    },
+                    setMuted: (muted) => {
+                        console.log('🎵 iframe API: setMuted', muted);
+                        audio.muted = muted;
+                    },
                     getCurrentTime: () => audio.currentTime,
-                    setCurrentTime: (time) => { audio.currentTime = time; },
+                    setCurrentTime: (time) => { 
+                        console.log('🎵 iframe API: setCurrentTime', time);
+                        audio.currentTime = time; 
+                    },
                     isPaused: () => audio.paused
                 };
+                console.log('🎵 iframe API создан');
             </script>
         </body>
         </html>
@@ -77,6 +104,7 @@ function createMusicIframe() {
     iframe.srcdoc = iframeHTML;
     
     window.musicIframe = iframe;
+    console.log('🎵 iframe создан и добавлен в DOM');
     return iframe;
 }
 
@@ -145,12 +173,14 @@ function restoreBackgroundMusicState(audio, isMuted) {
 }
 
 export function initBackgroundMusic() {
+    console.log('🎵 Инициализация фоновой музыки...');
     // --- ГЛОБАЛЬНАЯ МУЗЫКА ЧЕРЕЗ IFRAME ---
     const musicIframe = createMusicIframe();
     const stepSound = ensureAudioElement('stepSound', 'media/step.wav');
     const musicHint = document.querySelector('#musicHint');
     const animationHint = document.querySelector('#animationHint');
     const isMuted = localStorage.getItem('soundMuted') === 'true';
+    console.log('🎵 Состояние звука:', { isMuted, soundMuted: localStorage.getItem('soundMuted') });
 
     // Устанавливаем громкость для всех звуков
     if (stepSound) stepSound.volume = 0.7;
@@ -175,8 +205,11 @@ export function initBackgroundMusic() {
 
     // Управляем музыкой через iframe API
     const controlMusic = () => {
+        console.log('🎵 controlMusic вызвана');
         if (musicIframe.contentWindow && musicIframe.contentWindow.musicAPI) {
+            console.log('🎵 iframe API доступен');
             const api = musicIframe.contentWindow.musicAPI;
+            console.log('🎵 iframe API методы:', Object.keys(api));
             api.setMuted(isMuted);
             
             // Восстанавливаем состояние при обновлении страницы
@@ -187,8 +220,11 @@ export function initBackgroundMusic() {
                 api.setCurrentTime(parseFloat(savedTime));
             }
             
-            if (!isMuted && savedPaused !== '1') {
-                api.play().catch(() => {
+            // Всегда пытаемся запустить музыку, если не выключена
+            if (!isMuted) {
+                console.log('🎵 Пытаемся запустить музыку...', { isMuted, savedPaused });
+                api.play().catch((error) => {
+                    console.log('🎵 Ошибка воспроизведения:', error);
                     if (musicHint) {
                         musicHint.style.display = 'block';
                         setTimeout(() => {
@@ -204,18 +240,49 @@ export function initBackgroundMusic() {
                     };
                     document.addEventListener('click', startMusicOnClick, { once: true });
                 });
+            } else {
+                console.log('🎵 Музыка отключена (muted)');
             }
         } else {
             // Если iframe еще не загрузился, ждем
+            console.log('🎵 iframe API не доступен, ждем...', {
+                contentWindow: !!musicIframe.contentWindow,
+                musicAPI: !!(musicIframe.contentWindow && musicIframe.contentWindow.musicAPI)
+            });
             setTimeout(controlMusic, 100);
         }
     };
 
     // Ждем загрузки iframe и управляем музыкой
-    musicIframe.addEventListener('load', controlMusic);
+    musicIframe.addEventListener('load', () => {
+        console.log('🎵 iframe загружен, ждем немного для инициализации API');
+        setTimeout(() => {
+            controlMusic();
+        }, 100);
+    });
+    
+    musicIframe.addEventListener('error', (error) => {
+        console.log('🎵 Ошибка загрузки iframe:', error);
+    });
+    
     if (musicIframe.contentDocument && musicIframe.contentDocument.readyState === 'complete') {
-        controlMusic();
+        console.log('🎵 iframe уже загружен, вызываем controlMusic');
+        setTimeout(() => {
+            controlMusic();
+        }, 100);
+    } else {
+        console.log('🎵 iframe еще не загружен, ждем события load');
     }
+    
+    // Дополнительная проверка через 2 секунды на случай медленной загрузки
+    setTimeout(() => {
+        if (musicIframe.contentWindow && musicIframe.contentWindow.musicAPI) {
+            console.log('🎵 Дополнительная проверка: iframe API доступен');
+            controlMusic();
+        } else {
+            console.log('🎵 Дополнительная проверка: iframe API все еще недоступен');
+        }
+    }, 2000);
 
     // Универсальный обработчик для воспроизведения звука (с учётом mute)
     function playSound(sound) {

@@ -34,8 +34,15 @@ export async function initPageCommon() {
         try { if (typeof window.applyCommonButtonStyles === 'function') window.applyCommonButtonStyles(); } catch (_) {}
         try {
             const music = await import('./background_music.js');
-            if (music && typeof music.initBackgroundMusic === 'function') music.initBackgroundMusic();
-        } catch (_) {}
+            if (music && typeof music.initBackgroundMusic === 'function') {
+                console.log('🎵 Вызываем initBackgroundMusic из tumski_page_common.js');
+                music.initBackgroundMusic();
+            } else {
+                console.log('🎵 initBackgroundMusic не найдена в модуле');
+            }
+        } catch (error) {
+            console.log('🎵 Ошибка загрузки модуля музыки:', error);
+        }
         try { if (window.BookPaths && typeof window.BookPaths.initBookHandlers === 'function') window.BookPaths.initBookHandlers(); } catch (_) {}
 
         // 4) Возврат из зума (если есть)

@@ -403,6 +403,13 @@ export function setupUniversalGeoMarker({ markerId, i18nKey, position }) {
     // --- Картинка papera1.png под текстом ---
     const contentWrapper = marker.parentElement.querySelector('.content-wrapper');
     const textElem = contentWrapper.querySelector('.tumski-text');
+    
+    // Обновляем текст геометки при инициализации
+    if (textElem && window.i18n && typeof window.i18n.t === 'function') {
+        const title = window.i18n.t(i18nKey + '.title');
+        textElem.innerHTML = title;
+    }
+    
     let paperaImg = contentWrapper.querySelector('.papera-image');
     if (!paperaImg) {
         paperaImg = document.createElement('img');
@@ -450,12 +457,16 @@ export function setupUniversalGeoMarker({ markerId, i18nKey, position }) {
             const mostTitles = mostOverlay.querySelectorAll('.most-title');
             const mostDescriptions = mostOverlay.querySelectorAll('.most-description');
             
+            const titleText = window.i18n.t(i18nKey + '.title');
+            const descriptionKey = i18nKey + '.book02.zone1.text';
+            const descriptionText = window.i18n.t(descriptionKey);
+            
             mostTitles.forEach(title => {
-                title.innerHTML = window.i18n.t(i18nKey + '.title');
+                title.innerHTML = titleText;
             });
             
             mostDescriptions.forEach(description => {
-                description.innerHTML = window.i18n.t(i18nKey + '.description');
+                description.innerHTML = descriptionText;
             });
         }
         // Добавляю запуск подсветки зон:

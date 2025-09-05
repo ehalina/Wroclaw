@@ -61,6 +61,7 @@ function updatePageContent() {
     const mapMarkWyspa = document.getElementById('tumska_wyspa');
     const mapMarkMost = document.getElementById('tumski_most');
     const mapMarkCathedral = document.getElementById('tumski_cathedral');
+    const mapMarkOgrodPapieski = document.getElementById('ogrod_papieski');
     const tumskiTexts = document.querySelectorAll('.tumski-text');
 
     if (mapMarkWyspa) {
@@ -73,6 +74,17 @@ function updatePageContent() {
 
     if (mapMarkCathedral) {
         mapMarkCathedral.setAttribute('data-title', t('tumski_cathedral.title'));
+    }
+
+    if (mapMarkOgrodPapieski) {
+        const title = t('ogrod_papieski.title');
+        mapMarkOgrodPapieski.setAttribute('data-title', title);
+        // Также обновляем текст в content-wrapper
+        const contentWrapper = mapMarkOgrodPapieski.parentElement.querySelector('.content-wrapper');
+        const textElem = contentWrapper?.querySelector('.tumski-text');
+        if (textElem) {
+            textElem.innerHTML = title;
+        }
     }
 
     // Обновляем содержимое книги

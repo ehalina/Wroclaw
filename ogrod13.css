@@ -1,0 +1,16 @@
+/* Уникальные стили страницы tumski03 */
+
+.image {
+    background-image: url('media/tumski/ogrud_13.jpg');
+}
+
+.next-image-container {
+    background-image: url('media/tumski/ogrud_12.jpg');
+}
+
+/* Индивидуальные размеры области стрелки назад на этой странице */
+.custom-cursor-backarea {
+    width: 60%;
+    height: 25%;
+} 
+

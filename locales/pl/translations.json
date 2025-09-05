@@ -221,6 +221,43 @@
       }
     }
   },
+  "ogrod_papieski": {
+    "title": "Ogród Papieskiego Wydziału Teologicznego",
+    "book02": {
+      "zone1": {
+        "title": "Ogród Papieskiego Wydziału Teologicznego",
+        "text": "W sercu Wrocławia, gdzie kamień spotyka się z zielenią, a historia z teraźniejszością, znajduje się miejsce szczególne — Ogród Papieskiego Wydziału Teologicznego. To nie tylko przestrzeń zielona, ale prawdziwy oaz spokoju w miejskim zgiełku, gdzie każdy krzew, każda ścieżka opowiada swoją historię. Tutaj czas płynie inaczej, a cisza ma swój własny głos."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Ogród powstał w miejscu, gdzie kiedyś znajdował się klasztor cysterski. Przez wieki przechodził różne transformacje, ale zawsze zachowywał swój duchowy charakter. W XVIII wieku, gdy Wrocław przeżywał okres rozkwitu, ogród stał się miejscem spotkań intelektualistów i teologów, którzy wśród zieleni szukali inspiracji do swoich rozważań."
+      },
+      "zone2-2": {
+        "title": "Historia",
+        "text": "Pierwsze wzmianki o ogrodzie sięgają XIII wieku, gdy cystersi założyli tu swój klasztor. Z czasem miejsce to stało się centrum życia duchowego i intelektualnego Wrocławia. W XIX wieku ogród został przekształcony w nowoczesny park, zachowując jednak swój sakralny charakter i stając się miejscem kontemplacji i nauki."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Dziś ogród to prawdziwy skarbiec przyrody w sercu miasta. Stare drzewa, które pamiętają czasy średniowiecza, sąsiadują z nowoczesnymi nasadzeniami. Wśród zieleni ukryte są rzeźby i pomniki, które opowiadają historię tego miejsca. Każda pora roku przynosi tu nowe kolory i zapachy, tworząc niepowtarzalną atmosferę spokoju i refleksji."
+      },
+      "zone3-2": {
+        "title": "Architektura krajobrazu",
+        "text": "Ogród zaprojektowano w stylu angielskim, z naturalnymi ścieżkami i malowniczymi zakątkami. Centralnym punktem jest stary platan, który od wieków daje cień wędrowcom i studentom. Wokół niego rozciągają się trawniki, klomby kwiatów i krzewów ozdobnych, tworząc harmonijną całość, która zachęca do spacerów i medytacji."
+      },
+      "zone4": {
+        "title": "",
+        "text": "W ogrodzie znajduje się również kaplica, która służy jako miejsce modlitwy i refleksji. Jej prosta, ale elegancka architektura doskonale wpisuje się w naturalne otoczenie. Wewnątrz panuje atmosfera skupienia i spokoju, a przez okna wpada miękkie światło, które tworzy niepowtarzalny nastrój. To miejsce, gdzie można znaleźć chwilę wytchnienia od codziennego zgiełku."
+      },
+      "zone4-2": {
+        "title": "Ciekawe fakty",
+        "text": "W ogrodzie rośnie jeden z najstarszych platanów w Polsce, który ma ponad 200 lat. Drzewo to jest pomnikiem przyrody i świadkiem wielu ważnych wydarzeń w historii Wrocławia. Pod jego koroną odbywały się spotkania intelektualistów, a dziś daje cień studentom i turystom, którzy szukają tu spokoju i inspiracji."
+      }
+    }
+  },
 
   "panorama": {
     "title": "Platforma widokowa"
