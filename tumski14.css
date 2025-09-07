@@ -1,11 +1,12 @@
-/* Уникальные стили страницы tumski06 */
+/* Уникальные стили страницы tumski14 */
 
 .image {
-    background-image: url('media/tumski/tumski_11.jpg');
+    background-image: url('media/tumski/tumski_14.jpg');
 }
 
+
 .next-image-container {
-    background-image: url('media/tumski/tumski_14.jpg');
+    background-image: url('media/tumski/tumski_08.jpg');
 }
 
 /* Стили для стрелки прямо влево */
@@ -14,6 +15,11 @@
     bottom: auto;
     width: 20%;
     height: 15%;
+}
+
+/* Переопределяем картинку стрелки прямо */
+.custom-cursor-prosto {
+    background-image: url('media/strelka_rondo_l.png') !important;
 }
 
 /* Индивидуальные размеры областей стрелок */

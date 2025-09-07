@@ -164,73 +164,6 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, prevPageCa
     });
 }
 
-function setupUpArrowHandler(cursor, cursorArea, stepSound, nextPageCallback) {
-    // Проверяем наличие необходимых элементов
-    if (!cursor || !cursorArea) {
-        return;
-    }
-
-    // Обработчик движения мыши над областью курсора
-            cursorArea.addEventListener('mousemove', function(e) {
-            const rect = this.getBoundingClientRect();
-
-            if (e.clientX >= rect.left && e.clientX <= rect.right &&
-                e.clientY >= rect.top && e.clientY <= rect.bottom) {
-                cursor.style.opacity = '1';
-                cursor.style.left = e.clientX + 'px';
-                cursor.style.top = e.clientY + 'px';
-            }
-        });
-
-    // Скрываем курсор при уходе мыши из области
-    cursorArea.addEventListener('mouseleave', function() {
-        cursor.style.opacity = '0';
-    });
-
-    // Обработчик клика
-    cursor.addEventListener('click', handleClick);
-    cursorArea.addEventListener('click', handleClick);
-
-    function handleClick(e) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        try {
-            hideAllCursors();
-            
-            if (stepSound) {
-                stepSound.currentTime = 0;
-                stepSound.play();
-            }
-            
-            // Получаем элементы для анимации
-            const imageContainer = document.querySelector('.image-container');
-            const currentImage = document.querySelector('.image');
-            const nextImageContainer = document.querySelector('.next-image-container-Up');
-            
-            if (!imageContainer || !currentImage || !nextImageContainer) {
-                return;
-            }
-
-            // Показываем следующее изображение
-            nextImageContainer.style.opacity = '1';
-            
-            // Запускаем анимацию перехода
-            imageContainer.style.animationPlayState = 'paused';
-            imageContainer.classList.add('zoom-transition-Up');
-            
-            // После завершения анимации переходим на следующую страницу
-            setTimeout(() => {
-                if (typeof nextPageCallback === 'function') {
-                    nextPageCallback();
-                }
-            }, 1500);
-            
-        } catch (error) {
-            // Ошибка при обработке клика
-        }
-    }
-}
 
 // Общие функции для работы с книгой
 function openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator) {
@@ -359,7 +292,7 @@ function setupScrollHandlers(bookContent, scrollIndicator) {
 
 // Функция для скрытия всех курсоров
 function hideAllCursors() {
-    document.querySelectorAll('.custom-cursor, .custom-cursor-area, .custom-cursor-prosto, .custom-cursor-prostoarea, .custom-cursor-back, .custom-cursor-backarea').forEach(element => {
+    document.querySelectorAll('.custom-cursor, .custom-cursor-area, .custom-cursor-prosto, .custom-cursor-prostoarea, .custom-cursor-back, .custom-cursor-backarea, .custom-cursor-up, .custom-cursor-uparea').forEach(element => {
         element.classList.add('hide-cursors');
     });
 }
@@ -445,7 +378,6 @@ window.Common = {
     setupResetAnimation,
     setupRightArrowHandler,
     setupBackArrowHandler,
-    setupUpArrowHandler,
     setupTumskiIslandHandler,
     setupTumskiMostHandler,
     openBook,

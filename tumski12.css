@@ -1,11 +1,11 @@
 /* Уникальные стили страницы tumski06 */
 
 .image {
-    background-image: url('media/tumski/tumski_11.jpg');
+    background-image: url('media/tumski/tumski_12.jpg');
 }
 
 .next-image-container {
-    background-image: url('media/tumski/tumski_14.jpg');
+    background-image: url('media/tumski/tumski_13.jpg');
 }
 
 /* Стили для стрелки прямо влево */
@@ -22,20 +22,10 @@
     height: 25%;
 }
 
-/* Переопределяем стрелку влево для использования как стрелка вверх */
+/* Индивидуальные размеры области стрелки влево */
 .custom-cursor-leftarea {
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50%;
-    height: 20%;
-    z-index: 999;
-    cursor: none;
-}
-
-.custom-cursor-left {
-    background-image: url('media/strelka_v.png') !important;
+    width: 350px;
+    height: 500px;
 }
 
 
@@ -86,35 +76,6 @@
         opacity: 1 !important;
     }
     
-    /* Мобильные стили для стрелки влево (используется как стрелка вверх) */
-    .custom-cursor-leftarea {
-        position: absolute !important;
-        z-index: 998 !important;
-        top: 0 !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        width: 80px !important;
-        height: 80px !important;
-        display: block !important;
-        pointer-events: auto !important;
-        opacity: 1 !important;
-    }
-    
-    .custom-cursor-left {
-        opacity: 1 !important;
-        display: block !important;
-        pointer-events: auto !important;
-        visibility: visible !important;
-        z-index: 9999 !important;
-        position: absolute !important;
-        width: 80px !important;
-        height: 80px !important;
-        background-image: url('media/strelka_v.png') !important;
-    }
-    
-    .custom-cursor-leftarea:hover .custom-cursor-left {
-        opacity: 1 !important;
-    }
 }
 
 

@@ -6,7 +6,7 @@
     <title>Тумский остров - Вроцлав</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="common_tumski.css">
-    <link rel="stylesheet" href="tumski11.css">
+    <link rel="stylesheet" href="tumski12.css">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
     <script src="i18n.js"></script>
@@ -40,6 +40,16 @@
         <audio id="bookSound3" src="media/opening-a-book.wav"></audio>
     </div>
 
+    <!-- Геометка: Генрик, превращенный в камень -->
+    <div class="map-mark-area">
+        <div class="map-mark" id="genrik_stone" data-x-desktop="1200" data-y-desktop="800" data-x-mobile="1500" data-y-mobile="900" data-quest-number="7" data-quest-image="media/watercolor/72.jpg"></div>
+        <div class="content-wrapper">
+            <img class="papera-image" src="media/papera1.png" alt="Papera">
+            <div class="tumski-text" data-i18n="quest.task7"></div>
+        </div>
+        <audio id="bookSoundGenrik" src="media/opening-a-book.wav"></audio>
+    </div>
+
 
     <!-- Главная сцена с фоновым изображением и анимацией -->
     <div class="scene">
@@ -47,32 +57,20 @@
             <div class="image-scroll-wrapper">
                 <div class="image">
                 
-                <!-- Стрелка прямо -->
-                <div class="custom-cursor-prosto" data-x-desktop="1500" data-y-desktop="1000" data-x-mobile="1500" data-y-mobile="1200" data-next-page="tumski14.html"></div>
-                <div class="custom-cursor-prostoarea" data-x-desktop="1500" data-y-desktop="1000" data-x-mobile="1500" data-y-mobile="1200">
-                </div>
-                
-                 <!-- Кастомный курсор для стрелки вправо -->
-                <div class="custom-cursor" data-x-desktop="1400" data-y-desktop="1500" data-x-mobile="1900" data-y-mobile="1500" data-prev-page="tumski15.html"></div>
-                 <!-- Область для появления кастомного курсора -->
-                 <div class="custom-cursor-area" data-x-desktop="1400" data-y-desktop="1500" data-x-mobile="1900" data-y-mobile="1400">
-                 </div>
-                
-                <!-- Стрелка вверх (используем стрелку влево с переопределенной картинкой) -->
-                <div class="custom-cursor-left" data-x-desktop="800" data-y-desktop="200" data-x-mobile="800" data-y-mobile="200" data-next-page="tumski13.html"></div>
-                <div class="custom-cursor-leftarea" data-x-desktop="800" data-y-desktop="200" data-x-mobile="800" data-y-mobile="200">
-                </div>
+                <!-- Стрелка влево -->
+                <div class="custom-cursor-left" data-x-desktop="350" data-y-desktop="1200" data-x-mobile="400" data-y-mobile="1400" data-next-page="tumski13.html"></div>
+                <div class="custom-cursor-leftarea" data-x-desktop="0" data-y-desktop="1000" data-x-mobile="400" data-y-mobile="1400">
+                </div>         
 
+                
                 <!-- Стрелка назад -->
-                <div class="custom-cursor-back" data-x-desktop="100" data-y-desktop="1600" data-x-mobile="400" data-y-mobile="1600" data-prev-page="tumski06.html"></div>
+                <div class="custom-cursor-back" data-x-desktop="100" data-y-desktop="1600" data-x-mobile="400" data-y-mobile="1600" data-prev-page="tumski11.html"></div>
                 <div class="custom-cursor-backarea" data-x-desktop="100" data-y-desktop="1600" data-x-mobile="400" data-y-mobile="1600">
                 </div>
             </div>
         </div>
-    </div>
        <div class="next-image-container"></div>
-   
-</div>
+    </div>
     <script type="module" src="tumski_init.js"></script>
 </body>
 </html> 

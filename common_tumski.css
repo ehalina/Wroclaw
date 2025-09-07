@@ -72,7 +72,8 @@
 .custom-cursor-prostoarea,
 .custom-cursor-prosto-leftarea,
 .custom-cursor-backarea,
-.custom-cursor-leftarea {
+.custom-cursor-leftarea,
+.custom-cursor-uparea {
     position: absolute;
     z-index: 999;
     cursor: none;
@@ -127,12 +128,25 @@
     height: 150px;
 }
 
+/* Стрелка вверх */
+.custom-cursor-uparea {
+    position: absolute;
+    z-index: 999;
+    cursor: none;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 20%;
+}
+
 /* Иконки стрелок */
 .custom-cursor,
 .custom-cursor-prosto,
 .custom-cursor-prosto-left,
 .custom-cursor-back,
-.custom-cursor-left {
+.custom-cursor-left,
+.custom-cursor-up {
     width: 64px;
     height: 64px;
     position: absolute;
@@ -170,12 +184,17 @@
     background-image: url('media/strelka_rev.png');
 }
 
+.custom-cursor-up {
+    background-image: url('media/strelka_v.png');
+}
+
 /* Показываем стрелки при наведении на область */
 .custom-cursor-area:hover .custom-cursor,
 .custom-cursor-prostoarea:hover .custom-cursor-prosto,
 .custom-cursor-prosto-leftarea:hover .custom-cursor-prosto-left,
 .custom-cursor-backarea:hover .custom-cursor-back,
-.custom-cursor-leftarea:hover .custom-cursor-left {
+.custom-cursor-leftarea:hover .custom-cursor-left,
+.custom-cursor-uparea:hover .custom-cursor-up {
     opacity: 1 !important;
     pointer-events: auto;
 }
@@ -289,7 +308,7 @@
 /* ===== МОБИЛЬНЫЕ СТИЛИ ===== */
 @media (max-width: 700px) {
     /* Геометки и стрелки */
-    .map-mark-area, .custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-prosto-leftarea, .custom-cursor-backarea, .custom-cursor-leftarea {
+    .map-mark-area, .custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-prosto-leftarea, .custom-cursor-backarea, .custom-cursor-leftarea, .custom-cursor-uparea {
         position: absolute !important;
         z-index: 998 !important;
         right: auto !important;
@@ -386,10 +405,12 @@
     .custom-cursor-prosto-left,
     .custom-cursor-back,
     .custom-cursor-left,
+    .custom-cursor-up,
     .custom-cursor-area,
     .custom-cursor-prosto-leftarea,
     .custom-cursor-backarea,
     .custom-cursor-leftarea,
+    .custom-cursor-uparea,
     .custom-cursor-prostoarea {
         opacity: 1 !important;
         display: block !important;
@@ -465,7 +486,8 @@
     .custom-cursor-prostoarea:hover .custom-cursor-prosto,
     .custom-cursor-prosto-leftarea:hover .custom-cursor-prosto-left,
     .custom-cursor-backarea:hover .custom-cursor-back,
-    .custom-cursor-leftarea:hover .custom-cursor-left {
+    .custom-cursor-leftarea:hover .custom-cursor-left,
+    .custom-cursor-uparea:hover .custom-cursor-up {
         opacity: 1 !important;
     }
     

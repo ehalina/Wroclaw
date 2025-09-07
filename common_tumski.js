@@ -236,7 +236,7 @@ function addQuestGlowEffect(questElement) {
  * Применение мобильных стилей
  */
 function applyMobileStyles() {
-    const cursors = document.querySelectorAll('.custom-cursor, .custom-cursor-prosto, .custom-cursor-back, .custom-cursor-left, .custom-cursor-area, .custom-cursor-backarea, .custom-cursor-leftarea, .custom-cursor-prostoarea');
+    const cursors = document.querySelectorAll('.custom-cursor, .custom-cursor-prosto, .custom-cursor-back, .custom-cursor-left, .custom-cursor-up, .custom-cursor-area, .custom-cursor-backarea, .custom-cursor-leftarea, .custom-cursor-uparea, .custom-cursor-prostoarea');
     cursors.forEach(cursor => {
         cursor.style.opacity = '1';
         cursor.style.display = 'block';

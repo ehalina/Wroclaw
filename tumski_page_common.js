@@ -231,6 +231,13 @@ function setupAllArrows(stepSound) {
                 if (next) window.location.href = next;
             });
         }
+
+        // Вверх (data-next-page на .custom-cursor-up)
+        const cursorUp = document.querySelector('.custom-cursor-up');
+        const areaUp = document.querySelector('.custom-cursor-uparea');
+        if (cursorUp && areaUp && typeof window.setupUpArrowHandler === 'function') {
+            window.setupUpArrowHandler(cursorUp, areaUp, stepSound);
+        }
     } catch (_) {}
 }
 
@@ -242,7 +249,8 @@ function forceShowCursorsOnMobile() {
             '.custom-cursor-prosto', '.custom-cursor-prostoarea',
             '.custom-cursor-prosto-left', '.custom-cursor-prosto-leftarea',
             '.custom-cursor-back', '.custom-cursor-backarea',
-            '.custom-cursor-left', '.custom-cursor-leftarea'
+            '.custom-cursor-left', '.custom-cursor-leftarea',
+            '.custom-cursor-up', '.custom-cursor-uparea'
         ];
         document.querySelectorAll(selectors.join(',')).forEach(el => {
             try {
