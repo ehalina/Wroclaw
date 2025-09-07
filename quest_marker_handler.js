@@ -57,7 +57,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         const revealDurationMs = 5000;
 
         // Заполняем список заданий
-        for (let i = 1; i <= 12; i++) {
+        for (let i = 1; i <= 13; i++) {
             const listItem = document.createElement('li');
                
             // Создаем контейнер для галочки

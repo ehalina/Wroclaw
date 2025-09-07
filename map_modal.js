@@ -1312,7 +1312,7 @@ const MapModal = {
             if (bookSound) bookSound.play();
 
             // Заполняем список заданий
-            for (let i = 1; i <= 12; i++) {
+            for (let i = 1; i <= 13; i++) {
                 const listItem = document.createElement('li');
 
                 // Чекбоксы (обычный и яркий) с учетом состояния
