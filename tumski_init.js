@@ -5,6 +5,15 @@ document.addEventListener('DOMContentLoaded', async function() {
         if (common && typeof common.initPageCommon === 'function') {
             await common.initPageCommon();
         }
+        
+        // Инициализация стрелки вверх
+        const cursorUp = document.querySelector('.custom-cursor-up');
+        const cursorUpArea = document.querySelector('.custom-cursor-uparea');
+        const stepSound = document.querySelector('#stepSound');
+        
+        if (cursorUp && cursorUpArea && window.setupUpArrowHandler) {
+            window.setupUpArrowHandler(cursorUp, cursorUpArea, stepSound);
+        }
     } catch (_) {}
 });
 

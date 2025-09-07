@@ -43,8 +43,8 @@ const mapPoints = {
     mobile: { x: 78, y: 50 }
   },
   11: { 
-    desktop: { x: 66, y: 46 },
-    mobile: { x: 72, y: 46 }
+    desktop: { x: 46, y: 73 },
+    mobile: { x: 42, y: 74 }
   },
   12: { 
     desktop: { x: 56, y: 46 },
@@ -59,8 +59,8 @@ const mapPoints = {
     mobile: { x: 74, y: 38 }
   },
   15: { 
-    desktop: { x: 62, y: 30 },
-    mobile: { x: 68, y: 30 }
+    desktop: { x: 46, y: 77 },
+    mobile: { x: 42, y: 74 }
   },
   16: { 
     desktop: { x: 58, y: 36 },
@@ -81,6 +81,34 @@ const mapPoints = {
   20: { 
     desktop: { x: 28, y: 40 },
     mobile: { x: 35, y: 40 }
+  },
+  21: { 
+    desktop: { x: 45, y: 82 },
+    mobile: { x: 42, y: 74 }
+  },
+  22: { 
+    desktop: { x: 45, y: 86 },
+    mobile: { x: 45, y: 45 }
+  },
+  23: { 
+    desktop: { x: 42, y: 86 },
+    mobile: { x: 45, y: 45 }
+  },
+  24: { 
+    desktop: { x: 40, y: 90 },
+    mobile: { x: 45, y: 45 }
+  },
+  25: { 
+    desktop: { x: 38, y: 95 },
+    mobile: { x: 45, y: 45 }
+  },
+  26: { 
+    desktop: { x: 37, y: 92 },
+    mobile: { x: 45, y: 45 }
+  },
+  27: { 
+    desktop: { x: 41, y: 94 },
+    mobile: { x: 45, y: 45 }
   },
 };
 

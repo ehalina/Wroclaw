@@ -2,7 +2,7 @@
  * Скрывает все курсоры на странице, добавляя класс hide-cursors
  */
 function hideAllCursors() {
-    document.querySelectorAll('.custom-cursor, .custom-cursor-area, .custom-cursor-prosto, .custom-cursor-prostoarea, .custom-cursor-prosto-left, .custom-cursor-prosto-leftarea, .custom-cursor-back, .custom-cursor-backarea, .custom-cursor-left, .custom-cursor-leftarea').forEach(element => {
+    document.querySelectorAll('.custom-cursor, .custom-cursor-area, .custom-cursor-prosto, .custom-cursor-prostoarea, .custom-cursor-prosto-left, .custom-cursor-prosto-leftarea, .custom-cursor-back, .custom-cursor-backarea, .custom-cursor-left, .custom-cursor-leftarea, .custom-cursor-up, .custom-cursor-uparea').forEach(element => {
         element.classList.add('hide-cursors');
     });
 }
@@ -733,6 +733,21 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
                     nextImageContainer.style.backgroundSize = 'contain';
                     console.log('🟡 Десктопная версия: загружено полное изображение pk_01.jpg');
                 }
+            } else if (nextPage === 'ogrod08.html') {
+                // Для ogrod08.html загружаем соответствующее изображение
+                if (isMobile) {
+                    // В мобильной версии загружаем изображение, вписанное по высоте
+                    nextImageContainer.style.backgroundImage = 'url("media/tumski/ogrud_08.jpg")';
+                    nextImageContainer.style.backgroundPosition = 'left top';
+                    nextImageContainer.style.backgroundSize = 'auto 100%';
+                    console.log('🟡 Мобильная версия: загружено изображение ogrud_08.jpg, вписанное по высоте');
+                } else {
+                    // В десктопной версии загружаем полное изображение
+                    nextImageContainer.style.backgroundImage = 'url("media/tumski/ogrud_08.jpg")';
+                    nextImageContainer.style.backgroundPosition = 'center center';
+                    nextImageContainer.style.backgroundSize = 'contain';
+                    console.log('🟡 Десктопная версия: загружено полное изображение ogrud_08.jpg');
+                }
             }
             
             console.log('🟡 Сразу начинаем плавно показывать next-image-container');
@@ -809,6 +824,21 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
                         nextImageContainer.style.backgroundSize = 'contain';
                         console.log('🟡 Десктопная версия (touchend): загружено полное изображение pk_01.jpg');
                     }
+                } else if (nextPage === 'ogrod08.html') {
+                    // Для ogrod08.html загружаем соответствующее изображение
+                    if (isMobile) {
+                        // В мобильной версии загружаем изображение, вписанное по высоте
+                        nextImageContainer.style.backgroundImage = 'url("media/tumski/ogrud_08.jpg")';
+                        nextImageContainer.style.backgroundPosition = 'left top';
+                        nextImageContainer.style.backgroundSize = 'auto 100%';
+                        console.log('🟡 Мобильная версия (touchend): загружено изображение ogrud_08.jpg, вписанное по высоте');
+                    } else {
+                        // В десктопной версии загружаем полное изображение
+                        nextImageContainer.style.backgroundImage = 'url("media/tumski/ogrud_08.jpg")';
+                        nextImageContainer.style.backgroundPosition = 'center center';
+                        nextImageContainer.style.backgroundSize = 'contain';
+                        console.log('🟡 Десктопная версия (touchend): загружено полное изображение ogrud_08.jpg');
+                    }
                 }
                 
                 console.log('🟡 Сразу начинаем плавно показывать next-image-container');
@@ -833,19 +863,83 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
     }
 }
 
+/**
+ * Настраивает обработчик для стрелки вверх
+ * @param {HTMLElement} cursor - Элемент курсора
+ * @param {HTMLElement} cursorArea - Область курсора
+ * @param {HTMLAudioElement} stepSound - Звук шага
+ */
+function setupUpArrowHandler(cursor, cursorArea, stepSound) {
+    const isMobile = window.innerWidth <= 700;
+    
+    if (!isMobile) {
+        // Обработчик движения мыши над областью курсора
+        cursorArea.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            if (e.clientX >= rect.left && e.clientX <= rect.right &&
+                e.clientY >= rect.top && e.clientY <= rect.bottom) {
+                cursor.style.opacity = '1';
+                cursor.style.left = e.clientX - 32 + 'px';
+                cursor.style.top = e.clientY - 32 + 'px';
+            } else {
+                cursor.style.opacity = '0';
+            }
+        });
+
+        // Обработчик движения мыши по всему документу
+        document.addEventListener('mousemove', function(e) {
+            const rect = cursorArea.getBoundingClientRect();
+            if (!(e.clientX >= rect.left && e.clientX <= rect.right &&
+                e.clientY >= rect.top && e.clientY <= rect.bottom)) {
+                cursor.style.opacity = '0';
+            }
+        });
+
+        // Скрываем курсор при уходе мыши из области
+        cursorArea.addEventListener('mouseleave', function() {
+            cursor.style.opacity = '0';
+        });
+    } else {
+        // Для мобильных устройств показываем курсор всегда
+        cursor.style.opacity = '1';
+        cursor.style.display = 'block';
+        cursorArea.style.pointerEvents = 'auto';
+        cursorArea.style.opacity = '1';
+        cursorArea.style.display = 'block';
+    }
+
+    // Обработчик клика по стрелке вверх
+    cursorArea.addEventListener('click', function(e) {
+        e.preventDefault();
+        hideAllCursors();
+        if (stepSound) {
+            stepSound.currentTime = 0;
+            stepSound.play();
+        }
+        
+        const nextPage = cursor.getAttribute('data-next-page');
+        if (nextPage) {
+            setTimeout(() => {
+                window.location.href = nextPage;
+            }, 300);
+        }
+    });
+}
+
 // Экспортируем функции в глобальную область видимости
 window.setupRightArrowHandler = setupRightArrowHandler;
 window.setupForwardArrowHandler = setupForwardArrowHandler;
 window.setupForwardLeftArrowHandler = setupForwardLeftArrowHandler;
 window.setupBackArrowHandler = setupBackArrowHandler;
 window.setupLeftArrowHandler = setupLeftArrowHandler;
+window.setupUpArrowHandler = setupUpArrowHandler;
 window.hideAllCursors = hideAllCursors;
 
 // Обработчик изменения размера окна для корректной работы на мобильных устройствах
 window.addEventListener('resize', function() {
     const isMobile = window.innerWidth <= 700;
-    const cursors = document.querySelectorAll('.custom-cursor, .custom-cursor-prosto, .custom-cursor-prosto-left, .custom-cursor-left');
-    const cursorAreas = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-prosto-leftarea, .custom-cursor-leftarea');
+    const cursors = document.querySelectorAll('.custom-cursor, .custom-cursor-prosto, .custom-cursor-prosto-left, .custom-cursor-left, .custom-cursor-up');
+    const cursorAreas = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-prosto-leftarea, .custom-cursor-leftarea, .custom-cursor-uparea');
     
     cursors.forEach(cursor => {
         if (isMobile) {

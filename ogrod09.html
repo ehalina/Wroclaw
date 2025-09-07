@@ -6,7 +6,7 @@
     <title>Тумский остров - Вроцлав</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="common_tumski.css">
-    <link rel="stylesheet" href="tumski15.css">
+    <link rel="stylesheet" href="ogrod09.css">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
     <script src="i18n.js"></script>
@@ -17,27 +17,36 @@
     <script src="language_menu.js"></script>
     <script src="map_modal.js"></script>
     <script type="module" src="background_music.js"></script>
+    <script type="module" src="ogrod03_handler.js"></script>
     <script type="module" src="tumski_cathedral_handler.js"></script>
     <script type="module" src="map_points.js"></script>
 </head>
 <body>
-    
+
+
+    <!-- Геометка: Статуя Марии Магдалины Квест -->
+    <div class="map-mark-area">
+        <div class="map-mark" id="maria_magdalena_quest" data-x-desktop="1200" data-y-desktop="1300" data-x-mobile="600" data-y-mobile="900" data-quest-number="12" data-quest-image="media/tumski/ogrud_09.jpg"></div>
+        <div class="content-wrapper">
+            <img class="papera-image" src="media/papera1.png" alt="Papera">
+            <div class="tumski-text" data-i18n="quest.task12"></div>
+        </div>
+        <audio id="bookSoundMariaMagdalena" src="media/opening-a-book.wav"></audio>
+    </div>
+
     <!-- Главная сцена с фоновым изображением и анимацией -->
     <div class="scene">
-        <div class="image-container" data-map-point="15">
+        <div class="image-container" data-map-point="27">
             <div class="image-scroll-wrapper">
                 <div class="image">
 
-                    
-                    <!-- Область иконки "стрелка прямо" в правом нижнем углу -->
-                    <div class="custom-cursor-prosto" data-x-desktop="500" data-y-desktop="800" data-x-mobile="1100" data-y-mobile="1200" data-next-page="ogrod13.html"></div>
-                    <div class="custom-cursor-prostoarea" data-x-desktop="500" data-y-desktop="800" data-x-mobile="1100" data-y-mobile="1200">
-                    </div>
+                
                     
                     <!-- Стрелка назад -->
-                    <div class="custom-cursor-back" data-x-desktop="100" data-y-desktop="1400" data-x-mobile="1100" data-y-mobile="1400" data-prev-page="tumski11.html"></div>
+                    <div class="custom-cursor-back" data-x-desktop="100" data-y-desktop="1400" data-x-mobile="1100" data-y-mobile="1400" data-prev-page="ogrod08.html"></div>
                     <div class="custom-cursor-backarea" data-x-desktop="100" data-y-desktop="1400" data-x-mobile="1100" data-y-mobile="1400">
                     </div>
+
                 </div>
             </div>
         </div>

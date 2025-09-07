@@ -220,11 +220,63 @@ export function initBackgroundMusic() {
                 api.setCurrentTime(parseFloat(savedTime));
             }
             
+            // Проверяем, нужно ли переключать музыку на основе текущей страницы
+            const currentPage = window.location.pathname;
+            let targetMusic = 'media/zwyki/town.mp3'; // По умолчанию
+            
+            // Определяем нужную музыку на основе страницы
+            if (currentPage.includes('ogrod') || currentPage.includes('pk')) {
+                targetMusic = 'media/zwyki/birds.mp3';
+            }
+            
+            // Если нужно переключить музыку, делаем это
+            const audio = musicIframe.contentDocument.getElementById('persistentMusic');
+            if (audio && audio.src !== targetMusic) {
+                console.log('🎵 Переключаем музыку с', audio.src, 'на', targetMusic);
+                switchMusicSource(targetMusic);
+                return; // Выходим, чтобы не запускать старую музыку
+            }
+            
             // Всегда пытаемся запустить музыку, если не выключена
             if (!isMuted) {
                 console.log('🎵 Пытаемся запустить музыку...', { isMuted, savedPaused });
+                
+                // Принудительный запуск музыки при перезагрузке страницы
+                const forcePlayMusic = () => {
+                    console.log('🎵 Принудительный запуск музыки...');
+                    api.play().then(() => {
+                        console.log('🎵 Музыка успешно запущена');
+                    }).catch((error) => {
+                        console.log('🎵 Ошибка принудительного воспроизведения:', error);
+                        // Если автовоспроизведение заблокировано, показываем подсказку
+                        if (musicHint) {
+                            musicHint.style.display = 'block';
+                            setTimeout(() => {
+                                musicHint.style.display = 'none';
+                                if (animationHint) {
+                                    animationHint.style.display = 'block';
+                                    setTimeout(() => { animationHint.style.display = 'none'; }, 6000);
+                                }
+                            }, 6000);
+                        }
+                        // Добавляем обработчик клика для запуска музыки
+                        const startMusicOnClick = () => {
+                            api.play().finally(() => document.removeEventListener('click', startMusicOnClick));
+                        };
+                        document.addEventListener('click', startMusicOnClick, { once: true });
+                    });
+                };
+                
+                // Пытаемся запустить сразу
                 api.play().catch((error) => {
                     console.log('🎵 Ошибка воспроизведения:', error);
+                    
+                    // Если автовоспроизведение заблокировано, пробуем принудительно через небольшую задержку
+                    setTimeout(() => {
+                        forcePlayMusic();
+                    }, 500);
+                    
+                    // Также показываем подсказку пользователю
                     if (musicHint) {
                         musicHint.style.display = 'block';
                         setTimeout(() => {
@@ -235,10 +287,6 @@ export function initBackgroundMusic() {
                             }
                         }, 6000);
                     }
-                    const startMusicOnClick = () => {
-                        api.play().finally(() => document.removeEventListener('click', startMusicOnClick));
-                    };
-                    document.addEventListener('click', startMusicOnClick, { once: true });
                 });
             } else {
                 console.log('🎵 Музыка отключена (muted)');
@@ -284,6 +332,31 @@ export function initBackgroundMusic() {
         }
     }, 2000);
 
+    // Принудительный запуск музыки при полной загрузке страницы
+    const forceMusicOnLoad = () => {
+        console.log('🎵 Принудительный запуск музыки при загрузке страницы');
+        if (musicIframe.contentWindow && musicIframe.contentWindow.musicAPI) {
+            const api = musicIframe.contentWindow.musicAPI;
+            const isMuted = localStorage.getItem('soundMuted') === 'true';
+            
+            if (!isMuted) {
+                console.log('🎵 Звук включен, принудительно запускаем музыку');
+                api.play().catch((error) => {
+                    console.log('🎵 Ошибка принудительного запуска:', error);
+                });
+            }
+        }
+    };
+
+    // Запускаем принудительно после полной загрузки страницы
+    if (document.readyState === 'complete') {
+        setTimeout(forceMusicOnLoad, 1000);
+    } else {
+        window.addEventListener('load', () => {
+            setTimeout(forceMusicOnLoad, 1000);
+        });
+    }
+
     // Универсальный обработчик для воспроизведения звука (с учётом mute)
     function playSound(sound) {
         if (!isMuted && sound) {
@@ -327,6 +400,9 @@ function switchMusicSource(newSrc) {
             // Обновляем источник музыки в iframe
             const audio = musicIframe.contentDocument.getElementById('persistentMusic');
             if (audio) {
+                // Сначала ставим на паузу, чтобы избежать проигрывания старой музыки
+                audio.pause();
+                
                 // Плавно переключаем на новый источник
                 audio.src = newSrc;
                 audio.load(); // Перезагружаем аудио с новым источником
@@ -336,9 +412,12 @@ function switchMusicSource(newSrc) {
                     audio.currentTime = currentTime;
                     audio.muted = isMuted;
                     
-                    if (!isPaused && !isMuted) {
-                        audio.play().catch(console.log);
-                    }
+                    // Небольшая задержка перед воспроизведением, чтобы избежать проигрывания старой музыки
+                    setTimeout(() => {
+                        if (!isPaused && !isMuted) {
+                            audio.play().catch(console.log);
+                        }
+                    }, 100);
                 }, { once: true });
                 
                 console.log('🎵 Музыка переключена на', newSrc, 'без прерывания');

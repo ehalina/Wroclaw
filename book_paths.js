@@ -136,6 +136,10 @@ function updateModalText(zoneNumber) {
             section = 'jan_nepomuk';
         } else if (window.activeGeoMarker === 'ogrod_papieski') {
             section = 'ogrod_papieski';
+        } else if (window.activeGeoMarker === 'national_museum') {
+            section = 'national_museum';
+        } else if (window.activeGeoMarker === 'odra') {
+            section = 'odra';
         }
     } else {
         // Fallback: проверяем DOM элементы
@@ -143,7 +147,9 @@ function updateModalText(zoneNumber) {
                             document.querySelector('.map-mark-area:hover') ||
                             document.querySelector('#tumski_most') ||
                             document.querySelector('#tumski_cathedral') ||
-                            document.querySelector('#ogrod_papieski');
+                            document.querySelector('#ogrod_papieski') ||
+                            document.querySelector('#national_museum') ||
+                            document.querySelector('#odra');
         
         if (activeMarker) {
             const markerId = activeMarker.id || activeMarker.getAttribute('data-marker-id');
@@ -163,6 +169,10 @@ function updateModalText(zoneNumber) {
                 section = 'jan_nepomuk';
             } else if (markerId === 'ogrod_papieski' || markerId === 'ogrod-papieski-text') {
                 section = 'ogrod_papieski';
+            } else if (markerId === 'national_museum' || markerId === 'national-museum-text') {
+                section = 'national_museum';
+            } else if (markerId === 'odra' || markerId === 'odra-text') {
+                section = 'odra';
             }
         }
     }
