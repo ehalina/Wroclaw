@@ -1,0 +1,79 @@
+/* Уникальные стили страницы tumski06 */
+
+.image {
+    background-image: url('media/tumski/tumski_23.jpg');
+}
+
+.next-image-container {
+    background-image: url('media/tumski/tumski_01.jpg');
+}
+
+/* Переопределяем стрелку прямо вправо для этой страницы */
+.custom-cursor-prosto {
+    background-image: url('media/strelka_rondo_l.png') !important;
+}
+
+/* Стили для стрелки прямо влево */
+.custom-cursor-prosto-leftarea {
+    right: auto;
+    bottom: auto;
+    width: 20%;
+    height: 15%;
+}
+
+/* Индивидуальные размеры областей стрелок */
+.custom-cursor-backarea {
+    width: 60%;
+    height: 25%;
+}
+
+
+
+/* Уникальная квест‑метка */
+#bogomater_quest {
+    background-image: url('media/mapmarknb.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+/* Мобильная версия */
+@media (max-width: 700px) {
+    .custom-cursor-prosto-leftarea {
+        position: absolute !important;
+        z-index: 998 !important;
+        right: auto !important;
+        bottom: auto !important;
+        width: 80px !important;
+        height: 80px !important;
+        display: block !important;
+        pointer-events: auto !important;
+        opacity: 1 !important;
+        top: unset !important;
+        right: unset !important;
+        left: unset !important;
+        bottom: unset !important;
+        transform: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .custom-cursor-prosto-left {
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+        z-index: 9999 !important;
+        position: absolute !important;
+        width: 80px !important;
+        height: 80px !important;
+    }
+    
+    .custom-cursor-prosto-leftarea:hover .custom-cursor-prosto-left {
+        opacity: 1 !important;
+    }
+}
+
+

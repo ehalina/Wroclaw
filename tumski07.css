@@ -1,0 +1,126 @@
+/* Уникальные стили страницы tumski14 */
+
+.image {
+    background-image: url('media/tumski/tumski_07.jpg');
+}
+
+
+.next-image-container {
+    background-image: url('media/tumski/tumski_08.jpg');
+}
+
+/* Стили для стрелки прямо влево */
+.custom-cursor-prosto-leftarea {
+    right: auto;
+    bottom: auto;
+    width: 20%;
+    height: 15%;
+}
+
+/* Переопределяем картинку стрелки прямо */
+.custom-cursor-prosto {
+    background-image: url('media/strelka_rondo.png') !important;
+}
+
+/* Индивидуальные размеры областей стрелок */
+.custom-cursor-backarea {
+    width: 60%;
+    height: 25%;
+}
+
+/* Переопределяем стрелку влево для использования как стрелка вверх */
+.custom-cursor-leftarea {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 20%;
+    z-index: 999;
+    cursor: none;
+}
+
+.custom-cursor-left {
+    background-image: url('media/strelka_v.png') !important;
+}
+
+
+
+/* Уникальная квест‑метка */
+#bogomater_quest {
+    background-image: url('media/mapmarknb.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+}
+
+/* Мобильная версия */
+@media (max-width: 700px) {
+    .custom-cursor-prosto-leftarea {
+        position: absolute !important;
+        z-index: 998 !important;
+        right: auto !important;
+        bottom: auto !important;
+        width: 80px !important;
+        height: 80px !important;
+        display: block !important;
+        pointer-events: auto !important;
+        opacity: 1 !important;
+        top: unset !important;
+        right: unset !important;
+        left: unset !important;
+        bottom: unset !important;
+        transform: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    .custom-cursor-prosto-left {
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+        z-index: 9999 !important;
+        position: absolute !important;
+        width: 80px !important;
+        height: 80px !important;
+    }
+    
+    .custom-cursor-prosto-leftarea:hover .custom-cursor-prosto-left {
+        opacity: 1 !important;
+    }
+    
+    /* Мобильные стили для стрелки влево (используется как стрелка вверх) */
+    .custom-cursor-leftarea {
+        position: absolute !important;
+        z-index: 998 !important;
+        top: 0 !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 80px !important;
+        height: 80px !important;
+        display: block !important;
+        pointer-events: auto !important;
+        opacity: 1 !important;
+    }
+    
+    .custom-cursor-left {
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+        z-index: 9999 !important;
+        position: absolute !important;
+        width: 80px !important;
+        height: 80px !important;
+        background-image: url('media/strelka_v.png') !important;
+    }
+    
+    .custom-cursor-leftarea:hover .custom-cursor-left {
+        opacity: 1 !important;
+    }
+}
+
+

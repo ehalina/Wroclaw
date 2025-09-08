@@ -6,7 +6,7 @@
     <title>Тумский остров - Вроцлав</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="common_tumski.css">
-    <link rel="stylesheet" href="tumski22.css">
+    <link rel="stylesheet" href="dwor01.css">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
     <script src="i18n.js"></script>
@@ -28,40 +28,44 @@
     <div id="animationHint" class="animation-hint" data-i18n="animation.hint"></div>
 
 
-                <!-- Геометка: Богоматерь с младенцем Квест -->
+
+
+
+                <!-- Геометка: Черная клёцка Квест -->
                 <div class="map-mark-area">
-                    <div class="map-mark" id="bogomater_quest" data-x-desktop="1300" data-y-desktop="1300" data-x-mobile="1350" data-y-mobile="1100" data-quest-number="4" data-quest-image="media/watercolor/42.jpg"></div>
+                    <div class="map-mark" id="black_klotska_quest" data-x-desktop="1220" data-y-desktop="650" data-x-mobile="1100" data-y-mobile="900" data-quest-number="9" data-quest-image="media/tumski/dwor_08.jpg"></div>
                     <div class="content-wrapper">
                         <img class="papera-image" src="media/papera1.png" alt="Papera">
-                        <div class="tumski-text" data-i18n="quest.task4"></div>
+                        <div class="tumski-text" data-i18n="quest.task9"></div>
                     </div>
-                    <audio id="bookSoundBogomater" src="media/opening-a-book.wav"></audio>
+                    <audio id="bookSoundBlackKlotska" src="media/opening-a-book.wav"></audio>
                 </div>
 
-                <!-- Геометка: Фонарщик Квест -->
+                <!-- Геометка: Клецкие ворота -->
                 <div class="map-mark-area">
-                    <div class="map-mark" id="fonarshik_quest" data-x-desktop="700" data-y-desktop="1150" data-x-mobile="1000" data-y-mobile="800" data-quest-number="8" data-quest-image="media/watercolor/82.jpg"></div>
+                    <div class="map-mark" id="kleck_gate" data-x-desktop="1500" data-y-desktop="950" data-x-mobile="1300" data-y-mobile="600"></div>
                     <div class="content-wrapper">
-                        <img class="papera-image" src="media/papera1.png" alt="Papera">
-                        <div class="tumski-text" data-i18n="quest.task8"></div>
+                        <img class="papera-image" alt="Papera">
+                        <div class="tumski-text" id="kleck-gate-text" data-i18n="kleck_gate.title"></div>
                     </div>
-                    <audio id="bookSoundFonarshik" src="media/opening-a-book.wav"></audio>
+                    <audio id="bookSoundKleckGate" src="media/opening-a-book.wav"></audio>
                 </div>
+
 
     <!-- Главная сцена с фоновым изображением и анимацией -->
     <div class="scene">
-        <div class="image-container" data-map-point="18">
+        <div class="image-container" data-map-point="34">
             <div class="image-scroll-wrapper">
                 <div class="image">
 
 
                     <!-- Область иконки "стрелка прямо" в правом нижнем углу -->
-                    <div class="custom-cursor-prosto" data-x-desktop="1000" data-y-desktop="700" data-x-mobile="1500" data-y-mobile="1000" data-next-page="tumski23.html"></div>
-                    <div class="custom-cursor-prostoarea" data-x-desktop="1000" data-y-desktop="700" data-x-mobile="1500" data-y-mobile="1000">
+                    <div class="custom-cursor-prosto" data-x-desktop="1000" data-y-desktop="1200" data-x-mobile="1500" data-y-mobile="1000" data-next-page="dwor02.html"></div>
+                    <div class="custom-cursor-prostoarea" data-x-desktop="1000" data-y-desktop="1200" data-x-mobile="1500" data-y-mobile="1000">
                     </div>
                 
                 <!-- Стрелка назад -->
-                <div class="custom-cursor-back" data-x-desktop="100" data-y-desktop="1600" data-x-mobile="400" data-y-mobile="1600" data-prev-page="tumski10.html"></div>
+                <div class="custom-cursor-back" data-x-desktop="100" data-y-desktop="1600" data-x-mobile="400" data-y-mobile="1600" data-prev-page="pk02.html"></div>
                 <div class="custom-cursor-backarea" data-x-desktop="100" data-y-desktop="1600" data-x-mobile="400" data-y-mobile="1600">
                 </div>
             </div>

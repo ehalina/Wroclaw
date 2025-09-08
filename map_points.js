@@ -118,6 +118,26 @@ const mapPoints = {
     desktop: { x: 73, y: 75 },
     mobile: { x: 45, y: 45 }
   },
+  30: { 
+    desktop: { x: 48, y: 65 },
+    mobile: { x: 45, y: 45 }
+  },
+  31: { 
+    desktop: { x: 55, y: 60 },
+    mobile: { x: 45, y: 45 }
+  },
+  32: { 
+    desktop: { x: 61, y: 59 },
+    mobile: { x: 45, y: 45 }
+  },
+  33: { 
+    desktop: { x: 61, y: 74 },
+    mobile: { x: 45, y: 45 }
+  },
+  34: { 
+    desktop: { x: 59, y: 58 },
+    mobile: { x: 45, y: 45 }
+  },
 };
 
 // Координаты для всплывающих подсказок на карте

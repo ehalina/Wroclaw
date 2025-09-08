@@ -6,7 +6,7 @@
     <title>Тумский остров - Вроцлав</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="common_tumski.css">
-    <link rel="stylesheet" href="tumski09.css">
+    <link rel="stylesheet" href="tumski07.css">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
     <script src="i18n.js"></script>
@@ -28,40 +28,38 @@
     <div id="animationHint" class="animation-hint" data-i18n="animation.hint"></div>
 
 
-
-
-    <!-- Геометка: Собор Святого Иоанна Крестителя (универсальная) -->
+    <!-- Геометка: Платан -->
     <div class="map-mark-area">
-        <div class="map-mark" id="tumski_cathedral" data-x-desktop="1200" data-y-desktop="300" data-x-mobile="1400" data-y-mobile=300></div>
+        <div class="map-mark" id="platan_quest" data-x-desktop="1300" data-y-desktop="700" data-x-mobile="1000" data-y-mobile="1000" data-quest-number="13" data-quest-image="media/watercolor/132.jpg"></div>
         <div class="content-wrapper">
-            <img class="papera-image" alt="Papera">
-            <div class="tumski-text" id="tumski-cathedral-text" data-i18n="tumski_cathedral.title"></div>
+            <img class="papera-image" src="media/papera1.png" alt="Papera">
+            <div class="tumski-text" data-i18n="quest.task13"></div>
         </div>
-        <audio id="bookSound3" src="media/opening-a-book.wav"></audio>
+        <audio id="bookSoundPlatan" src="media/opening-a-book.wav"></audio>
     </div>
 
 
     <!-- Главная сцена с фоновым изображением и анимацией -->
     <div class="scene">
-        <div class="image-container" data-map-point="33">
+        <div class="image-container" data-map-point="32">
             <div class="image-scroll-wrapper">
                 <div class="image">
                 
-                      
-                <!-- Стрелка прямо влево -->
-                <div class="custom-cursor-prosto-left" data-x-desktop="400" data-y-desktop="1200" data-x-mobile="200" data-y-mobile="1200" data-next-page="tumski10.html"></div>
-                <div class="custom-cursor-prosto-leftarea" data-x-desktop="400" data-y-desktop="1200" data-x-mobile="200" data-y-mobile="1200">
-                </div>
+                <!-- Стрелка прямо -->
+                <div class="custom-cursor-prosto" data-x-desktop="1100" data-y-desktop="1000" data-x-mobile="1500" data-y-mobile="1200" data-next-page="tumski08.html"></div>
+                <div class="custom-cursor-prostoarea" data-x-desktop="1100" data-y-desktop="1000" data-x-mobile="1500" data-y-mobile="1200">
                 </div>
                 
                 <!-- Стрелка назад -->
-                <div class="custom-cursor-back" data-x-desktop="100" data-y-desktop="1600" data-x-mobile="400" data-y-mobile="1600" data-prev-page="tumski08.html"></div>
-                <div class="custom-cursor-backarea" data-x-desktop="100" data-y-desktop="1600" data-x-mobile="400" data-y-mobile="1600">
+                <div class="custom-cursor-back" data-x-desktop="100" data-y-desktop="1400" data-x-mobile="400" data-y-mobile="1600" data-prev-page="pk02.html"></div>
+                <div class="custom-cursor-backarea" data-x-desktop="100" data-y-desktop="1400" data-x-mobile="400" data-y-mobile="1600">
                 </div>
             </div>
         </div>
-       <div class="next-image-container"></div>
     </div>
+       <div class="next-image-container"></div>
+    
+</div>
     <script type="module" src="tumski_init.js"></script>
 </body>
 </html> 

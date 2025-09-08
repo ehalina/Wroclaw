@@ -6,7 +6,7 @@
     <title>Тумский остров - Вроцлав</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="common_tumski.css">
-    <link rel="stylesheet" href="ogrod12.css">
+    <link rel="stylesheet" href="pk01.css">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
     <script src="i18n.js"></script>
@@ -17,39 +17,28 @@
     <script src="language_menu.js"></script>
     <script src="map_modal.js"></script>
     <script type="module" src="background_music.js"></script>
+    <script type="module" src="town_music_handler.js"></script>
     <script type="module" src="tumski_cathedral_handler.js"></script>
     <script type="module" src="map_points.js"></script>
 </head>
 <body>
     
-    <!-- Геометка: Сад папского теологического факультета -->
-    <div class="map-mark-area">
-        <div class="map-mark" id="ogrod_papieski" data-x-desktop="1200" data-y-desktop="300" data-x-mobile="1400" data-y-mobile="600"></div>
-        <div class="content-wrapper">
-            <img class="papera-image" alt="Papera">
-            <div class="tumski-text" id="ogrod-papieski-text" data-i18n="ogrod_papieski.title"></div>
-        </div>
-        <audio id="bookSoundOgrodPapieski" src="media/opening-a-book.wav"></audio>
-    </div>
-
     <!-- Главная сцена с фоновым изображением и анимацией -->
     <div class="scene">
-        <div class="image-container" data-map-point="22">
+        <div class="image-container" data-map-point="30">
             <div class="image-scroll-wrapper">
                 <div class="image">
 
                     
                     <!-- Область иконки "стрелка прямо" в правом нижнем углу -->
-                    <div class="custom-cursor-prosto" data-x-desktop="500" data-y-desktop="800" data-x-mobile="1100" data-y-mobile="1200" data-next-page="ogrod02.html"></div>
-                    <div class="custom-cursor-prostoarea" data-x-desktop="500" data-y-desktop="800" data-x-mobile="1100" data-y-mobile="1200">
+                    <div class="custom-cursor-prosto" data-x-desktop="500" data-y-desktop="1000" data-x-mobile="1100" data-y-mobile="1200" data-next-page="pk02.html"></div>
+                    <div class="custom-cursor-prostoarea" data-x-desktop="500" data-y-desktop="1000" data-x-mobile="1100" data-y-mobile="1200">
                     </div>
                     
-                         <!-- Кастомный курсор для стрелки вправо -->
-                          <div class="custom-cursor" data-x-desktop="1400" data-y-desktop="1200" data-x-mobile="1900" data-y-mobile="1500" data-prev-page="ogrod13.html"></div>
-                          <!-- Область для появления кастомного курсора -->
-                          <div class="custom-cursor-area" data-x-desktop="1400" data-y-desktop="1200" data-x-mobile="1900" data-y-mobile="1400">
-                          </div>
-
+                    <!-- Стрелка назад -->
+                    <div class="custom-cursor-back" data-x-desktop="100" data-y-desktop="1400" data-x-mobile="1100" data-y-mobile="1400" data-prev-page="tumski06.html"></div>
+                    <div class="custom-cursor-backarea" data-x-desktop="100" data-y-desktop="1400" data-x-mobile="1100" data-y-mobile="1400">
+                    </div>
                 </div>
             </div>
         </div>

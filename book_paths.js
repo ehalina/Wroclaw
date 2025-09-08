@@ -144,6 +144,10 @@ function updateModalText(zoneNumber) {
             section = 'millennium_column';
         } else if (window.activeGeoMarker === 'spiritual_seminary') {
             section = 'spiritual_seminary';
+        } else if (window.activeGeoMarker === 'st_mary_church') {
+            section = 'st_mary_church';
+        } else if (window.activeGeoMarker === 'kleck_gate') {
+            section = 'kleck_gate';
         }
     } else {
         // Fallback: проверяем DOM элементы
@@ -155,7 +159,9 @@ function updateModalText(zoneNumber) {
                             document.querySelector('#national_museum') ||
                             document.querySelector('#odra') ||
                             document.querySelector('#millennium_column') ||
-                            document.querySelector('#spiritual_seminary');
+                            document.querySelector('#spiritual_seminary') ||
+                            document.querySelector('#st_mary_church') ||
+                            document.querySelector('#kleck_gate');
         
         if (activeMarker) {
             const markerId = activeMarker.id || activeMarker.getAttribute('data-marker-id');
@@ -183,6 +189,10 @@ function updateModalText(zoneNumber) {
                 section = 'millennium_column';
             } else if (markerId === 'spiritual_seminary' || markerId === 'spiritual-seminary-text') {
                 section = 'spiritual_seminary';
+            } else if (markerId === 'st_mary_church' || markerId === 'st-mary-church-text') {
+                section = 'st_mary_church';
+            } else if (markerId === 'kleck_gate' || markerId === 'kleck-gate-text') {
+                section = 'kleck_gate';
             }
         }
     }

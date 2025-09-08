@@ -225,16 +225,26 @@ export function initBackgroundMusic() {
             let targetMusic = 'media/zwyki/town.mp3'; // По умолчанию
             
             // Определяем нужную музыку на основе страницы
-            if (currentPage.includes('ogrod') || currentPage.includes('pk')) {
+            if (currentPage.includes('ogrod03.html')) {
                 targetMusic = 'media/zwyki/birds.mp3';
+            } else if (currentPage.includes('tumski21.html')) {
+                targetMusic = ''; // Отключаем музыку для tumski21.html
+            } else {
+                // Для всех остальных страниц используем town.mp3
+                targetMusic = 'media/zwyki/town.mp3';
             }
             
             // Если нужно переключить музыку, делаем это
             const audio = musicIframe.contentDocument.getElementById('persistentMusic');
-            if (audio && audio.src !== targetMusic) {
-                console.log('🎵 Переключаем музыку с', audio.src, 'на', targetMusic);
-                switchMusicSource(targetMusic);
-                return; // Выходим, чтобы не запускать старую музыку
+            if (audio) {
+                if (targetMusic === '') {
+                    audio.pause();
+                    console.log('🎵 Музыка отключена для текущей страницы');
+                } else if (!audio.src.includes(targetMusic.split('/').pop())) {
+                    console.log('🎵 Переключаем музыку с', audio.src, 'на', targetMusic);
+                    switchMusicSource(targetMusic);
+                    return; // Выходим, чтобы не запускать старую музыку
+                }
             }
             
             // Всегда пытаемся запустить музыку, если не выключена
@@ -259,13 +269,10 @@ export function initBackgroundMusic() {
                                 }
                             }, 6000);
                         }
-                        // Добавляем обработчик клика для запуска музыки
-                        const startMusicOnClick = () => {
-                            api.play().finally(() => document.removeEventListener('click', startMusicOnClick));
-                        };
-                        document.addEventListener('click', startMusicOnClick, { once: true });
                     });
                 };
+                
+                // Обработчик клика для запуска музыки теперь глобальный (см. globalMusicClickHandler)
                 
                 // Пытаемся запустить сразу
                 api.play().catch((error) => {
@@ -364,6 +371,27 @@ export function initBackgroundMusic() {
             sound.play();
         }
     }
+
+    // Глобальный обработчик клика для запуска фоновой музыки
+    const globalMusicClickHandler = (event) => {
+        // Проверяем, включен ли звук
+        const isSoundEnabled = localStorage.getItem('soundMuted') !== 'true';
+        
+        if (isSoundEnabled && musicIframe && musicIframe.contentWindow && musicIframe.contentWindow.musicAPI) {
+            const api = musicIframe.contentWindow.musicAPI;
+            
+            // Проверяем, не играет ли уже музыка
+            if (api.isPaused()) {
+                console.log('🎵 Запуск музыки по глобальному клику');
+                api.play().catch((error) => {
+                    console.log('🎵 Ошибка запуска музыки по глобальному клику:', error);
+                });
+            }
+        }
+    };
+
+    // Добавляем глобальный обработчик клика на документ
+    document.addEventListener('click', globalMusicClickHandler);
 
     // Глобальные функции для воспроизведения шагов и карты
     window.playStepSound = () => playSound(stepSound);
