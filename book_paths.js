@@ -140,6 +140,10 @@ function updateModalText(zoneNumber) {
             section = 'national_museum';
         } else if (window.activeGeoMarker === 'odra') {
             section = 'odra';
+        } else if (window.activeGeoMarker === 'millennium_column') {
+            section = 'millennium_column';
+        } else if (window.activeGeoMarker === 'spiritual_seminary') {
+            section = 'spiritual_seminary';
         }
     } else {
         // Fallback: проверяем DOM элементы
@@ -149,7 +153,9 @@ function updateModalText(zoneNumber) {
                             document.querySelector('#tumski_cathedral') ||
                             document.querySelector('#ogrod_papieski') ||
                             document.querySelector('#national_museum') ||
-                            document.querySelector('#odra');
+                            document.querySelector('#odra') ||
+                            document.querySelector('#millennium_column') ||
+                            document.querySelector('#spiritual_seminary');
         
         if (activeMarker) {
             const markerId = activeMarker.id || activeMarker.getAttribute('data-marker-id');
@@ -173,6 +179,10 @@ function updateModalText(zoneNumber) {
                 section = 'national_museum';
             } else if (markerId === 'odra' || markerId === 'odra-text') {
                 section = 'odra';
+            } else if (markerId === 'millennium_column' || markerId === 'millennium-column-text') {
+                section = 'millennium_column';
+            } else if (markerId === 'spiritual_seminary' || markerId === 'spiritual-seminary-text') {
+                section = 'spiritual_seminary';
             }
         }
     }

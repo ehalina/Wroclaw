@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тумский остров - Вроцлав</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="common_tumski.css">
+    <link rel="stylesheet" href="tumski22.css">
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
+    <script src="i18n.js"></script>
+    <script src="common.js"></script>
+    <script src="arrow_handlers.js"></script>
+    <script src="book_paths.js"></script>
+    <script src="common_buttons.js"></script>
+    <script src="language_menu.js"></script>
+    <script src="map_modal.js"></script>
+    <script type="module" src="background_music.js"></script>
+    <script type="module" src="tumski_cathedral_handler.js"></script>
+    <script type="module" src="map_points.js"></script>
+</head>
+<body>
+
+    <!-- Подсказка для запуска музыки -->
+    <div id="musicHint" class="music-hint" data-i18n="music.hint"></div>
+    <!-- Подсказка для возврата анимации -->
+    <div id="animationHint" class="animation-hint" data-i18n="animation.hint"></div>
+
+
+                <!-- Геометка: Богоматерь с младенцем Квест -->
+                <div class="map-mark-area">
+                    <div class="map-mark" id="bogomater_quest" data-x-desktop="1300" data-y-desktop="1300" data-x-mobile="1350" data-y-mobile="1100" data-quest-number="4" data-quest-image="media/watercolor/42.jpg"></div>
+                    <div class="content-wrapper">
+                        <img class="papera-image" src="media/papera1.png" alt="Papera">
+                        <div class="tumski-text" data-i18n="quest.task4"></div>
+                    </div>
+                    <audio id="bookSoundBogomater" src="media/opening-a-book.wav"></audio>
+                </div>
+
+                <!-- Геометка: Фонарщик Квест -->
+                <div class="map-mark-area">
+                    <div class="map-mark" id="fonarshik_quest" data-x-desktop="700" data-y-desktop="1150" data-x-mobile="1000" data-y-mobile="800" data-quest-number="8" data-quest-image="media/watercolor/82.jpg"></div>
+                    <div class="content-wrapper">
+                        <img class="papera-image" src="media/papera1.png" alt="Papera">
+                        <div class="tumski-text" data-i18n="quest.task8"></div>
+                    </div>
+                    <audio id="bookSoundFonarshik" src="media/opening-a-book.wav"></audio>
+                </div>
+
+    <!-- Главная сцена с фоновым изображением и анимацией -->
+    <div class="scene">
+        <div class="image-container" data-map-point="6">
+            <div class="image-scroll-wrapper">
+                <div class="image">
+
+                <!-- Стрелка прямо вправо -->
+                <div class="custom-cursor-prosto" data-x-desktop="1000" data-y-desktop="600" data-x-mobile="1500" data-y-mobile="1200" data-next-page="tumski23.html"></div>
+                <div class="custom-cursor-prostoarea" data-x-desktop="1000" data-y-desktop="600" data-x-mobile="1500" data-y-mobile="1200">
+                </div>
+                
+                <!-- Стрелка назад -->
+                <div class="custom-cursor-back" data-x-desktop="100" data-y-desktop="1600" data-x-mobile="400" data-y-mobile="1600" data-prev-page="tumski10.html"></div>
+                <div class="custom-cursor-backarea" data-x-desktop="100" data-y-desktop="1600" data-x-mobile="400" data-y-mobile="1600">
+                </div>
+            </div>
+        </div>
+       <div class="next-image-container"></div>
+    </div>
+    <script type="module" src="tumski_init.js"></script>
+</body>
+</html> 

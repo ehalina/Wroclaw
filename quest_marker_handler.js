@@ -54,7 +54,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         questTasksList.innerHTML = '';
 
         // Единая длительность плавного проявления (в мс)
-        const revealDurationMs = 5000;
+        const revealDurationMs = 2500;
 
         // Заполняем список заданий
         for (let i = 1; i <= 13; i++) {
@@ -1228,11 +1228,11 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                     }
                                 }
                             }
-                        }, 500); // Небольшая задержка перед началом анимации
+                        }, revealDurationMs / 3); // Небольшая задержка перед началом анимации
                     }
-                }, 1000);
+                }, revealDurationMs / 2);
             }
-        }, 1000);
+        }, revealDurationMs / 3);
 
         // Принудительное применение мобильных стилей
         if (window.innerWidth <= 768) {

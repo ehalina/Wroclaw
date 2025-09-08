@@ -292,6 +292,21 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
                     nextImageContainer.style.backgroundSize = 'contain';
                     console.log('🟡 Десктопная версия: загружено полное изображение tumski_08.jpg');
                 }
+            } else if (nextPage === 'tumski22.html') {
+                // Для tumski22.html загружаем соответствующее изображение
+                if (isMobile) {
+                    // В мобильной версии загружаем изображение, вписанное по высоте
+                    nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_22.jpg")';
+                    nextImageContainer.style.backgroundPosition = 'left top';
+                    nextImageContainer.style.backgroundSize = 'auto 100%';
+                    console.log('🟡 Мобильная версия: загружено изображение tumski_22.jpg, вписанное по высоте');
+                } else {
+                    // В десктопной версии загружаем полное изображение
+                    nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_22.jpg")';
+                    nextImageContainer.style.backgroundPosition = 'center center';
+                    nextImageContainer.style.backgroundSize = 'contain';
+                    console.log('🟡 Десктопная версия: загружено полное изображение tumski_22.jpg');
+                }
             }
             
             console.log('🟡 Сразу начинаем плавно показывать next-image-container');
@@ -428,6 +443,21 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
                         nextImageContainer.style.backgroundPosition = 'center center';
                         nextImageContainer.style.backgroundSize = 'contain';
                         console.log('🟡 Десктопная версия (touchend): загружено полное изображение tumski_08.jpg');
+                    }
+                } else if (nextPage === 'tumski22.html') {
+                    // Для tumski22.html загружаем соответствующее изображение
+                    if (isMobile) {
+                        // В мобильной версии загружаем изображение, вписанное по высоте
+                        nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_22.jpg")';
+                        nextImageContainer.style.backgroundPosition = 'left top';
+                        nextImageContainer.style.backgroundSize = 'auto 100%';
+                        console.log('🟡 Мобильная версия (touchend): загружено изображение tumski_22.jpg, вписанное по высоте');
+                    } else {
+                        // В десктопной версии загружаем полное изображение
+                        nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_22.jpg")';
+                        nextImageContainer.style.backgroundPosition = 'center center';
+                        nextImageContainer.style.backgroundSize = 'contain';
+                        console.log('🟡 Десктопная версия (touchend): загружено полное изображение tumski_22.jpg');
                     }
                 }
                 
@@ -797,6 +827,21 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
                     nextImageContainer.style.backgroundSize = 'contain';
                     console.log('🟡 Десктопная версия: загружено полное изображение ogrud_08.jpg');
                 }
+            } else if (nextPage === 'tumski15.html') {
+                // Для tumski15.html загружаем соответствующее изображение
+                if (isMobile) {
+                    // В мобильной версии загружаем изображение, вписанное по высоте
+                    nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_15.jpg")';
+                    nextImageContainer.style.backgroundPosition = 'left top';
+                    nextImageContainer.style.backgroundSize = 'auto 100%';
+                    console.log('🟡 Мобильная версия: загружено изображение tumski_15.jpg, вписанное по высоте');
+                } else {
+                    // В десктопной версии загружаем полное изображение
+                    nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_15.jpg")';
+                    nextImageContainer.style.backgroundPosition = 'center center';
+                    nextImageContainer.style.backgroundSize = 'contain';
+                    console.log('🟡 Десктопная версия: загружено полное изображение tumski_15.jpg');
+                }
             }
             
             console.log('🟡 Сразу начинаем плавно показывать next-image-container');
@@ -887,6 +932,21 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
                         nextImageContainer.style.backgroundPosition = 'center center';
                         nextImageContainer.style.backgroundSize = 'contain';
                         console.log('🟡 Десктопная версия (touchend): загружено полное изображение ogrud_08.jpg');
+                    }
+                } else if (nextPage === 'tumski15.html') {
+                    // Для tumski15.html загружаем соответствующее изображение
+                    if (isMobile) {
+                        // В мобильной версии загружаем изображение, вписанное по высоте
+                        nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_15.jpg")';
+                        nextImageContainer.style.backgroundPosition = 'left top';
+                        nextImageContainer.style.backgroundSize = 'auto 100%';
+                        console.log('🟡 Мобильная версия (touchend): загружено изображение tumski_15.jpg, вписанное по высоте');
+                    } else {
+                        // В десктопной версии загружаем полное изображение
+                        nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_15.jpg")';
+                        nextImageContainer.style.backgroundPosition = 'center center';
+                        nextImageContainer.style.backgroundSize = 'contain';
+                        console.log('🟡 Десктопная версия (touchend): загружено полное изображение tumski_15.jpg');
                     }
                 }
                 
