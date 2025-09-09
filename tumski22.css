@@ -12,5 +12,10 @@
 .custom-cursor-backarea {
     width: 60%;
     height: 25%;
+}
+
+/* Переопределяем изображение курсора для стрелки влево только на этой странице */
+.custom-cursor-left {
+    background-image: url('media/strelka_rondo_l.png') !important;
 } 
 

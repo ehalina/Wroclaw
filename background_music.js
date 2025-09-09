@@ -225,10 +225,18 @@ export function initBackgroundMusic() {
             let targetMusic = 'media/zwyki/town.mp3'; // По умолчанию
             
             // Определяем нужную музыку на основе страницы
-            if (currentPage.includes('ogrod03.html')) {
+            if (currentPage.includes('ogrod03.html') || 
+                currentPage.includes('ogrod04.html') || 
+                currentPage.includes('ogrod05.html') || 
+                currentPage.includes('ogrod06.html') || 
+                currentPage.includes('ogrod07.html') || 
+                currentPage.includes('ogrod08.html') || 
+                currentPage.includes('ogrod09.html')) {
                 targetMusic = 'media/zwyki/birds.mp3';
             } else if (currentPage.includes('tumski21.html')) {
-                targetMusic = ''; // Отключаем музыку для tumski21.html
+                targetMusic = ''; // Отключаем музыку для tumski21.html, оставляем только hang.mp3
+            } else if (currentPage.includes('tumski19.html')) {
+                targetMusic = 'media/zwyki/kostel.mp3'; // Включаем kostel для tumski19.html
             } else {
                 // Для всех остальных страниц используем town.mp3
                 targetMusic = 'media/zwyki/town.mp3';
@@ -244,11 +252,19 @@ export function initBackgroundMusic() {
                     console.log('🎵 Переключаем музыку с', audio.src, 'на', targetMusic);
                     switchMusicSource(targetMusic);
                     return; // Выходим, чтобы не запускать старую музыку
+                } else if (audio.src.includes(targetMusic.split('/').pop())) {
+                    console.log('🎵 Правильная музыка уже загружена:', targetMusic);
+                    // Если правильная музыка уже загружена, просто убеждаемся что она играет
+                    if (!isMuted && audio.paused) {
+                        console.log('🎵 Возобновляем воспроизведение правильной музыки');
+                        audio.play().catch(console.log);
+                    }
+                    return; // Выходим, не нужно ничего больше делать
                 }
             }
             
-            // Всегда пытаемся запустить музыку, если не выключена
-            if (!isMuted) {
+            // Всегда пытаемся запустить музыку, если не выключена и targetMusic не пустой
+            if (!isMuted && targetMusic !== '') {
                 console.log('🎵 Пытаемся запустить музыку...', { isMuted, savedPaused });
                 
                 // Принудительный запуск музыки при перезагрузке страницы
@@ -342,6 +358,14 @@ export function initBackgroundMusic() {
     // Принудительный запуск музыки при полной загрузке страницы
     const forceMusicOnLoad = () => {
         console.log('🎵 Принудительный запуск музыки при загрузке страницы');
+        
+        // Проверяем текущую страницу
+        const currentPage = window.location.pathname;
+        if (currentPage.includes('tumski21.html')) {
+            console.log('🎵 Страница tumski21.html - не запускаем town.mp3');
+            return;
+        }
+        
         if (musicIframe.contentWindow && musicIframe.contentWindow.musicAPI) {
             const api = musicIframe.contentWindow.musicAPI;
             const isMuted = localStorage.getItem('soundMuted') === 'true';
@@ -374,6 +398,12 @@ export function initBackgroundMusic() {
 
     // Глобальный обработчик клика для запуска фоновой музыки
     const globalMusicClickHandler = (event) => {
+        // Проверяем текущую страницу
+        const currentPage = window.location.pathname;
+        if (currentPage.includes('tumski21.html')) {
+            return; // Не запускаем town.mp3 на tumski21.html
+        }
+        
         // Проверяем, включен ли звук
         const isSoundEnabled = localStorage.getItem('soundMuted') !== 'true';
         
@@ -437,7 +467,8 @@ function switchMusicSource(newSrc) {
                 
                 // Восстанавливаем состояние после загрузки
                 audio.addEventListener('loadedmetadata', () => {
-                    audio.currentTime = currentTime;
+                    // Для разных музыкальных треков не восстанавливаем время, начинаем с начала
+                    audio.currentTime = 0;
                     audio.muted = isMuted;
                     
                     // Небольшая задержка перед воспроизведением, чтобы избежать проигрывания старой музыки

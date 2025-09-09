@@ -34,41 +34,5 @@
     cursor: pointer;
 }
 
-/* Мобильная версия */
-@media (max-width: 700px) {
-    .custom-cursor-prosto-leftarea {
-        position: absolute !important;
-        z-index: 998 !important;
-        right: auto !important;
-        bottom: auto !important;
-        width: 80px !important;
-        height: 80px !important;
-        display: block !important;
-        pointer-events: auto !important;
-        opacity: 1 !important;
-        top: unset !important;
-        right: unset !important;
-        left: unset !important;
-        bottom: unset !important;
-        transform: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
-    
-    .custom-cursor-prosto-left {
-        opacity: 1 !important;
-        display: block !important;
-        pointer-events: auto !important;
-        visibility: visible !important;
-        z-index: 9999 !important;
-        position: absolute !important;
-        width: 80px !important;
-        height: 80px !important;
-    }
-    
-    .custom-cursor-prosto-leftarea:hover .custom-cursor-prosto-left {
-        opacity: 1 !important;
-    }
-}
 
 

@@ -194,7 +194,10 @@ function setupAllArrows(stepSound) {
 
         // Право (data-prev-page на .custom-cursor)
         if (cursorRight && areaRight && typeof window.setupRightArrowHandler === 'function') {
+            console.log('🟡 Инициализация стрелки вправо на странице', window.location.pathname);
+            console.log('🟡 Элементы стрелки вправо:', { cursor: !!cursorRight, area: !!areaRight });
             window.setupRightArrowHandler(cursorRight, areaRight, stepSound);
+            console.log('🟡 Обработчик для стрелки вправо установлен');
         }
 
         // Вперёд (data-next-page на .custom-cursor-prosto)
@@ -226,10 +229,13 @@ function setupAllArrows(stepSound) {
 
         // Прямо влево (data-next-page на .custom-cursor-prosto-left)
         if (cursorProstoLeft && areaProstoLeft && typeof window.setupForwardLeftArrowHandler === 'function') {
+            console.log('🟡 Инициализация стрелки прямо влево на странице', window.location.pathname);
+            console.log('🟡 Элементы стрелки прямо влево:', { cursor: !!cursorProstoLeft, area: !!areaProstoLeft });
             window.setupForwardLeftArrowHandler(cursorProstoLeft, areaProstoLeft, stepSound, () => {
                 const next = cursorProstoLeft.getAttribute('data-next-page');
                 if (next) window.location.href = next;
             });
+            console.log('🟡 Обработчик для стрелки прямо влево установлен');
         }
 
         // Вверх (data-next-page на .custom-cursor-up)

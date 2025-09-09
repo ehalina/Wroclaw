@@ -1259,7 +1259,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                 
                 if (bookContentArea) {
                     bookContentArea.style.position = 'absolute';
-                    bookContentArea.style.top = '0';
+                    bookContentArea.style.top = '100px';
                     bookContentArea.style.left = '0';
                     bookContentArea.style.width = '100%';
                     bookContentArea.style.zIndex = '2';

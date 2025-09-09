@@ -44,7 +44,7 @@ const mapPoints = {
   },
   11: { 
     desktop: { x: 46, y: 73 },
-    mobile: { x: 42, y: 74 }
+    mobile: { x: 43, y: 77 }
   },
   12: { 
     desktop: { x: 56, y: 46 },
@@ -60,7 +60,7 @@ const mapPoints = {
   },
   15: { 
     desktop: { x: 46, y: 77 },
-    mobile: { x: 42, y: 74 }
+    mobile: { x: 43, y: 79 }
   },
   16: { 
     desktop: { x: 58, y: 36 },
@@ -84,23 +84,23 @@ const mapPoints = {
   },
   21: { 
     desktop: { x: 45, y: 82 },
-    mobile: { x: 42, y: 74 }
+    mobile: { x: 43, y: 85 }
   },
   22: { 
     desktop: { x: 45, y: 86 },
-    mobile: { x: 45, y: 45 }
+    mobile: { x: 42, y: 88 }
   },
   23: { 
     desktop: { x: 42, y: 86 },
-    mobile: { x: 45, y: 45 }
+    mobile: { x: 38, y: 89 }
   },
   24: { 
     desktop: { x: 40, y: 90 },
-    mobile: { x: 45, y: 45 }
+    mobile: { x: 38, y: 91 }
   },
   25: { 
     desktop: { x: 38, y: 95 },
-    mobile: { x: 45, y: 45 }
+    mobile: { x: 38, y: 95 }
   },
   26: { 
     desktop: { x: 37, y: 92 },
@@ -108,34 +108,58 @@ const mapPoints = {
   },
   27: { 
     desktop: { x: 41, y: 94 },
-    mobile: { x: 45, y: 45 }
+    mobile: { x: 38, y: 91 }
   },
   28: { 
     desktop: { x: 53, y: 75 },
-    mobile: { x: 42, y: 42 }
+    mobile: { x: 50, y: 78 }
   },
   29: { 
     desktop: { x: 73, y: 75 },
-    mobile: { x: 45, y: 45 }
+    mobile: { x: 69, y: 79 }
   },
   30: { 
     desktop: { x: 48, y: 65 },
-    mobile: { x: 45, y: 45 }
+    mobile: { x: 46, y:69 }
   },
   31: { 
     desktop: { x: 55, y: 60 },
-    mobile: { x: 45, y: 45 }
+    mobile: { x: 53, y: 64 }
   },
   32: { 
     desktop: { x: 61, y: 59 },
-    mobile: { x: 45, y: 45 }
+    mobile: { x: 58, y: 64 }
   },
   33: { 
     desktop: { x: 61, y: 74 },
-    mobile: { x: 45, y: 45 }
+    mobile: { x: 55, y: 78 }
   },
   34: { 
     desktop: { x: 59, y: 58 },
+    mobile: { x: 45, y: 45 }
+  },
+  35: { 
+    desktop: { x: 52, y: 53 },
+    mobile: { x: 49, y: 55 }
+  },
+  36: { 
+    desktop: { x: 52, y: 41 },
+    mobile: { x: 50, y: 46 }
+  },
+  37: { 
+    desktop: { x: 57, y: 40 },
+    mobile: { x: 54, y: 45 }
+  },
+  38: { 
+    desktop: { x: 58, y: 47 },
+    mobile: { x: 45, y: 45 }
+  },
+  39: { 
+    desktop: { x: 59, y: 55 },
+    mobile: { x: 45, y: 45 }
+  },
+  40: { 
+    desktop: { x: 59, y: 59 },
     mobile: { x: 45, y: 45 }
   },
 };

@@ -173,6 +173,14 @@ function openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIn
     container.style.animationPlayState = 'paused';
     bookContent.scrollTop = 0;
     setTimeout(toggleScrollIndicator, 100);
+    
+    // Добавляем смещение для мобильной версии
+    if (window.innerWidth <= 768) {
+        const bookContentArea = bookOverlay.querySelector('.book-content-area');
+        if (bookContentArea) {
+            bookContentArea.style.top = '1000px';
+        }
+    }
 }
 
 function openMost(bookSound, mostOverlay, container, mostTitle) {
