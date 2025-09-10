@@ -83,6 +83,104 @@ window.showInitialHighlight = function() {
     highlightZonesSequentially(zones, 0);
 };
 
+// Функция для адаптивного размера шрифта
+function updateFontSizes() {
+    const mostOverlay = document.querySelector('.most-overlay');
+    if (!mostOverlay) return;
+    
+    const overlayWidth = mostOverlay.offsetWidth;
+    const overlayHeight = mostOverlay.offsetHeight;
+    const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+    
+    // Определяем, мобильное ли устройство
+    const isMobile = windowWidth <= 768;
+    const isTablet = windowWidth > 768 && windowWidth <= 1024;
+    
+    let baseWidth, baseHeight, baseTitleSize, baseTextSize, baseSmallTextSize;
+    
+    if (isMobile) {
+        // Для мобильных устройств
+        baseWidth = 320;
+        baseHeight = 568;
+        baseTitleSize = 22;  // увеличено с 18
+        baseTextSize = 16;   // увеличено с 14
+        baseSmallTextSize = 14; // увеличено с 12
+    } else if (isTablet) {
+        // Для планшетов
+        baseWidth = 768;
+        baseHeight = 1024;
+        baseTitleSize = 26;  // увеличено с 20
+        baseTextSize = 18;   // увеличено с 15
+        baseSmallTextSize = 16; // увеличено с 13
+    } else {
+        // Для десктопов
+        baseWidth = 1200;
+        baseHeight = 800;
+        baseTitleSize = 28;  // увеличено с 24
+        baseTextSize = 18;   // увеличено с 16
+        baseSmallTextSize = 16; // увеличено с 14
+    }
+    
+    // Коэффициенты масштабирования с более разумными ограничениями
+    const widthScale = Math.min(overlayWidth / baseWidth, 1.2); // ограничиваем максимальное увеличение
+    const heightScale = Math.min(overlayHeight / baseHeight, 1.2);
+    const scale = Math.min(widthScale, heightScale);
+    
+    // Адаптивные размеры с учетом устройства и максимальными ограничениями
+    const maxTitleSize = isMobile ? 24 : (isTablet ? 32 : 36);
+    const maxTextSize = isMobile ? 20 : (isTablet ? 24 : 28);
+    const maxSmallTextSize = isMobile ? 18 : (isTablet ? 22 : 24);
+    
+    const titleSize = Math.min(Math.max(baseTitleSize * scale, isMobile ? 16 : 18), maxTitleSize);
+    const textSize = Math.min(Math.max(baseTextSize * scale, isMobile ? 12 : 14), maxTextSize);
+    const smallTextSize = Math.min(Math.max(baseSmallTextSize * scale, isMobile ? 11 : 12), maxSmallTextSize);
+    
+    // Применяем стили ко всем текстовым элементам
+    const titleElements = mostOverlay.querySelectorAll('.most-title');
+    const textElements = mostOverlay.querySelectorAll('.most-description');
+    const smallTextElements = mostOverlay.querySelectorAll('.most-small-text');
+    
+    titleElements.forEach(el => {
+        el.style.fontSize = `${titleSize}px`;
+        el.style.lineHeight = isMobile ? '1.2' : '1.4';
+    });
+    
+    textElements.forEach(el => {
+        el.style.fontSize = `${textSize}px`;
+        el.style.lineHeight = isMobile ? '1.3' : '1.5';
+    });
+    
+    smallTextElements.forEach(el => {
+        el.style.fontSize = `${smallTextSize}px`;
+        el.style.lineHeight = isMobile ? '1.2' : '1.4';
+    });
+    
+    // Дополнительная адаптация для очень маленьких экранов
+    if (windowWidth < 400) {
+        titleElements.forEach(el => {
+            el.style.fontSize = `${Math.max(titleSize * 0.9, 14)}px`;
+        });
+        textElements.forEach(el => {
+            el.style.fontSize = `${Math.max(textSize * 0.9, 11)}px`;
+        });
+    }
+    
+    // Дополнительная адаптация для очень больших экранов (4K и выше)
+    if (windowWidth > 1920) {
+        const largeScreenScale = Math.min(1920 / windowWidth, 1);
+        titleElements.forEach(el => {
+            el.style.fontSize = `${Math.max(titleSize * largeScreenScale, 18)}px`;
+        });
+        textElements.forEach(el => {
+            el.style.fontSize = `${Math.max(textSize * largeScreenScale, 14)}px`;
+        });
+        smallTextElements.forEach(el => {
+            el.style.fontSize = `${Math.max(smallTextSize * largeScreenScale, 12)}px`;
+        });
+    }
+}
+
 // Функция для обновления текста в модальном окне
 function updateModalText(zoneNumber) {
     // console.log('updateModalText вызвана с зоной:', zoneNumber);
@@ -278,6 +376,11 @@ function updateModalText(zoneNumber) {
     } else {
         // console.log('Переводы не найдены. translations:', translations, 'section:', section);
     }
+    
+    // Обновляем размеры шрифтов после обновления текста
+    setTimeout(() => {
+        updateFontSizes();
+    }, 50);
 }
 
 // Функция для принудительного открытия книги на ZONE_1 при открытии любой геометки
@@ -959,6 +1062,8 @@ window.ButtonsConfig = BUTTONS_CONFIG;
 window.updateModalText = updateModalText;
 // Экспортируем функцию принудительного открытия на ZONE_1
 window.forceOpenBookOnZone1 = forceOpenBookOnZone1;
+// Экспортируем функцию обновления размеров шрифтов
+window.updateFontSizes = updateFontSizes;
 
 window.BookPaths.initBookHandlers = function() {
     // Установка путей к изображениям книг
@@ -1061,7 +1166,29 @@ window.BookPaths.initBookHandlers = function() {
         }
     }
     
-    window.addEventListener('resize', updateOverlayImageStyles);
+    // Debounce функция для оптимизации производительности
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+    
+    // Обработчик изменения размера окна для адаптивных шрифтов
+    function handleResize() {
+        updateOverlayImageStyles();
+        updateFontSizes();
+    }
+    
+    // Создаем debounced версию обработчика
+    const debouncedHandleResize = debounce(handleResize, 100);
+    
+    window.addEventListener('resize', debouncedHandleResize);
 
     // Обработчики для модалок и закрытия
     const bookOverlay = document.querySelector('.book-overlay');
@@ -1110,6 +1237,7 @@ window.BookPaths.initBookHandlers = function() {
                         // Небольшая задержка для корректного отображения
                         setTimeout(() => {
                             forceOpenBookOnZone1();
+                            updateFontSizes(); // Обновляем размеры шрифтов при открытии
                         }, 50);
                     }
                 }
@@ -1194,4 +1322,9 @@ window.BookPaths.initBookHandlers = function() {
 
     // Вызываем функцию обновления
     updateAllZonesWithText();
+    
+    // Инициализируем размеры шрифтов при загрузке
+    setTimeout(() => {
+        updateFontSizes();
+    }, 200);
 }; 
