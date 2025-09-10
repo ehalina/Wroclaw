@@ -152,15 +152,15 @@ const mapPoints = {
   },
   38: { 
     desktop: { x: 58, y: 47 },
-    mobile: { x: 45, y: 45 }
+    mobile: { x: 55, y: 55 }
   },
   39: { 
     desktop: { x: 59, y: 55 },
-    mobile: { x: 45, y: 45 }
+    mobile: { x: 56, y: 62 }
   },
   40: { 
     desktop: { x: 59, y: 59 },
-    mobile: { x: 45, y: 45 }
+    mobile: { x: 56, y: 63 }
   },
 };
 

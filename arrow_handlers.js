@@ -873,7 +873,7 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
                     console.log('🟡 Десктопная версия: загружено полное изображение tumski_15.jpg');
                 }
             } else if (nextPage === 'dwor01.html') {
-                // Для dwor01.html (переход с pk02.html) загружаем dwor_01.jpg
+                // Для dwor01.html (переход с pk02.html) загружаем dwor_01.jpg (по требованию)
                 if (isMobile) {
                     // В мобильной версии загружаем изображение, вписанное по высоте
                     nextImageContainer.style.backgroundImage = 'url("media/tumski/dwor_01.jpg")';
@@ -929,6 +929,21 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
         cursorProstoLeftArea.addEventListener('touchstart', function(e) {
             e.preventDefault();
             cursorProstoLeft.style.opacity = '1';
+            // Предзагрузка изображения на касание для pk02 -> dwor01
+            try {
+                const nextImageContainer = document.querySelector('.next-image-container');
+                if (nextImageContainer) {
+                    const nextPage = cursorProstoLeft.getAttribute('data-next-page');
+                    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+                    if (currentPage === 'pk02.html' && nextPage === 'dwor01.html') {
+                        nextImageContainer.style.backgroundImage = 'url("media/tumski/dwor_01.jpg")';
+                        nextImageContainer.style.backgroundPosition = 'left top';
+                        nextImageContainer.style.backgroundSize = 'auto 100%';
+                        nextImageContainer.style.display = 'block';
+                        console.log('🖼️ Предзагрузка (touchstart) dwor_01.jpg для стрелки прямо влево на pk02.html');
+                    }
+                }
+            } catch (_) {}
         });
         
         cursorProstoLeftArea.addEventListener('touchend', function(e) {
@@ -1009,19 +1024,19 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
                         console.log('🟡 Десктопная версия (touchend): загружено полное изображение tumski_15.jpg');
                     }
                 } else if (nextPage === 'dwor01.html') {
-                    // Для dwor01.html (переход с pk02.html) загружаем pk_03.jpg
+                    // Для dwor01.html (переход с pk02.html) загружаем dwor_01.jpg
                     if (isMobile) {
                         // В мобильной версии загружаем изображение, вписанное по высоте
-                        nextImageContainer.style.backgroundImage = 'url("media/tumski/pk_03.jpg")';
+                        nextImageContainer.style.backgroundImage = 'url("media/tumski/dwor_01.jpg")';
                         nextImageContainer.style.backgroundPosition = 'left top';
                         nextImageContainer.style.backgroundSize = 'auto 100%';
-                        console.log('🟡 Мобильная версия (touchend): загружено изображение pk_03.jpg, вписанное по высоте');
+                        console.log('🟡 Мобильная версия (touchend): загружено изображение dwor_01.jpg, вписанное по высоте');
                     } else {
                         // В десктопной версии загружаем полное изображение
-                        nextImageContainer.style.backgroundImage = 'url("media/tumski/pk_03.jpg")';
+                        nextImageContainer.style.backgroundImage = 'url("media/tumski/dwor_01.jpg")';
                         nextImageContainer.style.backgroundPosition = 'center center';
                         nextImageContainer.style.backgroundSize = 'contain';
-                        console.log('🟡 Десктопная версия (touchend): загружено полное изображение pk_03.jpg');
+                        console.log('🟡 Десктопная версия (touchend): загружено полное изображение dwor_01.jpg');
                     }
                 } else if (nextPage === 'tumski09.html') {
                     // Для tumski09.html (переход с tumski08.html) загружаем tumski_09.jpg
