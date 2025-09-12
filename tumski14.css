@@ -85,7 +85,7 @@
         background-image: url('media/strelka_v.png') !important;
     }
     
-    .custom-cursor-leftarea:hover .custom-cursor-left {
+    html[data-input-type="touch"] .custom-cursor-leftarea:hover .custom-cursor-left {
         opacity: 1 !important;
     }
 }

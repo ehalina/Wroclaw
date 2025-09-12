@@ -14,7 +14,9 @@ function hideAllCursors() {
  * @param {HTMLAudioElement} stepSound - Звук шага
  */
 function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
-    const isMobile = window.innerWidth <= 700;
+    // Используем data-input-type для определения режима, fallback на ширину экрана
+    const inputType = document.documentElement.getAttribute('data-input-type');
+    const isMobile = inputType === 'touch' || (inputType !== 'desktop' && window.innerWidth <= 700);
     
     if (!isMobile) {
         // Обработчик движения мыши над областью курсора
@@ -120,7 +122,9 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
         return;
     }
 
-    const isMobile = window.innerWidth <= 700;
+    // Используем data-input-type для определения режима, fallback на ширину экрана
+    const inputType = document.documentElement.getAttribute('data-input-type');
+    const isMobile = inputType === 'touch' || (inputType !== 'desktop' && window.innerWidth <= 700);
     
     if (!isMobile) {
         // Обработчик движения мыши над областью курсора
@@ -521,7 +525,9 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
  * @param {Function} onLeftClick - Callback-функция для обработки клика
  */
 function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClick) {
-    const isMobile = window.innerWidth <= 700;
+    // Используем data-input-type для определения режима, fallback на ширину экрана
+    const inputType = document.documentElement.getAttribute('data-input-type');
+    const isMobile = inputType === 'touch' || (inputType !== 'desktop' && window.innerWidth <= 700);
     
     if (!isMobile) {
         console.log('🟡 Настройка обработчиков для десктопной версии стрелки влево');
@@ -747,7 +753,9 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
         return;
     }
 
-    const isMobile = window.innerWidth <= 700;
+    // Используем data-input-type для определения режима, fallback на ширину экрана
+    const inputType = document.documentElement.getAttribute('data-input-type');
+    const isMobile = inputType === 'touch' || (inputType !== 'desktop' && window.innerWidth <= 700);
     
     if (!isMobile) {
         // Обработчик движения мыши над областью курсора
@@ -1084,7 +1092,9 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
  * @param {HTMLAudioElement} stepSound - Звук шага
  */
 function setupUpArrowHandler(cursor, cursorArea, stepSound) {
-    const isMobile = window.innerWidth <= 700;
+    // Используем data-input-type для определения режима, fallback на ширину экрана
+    const inputType = document.documentElement.getAttribute('data-input-type');
+    const isMobile = inputType === 'touch' || (inputType !== 'desktop' && window.innerWidth <= 700);
     
     if (!isMobile) {
         // Обработчик движения мыши над областью курсора
@@ -1151,7 +1161,10 @@ window.hideAllCursors = hideAllCursors;
 
 // Обработчик изменения размера окна для корректной работы на мобильных устройствах
 window.addEventListener('resize', function() {
-    const isMobile = window.innerWidth <= 700;
+    // Используем data-input-type для определения режима, fallback на ширину экрана
+    const inputType = document.documentElement.getAttribute('data-input-type');
+    const isMobile = inputType === 'touch' || (inputType !== 'desktop' && window.innerWidth <= 700);
+    
     const cursors = document.querySelectorAll('.custom-cursor, .custom-cursor-prosto, .custom-cursor-prosto-left, .custom-cursor-left, .custom-cursor-up');
     const cursorAreas = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-prosto-leftarea, .custom-cursor-leftarea, .custom-cursor-uparea');
     

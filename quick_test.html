@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Быстрый тест</title>
+    <link rel="stylesheet" href="common_tumski.css">
+    <link rel="stylesheet" href="input_compatibility.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f0f0f0;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .test-area {
+            position: relative;
+            width: 400px;
+            height: 300px;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+            border: 2px solid #ccc;
+            margin: 20px auto;
+            border-radius: 10px;
+        }
+        
+        .custom-cursor {
+            width: 64px;
+            height: 64px;
+            position: absolute;
+            background: url('media/strelka.png') no-repeat center;
+            background-size: contain;
+            filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            cursor: pointer;
+            pointer-events: none;
+            transform: translateX(-50%) translateY(-50%);
+            left: 50%;
+            top: 50%;
+        }
+        
+        .custom-cursor-area {
+            position: absolute;
+            z-index: 999;
+            cursor: none;
+            transform-origin: center center;
+            will-change: transform;
+            transition: transform 0.3s ease-out;
+            right: auto;
+            bottom: auto;
+            width: 40%;
+            height: 20%;
+            left: 30%;
+            top: 40%;
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px dashed red;
+        }
+        
+        .papera-image {
+            width: 100px;
+            height: 100px;
+            background: url('media/papera1.png') no-repeat center;
+            background-size: contain;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .map-mark-area {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 998;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .map-mark {
+            width: 50px;
+            height: 50px;
+            background: url('media/mapmark.png') no-repeat center;
+            background-size: contain;
+            position: relative;
+        }
+        
+        .tumski-text {
+            color: #333;
+            font-weight: bold;
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        .desktop { background: #d4edda; color: #155724; }
+        .touch { background: #f8d7da; color: #721c24; }
+    </style>
+    <script src="input_detection.js"></script>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Быстрый тест определения типа ввода</h1>
+        
+        <div id="status" class="status">Определение...</div>
+        
+        <div class="test-area">
+            <div class="custom-cursor-area">
+                <div class="custom-cursor"></div>
+            </div>
+            
+            <div class="map-mark-area">
+                <div class="map-mark"></div>
+                <div class="papera-image"></div>
+                <div class="tumski-text">Тестовый текст</div>
+            </div>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <button onclick="forceDesktop()" style="margin: 5px; padding: 10px;">Desktop режим</button>
+            <button onclick="forceTouch()" style="margin: 5px; padding: 10px;">Touch режим</button>
+            <button onclick="reload()" style="margin: 5px; padding: 10px;">Перезагрузить</button>
+        </div>
+        
+        <div id="info" style="margin-top: 20px; padding: 10px; background: #f8f9fa; border-radius: 5px; font-family: monospace; font-size: 12px;">
+            <div id="info-content">Загрузка...</div>
+        </div>
+    </div>
+
+    <script>
+        function updateStatus() {
+            const inputType = document.documentElement.getAttribute('data-input-type');
+            const statusEl = document.getElementById('status');
+            
+            if (inputType === 'desktop') {
+                statusEl.textContent = 'Режим: DESKTOP (элементы по наведению)';
+                statusEl.className = 'status desktop';
+            } else if (inputType === 'touch') {
+                statusEl.textContent = 'Режим: TOUCH (элементы всегда видны)';
+                statusEl.className = 'status touch';
+            } else {
+                statusEl.textContent = 'Режим не определен';
+                statusEl.className = 'status';
+            }
+            
+            // Обновляем информацию
+            const cursor = document.querySelector('.custom-cursor');
+            const papera = document.querySelector('.papera-image');
+            const text = document.querySelector('.tumski-text');
+            
+            const info = {
+                'Тип ввода': inputType,
+                'Cursor opacity': cursor ? getComputedStyle(cursor).opacity : 'не найден',
+                'Papera opacity': papera ? getComputedStyle(papera).opacity : 'не найден',
+                'Text opacity': text ? getComputedStyle(text).opacity : 'не найден'
+            };
+            
+            document.getElementById('info-content').innerHTML = Object.entries(info)
+                .map(([key, value]) => `<strong>${key}:</strong> ${value}<br>`)
+                .join('');
+        }
+        
+        function forceDesktop() {
+            localStorage.setItem('input-type-override', 'desktop');
+            location.reload();
+        }
+        
+        function forceTouch() {
+            localStorage.setItem('input-type-override', 'touch');
+            location.reload();
+        }
+        
+        function reload() {
+            location.reload();
+        }
+        
+        // Обновляем статус при загрузке
+        window.addEventListener('load', () => {
+            updateStatus();
+            setTimeout(updateStatus, 500);
+        });
+        
+        // Обновляем статус каждые 2 секунды
+        setInterval(updateStatus, 2000);
+    </script>
+</body>
+</html>

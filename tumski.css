@@ -271,10 +271,10 @@
         width: 80px !important;
         height: 80px !important;
     }
-    /* Убрать эффекты наведения для стрелок */
-    .custom-cursor-area:hover .custom-cursor,
-    .custom-cursor-prostoarea:hover .custom-cursor-prosto,
-    .custom-cursor-prosto-leftarea:hover .custom-cursor-prosto-left {
+    /* Убрать эффекты наведения для стрелок - только для тач-режима */
+    html[data-input-type="touch"] .custom-cursor-area:hover .custom-cursor,
+    html[data-input-type="touch"] .custom-cursor-prostoarea:hover .custom-cursor-prosto,
+    html[data-input-type="touch"] .custom-cursor-prosto-leftarea:hover .custom-cursor-prosto-left {
         opacity: 1 !important;
     }
     html, body {

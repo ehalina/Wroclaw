@@ -496,7 +496,8 @@ body, html {
     pointer-events: auto;
 }
 
-.custom-cursor-prostoarea:hover .custom-cursor-prosto {
+/* Hover эффекты для стрелок - только для тач-режима */
+html[data-input-type="touch"] .custom-cursor-prostoarea:hover .custom-cursor-prosto {
     opacity: 1;
 }
 

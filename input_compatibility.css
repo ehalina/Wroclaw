@@ -1,0 +1,180 @@
+/**
+ * Дополнительные стили для совместимости с разными типами ввода
+ * Обеспечивает корректную работу на планшетах и гибридных устройствах
+ */
+
+/* ===== БАЗОВЫЕ СТИЛИ ДЛЯ ВСЕХ УСТРОЙСТВ ===== */
+
+/* Убираем outline для тач-устройств */
+@media (hover: none), (pointer: coarse) {
+    *:focus {
+        outline: none;
+    }
+    
+    /* Улучшаем видимость элементов для тач-устройств */
+    .custom-cursor,
+    .custom-cursor-prosto,
+    .custom-cursor-prosto-left,
+    .custom-cursor-back,
+    .custom-cursor-left,
+    .custom-cursor-up {
+        filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.8));
+        transition: transform 0.2s ease, filter 0.2s ease;
+    }
+    
+    .custom-cursor:hover,
+    .custom-cursor-prosto:hover,
+    .custom-cursor-prosto-left:hover,
+    .custom-cursor-back:hover,
+    .custom-cursor-left:hover,
+    .custom-cursor-up:hover {
+        transform: scale(1.1);
+        filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.9));
+    }
+}
+
+/* ===== ГИБРИДНЫЕ УСТРОЙСТВА ===== */
+/* Для устройств с поддержкой и hover, и touch (например, Surface) */
+@media (hover: hover) and (pointer: fine) and (any-hover: hover) {
+    /* Приоритет hover для гибридных устройств */
+    .custom-cursor,
+    .custom-cursor-prosto,
+    .custom-cursor-prosto-left,
+    .custom-cursor-back,
+    .custom-cursor-left,
+    .custom-cursor-up {
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    .custom-cursor-area:hover .custom-cursor,
+    .custom-cursor-prostoarea:hover .custom-cursor-prosto,
+    .custom-cursor-prosto-leftarea:hover .custom-cursor-prosto-left,
+    .custom-cursor-backarea:hover .custom-cursor-back,
+    .custom-cursor-leftarea:hover .custom-cursor-left,
+    .custom-cursor-uparea:hover .custom-cursor-up {
+        opacity: 1 !important;
+        pointer-events: auto;
+    }
+}
+
+/* ===== УЛУЧШЕНИЯ ДЛЯ ПЛАНШЕТОВ ===== */
+@media (hover: none) and (pointer: coarse) and (min-width: 768px) {
+    /* Планшеты в портретной ориентации */
+    .custom-cursor,
+    .custom-cursor-prosto,
+    .custom-cursor-prosto-left,
+    .custom-cursor-back,
+    .custom-cursor-left,
+    .custom-cursor-up {
+        width: 80px;
+        height: 80px;
+        filter: drop-shadow(3px 3px 6px rgba(0, 0, 0, 0.8));
+    }
+    
+    .custom-cursor-area,
+    .custom-cursor-prostoarea,
+    .custom-cursor-prosto-leftarea,
+    .custom-cursor-backarea,
+    .custom-cursor-leftarea,
+    .custom-cursor-uparea {
+        width: 100px;
+        height: 100px;
+    }
+    
+    /* Геометки для планшетов */
+    .map-mark {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .map-mark::before {
+        top: -60px;
+        left: -60px;
+        right: -60px;
+        bottom: -60px;
+    }
+}
+
+/* ===== ОБРАТНАЯ СОВМЕСТИМОСТЬ ===== */
+/* Для старых браузеров без поддержки hover/pointer медиа-запросов */
+@supports not (hover: hover) {
+    .custom-cursor,
+    .custom-cursor-prosto,
+    .custom-cursor-prosto-left,
+    .custom-cursor-back,
+    .custom-cursor-left,
+    .custom-cursor-up {
+        opacity: 1 !important;
+        pointer-events: auto !important;
+    }
+    
+    .map-mark-area,
+    .map-mark,
+    .papera-image,
+    .tumski-text {
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+    }
+}
+
+/* ===== ДОПОЛНИТЕЛЬНЫЕ УЛУЧШЕНИЯ ===== */
+
+/* Улучшаем доступность для пользователей с ограниченными возможностями */
+@media (prefers-reduced-motion: reduce) {
+    .custom-cursor,
+    .custom-cursor-prosto,
+    .custom-cursor-prosto-left,
+    .custom-cursor-back,
+    .custom-cursor-left,
+    .custom-cursor-up {
+        transition: none;
+        animation: none;
+    }
+}
+
+/* Высокий контраст для лучшей видимости */
+@media (prefers-contrast: high) {
+    .custom-cursor,
+    .custom-cursor-prosto,
+    .custom-cursor-prosto-left,
+    .custom-cursor-back,
+    .custom-cursor-left,
+    .custom-cursor-up {
+        filter: drop-shadow(4px 4px 8px rgba(0, 0, 0, 1));
+        border: 2px solid #fff;
+    }
+}
+
+/* ===== ОТЛАДОЧНЫЕ СТИЛИ ===== */
+/* Показываем тип ввода в консоли (можно удалить в продакшене) */
+[data-input-type="desktop"] body::before {
+    content: "Desktop mode";
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 255, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    z-index: 10000;
+    display: none; /* Скрыто по умолчанию */
+}
+
+[data-input-type="touch"] body::before {
+    content: "Touch mode";
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    z-index: 10000;
+    display: none; /* Скрыто по умолчанию */
+}
+
+/* Для отладки раскомментируйте следующую строку: */
+[data-input-type] body::before { display: block !important; }

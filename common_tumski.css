@@ -188,16 +188,7 @@
     background-image: url('media/strelka_v.png');
 }
 
-/* Показываем стрелки при наведении на область */
-.custom-cursor-area:hover .custom-cursor,
-.custom-cursor-prostoarea:hover .custom-cursor-prosto,
-.custom-cursor-prosto-leftarea:hover .custom-cursor-prosto-left,
-.custom-cursor-backarea:hover .custom-cursor-back,
-.custom-cursor-leftarea:hover .custom-cursor-left,
-.custom-cursor-uparea:hover .custom-cursor-up {
-    opacity: 1 !important;
-    pointer-events: auto;
-}
+/* Показываем стрелки при наведении на область - теперь в медиа-запросах */
 
 /* ===== ГЕОМЕТКИ ===== */
 .map-mark-area {
@@ -280,15 +271,10 @@
     justify-content: center !important;
 }
 
-/* Показываем элементы при наведении */
-.map-mark-area:hover .papera-image,
-.map-mark-area:hover .tumski-text {
-    opacity: 1 !important;
-    visibility: visible !important;
-}
+/* Показываем элементы при наведении - теперь в медиа-запросах */
 
-/* Принудительно показываем papera-image */
-.papera-image {
+/* Принудительно показываем papera-image - только если не определен тип ввода */
+.papera-image:not([data-input-type]) {
     opacity: 1 !important;
     visibility: visible !important;
     width: 100% !important;
@@ -305,7 +291,258 @@
     object-fit: cover !important;
 }
 
-/* ===== МОБИЛЬНЫЕ СТИЛИ ===== */
+/* Переопределяем базовые стили для десктопного режима */
+html[data-input-type="desktop"] .papera-image {
+    opacity: 0 !important;
+    visibility: visible !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 100% !important;
+    min-height: 100% !important;
+    margin: 0 !important;
+    top: 0 !important;
+    position: relative !important;
+    flex-shrink: 0 !important;
+    z-index: 1 !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: cover !important;
+    transition: opacity 0.3s ease !important;
+}
+
+html[data-input-type="desktop"] .tumski-text {
+    opacity: 0 !important;
+    visibility: visible !important;
+    transition: opacity 0.3s ease !important;
+}
+
+html[data-input-type="desktop"] .map-mark {
+    opacity: 0 !important;
+    visibility: visible !important;
+    transition: opacity 0.3s ease !important;
+}
+
+/* Переопределяем базовые стили стрелок для десктопного режима */
+html[data-input-type="desktop"] .custom-cursor,
+html[data-input-type="desktop"] .custom-cursor-prosto,
+html[data-input-type="desktop"] .custom-cursor-prosto-left,
+html[data-input-type="desktop"] .custom-cursor-back,
+html[data-input-type="desktop"] .custom-cursor-left,
+html[data-input-type="desktop"] .custom-cursor-up {
+    width: 64px !important;
+    height: 64px !important;
+    position: absolute !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    filter: drop-shadow(3px 3px 2px rgba(0, 0, 0, 0.7)) !important;
+    opacity: 0 !important;
+    transition: opacity 0.3s ease !important;
+    z-index: 1000 !important;
+    cursor: pointer !important;
+    pointer-events: none !important;
+    transform: translateX(-50%) translateY(-50%) !important;
+    left: 50% !important;
+    top: 50% !important;
+}
+
+/* ===== ОПРЕДЕЛЕНИЕ ТИПА ВВОДА ===== */
+/* Десктопные устройства с hover и точным указателем */
+@media (hover: hover) and (pointer: fine) {
+    /* Элементы управления по наведению */
+    .custom-cursor,
+    .custom-cursor-prosto,
+    .custom-cursor-prosto-left,
+    .custom-cursor-back,
+    .custom-cursor-left,
+    .custom-cursor-up {
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    .custom-cursor-area:hover .custom-cursor,
+    .custom-cursor-prostoarea:hover .custom-cursor-prosto,
+    .custom-cursor-prosto-leftarea:hover .custom-cursor-prosto-left,
+    .custom-cursor-backarea:hover .custom-cursor-back,
+    .custom-cursor-leftarea:hover .custom-cursor-left,
+    .custom-cursor-uparea:hover .custom-cursor-up {
+        opacity: 1 !important;
+        pointer-events: auto;
+    }
+    
+    /* Геометки по наведению */
+    .map-mark-area:hover .papera-image,
+    .map-mark-area:hover .tumski-text {
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+    
+    .papera-image,
+    .tumski-text {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+}
+
+/* Тач-устройства без hover или с грубым указателем */
+@media (hover: none), (pointer: coarse) {
+    /* Элементы управления всегда видны */
+    .custom-cursor,
+    .custom-cursor-prosto,
+    .custom-cursor-prosto-left,
+    .custom-cursor-back,
+    .custom-cursor-left,
+    .custom-cursor-up,
+    .custom-cursor-area,
+    .custom-cursor-prostoarea,
+    .custom-cursor-prosto-leftarea,
+    .custom-cursor-backarea,
+    .custom-cursor-leftarea,
+    .custom-cursor-uparea {
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+    }
+    
+    /* Геометки всегда видны */
+    .map-mark-area,
+    .map-mark,
+    .papera-image,
+    .tumski-text {
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+    }
+    
+    /* Убираем эффекты наведения */
+    .custom-cursor-area:hover .custom-cursor,
+    .custom-cursor-prostoarea:hover .custom-cursor-prosto,
+    .custom-cursor-prosto-leftarea:hover .custom-cursor-prosto-left,
+    .custom-cursor-backarea:hover .custom-cursor-back,
+    .custom-cursor-leftarea:hover .custom-cursor-left,
+    .custom-cursor-uparea:hover .custom-cursor-up {
+        opacity: 1 !important;
+    }
+}
+
+/* ===== ПРИОРИТЕТ ПО DATA-АТРИБУТУ ===== */
+/* Если JavaScript определил тип ввода, используем его */
+
+/* ДЕСКТОПНЫЙ РЕЖИМ - элементы по наведению */
+html[data-input-type="desktop"] .custom-cursor,
+html[data-input-type="desktop"] .custom-cursor-prosto,
+html[data-input-type="desktop"] .custom-cursor-prosto-left,
+html[data-input-type="desktop"] .custom-cursor-back,
+html[data-input-type="desktop"] .custom-cursor-left,
+html[data-input-type="desktop"] .custom-cursor-up {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    display: block !important;
+    visibility: visible !important;
+}
+
+/* Более специфичные селекторы для десктопного режима */
+html[data-input-type="desktop"] .custom-cursor-area:hover .custom-cursor,
+html[data-input-type="desktop"] .custom-cursor-prostoarea:hover .custom-cursor-prosto,
+html[data-input-type="desktop"] .custom-cursor-prosto-leftarea:hover .custom-cursor-prosto-left,
+html[data-input-type="desktop"] .custom-cursor-backarea:hover .custom-cursor-back,
+html[data-input-type="desktop"] .custom-cursor-leftarea:hover .custom-cursor-left,
+html[data-input-type="desktop"] .custom-cursor-uparea:hover .custom-cursor-up {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+/* Дополнительная специфичность для переопределения других правил */
+html[data-input-type="desktop"] body .custom-cursor-area:hover .custom-cursor,
+html[data-input-type="desktop"] body .custom-cursor-prostoarea:hover .custom-cursor-prosto,
+html[data-input-type="desktop"] body .custom-cursor-prosto-leftarea:hover .custom-cursor-prosto-left,
+html[data-input-type="desktop"] body .custom-cursor-backarea:hover .custom-cursor-back,
+html[data-input-type="desktop"] body .custom-cursor-leftarea:hover .custom-cursor-left,
+html[data-input-type="desktop"] body .custom-cursor-uparea:hover .custom-cursor-up {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+html[data-input-type="desktop"] .papera-image,
+html[data-input-type="desktop"] .tumski-text {
+    opacity: 0 !important;
+    transition: opacity 0.3s ease !important;
+    visibility: visible !important;
+    display: block !important;
+}
+
+html[data-input-type="desktop"] .map-mark-area:hover .papera-image,
+html[data-input-type="desktop"] .map-mark-area:hover .tumski-text,
+html[data-input-type="desktop"] .map-mark-area:hover .map-mark {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* ТАЧ-РЕЖИМ - элементы всегда видны */
+html[data-input-type="touch"] .custom-cursor,
+html[data-input-type="touch"] .custom-cursor-prosto,
+html[data-input-type="touch"] .custom-cursor-prosto-left,
+html[data-input-type="touch"] .custom-cursor-back,
+html[data-input-type="touch"] .custom-cursor-left,
+html[data-input-type="touch"] .custom-cursor-up,
+html[data-input-type="touch"] .custom-cursor-area,
+html[data-input-type="touch"] .custom-cursor-prostoarea,
+html[data-input-type="touch"] .custom-cursor-prosto-leftarea,
+html[data-input-type="touch"] .custom-cursor-backarea,
+html[data-input-type="touch"] .custom-cursor-leftarea,
+html[data-input-type="touch"] .custom-cursor-uparea {
+    opacity: 1 !important;
+    display: block !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+}
+
+html[data-input-type="touch"] .map-mark-area,
+html[data-input-type="touch"] .map-mark,
+html[data-input-type="touch"] .papera-image,
+html[data-input-type="touch"] .tumski-text {
+    opacity: 1 !important;
+    display: block !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+}
+
+/* ===== ДОПОЛНИТЕЛЬНЫЕ СТИЛИ ЧЕРЕЗ КЛАССЫ ===== */
+/* Десктопный режим через классы */
+.desktop-mode.custom-cursor,
+.desktop-mode.custom-cursor-prosto,
+.desktop-mode.custom-cursor-prosto-left,
+.desktop-mode.custom-cursor-back,
+.desktop-mode.custom-cursor-left,
+.desktop-mode.custom-cursor-up {
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+.desktop-mode.papera-image,
+.desktop-mode.tumski-text {
+    opacity: 0 !important;
+    transition: opacity 0.3s ease !important;
+}
+
+/* Тач-режим через классы */
+.touch-mode.custom-cursor,
+.touch-mode.custom-cursor-prosto,
+.touch-mode.custom-cursor-prosto-left,
+.touch-mode.custom-cursor-back,
+.touch-mode.custom-cursor-left,
+.touch-mode.custom-cursor-up {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+.touch-mode.papera-image,
+.touch-mode.tumski-text {
+    opacity: 1 !important;
+}
+
+/* ===== МОБИЛЬНЫЕ СТИЛИ (для обратной совместимости) ===== */
 @media (max-width: 700px) {
     /* Геометки и стрелки */
     .map-mark-area, .custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-prosto-leftarea, .custom-cursor-backarea, .custom-cursor-leftarea, .custom-cursor-uparea {

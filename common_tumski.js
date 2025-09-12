@@ -114,8 +114,16 @@ export async function initializeTumskiPage(options = {}) {
         console.error('Ошибка позиционирования элементов:', error);
     }
 
-    // 10. Принудительное применение стилей для мобильной версии
-    if (window.innerWidth <= 700) {
+    // 10. Принудительное применение стилей в зависимости от типа ввода
+    const inputType = document.documentElement.getAttribute('data-input-type') || 'desktop';
+    console.log('Current input type:', inputType);
+    
+    // Применяем стили через общий скрипт определения типа ввода
+    if (window.InputDetection && typeof window.InputDetection.applyInputMode === 'function') {
+        setTimeout(() => {
+            window.InputDetection.applyInputMode(inputType);
+        }, 500);
+    } else if (inputType === 'touch') {
         setTimeout(() => {
             applyMobileStyles();
         }, 1000);
@@ -233,7 +241,7 @@ function addQuestGlowEffect(questElement) {
 }
 
 /**
- * Применение мобильных стилей
+ * Применение стилей для тач-устройств
  */
 function applyMobileStyles() {
     const cursors = document.querySelectorAll('.custom-cursor, .custom-cursor-prosto, .custom-cursor-back, .custom-cursor-left, .custom-cursor-up, .custom-cursor-area, .custom-cursor-backarea, .custom-cursor-leftarea, .custom-cursor-uparea, .custom-cursor-prostoarea');
@@ -243,6 +251,15 @@ function applyMobileStyles() {
         cursor.style.pointerEvents = 'auto';
         cursor.style.visibility = 'visible';
         cursor.style.zIndex = '9999';
+    });
+    
+    // Также показываем геометки для тач-устройств
+    const markers = document.querySelectorAll('.map-mark-area, .map-mark, .papera-image, .tumski-text');
+    markers.forEach(marker => {
+        marker.style.opacity = '1';
+        marker.style.display = 'block';
+        marker.style.pointerEvents = 'auto';
+        marker.style.visibility = 'visible';
     });
 }
 
@@ -297,8 +314,11 @@ export async function initializeArrowHandlers(arrowConfigs = []) {
             const { type, cursor, cursorArea, handlerType, callback } = config;
             
             if (cursor && cursorArea) {
-                if (type === 'mobile') {
-                    // Мобильные обработчики
+                // Определяем тип ввода по data-атрибуту
+                const inputType = document.documentElement.getAttribute('data-input-type') || 'desktop';
+                
+                if (inputType === 'touch') {
+                    // Тач-обработчики
                     const handleClick = () => {
                         if (stepSound) {
                             stepSound.play().then(() => {
