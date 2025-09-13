@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест музыки SPA</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+        }
+        .music-controls {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        .control-button {
+            margin: 5px;
+            padding: 8px 16px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .control-button:hover {
+            background: #218838;
+        }
+        .control-button.danger {
+            background: #dc3545;
+        }
+        .control-button.danger:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎵 Тест фоновой музыки SPA</h1>
+        
+        <div class="status">
+            <h3>Статус музыки:</h3>
+            <p id="musicStatus">Инициализация...</p>
+            <p id="musicTime">Время: 0:00</p>
+            <p id="musicSource">Источник: -</p>
+        </div>
+        
+        <div class="music-controls">
+            <h3>Управление музыкой:</h3>
+            <button class="control-button" onclick="testPlayMusic()">▶️ Воспроизвести</button>
+            <button class="control-button danger" onclick="testPauseMusic()">⏸️ Пауза</button>
+            <button class="control-button" onclick="testSwitchToTown()">🏰 Town.mp3</button>
+            <button class="control-button" onclick="testSwitchToBirds()">🐦 Birds.mp3</button>
+            <button class="control-button" onclick="testSwitchToKostel()">⛪ Kostel.mp3</button>
+        </div>
+        
+        <div class="status">
+            <h3>Тестирование:</h3>
+            <ol>
+                <li>Откройте <code>index.html</code> в браузере</li>
+                <li>Проверьте, что музыка town.mp3 запускается автоматически</li>
+                <li>Перейдите между страницами и убедитесь, что музыка переключается</li>
+                <li>Используйте кнопки выше для тестирования управления музыкой</li>
+            </ol>
+        </div>
+        
+        <div class="status">
+            <h3>Ожидаемое поведение:</h3>
+            <ul>
+                <li>✅ Музыка town.mp3 запускается при загрузке SPA</li>
+                <li>✅ <strong>Музыка НЕ прерывается</strong> при переходах между страницами</li>
+                <li>✅ Музыка переключается в зависимости от страницы</li>
+                <li>✅ <strong>Музыка отключена на ogrod03-ogrod09, tumski19, tumski21</strong></li>
+                <li>✅ Поддержка всех музыкальных треков проекта</li>
+                <li>✅ Сохранение состояния музыки</li>
+                <li>✅ Музыка в iframe отключена (управляется только из SPA)</li>
+            </ul>
+        </div>
+        
+        <div class="status">
+            <h3>Исправления:</h3>
+            <ul>
+                <li>🔧 Отключена музыка в iframe страницах</li>
+                <li>🔧 Добавлен скрипт iframe_music_disable.js</li>
+                <li>🔧 Предотвращен перезапуск музыки при переходах</li>
+                <li>🔧 Улучшена система переключения музыки</li>
+                <li>🔧 <strong>Добавлено сохранение времени музыки</strong></li>
+                <li>🔧 Музыка продолжается с того же места при переходах</li>
+            </ul>
+        </div>
+        
+        <div class="status">
+            <h3>Новые функции:</h3>
+            <ul>
+                <li>⏰ <strong>Сохранение позиции</strong> - музыка продолжается с того же места</li>
+                <li>🔄 <strong>Автовосстановление</strong> - время восстанавливается при перезагрузке</li>
+                <li>💾 <strong>Периодическое сохранение</strong> - время сохраняется каждые 2 секунды</li>
+                <li>🎯 <strong>Умное переключение</strong> - музыка не перезапускается без необходимости</li>
+            </ul>
+        </div>
+        
+        <div class="status">
+            <h3>Страницы с отключенной музыкой:</h3>
+            <ul>
+                <li>🔇 <strong>ogrod03.html - ogrod09.html</strong> - музыка отключена</li>
+                <li>🔇 <strong>tumski19.html</strong> - музыка отключена</li>
+                <li>🔇 <strong>tumski21.html</strong> - музыка отключена</li>
+                <li>🎵 <strong>Все остальные страницы</strong> - играет town.mp3</li>
+            </ul>
+        </div>
+        
+        <div>
+            <a href="index.html" class="test-button">🚀 Открыть SPA</a>
+            <a href="tumski.html" class="test-button">🏰 Оригинальная tumski.html</a>
+        </div>
+    </div>
+    
+    <script>
+        // Функции для тестирования музыки
+        function testPlayMusic() {
+            if (window.musicIframe && window.musicIframe.contentWindow && window.musicIframe.contentWindow.musicAPI) {
+                window.musicIframe.contentWindow.musicAPI.play();
+                updateStatus('Музыка воспроизводится');
+            } else if (window.directMusicAudio) {
+                window.directMusicAudio.play();
+                updateStatus('Музыка воспроизводится (iOS)');
+            } else {
+                updateStatus('Музыка не инициализирована');
+            }
+        }
+        
+        function testPauseMusic() {
+            if (window.musicIframe && window.musicIframe.contentWindow && window.musicIframe.contentWindow.musicAPI) {
+                window.musicIframe.contentWindow.musicAPI.pause();
+                updateStatus('Музыка на паузе');
+            } else if (window.directMusicAudio) {
+                window.directMusicAudio.pause();
+                updateStatus('Музыка на паузе (iOS)');
+            } else {
+                updateStatus('Музыка не инициализирована');
+            }
+        }
+        
+        function testSwitchToTown() {
+            if (window.switchMusicSource) {
+                window.switchMusicSource('media/zwyki/town.mp3');
+                updateStatus('Переключено на town.mp3');
+            } else {
+                updateStatus('Функция переключения музыки недоступна');
+            }
+        }
+        
+        function testSwitchToBirds() {
+            if (window.switchMusicSource) {
+                window.switchMusicSource('media/zwyki/birds.mp3');
+                updateStatus('Переключено на birds.mp3');
+            } else {
+                updateStatus('Функция переключения музыки недоступна');
+            }
+        }
+        
+        function testSwitchToKostel() {
+            if (window.switchMusicSource) {
+                window.switchMusicSource('media/zwyki/kostel.mp3');
+                updateStatus('Переключено на kostel.mp3');
+            } else {
+                updateStatus('Функция переключения музыки недоступна');
+            }
+        }
+        
+        function updateStatus(message) {
+            document.getElementById('musicStatus').textContent = message;
+        }
+        
+        // Проверяем состояние музыки каждые 2 секунды
+        setInterval(() => {
+            if (window.musicIframe && window.musicIframe.contentWindow && window.musicIframe.contentWindow.musicAPI) {
+                const api = window.musicIframe.contentWindow.musicAPI;
+                const isPaused = api.isPaused();
+                const currentTime = api.getCurrentTime();
+                const src = window.musicIframe.contentDocument.getElementById('persistentMusic')?.src;
+                
+                updateStatus(isPaused ? 'Музыка на паузе' : 'Музыка воспроизводится');
+                updateTime(currentTime);
+                updateSource(src);
+            } else if (window.directMusicAudio) {
+                const isPaused = window.directMusicAudio.paused;
+                const currentTime = window.directMusicAudio.currentTime;
+                const src = window.directMusicAudio.src;
+                
+                updateStatus(isPaused ? 'Музыка на паузе (iOS)' : 'Музыка воспроизводится (iOS)');
+                updateTime(currentTime);
+                updateSource(src);
+            } else {
+                updateStatus('Музыка не инициализирована');
+                updateTime(0);
+                updateSource('-');
+            }
+        }, 2000);
+        
+        function updateTime(time) {
+            const minutes = Math.floor(time / 60);
+            const seconds = Math.floor(time % 60);
+            const timeString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('musicTime').textContent = `Время: ${timeString}`;
+        }
+        
+        function updateSource(src) {
+            if (src) {
+                const fileName = src.split('/').pop();
+                document.getElementById('musicSource').textContent = `Источник: ${fileName}`;
+            } else {
+                document.getElementById('musicSource').textContent = 'Источник: -';
+            }
+        }
+    </script>
+</body>
+</html>

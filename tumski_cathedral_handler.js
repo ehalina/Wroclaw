@@ -599,7 +599,7 @@ export function positionMarkersOnBg() {
     }
     
     // Определяем, мобильная ли версия
-    const isMobile = window.innerWidth <= 700;
+    const isMobile = window.innerWidth <= 1366;
 
     // Геометки и стрелки должны иметь data-x-desktop/data-y-desktop или data-x-mobile/data-y-mobile
     const markers = document.querySelectorAll('[data-x-desktop][data-y-desktop], [data-x-mobile][data-y-mobile]');

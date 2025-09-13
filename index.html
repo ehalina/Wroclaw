@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тумский остров - Вроцлав SPA</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="common_tumski.css">
+    <link rel="stylesheet" href="tumski.css">
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
+    <script src="i18n.js"></script>
+    <script src="common.js"></script>
+    <script src="arrow_handlers.js"></script>
+    <script src="book_paths.js"></script>
+    <script src="common_buttons.js"></script>
+    <script src="language_menu.js"></script>
+    <script src="map_modal.js"></script>
+    <script type="module" src="background_music.js"></script>
+    <script type="module" src="town_music_handler.js"></script>
+    <script type="module" src="tumski_cathedral_handler.js"></script>
+    <script type="module" src="map_points.js"></script>
+    <script type="module" src="spa_integration.js"></script>
+    <style>
+        /* SPA специфичные стили */
+        #spa-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .page-content {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .page-content.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .loading-overlay.hidden {
+            display: none;
+        }
+        
+        /* Стили для кнопки запуска музыки */
+        .music-start-button {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: 2px solid white;
+            padding: 20px 40px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            z-index: 10001;
+            transition: all 0.3s ease;
+        }
+        
+        .music-start-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+        
+        .music-start-button.hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Кнопка запуска музыки -->
+    <div id="musicStartButton" class="music-start-button">
+        🎵 Нажмите для запуска музыки
+    </div>
+    
+    <!-- Индикатор загрузки -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div>Загрузка...</div>
+    </div>
+    
+    <!-- SPA контейнер -->
+    <div id="spa-container">
+        <!-- Контент страниц будет загружаться сюда -->
+    </div>
+    
+    <script type="module">
+        // SPA система управления страницами с iframe
+        class SPAManager {
+            constructor() {
+                this.currentPage = null;
+                this.pages = new Map();
+                this.musicStarted = false;
+                this.init();
+            }
+            
+            async init() {
+                console.log('🚀 Инициализация SPA...');
+                
+                // Показываем кнопку запуска музыки
+                this.showMusicButton();
+                
+                // Инициализируем фоновую музыку сразу
+                this.initializeBackgroundMusic();
+                
+                // Загружаем первую страницу (tumski.html)
+                await this.loadPage('tumski.html');
+                
+                // Инициализируем обработчики
+                this.setupEventListeners();
+            }
+            
+            initializeBackgroundMusic() {
+                console.log('🎵 Инициализация фоновой музыки...');
+                
+                // Импортируем и инициализируем background_music.js
+                import('./background_music.js').then(module => {
+                    if (module.initBackgroundMusic) {
+                        console.log('🎵 Инициализируем фоновую музыку через модуль');
+                        module.initBackgroundMusic();
+                        this.musicStarted = true;
+                        
+                        // Скрываем кнопку запуска музыки, так как музыка уже инициализирована
+                        setTimeout(() => {
+                            const button = document.getElementById('musicStartButton');
+                            if (button) {
+                                button.classList.add('hidden');
+                            }
+                        }, 1000);
+                        
+                        // Принудительно запускаем музыку
+                        setTimeout(() => {
+                            this.forceStartMusic();
+                        }, 2000);
+                    }
+                }).catch(error => {
+                    console.log('🎵 Ошибка загрузки background_music.js:', error);
+                    // Показываем кнопку запуска музыки как fallback
+                });
+            }
+            
+            forceStartMusic() {
+                console.log('🎵 Принудительный запуск музыки...');
+                
+                // Пытаемся запустить музыку через существующую систему
+                if (window.musicIframe && window.musicIframe.contentWindow && window.musicIframe.contentWindow.musicAPI) {
+                    window.musicIframe.contentWindow.musicAPI.play().catch(console.log);
+                } else if (window.directMusicAudio) {
+                    window.directMusicAudio.play().catch(console.log);
+                } else {
+                    // Если система не готова, пробуем еще раз через некоторое время
+                    setTimeout(() => {
+                        this.forceStartMusic();
+                    }, 1000);
+                }
+                
+                // Восстанавливаем сохраненное время музыки
+                this.restoreSavedMusicTime();
+            }
+            
+            restoreSavedMusicTime() {
+                const savedTime = localStorage.getItem('spaMusicTime');
+                const savedSrc = localStorage.getItem('spaMusicSrc');
+                
+                if (savedTime && savedSrc) {
+                    console.log('🎵 Восстанавливаем сохраненное время музыки:', savedTime, 'для', savedSrc);
+                    
+                    setTimeout(() => {
+                        this.restoreMusicTime(savedSrc, parseFloat(savedTime));
+                    }, 2000);
+                }
+            }
+            
+            showMusicButton() {
+                const button = document.getElementById('musicStartButton');
+                button.addEventListener('click', () => {
+                    this.startMusic();
+                    button.classList.add('hidden');
+                });
+            }
+            
+            startMusic() {
+                if (this.musicStarted) return;
+                
+                console.log('🎵 Запуск музыки через background_music.js...');
+                this.musicStarted = true;
+                
+                // Инициализируем фоновую музыку через существующую систему
+                if (window.initBackgroundMusic) {
+                    window.initBackgroundMusic();
+                } else {
+                    // Если функция не доступна, создаем простой аудио элемент
+                    const audio = document.createElement('audio');
+                    audio.id = 'spaBackgroundMusic';
+                    audio.src = 'media/zwyki/town.mp3';
+                    audio.loop = true;
+                    audio.volume = 0.5;
+                    audio.preload = 'auto';
+                    audio.playsInline = true;
+                    audio.webkitPlaysInline = true;
+                    
+                    // Пытаемся запустить музыку
+                    audio.play().then(() => {
+                        console.log('🎵 Музыка успешно запущена');
+                        document.body.appendChild(audio);
+                    }).catch((error) => {
+                        console.log('🎵 Ошибка запуска музыки:', error);
+                        this.showMusicHint();
+                    });
+                }
+            }
+            
+            showMusicHint() {
+                const hint = document.createElement('div');
+                hint.className = 'music-hint';
+                hint.textContent = 'Нажмите в любом месте для запуска музыки';
+                hint.style.display = 'block';
+                document.body.appendChild(hint);
+                
+                setTimeout(() => {
+                    hint.style.display = 'none';
+                    document.body.removeChild(hint);
+                }, 6000);
+            }
+            
+            async loadPage(pageName) {
+                console.log('📄 Загрузка страницы:', pageName);
+                
+                // Показываем индикатор загрузки
+                this.showLoading();
+                
+                try {
+                    // Если страница уже загружена, просто переключаемся на неё
+                    if (this.pages.has(pageName)) {
+                        this.showPage(pageName);
+                        this.hideLoading();
+                        return;
+                    }
+                    
+                    // Создаем iframe для страницы
+                    const iframe = document.createElement('iframe');
+                    iframe.src = pageName;
+                    iframe.style.width = '100%';
+                    iframe.style.height = '100%';
+                    iframe.style.border = 'none';
+                    iframe.style.position = 'absolute';
+                    iframe.style.top = '0';
+                    iframe.style.left = '0';
+                    iframe.style.zIndex = '1';
+                    
+                    // Создаем контейнер для страницы
+                    const pageContainer = document.createElement('div');
+                    pageContainer.className = 'page-content';
+                    pageContainer.id = `page-${pageName.replace('.html', '')}`;
+                    pageContainer.appendChild(iframe);
+                    
+                    // Добавляем в SPA контейнер
+                    document.getElementById('spa-container').appendChild(pageContainer);
+                    
+                    // Сохраняем страницу
+                    this.pages.set(pageName, pageContainer);
+                    
+                    // Ждем загрузки iframe
+                    iframe.onload = () => {
+                        console.log('✅ iframe загружен:', pageName);
+                        this.setupIframeNavigation(iframe, pageName);
+                        this.disableIframeMusic(iframe); // Отключаем музыку в iframe
+                        this.showPage(pageName);
+                        this.hideLoading();
+                    };
+                    
+                    iframe.onerror = () => {
+                        console.error('❌ Ошибка загрузки iframe:', pageName);
+                        this.hideLoading();
+                    };
+                    
+                } catch (error) {
+                    console.error('❌ Ошибка загрузки страницы:', error);
+                    this.hideLoading();
+                }
+            }
+            
+            setupIframeNavigation(iframe, pageName) {
+                // Настраиваем навигацию внутри iframe
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    
+                    // Обработчики для стрелок навигации
+                    const arrowHandlers = iframeDoc.querySelectorAll('[data-prev-page], [data-next-page]');
+                    arrowHandlers.forEach(handler => {
+                        handler.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const targetPage = handler.dataset.prevPage || handler.dataset.nextPage;
+                            if (targetPage) {
+                                this.navigateToPage(targetPage);
+                            }
+                        });
+                    });
+                    
+                    // Обработчики для всех ссылок
+                    const links = iframeDoc.querySelectorAll('a[href$=".html"]');
+                    links.forEach(link => {
+                        link.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const href = link.getAttribute('href');
+                            if (href) {
+                                this.navigateToPage(href);
+                            }
+                        });
+                    });
+                    
+                } catch (error) {
+                    console.log('⚠️ Не удалось настроить навигацию iframe (возможно, CORS):', error);
+                }
+            }
+            
+            disableIframeMusic(iframe) {
+                // Отключаем музыку в iframe, чтобы она не конфликтовала с основной
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    
+                    // Загружаем скрипт отключения музыки в iframe
+                    const disableScript = iframeDoc.createElement('script');
+                    disableScript.src = 'iframe_music_disable.js';
+                    disableScript.onload = () => {
+                        console.log('🎵 Скрипт отключения музыки загружен в iframe');
+                    };
+                    iframeDoc.head.appendChild(disableScript);
+                    
+                    // Отключаем все аудио элементы в iframe
+                    const audioElements = iframeDoc.querySelectorAll('audio');
+                    audioElements.forEach(audio => {
+                        audio.pause();
+                        audio.muted = true;
+                        audio.volume = 0;
+                    });
+                    
+                    // Отключаем инициализацию музыки в iframe
+                    if (iframe.contentWindow.initBackgroundMusic) {
+                        iframe.contentWindow.initBackgroundMusic = () => {
+                            console.log('🎵 Музыка в iframe отключена (управляется из SPA)');
+                        };
+                    }
+                    
+                    // Отключаем глобальные обработчики музыки в iframe
+                    if (iframe.contentWindow.muteIframeMusic) {
+                        iframe.contentWindow.muteIframeMusic = () => {};
+                    }
+                    if (iframe.contentWindow.unmuteIframeMusic) {
+                        iframe.contentWindow.unmuteIframeMusic = () => {};
+                    }
+                    
+                    console.log('🎵 Музыка в iframe отключена для страницы');
+                    
+                } catch (error) {
+                    console.log('⚠️ Не удалось отключить музыку в iframe (возможно, CORS):', error);
+                }
+            }
+            
+            showPage(pageName) {
+                // Скрываем все страницы
+                this.pages.forEach((page, name) => {
+                    page.classList.remove('active');
+                });
+                
+                // Показываем нужную страницу
+                const targetPage = this.pages.get(pageName);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                    this.currentPage = pageName;
+                    
+                    // Обновляем URL без перезагрузки страницы
+                    history.pushState({ page: pageName }, '', `#${pageName}`);
+                    
+                    // Переключаем музыку в зависимости от страницы
+                    this.switchMusicForPage(pageName);
+                }
+                
+                this.hideLoading();
+            }
+            
+            switchMusicForPage(pageName) {
+                console.log('🎵 Переключение музыки для страницы:', pageName);
+                
+                // Определяем нужную музыку на основе страницы
+                let targetMusic = 'media/zwyki/town.mp3'; // По умолчанию
+                
+                if (pageName.includes('ogrod03.html') || 
+                    pageName.includes('ogrod04.html') || 
+                    pageName.includes('ogrod05.html') || 
+                    pageName.includes('ogrod06.html') || 
+                    pageName.includes('ogrod07.html') || 
+                    pageName.includes('ogrod08.html') || 
+                    pageName.includes('ogrod09.html')) {
+                    targetMusic = ''; // Отключаем музыку для ogrod03-ogrod09
+                } else if (pageName.includes('tumski21.html')) {
+                    targetMusic = ''; // Отключаем музыку для tumski21.html
+                } else if (pageName.includes('tumski19.html')) {
+                    targetMusic = ''; // Отключаем музыку для tumski19.html
+                } else {
+                    targetMusic = 'media/zwyki/town.mp3';
+                }
+                
+                // Сохраняем текущую позицию музыки перед переключением
+                const currentTime = this.getCurrentMusicTime();
+                console.log('🎵 Текущая позиция музыки:', currentTime);
+                
+                // Переключаем музыку через существующую систему
+                if (window.switchMusicSource) {
+                    if (targetMusic === '') {
+                        // Пауза музыки
+                        if (window.musicIframe && window.musicIframe.contentWindow && window.musicIframe.contentWindow.musicAPI) {
+                            window.musicIframe.contentWindow.musicAPI.pause();
+                        } else if (window.directMusicAudio) {
+                            window.directMusicAudio.pause();
+                        }
+                    } else {
+                        // Проверяем, нужно ли переключать музыку
+                        const currentSrc = this.getCurrentMusicSource();
+                        if (!currentSrc || !currentSrc.includes(targetMusic.split('/').pop())) {
+                            console.log('🎵 Переключаем музыку с', currentSrc, 'на', targetMusic);
+                            
+                            // Переключаем музыку и восстанавливаем позицию
+                            this.switchMusicWithTimePreservation(targetMusic, currentTime);
+                        } else {
+                            console.log('🎵 Правильная музыка уже играет:', targetMusic);
+                            // Если музыка уже правильная, просто убеждаемся что она играет
+                            this.ensureMusicIsPlaying();
+                        }
+                    }
+                }
+            }
+            
+            getCurrentMusicSource() {
+                try {
+                    if (window.musicIframe && window.musicIframe.contentDocument) {
+                        const audio = window.musicIframe.contentDocument.getElementById('persistentMusic');
+                        return audio ? audio.src : null;
+                    } else if (window.directMusicAudio) {
+                        return window.directMusicAudio.src;
+                    }
+                } catch (error) {
+                    console.log('⚠️ Не удалось получить текущий источник музыки:', error);
+                }
+                return null;
+            }
+            
+            getCurrentMusicTime() {
+                try {
+                    if (window.musicIframe && window.musicIframe.contentWindow && window.musicIframe.contentWindow.musicAPI) {
+                        return window.musicIframe.contentWindow.musicAPI.getCurrentTime();
+                    } else if (window.directMusicAudio) {
+                        return window.directMusicAudio.currentTime;
+                    }
+                } catch (error) {
+                    console.log('⚠️ Не удалось получить текущее время музыки:', error);
+                }
+                return 0;
+            }
+            
+            switchMusicWithTimePreservation(targetMusic, currentTime) {
+                console.log('🎵 Переключение музыки с сохранением времени:', targetMusic, 'время:', currentTime);
+                
+                // Сохраняем время в localStorage для восстановления
+                localStorage.setItem('spaMusicTime', currentTime.toString());
+                localStorage.setItem('spaMusicSrc', targetMusic);
+                
+                // Переключаем музыку
+                if (window.switchMusicSource) {
+                    window.switchMusicSource(targetMusic);
+                }
+                
+                // Восстанавливаем время после переключения
+                setTimeout(() => {
+                    this.restoreMusicTime(targetMusic, currentTime);
+                }, 1000);
+            }
+            
+            restoreMusicTime(targetMusic, time) {
+                console.log('🎵 Восстановление времени музыки:', time);
+                
+                try {
+                    if (window.musicIframe && window.musicIframe.contentWindow && window.musicIframe.contentWindow.musicAPI) {
+                        const api = window.musicIframe.contentWindow.musicAPI;
+                        api.setCurrentTime(time);
+                        console.log('🎵 Время восстановлено через iframe API');
+                    } else if (window.directMusicAudio) {
+                        window.directMusicAudio.currentTime = time;
+                        console.log('🎵 Время восстановлено через прямой аудио элемент');
+                    }
+                } catch (error) {
+                    console.log('⚠️ Не удалось восстановить время музыки:', error);
+                }
+            }
+            
+            ensureMusicIsPlaying() {
+                try {
+                    if (window.musicIframe && window.musicIframe.contentWindow && window.musicIframe.contentWindow.musicAPI) {
+                        const api = window.musicIframe.contentWindow.musicAPI;
+                        if (api.isPaused()) {
+                            console.log('🎵 Возобновляем воспроизведение музыки');
+                            api.play().catch(console.log);
+                        }
+                    } else if (window.directMusicAudio && window.directMusicAudio.paused) {
+                        console.log('🎵 Возобновляем воспроизведение музыки (прямой элемент)');
+                        window.directMusicAudio.play().catch(console.log);
+                    }
+                } catch (error) {
+                    console.log('⚠️ Не удалось возобновить воспроизведение музыки:', error);
+                }
+            }
+            
+            async navigateToPage(pageName) {
+                console.log('🧭 Навигация к странице:', pageName);
+                
+                // Загружаем страницу, если она ещё не загружена
+                if (!this.pages.has(pageName)) {
+                    await this.loadPage(pageName);
+                } else {
+                    this.showPage(pageName);
+                }
+            }
+            
+            showLoading() {
+                document.getElementById('loadingOverlay').classList.remove('hidden');
+            }
+            
+            hideLoading() {
+                document.getElementById('loadingOverlay').classList.add('hidden');
+            }
+            
+            setupEventListeners() {
+                // Обработчик для кнопки "Назад" в браузере
+                window.addEventListener('popstate', (event) => {
+                    if (event.state && event.state.page) {
+                        this.showPage(event.state.page);
+                    }
+                });
+                
+                // Глобальный обработчик кликов для запуска музыки
+                document.addEventListener('click', (event) => {
+                    if (!this.musicStarted) {
+                        this.startMusic();
+                        const button = document.getElementById('musicStartButton');
+                        if (button) {
+                            button.classList.add('hidden');
+                        }
+                    }
+                });
+                
+                // Обработчик для автоматического запуска музыки при взаимодействии
+                const interactionEvents = ['click', 'touchstart', 'keydown'];
+                interactionEvents.forEach(eventType => {
+                    document.addEventListener(eventType, () => {
+                        if (!this.musicStarted && window.initBackgroundMusic) {
+                            console.log('🎵 Автоматический запуск музыки по взаимодействию');
+                            this.startMusic();
+                            const button = document.getElementById('musicStartButton');
+                            if (button) {
+                                button.classList.add('hidden');
+                            }
+                        }
+                    }, { once: true });
+                });
+                
+                // Предотвращаем перезапуск музыки при переходах
+                this.preventMusicRestart();
+                
+                // Запускаем периодическое сохранение времени музыки
+                this.startMusicTimeSaving();
+            }
+            
+            startMusicTimeSaving() {
+                // Сохраняем время музыки каждые 2 секунды
+                setInterval(() => {
+                    if (this.musicStarted) {
+                        const currentTime = this.getCurrentMusicTime();
+                        const currentSrc = this.getCurrentMusicSource();
+                        
+                        if (currentTime > 0 && currentSrc) {
+                            localStorage.setItem('spaMusicTime', currentTime.toString());
+                            localStorage.setItem('spaMusicSrc', currentSrc);
+                        }
+                    }
+                }, 2000);
+            }
+            
+            preventMusicRestart() {
+                // Перехватываем все попытки инициализации музыки
+                const originalInitBackgroundMusic = window.initBackgroundMusic;
+                window.initBackgroundMusic = () => {
+                    if (!this.musicStarted) {
+                        console.log('🎵 Инициализация музыки через SPA');
+                        if (originalInitBackgroundMusic) {
+                            originalInitBackgroundMusic();
+                        }
+                        this.musicStarted = true;
+                    } else {
+                        console.log('🎵 Музыка уже инициализирована, пропускаем');
+                    }
+                };
+                
+                // Перехватываем попытки переключения музыки
+                const originalSwitchMusicSource = window.switchMusicSource;
+                window.switchMusicSource = (src) => {
+                    console.log('🎵 Переключение музыки через SPA:', src);
+                    if (originalSwitchMusicSource) {
+                        originalSwitchMusicSource(src);
+                    }
+                };
+            }
+        }
+        
+        // Инициализируем SPA при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            window.spaManager = new SPAManager();
+        });
+        
+        // Экспортируем для использования в других модулях
+        window.SPAManager = SPAManager;
+    </script>
+</body>
+</html>
