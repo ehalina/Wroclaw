@@ -588,7 +588,7 @@ const mapStyles = `
     .close-button {
         position: absolute;
         top: 20px;
-        right: 20px;
+        left: 20px;
         color: white;
         font-size: 24px;
         cursor: pointer;
