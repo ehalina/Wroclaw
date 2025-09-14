@@ -25,10 +25,21 @@ const COMMON_BUTTON_STYLES = {
             color: 'white',
             fontSize: '24px',
             cursor: 'pointer',
-            background: 'none',
-            border: 'none',
+            background: 'rgba(0, 0, 0, 0.7)',
+            border: '2px solid white',
+            borderRadius: '50%',
             padding: '10px',
-            zIndex: 1002
+            zIndex: 1002,
+            width: '40px',
+            height: '40px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.3s ease'
+        },
+        hoverStyle: {
+            background: 'rgba(0, 0, 0, 0.9)',
+            transform: 'scale(1.1)'
         }
     }
 };
@@ -51,6 +62,14 @@ function applyCommonButtonStyles() {
     const closeButtons = document.querySelectorAll('.close-button');
     closeButtons.forEach(button => {
         Object.assign(button.style, COMMON_BUTTON_STYLES.closeButton.style);
+        
+        // Добавляем hover эффекты
+        button.addEventListener('mouseenter', () => {
+            Object.assign(button.style, COMMON_BUTTON_STYLES.closeButton.hoverStyle);
+        });
+        button.addEventListener('mouseleave', () => {
+            Object.assign(button.style, COMMON_BUTTON_STYLES.closeButton.style);
+        });
     });
 }
 

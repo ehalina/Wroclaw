@@ -192,79 +192,7 @@
             z-index: 1000;
         }
 
-/*
-        /* Стили для модального окна квеста 
-        .book-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1001;
-        }
-
-        .book-container {
-            position: relative;
-            max-width: 90%;
-            max-height: 90vh;
-            background: #f5f5dc;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-
-        .book-image-content-wrapper {
-            width: 100%;
-            height: 100%;
-            overflow-y: auto;
-            padding: 20px;
-        }
-
-        .book-content-area {
-            width: 100%;
-            text-align: center;
-        }
-
-        .book-title {
-            font-family: 'Marck Script', cursive;
-            font-size: 28px;
-            color: #8B4513;
-            margin-bottom: 20px;
-        }
-
-        .quest-tasks {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .quest-tasks li {
-            margin-bottom: 15px;
-            text-align: left;
-            font-family: serif;
-            color: #5b4636;
-        }
-
-        .close-button {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: none;
-            border: none;
-            font-size: 30px;
-            color: #8B4513;
-            cursor: pointer;
-            z-index: 1002;
-        }
-
-        .close-button:hover {
-            color: #654321;
-        }
-*/
+        /* Стили для модального окна квеста уже определены в styles.css */
         @media (max-width: 768px) {
            .page-container {
             width: 280vw;
@@ -432,16 +360,44 @@
                 const closeButton = bookOverlay.querySelector('.close-button');
                 if (closeButton) {
                     closeButton.addEventListener('click', () => {
+                        console.log('🎵 Квест закрыт - переходим на tumski06.html');
                         bookOverlay.style.display = 'none';
-                        resumeBackgroundMusic();
+                        
+                        // Переходим на страницу 06 через SPA
+                        if (window.parent && window.parent !== window) {
+                            console.log('🎵 Отправляем сообщение родительскому окну для перехода на tumski06.html');
+                            // Отправляем сообщение родительскому окну
+                            window.parent.postMessage({
+                                type: 'SPA_NAVIGATE',
+                                page: 'tumski06.html',
+                                action: 'navigate'
+                            }, '*');
+                        } else {
+                            console.log('🎵 Переход на tumski06.html обычным способом');
+                            window.location.href = 'tumski06.html';
+                        }
                     });
                 }
                 
                 // Закрытие по клику вне модального окна
                 bookOverlay.addEventListener('click', (e) => {
                     if (e.target === bookOverlay) {
+                        console.log('🎵 Квест закрыт (клик вне окна) - переходим на tumski06.html');
                         bookOverlay.style.display = 'none';
-                        resumeBackgroundMusic();
+                        
+                        // Переходим на страницу 06 через SPA
+                        if (window.parent && window.parent !== window) {
+                            console.log('🎵 Отправляем сообщение родительскому окну для перехода на tumski06.html');
+                            // Отправляем сообщение родительскому окну
+                            window.parent.postMessage({
+                                type: 'SPA_NAVIGATE',
+                                page: 'tumski06.html',
+                                action: 'navigate'
+                            }, '*');
+                        } else {
+                            console.log('🎵 Переход на tumski06.html обычным способом');
+                            window.location.href = 'tumski06.html';
+                        }
                     }
                 });
             }
@@ -461,23 +417,20 @@
                     
                     // Добавляем кастомный обработчик
                     const handleBackClick = () => {
+                        console.log('🎵 Клик по стрелке назад на tumski21 - отключаем hang.mp3 и запускаем квест');
+                        
+                        // 1. Сначала полностью отключаем hang.mp3
+                        if (window.parent && window.parent !== window && window.parent.SPAManager) {
+                            console.log('🎵 Останавливаем hang.mp3 через SPA');
+                            window.parent.SPAManager.switchToTownMusic();
+                        }
+                        
                         // Останавливаем анимацию параллакса
                         if (window.sunsetParallax) {
                             if (window.sunsetParallax.timeline) {
                                 window.sunsetParallax.timeline.pause();
                             }
                             window.sunsetParallax.isPaused = true;
-                        }
-                        
-                        // Останавливаем основную музыку через iframe API
-                        const iframe = window.musicIframe;
-                        if (iframe && iframe.contentWindow && iframe.contentWindow.musicAPI) {
-                            iframe.contentWindow.musicAPI.pause();
-                        }
-                        
-                        // Останавливаем прямую музыку hang.mp3
-                        if (window.stopHangMusic) {
-                            window.stopHangMusic();
                         }
                         
                         try {
@@ -515,15 +468,20 @@
                                 const bookOverlay = document.querySelector('.book-overlay');
                                 
                                 if (bookOverlay && bookOverlay.style.display === 'none') {
-                                    // Возобновляем основную музыку через iframe API
-                                    // Музыка управляется через SPA
-                                    
-                                    // Музыка управляется через SPA
-                                    
-                                    // Квест закрыт, выполняем переход назад
-                                    setTimeout(() => {
-                                        window.location.href = 'tumski06.html';
-                                    }, 100);
+                                    // Квест закрыт, выполняем переход через SPA
+                                    if (window.parent && window.parent !== window) {
+                                        console.log('🎵 Квест закрыт через checkQuestClosed - отправляем сообщение SPA');
+                                        window.parent.postMessage({
+                                            type: 'SPA_NAVIGATE',
+                                            page: 'tumski06.html',
+                                            action: 'navigate'
+                                        }, '*');
+                                    } else {
+                                        console.log('🎵 Квест закрыт через checkQuestClosed - обычный переход');
+                                        setTimeout(() => {
+                                            window.location.href = 'tumski06.html';
+                                        }, 100);
+                                    }
                                 } else {
                                     // Проверяем снова через 100мс
                                     setTimeout(checkQuestClosed, 100);

@@ -224,6 +224,24 @@ const LanguageMenu = {
                 
                 kostelMusic.play().catch(console.log);
             }
+        } else if (currentPage && currentPage.includes('tumski21.html')) {
+            // Запускаем hang.mp3 для tumski21
+            const hangMusic = document.querySelector('#hangMusic');
+            if (hangMusic) {
+                // Добавляем обработчик зацикливания, если его еще нет
+                if (!hangMusic.hasAttribute('data-loop-handler-added')) {
+                    hangMusic.addEventListener('ended', () => {
+                        const isMuted = localStorage.getItem('soundMuted') === 'true';
+                        if (!isMuted) {
+                            hangMusic.currentTime = 0;
+                            hangMusic.play().catch(console.log);
+                        }
+                    });
+                    hangMusic.setAttribute('data-loop-handler-added', 'true');
+                }
+                
+                hangMusic.play().catch(console.log);
+            }
         } else {
             // Запускаем town.mp3 для остальных страниц
             const backgroundMusic = document.querySelector('#backgroundMusic');

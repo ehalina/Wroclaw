@@ -116,6 +116,11 @@
         <source src="media/zwyki/kostel.mp3" type="audio/mpeg">
     </audio>
     
+    <!-- Аудио элемент для hang.mp3 -->
+    <audio id="hangMusic" loop>
+        <source src="media/zwyki/hang.mp3" type="audio/mpeg">
+    </audio>
+    
     <!-- SPA контейнер -->
     <div id="spa-container">
         <!-- Контент страниц будет загружаться сюда -->
@@ -391,6 +396,9 @@
                 if (pageName.includes('tumski19.html')) {
                     console.log('🎵 Переключаем на kostel.mp3 для tumski19.html');
                     this.switchToKostelMusic();
+                } else if (pageName.includes('tumski21.html')) {
+                    console.log('🎵 Переключаем на hang.mp3 для tumski21.html');
+                    this.switchToHangMusic();
                 } else {
                     console.log('🎵 Переключаем на town.mp3 для:', pageName);
                     this.switchToTownMusic();
@@ -403,13 +411,20 @@
             }
             
             switchToKostelMusic() {
-                console.log('🎵 switchToKostelMusic: останавливаем town.mp3, включаем kostel.mp3');
+                console.log('🎵 switchToKostelMusic: останавливаем town.mp3 и hang.mp3, включаем kostel.mp3');
                 
                 // Останавливаем town.mp3
                 const townMusic = document.getElementById('backgroundMusic');
                 if (townMusic) {
                     townMusic.pause();
                     console.log('🎵 town.mp3 остановлен');
+                }
+                
+                // Останавливаем hang.mp3
+                const hangMusic = document.getElementById('hangMusic');
+                if (hangMusic) {
+                    hangMusic.pause();
+                    console.log('🎵 hang.mp3 остановлен');
                 }
                 
                 // Запускаем kostel.mp3
@@ -438,7 +453,7 @@
             }
             
             switchToTownMusic() {
-                console.log('🎵 switchToTownMusic: останавливаем kostel.mp3, включаем town.mp3');
+                console.log('🎵 switchToTownMusic: останавливаем kostel.mp3 и hang.mp3, включаем town.mp3');
                 
                 // Останавливаем kostel.mp3
                 const kostelMusic = document.getElementById('kostelMusic');
@@ -447,14 +462,21 @@
                     console.log('🎵 kostel.mp3 остановлен');
                 }
                 
+                // Останавливаем hang.mp3
+                const hangMusic = document.getElementById('hangMusic');
+                if (hangMusic) {
+                    hangMusic.pause();
+                    console.log('🎵 hang.mp3 остановлен');
+                }
+                
                 // Запускаем town.mp3
                 const townMusic = document.getElementById('backgroundMusic');
                 if (townMusic) {
                     // Добавляем обработчик зацикливания, если его еще нет
                     if (!townMusic.hasAttribute('data-loop-handler-added')) {
                         townMusic.addEventListener('ended', () => {
-                    const isMuted = localStorage.getItem('soundMuted') === 'true';
-                    if (!isMuted) {
+                            const isMuted = localStorage.getItem('soundMuted') === 'true';
+                            if (!isMuted) {
                                 townMusic.currentTime = 0;
                                 townMusic.play().catch(console.log);
                             }
@@ -469,6 +491,48 @@
                     });
                 } else {
                     console.log('🎵 Элемент backgroundMusic не найден');
+                }
+            }
+            
+            switchToHangMusic() {
+                console.log('🎵 switchToHangMusic: останавливаем town.mp3 и kostel.mp3, включаем hang.mp3');
+                
+                // Останавливаем town.mp3
+                const townMusic = document.getElementById('backgroundMusic');
+                if (townMusic) {
+                    townMusic.pause();
+                    console.log('🎵 town.mp3 остановлен');
+                }
+                
+                // Останавливаем kostel.mp3
+                const kostelMusic = document.getElementById('kostelMusic');
+                if (kostelMusic) {
+                    kostelMusic.pause();
+                    console.log('🎵 kostel.mp3 остановлен');
+                }
+                
+                // Запускаем hang.mp3
+                const hangMusic = document.getElementById('hangMusic');
+                if (hangMusic) {
+                    // Добавляем обработчик зацикливания, если его еще нет
+                    if (!hangMusic.hasAttribute('data-loop-handler-added')) {
+                        hangMusic.addEventListener('ended', () => {
+                            const isMuted = localStorage.getItem('soundMuted') === 'true';
+                            if (!isMuted) {
+                                hangMusic.currentTime = 0;
+                                hangMusic.play().catch(console.log);
+                            }
+                        });
+                        hangMusic.setAttribute('data-loop-handler-added', 'true');
+                    }
+                    
+                    hangMusic.play().then(() => {
+                        console.log('🎵 hang.mp3 успешно запущен');
+                    }).catch(error => {
+                        console.log('🎵 Ошибка запуска hang.mp3:', error);
+                    });
+                } else {
+                    console.log('🎵 Элемент hangMusic не найден');
                 }
             }
             
@@ -505,6 +569,20 @@
                 window.addEventListener('popstate', (event) => {
                     if (event.state && event.state.page) {
                         this.showPage(event.state.page);
+                    }
+                });
+                
+                // Обработчик сообщений от iframe для навигации
+                window.addEventListener('message', (event) => {
+                    console.log('🎵 Получено сообщение от iframe:', event.data);
+                    
+                    if (event.data && event.data.type === 'SPA_NAVIGATE') {
+                        const targetPage = event.data.page;
+                        console.log('🎵 Выполняем навигацию на страницу:', targetPage);
+                        
+                        if (targetPage) {
+                            this.navigateToPage(targetPage);
+                        }
                     }
                 });
                 

@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const common = await import('./tumski_page_common.js');
         if (common && typeof common.initPageCommon === 'function') {
-            console.log('🎵 Инициализируем обработчики стрелок для tumski19.html');
+            console.log('🎵 Инициализируем обработчики стрелок для страницы:', window.location.pathname);
             await common.initPageCommon();
         }
     } catch (error) {

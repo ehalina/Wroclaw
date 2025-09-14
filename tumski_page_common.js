@@ -257,7 +257,8 @@ function setupAllArrows(stepSound) {
             cursorBack: !!cursorBack,
             areaBack: !!areaBack,
             setupBackArrowHandler: typeof window.setupBackArrowHandler,
-            dataPrevPage: cursorBack ? cursorBack.getAttribute('data-prev-page') : 'нет cursorBack'
+            dataPrevPage: cursorBack ? cursorBack.getAttribute('data-prev-page') : 'нет cursorBack',
+            currentPage: window.location.pathname
         });
         
         if (cursorBack && areaBack && typeof window.setupBackArrowHandler === 'function') {
