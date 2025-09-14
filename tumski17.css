@@ -24,3 +24,124 @@
     cursor: pointer;
 }
 
+/* Квест-геометка с наивысшим приоритетом */
+#jan_nepomuk_quest {
+    z-index: 10000 !important;
+    position: relative !important;
+}
+
+/* Область квест-геометки с наивысшим приоритетом */
+.map-mark-area:has(#jan_nepomuk_quest) {
+    z-index: 10000 !important;
+    position: absolute !important;
+}
+
+/* Расширенная область квест-геометки с наивысшим приоритетом */
+#jan_nepomuk_quest::before {
+    z-index: 10000 !important;
+}
+
+/* Контент квест-геометки с наивысшим приоритетом */
+.map-mark-area:has(#jan_nepomuk_quest) .content-wrapper,
+.map-mark-area:has(#jan_nepomuk_quest) .papera-image,
+.map-mark-area:has(#jan_nepomuk_quest) .tumski-text {
+    z-index: 10000 !important;
+}
+
+/* Мобильные стили с наивысшим приоритетом для квест-геометки */
+@media (max-width: 700px) {
+    #jan_nepomuk_quest {
+        z-index: 10000 !important;
+        position: absolute !important;
+    }
+    
+    .map-mark-area:has(#jan_nepomuk_quest) {
+        z-index: 10000 !important;
+        position: absolute !important;
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+    }
+    
+    .map-mark-area:has(#jan_nepomuk_quest) .content-wrapper,
+    .map-mark-area:has(#jan_nepomuk_quest) .papera-image,
+    .map-mark-area:has(#jan_nepomuk_quest) .tumski-text {
+        z-index: 10000 !important;
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+    }
+    
+    #jan_nepomuk_quest::before {
+        z-index: 10000 !important;
+    }
+}
+
+/* Дополнительные стили для обеспечения максимального приоритета */
+/* Квест-геометка должна быть выше всех стрелок и курсоров */
+#jan_nepomuk_quest {
+    z-index: 10000 !important;
+    position: relative !important;
+}
+
+/* Переопределяем z-index для всех возможных конфликтующих элементов */
+.map-mark-area:has(#jan_nepomuk_quest) {
+    z-index: 10000 !important;
+    position: absolute !important;
+}
+
+/* Убеждаемся, что квест-геометка выше всех стрелок */
+.custom-cursor-area,
+.custom-cursor-prostoarea,
+.custom-cursor-prosto-leftarea,
+.custom-cursor-backarea,
+.custom-cursor-leftarea,
+.custom-cursor-uparea {
+    z-index: 999 !important;
+}
+
+/* Квест-геометка должна быть выше всех стрелок */
+.map-mark-area:has(#jan_nepomuk_quest) {
+    z-index: 10000 !important;
+}
+
+/* Убеждаемся, что квест-геометка видна поверх всех элементов */
+.map-mark-area:has(#jan_nepomuk_quest) .map-mark {
+    z-index: 10000 !important;
+    position: relative !important;
+}
+
+/* Финальные стили для максимального приоритета квест-геометки */
+/* Квест-геометка должна быть выше всех модальных окон и подсказок */
+.map-mark-area:has(#jan_nepomuk_quest) {
+    z-index: 10001 !important;
+    position: absolute !important;
+}
+
+#jan_nepomuk_quest {
+    z-index: 10001 !important;
+    position: relative !important;
+}
+
+.map-mark-area:has(#jan_nepomuk_quest) .content-wrapper,
+.map-mark-area:has(#jan_nepomuk_quest) .papera-image,
+.map-mark-area:has(#jan_nepomuk_quest) .tumski-text {
+    z-index: 10001 !important;
+}
+
+#jan_nepomuk_quest::before {
+    z-index: 10001 !important;
+}
+
+/* Убеждаемся, что квест-геометка выше всех элементов управления */
+.map-mark-area:has(#jan_nepomuk_quest) {
+    z-index: 10001 !important;
+    position: absolute !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+}
+

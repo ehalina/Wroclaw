@@ -2,6 +2,16 @@
 // Выносим дублирующийся код в отдельный файл
 
 /**
+ * Проверяет, включен ли звук
+ * @returns {boolean} true если звук включен, false если выключен
+ */
+function isSoundEnabled() {
+    const soundMuted = localStorage.getItem('soundMuted');
+    // По умолчанию звук включен (если значение не установлено или 'false')
+    return soundMuted !== 'true';
+}
+
+/**
  * Общая инициализация для всех tumski страниц
  * @param {Object} options - опции инициализации
  * @param {Array} options.geometries - массив геометок для инициализации
@@ -313,7 +323,7 @@ export async function initializeArrowHandlers(arrowConfigs = []) {
                 if (inputType === 'touch') {
                     // Тач-обработчики
                     const handleClick = () => {
-                        if (stepSound) {
+                        if (stepSound && isSoundEnabled()) {
                             stepSound.play().then(() => {
                                 if (callback) callback();
                             }).catch(() => {

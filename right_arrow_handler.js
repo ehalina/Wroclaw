@@ -1,3 +1,13 @@
+/**
+ * Проверяет, включен ли звук
+ * @returns {boolean} true если звук включен, false если выключен
+ */
+function isSoundEnabled() {
+    const soundMuted = localStorage.getItem('soundMuted');
+    // По умолчанию звук включен (если значение не установлено или 'false')
+    return soundMuted !== 'true';
+}
+
 function setupRightArrowHandler(cursor, cursorArea, stepSound) {
     cursorArea.addEventListener('mousemove', function(e) {
         cursor.style.display = 'block';
@@ -11,8 +21,10 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound) {
 
     cursorArea.addEventListener('click', function() {
         hideAllCursors();
-        stepSound.currentTime = 0;
-        stepSound.play();
+        if (stepSound && isSoundEnabled()) {
+            stepSound.currentTime = 0;
+            stepSound.play();
+        }
         setTimeout(() => {
             window.location.href = 'tumski_02.html';
         }, 300);

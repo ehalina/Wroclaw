@@ -132,11 +132,52 @@
             constructor() {
                 this.currentPage = null;
                 this.pages = new Map();
+                this.stepSound = null;
                 this.init();
+            }
+            
+            /**
+             * Проверяет, включен ли звук
+             * @returns {boolean} true если звук включен, false если выключен
+             */
+            isSoundEnabled() {
+                const soundMuted = localStorage.getItem('soundMuted');
+                // По умолчанию звук включен (если значение не установлено или 'false')
+                return soundMuted !== 'true';
+            }
+            
+            /**
+             * Инициализирует звук шага
+             */
+            initStepSound() {
+                if (!this.stepSound) {
+                    this.stepSound = new Audio('media/step.wav');
+                    this.stepSound.volume = 1.0; // Максимальная громкость
+                    this.stepSound.preload = 'auto';
+                }
+            }
+            
+            /**
+             * Воспроизводит звук шага
+             */
+            playStepSound() {
+                if (this.isSoundEnabled() && this.stepSound) {
+                    try {
+                        this.stepSound.currentTime = 0;
+                        this.stepSound.play().catch(error => {
+                            console.log('🎵 Ошибка воспроизведения step.wav:', error);
+                        });
+                    } catch (error) {
+                        console.log('🎵 Ошибка воспроизведения step.wav:', error);
+                    }
+                }
             }
             
             async init() {
                 console.log('🚀 Инициализация SPA...');
+                
+                // Инициализируем звук шага
+                this.initStepSound();
                 
                 // Запускаем музыку сразу при загрузке
                 this.startBackgroundMusic();
@@ -539,6 +580,9 @@
             async navigateToPage(pageName) {
                 console.log('🎵 navigateToPage вызван для:', pageName);
                 console.log('🎵 Загруженные страницы:', Array.from(this.pages.keys()));
+                
+                // Воспроизводим звук шага при навигации
+                this.playStepSound();
                 
                 // Загружаем страницу, если она ещё не загружена
                 if (!this.pages.has(pageName)) {

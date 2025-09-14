@@ -211,11 +211,12 @@ export function initBackgroundMusic() {
     const stepSound = ensureAudioElement('stepSound', 'media/step.wav');
     const musicHint = document.querySelector('#musicHint');
     const animationHint = document.querySelector('#animationHint');
-    const isMuted = localStorage.getItem('soundMuted') === 'true';
-    console.log('🎵 Состояние звука:', { isMuted, soundMuted: localStorage.getItem('soundMuted') });
+    const soundMuted = localStorage.getItem('soundMuted');
+    const isMuted = soundMuted === 'true';
+    console.log('🎵 Состояние звука:', { isMuted, soundMuted, isSoundEnabled: soundMuted !== 'true' });
 
     // Устанавливаем громкость для всех звуков
-    if (stepSound) stepSound.volume = 0.7;
+    if (stepSound) stepSound.volume = 1.0; // Максимальная громкость для step.wav
     if (mapSound) mapSound.volume = 0.7;
 
     // Принудительно выставляем mute для всех аудио-элементов

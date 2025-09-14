@@ -489,7 +489,7 @@ export function setupUniversalGeoMarker({ markerId, i18nKey, position }) {
 // Функция для создания звука шага
 export function createStepSound() {
     const stepSound = new Audio(MEDIA_PATHS.STEP_SOUND);
-    stepSound.volume = 0.3;
+    stepSound.volume = 1.0; // Максимальная громкость
     return stepSound;
 }
 
@@ -618,8 +618,8 @@ export function positionMarkersOnBg() {
     // Сбрасываем счетчик при успешном выполнении
     positionMarkersRetryCount = 0;
     
-    // Определяем, мобильная ли версия
-    const isMobile = window.innerWidth <= 1366;
+    // Определяем, поддерживает ли устройство hover (указывает на touch-устройство)
+    const isMobile = !window.matchMedia('(hover: hover)').matches;
 
     // Геометки и стрелки должны иметь data-x-desktop/data-y-desktop или data-x-mobile/data-y-mobile
     const markers = document.querySelectorAll('[data-x-desktop][data-y-desktop], [data-x-mobile][data-y-mobile]');

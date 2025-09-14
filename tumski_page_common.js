@@ -2,6 +2,16 @@
 // Выполняет загрузку переводов, инициализацию общих модулей,
 // навешивает обработчики на стрелки, квест-метки и настраивает позиционирование
 
+/**
+ * Проверяет, включен ли звук
+ * @returns {boolean} true если звук включен, false если выключен
+ */
+function isSoundEnabled() {
+    const soundMuted = localStorage.getItem('soundMuted');
+    // По умолчанию звук включен (если значение не установлено или 'false')
+    return soundMuted !== 'true';
+}
+
 export async function initPageCommon() {
     console.log('🎵 initPageCommon вызван для страницы:', window.location.pathname);
     try {
@@ -210,7 +220,7 @@ function setupAllArrows(stepSound) {
             const handler = () => {
                 const url = cursorEl.getAttribute(attrName);
                 if (!url) return;
-                if (stepSound) {
+                if (stepSound && isSoundEnabled()) {
                     try { stepSound.currentTime = 0; stepSound.play().catch(()=>{}); } catch(_) {}
                 }
                 

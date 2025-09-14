@@ -8,6 +8,16 @@ function hideAllCursors() {
 }
 
 /**
+ * Проверяет, включен ли звук
+ * @returns {boolean} true если звук включен, false если выключен
+ */
+function isSoundEnabled() {
+    const soundMuted = localStorage.getItem('soundMuted');
+    // По умолчанию звук включен (если значение не установлено или 'false')
+    return soundMuted !== 'true';
+}
+
+/**
  * Настраивает обработчик для стрелки вправо
  * @param {HTMLElement} cursor - Элемент курсора
  * @param {HTMLElement} cursorArea - Область курсора
@@ -59,7 +69,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
     cursorArea.addEventListener('click', function(e) {
         e.preventDefault();
         hideAllCursors();
-        if (stepSound) {
+        if (stepSound && isSoundEnabled()) {
             stepSound.currentTime = 0;
             stepSound.play();
         }
@@ -88,7 +98,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
         cursorArea.addEventListener('touchend', function(e) {
             e.preventDefault();
             hideAllCursors();
-            if (stepSound) {
+            if (stepSound && isSoundEnabled()) {
                 stepSound.currentTime = 0;
                 stepSound.play();
             }
@@ -173,7 +183,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
             console.log('🟡 Скрываем все курсоры');
             hideAllCursors();
             
-            if (stepSound) {
+            if (stepSound && isSoundEnabled()) {
                 console.log('🟡 Воспроизводим звук шага');
                 stepSound.currentTime = 0;
                 stepSound.play();
@@ -363,7 +373,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
                 console.log('🟡 Касание по стрелке прямо - обработчик из arrow_handlers.js запущен');
                 hideAllCursors();
                 
-                if (stepSound) {
+                if (stepSound && isSoundEnabled()) {
                     stepSound.currentTime = 0;
                     stepSound.play();
                 }
@@ -592,7 +602,7 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
     cursorLeftArea.addEventListener('click', function(e) {
         e.preventDefault();
         hideAllCursors();
-        if (stepSound) {
+        if (stepSound && isSoundEnabled()) {
             stepSound.currentTime = 0;
             stepSound.play();
         }
@@ -702,7 +712,7 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
         }
         
         hideAllCursors();
-        if (stepSound) {
+        if (stepSound && isSoundEnabled()) {
             stepSound.currentTime = 0;
             stepSound.play();
         }
@@ -716,7 +726,7 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
     cursorBackArea.addEventListener('touchend', function(e) {
         e.preventDefault(); // Предотвращаем стандартное поведение
         hideAllCursors();
-        if (stepSound) {
+        if (stepSound && isSoundEnabled()) {
             stepSound.currentTime = 0;
             stepSound.play();
         }
@@ -729,7 +739,7 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
     cursorBack.addEventListener('touchend', function(e) {
         e.preventDefault(); // Предотвращаем стандартное поведение
         hideAllCursors();
-        if (stepSound) {
+        if (stepSound && isSoundEnabled()) {
             stepSound.currentTime = 0;
             stepSound.play();
         }
@@ -803,7 +813,7 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
             console.log('🟡 Скрываем все курсоры');
             hideAllCursors();
             
-            if (stepSound) {
+            if (stepSound && isSoundEnabled()) {
                 console.log('🟡 Воспроизводим звук шага');
                 stepSound.currentTime = 0;
                 stepSound.play();
@@ -962,7 +972,7 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
                 console.log('🟡 Касание по стрелке прямо влево - обработчик из arrow_handlers.js запущен');
                 hideAllCursors();
                 
-                if (stepSound) {
+                if (stepSound && isSoundEnabled()) {
                     stepSound.currentTime = 0;
                     stepSound.play();
                 }
@@ -1136,7 +1146,7 @@ function setupUpArrowHandler(cursor, cursorArea, stepSound) {
     cursorArea.addEventListener('click', function(e) {
         e.preventDefault();
         hideAllCursors();
-        if (stepSound) {
+        if (stepSound && isSoundEnabled()) {
             stepSound.currentTime = 0;
             stepSound.play();
         }

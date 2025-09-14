@@ -1,3 +1,13 @@
+/**
+ * Проверяет, включен ли звук
+ * @returns {boolean} true если звук включен, false если выключен
+ */
+function isSoundEnabled() {
+    const soundMuted = localStorage.getItem('soundMuted');
+    // По умолчанию звук включен (если значение не установлено или 'false')
+    return soundMuted !== 'true';
+}
+
 // Общие константы
 const COMMON_ELEMENTS = {
     SCENE: '.scene',
@@ -82,7 +92,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, nextPageCallback)
         try {
             hideAllCursors();
             
-            if (stepSound) {
+            if (stepSound && isSoundEnabled()) {
                 stepSound.currentTime = 0;
                 stepSound.play();
             }
@@ -151,7 +161,7 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, prevPageCa
     // Обработчик клика по стрелке назад
     cursorBackArea.addEventListener('click', function() {
         hideAllCursors();
-        if (stepSound) {
+        if (stepSound && isSoundEnabled()) {
             stepSound.currentTime = 0;
             stepSound.play();
         }
