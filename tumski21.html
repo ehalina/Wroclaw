@@ -22,9 +22,9 @@
     <script src="map_modal.js"></script>
     <script src="sunset_parallax.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script type="module" src="background_music.js"></script>
     <script type="module" src="tumski_cathedral_handler.js"></script>
     <script type="module" src="map_points.js"></script>
+    <!-- <script src="tumski21_music_handler.js"></script> -->
         <style>
         * {
             margin: 0;
@@ -422,27 +422,10 @@
                 const resumeBackgroundMusic = () => {
                     const iframe = window.musicIframe;
                     if (iframe && iframe.contentWindow && iframe.contentWindow.musicAPI) {
-                        // Проверяем, не заглушена ли музыка глобально
-                        const soundButton = document.querySelector('.sound-menu-button');
-                        const isMuted = soundButton ? soundButton.classList.contains('muted') : false;
-                        
-                        if (!isMuted) {
-                            iframe.contentWindow.musicAPI.play().then(() => {
-                            }).catch(error => {
-                            });
-                        }
+                        // Музыка управляется через SPA
                     }
                     
-                    // Возобновляем прямую музыку hang.mp3
-                    const backgroundMusic = document.getElementById('backgroundMusic');
-                    const soundButton = document.querySelector('.sound-menu-button');
-                    const isMuted = soundButton ? soundButton.classList.contains('muted') : false;
-                    
-                    if (backgroundMusic && !isMuted) {
-                        backgroundMusic.play().catch(error => {
-                            // Игнорируем ошибки автовоспроизведения
-                        });
-                    }
+                    // Музыка управляется через SPA
                 };
                 
                 // Добавляем обработчик закрытия модального окна
@@ -493,9 +476,8 @@
                         }
                         
                         // Останавливаем прямую музыку hang.mp3
-                        const backgroundMusic = document.getElementById('backgroundMusic');
-                        if (backgroundMusic) {
-                            backgroundMusic.pause();
+                        if (window.stopHangMusic) {
+                            window.stopHangMusic();
                         }
                         
                         try {
@@ -534,26 +516,9 @@
                                 
                                 if (bookOverlay && bookOverlay.style.display === 'none') {
                                     // Возобновляем основную музыку через iframe API
-                                    const iframe = window.musicIframe;
-                                    if (iframe && iframe.contentWindow && iframe.contentWindow.musicAPI) {
-                                        const soundButton = document.querySelector('.sound-menu-button');
-                                        const isMuted = soundButton ? soundButton.classList.contains('muted') : false;
-                                        
-                                        if (!isMuted) {
-                                            iframe.contentWindow.musicAPI.play();
-                                        }
-                                    }
+                                    // Музыка управляется через SPA
                                     
-                                    // Возобновляем прямую музыку hang.mp3
-                                    const backgroundMusic = document.getElementById('backgroundMusic');
-                                    const soundButton = document.querySelector('.sound-menu-button');
-                                    const isMuted = soundButton ? soundButton.classList.contains('muted') : false;
-                                    
-                                    if (backgroundMusic && !isMuted) {
-                                        backgroundMusic.play().catch(error => {
-                                            // Игнорируем ошибки автовоспроизведения
-                                        });
-                                    }
+                                    // Музыка управляется через SPA
                                     
                                     // Квест закрыт, выполняем переход назад
                                     setTimeout(() => {
@@ -656,9 +621,5 @@
         });
     </script>
     
-    <audio id="backgroundMusic" loop autoplay hidden>
-        <source src="media/zwyki/hang.mp3" type="audio/mpeg">
-        Ваш браузер не поддерживает элемент audio.
-    </audio>
 </body>
 </html> 

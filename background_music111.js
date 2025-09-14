@@ -97,15 +97,8 @@ function createMusicIframe() {
                     });
                 }
                 
-                // Пытаемся запустить музыку, если она не была явно поставлена на паузу
-                if (savedPaused !== '1') {
-                    console.log('🎵 iframe: пытаемся запустить музыку');
-                    audio.play().catch((error) => {
-                        console.log('🎵 iframe: ошибка воспроизведения', error);
-                    });
-                } else {
-                    console.log('🎵 iframe: музыка была на паузе, не запускаем');
-                }
+                // Автозапуск отключен - управляется через SPA
+                console.log('🎵 iframe: автозапуск отключен - управляется через SPA');
                 
                 // Сохраняем состояние каждые 2 секунды
                 setInterval(() => {
@@ -196,24 +189,9 @@ function restoreBackgroundMusicState(audio, isMuted) {
         audio.addEventListener('loadedmetadata', onMeta, { once: true });
     }
 
-    // Если раньше играло и не muted — запустить; иначе оставить паузу
-    if (!paused && !isMuted) {
-        const tryPlay = () => {
-            audio.play().catch(() => {
-                // Автовоспроизведение может быть заблокировано; стартнем по первому клику
-                const starter = () => { audio.play().finally(() => document.removeEventListener('click', starter)); };
-                document.addEventListener('click', starter, { once: true });
-            });
-        };
-        if (audio.readyState >= 2) {
-            tryPlay();
-        } else {
-            const onCanPlay = () => { tryPlay(); audio.removeEventListener('canplay', onCanPlay); };
-            audio.addEventListener('canplay', onCanPlay, { once: true });
-        }
-    } else {
-        try { audio.pause(); } catch (_) {}
-    }
+    // Автозапуск отключен - управляется через SPA
+    console.log('🎵 Прямой аудио элемент: автозапуск отключен - управляется через SPA');
+    try { audio.pause(); } catch (_) {}
 }
 
 export function initBackgroundMusic() {
@@ -322,6 +300,19 @@ export function initBackgroundMusic() {
     const controlMusic = () => {
         console.log('🎵 controlMusic вызвана');
         
+        // Проверяем, инициализирована ли SPA
+        if (typeof window.spaMusicStopped === 'undefined') {
+            console.log('🎵 SPA еще не инициализирована, ждем...');
+            setTimeout(controlMusic, 100);
+            return;
+        }
+        
+        // Проверяем, не остановила ли SPA музыку для специальных страниц
+        if (window.spaMusicStopped) {
+            console.log('🎵 SPA остановила музыку для специальной страницы, не запускаем town.mp3');
+            return;
+        }
+        
         // Для iOS проверяем готовность прямого аудио элемента
         if (isIOS()) {
             if (musicPlayer.readyState >= 1) {
@@ -364,11 +355,21 @@ export function initBackgroundMusic() {
             currentPage.includes('ogrod07.html') || 
             currentPage.includes('ogrod08.html') || 
             currentPage.includes('ogrod09.html')) {
-            targetMusic = 'media/zwyki/birds.mp3';
+            // Позволяем SPA управлять музыкой для ogrod страниц
+            console.log('🎵 Позволяем SPA управлять музыкой (ogrod03-ogrod09)');
+            return;
         } else if (currentPage.includes('tumski21.html')) {
-            targetMusic = ''; // Отключаем музыку для tumski21.html, оставляем только hang.mp3
+            // Позволяем SPA управлять музыкой для tumski21
+            console.log('🎵 Позволяем SPA управлять музыкой (tumski21)');
+            return;
+        } else if (currentPage.includes('tumski20.html')) {
+            // Позволяем SPA управлять музыкой для tumski20
+            console.log('🎵 Позволяем SPA управлять музыкой (tumski20)');
+            return;
         } else if (currentPage.includes('tumski19.html')) {
-            targetMusic = 'media/zwyki/kostel.mp3'; // Включаем kostel для tumski19.html
+            // Позволяем SPA управлять музыкой для tumski19
+            console.log('🎵 Позволяем SPA управлять музыкой (tumski19)');
+            return;
         } else {
             // Для всех остальных страниц используем town.mp3
             targetMusic = 'media/zwyki/town.mp3';
@@ -397,50 +398,7 @@ export function initBackgroundMusic() {
         
         // Всегда пытаемся запустить музыку, если не выключена и targetMusic не пустой
         if (!isMuted && targetMusic !== '') {
-            console.log('🎵 Пытаемся запустить музыку...', { isMuted, savedPaused });
-            
-            // Принудительный запуск музыки при перезагрузке страницы
-            const forcePlayMusic = () => {
-                console.log('🎵 Принудительный запуск музыки...');
-                musicAPI.play().then(() => {
-                    console.log('🎵 Музыка успешно запущена');
-                }).catch((error) => {
-                    console.log('🎵 Ошибка принудительного воспроизведения:', error);
-                    // Если автовоспроизведение заблокировано, показываем подсказку
-                    if (musicHint) {
-                        musicHint.style.display = 'block';
-                        setTimeout(() => {
-                            musicHint.style.display = 'none';
-                            if (animationHint) {
-                                animationHint.style.display = 'block';
-                                setTimeout(() => { animationHint.style.display = 'none'; }, 6000);
-                            }
-                        }, 6000);
-                    }
-                });
-            };
-            
-            // Пытаемся запустить сразу
-            musicAPI.play().catch((error) => {
-                console.log('🎵 Ошибка воспроизведения:', error);
-                
-                // Если автовоспроизведение заблокировано, пробуем принудительно через небольшую задержку
-                setTimeout(() => {
-                    forcePlayMusic();
-                }, 500);
-                
-                // Также показываем подсказку пользователю
-                if (musicHint) {
-                    musicHint.style.display = 'block';
-                    setTimeout(() => {
-                        musicHint.style.display = 'none';
-                        if (animationHint) {
-                            animationHint.style.display = 'block';
-                            setTimeout(() => { animationHint.style.display = 'none'; }, 6000);
-                        }
-                    }, 6000);
-                }
-            });
+            console.log('🎵 Автозапуск отключен - управляется через SPA');
         } else {
             console.log('🎵 Музыка отключена (muted)');
         }
@@ -492,74 +450,11 @@ export function initBackgroundMusic() {
         }, 2000);
     }
 
-    // Принудительный запуск музыки при полной загрузке страницы
-    const forceMusicOnLoad = () => {
-        console.log('🎵 Принудительный запуск музыки при загрузке страницы');
-        
-        // Проверяем текущую страницу
-        const currentPage = window.location.pathname;
-        if (currentPage.includes('tumski21.html')) {
-            console.log('🎵 Страница tumski21.html - не запускаем town.mp3');
-            return;
-        }
-        
-        const isMuted = localStorage.getItem('soundMuted') === 'true';
-        
-        if (!isMuted) {
-            console.log('🎵 Звук включен, принудительно запускаем музыку');
-            musicAPI.play().catch((error) => {
-                console.log('🎵 Ошибка принудительного запуска:', error);
-            });
-        }
-    };
+    // Принудительный запуск музыки отключен - управляется через SPA
+    console.log('🎵 Принудительный запуск музыки отключен - управляется через SPA');
 
-    // Запускаем принудительно после полной загрузки страницы
-    if (document.readyState === 'complete') {
-        setTimeout(forceMusicOnLoad, 1000);
-    } else {
-        window.addEventListener('load', () => {
-            setTimeout(forceMusicOnLoad, 1000);
-        });
-    }
-
-    // Эмуляция клика в нулевом пикселе для запуска фоновой музыки
-    function simulateClickForMusic() {
-        console.log('🎵 Эмулируем клик для запуска музыки');
-        
-        // Проверяем текущую страницу
-        const currentPage = window.location.pathname;
-        if (currentPage.includes('tumski21.html')) {
-            console.log('🎵 Страница tumski21.html - не эмулируем клик');
-            return;
-        }
-        
-        // Проверяем, включен ли звук
-        const isSoundEnabled = localStorage.getItem('soundMuted') !== 'true';
-        if (!isSoundEnabled) {
-            console.log('🎵 Звук отключен - не эмулируем клик');
-            return;
-        }
-        
-        // Создаем и отправляем событие клика в нулевом пикселе
-        const clickEvent = new MouseEvent('click', {
-            view: window,
-            bubbles: true,
-            cancelable: true,
-            clientX: 0,
-            clientY: 0,
-            screenX: 0,
-            screenY: 0
-        });
-        
-        // Отправляем событие на document
-        document.dispatchEvent(clickEvent);
-        console.log('🎵 Клик эмулирован в координатах (0,0)');
-    }
-
-    // Запускаем эмуляцию клика с небольшой задержкой после инициализации
-    document.addEventListener("DOMContentLoaded", () => {
-        simulateClickForMusic();
-    });
+    // Эмуляция клика отключена - управляется через SPA
+    console.log('🎵 Эмуляция клика отключена - управляется через SPA');
     
 
     // Универсальный обработчик для воспроизведения звука (с учётом mute)
@@ -570,30 +465,8 @@ export function initBackgroundMusic() {
         }
     }
 
-    // Глобальный обработчик клика для запуска фоновой музыки
-    const globalMusicClickHandler = (event) => {
-        // Проверяем текущую страницу
-        const currentPage = window.location.pathname;
-        if (currentPage.includes('tumski21.html')) {
-            return; // Не запускаем town.mp3 на tumski21.html
-        }
-        
-        // Проверяем, включен ли звук
-        const isSoundEnabled = localStorage.getItem('soundMuted') !== 'true';
-        
-        if (isSoundEnabled) {
-            // Проверяем, не играет ли уже музыка
-            if (musicAPI.isPaused()) {
-                console.log('🎵 Запуск музыки по глобальному клику');
-                musicAPI.play().catch((error) => {
-                    console.log('🎵 Ошибка запуска музыки по глобальному клику:', error);
-                });
-            }
-        }
-    };
-
-    // Добавляем глобальный обработчик клика на документ
-    document.addEventListener('click', globalMusicClickHandler);
+    // Глобальный обработчик клика отключен - управляется через SPA
+    console.log('🎵 Глобальный обработчик клика отключен - управляется через SPA');
 
     // Глобальные функции для воспроизведения шагов и карты
     window.playStepSound = () => playSound(stepSound);
@@ -621,6 +494,31 @@ function switchMusicSource(newSrc) {
         // Сохраняем текущее состояние
         const isMuted = localStorage.getItem('soundMuted') === 'true';
         
+        // Сначала останавливаем ВСЮ музыку
+        console.log('🎵 Останавливаем всю музыку перед переключением');
+        if (window.musicIframe && window.musicIframe.contentWindow && window.musicIframe.contentWindow.musicAPI) {
+            window.musicIframe.contentWindow.musicAPI.pause();
+        }
+        if (window.directMusicAudio) {
+            window.directMusicAudio.pause();
+        }
+        
+        // Принудительно останавливаем все аудио элементы на странице
+        const allAudioElements = document.querySelectorAll('audio');
+        allAudioElements.forEach(audio => {
+            audio.pause();
+            audio.currentTime = 0;
+        });
+        
+        // Также останавливаем аудио в iframe
+        if (window.musicIframe && window.musicIframe.contentDocument) {
+            const iframeAudioElements = window.musicIframe.contentDocument.querySelectorAll('audio');
+            iframeAudioElements.forEach(audio => {
+                audio.pause();
+                audio.currentTime = 0;
+            });
+        }
+        
         if (isIOS()) {
             // Для iOS используем прямой аудио элемент
             const audio = window.directMusicAudio;
@@ -638,12 +536,12 @@ function switchMusicSource(newSrc) {
                     audio.currentTime = 0;
                     audio.muted = isMuted;
                     
-                    // Небольшая задержка перед воспроизведением, чтобы избежать проигрывания старой музыки
+                    // Увеличенная задержка перед воспроизведением, чтобы избежать проигрывания старой музыки
                     setTimeout(() => {
                         if (!isMuted) {
                             audio.play().catch(console.log);
                         }
-                    }, 100);
+                    }, 300);
                 }, { once: true });
                 
                 console.log('🎵 Музыка переключена на', newSrc, 'без прерывания (iOS)');
@@ -675,12 +573,12 @@ function switchMusicSource(newSrc) {
                         audio.currentTime = 0;
                         audio.muted = isMuted;
                         
-                        // Небольшая задержка перед воспроизведением, чтобы избежать проигрывания старой музыки
+                        // Увеличенная задержка перед воспроизведением, чтобы избежать проигрывания старой музыки
                         setTimeout(() => {
                             if (!isPaused && !isMuted) {
                                 audio.play().catch(console.log);
                             }
-                        }, 100);
+                        }, 300);
                     }, { once: true });
                     
                     console.log('🎵 Музыка переключена на', newSrc, 'без прерывания (iframe)');
@@ -716,93 +614,5 @@ function globalMusicStateSaver(e) {
 }
 document.addEventListener('click', globalMusicStateSaver, true);
 
-// --- Специальная обработка для iOS устройств ---
-if (isIOS()) {
-    console.log('🎵 iOS: инициализируем специальную обработку');
-    
-    // Добавляем обработчики для различных типов взаимодействия на iOS
-    const iosInteractionEvents = ['touchstart', 'touchend', 'click', 'keydown'];
-    
-    iosInteractionEvents.forEach(eventType => {
-        document.addEventListener(eventType, () => {
-            if (window.directMusicAudio && window.directMusicAudio.paused) {
-                const isSoundEnabled = localStorage.getItem('soundMuted') !== 'true';
-                if (isSoundEnabled) {
-                    console.log('🎵 iOS: запуск музыки по взаимодействию', eventType);
-                    window.directMusicAudio.play().catch(console.log);
-                }
-            }
-        }, { once: true, passive: true });
-    });
-    
-    // Специальная обработка для переключения между страницами на iOS
-    const originalPushState = history.pushState;
-    const originalReplaceState = history.replaceState;
-    
-    history.pushState = function(...args) {
-        originalPushState.apply(history, args);
-        setTimeout(() => {
-            if (window.directMusicAudio) {
-                const isSoundEnabled = localStorage.getItem('soundMuted') !== 'true';
-                if (isSoundEnabled && window.directMusicAudio.paused) {
-                    console.log('🎵 iOS: запуск музыки после pushState');
-                    window.directMusicAudio.play().catch(console.log);
-                }
-            }
-        }, 100);
-    };
-    
-    history.replaceState = function(...args) {
-        originalReplaceState.apply(history, args);
-        setTimeout(() => {
-            if (window.directMusicAudio) {
-                const isSoundEnabled = localStorage.getItem('soundMuted') !== 'true';
-                if (isSoundEnabled && window.directMusicAudio.paused) {
-                    console.log('🎵 iOS: запуск музыки после replaceState');
-                    window.directMusicAudio.play().catch(console.log);
-                }
-            }
-        }, 100);
-    };
-    
-    // Обработка события popstate (назад/вперед в браузере)
-    window.addEventListener('popstate', () => {
-        setTimeout(() => {
-            if (window.directMusicAudio) {
-                const isSoundEnabled = localStorage.getItem('soundMuted') !== 'true';
-                if (isSoundEnabled && window.directMusicAudio.paused) {
-                    console.log('🎵 iOS: запуск музыки после popstate');
-                    window.directMusicAudio.play().catch(console.log);
-                }
-            }
-        }, 100);
-    });
-    
-    // Обработка фокуса окна (возврат на вкладку)
-    window.addEventListener('focus', () => {
-        setTimeout(() => {
-            if (window.directMusicAudio) {
-                const isSoundEnabled = localStorage.getItem('soundMuted') !== 'true';
-                if (isSoundEnabled && window.directMusicAudio.paused) {
-                    console.log('🎵 iOS: запуск музыки после фокуса окна');
-                    window.directMusicAudio.play().catch(console.log);
-                }
-            }
-        }, 100);
-    });
-    
-    // Обработка видимости страницы
-    document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) {
-            setTimeout(() => {
-                if (window.directMusicAudio) {
-                    const isSoundEnabled = localStorage.getItem('soundMuted') !== 'true';
-                    if (isSoundEnabled && window.directMusicAudio.paused) {
-                        console.log('🎵 iOS: запуск музыки после возврата видимости');
-                        window.directMusicAudio.play().catch(console.log);
-                    }
-                }
-            }, 100);
-        }
-    });
-} 
+// --- Специальная обработка для iOS устройств отключена - управляется через SPA ---
+console.log('🎵 iOS обработчики отключены - управляется через SPA'); 

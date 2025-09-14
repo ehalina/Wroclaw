@@ -68,15 +68,8 @@ export async function initializeTumskiPage(options = {}) {
         applyCommonButtonStyles();
     }
 
-    // 6. Запуск фоновой музыки
-    try {
-        const musicMod = await import('./background_music.js');
-        if (musicMod && typeof musicMod.initBackgroundMusic === 'function') {
-            musicMod.initBackgroundMusic();
-        }
-    } catch (error) {
-        console.error('Ошибка инициализации музыки:', error);
-    }
+    // 6. Фоновая музыка управляется через SPA
+    console.log('🎵 Фоновая музыка управляется через SPA');
 
     // 7. Инициализация логики книги
     if (window.BookPaths && typeof window.BookPaths.initBookHandlers === 'function') {

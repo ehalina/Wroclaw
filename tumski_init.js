@@ -1,15 +1,5 @@
-// Минимальный инициализатор страницы tumski02: вызывает общий модуль
-document.addEventListener('DOMContentLoaded', async function() {
-    try {
-        const common = await import('./tumski_page_common.js');
-        if (common && typeof common.initPageCommon === 'function') {
-            await common.initPageCommon();
-        }
-        
-    } catch (_) {}
-});
-
-document.addEventListener('DOMContentLoaded', () => {
+// Инициализатор страницы tumski19: вызывает общий модуль и настраивает обработчики
+document.addEventListener('DOMContentLoaded', async () => {
     // Эффект разворота камеры при загрузке tumski08.html
     const imageContainer = document.querySelector('.image-container');
     if (imageContainer) {
@@ -23,10 +13,20 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // После завершения разворота запускаем стандартную анимацию движения
         setTimeout(() => {
-            console.log('🔄 Разворот завершен, запускаем стандартную анимацию');
             imageContainer.classList.remove('rotate-transition');
             imageContainer.style.animationPlayState = 'running';
         }, 1500);
+    }
+
+    // Инициализируем общие обработчики страницы (включая стрелки)
+    try {
+        const common = await import('./tumski_page_common.js');
+        if (common && typeof common.initPageCommon === 'function') {
+            console.log('🎵 Инициализируем обработчики стрелок для tumski19.html');
+            await common.initPageCommon();
+        }
+    } catch (error) {
+        console.error('🎵 Ошибка инициализации tumski_page_common:', error);
     }
 
     const playButton = document.getElementById('play-button');

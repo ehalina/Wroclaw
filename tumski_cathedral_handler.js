@@ -579,10 +579,20 @@ export function moveMarkersAndCursors() {
 }
 
 // Универсальная функция для позиционирования геометок и стрелок по координатам картинки
+let positionMarkersRetryCount = 0;
+const MAX_POSITION_RETRIES = 10;
+let isPositioning = false;
+
 export function positionMarkersOnBg() {
+    // Защита от рекурсии
+    if (isPositioning) {
+        return;
+    }
+    isPositioning = true;
     const imageBlock = document.querySelector('.image');
     const imageContainer = document.querySelector('.image-container');
     if (!imageBlock || !imageContainer) {
+        isPositioning = false;
         return;
     }
     
@@ -590,13 +600,23 @@ export function positionMarkersOnBg() {
     const computedStyle = window.getComputedStyle(imageBlock);
     const backgroundImage = computedStyle.backgroundImage;
     
-    // Если изображение еще не загружено, ждем немного и повторяем
+    // Если изображение еще не загружено, ждем немного и повторяем (с ограничением)
     if (backgroundImage === 'none' || backgroundImage === '') {
-        setTimeout(() => {
-            positionMarkersOnBg();
-        }, 100);
+        if (positionMarkersRetryCount < MAX_POSITION_RETRIES) {
+            positionMarkersRetryCount++;
+            setTimeout(() => {
+                positionMarkersOnBg();
+            }, 100);
+        } else {
+            console.warn('⚠️ Превышено максимальное количество попыток позиционирования геометок');
+            positionMarkersRetryCount = 0; // Сбрасываем счетчик
+            isPositioning = false; // Сбрасываем флаг
+        }
         return;
     }
+    
+    // Сбрасываем счетчик при успешном выполнении
+    positionMarkersRetryCount = 0;
     
     // Определяем, мобильная ли версия
     const isMobile = window.innerWidth <= 1366;
@@ -711,6 +731,9 @@ export function positionMarkersOnBg() {
     
     // Создаем расширенные области для геометок после позиционирования
     createExtendedHoverArea();
+    
+    // Сбрасываем флаг позиционирования
+    isPositioning = false;
 }
 
 // Функция для позиционирования content-wrapper относительно map-mark

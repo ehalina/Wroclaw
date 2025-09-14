@@ -140,9 +140,17 @@ const LanguageMenu = {
         if (soundButton) {
             if (isMuted) {
                 soundButton.classList.add('muted');
-                this.muteAllSounds();
+                // Не вызываем muteAllSounds() здесь, так как это может помешать автозапуску музыки
+                // Состояние будет применено после загрузки аудио элемента
             }
         }
+        
+        // Применяем состояние звука после небольшой задержки, чтобы аудио элемент успел загрузиться
+        setTimeout(() => {
+            if (isMuted) {
+                this.muteAllSounds();
+            }
+        }, 1000);
     },
 
     toggleSound() {
@@ -170,6 +178,18 @@ const LanguageMenu = {
         if (window.muteIframeMusic) {
             window.muteIframeMusic();
         }
+        
+        // Останавливаем фоновую музыку SPA (town.mp3)
+        const backgroundMusic = document.querySelector('#backgroundMusic');
+        if (backgroundMusic) {
+            backgroundMusic.pause();
+        }
+        
+        // Останавливаем kostel музыку SPA
+        const kostelMusic = document.querySelector('#kostelMusic');
+        if (kostelMusic) {
+            kostelMusic.pause();
+        }
     },
 
     unmuteAllSounds() {
@@ -183,14 +203,45 @@ const LanguageMenu = {
             window.unmuteIframeMusic();
         }
         
-        // Пробуем запустить фоновую музыку, если она есть и не играет
-        const backgroundMusic = document.querySelector('#backgroundMusic');
-        if (backgroundMusic && backgroundMusic.paused) {
-            backgroundMusic.play().then(() => {
-                // console.log('Фоновая музыка запущена через кнопку звука');
-            }).catch(err => {
-                // console.log('Не удалось запустить фоновую музыку:', err);
-            });
+        // Определяем, какая музыка должна играть на основе текущей страницы
+        const currentPage = window.spaManager ? window.spaManager.currentPage : null;
+        
+        if (currentPage && currentPage.includes('tumski19.html')) {
+            // Запускаем kostel.mp3 для tumski19
+            const kostelMusic = document.querySelector('#kostelMusic');
+            if (kostelMusic) {
+                // Добавляем обработчик зацикливания, если его еще нет
+                if (!kostelMusic.hasAttribute('data-loop-handler-added')) {
+                    kostelMusic.addEventListener('ended', () => {
+                        const isMuted = localStorage.getItem('soundMuted') === 'true';
+                        if (!isMuted) {
+                            kostelMusic.currentTime = 0;
+                            kostelMusic.play().catch(console.log);
+                        }
+                    });
+                    kostelMusic.setAttribute('data-loop-handler-added', 'true');
+                }
+                
+                kostelMusic.play().catch(console.log);
+            }
+        } else {
+            // Запускаем town.mp3 для остальных страниц
+            const backgroundMusic = document.querySelector('#backgroundMusic');
+            if (backgroundMusic) {
+                // Добавляем обработчик зацикливания, если его еще нет
+                if (!backgroundMusic.hasAttribute('data-loop-handler-added')) {
+                    backgroundMusic.addEventListener('ended', () => {
+                        const isMuted = localStorage.getItem('soundMuted') === 'true';
+                        if (!isMuted) {
+                            backgroundMusic.currentTime = 0;
+                            backgroundMusic.play().catch(console.log);
+                        }
+                    });
+                    backgroundMusic.setAttribute('data-loop-handler-added', 'true');
+                }
+                
+                backgroundMusic.play().catch(console.log);
+            }
         }
     },
 

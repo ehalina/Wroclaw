@@ -3,6 +3,7 @@
 // навешивает обработчики на стрелки, квест-метки и настраивает позиционирование
 
 export async function initPageCommon() {
+    console.log('🎵 initPageCommon вызван для страницы:', window.location.pathname);
     try {
         // 1) I18n
         if (window.i18n && typeof window.i18n.loadTranslations === 'function') {
@@ -32,10 +33,7 @@ export async function initPageCommon() {
         try { if (window.LanguageMenu && typeof window.LanguageMenu.init === 'function') window.LanguageMenu.init(); } catch (_) {}
         try { if (window.MapModal && typeof window.MapModal.init === 'function') window.MapModal.init(); } catch (_) {}
         try { if (typeof window.applyCommonButtonStyles === 'function') window.applyCommonButtonStyles(); } catch (_) {}
-        try {
-            const music = await import('./background_music.js');
-            if (music && typeof music.initBackgroundMusic === 'function') music.initBackgroundMusic();
-        } catch (_) {}
+        // Фоновая музыка управляется через SPA
         try { if (window.BookPaths && typeof window.BookPaths.initBookHandlers === 'function') window.BookPaths.initBookHandlers(); } catch (_) {}
 
         // 4) Возврат из зума (если есть)
@@ -56,6 +54,7 @@ export async function initPageCommon() {
         } catch (_) {}
 
         // 6) Стрелки: навесим обработчики, если элементы присутствуют
+        console.log('🎵 Настраиваем обработчики стрелок...');
         setupAllArrows(stepSound);
 
         // 7) Квест-метки (унифицировано): ищем любые .map-mark с data-quest-number
@@ -101,7 +100,10 @@ export async function initPageCommon() {
             const cathedral = await import('./tumski_cathedral_handler.js');
             if (cathedral && typeof cathedral.moveMarkersAndCursors === 'function') cathedral.moveMarkersAndCursors();
             if (cathedral && typeof cathedral.positionMarkersOnBg === 'function') {
-                cathedral.positionMarkersOnBg();
+                // Добавляем задержку для предотвращения рекурсии
+                setTimeout(() => {
+                    cathedral.positionMarkersOnBg();
+                }, 50);
             }
             
             // Устанавливаем src для papera-изображений и растягиваем их
@@ -122,19 +124,38 @@ export async function initPageCommon() {
                 cathedral.setupZoomTracking();
             }
 
-            // Перепозиционирование на resize
+            // Перепозиционирование на resize (с защитой от рекурсии)
             let resizeTimeout;
+            let isPositioning = false;
             window.addEventListener('resize', () => {
+                if (isPositioning) return; // Предотвращаем множественные вызовы
                 clearTimeout(resizeTimeout);
                 resizeTimeout = setTimeout(() => {
-                    try { if (cathedral && typeof cathedral.positionMarkersOnBg === 'function') cathedral.positionMarkersOnBg(); } catch (_) {}
+                    if (!isPositioning) {
+                        isPositioning = true;
+                        try { 
+                            if (cathedral && typeof cathedral.positionMarkersOnBg === 'function') {
+                                cathedral.positionMarkersOnBg();
+                            }
+                        } catch (_) {}
+                        setTimeout(() => { isPositioning = false; }, 100);
+                    }
                 }, 100);
             });
 
-            // И после полной загрузки окна
+            // И после полной загрузки окна (с защитой от рекурсии)
             window.addEventListener('load', () => {
+                if (isPositioning) return;
                 setTimeout(() => {
-                    try { if (cathedral && typeof cathedral.positionMarkersOnBg === 'function') cathedral.positionMarkersOnBg(); } catch (_) {}
+                    if (!isPositioning) {
+                        isPositioning = true;
+                        try { 
+                            if (cathedral && typeof cathedral.positionMarkersOnBg === 'function') {
+                                cathedral.positionMarkersOnBg();
+                            }
+                        } catch (_) {}
+                        setTimeout(() => { isPositioning = false; }, 100);
+                    }
                 }, 200);
             });
         } catch (_) {}
@@ -162,6 +183,7 @@ function ensureQuestGlowStyles() {
 }
 
 function setupAllArrows(stepSound) {
+    console.log('🎵 setupAllArrows: ищем элементы стрелок...');
     try {
         const cursorRight = document.querySelector('.custom-cursor');
         const areaRight = document.querySelector('.custom-cursor-area');
@@ -174,6 +196,13 @@ function setupAllArrows(stepSound) {
         const cursorProstoLeft = document.querySelector('.custom-cursor-prosto-left');
         const areaProstoLeft = document.querySelector('.custom-cursor-prosto-leftarea');
         
+        console.log('🎵 Найденные элементы стрелок:', {
+            cursorBack: !!cursorBack,
+            areaBack: !!areaBack,
+            cursorLeft: !!cursorLeft,
+            areaLeft: !!areaLeft
+        });
+        
 
         // Fallback обработчик клика (для мобильных), читает data-* со стрелки
         const attachDirectNav = (cursorEl, areaEl, attrName) => {
@@ -184,7 +213,15 @@ function setupAllArrows(stepSound) {
                 if (stepSound) {
                     try { stepSound.currentTime = 0; stepSound.play().catch(()=>{}); } catch(_) {}
                 }
-                setTimeout(() => { window.location.href = url; }, 0);
+                
+                // Проверяем, находимся ли мы в SPA
+                if (window.parent && window.parent !== window && window.parent.SPAManager) {
+                    console.log('🎵 Fallback навигация через SPA:', url);
+                    window.parent.SPAManager.navigateToPage(url);
+                } else {
+                    console.log('🎵 Fallback обычная навигация:', url);
+                    setTimeout(() => { window.location.href = url; }, 0);
+                }
             };
             ['click','touchend'].forEach(ev => {
                 cursorEl.addEventListener(ev, handler);
@@ -194,48 +231,85 @@ function setupAllArrows(stepSound) {
 
         // Право (data-prev-page на .custom-cursor)
         if (cursorRight && areaRight && typeof window.setupRightArrowHandler === 'function') {
-            console.log('🟡 Инициализация стрелки вправо на странице', window.location.pathname);
-            console.log('🟡 Элементы стрелки вправо:', { cursor: !!cursorRight, area: !!areaRight });
             window.setupRightArrowHandler(cursorRight, areaRight, stepSound);
-            console.log('🟡 Обработчик для стрелки вправо установлен');
         }
 
         // Вперёд (data-next-page на .custom-cursor-prosto)
         if (cursorProsto && areaProsto && typeof window.setupForwardArrowHandler === 'function') {
             window.setupForwardArrowHandler(cursorProsto, areaProsto, stepSound, () => {
                 const next = cursorProsto.getAttribute('data-next-page');
-                if (next) window.location.href = next;
+                if (next) {
+                    // Проверяем, находимся ли мы в SPA
+                    if (window.parent && window.parent !== window && window.parent.SPAManager) {
+                        console.log('🎵 Переход через SPA:', next);
+                        window.parent.SPAManager.navigateToPage(next);
+                    } else {
+                        console.log('🎵 Обычный переход:', next);
+                        window.location.href = next;
+                    }
+                }
             });
             // attachDirectNav(cursorProsto, areaProsto, 'data-next-page'); // Удалено: мешало анимации перехода
         }
 
         // Назад (data-prev-page на .custom-cursor-back)
+        console.log('🎵 Проверяем стрелку назад:', {
+            cursorBack: !!cursorBack,
+            areaBack: !!areaBack,
+            setupBackArrowHandler: typeof window.setupBackArrowHandler,
+            dataPrevPage: cursorBack ? cursorBack.getAttribute('data-prev-page') : 'нет cursorBack'
+        });
+        
         if (cursorBack && areaBack && typeof window.setupBackArrowHandler === 'function') {
             window.setupBackArrowHandler(cursorBack, areaBack, stepSound, () => {
                 const prev = cursorBack.getAttribute('data-prev-page');
-                if (prev) window.location.href = prev;
+                if (prev) {
+                    // Проверяем, находимся ли мы в SPA
+                    if (window.parent && window.parent !== window && window.parent.SPAManager) {
+                        window.parent.SPAManager.navigateToPage(prev);
+                    } else {
+                        window.location.href = prev;
+                    }
+                }
             });
             attachDirectNav(cursorBack, areaBack, 'data-prev-page');
+        } else {
+            console.log('🎵 Стрелка назад не настроена - отсутствуют элементы или функция');
         }
 
         // Влево (data-next-page на .custom-cursor-left)
         if (cursorLeft && areaLeft && typeof window.setupLeftArrowHandler === 'function') {
             window.setupLeftArrowHandler(cursorLeft, areaLeft, stepSound, () => {
                 const next = cursorLeft.getAttribute('data-next-page');
-                if (next) window.location.href = next;
+                if (next) {
+                    // Проверяем, находимся ли мы в SPA
+                    if (window.parent && window.parent !== window && window.parent.SPAManager) {
+                        console.log('🎵 Переход через SPA:', next);
+                        window.parent.SPAManager.navigateToPage(next);
+                    } else {
+                        console.log('🎵 Обычный переход:', next);
+                        window.location.href = next;
+                    }
+                }
             });
             attachDirectNav(cursorLeft, areaLeft, 'data-next-page');
         }
 
         // Прямо влево (data-next-page на .custom-cursor-prosto-left)
         if (cursorProstoLeft && areaProstoLeft && typeof window.setupForwardLeftArrowHandler === 'function') {
-            console.log('🟡 Инициализация стрелки прямо влево на странице', window.location.pathname);
-            console.log('🟡 Элементы стрелки прямо влево:', { cursor: !!cursorProstoLeft, area: !!areaProstoLeft });
             window.setupForwardLeftArrowHandler(cursorProstoLeft, areaProstoLeft, stepSound, () => {
                 const next = cursorProstoLeft.getAttribute('data-next-page');
-                if (next) window.location.href = next;
+                if (next) {
+                    // Проверяем, находимся ли мы в SPA
+                    if (window.parent && window.parent !== window && window.parent.SPAManager) {
+                        console.log('🎵 Переход через SPA:', next);
+                        window.parent.SPAManager.navigateToPage(next);
+                    } else {
+                        console.log('🎵 Обычный переход:', next);
+                        window.location.href = next;
+                    }
+                }
             });
-            console.log('🟡 Обработчик для стрелки прямо влево установлен');
         }
 
         // Вверх (data-next-page на .custom-cursor-up)
