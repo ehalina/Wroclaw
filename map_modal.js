@@ -1350,6 +1350,20 @@ const MapModal = {
                 }, 100);
             }
 
+            // === Для планшетов (hover: none, но экран шире мобильного) ===
+            // Показываем подсказки по умолчанию, но оставляем десктопный режим
+            if (window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches) {
+                // Показываем кнопку переключения подсказок
+                const toggleButton = document.getElementById('toggle-tooltips');
+                if (toggleButton) {
+                    toggleButton.style.display = 'flex';
+                }
+                // Показываем все подсказки по умолчанию
+                setTimeout(() => {
+                    MapModal.showAllTooltips();
+                }, 100);
+            }
+
             // Добавляем обработчик изменения языка для обновления текста подсказки
             document.addEventListener('languageChanged', function() {
                 // Проверяем, открыто ли модальное окно и видна ли подсказка
@@ -1364,6 +1378,11 @@ const MapModal = {
                 
                 // Обновляем мобильные подсказки при смене языка
                 if (window.innerWidth <= 768) {
+                    MapModal.showAllTooltips();
+                }
+                
+                // Обновляем подсказки на планшетах при смене языка
+                if (window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches) {
                     MapModal.showAllTooltips();
                 }
             });
@@ -2273,22 +2292,48 @@ const MapModal = {
             // Создаем подсказки для всех точек
             const createdTooltips = [];
             
+            // Определяем, является ли устройство планшетом
+            const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
+            
             Object.entries(tooltipPoints).forEach(([key, coords]) => {
                 const tooltip = document.createElement('div');
                 tooltip.className = 'mobile-tooltip';
                 tooltip.style.position = 'absolute';
                 
+                // Получаем координаты для текущего типа устройства
+                const deviceCoords = isTablet ? (coords.tablet || coords.desktop) : coords.desktop;
+                
                 // Пересчитываем координаты относительно реального размера карты
-                const xPercent = coords.x / 100;
-                const yPercent = coords.y / 100;
+                const xPercent = deviceCoords.x / 100;
+                const yPercent = deviceCoords.y / 100;
                 
                 // Сохраняем оригинальные координаты в data-атрибутах
                 tooltip.dataset.xPercent = xPercent;
                 tooltip.dataset.yPercent = yPercent;
                 
-                // Используем реальную ширину и высоту карты для расчета
-                const xPos = mapImage.offsetWidth * xPercent;
-                const yPos = (mapImage.offsetHeight * yPercent) + 25; // Опускаем подсказки на 15px ниже
+                let xPos, yPos;
+                
+                if (isTablet) {
+                    // Для планшетов используем размеры изображения и его offset в контейнере
+                    const imageWidth = mapImage.offsetWidth;
+                    const imageHeight = mapImage.offsetHeight;
+                    
+                    // Получаем позицию изображения относительно контейнера через offset
+                    const imageOffsetX = mapImage.offsetLeft;
+                    const imageOffsetY = mapImage.offsetTop;
+                    
+                    // Рассчитываем позицию подсказки относительно изображения
+                    const imageX = imageWidth * xPercent;
+                    const imageY = imageHeight * yPercent;
+                    
+                    // Добавляем смещение изображения в контейнере
+                    xPos = imageOffsetX + imageX + 30; // Сдвигаем вправо на 10px
+                    yPos = imageOffsetY + imageY - 40; // Сдвигаем вверх на 10px
+                } else {
+                    // Для мобильных устройств используем размеры изображения
+                    xPos = mapImage.offsetWidth * xPercent;
+                    yPos = (mapImage.offsetHeight * yPercent); // Опускаем подсказки на 25px ниже
+                }
                 
                 tooltip.style.left = `${xPos}px`;
                 tooltip.style.top = `${yPos}px`;
@@ -2344,6 +2389,9 @@ const MapModal = {
         
         if (!mapImage || !mapContainer || tooltips.length === 0) return;
         
+        // Определяем, является ли устройство планшетом
+        const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
+        
         tooltips.forEach(tooltip => {
             // Получаем оригинальные координаты из data-атрибутов
             const xPercent = parseFloat(tooltip.dataset.xPercent);
@@ -2351,9 +2399,29 @@ const MapModal = {
             
             if (isNaN(xPercent) || isNaN(yPercent)) return;
             
-            // Пересчитываем позицию относительно реального размера карты
-            const xPos = mapImage.offsetWidth * xPercent;
-            const yPos = (mapImage.offsetHeight * yPercent) + 25; // Опускаем подсказки на 25px ниже
+            let xPos, yPos;
+            
+            if (isTablet) {
+                // Для планшетов используем размеры изображения и его offset в контейнере
+                const imageWidth = mapImage.offsetWidth;
+                const imageHeight = mapImage.offsetHeight;
+                
+                // Получаем позицию изображения относительно контейнера через offset
+                const imageOffsetX = mapImage.offsetLeft;
+                const imageOffsetY = mapImage.offsetTop;
+                
+                // Рассчитываем позицию подсказки относительно изображения
+                const imageX = imageWidth * xPercent;
+                const imageY = imageHeight * yPercent;
+                
+                // Добавляем смещение изображения в контейнере
+                xPos = imageOffsetX + imageX + 10; // Сдвигаем вправо на 10px
+                yPos = imageOffsetY + imageY - 10; // Сдвигаем вверх на 10px
+            } else {
+                // Для мобильных устройств используем размеры изображения
+                xPos = mapImage.offsetWidth * xPercent;
+                yPos = (mapImage.offsetHeight * yPercent) + 25; // Опускаем подсказки на 25px ниже
+            }
             
             tooltip.style.left = `${xPos}px`;
             tooltip.style.top = `${yPos}px`;
