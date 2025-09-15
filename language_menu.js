@@ -76,11 +76,30 @@ const languageMenuStyles = `
         text-decoration: underline;
         background: rgba(0, 0, 0, 0.05); 
     }
+
+    .language-menu.disabled {
+        pointer-events: none;
+        opacity: 0.3;
+        transition: opacity 0.3s ease;
+    }
+
+    .language-menu.disabled .language-menu-button,
+    .language-menu.disabled .sound-menu-button {
+        cursor: not-allowed;
+        opacity: 0.3;
+        pointer-events: none;
+    }
 `;
 
 // Функции для работы с языковым меню
 const LanguageMenu = {
     init() {
+        // Проверяем, не инициализировано ли уже меню
+        if (document.querySelector('.language-menu')) {
+            console.log('🔧 Language menu уже инициализирован, пропускаем повторную инициализацию');
+            return;
+        }
+
         // Добавляем стили на страницу
         const styleSheet = document.createElement("style");
         styleSheet.textContent = languageMenuStyles;
@@ -168,6 +187,12 @@ const LanguageMenu = {
     },
 
     toggleSound() {
+        // Проверяем, не отключено ли меню
+        if (this.isMenuDisabled()) {
+            console.log('🚫 Language menu отключен, игнорируем клик по кнопке звука');
+            return;
+        }
+        
         const soundButton = document.querySelector('.sound-menu-button');
         const isMuted = soundButton.classList.contains('muted');
         
@@ -289,11 +314,23 @@ const LanguageMenu = {
     },
 
     toggleDropdown() {
+        // Проверяем, не отключено ли меню
+        if (this.isMenuDisabled()) {
+            console.log('🚫 Language menu отключен, игнорируем клик');
+            return;
+        }
+        
         const dropdown = document.querySelector('.language-dropdown');
         dropdown.classList.toggle('show');
     },
 
     async changeLang(lang) {
+        // Проверяем, не отключено ли меню
+        if (this.isMenuDisabled()) {
+            console.log('🚫 Language menu отключен, игнорируем смену языка');
+            return;
+        }
+        
         await window.i18n.changeLang(lang);
         localStorage.setItem('selectedLanguage', lang);
         document.querySelector('.language-dropdown').classList.remove('show');
@@ -304,6 +341,9 @@ const LanguageMenu = {
         if (mapModal && mapModal.style.display === 'flex') {
             if (window.updateMapTooltipText) window.updateMapTooltipText();
         }
+        
+        // Обновляем локализацию в активном iframe
+        this.updateIframeLocalization(lang);
         
         // Дополнительно обновляем размеры контейнеров после смены языка
         if (window.updateContentWrapperSizesAfterLanguageChange) {
@@ -319,6 +359,49 @@ const LanguageMenu = {
         document.querySelectorAll('.language-option').forEach(option => {
             option.classList.toggle('active', option.getAttribute('data-lang') === currentLang);
         });
+    },
+
+    updateIframeLocalization(lang) {
+        console.log('🌐 Обновляем локализацию в iframe для языка:', lang);
+        
+        // Находим активный iframe
+        const activeIframe = this.getActiveIframe();
+        if (!activeIframe) {
+            console.log('🌐 Активный iframe не найден');
+            return;
+        }
+        
+        try {
+            const iframeDoc = activeIframe.contentDocument || activeIframe.contentWindow.document;
+            
+            // Отправляем сообщение в iframe для обновления локализации
+            if (iframeDoc && iframeDoc.defaultView) {
+                // Пытаемся вызвать функцию обновления локализации в iframe
+                if (typeof iframeDoc.defaultView.i18n !== 'undefined' && 
+                    typeof iframeDoc.defaultView.i18n.changeLang === 'function') {
+                    console.log('🌐 Вызываем changeLang в iframe');
+                    iframeDoc.defaultView.i18n.changeLang(lang);
+                } else {
+                    console.log('🌐 i18n не найден в iframe, отправляем сообщение');
+                    // Отправляем сообщение через postMessage
+                    activeIframe.contentWindow.postMessage({
+                        type: 'LANGUAGE_CHANGE',
+                        lang: lang
+                    }, '*');
+                }
+            }
+        } catch (error) {
+            console.log('🌐 Ошибка доступа к iframe:', error);
+            // Fallback: отправляем сообщение через postMessage
+            try {
+                activeIframe.contentWindow.postMessage({
+                    type: 'LANGUAGE_CHANGE',
+                    lang: lang
+                }, '*');
+            } catch (postError) {
+                console.log('🌐 Ошибка отправки сообщения в iframe:', postError);
+            }
+        }
     },
 
     showSoundHint() {
@@ -526,6 +609,31 @@ const LanguageMenu = {
                 console.log('🎵 Не удалось получить доступ к iframe для принудительной инициализации звуков:', error);
             }
         });
+    },
+
+    disableMenu() {
+        const menu = document.querySelector('.language-menu');
+        if (menu) {
+            menu.classList.add('disabled');
+            console.log('🚫 Language menu отключен');
+        } else {
+            console.log('⚠️ Language menu не найден для отключения');
+        }
+    },
+
+    enableMenu() {
+        const menu = document.querySelector('.language-menu');
+        if (menu) {
+            menu.classList.remove('disabled');
+            console.log('✅ Language menu включен');
+        } else {
+            console.log('⚠️ Language menu не найден для включения');
+        }
+    },
+
+    isMenuDisabled() {
+        const menu = document.querySelector('.language-menu');
+        return menu ? menu.classList.contains('disabled') : false;
     }
 };
 

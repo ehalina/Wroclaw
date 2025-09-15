@@ -32,6 +32,16 @@ export async function initPageCommon() {
             } catch (_) {}
         }
 
+        // Добавляем обработчик сообщений для смены языка из SPA
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'LANGUAGE_CHANGE') {
+                console.log('🌐 Получено сообщение о смене языка:', event.data.lang);
+                if (window.i18n && typeof window.i18n.changeLang === 'function') {
+                    window.i18n.changeLang(event.data.lang);
+                }
+            }
+        });
+
         // 2) Сохраним координаты текущей точки карты (если указана)
         try {
             const imageContainer = document.querySelector('.image-container');

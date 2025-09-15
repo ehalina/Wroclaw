@@ -363,6 +363,11 @@
                         console.log('🎵 Квест закрыт - переходим на tumski06.html');
                         bookOverlay.style.display = 'none';
                         
+                        // Включаем language-menu при закрытии модалки
+                        if (window.LanguageMenu && typeof window.LanguageMenu.enableMenu === 'function') {
+                            window.LanguageMenu.enableMenu();
+                        }
+                        
                         // Переходим на страницу 06 через SPA
                         if (window.parent && window.parent !== window) {
                             console.log('🎵 Отправляем сообщение родительскому окну для перехода на tumski06.html');

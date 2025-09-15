@@ -1406,6 +1406,11 @@ const MapModal = {
             // Показываем модальное окно и сбрасываем прокрутку
             bookOverlay.style.display = 'flex';
             
+            // Отключаем language-menu при открытии модалки
+            if (window.LanguageMenu && typeof window.LanguageMenu.disableMenu === 'function') {
+                window.LanguageMenu.disableMenu();
+            }
+            
             // Сбрасываем прокрутку контента к началу после того, как окно стало видимым
             setTimeout(() => {
                 bookImageContentWrapper.scrollTop = 0;
@@ -1930,6 +1935,11 @@ const MapModal = {
 
             // Открываем модальное окно
             bookOverlay.style.display = 'flex';
+            
+            // Отключаем language-menu при открытии модалки
+            if (window.LanguageMenu && typeof window.LanguageMenu.disableMenu === 'function') {
+                window.LanguageMenu.disableMenu();
+            }
 
             // Принудительное применение мобильных стилей
             if (window.innerWidth <= 768) {
@@ -2057,16 +2067,19 @@ const MapModal = {
                 mapModal.style.display = 'none';
                 // Останавливаем звук карты
                 const mapSound = document.getElementById('mapSound');
-                 if (mapSound) mapSound.pause();
-                 if (mapSound) mapSound.currentTime = 0;
-                 
-                 // Удаляем обработчики свайпа
-                 const mapContainer = document.querySelector('#map-modal > div');
-                 if (mapContainer && mapContainer._removeSwipeListeners) {
-                     mapContainer._removeSwipeListeners();
-                 }
+                if (mapSound) mapSound.pause();
+                if (mapSound) mapSound.currentTime = 0;
+                
+                // Удаляем обработчики свайпа
+                const mapContainer = document.querySelector('#map-modal > div');
+                if (mapContainer && mapContainer._removeSwipeListeners) {
+                    mapContainer._removeSwipeListeners();
+                }
             }
         });
+
+        // Обработчики для quest модального окна теперь в SPA интеграции
+        // (index.html setupQuestModalHandlers)
     },
 
     positionMarker(coords) {

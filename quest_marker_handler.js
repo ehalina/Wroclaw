@@ -726,6 +726,11 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
 
         // Открываем модальное окно
         bookOverlay.style.display = 'flex';
+        
+        // Отключаем language-menu при открытии модалки
+        if (window.LanguageMenu && typeof window.LanguageMenu.disableMenu === 'function') {
+            window.LanguageMenu.disableMenu();
+        }
 
         // Сбрасываем прокрутку контента к началу после того, как окно стало видимым
         setTimeout(() => {
@@ -743,6 +748,11 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         const stopQuestSound = () => {
             questSound.pause();
             questSound.currentTime = 0;
+            
+            // Включаем language-menu при закрытии модалки
+            if (window.LanguageMenu && typeof window.LanguageMenu.enableMenu === 'function') {
+                window.LanguageMenu.enableMenu();
+            }
             
             // Сбрасываем сдвиг для планшетов при закрытии модалки
             const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;

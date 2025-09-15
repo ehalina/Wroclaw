@@ -198,6 +198,11 @@ function openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIn
     bookContent.scrollTop = 0;
     setTimeout(toggleScrollIndicator, 100);
     
+    // Отключаем language-menu при открытии модалки
+    if (window.LanguageMenu && typeof window.LanguageMenu.disableMenu === 'function') {
+        window.LanguageMenu.disableMenu();
+    }
+    
     // Добавляем смещение для мобильной версии
     if (window.innerWidth <= 768) {
         const bookContentArea = bookOverlay.querySelector('.book-content-area');
@@ -218,12 +223,22 @@ function openMost(bookSound, mostOverlay, container, mostTitle) {
     
     mostOverlay.style.display = 'flex';
     container.style.animationPlayState = 'paused';
+    
+    // Отключаем language-menu при открытии модалки
+    if (window.LanguageMenu && typeof window.LanguageMenu.disableMenu === 'function') {
+        window.LanguageMenu.disableMenu();
+    }
 }
 
 function resumeAnimation(bookOverlay, mostOverlay, container) {
     bookOverlay.style.display = 'none';
     mostOverlay.style.display = 'none';
     container.style.animationPlayState = 'running';
+    
+    // Включаем language-menu при закрытии модалки
+    if (window.LanguageMenu && typeof window.LanguageMenu.enableMenu === 'function') {
+        window.LanguageMenu.enableMenu();
+    }
     
     // Сбрасываем сдвиг для планшетов при закрытии модалки
     const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
