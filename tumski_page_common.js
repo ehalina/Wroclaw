@@ -7,6 +7,13 @@
  * @returns {boolean} true если звук включен, false если выключен
  */
 function isSoundEnabled() {
+    // Сначала проверяем состояние кнопки звука (приоритет)
+    const soundButton = document.querySelector('.sound-menu-button');
+    if (soundButton) {
+        return !soundButton.classList.contains('muted');
+    }
+    
+    // Если кнопка не найдена, проверяем localStorage
     const soundMuted = localStorage.getItem('soundMuted');
     // По умолчанию звук включен (если значение не установлено или 'false')
     return soundMuted !== 'true';
@@ -355,4 +362,5 @@ function forceShowCursorsOnMobile() {
     } catch (_) {}
 }
 
-
+// Делаем функцию isSoundEnabled доступной глобально
+window.isSoundEnabled = isSoundEnabled;

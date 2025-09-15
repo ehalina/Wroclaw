@@ -270,7 +270,8 @@
     "task12": "Statue of Mary Magdalene in the garden of the papal theological faculty"
   },
   "music": {
-    "hint": "Click anywhere to start sounds"
+    "hint": "Click anywhere to start sounds",
+    "enable_sound_hint": "Enable sounds"
   },
   "animation": {
     "hint": "To return to animation, double-click in a free area of the screen"

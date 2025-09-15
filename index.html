@@ -121,6 +121,11 @@
         <source src="media/zwyki/hang.mp3" type="audio/mpeg">
     </audio>
     
+    <!-- Аудио элемент для birds.mp3 -->
+    <audio id="birdsMusic" loop>
+        <source src="media/zwyki/birds.mp3" type="audio/mpeg">
+    </audio>
+    
     <!-- SPA контейнер -->
     <div id="spa-container">
         <!-- Контент страниц будет загружаться сюда -->
@@ -224,9 +229,12 @@
             }
             
             showMusicHint() {
+                // Получаем текст подсказки из локализации
+                const hintText = window.i18n ? window.i18n.t('music.hint') : 'Нажмите в любом месте для запуска музыки';
+                
                 const hint = document.createElement('div');
                 hint.className = 'music-hint';
-                hint.textContent = 'Нажмите в любом месте для запуска музыки';
+                hint.textContent = hintText;
                 hint.style.cssText = `
                     position: fixed;
                     top: 50%;
@@ -333,6 +341,10 @@
                         console.log('🎵 iframe src:', iframe.src);
                         console.log('🎵 iframe contentWindow location:', iframe.contentWindow.location.href);
                         this.setupIframeNavigation(iframe, pageName);
+                        
+                        // Инициализируем звуки геометок в iframe
+                        this.initializeIframeGeoMarkerSounds(iframe);
+                        
                         console.log('🎵 Вызываем showPage для:', pageName);
                         this.showPage(pageName);
                         this.hideLoading();
@@ -440,6 +452,13 @@
                 } else if (pageName.includes('tumski21.html')) {
                     console.log('🎵 Переключаем на hang.mp3 для tumski21.html');
                     this.switchToHangMusic();
+                } else if (pageName.includes('ogrod02.html') || pageName.includes('ogrod03.html') || 
+                          pageName.includes('ogrod04.html') || pageName.includes('ogrod05.html') || 
+                          pageName.includes('ogrod06.html') || pageName.includes('ogrod07.html') || 
+                          pageName.includes('ogrod08.html') || pageName.includes('ogrod09.html') || 
+                          pageName.includes('ogrod12.html') || pageName.includes('ogrod13.html')) {
+                    console.log('🎵 Переключаем на birds.mp3 для страниц ogrod:', pageName);
+                    this.switchToBirdsMusic();
                 } else {
                     console.log('🎵 Переключаем на town.mp3 для:', pageName);
                     this.switchToTownMusic();
@@ -452,7 +471,7 @@
             }
             
             switchToKostelMusic() {
-                console.log('🎵 switchToKostelMusic: останавливаем town.mp3 и hang.mp3, включаем kostel.mp3');
+                console.log('🎵 switchToKostelMusic: останавливаем town.mp3, hang.mp3 и birds.mp3, включаем kostel.mp3');
                 
                 // Останавливаем town.mp3
                 const townMusic = document.getElementById('backgroundMusic');
@@ -466,6 +485,13 @@
                 if (hangMusic) {
                     hangMusic.pause();
                     console.log('🎵 hang.mp3 остановлен');
+                }
+                
+                // Останавливаем birds.mp3
+                const birdsMusic = document.getElementById('birdsMusic');
+                if (birdsMusic) {
+                    birdsMusic.pause();
+                    console.log('🎵 birds.mp3 остановлен');
                 }
                 
                 // Запускаем kostel.mp3
@@ -494,7 +520,7 @@
             }
             
             switchToTownMusic() {
-                console.log('🎵 switchToTownMusic: останавливаем kostel.mp3 и hang.mp3, включаем town.mp3');
+                console.log('🎵 switchToTownMusic: останавливаем kostel.mp3, hang.mp3 и birds.mp3, включаем town.mp3');
                 
                 // Останавливаем kostel.mp3
                 const kostelMusic = document.getElementById('kostelMusic');
@@ -508,6 +534,13 @@
                 if (hangMusic) {
                     hangMusic.pause();
                     console.log('🎵 hang.mp3 остановлен');
+                }
+                
+                // Останавливаем birds.mp3
+                const birdsMusic = document.getElementById('birdsMusic');
+                if (birdsMusic) {
+                    birdsMusic.pause();
+                    console.log('🎵 birds.mp3 остановлен');
                 }
                 
                 // Запускаем town.mp3
@@ -552,6 +585,13 @@
                     console.log('🎵 kostel.mp3 остановлен');
                 }
                 
+                // Останавливаем birds.mp3
+                const birdsMusic = document.getElementById('birdsMusic');
+                if (birdsMusic) {
+                    birdsMusic.pause();
+                    console.log('🎵 birds.mp3 остановлен');
+                }
+                
                 // Запускаем hang.mp3
                 const hangMusic = document.getElementById('hangMusic');
                 if (hangMusic) {
@@ -574,6 +614,55 @@
                     });
                 } else {
                     console.log('🎵 Элемент hangMusic не найден');
+                }
+            }
+            
+            switchToBirdsMusic() {
+                console.log('🎵 switchToBirdsMusic: останавливаем town.mp3, kostel.mp3 и hang.mp3, включаем birds.mp3');
+                
+                // Останавливаем town.mp3
+                const townMusic = document.getElementById('backgroundMusic');
+                if (townMusic) {
+                    townMusic.pause();
+                    console.log('🎵 town.mp3 остановлен');
+                }
+                
+                // Останавливаем kostel.mp3
+                const kostelMusic = document.getElementById('kostelMusic');
+                if (kostelMusic) {
+                    kostelMusic.pause();
+                    console.log('🎵 kostel.mp3 остановлен');
+                }
+                
+                // Останавливаем hang.mp3
+                const hangMusic = document.getElementById('hangMusic');
+                if (hangMusic) {
+                    hangMusic.pause();
+                    console.log('🎵 hang.mp3 остановлен');
+                }
+                
+                // Запускаем birds.mp3
+                const birdsMusic = document.getElementById('birdsMusic');
+                if (birdsMusic) {
+                    // Добавляем обработчик зацикливания, если его еще нет
+                    if (!birdsMusic.hasAttribute('data-loop-handler-added')) {
+                        birdsMusic.addEventListener('ended', () => {
+                            const isMuted = localStorage.getItem('soundMuted') === 'true';
+                            if (!isMuted) {
+                                birdsMusic.currentTime = 0;
+                                birdsMusic.play().catch(console.log);
+                            }
+                        });
+                        birdsMusic.setAttribute('data-loop-handler-added', 'true');
+                    }
+                    
+                    birdsMusic.play().then(() => {
+                        console.log('🎵 birds.mp3 успешно запущен');
+                    }).catch(error => {
+                        console.log('🎵 Ошибка запуска birds.mp3:', error);
+                    });
+                } else {
+                    console.log('🎵 Элемент birdsMusic не найден');
                 }
             }
             
@@ -670,13 +759,43 @@
                 }
                 return null;
             }
+            
+            initializeIframeGeoMarkerSounds(iframe) {
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    const iframeSounds = iframeDoc.querySelectorAll('audio[src*="opening-a-book.wav"]');
+                    
+                    console.log('🎵 Инициализируем звуки геометок в iframe:', iframeSounds.length);
+                    
+                    iframeSounds.forEach((audio, index) => {
+                        try {
+                            if (!audio.src || !audio.src.includes('opening-a-book.wav')) {
+                                audio.src = 'media/opening-a-book.wav';
+                            }
+                            audio.preload = 'auto';
+                            audio.load();
+                            console.log(`🎵 Звук геометки в iframe ${index + 1} инициализирован:`, audio.src);
+                        } catch (error) {
+                            console.log('🎵 Ошибка инициализации звука геометки в iframe:', error);
+                        }
+                    });
+                } catch (error) {
+                    console.log('🎵 Не удалось получить доступ к iframe для инициализации звуков:', error);
+                }
+            }
         }
         
         // Инициализируем SPA при загрузке страницы
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             // Проверяем, не конфликтует ли с расширениями браузера
             if (window.chrome && window.chrome.runtime && window.chrome.runtime.id) {
                 console.log('⚠️ Обнаружено расширение браузера, отключаем проблемные функции');
+            }
+            
+            // Инициализируем локализацию
+            if (window.i18n && typeof window.i18n.loadTranslations === 'function') {
+                await window.i18n.loadTranslations('ru');
+                console.log('🔍 Локализация загружена, переводы:', window.i18n.translations);
             }
             
             // Инициализируем LanguageMenu для кнопки звука

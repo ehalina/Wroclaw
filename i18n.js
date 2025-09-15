@@ -26,13 +26,16 @@ async function loadTranslations(lang = 'ru') {
 
 // Функция для получения перевода
 function t(key) {
+    // Используем переводы из window.i18n.translations, если они есть
+    const currentTranslations = window.i18n ? window.i18n.translations : translations;
+    
     // Сначала ищем плоский ключ
-    if (translations && translations.hasOwnProperty(key)) {
-        return translations[key];
+    if (currentTranslations && currentTranslations.hasOwnProperty(key)) {
+        return currentTranslations[key];
     }
     // Если не найдено — ищем вложенный ключ
     const keys = key.split('.');
-    let result = translations;
+    let result = currentTranslations;
     for (const k of keys) {
         if (result && result[k]) {
             result = result[k];

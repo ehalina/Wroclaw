@@ -307,7 +307,8 @@
     "task12": "Statua Marii Magdaleny w ogrodzie papieskiego wydziału teologicznego"
   },
   "music": {
-    "hint": "Kliknij gdziekolwiek, żeby uruchomić dźwięki"
+    "hint": "Kliknij gdziekolwiek, żeby uruchomić dźwięki",
+    "enable_sound_hint": "Włącz dźwięki"
   },
   "animation": {
     "hint": "Aby wrócić do animacji, kliknij dwukrotnie w wolne miejsce na ekranie"

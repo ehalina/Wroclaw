@@ -270,7 +270,8 @@
     "task12": "Socha Marie Magdalény v zahradě papežské teologické fakulty"
   },
   "music": {
-    "hint": "Klikni kdekoli pro spuštění zvuků"
+    "hint": "Klikni kdekoli pro spuštění zvuků",
+    "enable_sound_hint": "Zapnout zvuky"
   },
   "animation": {
     "hint": "Pro návrat k animaci dvakrát klikněte na volné místo na obrazovce"

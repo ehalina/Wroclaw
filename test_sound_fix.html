@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест исправления звука opening-a-book.wav</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Тест исправления звука opening-a-book.wav</h1>
+    
+    <div class="test-section">
+        <h2>Тест 1: Инициализация при загрузке страницы</h2>
+        <button class="test-button" onclick="testInitialLoad()">Тестировать загрузку</button>
+        <div id="loadStatus" class="status"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Тест 2: Инициализация при клике на кнопку звука</h2>
+        <button class="test-button" onclick="testSoundButtonClick()">Тестировать кнопку звука</button>
+        <div id="soundStatus" class="status"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Тест 3: Воспроизведение звука геометки</h2>
+        <button class="test-button" onclick="testGeoMarkerSound()">Тестировать звук геометки</button>
+        <div id="geoStatus" class="status"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Тест 4: Полный тест SPA</h2>
+        <button class="test-button" onclick="testSPA()">Тестировать SPA</button>
+        <div id="spaStatus" class="status"></div>
+    </div>
+    
+    <!-- Тестовые аудио элементы -->
+    <audio id="testSound1" src="media/opening-a-book.wav"></audio>
+    <audio id="testSound2" src="media/opening-a-book.wav"></audio>
+    
+    <script>
+        function updateStatus(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `status ${type}`;
+        }
+        
+        function testInitialLoad() {
+            updateStatus('loadStatus', 'Тестируем инициализацию при загрузке...', 'info');
+            
+            // Проверяем, есть ли аудио элементы
+            const sounds = document.querySelectorAll('audio[src*="opening-a-book.wav"]');
+            updateStatus('loadStatus', `Найдено ${sounds.length} аудио элементов с opening-a-book.wav`, 'info');
+            
+            // Проверяем, инициализированы ли они
+            let initialized = 0;
+            sounds.forEach(sound => {
+                if (sound.src && sound.src.includes('opening-a-book.wav')) {
+                    initialized++;
+                }
+            });
+            
+            if (initialized === sounds.length && sounds.length > 0) {
+                updateStatus('loadStatus', `✅ Успешно: ${initialized}/${sounds.length} звуков инициализированы`, 'success');
+            } else {
+                updateStatus('loadStatus', `❌ Ошибка: только ${initialized}/${sounds.length} звуков инициализированы`, 'error');
+            }
+        }
+        
+        function testSoundButtonClick() {
+            updateStatus('soundStatus', 'Тестируем клик по кнопке звука...', 'info');
+            
+            // Симулируем клик по кнопке звука
+            if (window.LanguageMenu && typeof window.LanguageMenu.initializeGeoMarkerSounds === 'function') {
+                try {
+                    // Тестируем обычную инициализацию
+                    window.LanguageMenu.initializeGeoMarkerSounds();
+                    
+                    // Тестируем принудительную инициализацию
+                    if (typeof window.LanguageMenu.forceInitializeIframeSounds === 'function') {
+                        window.LanguageMenu.forceInitializeIframeSounds();
+                    }
+                    
+                    updateStatus('soundStatus', '✅ Успешно: звуки геометок инициализированы (обычная + принудительная)', 'success');
+                } catch (error) {
+                    updateStatus('soundStatus', `❌ Ошибка: ${error.message}`, 'error');
+                }
+            } else {
+                updateStatus('soundStatus', '❌ Ошибка: LanguageMenu.initializeGeoMarkerSounds не найден', 'error');
+            }
+        }
+        
+        function testGeoMarkerSound() {
+            updateStatus('geoStatus', 'Тестируем воспроизведение звука...', 'info');
+            
+            const sound = document.getElementById('testSound1');
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play().then(() => {
+                    updateStatus('geoStatus', '✅ Успешно: звук воспроизведен', 'success');
+                }).catch(error => {
+                    updateStatus('geoStatus', `❌ Ошибка воспроизведения: ${error.message}`, 'error');
+                });
+            } else {
+                updateStatus('geoStatus', '❌ Ошибка: тестовый звук не найден', 'error');
+            }
+        }
+        
+        function testSPA() {
+            updateStatus('spaStatus', 'Тестируем SPA инициализацию...', 'info');
+            
+            // Проверяем, есть ли SPA Manager
+            if (window.spaManager) {
+                updateStatus('spaStatus', '✅ SPA Manager найден', 'success');
+                
+                // Проверяем, есть ли функция инициализации звуков iframe
+                if (typeof window.spaManager.initializeIframeGeoMarkerSounds === 'function') {
+                    updateStatus('spaStatus', '✅ Функция initializeIframeGeoMarkerSounds найдена', 'success');
+                } else {
+                    updateStatus('spaStatus', '❌ Функция initializeIframeGeoMarkerSounds не найдена', 'error');
+                }
+            } else {
+                updateStatus('spaStatus', '❌ SPA Manager не найден', 'error');
+            }
+        }
+        
+        // Автоматически запускаем тест при загрузке
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                testInitialLoad();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

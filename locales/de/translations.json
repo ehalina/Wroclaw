@@ -270,7 +270,8 @@
     "task12": "Statue der Maria Magdalena im Garten der päpstlichen theologischen Fakultät"
   },
   "music": {
-    "hint": "Klicke irgendwo, um die Klänge zu starten"
+    "hint": "Klicke irgendwo, um die Klänge zu starten",
+    "enable_sound_hint": "Töne aktivieren"
   },
   "animation": {
     "hint": "Um zur Animation zurückzukehren, doppelklicke auf einen freien Bereich des Bildschirms"

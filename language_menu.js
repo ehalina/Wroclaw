@@ -134,21 +134,35 @@ const LanguageMenu = {
     },
 
     initSoundState() {
+        // Проверяем, была ли уже показана подсказка
+        const hintShown = localStorage.getItem('soundHintShown') === 'true';
+        
         // Проверяем сохраненное состояние звука
         const isMuted = localStorage.getItem('soundMuted') === 'true';
         const soundButton = document.querySelector('.sound-menu-button');
+        
         if (soundButton) {
-            if (isMuted) {
+            // По умолчанию кнопка звука выключена при первой загрузке
+            if (!hintShown) {
                 soundButton.classList.add('muted');
-                // Не вызываем muteAllSounds() здесь, так как это может помешать автозапуску музыки
-                // Состояние будет применено после загрузки аудио элемента
+                localStorage.setItem('soundMuted', 'true');
+                // Добавляем небольшую задержку, чтобы локализация успела загрузиться
+                setTimeout(() => {
+                    this.showSoundHint();
+                }, 500);
+            } else if (isMuted) {
+                soundButton.classList.add('muted');
             }
         }
         
         // Применяем состояние звука после небольшой задержки, чтобы аудио элемент успел загрузиться
         setTimeout(() => {
-            if (isMuted) {
+            const currentMuted = localStorage.getItem('soundMuted') === 'true';
+            if (currentMuted) {
                 this.muteAllSounds();
+            } else {
+                // Если звук не отключен, инициализируем звуки геометок
+                this.initializeGeoMarkerSounds();
             }
         }, 1000);
     },
@@ -160,7 +174,15 @@ const LanguageMenu = {
         if (isMuted) {
             soundButton.classList.remove('muted');
             localStorage.setItem('soundMuted', 'false');
-            this.unmuteAllSounds();
+            
+        // Инициализируем звуки геометок при первом включении звука
+        console.log('🎵 Включаем звук - инициализируем звуки геометок...');
+        this.initializeGeoMarkerSounds();
+        
+        // Принудительно инициализируем звуки в iframe при первом клике
+        this.forceInitializeIframeSounds();
+        
+        this.unmuteAllSounds();
         } else {
             soundButton.classList.add('muted');
             localStorage.setItem('soundMuted', 'true');
@@ -197,6 +219,9 @@ const LanguageMenu = {
         sounds.forEach(sound => {
             sound.muted = false;
         });
+        
+        // Инициализируем звуки opening-a-book.wav для геометок
+        this.initializeGeoMarkerSounds();
         
         // Включаем iframe музыку
         if (window.unmuteIframeMusic) {
@@ -293,6 +318,213 @@ const LanguageMenu = {
         const currentLang = window.i18n.getCurrentLang();
         document.querySelectorAll('.language-option').forEach(option => {
             option.classList.toggle('active', option.getAttribute('data-lang') === currentLang);
+        });
+    },
+
+    showSoundHint() {
+        // Получаем текст подсказки из локализации
+        const hintText = window.i18n ? window.i18n.t('music.enable_sound_hint') : 'Включить звуки';
+        
+        // Создаем элемент подсказки
+        const hint = document.createElement('div');
+        hint.className = 'sound-hint';
+        hint.textContent = hintText;
+        hint.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 90px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            z-index: 10001;
+            font-size: 14px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            animation: fadeInOut 3s ease-in-out;
+        `;
+        
+        // Добавляем CSS анимацию
+        if (!document.querySelector('#sound-hint-styles')) {
+            const style = document.createElement('style');
+            style.id = 'sound-hint-styles';
+            style.textContent = `
+                @keyframes fadeInOut {
+                    0% { opacity: 0; transform: translateY(-10px); }
+                    20% { opacity: 1; transform: translateY(0); }
+                    80% { opacity: 1; transform: translateY(0); }
+                    100% { opacity: 0; transform: translateY(-10px); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Добавляем подсказку на страницу
+        document.body.appendChild(hint);
+        
+        // Отмечаем, что подсказка была показана
+        localStorage.setItem('soundHintShown', 'true');
+        
+        // Удаляем подсказку через 3 секунды
+        setTimeout(() => {
+            if (hint.parentNode) {
+                hint.remove();
+            }
+        }, 3000);
+    },
+
+    initializeGeoMarkerSounds() {
+        console.log('🎵 Инициализируем звуки геометок...');
+        
+        // Находим все аудио элементы с opening-a-book.wav
+        const geoMarkerSounds = document.querySelectorAll('audio[src*="opening-a-book.wav"]');
+        console.log('🎵 Найдено звуков геометок:', geoMarkerSounds.length);
+        
+        geoMarkerSounds.forEach((audio, index) => {
+            try {
+                // Устанавливаем правильный источник звука
+                if (!audio.src || !audio.src.includes('opening-a-book.wav')) {
+                    audio.src = 'media/opening-a-book.wav';
+                }
+                
+                // Предзагружаем звук
+                audio.preload = 'auto';
+                audio.load();
+                
+                // Принудительно инициализируем звук для обхода блокировки браузера
+                audio.muted = false;
+                audio.volume = 1.0;
+                
+                // Принудительно воспроизводим короткий звук для инициализации
+                audio.currentTime = 0;
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    console.log(`🎵 Звук геометки ${index + 1} принудительно инициализирован:`, audio.src);
+                }).catch(error => {
+                    console.log(`🎵 Ошибка принудительной инициализации звука геометки:`, error);
+                });
+            } catch (error) {
+                console.log('🎵 Ошибка инициализации звука геометки:', error);
+            }
+        });
+        
+        // Также инициализируем звуки в iframe, если он загружен
+        const activeIframe = this.getActiveIframe();
+        if (activeIframe) {
+            try {
+                const iframeDoc = activeIframe.contentDocument || activeIframe.contentWindow.document;
+                const iframeSounds = iframeDoc.querySelectorAll('audio[src*="opening-a-book.wav"]');
+                
+                console.log('🎵 Найдено звуков геометок в iframe:', iframeSounds.length);
+                
+                iframeSounds.forEach((audio, index) => {
+                    try {
+                        if (!audio.src || !audio.src.includes('opening-a-book.wav')) {
+                            audio.src = 'media/opening-a-book.wav';
+                        }
+                        audio.preload = 'auto';
+                        audio.load();
+                        
+                        // Принудительно инициализируем звук для обхода блокировки браузера
+                        audio.muted = false;
+                        audio.volume = 1.0;
+                        
+                        console.log(`🎵 Звук геометки в iframe ${index + 1} инициализирован:`, audio.src);
+                    } catch (error) {
+                        console.log('🎵 Ошибка инициализации звука геометки в iframe:', error);
+                    }
+                });
+            } catch (error) {
+                console.log('🎵 Не удалось получить доступ к iframe для инициализации звуков:', error);
+            }
+        }
+        
+        // Дополнительно: инициализируем звуки во всех iframe на странице
+        const allIframes = document.querySelectorAll('iframe');
+        allIframes.forEach((iframe, iframeIndex) => {
+            try {
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const iframeSounds = iframeDoc.querySelectorAll('audio[src*="opening-a-book.wav"]');
+                
+                if (iframeSounds.length > 0) {
+                    console.log(`🎵 Инициализируем звуки в iframe ${iframeIndex + 1}:`, iframeSounds.length);
+                    
+                    iframeSounds.forEach((audio, index) => {
+                        try {
+                            if (!audio.src || !audio.src.includes('opening-a-book.wav')) {
+                                audio.src = 'media/opening-a-book.wav';
+                            }
+                            audio.preload = 'auto';
+                            audio.load();
+                            audio.muted = false;
+                            audio.volume = 1.0;
+                            
+                            console.log(`🎵 Звук геометки в iframe ${iframeIndex + 1}, звук ${index + 1} инициализирован:`, audio.src);
+                        } catch (error) {
+                            console.log('🎵 Ошибка инициализации звука геометки в iframe:', error);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.log('🎵 Не удалось получить доступ к iframe для инициализации звуков:', error);
+            }
+        });
+    },
+
+    getActiveIframe() {
+        // Находим активную страницу и её iframe
+        const activePage = document.querySelector('.page-content.active');
+        if (activePage) {
+            const iframe = activePage.querySelector('iframe');
+            return iframe;
+        }
+        return null;
+    },
+
+    forceInitializeIframeSounds() {
+        console.log('🎵 Принудительно инициализируем звуки в iframe...');
+        
+        // Инициализируем звуки во всех iframe на странице
+        const allIframes = document.querySelectorAll('iframe');
+        console.log('🎵 Найдено iframe:', allIframes.length);
+        
+        allIframes.forEach((iframe, iframeIndex) => {
+            try {
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const iframeSounds = iframeDoc.querySelectorAll('audio[src*="opening-a-book.wav"]');
+                
+                if (iframeSounds.length > 0) {
+                    console.log(`🎵 Принудительно инициализируем звуки в iframe ${iframeIndex + 1}:`, iframeSounds.length);
+                    
+                    iframeSounds.forEach((audio, index) => {
+                        try {
+                            if (!audio.src || !audio.src.includes('opening-a-book.wav')) {
+                                audio.src = 'media/opening-a-book.wav';
+                            }
+                            audio.preload = 'auto';
+                            audio.load();
+                            audio.muted = false;
+                            audio.volume = 1.0;
+                            
+                            // Принудительно воспроизводим короткий звук для инициализации
+                            audio.currentTime = 0;
+                            audio.play().then(() => {
+                                audio.pause();
+                                audio.currentTime = 0;
+                                console.log(`🎵 Звук геометки в iframe ${iframeIndex + 1}, звук ${index + 1} принудительно инициализирован`);
+                            }).catch(error => {
+                                console.log(`🎵 Ошибка принудительной инициализации звука в iframe:`, error);
+                            });
+                            
+                        } catch (error) {
+                            console.log('🎵 Ошибка принудительной инициализации звука геометки в iframe:', error);
+                        }
+                    });
+                }
+            } catch (error) {
+                console.log('🎵 Не удалось получить доступ к iframe для принудительной инициализации звуков:', error);
+            }
         });
     }
 };

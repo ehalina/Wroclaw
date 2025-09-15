@@ -3,6 +3,13 @@
  * @returns {boolean} true если звук включен, false если выключен
  */
 function isSoundEnabled() {
+    // Сначала проверяем состояние кнопки звука (приоритет)
+    const soundButton = document.querySelector('.sound-menu-button');
+    if (soundButton) {
+        return !soundButton.classList.contains('muted');
+    }
+    
+    // Если кнопка не найдена, проверяем localStorage
     const soundMuted = localStorage.getItem('soundMuted');
     // По умолчанию звук включен (если значение не установлено или 'false')
     return soundMuted !== 'true';
@@ -179,6 +186,13 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, prevPageCa
 function openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator) {
     
     if (window.playMapSound) window.playMapSound();
+    
+    // Воспроизводим звук открытия книги только если звук включен
+    if (bookSound && isSoundEnabled()) {
+        bookSound.currentTime = 0;
+        bookSound.play().catch(console.log);
+    }
+    
     bookOverlay.style.display = 'flex';
     container.style.animationPlayState = 'paused';
     bookContent.scrollTop = 0;
@@ -195,6 +209,13 @@ function openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIn
 
 function openMost(bookSound, mostOverlay, container, mostTitle) {
     if (window.playMapSound) window.playMapSound();
+    
+    // Воспроизводим звук открытия книги только если звук включен
+    if (bookSound && isSoundEnabled()) {
+        bookSound.currentTime = 0;
+        bookSound.play().catch(console.log);
+    }
+    
     mostOverlay.style.display = 'flex';
     container.style.animationPlayState = 'paused';
 }
@@ -406,4 +427,7 @@ window.Common = {
     updateActiveLanguage,
     setupScrollHandlers,
     hideAllCursors
-}; 
+};
+
+// Делаем функцию isSoundEnabled доступной глобально
+window.isSoundEnabled = isSoundEnabled; 

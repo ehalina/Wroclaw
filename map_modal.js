@@ -1171,9 +1171,12 @@ const MapModal = {
             if (!isMuted && window.playMapSound) {
                 window.playMapSound();
             }
-            // Воспроизводим звук открытия книги
+            // Воспроизводим звук открытия книги только если звук включен
             const bookSound = document.getElementById('bookSound');
-            if (bookSound) bookSound.play();
+            if (bookSound && window.isSoundEnabled && window.isSoundEnabled()) {
+                bookSound.currentTime = 0;
+                bookSound.play().catch(console.log);
+            }
             
             // Получаем номер точки из data-атрибута
             const imageContainer = document.querySelector('.image-container');
@@ -1320,8 +1323,11 @@ const MapModal = {
                 bookContentArea.scrollTop = 0;
             }, 0);
 
-            // Воспроизводим звук книги
-            if (bookSound) bookSound.play();
+            // Воспроизводим звук книги только если звук включен
+            if (bookSound && window.isSoundEnabled && window.isSoundEnabled()) {
+                bookSound.currentTime = 0;
+                bookSound.play().catch(console.log);
+            }
 
             // Заполняем список заданий
             for (let i = 1; i <= 13; i++) {
@@ -1895,8 +1901,11 @@ const MapModal = {
                 }, 100);
             }
 
-            // Воспроизведение звука книги
-            if (bookSound) bookSound.play();
+            // Воспроизведение звука книги только если звук включен
+            if (bookSound && window.isSoundEnabled && window.isSoundEnabled()) {
+                bookSound.currentTime = 0;
+                bookSound.play().catch(console.log);
+            }
             
             // Скрываем элементы книги внутри модалки, которые не нужны для картинки квеста
             const contentImage = bookContainer.querySelector('.content-image');
@@ -2362,11 +2371,11 @@ async function showQuestConfirmDialog(message) {
         overlay.style.display = 'block';
         dialog.style.display = 'block';
 
-        // Воспроизводим звук открытия книги
+        // Воспроизводим звук открытия книги только если звук включен
         const bookSound = document.getElementById('bookSound');
-        if (bookSound) {
+        if (bookSound && window.isSoundEnabled && window.isSoundEnabled()) {
             bookSound.currentTime = 0;
-            bookSound.play();
+            bookSound.play().catch(console.log);
         }
 
         // Обработчики кнопок
