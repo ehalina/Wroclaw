@@ -743,6 +743,23 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         const stopQuestSound = () => {
             questSound.pause();
             questSound.currentTime = 0;
+            
+            // Сбрасываем сдвиг для планшетов при закрытии модалки
+            const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
+            if (isTablet) {
+                const closeButton = bookOverlay.querySelector('.close-button');
+                const mapQuestButtons = document.querySelector('.map-and-quest-buttons');
+                
+                if (closeButton) {
+                    closeButton.style.transform = '';
+                }
+                if (mapQuestButtons) {
+                    // Сдвигаем меню вниз на половину высоты кнопки и оставляем в этом положении
+                    const buttonHeight = 70; // Высота кнопки (64px + отступы)
+                    const offset = buttonHeight / 2; // Половина высоты кнопки (35px)
+                    mapQuestButtons.style.transform = `translateY(${offset}px)`;
+                }
+            }
         };
 
         // Добавляем обработчик для закрытия модального окна кнопкой
@@ -765,8 +782,29 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         } else setTimeout(() => {
             const targetContainer = questTasksList.children[questNumber * 2 - 1]; // Получаем контейнер с изображениями
             if (targetContainer && targetContainer.dataset.targetImage) {
+                // Проверяем, что это планшет (hover: none, pointer: coarse, min-width: 768px)
+                const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
+                
                 // Прокручиваем так, чтобы изображение было в центре
                 targetContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                // Для планшетов добавляем компенсирующий сдвиг
+                if (isTablet) {
+                    setTimeout(() => {
+                        // Сдвигаем модалку и кнопки управления в обратную сторону на полную высоту кнопки
+                        const closeButton = bookOverlay.querySelector('.close-button');
+                        const mapQuestButtons = document.querySelector('.map-and-quest-buttons');
+                        const buttonHeight = closeButton ? closeButton.offsetHeight : 70; // Высота кнопки (64px + отступы)
+                        const offset = buttonHeight; // Увеличиваем сдвиг до полной высоты кнопки
+                        
+                        if (closeButton) {
+                            closeButton.style.transform = `translateY(${offset}px)`;
+                        }
+                        if (mapQuestButtons) {
+                            mapQuestButtons.style.transform = `translateY(${offset}px)`;
+                        }
+                    }, 100); // Небольшая задержка, чтобы сдвиг произошел после прокрутки
+                }
                 
                 //Добавляем дополнительную прокрутку, чтобы показать и текст пункта сверху
                 setTimeout(() => {

@@ -43,7 +43,6 @@
 
 /* Контент квест-геометки с наивысшим приоритетом */
 .map-mark-area:has(#jan_nepomuk_quest) .content-wrapper,
-.map-mark-area:has(#jan_nepomuk_quest) .papera-image,
 .map-mark-area:has(#jan_nepomuk_quest) .tumski-text {
     z-index: 10000 !important;
 }
@@ -65,13 +64,34 @@
     }
     
     .map-mark-area:has(#jan_nepomuk_quest) .content-wrapper,
-    .map-mark-area:has(#jan_nepomuk_quest) .papera-image,
     .map-mark-area:has(#jan_nepomuk_quest) .tumski-text {
         z-index: 10000 !important;
         opacity: 1 !important;
         display: block !important;
         pointer-events: auto !important;
         visibility: visible !important;
+    }
+    
+    /* Скрываем papera-image в мобильной версии для квест-геометки */
+    .map-mark-area:has(#jan_nepomuk_quest) .papera-image {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
+    }
+    
+    /* Скрываем все papera-image в мобильной версии на странице 17 */
+    .papera-image {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+        pointer-events: none !important;
     }
     
     #jan_nepomuk_quest::before {
@@ -126,7 +146,6 @@
 }
 
 .map-mark-area:has(#jan_nepomuk_quest) .content-wrapper,
-.map-mark-area:has(#jan_nepomuk_quest) .papera-image,
 .map-mark-area:has(#jan_nepomuk_quest) .tumski-text {
     z-index: 10001 !important;
 }

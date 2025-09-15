@@ -142,6 +142,60 @@ const mapStyles = `
         }
     }
 
+    /* Стили для планшетов (hover: none, pointer: coarse, min-width: 768px) */
+    @media (hover: none) and (pointer: coarse) and (min-width: 768px) {
+        .map-and-quest-buttons {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            /* Убеждаемся, что кнопки не сползают */
+            transform: none;
+        }
+
+        .map-button, .quest-button {
+            width: 64px;
+            height: 64px;
+            border-radius: 4px;
+            /* Улучшаем видимость на планшетах */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Стили для модалки квеста на планшетах */
+        .book-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            /* Убеждаемся, что модалка занимает весь экран */
+            transform: none;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 1002;
+            /* Улучшаем видимость кнопки закрытия */
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            /* Убеждаемся, что кнопка не сползает */
+            transform: none;
+        }
+
+        .book-container {
+            position: relative;
+            width: 90vw;
+            height: 90vh;
+            max-width: 100vw;
+            max-height: 100vh;
+            /* Убеждаемся, что контейнер правильно позиционирован */
+            transform: none;
+        }
+    }
+
     #map-modal {
         display: none;
         position: fixed;
@@ -310,6 +364,41 @@ const mapStyles = `
             -webkit-user-select: none;
             -webkit-touch-callout: none;
         }
+    }
+
+    /* Стили для модалки карты на планшетах */
+    @media (hover: none) and (pointer: coarse) and (min-width: 768px) {
+        #map-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            /* Убеждаемся, что модалка занимает весь экран */
+            transform: none;
+        }
+
+        #map-modal > div {
+            position: relative;
+            width: 80vw;
+            max-width: 900px;
+            /* Убеждаемся, что контейнер правильно позиционирован */
+            transform: none;
+        }
+
+        #close-map-modal {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            z-index: 10;
+            /* Улучшаем видимость кнопки закрытия */
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+            /* Убеждаемся, что кнопка не сползает */
+            transform: none;
+        }
+    }
 
         #map-marker {
             width: 52px;

@@ -63,13 +63,17 @@ export async function initializeTumskiPage(options = {}) {
         console.error('Ошибка инициализации геометок:', error);
     }
 
-    // 3. Инициализация языкового меню
-    if (window.LanguageMenu && typeof window.LanguageMenu.init === 'function') {
-        window.LanguageMenu.init();
+    // 3. Инициализация языкового меню (только в главном окне SPA и не на планшетах)
+    if (window.parent === window && window.LanguageMenu && typeof window.LanguageMenu.init === 'function' && !document.querySelector('.language-menu')) {
+        // Проверяем, что это не планшет (hover: none и ширина больше мобильного)
+        const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
+        if (!isTablet) {
+            window.LanguageMenu.init();
+        }
     }
 
-    // 4. Инициализация модального окна карты
-    if (window.MapModal && typeof window.MapModal.init === 'function') {
+    // 4. Инициализация модального окна карты (только в главном окне SPA)
+    if (window.parent === window && window.MapModal && typeof window.MapModal.init === 'function' && !document.querySelector('.map-and-quest-buttons')) {
         window.MapModal.init();
     }
 

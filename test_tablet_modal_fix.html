@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест исправления модалки на планшете</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .test-info {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .device-info {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: monospace;
+        }
+
+        .test-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .test-button {
+            padding: 15px 30px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .test-button:hover {
+            background: #45a049;
+        }
+
+        .test-button:active {
+            background: #3d8b40;
+        }
+
+        /* Подключаем стили из map_modal.js */
+        .map-and-quest-buttons {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        .map-button, .quest-button {
+            width: 64px;
+            height: 64px;
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .map-button:hover, .quest-button:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .map-button img, .quest-button img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .book-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+        }
+
+        .book-container {
+            position: relative;
+            width: 90vw;
+            height: 90vh;
+            max-width: 100vw;
+            max-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            overflow: auto;
+            box-sizing: border-box;
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid white;
+            border-radius: 50%;
+            padding: 10px;
+            z-index: 1002;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-button:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: scale(1.1);
+        }
+
+        /* Стили для планшетов (hover: none, pointer: coarse, min-width: 768px) */
+        @media (hover: none) and (pointer: coarse) and (min-width: 768px) {
+            .map-and-quest-buttons {
+                position: fixed;
+                top: 20px;
+                left: 20px;
+                z-index: 1000;
+                transform: none;
+            }
+
+            .map-button, .quest-button {
+                width: 64px;
+                height: 64px;
+                border-radius: 4px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            }
+
+            .book-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                transform: none;
+            }
+
+            .close-button {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                z-index: 1002;
+                background: rgba(0, 0, 0, 0.8);
+                border: 2px solid white;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+                transform: none;
+            }
+
+            .book-container {
+                position: relative;
+                width: 90vw;
+                height: 90vh;
+                max-width: 100vw;
+                max-height: 100vh;
+                transform: none;
+            }
+        }
+
+        .quest-content {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .quest-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .quest-tasks {
+            list-style: none;
+            padding: 0;
+        }
+
+        .quest-tasks li {
+            padding: 10px;
+            margin: 10px 0;
+            background: #f0f0f0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-info">
+        <h1>Тест исправления модалки на планшете</h1>
+        <div class="device-info" id="deviceInfo">
+            Загрузка информации об устройстве...
+        </div>
+        <p>Этот тест проверяет, что модалка квеста и кнопки управления правильно позиционируются на планшетах с hover: none.</p>
+    </div>
+
+    <div class="test-buttons">
+        <button class="test-button" onclick="openQuest()">Открыть модалку квеста</button>
+        <button class="test-button" onclick="checkPositioning()">Проверить позиционирование</button>
+        <button class="test-button" onclick="simulateTablet()">Симулировать планшет</button>
+    </div>
+
+    <!-- Кнопки управления -->
+    <div class="map-and-quest-buttons">
+        <button class="map-button" onclick="alert('Карта')">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjNDQ0Ii8+CjxwYXRoIGQ9Ik0xNiAyNEg0OFY0MEgxNlYyNFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0yNCAzMkg0MFYzNkgyNFYzMloiIGZpbGw9IiM0NDQiLz4KPC9zdmc+" alt="Карта">
+        </button>
+        <button class="quest-button" onclick="openQuest()">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjNDQ0Ii8+CjxwYXRoIGQ9Ik0xNiAyNEg0OFY0MEgxNlYyNFoiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0yNCAzMkg0MFYzNkgyNFYzMloiIGZpbGw9IiM0NDQiLz4KPC9zdmc+" alt="Квесты">
+        </button>
+    </div>
+
+    <!-- Модалка квеста -->
+    <div class="book-overlay" id="questModal">
+        <button class="close-button" onclick="closeQuest()">×</button>
+        <div class="book-container">
+            <div class="quest-content">
+                <h2 class="quest-title">Тестовый квест</h2>
+                <ul class="quest-tasks">
+                    <li>Пункт 1: Проверить позиционирование кнопки закрытия</li>
+                    <li>Пункт 2: Убедиться, что модалка занимает весь экран</li>
+                    <li>Пункт 3: Проверить, что элементы не сползают вверх</li>
+                    <li>Пункт 4: Тестирование компенсирующего сдвига</li>
+                    <li>Пункт 5: Проверка работы на планшетах</li>
+                    <li>Пункт 6: Симуляция реального квеста</li>
+                    <li>Пункт 7: Дополнительный контент для прокрутки</li>
+                    <li>Пункт 8: Проверка сброса сдвига при закрытии</li>
+                    <li>Пункт 9: Тестирование на разных устройствах</li>
+                    <li>Пункт 10: Финальная проверка функционала</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Определяем тип устройства
+        function detectDevice() {
+            const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            const isDesktop = !isTablet && !isMobile;
+            
+            let deviceType = 'Неизвестно';
+            if (isTablet) deviceType = 'Планшет (hover: none)';
+            else if (isMobile) deviceType = 'Мобильное устройство';
+            else if (isDesktop) deviceType = 'Десктоп';
+            
+            const deviceInfo = document.getElementById('deviceInfo');
+            deviceInfo.innerHTML = `
+                <strong>Тип устройства:</strong> ${deviceType}<br>
+                <strong>Ширина экрана:</strong> ${window.innerWidth}px<br>
+                <strong>Высота экрана:</strong> ${window.innerHeight}px<br>
+                <strong>Hover support:</strong> ${window.matchMedia('(hover: hover)').matches}<br>
+                <strong>Pointer coarse:</strong> ${window.matchMedia('(pointer: coarse)').matches}
+            `;
+        }
+
+        function openQuest() {
+            const modal = document.getElementById('questModal');
+            modal.style.display = 'flex';
+            
+            // Симулируем прокрутку к активному пункту (как в реальном коде)
+            setTimeout(() => {
+                const questTasks = modal.querySelector('.quest-tasks');
+                if (questTasks && questTasks.children.length > 0) {
+                    // Прокручиваем к среднему пункту (симулируем активный пункт)
+                    const middleIndex = Math.floor(questTasks.children.length / 2);
+                    questTasks.children[middleIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Для планшетов добавляем компенсирующий сдвиг
+                    const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
+                    if (isTablet) {
+                        setTimeout(() => {
+                            const closeButton = modal.querySelector('.close-button');
+                            const mapQuestButtons = document.querySelector('.map-and-quest-buttons');
+                            const buttonHeight = closeButton ? closeButton.offsetHeight : 70;
+                            const offset = buttonHeight; // Увеличиваем сдвиг до полной высоты кнопки
+                            
+                            if (closeButton) {
+                                closeButton.style.transform = `translateY(${offset}px)`;
+                            }
+                            if (mapQuestButtons) {
+                                mapQuestButtons.style.transform = `translateY(${offset}px)`;
+                            }
+                            
+                            console.log(`Применен компенсирующий сдвиг: ${offset}px`);
+                        }, 100);
+                    }
+                }
+            }, 200);
+            
+            console.log('Модалка квеста открыта');
+        }
+
+        function closeQuest() {
+            const modal = document.getElementById('questModal');
+            modal.style.display = 'none';
+            
+            // Сбрасываем сдвиг при закрытии и добавляем компенсирующий сдвиг для меню
+            const closeButton = modal.querySelector('.close-button');
+            const mapQuestButtons = document.querySelector('.map-and-quest-buttons');
+            
+            if (closeButton) {
+                closeButton.style.transform = '';
+            }
+            if (mapQuestButtons) {
+                // Сдвигаем меню вниз на половину высоты кнопки и оставляем в этом положении
+                const buttonHeight = 70; // Примерная высота кнопки
+                const offset = buttonHeight / 2; // Половина высоты кнопки
+                mapQuestButtons.style.transform = `translateY(${offset}px)`;
+            }
+            
+            console.log('Модалка квеста закрыта, применен компенсирующий сдвиг для меню');
+        }
+
+        function checkPositioning() {
+            const buttons = document.querySelector('.map-and-quest-buttons');
+            const closeButton = document.querySelector('.close-button');
+            const modal = document.getElementById('questModal');
+            
+            const buttonsRect = buttons.getBoundingClientRect();
+            const closeButtonRect = closeButton.getBoundingClientRect();
+            const modalRect = modal.getBoundingClientRect();
+            
+            console.log('Позиционирование элементов:');
+            console.log('Кнопки управления:', {
+                top: buttonsRect.top,
+                left: buttonsRect.left,
+                right: buttonsRect.right,
+                bottom: buttonsRect.bottom
+            });
+            console.log('Кнопка закрытия:', {
+                top: closeButtonRect.top,
+                left: closeButtonRect.left,
+                right: closeButtonRect.right,
+                bottom: closeButtonRect.bottom
+            });
+            console.log('Модалка:', {
+                top: modalRect.top,
+                left: modalRect.left,
+                right: modalRect.right,
+                bottom: modalRect.bottom
+            });
+            
+            alert('Информация о позиционировании выведена в консоль');
+        }
+
+        function simulateTablet() {
+            // Принудительно применяем стили для планшета
+            document.body.style.setProperty('--is-tablet', '1');
+            const style = document.createElement('style');
+            style.textContent = `
+                .map-and-quest-buttons {
+                    position: fixed !important;
+                    top: 20px !important;
+                    left: 20px !important;
+                    z-index: 1000 !important;
+                    transform: none !important;
+                }
+                .book-overlay {
+                    position: fixed !important;
+                    top: 0 !important;
+                    left: 0 !important;
+                    width: 100vw !important;
+                    height: 100vh !important;
+                    transform: none !important;
+                }
+                .close-button {
+                    position: absolute !important;
+                    top: 20px !important;
+                    left: 20px !important;
+                    z-index: 1002 !important;
+                    transform: none !important;
+                    background: rgba(0, 0, 0, 0.8) !important;
+                    border: 2px solid white !important;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+                }
+            `;
+            document.head.appendChild(style);
+            alert('Стили для планшета применены принудительно');
+        }
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', function() {
+            detectDevice();
+            
+            // Обновляем информацию при изменении размера окна
+            window.addEventListener('resize', detectDevice);
+            
+            // Закрытие модалки по клику вне её
+            document.getElementById('questModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeQuest();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

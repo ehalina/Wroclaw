@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест исправления для планшетов</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f0f0f0;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .device-info {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <h1>Тест исправления бага с language-menu на планшетах</h1>
+    
+    <div class="device-info">
+        <h3>Информация об устройстве:</h3>
+        <p><strong>Ширина экрана:</strong> <span id="screen-width"></span>px</p>
+        <p><strong>Hover поддержка:</strong> <span id="hover-support"></span></p>
+        <p><strong>Pointer тип:</strong> <span id="pointer-type"></span></p>
+        <p><strong>Определен как планшет:</strong> <span id="is-tablet"></span></p>
+    </div>
+
+    <div class="test-container">
+        <h3>Тест инициализации language-menu</h3>
+        <button class="test-button" onclick="testLanguageMenuInit()">Тестировать инициализацию</button>
+        <div id="test-result" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="test-container">
+        <h3>Тест открытия квеста</h3>
+        <button class="test-button" onclick="testQuestOpening()">Имитировать открытие квеста</button>
+        <div id="quest-result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Определяем тип устройства
+        function detectDevice() {
+            const screenWidth = window.innerWidth;
+            const hoverSupport = window.matchMedia('(hover: hover)').matches;
+            const pointerType = window.matchMedia('(pointer: coarse)').matches ? 'coarse' : 'fine';
+            const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
+            
+            document.getElementById('screen-width').textContent = screenWidth;
+            document.getElementById('hover-support').textContent = hoverSupport ? 'Да' : 'Нет';
+            document.getElementById('pointer-type').textContent = pointerType;
+            document.getElementById('is-tablet').textContent = isTablet ? 'Да' : 'Нет';
+            
+            return { screenWidth, hoverSupport, pointerType, isTablet };
+        }
+
+        // Мокаем LanguageMenu для тестирования
+        window.LanguageMenu = {
+            init: function() {
+                console.log('LanguageMenu.init() вызван');
+                return true;
+            }
+        };
+
+        // Тестируем инициализацию language-menu
+        function testLanguageMenuInit() {
+            const device = detectDevice();
+            const resultDiv = document.getElementById('test-result');
+            
+            // Имитируем логику из tumski_page_common.js
+            let shouldInit = false;
+            if (window.LanguageMenu && typeof window.LanguageMenu.init === 'function') {
+                const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
+                if (!isTablet) {
+                    shouldInit = true;
+                }
+            }
+            
+            resultDiv.style.display = 'block';
+            if (shouldInit) {
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = '✅ LanguageMenu должен быть инициализирован (не планшет)';
+            } else {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '❌ LanguageMenu НЕ должен быть инициализирован (планшет)';
+            }
+        }
+
+        // Тестируем открытие квеста
+        function testQuestOpening() {
+            const device = detectDevice();
+            const resultDiv = document.getElementById('quest-result');
+            
+            // Имитируем вызов initPageCommon() при открытии квеста
+            let languageMenuInitialized = false;
+            
+            try {
+                if (window.LanguageMenu && typeof window.LanguageMenu.init === 'function') {
+                    const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
+                    if (!isTablet) {
+                        window.LanguageMenu.init();
+                        languageMenuInitialized = true;
+                    }
+                }
+            } catch (e) {
+                console.error('Ошибка инициализации LanguageMenu:', e);
+            }
+            
+            resultDiv.style.display = 'block';
+            if (device.isTablet && !languageMenuInitialized) {
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = '✅ Исправление работает! На планшете LanguageMenu не инициализируется при открытии квеста';
+            } else if (!device.isTablet && languageMenuInitialized) {
+                resultDiv.className = 'result success';
+                resultDiv.innerHTML = '✅ На десктопе LanguageMenu инициализируется корректно';
+            } else {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = '❌ Проблема: LanguageMenu инициализируется на планшете';
+            }
+        }
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            detectDevice();
+        });
+    </script>
+</body>
+</html>

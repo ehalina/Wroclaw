@@ -224,6 +224,23 @@ function resumeAnimation(bookOverlay, mostOverlay, container) {
     bookOverlay.style.display = 'none';
     mostOverlay.style.display = 'none';
     container.style.animationPlayState = 'running';
+    
+    // Сбрасываем сдвиг для планшетов при закрытии модалки
+    const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
+    if (isTablet) {
+        const closeButton = bookOverlay.querySelector('.close-button');
+        const mapQuestButtons = document.querySelector('.map-and-quest-buttons');
+        
+        if (closeButton) {
+            closeButton.style.transform = '';
+        }
+        if (mapQuestButtons) {
+            // Сдвигаем меню вниз на половину высоты кнопки и оставляем в этом положении
+            const buttonHeight = 70; // Высота кнопки (64px + отступы)
+            const offset = buttonHeight / 2; // Половина высоты кнопки (35px)
+            mapQuestButtons.style.transform = `translateY(${offset}px)`;
+        }
+    }
 }
 
 // Общие функции для работы с языком

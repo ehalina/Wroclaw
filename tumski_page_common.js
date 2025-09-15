@@ -47,7 +47,16 @@ export async function initPageCommon() {
         } catch (_) {}
 
         // 3) Общие UI-модули
-        try { if (window.LanguageMenu && typeof window.LanguageMenu.init === 'function') window.LanguageMenu.init(); } catch (_) {}
+        // Инициализируем языковое меню только для десктопных устройств (не планшеты)
+        try { 
+            if (window.LanguageMenu && typeof window.LanguageMenu.init === 'function') {
+                // Проверяем, что это не планшет (hover: none и ширина больше мобильного)
+                const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
+                if (!isTablet) {
+                    window.LanguageMenu.init();
+                }
+            }
+        } catch (_) {}
         try { if (window.MapModal && typeof window.MapModal.init === 'function') window.MapModal.init(); } catch (_) {}
         try { if (typeof window.applyCommonButtonStyles === 'function') window.applyCommonButtonStyles(); } catch (_) {}
         // Фоновая музыка управляется через SPA
