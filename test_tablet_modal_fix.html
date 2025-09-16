@@ -311,6 +311,7 @@
                         setTimeout(() => {
                             const closeButton = modal.querySelector('.close-button');
                             const mapQuestButtons = document.querySelector('.map-and-quest-buttons');
+                            const languageMenu = document.querySelector('.language-menu');
                             const buttonHeight = closeButton ? closeButton.offsetHeight : 70;
                             const offset = buttonHeight; // Увеличиваем сдвиг до полной высоты кнопки
                             
@@ -319,6 +320,9 @@
                             }
                             if (mapQuestButtons) {
                                 mapQuestButtons.style.transform = `translateY(${offset}px)`;
+                            }
+                            if (languageMenu) {
+                                languageMenu.style.transform = `translateY(${offset}px)`;
                             }
                             
                             console.log(`Применен компенсирующий сдвиг: ${offset}px`);
@@ -337,6 +341,7 @@
             // Сбрасываем сдвиг при закрытии и добавляем компенсирующий сдвиг для меню
             const closeButton = modal.querySelector('.close-button');
             const mapQuestButtons = document.querySelector('.map-and-quest-buttons');
+            const languageMenu = document.querySelector('.language-menu');
             
             if (closeButton) {
                 closeButton.style.transform = '';
@@ -346,6 +351,12 @@
                 const buttonHeight = 70; // Примерная высота кнопки
                 const offset = buttonHeight / 2; // Половина высоты кнопки
                 mapQuestButtons.style.transform = `translateY(${offset}px)`;
+            }
+            if (languageMenu) {
+                // Сдвигаем language-menu вниз на половину высоты кнопки и оставляем в этом положении
+                const buttonHeight = 70; // Примерная высота кнопки
+                const offset = buttonHeight / 2; // Половина высоты кнопки
+                languageMenu.style.transform = `translateY(${offset}px)`;
             }
             
             console.log('Модалка квеста закрыта, применен компенсирующий сдвиг для меню');

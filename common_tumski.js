@@ -63,13 +63,9 @@ export async function initializeTumskiPage(options = {}) {
         console.error('Ошибка инициализации геометок:', error);
     }
 
-    // 3. Инициализация языкового меню (только в главном окне SPA и не на планшетах)
+    // 3. Инициализация языкового меню (только в главном окне SPA)
     if (window.parent === window && window.LanguageMenu && typeof window.LanguageMenu.init === 'function' && !document.querySelector('.language-menu')) {
-        // Проверяем, что это не планшет (hover: none и ширина больше мобильного)
-        const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
-        if (!isTablet) {
-            window.LanguageMenu.init();
-        }
+        window.LanguageMenu.init();
     }
 
     // 4. Инициализация модального окна карты (только в главном окне SPA)
@@ -217,6 +213,7 @@ function addQuestGlowEffect(questElement) {
                     background-position: center center;
                     background-repeat: no-repeat;
                     background-size: contain;
+                    z-index: 1002;
                 }
 
                 .quest-marker-glow::after {
@@ -230,6 +227,7 @@ function addQuestGlowEffect(questElement) {
                     border-radius: 50%;
                     pointer-events: none;
                     animation: markerHaloPulse 1.8s ease-in-out infinite;
+                    z-index: 1002;
                 }
 
                 @media (prefers-reduced-motion: reduce) {

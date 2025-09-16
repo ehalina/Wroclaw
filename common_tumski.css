@@ -193,7 +193,7 @@
 /* ===== ГЕОМЕТКИ ===== */
 .map-mark-area {
     position: absolute !important;
-    z-index: 998;
+    z-index: 1001;
     display: flex;
     align-items: center;
     gap: 10px;
@@ -224,7 +224,7 @@
     background: transparent;
     border-radius: 50%;
     pointer-events: auto;
-    z-index: 997;
+    z-index: 1000;
 }
 
 .map-mark:hover::before {
@@ -235,7 +235,7 @@
 /* Стили для JavaScript-созданных расширенных областей */
 .extended-hover-area {
     position: absolute !important;
-    z-index: 997 !important;
+    z-index: 1000 !important;
     pointer-events: auto !important;
 }
 
@@ -404,7 +404,7 @@ html[data-input-type="desktop"] .custom-cursor-up {
         visibility: visible !important;
     }
     
-    /* Геометки всегда видны */
+    /* Геометки всегда видны и имеют приоритет над стрелками */
     .map-mark-area,
     .map-mark,
     .papera-image,
@@ -424,6 +424,78 @@ html[data-input-type="desktop"] .custom-cursor-up {
     .custom-cursor-uparea:hover .custom-cursor-up {
         opacity: 1 !important;
     }
+}
+
+/* Планшеты - приоритет геометок над стрелками */
+@media (hover: none) and (pointer: coarse) and (min-width: 768px) {
+    /* Геометки должны быть выше стрелок на планшетах */
+    .map-mark-area {
+        z-index: 10000 !important;
+    }
+    
+    .map-mark {
+        z-index: 10000 !important;
+    }
+    
+    .map-mark::before {
+        z-index: 9999 !important;
+    }
+    
+    .extended-hover-area {
+        z-index: 9999 !important;
+    }
+    
+    /* Квест-геометки должны быть еще выше */
+    .map-mark-area:has([data-quest-number]) {
+        z-index: 10001 !important;
+    }
+    
+    .map-mark-area:has([data-quest-number]) .map-mark {
+        z-index: 10001 !important;
+    }
+    
+    .map-mark-area:has([data-quest-number]) .map-mark::before {
+        z-index: 10001 !important;
+    }
+    
+    .map-mark-area:has([data-quest-number]) .extended-hover-area {
+        z-index: 10001 !important;
+    }
+    
+    /* Quest-marker-glow должен быть выше всех стрелок */
+    .quest-marker-glow {
+        z-index: 10001 !important;
+    }
+    
+    .quest-marker-glow::after {
+        z-index: 10001 !important;
+    }
+}
+
+/* Квест-геометки на всех устройствах должны быть выше стрелок */
+.map-mark-area:has([data-quest-number]) {
+    z-index: 1002 !important;
+}
+
+.map-mark-area:has([data-quest-number]) .map-mark {
+    z-index: 1002 !important;
+}
+
+.map-mark-area:has([data-quest-number]) .map-mark::before {
+    z-index: 1001 !important;
+}
+
+.map-mark-area:has([data-quest-number]) .extended-hover-area {
+    z-index: 1001 !important;
+}
+
+/* Quest-marker-glow на всех устройствах должен быть выше стрелок */
+.quest-marker-glow {
+    z-index: 1002 !important;
+}
+
+.quest-marker-glow::after {
+    z-index: 1002 !important;
 }
 
 /* ===== ПРИОРИТЕТ ПО DATA-АТРИБУТУ ===== */

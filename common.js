@@ -245,6 +245,7 @@ function resumeAnimation(bookOverlay, mostOverlay, container) {
     if (isTablet) {
         const closeButton = bookOverlay.querySelector('.close-button');
         const mapQuestButtons = document.querySelector('.map-and-quest-buttons');
+        const languageMenu = document.querySelector('.language-menu');
         
         if (closeButton) {
             closeButton.style.transform = '';
@@ -254,6 +255,12 @@ function resumeAnimation(bookOverlay, mostOverlay, container) {
             const buttonHeight = 70; // Высота кнопки (64px + отступы)
             const offset = buttonHeight / 2; // Половина высоты кнопки (35px)
             mapQuestButtons.style.transform = `translateY(${offset}px)`;
+        }
+        if (languageMenu) {
+            // Сдвигаем language-menu вниз на половину высоты кнопки и оставляем в этом положении
+            const buttonHeight = 70; // Высота кнопки (64px + отступы)
+            const offset = buttonHeight / 2; // Половина высоты кнопки (35px)
+            languageMenu.style.transform = `translateY(${offset}px)`;
         }
     }
 }
