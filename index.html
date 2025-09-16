@@ -345,6 +345,9 @@
                         // Инициализируем звуки геометок в iframe
                         this.initializeIframeGeoMarkerSounds(iframe);
                         
+                        // Инициализируем quest музыку в iframe
+                        this.initializeIframeQuestMusic(iframe);
+                        
                         console.log('🎵 Вызываем showPage для:', pageName);
                         this.showPage(pageName);
                         this.hideLoading();
@@ -390,175 +393,17 @@
                         });
                     });
                     
-                    // Обработчики для quest модального окна в iframe
-                    this.setupQuestModalHandlers(iframeDoc);
-                    
-                    // Обработчики для модального окна карты в iframe
-                    this.setupMapModalHandlers(iframeDoc);
+                    // LanguageMenu теперь инициализируется в iframe страницы
+                    // Обработчики для модальных окон также работают в iframe
                     
                 } catch (error) {
                     console.log('⚠️ Не удалось настроить навигацию iframe (возможно, CORS):', error);
                 }
             }
             
-            setupQuestModalHandlers(iframeDoc) {
-                console.log('🔧 Настройка обработчиков quest модального окна в iframe...');
-                
-                // Обработчик для открытия quest модального окна в iframe
-                const bookOverlay = iframeDoc.querySelector('.book-overlay');
-                if (bookOverlay) {
-                    console.log('🔧 Найден book-overlay для обработки открытия модального окна');
-                    
-                    // Создаем MutationObserver для отслеживания изменений display
-                    const observer = new MutationObserver(function(mutations) {
-                        mutations.forEach(function(mutation) {
-                            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
-                                const target = mutation.target;
-                                const computedStyle = window.getComputedStyle(target);
-                                if (computedStyle.display === 'flex') {
-                                    console.log('🔧 Quest модальное окно открыто в iframe, отключаем LanguageMenu');
-                                    // Отключаем language-menu при открытии модалки
-                                    if (window.LanguageMenu && typeof window.LanguageMenu.disableMenu === 'function') {
-                                        window.LanguageMenu.disableMenu();
-                                    }
-                                }
-                            }
-                        });
-                    });
-                    
-                    // Начинаем наблюдение за изменениями стилей
-                    observer.observe(bookOverlay, {
-                        attributes: true,
-                        attributeFilter: ['style']
-                    });
-                } else {
-                    console.log('⚠️ book-overlay не найден в iframe для обработки открытия');
-                }
-                
-                // Обработчик для кнопки закрытия quest модального окна в iframe
-                const questCloseButton = iframeDoc.querySelector('.book-overlay .close-button');
-                if (questCloseButton) {
-                    console.log('🔧 Найден обработчик кнопки закрытия quest модального окна');
-                    questCloseButton.addEventListener('click', function() {
-                        console.log('🔧 Клик по кнопке закрытия quest модального окна');
-                        const bookOverlay = iframeDoc.querySelector('.book-overlay');
-                        const container = iframeDoc.querySelector('.image-container');
-                        
-                        if (bookOverlay) {
-                            bookOverlay.style.display = 'none';
-                            
-                            // Включаем language-menu при закрытии модалки
-                            if (window.LanguageMenu && typeof window.LanguageMenu.enableMenu === 'function') {
-                                console.log('🔧 Вызываем LanguageMenu.enableMenu() из SPA');
-                                window.LanguageMenu.enableMenu();
-                            }
-                            
-                            // Возобновляем анимацию контейнера
-                            if (container) {
-                                container.style.animationPlayState = 'running';
-                            }
-                        }
-                    });
-                } else {
-                    console.log('⚠️ Кнопка закрытия quest модального окна не найдена в iframe');
-                }
-
-                // Закрытие quest модального окна по клику вне его в iframe
-                if (bookOverlay) {
-                    console.log('🔧 Найден book-overlay для обработки клика вне модального окна');
-                    bookOverlay.addEventListener('click', function(e) {
-                        if (e.target === bookOverlay) {
-                            console.log('🔧 Клик вне quest модального окна');
-                            const container = iframeDoc.querySelector('.image-container');
-                            
-                            bookOverlay.style.display = 'none';
-                            
-                            // Включаем language-menu при закрытии модалки
-                            if (window.LanguageMenu && typeof window.LanguageMenu.enableMenu === 'function') {
-                                console.log('🔧 Вызываем LanguageMenu.enableMenu() из SPA (клик вне)');
-                                window.LanguageMenu.enableMenu();
-                            }
-                            
-                            // Возобновляем анимацию контейнера
-                            if (container) {
-                                container.style.animationPlayState = 'running';
-                            }
-                        }
-                    });
-                } else {
-                    console.log('⚠️ book-overlay не найден в iframe');
-                }
-            }
+            // Обработчики quest модального окна теперь работают в iframe страницы
             
-            setupMapModalHandlers(iframeDoc) {
-                console.log('🔧 Настройка обработчиков модального окна карты в iframe...');
-                
-                // Обработчик для кнопки открытия модального окна карты в iframe
-                const openMapButton = iframeDoc.querySelector('#open-map-modal');
-                if (openMapButton) {
-                    console.log('🔧 Найден обработчик кнопки открытия модального окна карты');
-                    openMapButton.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        console.log('🔧 Клик по кнопке открытия модального окна карты');
-                        const mapModal = iframeDoc.querySelector('#map-modal');
-                        
-                        if (mapModal) {
-                            mapModal.style.display = 'flex';
-                            
-                            // Отключаем language-menu при открытии модалки карты
-                            if (window.LanguageMenu && typeof window.LanguageMenu.disableMenu === 'function') {
-                                console.log('🔧 Вызываем LanguageMenu.disableMenu() из SPA (открытие карты)');
-                                window.LanguageMenu.disableMenu();
-                            }
-                        }
-                    });
-                } else {
-                    console.log('⚠️ Кнопка открытия модального окна карты не найдена в iframe');
-                }
-                
-                // Обработчик для кнопки закрытия модального окна карты в iframe
-                const mapCloseButton = iframeDoc.querySelector('#close-map-modal');
-                if (mapCloseButton) {
-                    console.log('🔧 Найден обработчик кнопки закрытия модального окна карты');
-                    mapCloseButton.addEventListener('click', function() {
-                        console.log('🔧 Клик по кнопке закрытия модального окна карты');
-                        const mapModal = iframeDoc.querySelector('#map-modal');
-                        
-                        if (mapModal) {
-                            mapModal.style.display = 'none';
-                            
-                            // Включаем language-menu при закрытии модалки карты
-                            if (window.LanguageMenu && typeof window.LanguageMenu.enableMenu === 'function') {
-                                console.log('🔧 Вызываем LanguageMenu.enableMenu() из SPA (карта)');
-                                window.LanguageMenu.enableMenu();
-                            }
-                        }
-                    });
-                } else {
-                    console.log('⚠️ Кнопка закрытия модального окна карты не найдена в iframe');
-                }
-
-                // Закрытие модального окна карты по клику вне его в iframe
-                const mapModal = iframeDoc.querySelector('#map-modal');
-                if (mapModal) {
-                    console.log('🔧 Найден map-modal для обработки клика вне модального окна');
-                    mapModal.addEventListener('click', function(e) {
-                        if (e.target === mapModal) {
-                            console.log('🔧 Клик вне модального окна карты');
-                            
-                            mapModal.style.display = 'none';
-                            
-                            // Включаем language-menu при закрытии модалки карты
-                            if (window.LanguageMenu && typeof window.LanguageMenu.enableMenu === 'function') {
-                                console.log('🔧 Вызываем LanguageMenu.enableMenu() из SPA (клик вне карты)');
-                                window.LanguageMenu.enableMenu();
-                            }
-                        }
-                    });
-                } else {
-                    console.log('⚠️ map-modal не найден в iframe');
-                }
-            }
+            // Обработчики модального окна карты теперь работают в iframe страницы
             
             showPage(pageName) {
                 console.log('🎵 showPage вызван для:', pageName);
@@ -948,6 +793,49 @@
                     console.log('🎵 Не удалось получить доступ к iframe для инициализации звуков:', error);
                 }
             }
+            
+            initializeIframeQuestMusic(iframe) {
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    
+                    console.log('🎵 Инициализируем quest музыку в iframe...');
+                    
+                    // Создаем quest музыку в iframe, если ее еще нет
+                    let questMusic = iframeDoc.getElementById('questMusic');
+                    if (!questMusic) {
+                        questMusic = iframeDoc.createElement('audio');
+                        questMusic.id = 'questMusic';
+                        questMusic.src = 'media/zwyki/quest.mp3';
+                        questMusic.loop = true;
+                        questMusic.preload = 'auto';
+                        questMusic.volume = 0.7;
+                        iframeDoc.body.appendChild(questMusic);
+                        console.log('🎵 Создан аудио элемент quest музыки в iframe');
+                    }
+                    
+                    // Принудительно инициализируем quest музыку в iframe
+                    questMusic.muted = false;
+                    questMusic.volume = 0.7;
+                    questMusic.load();
+                    
+                    // Принудительно воспроизводим короткий звук для инициализации
+                    questMusic.currentTime = 0;
+                    questMusic.play().then(() => {
+                        questMusic.pause();
+                        questMusic.currentTime = 0;
+                        console.log('🎵 Quest музыка в iframe принудительно инициализирована');
+                    }).catch(error => {
+                        console.log('🎵 Ошибка принудительной инициализации quest музыки в iframe:', error);
+                    });
+                    
+                    // Делаем quest музыку доступной в iframe
+                    if (iframe.contentWindow) {
+                        iframe.contentWindow.questMusic = questMusic;
+                    }
+                } catch (error) {
+                    console.log('🎵 Ошибка инициализации quest музыки в iframe:', error);
+                }
+            }
         }
         
         // Инициализируем SPA при загрузке страницы
@@ -963,10 +851,7 @@
                 console.log('🔍 Локализация загружена, переводы:', window.i18n.translations);
             }
             
-            // Инициализируем LanguageMenu для кнопки звука
-            if (window.LanguageMenu && typeof window.LanguageMenu.init === 'function') {
-                window.LanguageMenu.init();
-            }
+            // LanguageMenu теперь инициализируется в iframe страницы
             
             window.spaManager = new SPAManager();
             window.SPAManager = window.spaManager; // Делаем доступным для iframe страниц

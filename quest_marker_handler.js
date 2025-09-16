@@ -720,16 +720,25 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         const mainSoundButton = document.querySelector('.sound-menu-button');
         const isSoundMuted = mainSoundButton ? mainSoundButton.classList.contains('muted') : false;
 
-        // Создаем аудио элемент для звука квеста
-        const questSound = new Audio('media/zwyki/quest.mp3');
-        questSound.loop = true; // Зацикливаем воспроизведение
+        // Используем глобальную quest музыку или создаем новую, если глобальной нет
+        let questSound = window.questMusic;
+        if (!questSound) {
+            questSound = new Audio('media/zwyki/quest.mp3');
+            questSound.loop = true; // Зацикливаем воспроизведение
+            questSound.volume = 0.7;
+            // Сохраняем ссылку глобально для повторного использования
+            window.questMusic = questSound;
+        }
 
         // Открываем модальное окно
         bookOverlay.style.display = 'flex';
         
         // Отключаем language-menu при открытии модалки
         if (window.LanguageMenu && typeof window.LanguageMenu.disableMenu === 'function') {
+            console.log('🚫 Quest: отключаем language-menu');
             window.LanguageMenu.disableMenu();
+        } else {
+            console.log('⚠️ Quest: LanguageMenu не найден для отключения');
         }
 
         // Сбрасываем прокрутку контента к началу после того, как окно стало видимым
@@ -743,6 +752,14 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
             if (bookSound) bookSound.play();
             questSound.play();
         }
+        
+        // Дополнительно воспроизводим музыку quest при открытии book-content-area
+        if (bookContentArea && !isSoundMuted && !suppressEffects) {
+            // Небольшая задержка, чтобы убедиться, что book-content-area полностью отрендерен
+            setTimeout(() => {
+                questSound.play();
+            }, 100);
+        }
 
         // Функция для остановки звука
         const stopQuestSound = () => {
@@ -751,7 +768,10 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
             
             // Включаем language-menu при закрытии модалки
             if (window.LanguageMenu && typeof window.LanguageMenu.enableMenu === 'function') {
+                console.log('✅ Quest: включаем language-menu');
                 window.LanguageMenu.enableMenu();
+            } else {
+                console.log('⚠️ Quest: LanguageMenu не найден для включения');
             }
             
             // Сбрасываем сдвиг для планшетов при закрытии модалки
@@ -1315,6 +1335,11 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                     bookContentArea.style.flexDirection = 'column';
                     bookContentArea.style.alignItems = 'center';
                     bookContentArea.style.justifyContent = 'center';
+                    
+                    // Воспроизводим музыку quest при открытии book-content-area, если звук не отключен
+                    if (!isSoundMuted && !suppressEffects) {
+                        questSound.play();
+                    }
                 }
                 
                 if (bookTitle) {
