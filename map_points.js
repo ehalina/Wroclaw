@@ -168,79 +168,98 @@ const mapPoints = {
 export const tooltipPoints = {
   tumskiBridge: { 
     desktop: { x: 14, y: 56 },
-    tablet: { x: 14, y: 56 }
+    tablet: { x: 14, y: 56 },
+    mobile: { x: 16, y: 58 }
   },
   katedra: { 
     desktop: { x: 53, y: 72 },
-    tablet: { x: 53, y: 72 }
+    tablet: { x: 53, y: 72 },
+    mobile: { x: 53, y: 72 }
   },
   matka: { 
     desktop: { x: 48, y: 72 },
-    tablet: { x: 48, y: 72 }
+    tablet: { x: 48, y: 72 },
+    mobile: { x: 48, y: 72 }
   },
   sobor: { 
     desktop: { x: 30, y: 52 },
-    tablet: { x: 30, y: 52 }
+    tablet: { x: 30, y: 52 },
+    mobile: { x: 30, y: 52 }
   },
   jan: { 
     desktop: { x: 25, y: 57 },
-    tablet: { x: 25, y: 57 }
+    tablet: { x: 25, y: 57 },
+    mobile: { x: 25, y: 57 }
   },
   kostel: { 
     desktop: { x: 8, y: 65 },
-    tablet: { x: 8, y: 65 }
+    tablet: { x: 8, y: 65 },
+    mobile: { x: 8, y: 65 }
   },
   platan: { 
     desktop: { x: 68, y: 69 },
-    tablet: { x: 68, y: 69 }
+    tablet: { x: 68, y: 69 },
+    mobile: { x: 68, y: 69 }
   },
   ogrod: { 
     desktop: { x: 45, y: 90 },
-    tablet: { x: 45, y: 90 }
+    tablet: { x: 45, y: 90 },
+    mobile: { x: 40, y: 90 }
   },
   ogrodbot1: { 
     desktop: { x: 55, y: 23 },
-    tablet: { x: 55, y: 23 }
+    tablet: { x: 55, y: 23 },
+    mobile: { x: 55, y: 23 }
   },
   plackat: { 
     desktop: { x: 45, y: 72 },
-    tablet: { x: 45, y: 72 }
+    tablet: { x: 45, y: 72 },
+    mobile: { x: 55, y: 70 }
   },
   odra2: { 
     desktop: { x: 12, y: 40 },
-    tablet: { x: 12, y: 40 }
+    tablet: { x: 12, y: 40 },
+    mobile: { x: 10, y: 44 }
   },
   mlynski: { 
     desktop: { x: 5, y: 25 },
-    tablet: { x: 5, y: 25 }
+    tablet: { x: 5, y: 25 },
+    mobile: { x: 5, y: 32 }
   },
   panny: { 
     desktop: { x: 9, y: 56 },
-    tablet: { x: 9, y: 56 }
+    tablet: { x: 9, y: 56 },
+    mobile: { x: 9, y: 60 }
   },
   piasek: { 
     desktop: { x: 10, y: 76 },
-    tablet: { x: 10, y: 76 }
+    tablet: { x: 10, y: 76 },
+    mobile: { x: 10, y: 79 }
   },
   katedralna1: { 
     desktop: { x: 32, y: 70 },
-    tablet: { x: 32, y: 70 }
+    tablet: { x: 32, y: 70 },
+    mobile: { x: 32, y: 70 }
   },
   brama: { 
     desktop: { x: 60, y: 57 },
-    tablet: { x: 60, y: 57 }
+    tablet: { x: 60, y: 57 },
+    mobile: { x: 60, y: 62 }
   },
   kanonia: { 
     desktop: { x: 60, y: 45 },
-    tablet: { x: 60, y: 45 }
+    tablet: { x: 60, y: 45 },
+    mobile: { x: 55, y: 45 }
   },
   bramabot: { 
     desktop: { x: 55, y: 45 },
-    tablet: { x: 55, y: 45 }
+    tablet: { x: 55, y: 45 },
+    mobile: { x: 51, y: 45 }
   },
   kapitulna: { 
     desktop: { x: 50, y: 50 },
-    tablet: { x: 50, y: 50 }
+    tablet: { x: 50, y: 50 },
+    mobile: { x: 50, y: 55 }
   },
 };
 
@@ -271,8 +290,17 @@ export function checkTooltipArea(x, y) {
   const tolerance = 5; // Допустимое отклонение в процентах
   
   // Определяем тип устройства
+  const isMobile = window.innerWidth <= 768;
   const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
-  const deviceType = isTablet ? 'tablet' : 'desktop';
+  
+  let deviceType;
+  if (isMobile) {
+    deviceType = 'mobile';
+  } else if (isTablet) {
+    deviceType = 'tablet';
+  } else {
+    deviceType = 'desktop';
+  }
   
   for (const [key, coords] of Object.entries(tooltipPoints)) {
     const deviceCoords = coords[deviceType] || coords.desktop; // fallback к desktop

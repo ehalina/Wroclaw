@@ -236,7 +236,7 @@ const mapStyles = `
         color: white;
         padding: 8px 12px;
         border-radius: 4px;
-        font-size: 14px;
+        font-size: 16px;
         pointer-events: none;
         z-index: 1001;
     }
@@ -334,19 +334,19 @@ const mapStyles = `
         #close-map-modal {
             top: 10px;
             right: 10px;
-            font-size: 24px;
+            font-size: 28px;
             position: fixed;
             z-index: 2010;
         }
 
         #toggle-tooltips {
             top: 10px;
-            right: 50px;
-            font-size: 20px;
+            right: 60px;
+            font-size: 24px;
             position: fixed;
             z-index: 2010;
-            width: 36px;
-            height: 36px;
+            width: 42px;
+            height: 42px;
         }
     }
 
@@ -417,15 +417,15 @@ const mapStyles = `
         #close-map-modal {
             top: 8px;
             right: 8px;
-            font-size: 20px;
+            font-size: 24px;
         }
 
         #toggle-tooltips {
             top: 8px;
-            right: 44px;
-            font-size: 18px;
-            width: 32px;
-            height: 32px;
+            right: 54px;
+            font-size: 22px;
+            width: 38px;
+            height: 38px;
         }
     }
 
@@ -1253,6 +1253,12 @@ const MapModal = {
         openMapBtn.addEventListener('click', async function(e) {
             e.preventDefault();
             mapModal.style.display = 'flex';
+            
+            // Отключаем language-menu при открытии модалки карты
+            if (window.LanguageMenu && typeof window.LanguageMenu.disableMenu === 'function') {
+                window.LanguageMenu.disableMenu();
+            }
+            
             // Проверяем глобальный mute
             const soundMenuBtn = document.querySelector('.sound-menu-button');
             const isMuted = soundMenuBtn && soundMenuBtn.classList.contains('muted');
@@ -2048,6 +2054,12 @@ const MapModal = {
 
         closeMapBtn.addEventListener('click', function() {
             mapModal.style.display = 'none';
+            
+            // Включаем language-menu при закрытии модалки карты
+            if (window.LanguageMenu && typeof window.LanguageMenu.enableMenu === 'function') {
+                window.LanguageMenu.enableMenu();
+            }
+            
             // Останавливаем звук карты
             const mapSound = document.getElementById('mapSound');
             if (mapSound) mapSound.pause();
@@ -2084,6 +2096,12 @@ const MapModal = {
         mapModal.addEventListener('click', function(e) {
             if (e.target === mapModal) {
                 mapModal.style.display = 'none';
+                
+                // Включаем language-menu при закрытии модалки карты
+                if (window.LanguageMenu && typeof window.LanguageMenu.enableMenu === 'function') {
+                    window.LanguageMenu.enableMenu();
+                }
+                
                 // Останавливаем звук карты
                 const mapSound = document.getElementById('mapSound');
                 if (mapSound) mapSound.pause();
@@ -2301,7 +2319,15 @@ const MapModal = {
                 tooltip.style.position = 'absolute';
                 
                 // Получаем координаты для текущего типа устройства
-                const deviceCoords = isTablet ? (coords.tablet || coords.desktop) : coords.desktop;
+                const isMobile = window.innerWidth <= 768;
+                let deviceCoords;
+                if (isMobile) {
+                    deviceCoords = coords.mobile || coords.desktop;
+                } else if (isTablet) {
+                    deviceCoords = coords.tablet || coords.desktop;
+                } else {
+                    deviceCoords = coords.desktop;
+                }
                 
                 // Пересчитываем координаты относительно реального размера карты
                 const xPercent = deviceCoords.x / 100;
@@ -2332,7 +2358,7 @@ const MapModal = {
                 } else {
                     // Для мобильных устройств используем размеры изображения
                     xPos = mapImage.offsetWidth * xPercent;
-                    yPos = (mapImage.offsetHeight * yPercent); // Опускаем подсказки на 25px ниже
+                    yPos = mapImage.offsetHeight * yPercent; // Убираем фиксированное смещение
                 }
                 
                 tooltip.style.left = `${xPos}px`;
@@ -2420,7 +2446,7 @@ const MapModal = {
             } else {
                 // Для мобильных устройств используем размеры изображения
                 xPos = mapImage.offsetWidth * xPercent;
-                yPos = (mapImage.offsetHeight * yPercent) + 25; // Опускаем подсказки на 25px ниже
+                yPos = mapImage.offsetHeight * yPercent; // Убираем фиксированное смещение
             }
             
             tooltip.style.left = `${xPos}px`;
