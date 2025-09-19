@@ -109,7 +109,13 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
                 key={location.id}
                 location={location}
                 isActive={location.id === currentLocationId}
-                onClick={() => onLocationSelect(location.id)}
+                onClick={() => {
+                  onLocationSelect(location.id);
+                  // Небольшая задержка для визуальной обратной связи
+                  setTimeout(() => {
+                    onClose();
+                  }, 300);
+                }}
                 className="absolute transform -translate-x-1/2 -translate-y-1/2"
                 style={{
                   left: `${location.coordinates[0]}%`,

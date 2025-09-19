@@ -1,252 +1,116 @@
-import React, { useState, useEffect } from 'react';
-import { InteractiveMap } from '@/components/InteractiveMap';
-import { FloatingPanel } from '@/components/FloatingPanel';
-import { MusicPlayer } from '@/components/MusicPlayer';
-import { NavigationArrows } from '@/components/NavigationArrows';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import { LanguageSelector } from '@/components/LanguageSelector';
-import { LocationModal } from '@/components/LocationModal';
-import useAppStore from '@/store/appStore';
-import { getLocationById, getLocationContent, audioTracks } from '@/data/locations';
-import tumskiPanorama from '@/assets/tumski-panorama.jpg';
-import cathedralInterior from '@/assets/cathedral-interior.jpg';
-import tumskiBridge from '@/assets/tumski-bridge.jpg';
+import { ParallaxBackground } from '@/components/ParallaxBackground';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const Index = () => {
-  const {
-    currentLocation,
-    language,
-    musicEnabled,
-    currentTrack,
-    isPlaying,
-    isMapOpen,
-    isMenuOpen,
-    selectedLocationForModal,
-    setCurrentLocation,
-    setLanguage,
-    toggleMusic,
-    setCurrentTrack,
-    setIsPlaying,
-    setMapOpen,
-    setMenuOpen,
-    setSelectedLocationForModal,
-  } = useAppStore();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentBgImage, setCurrentBgImage] = useState(tumskiPanorama);
-
-  // Initialize PWA
-  useEffect(() => {
-    // Register service worker
-    if ('serviceWorker' in navigator && 'PushManager' in window) {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then((registration) => {
-          console.log('SW registered: ', registration);
-        })
-        .catch((registrationError) => {
-          console.log('SW registration failed: ', registrationError);
-        });
-    }
-
-    // Handle PWA install prompt
-    let deferredPrompt: any;
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
-      deferredPrompt = e;
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
-    // Load saved language
-    const savedLanguage = localStorage.getItem('tumski-language');
-    if (savedLanguage) {
-      setLanguage(savedLanguage);
-    }
-
-    setIsLoading(false);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    };
-  }, [setLanguage]);
-
-  // Update background image and music based on current location
-  useEffect(() => {
-    const location = getLocationById(currentLocation);
-    if (location) {
-      // Set background image based on location
-      switch (currentLocation) {
-        case 'cathedral-john':
-        case 'cathedral-cross':
-          setCurrentBgImage(cathedralInterior);
-          break;
-        case 'tumski-bridge':
-          setCurrentBgImage(tumskiBridge);
-          break;
-        default:
-          setCurrentBgImage(tumskiPanorama);
-      }
-
-      // Set music track based on location
-      if (location.audioTrack) {
-        setCurrentTrack(location.audioTrack);
-      }
-    }
-  }, [currentLocation, setCurrentTrack]);
-
-  const handleLocationSelect = (locationId: string) => {
-    setCurrentLocation(locationId);
-    setMapOpen(false);
+  const startTour = () => {
+    navigate('/tour/tumski01');
   };
-
-  const handleGeomarkerClick = (locationId: string) => {
-    const content = getLocationContent(locationId, language);
-    if (content) {
-      setSelectedLocationForModal(locationId);
-    }
-  };
-
-  const handleNavigation = (direction: 'prev' | 'next' | 'up') => {
-    const location = getLocationById(currentLocation);
-    if (!location) return;
-
-    if (direction === 'up') {
-      setMapOpen(true);
-      return;
-    }
-
-    if (location.nextLocations && location.nextLocations.length > 0) {
-      const nextLocation = direction === 'next' 
-        ? location.nextLocations[0] 
-        : location.nextLocations[location.nextLocations.length - 1];
-      setCurrentLocation(nextLocation);
-    }
-  };
-
-  const currentLocationData = getLocationById(currentLocation);
-  const selectedLocationContent = selectedLocationForModal 
-    ? getLocationContent(selectedLocationForModal, language) 
-    : null;
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <div className="text-center space-y-4">
-          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <h2 className="text-xl font-medieval text-primary">
-            Загружаем виртуальную экскурсию...
-          </h2>
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <div className="relative w-full h-screen h-dvh overflow-hidden">
-      {/* Background Panorama */}
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-out"
-        style={{ 
-          backgroundImage: `url(${currentBgImage})`,
-          backgroundPosition: 'center center',
-        }}
-      >
-        {/* Overlay gradient for better UI visibility */}
-        <div className="absolute inset-0 bg-gradient-mystic opacity-30"></div>
-        <div className="absolute inset-0 bg-gradient-overlay"></div>
-      </div>
-
-      {/* Interactive Map Overlay */}
-      <div className="absolute inset-0">
-        <InteractiveMap
-          isOpen={isMapOpen}
-          onClose={() => setMapOpen(false)}
-          currentLocationId={currentLocation}
-          onLocationSelect={handleLocationSelect}
-          backgroundImage={currentBgImage}
-        />
-      </div>
-
-      {/* Geomarkers for current view */}
-      {!isMapOpen && currentLocationData && (
-        <div className="absolute inset-0">
-          {/* Add geomarkers based on current location */}
-          {/* This would be populated based on the current panorama view */}
-        </div>
-      )}
-
-      {/* Navigation Arrows */}
-      <NavigationArrows
-        showPrevious={currentLocationData?.nextLocations && currentLocationData.nextLocations.length > 1}
-        showNext={currentLocationData?.nextLocations && currentLocationData.nextLocations.length > 0}
-        showUp={currentLocation !== 'tumski'}
-        onPrevious={() => handleNavigation('prev')}
-        onNext={() => handleNavigation('next')}
-        onUp={() => handleNavigation('up')}
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      {/* Background image with parallax */}
+      <ParallaxBackground
+        imageUrl="/images/panoramas/tumski_01.jpg"
+        alt="Tumski Island Panorama"
+        intensity={0.4}
+        direction="both"
+        speed={1.5}
+        enabled={true}
+        overlay={true}
+        overlayOpacity={0.5}
+        layers={3}
+        zoomEffect={true}
+        zoomDuration={10000}
+        zoomAmount={0.1}
+        className="absolute inset-0"
       />
-
-      {/* Music Player */}
-      <div className="absolute top-4 right-4 z-30">
-        <MusicPlayer
-          currentTrack={currentTrack as keyof typeof audioTracks}
-          autoPlay={musicEnabled}
-        />
-      </div>
 
       {/* Language Selector */}
-      <div className="absolute top-4 left-4 z-30">
-        <LanguageSelector
-          currentLanguage={language}
-          onLanguageChange={setLanguage}
-          variant="compact"
-        />
+      <div className="absolute top-4 right-4 z-10">
+        <LanguageSelector variant="compact" />
       </div>
 
-      {/* Location Title */}
-      {currentLocationData && !isMapOpen && (
-        <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 text-center animate-fade-in-up">
-          <h1 className="text-4xl md:text-6xl font-medieval text-primary mb-4 drop-shadow-lg">
-            {currentLocationData.name}
-          </h1>
-          <div className="glass rounded-lg px-6 py-3 max-w-md">
-            <p className="text-foreground/90 text-sm md:text-base leading-relaxed">
-              {getLocationContent(currentLocation, language)?.zones.zone1?.text.substring(0, 120)}...
-            </p>
-          </div>
+      {/* Main Content */}
+      <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
+        <h1 className="text-5xl md:text-7xl font-bold mb-6 drop-shadow-2xl animate-fade-in-up animate-text-glow">
+          Wrocław
+        </h1>
+
+        <h2 className="text-2xl md:text-4xl font-light mb-8 opacity-90 animate-fade-in-up animate-delay-200">
+          Tumski Island Virtual Tour
+        </h2>
+
+        <p className="text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed opacity-80 animate-fade-in-up animate-delay-300">
+          Embark on an interactive journey through the historic heart of Wrocław.
+          Explore Tumski Island's ancient courtyards, magnificent cathedrals, and serene gardens.
+        </p>
+
+        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-bounce-in animate-delay-500">
+          <Button
+            onClick={startTour}
+            size="lg"
+            className="px-8 py-4 text-lg bg-primary hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 shadow-2xl hover-glow animate-shimmer"
+          >
+            Begin Virtual Tour
+          </Button>
+
+          <Button
+            variant="outline"
+            size="lg"
+            onClick={() => navigate('/tour/tumski19')} // Cathedral
+            className="px-8 py-4 text-lg border-white/30 text-white hover:bg-white/10 transition-all duration-300 hover-lift"
+          >
+            Visit Cathedral
+          </Button>
         </div>
-      )}
 
-      {/* Floating Control Panel */}
-      <FloatingPanel
-        onMapToggle={() => setMapOpen(!isMapOpen)}
-        onLanguageChange={() => {}} // Handled by language selector
-        onMusicToggle={toggleMusic}
-        onMenuToggle={() => setMenuOpen(!isMenuOpen)}
-        onQuestToggle={() => {}} // TODO: Implement quest system
-        isMusicPlaying={isPlaying}
-      />
+        {/* Features */}
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <Card className="glass border-white/20 backdrop-blur-md">
+            <CardHeader>
+              <CardTitle className="text-white">🏰 Historic Sites</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="text-gray-200">
+                Explore 24 unique panoramic views of Tumski Island's most significant locations.
+              </CardDescription>
+            </CardContent>
+          </Card>
 
-      {/* Location Modal */}
-      {selectedLocationForModal && selectedLocationContent && (
-        <LocationModal
-          isOpen={true}
-          onClose={() => setSelectedLocationForModal(null)}
-          title={currentLocationData?.name || ''}
-          content={selectedLocationContent}
-        />
-      )}
+          <Card className="glass border-white/20 backdrop-blur-md">
+            <CardHeader>
+              <CardTitle className="text-white">🎵 Immersive Audio</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="text-gray-200">
+                Experience contextual background music that changes based on your location.
+              </CardDescription>
+            </CardContent>
+          </Card>
 
-      {/* Loading indicator for PWA */}
-      <div className="absolute bottom-2 left-2 z-10">
-        <div className="text-xs text-muted-foreground/50">
-          PWA Ready • Offline Support
+          <Card className="glass border-white/20 backdrop-blur-md">
+            <CardHeader>
+              <CardTitle className="text-white">🌍 Multilingual</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="text-gray-200">
+                Available in 7 languages including Russian, English, German, and Polish.
+              </CardDescription>
+            </CardContent>
+          </Card>
         </div>
-      </div>
 
-      {/* Version info */}
-      <div className="absolute bottom-2 right-2 z-10">
-        <div className="text-xs text-muted-foreground/50">
-          v1.0.0 • Tumski Island Virtual Tour
+        {/* PWA Notice */}
+        <div className="mt-12 text-sm opacity-60">
+          <p>📱 Install this app on your device for the best experience</p>
         </div>
       </div>
     </div>

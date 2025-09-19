@@ -4,15 +4,60 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a virtual tour application of Wrocław's Tumski Island, built as an interactive Single Page Application (SPA) with multi-language support. The project features a complex navigation system with geomarkers, panoramic views, and contextual background music.
+This is a virtual tour application of Wrocław's Tumski Island. The project is currently being migrated from a vanilla JavaScript SPA to a modern React + TypeScript + Vite PWA application.
 
-## Architecture
+### Current Migration Status
+🚧 **MIGRATION IN PROGRESS** 🚧
 
-### Core Principles
-- **Universal Handler**: `tumski_cathedral_handler.js` remains universal and works across all HTML files - **NEVER modify this file**
-- **Page-specific Initialization**: Each page has its own initialization file that passes only the required geomarkers
-- **Modular Structure**: Uses ES6 modules for separation of concerns
-- **Backward Compatibility**: Changes must not break existing functionality
+- **Legacy codebase**: Vanilla JS with iframe-based SPA (root directory)
+- **New codebase**: React + TypeScript + Vite PWA (v2/ directory)
+- **Migration plan**: See MIGRATION_PLAN.md for detailed roadmap
+
+### Project Structure
+```
+/                    # Legacy vanilla JS application
+v2/                  # New React + TypeScript + Vite application
+MIGRATION_PLAN.md    # Detailed migration roadmap
+```
+
+The new application features:
+- React 18 + TypeScript for type safety
+- Vite for fast development and building
+- PWA capabilities for mobile app-like experience
+- ShadCN/UI components for consistent design
+- Zustand for state management
+- Multi-language support with i18next
+- Fullscreen panoramic experiences
+- Interactive geomarker system
+
+## Development Focus
+
+### Working on v2/ (New React App)
+When working on the new React application in v2/:
+
+#### Key Technologies
+- **React 18 + TypeScript**: Modern component-based architecture
+- **Vite**: Fast development server and optimized builds
+- **ShadCN/UI**: Pre-built accessible components
+- **Zustand**: Lightweight state management
+- **React Router**: Client-side routing
+- **PWA**: Service worker, manifest, offline capabilities
+
+#### Development Commands
+```bash
+cd v2/
+npm run dev        # Start development server
+npm run build      # Build for production
+npm run preview    # Preview production build
+npm run lint       # Run ESLint
+```
+
+### Legacy Architecture (Reference Only)
+The legacy vanilla JS application uses:
+- **Universal Handler**: `tumski_cathedral_handler.js` - reference for migration
+- **Page-specific Initialization**: Individual HTML pages with specific geomarkers
+- **Modular Structure**: ES6 modules
+- **iframe-based SPA**: For page isolation
 
 ### File Structure
 ```

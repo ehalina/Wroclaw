@@ -24,90 +24,118 @@ export interface LocationContent {
 }
 
 // Main locations on Tumski Island
-export const locations: Location[] = [
-  {
-    id: 'tumski',
-    name: 'Тумский остров',
-    coordinates: [50, 50],
-    type: 'main',
-    audioTrack: 'town',
-    nextLocations: ['cathedral-john', 'cathedral-cross', 'tumski-bridge'],
-    hasQuest: false,
-  },
-  {
-    id: 'cathedral-john',
-    name: 'Собор Святого Иоанна Крестителя',
-    coordinates: [35, 40],
-    type: 'cathedral',
-    audioTrack: 'kostel',
-    nextLocations: ['tumski', 'cathedral-cross'],
-    hasQuest: true,
-  },
-  {
-    id: 'cathedral-cross',
-    name: 'Соборная церковь Святого Креста',
-    coordinates: [65, 35],
-    type: 'cathedral',
-    audioTrack: 'kostel',
-    nextLocations: ['tumski', 'cathedral-john'],
-    hasQuest: false,
-  },
-  {
-    id: 'tumski-bridge',
-    name: 'Тумский мост',
-    coordinates: [20, 70],
-    type: 'main',
-    audioTrack: 'town',
-    nextLocations: ['tumski'],
-    hasQuest: false,
-  },
-  {
-    id: 'jadwiga',
-    name: 'Святая Ядвига',
-    coordinates: [80, 60],
-    type: 'main',
-    audioTrack: 'quest',
-    nextLocations: ['tumski'],
-    hasQuest: true,
-  },
-];
+export const locations: Location[] = [];
+
+// Generate all Tumski locations based on available images
+const tumskiLocationNames = {
+  1: 'Тумский остров - Главный вход',
+  2: 'Тумский остров - Площадь',
+  3: 'Тумский остров - Прогулочная зона',
+  4: 'Тумский остров - Вид на собор',
+  5: 'Тумский остров - Садовая аллея',
+  6: 'Тумский остров - Исторический центр',
+  7: 'Тумский остров - Набережная',
+  8: 'Тумский остров - Парковая зона',
+  9: 'Тумский остров - Мемориальный комплекс',
+  10: 'Тумский остров - Смотровая площадка',
+  11: 'Тумский остров - Старинные здания',
+  12: 'Тумский остров - Культурный центр',
+  13: 'Тумский остров - Археологические раскопки',
+  14: 'Тумский остров - Библиотечный сад',
+  15: 'Тумский остров - Духовный центр',
+  16: 'Тумский остров - Архитектурный ансамбль',
+  17: 'Тумский остров - Историческая экспозиция',
+  18: 'Тумский остров - Панорамный вид',
+  19: 'Собор Святого Иоанна Крестителя',
+  20: 'Тумский остров - Закатная панорама',
+  22: 'Тумский остров - Северная часть',
+  23: 'Тумский остров - Восточная набережная',
+  24: 'Тумский остров - Южная площадь',
+};
+
+// Generate tumski locations
+for (let i = 1; i <= 24; i++) {
+  if (i === 21) continue; // Skip missing tumski_21.jpg
+
+  const id = `tumski${i.toString().padStart(2, '0')}`;
+  locations.push({
+    id,
+    name: tumskiLocationNames[i as keyof typeof tumskiLocationNames] || `Тумский остров ${i}`,
+    coordinates: [20 + (i * 7) % 60, 20 + (i * 11) % 60],
+    type: i === 19 ? 'cathedral' : 'main',
+    audioTrack: i === 19 ? 'kostel' : (i === 21 ? 'hang' : 'town'),
+    nextLocations: i === 1 ? ['tumski02', 'tumski03'] : i === 24 ? ['tumski23', 'tumski01'] : [`tumski${(i-1).toString().padStart(2, '0')}`, `tumski${(i+1).toString().padStart(2, '0')}`],
+    hasQuest: [1, 19].includes(i),
+  });
+}
 
 // Generate dwor locations (courtyards)
+const dworNames = {
+  1: 'Двор мастеров',
+  2: 'Двор торговцев',
+  3: 'Двор священников',
+  4: 'Двор ремесленников',
+  5: 'Двор стражников',
+  6: 'Двор музыкантов',
+  7: 'Двор писцов',
+  8: 'Двор лекарей',
+  9: 'Двор садоводов',
+  10: 'Двор поваров',
+  11: 'Двор строителей',
+  12: 'Двор художников',
+  13: 'Двор паломников',
+};
+
 for (let i = 1; i <= 13; i++) {
   const id = `dwor${i.toString().padStart(2, '0')}`;
   locations.push({
     id,
-    name: `Двор ${i}`,
-    coordinates: [20 + (i * 5) % 80, 30 + (i * 7) % 60],
+    name: dworNames[i as keyof typeof dworNames] || `Двор ${i}`,
+    coordinates: [25 + (i * 6) % 50, 25 + (i * 8) % 50],
     type: 'dwor',
     audioTrack: 'town',
-    nextLocations: ['tumski'],
+    nextLocations: ['tumski01'],
     hasQuest: false,
   });
 }
 
 // Generate ogrod locations (gardens)
+const ogrodNames = {
+  2: 'Сад роз',
+  3: 'Сад трав',
+  4: 'Сад фруктов',
+  5: 'Сад цветов',
+  6: 'Сад овощей',
+  7: 'Сад лекарственных растений',
+  8: 'Сад специй',
+  9: 'Сад медитации',
+  12: 'Сад воспоминаний',
+  13: 'Сад молитв',
+};
+
 for (let i = 2; i <= 13; i++) {
+  if (![2,3,4,5,6,7,8,9,12,13].includes(i)) continue; // Only available images
+
   const id = `ogrod${i.toString().padStart(2, '0')}`;
   locations.push({
     id,
-    name: `Сад ${i}`,
-    coordinates: [30 + (i * 6) % 70, 40 + (i * 8) % 50],
+    name: ogrodNames[i as keyof typeof ogrodNames] || `Сад ${i}`,
+    coordinates: [30 + (i * 7) % 40, 35 + (i * 9) % 40],
     type: 'ogrod',
     audioTrack: 'birds',
-    nextLocations: ['tumski'],
+    nextLocations: ['tumski01'],
     hasQuest: false,
   });
 }
 
-// Special location for hang music
+// Special location for hang music (tumski21 doesn't exist, but we can use a substitute)
 locations.push({
-  id: 'tumski21',
+  id: 'secret-place',
   name: 'Тайное место',
   coordinates: [90, 10],
   type: 'main',
   audioTrack: 'hang',
-  nextLocations: ['tumski'],
+  nextLocations: ['tumski01'],
   hasQuest: true,
 });
 

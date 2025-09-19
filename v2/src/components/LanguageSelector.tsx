@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Globe, Check } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -26,28 +27,24 @@ const languages: Language[] = [
 ];
 
 interface LanguageSelectorProps {
-  currentLanguage: string;
-  onLanguageChange: (language: string) => void;
   variant?: 'compact' | 'full';
   className?: string;
 }
 
 export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
-  currentLanguage,
-  onLanguageChange,
   variant = 'compact',
   className,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  
-  const currentLang = languages.find(lang => lang.code === currentLanguage) || languages[0];
+  const { i18n } = useTranslation();
+
+  const currentLang = languages.find(lang => lang.code === i18n.language) || languages[0];
 
   const handleLanguageSelect = (languageCode: string) => {
-    onLanguageChange(languageCode);
+    i18n.changeLanguage(languageCode);
     setIsOpen(false);
-    
-    // Save to localStorage
-    localStorage.setItem('tumski-language', languageCode);
+
+    // Save to localStorage (i18next handles this automatically)
   };
 
   if (variant === 'compact') {
@@ -78,7 +75,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
               className={`
                 flex items-center gap-3 px-3 py-2 cursor-pointer rounded-md
                 hover:bg-primary/20 transition-colors duration-200
-                ${currentLanguage === language.code ? 'bg-primary/10' : ''}
+                ${i18n.language === language.code ? 'bg-primary/10' : ''}
               `}
             >
               <span className="text-lg">{language.flag}</span>
@@ -90,7 +87,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                   {language.name}
                 </div>
               </div>
-              {currentLanguage === language.code && (
+              {i18n.language === language.code && (
                 <Check className="w-4 h-4 text-primary" />
               )}
             </DropdownMenuItem>
@@ -110,12 +107,12 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
         {languages.map((language) => (
           <Button
             key={language.code}
-            variant={currentLanguage === language.code ? 'default' : 'ghost'}
+            variant={i18n.language === language.code ? 'default' : 'ghost'}
             onClick={() => handleLanguageSelect(language.code)}
             className={`
               flex items-center gap-3 justify-start h-auto p-3 rounded-lg
               transition-all duration-200 hover:scale-[1.02]
-              ${currentLanguage === language.code ? 'bg-primary text-background' : 'hover:bg-primary/10'}
+              ${i18n.language === language.code ? 'bg-primary text-background' : 'hover:bg-primary/10'}
             `}
           >
             <span className="text-xl">{language.flag}</span>
@@ -127,7 +124,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                 {language.name}
               </div>
             </div>
-            {currentLanguage === language.code && (
+            {i18n.language === language.code && (
               <Check className="w-5 h-5" />
             )}
           </Button>
