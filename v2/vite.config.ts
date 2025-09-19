@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from 'vite-plugin-pwa';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -13,6 +14,13 @@ export default defineConfig(({ mode }) => ({
   plugins: [
     react(),
     mode === "development" && componentTagger(),
+    // Bundle analyzer для анализа размера бандла
+    mode === "production" && visualizer({
+      filename: 'dist/stats.html',
+      open: true,
+      gzipSize: true,
+      brotliSize: true,
+    }),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'maskable-icon.png'],
@@ -145,5 +153,40 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  build: {
+    // Оптимизация сборки
+    target: 'esnext',
+    minify: 'esbuild',
+    sourcemap: mode === 'development',
+    rollupOptions: {
+      output: {
+        // Разделение кода на чанки
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          ui: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu', '@radix-ui/react-slider'],
+          i18n: ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
+          audio: ['zustand'],
+        },
+        // Оптимизация имен файлов
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]',
+      },
+    },
+    // Увеличиваем лимит для больших изображений
+    chunkSizeWarningLimit: 1000,
+  },
+  // Оптимизация зависимостей
+  optimizeDeps: {
+    include: [
+      'react',
+      'react-dom',
+      'react-router-dom',
+      'i18next',
+      'react-i18next',
+      'zustand',
+    ],
+    exclude: ['@radix-ui/react-dialog', '@radix-ui/react-dropdown-menu'],
   },
 }));

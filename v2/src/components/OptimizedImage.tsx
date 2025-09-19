@@ -1,272 +1,223 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 
 interface OptimizedImageProps {
   src: string;
   alt: string;
   className?: string;
+  style?: React.CSSProperties;
+  priority?: boolean;
+  quality?: number;
+  sizes?: string;
   onLoad?: () => void;
   onError?: () => void;
-  priority?: boolean; // For above-the-fold images
-  placeholder?: string; // Base64 or small placeholder image
-  sizes?: string; // Responsive sizes
-  quality?: number; // Image quality (for future WebP conversion)
-  loading?: 'lazy' | 'eager';
-  draggable?: boolean;
-  style?: React.CSSProperties;
+  placeholder?: 'blur' | 'empty';
+  blurDataURL?: string;
 }
 
-interface ImageState {
-  loaded: boolean;
-  error: boolean;
-  inView: boolean;
-  currentSrc: string;
-}
+// Hook for image preloading
+export const useImagePreloader = () => {
+  const preloadedImages = useRef<Set<string>>(new Set());
+  const loadingImages = useRef<Set<string>>(new Set());
+
+  const preloadImage = useCallback((src: string): Promise<void> => {
+    if (preloadedImages.current.has(src)) {
+      return Promise.resolve();
+    }
+
+    if (loadingImages.current.has(src)) {
+      return new Promise((resolve) => {
+        const checkLoaded = () => {
+          if (preloadedImages.current.has(src)) {
+            resolve();
+          } else {
+            setTimeout(checkLoaded, 50);
+          }
+        };
+        checkLoaded();
+      });
+    }
+
+    loadingImages.current.add(src);
+
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        preloadedImages.current.add(src);
+        loadingImages.current.delete(src);
+        resolve();
+      };
+      img.onerror = () => {
+        loadingImages.current.delete(src);
+        reject(new Error(`Failed to load image: ${src}`));
+      };
+      img.src = src;
+    });
+  }, []);
+
+  const preloadImages = useCallback(async (srcs: string[]): Promise<void> => {
+    const promises = srcs.map(src => preloadImage(src).catch(console.warn));
+    await Promise.all(promises);
+  }, [preloadImage]);
+
+  const isImageLoaded = useCallback((src: string): boolean => {
+    return preloadedImages.current.has(src);
+  }, []);
+
+  return {
+    preloadImage,
+    preloadImages,
+    isImageLoaded,
+  };
+};
 
 export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   src,
   alt,
   className,
+  style,
+  priority = false,
+  quality = 85,
+  sizes = '100vw',
   onLoad,
   onError,
-  priority = false,
-  placeholder,
-  sizes,
-  quality = 80,
-  loading = 'lazy',
-  draggable = false,
-  style,
+  placeholder = 'blur',
+  blurDataURL,
 }) => {
-  const [state, setState] = useState<ImageState>({
-    loaded: false,
-    error: false,
-    inView: false,
-    currentSrc: placeholder || '',
-  });
-
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isInView, setIsInView] = useState(priority);
+  const [hasError, setHasError] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
   const observerRef = useRef<IntersectionObserver>();
 
-  // Generate optimized image sources
-  const getOptimizedSrc = useCallback((originalSrc: string, format?: 'webp' | 'avif') => {
-    // For now, return original src. Later we can add WebP conversion logic
-    if (format === 'webp') {
-      return originalSrc.replace(/\.(jpg|jpeg|png)$/i, `.webp`);
-    }
-    if (format === 'avif') {
-      return originalSrc.replace(/\.(jpg|jpeg|png)$/i, `.avif`);
-    }
-    return originalSrc;
-  }, []);
+  // Intersection Observer for lazy loading
+  useEffect(() => {
+    if (priority || isInView) return;
 
-  // Create responsive image sources
-  const createSrcSet = useCallback((baseSrc: string) => {
-    const sizes = [0.5, 1, 1.5, 2]; // Different pixel densities
-    return sizes
-      .map(scale => `${baseSrc} ${scale}x`)
-      .join(', ');
-  }, []);
+    const img = imgRef.current;
+    if (!img) return;
 
-  // Handle image loading
-  const handleImageLoad = useCallback(() => {
-    setState(prev => ({ ...prev, loaded: true, error: false }));
+    observerRef.current = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observerRef.current?.disconnect();
+        }
+      },
+      {
+        rootMargin: '50px', // Start loading 50px before image comes into view
+        threshold: 0.1,
+      }
+    );
+
+    observerRef.current.observe(img);
+
+    return () => {
+      observerRef.current?.disconnect();
+    };
+  }, [priority, isInView]);
+
+  // Handle image load
+  const handleLoad = useCallback(() => {
+    setIsLoaded(true);
     onLoad?.();
   }, [onLoad]);
 
   // Handle image error
-  const handleImageError = useCallback(() => {
-    setState(prev => ({ ...prev, error: true, loaded: false }));
+  const handleError = useCallback(() => {
+    setHasError(true);
     onError?.();
   }, [onError]);
 
-  // Intersection Observer for lazy loading
-  useEffect(() => {
-    if (priority || loading === 'eager') {
-      setState(prev => ({ ...prev, inView: true, currentSrc: src }));
-      return;
-    }
+  // Generate optimized src with quality parameter
+  const getOptimizedSrc = useCallback((originalSrc: string) => {
+    // For now, return original src
+    // In production, you might want to use a service like Cloudinary or Next.js Image Optimization
+    return originalSrc;
+  }, []);
 
-    const currentImg = imgRef.current;
-    if (!currentImg) return;
-
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !state.inView) {
-            setState(prev => ({
-              ...prev,
-              inView: true,
-              currentSrc: src
-            }));
-            observerRef.current?.unobserve(entry.target);
-          }
-        });
-      },
-      {
-        rootMargin: '50px', // Load images 50px before they come into view
-        threshold: 0.1
-      }
-    );
-
-    observerRef.current.observe(currentImg);
-
-    return () => {
-      if (observerRef.current && currentImg) {
-        observerRef.current.unobserve(currentImg);
-      }
-    };
-  }, [src, priority, loading, state.inView]);
-
-  // Preload critical images
-  useEffect(() => {
-    if (priority && src) {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'image';
-      link.href = src;
-      if (sizes) link.setAttribute('imagesizes', sizes);
-      document.head.appendChild(link);
-
-      return () => {
-        document.head.removeChild(link);
-      };
-    }
-  }, [priority, src, sizes]);
+  const optimizedSrc = getOptimizedSrc(src);
 
   return (
-    <div className={cn('relative overflow-hidden', className)} style={style}>
-      {/* Placeholder or loading state */}
-      {(!state.loaded && !state.error) && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/10 animate-pulse">
-          <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
-        </div>
+    <div
+      ref={imgRef}
+      className={cn('relative overflow-hidden', className)}
+      style={style}
+    >
+      {/* Blur placeholder */}
+      {placeholder === 'blur' && !isLoaded && !hasError && (
+        <div
+          className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 animate-pulse"
+          style={{
+            backgroundImage: blurDataURL ? `url(${blurDataURL})` : undefined,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            filter: 'blur(20px)',
+          }}
+        />
+      )}
+
+      {/* Loading skeleton */}
+      {!isLoaded && !hasError && (
+        <div className="absolute inset-0 bg-gray-200 animate-pulse" />
+      )}
+
+      {/* Actual image */}
+      {isInView && (
+        <img
+          src={optimizedSrc}
+          alt={alt}
+          className={cn(
+            'w-full h-full object-cover transition-opacity duration-300',
+            isLoaded ? 'opacity-100' : 'opacity-0'
+          )}
+          onLoad={handleLoad}
+          onError={handleError}
+          loading={priority ? 'eager' : 'lazy'}
+          decoding="async"
+          sizes={sizes}
+        />
       )}
 
       {/* Error state */}
-      {state.error && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black/20 text-white/60 text-sm">
+      {hasError && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 text-gray-400">
           <div className="text-center">
-            <div className="mb-2">⚠️</div>
-            <div>Failed to load image</div>
+            <div className="text-4xl mb-2">🖼️</div>
+            <div className="text-sm">Ошибка загрузки</div>
           </div>
         </div>
-      )}
-
-      {/* Main image with modern format support */}
-      <picture>
-        {/* WebP format for supported browsers */}
-        <source
-          srcSet={state.inView ? getOptimizedSrc(src, 'webp') : undefined}
-          type="image/webp"
-          sizes={sizes}
-        />
-
-        {/* AVIF format for supported browsers */}
-        <source
-          srcSet={state.inView ? getOptimizedSrc(src, 'avif') : undefined}
-          type="image/avif"
-          sizes={sizes}
-        />
-
-        {/* Fallback to original format */}
-        <img
-          ref={imgRef}
-          src={state.currentSrc || src}
-          srcSet={state.inView ? createSrcSet(src) : undefined}
-          alt={alt}
-          onLoad={handleImageLoad}
-          onError={handleImageError}
-          loading={loading}
-          draggable={draggable}
-          sizes={sizes}
-          className={cn(
-            'w-full h-full object-cover transition-opacity duration-500',
-            state.loaded ? 'opacity-100' : 'opacity-0',
-            state.error && 'opacity-50'
-          )}
-          style={{
-            imageRendering: quality < 50 ? 'pixelated' : 'auto',
-          }}
-        />
-      </picture>
-
-      {/* Loading shimmer effect */}
-      {!state.loaded && !state.error && (
-        <div className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
       )}
     </div>
   );
 };
 
-// Hook for image preloading
-export const useImagePreloader = () => {
-  const preloadedImages = useRef(new Set<string>());
+// Hook for preloading nearby images
+export const useNearbyImagePreloader = (currentLocationId: string, locations: any[]) => {
+  const { preloadImages } = useImagePreloader();
 
-  const preloadImage = useCallback((src: string): Promise<void> => {
-    return new Promise((resolve, reject) => {
-      if (preloadedImages.current.has(src)) {
-        resolve();
-        return;
+  useEffect(() => {
+    // Find connected locations
+    const currentLocation = locations.find(loc => loc.id === currentLocationId);
+    if (!currentLocation?.nextLocations) return;
+
+    // Build image paths for nearby locations
+    const nearbyImagePaths = currentLocation.nextLocations.map((locationId: string) => {
+      if (locationId.startsWith('tumski')) {
+        return `/images/panoramas/tumski_${locationId.replace('tumski', '').padStart(2, '0')}.jpg`;
       }
-
-      const img = new Image();
-      img.onload = () => {
-        preloadedImages.current.add(src);
-        resolve();
-      };
-      img.onerror = reject;
-      img.src = src;
-    });
-  }, []);
-
-  const preloadImages = useCallback(async (srcs: string[]) => {
-    try {
-      await Promise.all(srcs.map(preloadImage));
-    } catch (error) {
-      console.warn('Some images failed to preload:', error);
-    }
-  }, [preloadImage]);
-
-  return { preloadImage, preloadImages, preloadedImages: preloadedImages.current };
-};
-
-// Cache management
-export const imageCache = {
-  cache: new Map<string, HTMLImageElement>(),
-
-  get(src: string): HTMLImageElement | null {
-    return this.cache.get(src) || null;
-  },
-
-  set(src: string, img: HTMLImageElement): void {
-    // Limit cache size to prevent memory issues
-    if (this.cache.size > 50) {
-      const firstKey = this.cache.keys().next().value;
-      if (firstKey) {
-        this.cache.delete(firstKey);
+      if (locationId.startsWith('dwor')) {
+        return `/images/panoramas/dwor_${locationId.replace('dwor', '').padStart(2, '0')}.jpg`;
       }
+      if (locationId.startsWith('ogrod')) {
+        return `/images/panoramas/ogrud_${locationId.replace('ogrod', '').padStart(2, '0')}.jpg`;
+      }
+      return '';
+    }).filter(Boolean);
+
+    // Preload nearby images
+    if (nearbyImagePaths.length > 0) {
+      preloadImages(nearbyImagePaths);
     }
-    this.cache.set(src, img);
-  },
-
-  preload(src: string): Promise<HTMLImageElement> {
-    const cached = this.get(src);
-    if (cached) {
-      return Promise.resolve(cached);
-    }
-
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => {
-        this.set(src, img);
-        resolve(img);
-      };
-      img.onerror = reject;
-      img.src = src;
-    });
-  },
-
-  clear(): void {
-    this.cache.clear();
-  }
+  }, [currentLocationId, locations, preloadImages]);
 };

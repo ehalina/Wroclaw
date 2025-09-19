@@ -118,10 +118,12 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
                     onClose();
                   }, 300);
                 }}
-                className="absolute transform -translate-x-1/2 -translate-y-1/2"
+                className="absolute"
                 style={{
                   left: `${location.coordinates[0]}%`,
                   top: `${location.coordinates[1]}%`,
+                  transform: 'translate(-50%, -50%)', // Центрируем маркер
+                  zIndex: location.id === currentLocationId ? 10 : 5, // Активный маркер поверх
                 }}
               />
             ))}

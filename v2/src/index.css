@@ -205,10 +205,14 @@ All colors MUST be HSL.
     @apply relative cursor-pointer transition-all duration-150;
     transform-origin: center center;
     position: relative;
+    /* Предотвращаем смещение при hover */
+    will-change: transform;
+    backface-visibility: hidden;
+    /* Фиксируем позиционирование */
+    transform: translateZ(0);
   }
   
   .geomarker:hover {
-    transform: scale(1.02);
     filter: drop-shadow(var(--shadow-glow));
   }
   
@@ -743,6 +747,7 @@ All colors MUST be HSL.
   .parallax-optimized {
     contain: layout style paint;
     will-change: transform;
+    transform: translateZ(0); /* Force hardware acceleration */
   }
 
   .parallax-optimized * {
@@ -751,6 +756,26 @@ All colors MUST be HSL.
 
   .parallax-optimized:hover * {
     will-change: transform;
+  }
+
+  /* Оптимизация анимаций */
+  .animate-optimized {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
+
+  /* Отключение анимаций для пользователей с предпочтением уменьшенного движения */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 
   /* Zoom effect animations */

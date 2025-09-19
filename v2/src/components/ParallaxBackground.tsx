@@ -1,5 +1,6 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState, memo } from 'react';
 import { useParallax } from '@/hooks/useParallax';
+import { OptimizedImage } from './OptimizedImage';
 import { cn } from '@/lib/utils';
 
 interface ParallaxBackgroundProps {
@@ -20,7 +21,7 @@ interface ParallaxBackgroundProps {
   key?: string | number; // Добавляем key для принудительного перезапуска
 }
 
-export const ParallaxBackground: React.FC<ParallaxBackgroundProps> = ({
+export const ParallaxBackground: React.FC<ParallaxBackgroundProps> = memo(({
   children,
   className,
   imageUrl,
@@ -31,7 +32,7 @@ export const ParallaxBackground: React.FC<ParallaxBackgroundProps> = ({
   enabled = true,
   overlay = true,
   overlayOpacity = 0.3,
-  layers = 3,
+  layers = 2, // Уменьшаем количество слоев для производительности
   zoomEffect = true,
   zoomDuration = 10000, // 10 секунд
   zoomAmount = 0.1 // 10%
@@ -91,12 +92,12 @@ export const ParallaxBackground: React.FC<ParallaxBackgroundProps> = ({
         className
       )}
     >
-      {/* Parallax layers - фоновые слои с параллакс эффектом */}
+      {/* Parallax layers - фоновые слои с параллакс эффектом (оптимизировано) */}
       {Array.from({ length: layers }, (_, index) => {
         const transform = getTransform(index);
         const layerIntensity = (index + 1) / layers;
-        const baseScale = 1 + (layerIntensity * 0.1); // Slight scale increase for depth
-        const finalScale = baseScale * zoomScale; // Применяем эффект приближения
+        const baseScale = 1 + (layerIntensity * 0.05); // Уменьшаем масштаб для производительности
+        const finalScale = baseScale * zoomScale;
         
         return (
           <div
@@ -107,25 +108,26 @@ export const ParallaxBackground: React.FC<ParallaxBackgroundProps> = ({
               transformOrigin: 'center center',
               transition: enabled && isHovering ? 'none' : 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
               willChange: enabled ? 'transform' : 'auto',
-              zIndex: layers - index
+              zIndex: layers - index,
+              contain: 'layout style paint' // Оптимизация рендеринга
             }}
           >
-            <img
+            <OptimizedImage
               src={imageUrl}
               alt={`${alt} - Layer ${index + 1}`}
               className="w-full h-full object-cover select-none pointer-events-none"
-              draggable={false}
-              loading="eager"
+              priority={index === 0} // Только первый слой загружается с приоритетом
+              quality={index === 0 ? 90 : 70} // Разное качество для разных слоев
               style={{
-                filter: `blur(${index * 0.5}px) brightness(${1 - index * 0.1})`,
-                opacity: 1 - (index * 0.1)
+                filter: `blur(${index * 0.3}px) brightness(${1 - index * 0.05})`, // Уменьшаем эффекты
+                opacity: 1 - (index * 0.05)
               }}
             />
           </div>
         );
       })}
 
-      {/* Main background layer - основной фоновый слой с параллаксом */}
+      {/* Main background layer - основной фоновый слой с параллаксом (оптимизировано) */}
       <div
         className="absolute inset-0 w-full h-full"
         style={{
@@ -133,15 +135,16 @@ export const ParallaxBackground: React.FC<ParallaxBackgroundProps> = ({
           transformOrigin: 'center center',
           transition: enabled && isHovering ? 'none' : 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
           willChange: enabled ? 'transform' : 'auto',
-          zIndex: layers + 1
+          zIndex: layers + 1,
+          contain: 'layout style paint' // Оптимизация рендеринга
         }}
       >
-        <img
+        <OptimizedImage
           src={imageUrl}
           alt={alt}
           className="w-full h-full object-cover select-none pointer-events-none"
-          draggable={false}
-          loading="eager"
+          priority={true} // Главное изображение загружается с приоритетом
+          quality={95} // Высокое качество для основного изображения
         />
       </div>
 
@@ -171,4 +174,6 @@ export const ParallaxBackground: React.FC<ParallaxBackgroundProps> = ({
       )}
     </div>
   );
-};
+});
+
+ParallaxBackground.displayName = 'ParallaxBackground';

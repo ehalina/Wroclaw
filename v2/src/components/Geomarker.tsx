@@ -93,6 +93,8 @@ export const Geomarker: React.FC<GeomarkerProps> = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
+      // Добавляем стили для предотвращения смещения
+      onMouseDown={(e) => e.preventDefault()} // Предотвращаем выделение
     >
       {/* Main marker */}
       <div
@@ -101,7 +103,7 @@ export const Geomarker: React.FC<GeomarkerProps> = ({
           'flex items-center justify-center',
           getBgColor(),
           isActive && 'scale-125 animate-pulse-glow',
-          'hover:scale-110'
+          'hover:scale-105' // Уменьшаем масштаб для более плавного эффекта
         )}
       >
         <Icon 

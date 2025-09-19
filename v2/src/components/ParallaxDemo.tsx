@@ -7,7 +7,7 @@ const demoImages = [
   '/images/panoramas/tumski_02.jpg',
   '/images/panoramas/tumski_03.jpg',
   '/images/panoramas/dwor_01.jpg',
-  '/images/panoramas/ogrod_01.jpg'
+  '/images/panoramas/ogrud_02.jpg'
 ];
 
 export const ParallaxDemo: React.FC = () => {

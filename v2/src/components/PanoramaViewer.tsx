@@ -1,16 +1,18 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo, memo, Suspense, lazy } from 'react';
 import { Maximize2, Minimize2, RotateCcw, BookOpen, Map, Volume2, VolumeX } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Geomarker } from './Geomarker';
 // import { NavigationArrows } from './NavigationArrows'; // DISABLED
 import { LanguageSelector } from './LanguageSelector';
-import { QuestBook } from './QuestBook';
 import { ParallaxBackground } from './ParallaxBackground';
-import { OptimizedImage, useImagePreloader } from './OptimizedImage';
+import { OptimizedImage, useImagePreloader, useNearbyImagePreloader } from './OptimizedImage';
 import { locations, getLocationById, type Location } from '@/data/locations';
 import { useAudio } from '@/hooks/useAudio';
 import { cn } from '@/lib/utils';
+
+// Ленивая загрузка тяжелых компонентов
+const QuestBook = lazy(() => import('./QuestBook').then(module => ({ default: module.QuestBook })));
 
 interface PanoramaViewerProps {
   locationId: string;
@@ -25,7 +27,7 @@ interface Transform {
   translateY: number;
 }
 
-export const PanoramaViewer: React.FC<PanoramaViewerProps> = ({
+export const PanoramaViewer: React.FC<PanoramaViewerProps> = memo(({
   locationId,
   onLocationChange,
   onMapOpen,
@@ -53,6 +55,9 @@ export const PanoramaViewer: React.FC<PanoramaViewerProps> = ({
 
   const location = getLocationById(locationId);
   const { preloadImages } = useImagePreloader();
+  
+  // Предзагрузка соседних изображений
+  useNearbyImagePreloader(locationId, locations);
 
   // Build panorama image path by location id
   const buildPanoramaPath = useCallback((id: string): string => {
@@ -63,7 +68,7 @@ export const PanoramaViewer: React.FC<PanoramaViewerProps> = ({
       return `/images/panoramas/dwor_${id.replace('dwor', '').padStart(2, '0')}.jpg`;
     }
     if (id.startsWith('ogrod')) {
-      return `/images/panoramas/ogrod_${id.replace('ogrod', '').padStart(2, '0')}.jpg`;
+      return `/images/panoramas/ogrud_${id.replace('ogrod', '').padStart(2, '0')}.jpg`;
     }
     return `/images/panoramas/tumski_01.jpg`;
   }, []);
@@ -259,10 +264,12 @@ export const PanoramaViewer: React.FC<PanoramaViewerProps> = ({
     location.nextLocations?.includes(loc.id)
   );
 
-  // Preload nearby images for better performance
+  // Оптимизированная предзагрузка - только для ближайших локаций
   useEffect(() => {
-    const nearbyImagePaths = connectedLocations.map(loc => buildPanoramaPath(loc.id));
-    preloadImages(nearbyImagePaths);
+    if (connectedLocations.length <= 3) { // Предзагружаем только если мало соседних локаций
+      const nearbyImagePaths = connectedLocations.map(loc => buildPanoramaPath(loc.id));
+      preloadImages(nearbyImagePaths);
+    }
   }, [connectedLocations, preloadImages, buildPanoramaPath]);
 
   return (
@@ -309,11 +316,12 @@ export const PanoramaViewer: React.FC<PanoramaViewerProps> = ({
               key={connectedLocation.id}
               location={connectedLocation}
               onClick={() => onLocationChange(connectedLocation.id)}
+              className="absolute"
               style={{
-                position: 'absolute',
                 left: `${connectedLocation.coordinates[0]}%`,
                 top: `${connectedLocation.coordinates[1]}%`,
                 transform: 'translate(-50%, -50%)',
+                zIndex: 10, // Маркеры поверх изображения
               }}
             />
           ))}
@@ -482,12 +490,16 @@ export const PanoramaViewer: React.FC<PanoramaViewerProps> = ({
         </div>
       </div>
 
-      {/* Quest Book */}
-      <QuestBook
-        isOpen={isQuestOpen}
-        onClose={() => setIsQuestOpen(false)}
-        currentLocationId={locationId}
-      />
+      {/* Quest Book - ленивая загрузка */}
+      <Suspense fallback={<div className="hidden" />}>
+        <QuestBook
+          isOpen={isQuestOpen}
+          onClose={() => setIsQuestOpen(false)}
+          currentLocationId={locationId}
+        />
+      </Suspense>
     </div>
   );
-};
+});
+
+PanoramaViewer.displayName = 'PanoramaViewer';
