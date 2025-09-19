@@ -41,16 +41,15 @@ const Index = () => {
       {/* Main Content */}
       <div className="relative z-10 text-center text-white max-w-4xl mx-auto px-6">
         <h1 className="text-5xl md:text-7xl font-bold mb-6 drop-shadow-2xl animate-fade-in-up animate-text-glow">
-          Wrocław
+          {t('homepage.title')}
         </h1>
 
         <h2 className="text-2xl md:text-4xl font-light mb-8 opacity-90 animate-fade-in-up animate-delay-200">
-          Tumski Island Virtual Tour
+          {t('homepage.subtitle')}
         </h2>
 
         <p className="text-lg md:text-xl mb-12 max-w-2xl mx-auto leading-relaxed opacity-80 animate-fade-in-up animate-delay-300">
-          Embark on an interactive journey through the historic heart of Wrocław.
-          Explore Tumski Island's ancient courtyards, magnificent cathedrals, and serene gardens.
+          {t('homepage.description')}
         </p>
 
         <div className="flex flex-col sm:flex-row gap-6 justify-center items-center animate-bounce-in animate-delay-500">
@@ -59,7 +58,7 @@ const Index = () => {
             size="lg"
             className="px-8 py-4 text-lg bg-primary hover:bg-primary/90 transition-all duration-300 transform hover:scale-105 shadow-2xl hover-glow animate-shimmer"
           >
-            Begin Virtual Tour
+            {t('homepage.beginTour')}
           </Button>
 
           <Button
@@ -68,7 +67,7 @@ const Index = () => {
             onClick={() => navigate('/tour/tumski19')} // Cathedral
             className="px-8 py-4 text-lg border-white/30 text-white hover:bg-white/10 transition-all duration-300 hover-lift"
           >
-            Visit Cathedral
+            {t('homepage.visitCathedral')}
           </Button>
         </div>
 
@@ -76,33 +75,33 @@ const Index = () => {
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
           <Card className="glass border-white/20 backdrop-blur-md">
             <CardHeader>
-              <CardTitle className="text-white">🏰 Historic Sites</CardTitle>
+              <CardTitle className="text-white">{t('homepage.features.historicSites.title')}</CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription className="text-gray-200">
-                Explore 24 unique panoramic views of Tumski Island's most significant locations.
+                {t('homepage.features.historicSites.description')}
               </CardDescription>
             </CardContent>
           </Card>
 
           <Card className="glass border-white/20 backdrop-blur-md">
             <CardHeader>
-              <CardTitle className="text-white">🎵 Immersive Audio</CardTitle>
+              <CardTitle className="text-white">{t('homepage.features.immersiveAudio.title')}</CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription className="text-gray-200">
-                Experience contextual background music that changes based on your location.
+                {t('homepage.features.immersiveAudio.description')}
               </CardDescription>
             </CardContent>
           </Card>
 
           <Card className="glass border-white/20 backdrop-blur-md">
             <CardHeader>
-              <CardTitle className="text-white">🌍 Multilingual</CardTitle>
+              <CardTitle className="text-white">{t('homepage.features.multilingual.title')}</CardTitle>
             </CardHeader>
             <CardContent>
               <CardDescription className="text-gray-200">
-                Available in 7 languages including Russian, English, German, and Polish.
+                {t('homepage.features.multilingual.description')}
               </CardDescription>
             </CardContent>
           </Card>
@@ -110,7 +109,7 @@ const Index = () => {
 
         {/* PWA Notice */}
         <div className="mt-12 text-sm opacity-60">
-          <p>📱 Install this app on your device for the best experience</p>
+          <p>{t('homepage.pwaNotice')}</p>
         </div>
       </div>
     </div>

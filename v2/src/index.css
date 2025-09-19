@@ -144,12 +144,39 @@ All colors MUST be HSL.
     text-shadow: 0 0 20px hsl(45 85% 47% / 0.3);
   }
   
-  /* Glassmorphism utility */
+  /* Liquid Glass Effects */
   .glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.05) 50%,
+      rgba(255, 255, 255, 0.1) 100%);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+      0 8px 32px 0 rgba(31, 38, 135, 0.37),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.1), 
+      transparent);
+    transition: left 0.5s ease;
+  }
+
+  .glass:hover::before {
+    left: 100%;
   }
   
   /* Custom scrollbar */
@@ -175,12 +202,13 @@ All colors MUST be HSL.
 @layer components {
   /* Interactive elements */
   .geomarker {
-    @apply relative cursor-pointer transition-all duration-300;
-    transform-origin: center;
+    @apply relative cursor-pointer transition-all duration-150;
+    transform-origin: center center;
+    position: relative;
   }
   
   .geomarker:hover {
-    transform: scale(1.1);
+    transform: scale(1.02);
     filter: drop-shadow(var(--shadow-glow));
   }
   
@@ -188,7 +216,7 @@ All colors MUST be HSL.
     content: '';
     @apply absolute inset-0 rounded-full;
     background: radial-gradient(circle, hsl(45 85% 47% / 0.3), transparent 70%);
-    animation: pulse-glow 2s infinite;
+    opacity: 0.6;
   }
   
   /* Navigation arrows */
@@ -202,11 +230,225 @@ All colors MUST be HSL.
     box-shadow: var(--shadow-golden);
   }
   
-  /* Floating panel */
+  /* Liquid Glass Floating Panel */
   .floating-panel {
-    @apply glass rounded-2xl;
-    box-shadow: var(--shadow-mystic);
-    border: 1px solid hsl(0 0% 98% / 0.1);
+    background: linear-gradient(135deg, 
+      rgba(26, 26, 46, 0.9) 0%,
+      rgba(26, 26, 46, 0.7) 50%,
+      rgba(26, 26, 46, 0.9) 100%);
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 
+      0 12px 40px 0 rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+  }
+
+  .floating-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.08), 
+      transparent);
+    transition: left 0.6s ease;
+  }
+
+  .floating-panel:hover::before {
+    left: 100%;
+  }
+
+  /* Liquid Glass Button Effects */
+  .glass-button {
+    background: linear-gradient(135deg, 
+      rgba(212, 175, 55, 0.2) 0%,
+      rgba(212, 175, 55, 0.1) 50%,
+      rgba(212, 175, 55, 0.2) 100%) !important;
+    backdrop-filter: blur(15px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(150%) !important;
+    border: 1px solid rgba(212, 175, 55, 0.3) !important;
+    box-shadow: 
+      0 6px 24px 0 rgba(212, 175, 55, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.1) !important;
+    position: relative !important;
+    overflow: hidden !important;
+    transition: all 0.3s ease !important;
+  }
+
+  .glass-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.15), 
+      transparent);
+    transition: left 0.4s ease;
+  }
+
+  .glass-button:hover::before {
+    left: 100%;
+  }
+
+  .glass-button:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 
+      0 8px 32px 0 rgba(212, 175, 55, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.1) !important;
+  }
+
+  /* Override any button styles for glass buttons */
+  button.glass-button {
+    background: linear-gradient(135deg, 
+      rgba(212, 175, 55, 0.4) 0%,
+      rgba(212, 175, 55, 0.2) 50%,
+      rgba(212, 175, 55, 0.4) 100%) !important;
+    backdrop-filter: blur(15px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(150%) !important;
+    border: 2px solid rgba(212, 175, 55, 0.6) !important;
+    box-shadow: 
+      0 6px 24px 0 rgba(212, 175, 55, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.4),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.2) !important;
+  }
+
+  button.glass-button:hover {
+    background: linear-gradient(135deg, 
+      rgba(212, 175, 55, 0.5) 0%,
+      rgba(212, 175, 55, 0.3) 50%,
+      rgba(212, 175, 55, 0.5) 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 
+      0 8px 32px 0 rgba(212, 175, 55, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.2) !important;
+  }
+
+  /* Override all possible button states */
+  button.glass-button:focus,
+  button.glass-button:active,
+  button.glass-button:focus-visible {
+    background: linear-gradient(135deg, 
+      rgba(212, 175, 55, 0.2) 0%,
+      rgba(212, 175, 55, 0.1) 50%,
+      rgba(212, 175, 55, 0.2) 100%) !important;
+    backdrop-filter: blur(15px) saturate(150%) !important;
+    -webkit-backdrop-filter: blur(15px) saturate(150%) !important;
+    border: 1px solid rgba(212, 175, 55, 0.3) !important;
+    box-shadow: 
+      0 6px 24px 0 rgba(212, 175, 55, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.1) !important;
+    outline: none !important;
+  }
+
+  /* Liquid Glass Marker Effects */
+  .glass-marker {
+    background: linear-gradient(135deg, 
+      rgba(212, 175, 55, 0.15) 0%,
+      rgba(212, 175, 55, 0.08) 50%,
+      rgba(212, 175, 55, 0.15) 100%);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    box-shadow: 
+      0 4px 16px 0 rgba(212, 175, 55, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.15s ease;
+    transform-origin: center center;
+  }
+
+  .glass-marker::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.1), 
+      transparent);
+    transition: left 0.3s ease;
+  }
+
+  .glass-marker:hover::before {
+    left: 100%;
+  }
+
+  .glass-marker:hover {
+    transform: scale(1.05);
+    box-shadow: 
+      0 6px 20px 0 rgba(212, 175, 55, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .glass-marker:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+
+  /* Very subtle scaling for markers */
+  .scale-102 {
+    transform: scale(1.02);
+    transform-origin: center center;
+  }
+
+  .scale-98 {
+    transform: scale(0.98);
+    transform-origin: center center;
+  }
+
+  /* Liquid Glass Panel Effects */
+  .glass-panel {
+    background: linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.03) 50%,
+      rgba(255, 255, 255, 0.08) 100%);
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 
+      0 10px 36px 0 rgba(31, 38, 135, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(255, 255, 255, 0.06), 
+      transparent);
+    transition: left 0.5s ease;
+  }
+
+  .glass-panel:hover::before {
+    left: 100%;
   }
 }
 
@@ -252,6 +494,11 @@ All colors MUST be HSL.
 
   .animate-pulse-glow {
     animation: pulse-glow 2s infinite;
+  }
+
+  /* Disable pulse-glow for markers to prevent jerky animation */
+  .geomarker .animate-pulse-glow {
+    animation: none;
   }
   
   .animate-float-in {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Volume2, VolumeX, RotateCcw } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { quests, Quest, QuestTask } from '@/data/quests';
 import { useAudio } from '@/hooks/useAudio';
@@ -15,6 +16,7 @@ export const QuestBook: React.FC<QuestBookProps> = ({
   onClose,
   currentLocationId
 }) => {
+  const { t } = useTranslation();
   const [currentQuest, setCurrentQuest] = useState<Quest>(quests[0]);
   const [completedTasks, setCompletedTasks] = useState<Set<number>>(new Set());
   const [isSoundEnabled, setIsSoundEnabled] = useState(true);
@@ -104,7 +106,7 @@ export const QuestBook: React.FC<QuestBookProps> = ({
 
   // Очистка прогресса
   const clearProgress = () => {
-    if (confirm('Вы точно хотите очистить результаты квеста?')) {
+    if (confirm(t('quest.clearConfirm'))) {
       setCompletedTasks(new Set());
       setFlippedCards(new Set());
       localStorage.removeItem('questProgress');
@@ -131,10 +133,10 @@ export const QuestBook: React.FC<QuestBookProps> = ({
             {/* Заголовок */}
             <div className="text-center mb-8">
               <h1 className="text-4xl font-bold text-white mb-4 heading-medieval">
-                {currentQuest.title}
+                {t('quest.title1')}
               </h1>
               <p className="text-lg text-white/80 max-w-4xl mx-auto leading-relaxed">
-                {currentQuest.intro}
+                {t('quest.intro')}
               </p>
             </div>
 
@@ -160,7 +162,7 @@ export const QuestBook: React.FC<QuestBookProps> = ({
                     <div className="flex-1">
                       <div className="flex items-center gap-4 mb-4">
                         <h3 className="text-xl font-semibold text-white">
-                          {task.title}
+                          {t(`quest.task${task.id}`)}
                         </h3>
                         <div className="flex gap-2">
                           {/* Кнопка звука */}
@@ -189,7 +191,7 @@ export const QuestBook: React.FC<QuestBookProps> = ({
                         </div>
                       </div>
 
-                      <p className="text-white/70 mb-4">{task.description}</p>
+                      <p className="text-white/70 mb-4">{t(`quest.task${task.id}Description`)}</p>
 
                       {/* Карточка с изображением */}
                       <div className="relative max-w-md mx-auto">
@@ -219,7 +221,7 @@ export const QuestBook: React.FC<QuestBookProps> = ({
                             />
                             {task.expectationText && (
                               <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-yellow-200 text-lg font-serif">
-                                {task.expectationText}
+                                {t('quest.expectation')}
                               </div>
                             )}
                           </div>
@@ -243,11 +245,11 @@ export const QuestBook: React.FC<QuestBookProps> = ({
                             <div className="absolute inset-0 flex items-center justify-center p-4">
                               <div className="bg-black/50 rounded-lg p-4 text-center">
                                 <p className="text-white text-sm leading-relaxed">
-                                  {task.backText}
+                                  {t(`quest.back${task.id}`)}
                                 </p>
                                 {task.realityText && (
                                   <div className="mt-2 text-yellow-200 text-lg font-serif">
-                                    {task.realityText}
+                                    {t('quest.reality')}
                                   </div>
                                 )}
                               </div>
@@ -269,7 +271,7 @@ export const QuestBook: React.FC<QuestBookProps> = ({
               size="icon"
               onClick={clearProgress}
               className="glass border-0 hover:bg-primary/20"
-              title="Очистить прогресс"
+              title={t('quest.clearTooltip')}
             >
               <RotateCcw className="h-4 w-4" />
             </Button>

@@ -253,6 +253,12 @@
   "map.kanonia": "Kanonikerstraße",
   "map.bramabot": "Botanischer Garten Tor",
   "map.kapitulna": "Kapitelstraße",
+  "map.legend": "Legende",
+  "map.mainLocations": "Hauptstandorte",
+  "map.cathedrals": "Kathedralen",
+  "map.gardens": "Gärten",
+  "map.courtyards": "Höfe",
+  "map.instructions": "Verwenden Sie das Mausrad zum Zoomen, ziehen Sie zum Bewegen auf der Karte",
   "quest": {
     "title1": "Quest 1: Finde alle Geheimnisse der Tumski-Insel",
     "intro": "Im Dachboden eines verlassenen Hauses wurden Aquarelle entdeckt. Mehrere Dutzend. Die Blätter sind staubig, hier und da von Zeit oder Mäusen angenagt (ich weiß nicht, wer von ihnen ordentlicher war), aber die Farben sind noch lebendig — solche, dass im Hals vom Geruch des Regens auf warmem Stein kitzelt, wenn man zu lange schaut. \n\nAutor? Unbekannt. Die Unterschrift ist unleserlich. Vielleicht ist es ein Name. Oder vielleicht — Koordinaten einer anderen Realität. \n\nAuf den Gemälden sind Orte. Straßen, Menschen, Fenster. Ein einsamer Laternenanzünder an einer Säule. Ein Turm mit Vögeln auf dem Dach. Alles ist seltsam vertraut. Als ob es bereits irgendwo existiert hätte. Im Traum? In einem Buch? In jenem Leben, von dem mir vergessen wurde zu erzählen? \n\nAber jetzt muss ich sie aus irgendeinem Grund finden. Alle. In der Realität sehen. \n\nObwohl wer weiß, was wirklich real ist?",
@@ -275,5 +281,32 @@
   },
   "animation": {
     "hint": "Um zur Animation zurückzukehren, doppelklicke auf einen freien Bereich des Bildschirms"
+  },
+  "homepage": {
+    "title": "Breslau",
+    "subtitle": "Virtueller Rundgang durch die Tumski-Insel",
+    "description": "Begeben Sie sich auf eine interaktive Reise durch das historische Herz von Breslau. Erkunden Sie die alten Höfe, prächtigen Kathedralen und ruhigen Gärten der Tumski-Insel.",
+    "beginTour": "Virtuellen Rundgang beginnen",
+    "visitCathedral": "Kathedrale besuchen",
+    "features": {
+      "historicSites": {
+        "title": "🏰 Historische Stätten",
+        "description": "Erkunden Sie 24 einzigartige Panoramaansichten der wichtigsten Orte der Tumski-Insel."
+      },
+      "immersiveAudio": {
+        "title": "🎵 Immersives Audio",
+        "description": "Erleben Sie kontextuelle Hintergrundmusik, die sich je nach Ihrem Standort ändert."
+      },
+      "multilingual": {
+        "title": "🌍 Mehrsprachig",
+        "description": "Verfügbar in 7 Sprachen, einschließlich Russisch, Englisch, Deutsch und Polnisch."
+      }
+    },
+    "pwaNotice": "📱 Installieren Sie diese App auf Ihrem Gerät für die beste Erfahrung"
+  },
+  "tour": {
+    "locationNotFound": "Standort nicht gefunden",
+    "locationNotFoundDescription": "Der angeforderte Standort konnte nicht gefunden werden.",
+    "returnToMainTour": "Zurück zur Haupttour"
   }
 } 

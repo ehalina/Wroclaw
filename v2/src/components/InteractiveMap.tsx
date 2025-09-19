@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, Navigation, ZoomIn, ZoomOut } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Geomarker } from './Geomarker';
 import { locations } from '@/data/locations';
@@ -19,6 +20,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
   onLocationSelect,
   backgroundImage,
 }) => {
+  const { t } = useTranslation();
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -171,23 +173,23 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
 
         {/* Map Legend */}
         <div className="absolute bottom-4 left-4 glass rounded-lg p-3">
-          <h3 className="text-sm font-medium text-foreground mb-2">Легенда</h3>
+          <h3 className="text-sm font-medium text-foreground mb-2">{t('map.legend')}</h3>
           <div className="space-y-1 text-xs">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-primary"></div>
-              <span>Основные локации</span>
+              <span>{t('map.mainLocations')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-accent-red"></div>
-              <span>Соборы</span>
+              <span>{t('map.cathedrals')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-accent-green"></div>
-              <span>Сады</span>
+              <span>{t('map.gardens')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-muted-foreground"></div>
-              <span>Дворы</span>
+              <span>{t('map.courtyards')}</span>
             </div>
           </div>
         </div>
@@ -195,7 +197,7 @@ export const InteractiveMap: React.FC<InteractiveMapProps> = ({
         {/* Instructions */}
         <div className="absolute bottom-4 right-4 glass rounded-lg p-3 max-w-xs">
           <p className="text-xs text-muted-foreground">
-            Используйте колесо мыши для масштабирования, перетаскивайте для перемещения по карте
+            {t('map.instructions')}
           </p>
         </div>
       </div>

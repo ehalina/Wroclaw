@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { PanoramaViewer } from '@/components/PanoramaViewer';
 import { InteractiveMap } from '@/components/InteractiveMap';
 import { LocationModal } from '@/components/LocationModal';
@@ -8,6 +9,7 @@ import { locations, getLocationById } from '@/data/locations';
 const TourPage: React.FC = () => {
   const { locationId } = useParams<{ locationId: string }>();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // Default to main tumski location if no locationId provided
   const currentLocationId = locationId || 'tumski01'; // Changed to tumski01 for better default
@@ -58,13 +60,13 @@ const TourPage: React.FC = () => {
     return (
       <div className="h-screen flex items-center justify-center bg-black text-white">
         <div className="text-center">
-          <h1 className="text-2xl font-medieval mb-4">Location not found</h1>
-          <p>The requested location could not be found.</p>
+          <h1 className="text-2xl font-medieval mb-4">{t('tour.locationNotFound')}</h1>
+          <p>{t('tour.locationNotFoundDescription')}</p>
           <button
             onClick={() => navigate('/tour/tumski')}
             className="mt-4 px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/80 transition-colors"
           >
-            Return to main tour
+            {t('tour.returnToMainTour')}
           </button>
         </div>
       </div>

@@ -253,6 +253,12 @@
   "map.kanonia": "Kanonická ulice",
   "map.bramabot": "Brána botanické zahrady",
   "map.kapitulna": "Kapitulní ulice",
+  "map.legend": "Legenda",
+  "map.mainLocations": "Hlavní lokace",
+  "map.cathedrals": "Katedrály",
+  "map.gardens": "Zahrady",
+  "map.courtyards": "Nádvoří",
+  "map.instructions": "Použijte kolečko myši pro přiblížení, přetáhněte pro pohyb po mapě",
   "quest": {
     "title1": "Quest 1: Najdi všechna tajemství Tumského ostrova",
     "intro": "Na půdě opuštěného domu byly objeveny akvarely. Několik desítek. Listy jsou zaprášené, tu a tam ohlodané časem nebo myšmi (nevím, který z nich byl pečlivější), ale barvy stále žijí — takové, že v krku lechtá od vůně deště na teplém kameni, pokud se dívá příliš dlouho. \n\nAutor? Neznámý. Podpis nečitelný. Možná je to jméno. A možná — souřadnice jiné reality. \n\nNa obrazech jsou místa. Ulice, lidé, okna. Osamělý lampář u sloupu. Věž s ptáky na střeše. Všechno je podivně povědomé. Jako by to už někde existovalo. Ve snu? V knize? V tom životě, o kterém mi zapomněli vyprávět? \n\nAle teď z nějakého důvodu je musím najít. Všechny. Vidět ve skutečnosti. \n\nAčkoli kdo ví, co je opravdu skutečné?",
@@ -275,5 +281,32 @@
   },
   "animation": {
     "hint": "Pro návrat k animaci dvakrát klikněte na volné místo na obrazovce"
+  },
+  "homepage": {
+    "title": "Vratislav",
+    "subtitle": "Virtuální prohlídka Tumského ostrova",
+    "description": "Vydejte se na interaktivní cestu historickým srdcem Vratislavi. Prozkoumejte starobylé dvory, majestátní katedrály a klidné zahrady Tumského ostrova.",
+    "beginTour": "Začít virtuální prohlídku",
+    "visitCathedral": "Navštívit katedrálu",
+    "features": {
+      "historicSites": {
+        "title": "🏰 Historická místa",
+        "description": "Prozkoumejte 24 jedinečných panoramatických pohledů na nejvýznamnější lokality Tumského ostrova."
+      },
+      "immersiveAudio": {
+        "title": "🎵 Imersivní zvuk",
+        "description": "Zažijte kontextovou hudbu na pozadí, která se mění podle vaší polohy."
+      },
+      "multilingual": {
+        "title": "🌍 Vícejazyčnost",
+        "description": "Dostupné v 7 jazycích včetně ruštiny, angličtiny, němčiny a polštiny."
+      }
+    },
+    "pwaNotice": "📱 Nainstalujte si tuto aplikaci na vaše zařízení pro nejlepší zážitek"
+  },
+  "tour": {
+    "locationNotFound": "Lokalita nenalezena",
+    "locationNotFoundDescription": "Požadovaná lokalita nemohla být nalezena.",
+    "returnToMainTour": "Zpět na hlavní prohlídku"
   }
 } 

@@ -332,17 +332,29 @@ export const PanoramaViewer: React.FC<PanoramaViewerProps> = ({
           onClick={toggleFullscreen}
           variant="ghost"
           size="icon"
-          className="glass w-10 h-10 hover:bg-white/20 hover-lift hover-glow animate-bounce-in animate-delay-700"
+          className="glass-button w-10 h-10 animate-bounce-in animate-delay-700"
+          style={{
+            background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(212, 175, 55, 0.15) 50%, rgba(212, 175, 55, 0.3) 100%)',
+            backdropFilter: 'blur(15px) saturate(150%)',
+            border: '1px solid rgba(212, 175, 55, 0.5)',
+            boxShadow: '0 4px 16px 0 rgba(212, 175, 55, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(0, 0, 0, 0.1)'
+          }}
         >
-          {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+          {isFullscreen ? <Minimize2 className="h-4 w-4 relative z-10 text-white drop-shadow-lg" /> : <Maximize2 className="h-4 w-4 relative z-10 text-white drop-shadow-lg" />}
         </Button>
         <Button
           onClick={resetView}
           variant="ghost"
           size="icon"
-          className="glass w-10 h-10 hover:bg-white/20 hover-lift hover-glow animate-bounce-in animate-delay-1000"
+          className="glass-button w-10 h-10 animate-bounce-in animate-delay-1000"
+          style={{
+            background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(212, 175, 55, 0.15) 50%, rgba(212, 175, 55, 0.3) 100%)',
+            backdropFilter: 'blur(15px) saturate(150%)',
+            border: '1px solid rgba(212, 175, 55, 0.5)',
+            boxShadow: '0 4px 16px 0 rgba(212, 175, 55, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(0, 0, 0, 0.1)'
+          }}
         >
-          <RotateCcw className="h-4 w-4" />
+          <RotateCcw className="h-4 w-4 relative z-10 text-white drop-shadow-lg" />
         </Button>
       </div>
 
@@ -359,11 +371,11 @@ export const PanoramaViewer: React.FC<PanoramaViewerProps> = ({
               transition: 'transform 0.1s ease-out'
             }}
           >
-            <div className="floating-panel p-4 min-w-[240px]">
+            <div className="glass-panel p-4 min-w-[240px] rounded-xl">
               <div className="flex items-center gap-3 mb-3">
                 {/* Track Name */}
                 <div className="flex-1">
-                  <div className="text-sm font-medium text-foreground">
+                  <div className="text-sm font-medium text-foreground relative z-10">
                     {location?.audioTrack === 'kostel' ? 'Соборная атмосфера' :
                      location?.audioTrack === 'birds' ? 'Садовые звуки' :
                      location?.audioTrack === 'hang' ? 'Мистическая музыка' :
@@ -376,19 +388,25 @@ export const PanoramaViewer: React.FC<PanoramaViewerProps> = ({
                   variant="ghost"
                   size="icon"
                   onClick={audio.toggleMute}
-                  className="w-8 h-8 rounded-full hover:bg-primary/20"
+                  className="glass-button w-8 h-8 rounded-full"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.3) 0%, rgba(212, 175, 55, 0.15) 50%, rgba(212, 175, 55, 0.3) 100%)',
+                    backdropFilter: 'blur(15px) saturate(150%)',
+                    border: '1px solid rgba(212, 175, 55, 0.5)',
+                    boxShadow: '0 4px 16px 0 rgba(212, 175, 55, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(0, 0, 0, 0.1)'
+                  }}
                 >
                   {audio.isMuted ? (
-                    <VolumeX className="w-4 h-4" />
+                    <VolumeX className="w-4 h-4 relative z-10 text-white drop-shadow-lg" />
                   ) : (
-                    <Volume2 className="w-4 h-4" />
+                    <Volume2 className="w-4 h-4 relative z-10 text-white drop-shadow-lg" />
                   )}
                 </Button>
               </div>
 
               {/* Volume Control */}
               <div className="flex items-center gap-3">
-                <VolumeX className="w-4 h-4 text-muted-foreground" />
+                <VolumeX className="w-4 h-4 text-white relative z-10 drop-shadow-lg" />
                 <Slider
                   value={[audio.isMuted ? 0 : audio.volume]}
                   onValueChange={(newVolume) => {
@@ -402,9 +420,9 @@ export const PanoramaViewer: React.FC<PanoramaViewerProps> = ({
                   }}
                   max={1}
                   step={0.05}
-                  className="flex-1"
+                  className="flex-1 relative z-10"
                 />
-                <Volume2 className="w-4 h-4 text-muted-foreground" />
+                <Volume2 className="w-4 h-4 text-white relative z-10 drop-shadow-lg" />
               </div>
             </div>
           </div>
@@ -419,25 +437,31 @@ export const PanoramaViewer: React.FC<PanoramaViewerProps> = ({
         {/* Map Button */}
         <Button
           onClick={onMapOpen}
-          className="relative w-12 h-12 rounded-full bg-primary hover:bg-primary-glow shadow-golden hover:shadow-glow transition-all duration-300 transform hover:scale-105 active:scale-95 animate-bounce-in animate-delay-600"
+          className="glass-button relative w-12 h-12 rounded-full animate-bounce-in animate-delay-600"
+          style={{
+            background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.4) 0%, rgba(212, 175, 55, 0.2) 50%, rgba(212, 175, 55, 0.4) 100%)',
+            backdropFilter: 'blur(15px) saturate(150%)',
+            border: '2px solid rgba(212, 175, 55, 0.6)',
+            boxShadow: '0 6px 24px 0 rgba(212, 175, 55, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.2)'
+          }}
           title="Открыть карту"
         >
-          <Map className="w-6 h-6 text-background" />
-          
-          {/* Subtle pulse effect */}
-          <div className="absolute inset-0 rounded-full bg-primary animate-ping opacity-20"></div>
+          <Map className="w-6 h-6 text-white relative z-10 drop-shadow-lg" />
         </Button>
 
         {/* Quest Button */}
         <Button
           onClick={() => setIsQuestOpen(true)}
-          className="relative w-12 h-12 rounded-full bg-primary hover:bg-primary-glow shadow-golden hover:shadow-glow transition-all duration-300 transform hover:scale-105 active:scale-95 animate-bounce-in animate-delay-700"
+          className="glass-button relative w-12 h-12 rounded-full animate-bounce-in animate-delay-700"
+          style={{
+            background: 'linear-gradient(135deg, rgba(212, 175, 55, 0.4) 0%, rgba(212, 175, 55, 0.2) 50%, rgba(212, 175, 55, 0.4) 100%)',
+            backdropFilter: 'blur(15px) saturate(150%)',
+            border: '2px solid rgba(212, 175, 55, 0.6)',
+            boxShadow: '0 6px 24px 0 rgba(212, 175, 55, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(0, 0, 0, 0.2)'
+          }}
           title="Открыть квесты"
         >
-          <BookOpen className="w-6 h-6 text-background" />
-          
-          {/* Subtle pulse effect */}
-          <div className="absolute inset-0 rounded-full bg-primary animate-ping opacity-20"></div>
+          <BookOpen className="w-6 h-6 text-white relative z-10 drop-shadow-lg" />
         </Button>
       </div>
 
@@ -453,8 +477,8 @@ export const PanoramaViewer: React.FC<PanoramaViewerProps> = ({
         ref={el => parallaxLayersRef.current[3] = el!}
         className="absolute top-4 left-4 z-20 animate-slide-in-left animate-delay-200"
       >
-        <div className="glass px-4 py-2 rounded-lg hover-lift">
-          <h1 className="text-white font-medieval text-lg">{location.name}</h1>
+        <div className="glass-panel px-4 py-2 rounded-lg">
+          <h1 className="text-white font-medieval text-lg relative z-10">{location.name}</h1>
         </div>
       </div>
 

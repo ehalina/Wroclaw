@@ -290,6 +290,12 @@
   "map.kanonia": "Ulica Kanonia",
   "map.bramabot": "Brama Ogrodu Botanicznego",
   "map.kapitulna": "Ulica Kapitulna",
+  "map.legend": "Legenda",
+  "map.mainLocations": "Główne lokalizacje",
+  "map.cathedrals": "Katedry",
+  "map.gardens": "Ogrody",
+  "map.courtyards": "Dziedzińce",
+  "map.instructions": "Użyj kółka myszy do przybliżania, przeciągnij aby poruszać się po mapie",
   "quest": {
     "title1": "Quest 1: Znajdź wszystkie tajemnice Ostrowa Tumskiego",
     "intro": "Na strychu opuszczonego domu odkryto akwarele. Kilkadziesiąt. Kartki są zakurzone, tu i tam podgryzione przez czas lub myszy (nie wiem, który z nich był staranniejszy), ale kolory wciąż żyją — takie, że w gardle łaskocze od zapachu deszczu na ciepłym kamieniu, jeśli patrzy się za długo. \n\nAutor? Nieznany. Podpis nieczytelny. Może to imię. A może — współrzędne innej rzeczywistości. \n\nNa obrazach są miejsca. Ulice, ludzie, okna. Samotny latarnik przy kolumnie. Wieża z ptakami na dachu. Wszystko jest dziwnie znajome. Jakby już gdzieś istniało. We śnie? W książce? W tym życiu, o którym zapomniano mi opowiedzieć? \n\nAle teraz z jakiegoś powodu muszę je znaleźć. Wszystkie. Zobaczyć w rzeczywistości. \n\nChociaż kto wie, co naprawdę jest rzeczywiste?",
@@ -312,5 +318,32 @@
   },
   "animation": {
     "hint": "Aby wrócić do animacji, kliknij dwukrotnie w wolne miejsce na ekranie"
+  },
+  "homepage": {
+    "title": "Wrocław",
+    "subtitle": "Wirtualny spacer po Ostrowie Tumskim",
+    "description": "Wyrusz w interaktywną podróż przez historyczne serce Wrocławia. Odkryj starożytne dziedzińce, wspaniałe katedry i spokojne ogrody Ostrowa Tumskiego.",
+    "beginTour": "Rozpocznij wirtualny spacer",
+    "visitCathedral": "Odwiedź katedrę",
+    "features": {
+      "historicSites": {
+        "title": "🏰 Miejsca historyczne",
+        "description": "Odkryj 24 unikalne widoki panoramiczne najważniejszych lokalizacji Ostrowa Tumskiego."
+      },
+      "immersiveAudio": {
+        "title": "🎵 Imersyjny dźwięk",
+        "description": "Doświadcz kontekstowej muzyki tła, która zmienia się w zależności od Twojej lokalizacji."
+      },
+      "multilingual": {
+        "title": "🌍 Wielojęzyczność",
+        "description": "Dostępne w 7 językach, w tym po polsku, angielsku, niemiecku i rosyjsku."
+      }
+    },
+    "pwaNotice": "📱 Zainstaluj tę aplikację na swoim urządzeniu, aby uzyskać najlepsze wrażenia"
+  },
+  "tour": {
+    "locationNotFound": "Lokalizacja nie znaleziona",
+    "locationNotFoundDescription": "Nie można znaleźć żądanej lokalizacji.",
+    "returnToMainTour": "Wróć do głównego spaceru"
   }
 } 

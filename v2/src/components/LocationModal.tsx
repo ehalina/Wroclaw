@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, ChevronLeft, ChevronRight, Volume2, VolumeX } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { LocationContent } from '@/data/locations';
 import { cn } from '@/lib/utils';
@@ -19,6 +20,7 @@ export const LocationModal: React.FC<LocationModalProps> = ({
   content,
   className,
 }) => {
+  const { t } = useTranslation();
   const [currentZone, setCurrentZone] = useState(0);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
