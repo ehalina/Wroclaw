@@ -199,6 +199,42 @@
                 
                 // Инициализируем обработчики
                 this.setupEventListeners();
+                
+                // Добавляем глобальный слушатель кликов для запуска музыки
+                this.setupGlobalMusicListener();
+            }
+            
+            /**
+             * Настраивает глобальный слушатель кликов для запуска фоновой музыки
+             */
+            setupGlobalMusicListener() {
+                console.log('🎵 Настройка глобального слушателя кликов для музыки...');
+                
+                // Флаг для отслеживания, была ли музыка уже запущена
+                this.musicStarted = false;
+                
+                const startMusicOnClick = () => {
+                    // Проверяем, не запущена ли уже музыка
+                    if (this.musicStarted) {
+                        return;
+                    }
+                    
+                    console.log('🎵 Клик пользователя - запускаем музыку для страницы:', this.currentPage);
+                    this.musicStarted = true;
+                    
+                    // Запускаем музыку для текущей страницы
+                    this.switchMusicForPage(this.currentPage);
+                    
+                    // Удаляем слушатель после первого успешного запуска
+                    document.removeEventListener('click', startMusicOnClick);
+                    document.removeEventListener('touchstart', startMusicOnClick);
+                };
+                
+                // Добавляем слушатели для клика и касания
+                document.addEventListener('click', startMusicOnClick);
+                document.addEventListener('touchstart', startMusicOnClick);
+                
+                console.log('🎵 Глобальный слушатель кликов настроен');
             }
             
             startBackgroundMusic() {
@@ -227,10 +263,11 @@
                     // Пытаемся запустить музыку
                     audio.play().then(() => {
                         console.log('🎵 Музыка успешно запущена');
+                        this.musicStarted = true;
                     }).catch(error => {
                         console.log('🎵 Ошибка автозапуска музыки (требуется взаимодействие пользователя):', error);
-                        // Показываем подсказку для запуска музыки
-                    this.showMusicHint();
+                        // Не показываем подсказку, так как у нас есть глобальный слушатель кликов
+                        console.log('🎵 Ожидаем клик пользователя для запуска музыки...');
                     });
                 }
             }
@@ -875,6 +912,90 @@
                 
                 // Мониторинг iframe отключен из-за проблем с рекурсией
                 // this.startIframeMonitoring();
+                
+                // Слушатель для изменения состояния sound-menu-button
+                this.setupSoundButtonListener();
+            }
+            
+            /**
+             * Настраивает слушатель для изменения состояния sound-menu-button
+             */
+            setupSoundButtonListener() {
+                console.log('🎵 Настройка слушателя sound-menu-button...');
+                
+                // Слушаем изменения в DOM для sound-menu-button
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                            const target = mutation.target;
+                            if (target.classList.contains('sound-menu-button')) {
+                                const isMuted = target.classList.contains('muted');
+                                console.log('🎵 Состояние sound-menu-button изменилось:', { isMuted });
+                                
+                                if (isMuted) {
+                                    // Если звук выключен, останавливаем всю музыку
+                                    this.pauseAllMusic();
+                                } else {
+                                    // Если звук включен, запускаем музыку для текущей страницы
+                                    this.musicStarted = false;
+                                    this.switchMusicForPage(this.currentPage);
+                                    console.log('🎵 Звук включен, запускаем музыку для страницы:', this.currentPage);
+                                }
+                            }
+                        }
+                    });
+                });
+                
+                // Начинаем наблюдение за изменениями в body
+                observer.observe(document.body, {
+                    attributes: true,
+                    subtree: true,
+                    attributeFilter: ['class']
+                });
+                
+                // Также слушаем изменения в iframe
+                this.setupIframeSoundButtonListener();
+                
+                console.log('🎵 Слушатель sound-menu-button настроен');
+            }
+            
+            /**
+             * Настраивает слушатель для sound-menu-button в iframe
+             */
+            setupIframeSoundButtonListener() {
+                // Слушаем сообщения от iframe о изменении состояния звука
+                window.addEventListener('message', (event) => {
+                    if (event.data && event.data.type === 'SOUND_STATE_CHANGED') {
+                        const isMuted = event.data.isMuted;
+                        console.log('🎵 Получено сообщение о изменении звука из iframe:', { isMuted });
+                        
+                        if (isMuted) {
+                            // Если звук выключен, останавливаем всю музыку
+                            this.pauseAllMusic();
+                        } else {
+                            // Если звук включен, запускаем музыку для текущей страницы
+                            this.musicStarted = false;
+                            this.switchMusicForPage(this.currentPage);
+                            console.log('🎵 Звук включен из iframe, запускаем музыку для страницы:', this.currentPage);
+                        }
+                    }
+                });
+            }
+            
+            /**
+             * Останавливает всю музыку
+             */
+            pauseAllMusic() {
+                console.log('🎵 Останавливаем всю музыку...');
+                
+                const musicElements = ['backgroundMusic', 'kostelMusic', 'hangMusic', 'birdsMusic', 'questMusic'];
+                musicElements.forEach(id => {
+                    const audio = document.getElementById(id);
+                    if (audio) {
+                        audio.pause();
+                        console.log(`🎵 ${id} остановлен`);
+                    }
+                });
             }
             
             startIframeMonitoring() {

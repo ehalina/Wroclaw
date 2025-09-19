@@ -228,6 +228,15 @@ const LanguageMenu = {
             soundButton.classList.remove('muted');
             localStorage.setItem('soundMuted', 'false');
             
+            // Отправляем сообщение в SPA о включении звука
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({
+                    type: 'SOUND_STATE_CHANGED',
+                    isMuted: false
+                }, '*');
+                console.log('🎵 Отправлено сообщение в SPA: звук включен');
+            }
+            
             // Инициализируем звуки геометок при первом включении звука
             console.log('🎵 Включаем звук - инициализируем звуки геометок...');
             this.initializeGeoMarkerSounds();
@@ -242,6 +251,15 @@ const LanguageMenu = {
         } else {
             soundButton.classList.add('muted');
             localStorage.setItem('soundMuted', 'true');
+            
+            // Отправляем сообщение в SPA о выключении звука
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({
+                    type: 'SOUND_STATE_CHANGED',
+                    isMuted: true
+                }, '*');
+                console.log('🎵 Отправлено сообщение в SPA: звук выключен');
+            }
             
             // Управляем музыкой через SPA
             this.manageSPAMusic('mute');
