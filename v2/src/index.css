@@ -1,0 +1,268 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tumski Island Virtual Tour Design System
+Medieval mystical atmosphere with dark tones and golden accents
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Core Medieval Theme Colors */
+    --background: 225 15% 8%;              /* Dark medieval blue-black */
+    --foreground: 0 0% 98%;                /* Pure white text */
+    
+    /* Primary Golden Theme */
+    --primary: 45 85% 47%;                 /* Rich medieval gold #d4af37 */
+    --primary-foreground: 225 15% 8%;     /* Dark background for contrast */
+    --primary-glow: 45 100% 60%;           /* Lighter gold for effects */
+    
+    /* Secondary Deep Blue */
+    --secondary: 225 20% 15%;              /* Darker blue-grey */
+    --secondary-foreground: 0 0% 98%;     /* White text */
+    
+    /* Accent Colors */
+    --accent-red: 351 83% 61%;             /* Medieval red #c0392b */
+    --accent-green: 145 63% 49%;           /* Forest green #27ae60 */
+    --accent-gold: 45 85% 47%;             /* Same as primary */
+    
+    /* Surface Colors */
+    --card: 225 20% 12%;                   /* Slightly lighter than bg */
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 225 20% 10%;
+    --popover-foreground: 0 0% 98%;
+    
+    /* Interactive States */
+    --muted: 225 15% 20%;
+    --muted-foreground: 210 20% 70%;      /* Light grey */
+    
+    --accent: 45 85% 47%;                  /* Gold accent */
+    --accent-foreground: 225 15% 8%;
+    
+    /* Borders and Inputs */
+    --border: 225 15% 25%;
+    --input: 225 15% 18%;
+    --ring: 45 85% 47%;                    /* Gold focus ring */
+    
+    /* Status Colors */
+    --destructive: 351 83% 61%;            /* Medieval red */
+    --destructive-foreground: 0 0% 98%;
+    
+    --success: 145 63% 49%;                /* Forest green */
+    --success-foreground: 0 0% 98%;
+    
+    --warning: 35 84% 62%;                 /* Amber warning */
+    --warning-foreground: 225 15% 8%;
+    
+    /* Gradients for atmospheric effects */
+    --gradient-primary: linear-gradient(135deg, hsl(45 85% 47%), hsl(45 100% 60%));
+    --gradient-mystic: linear-gradient(180deg, hsl(225 15% 8%), hsl(225 20% 12%));
+    --gradient-overlay: linear-gradient(0deg, hsl(225 15% 8% / 0.8), transparent);
+    
+    /* Shadows for depth */
+    --shadow-golden: 0 10px 30px -5px hsl(45 85% 47% / 0.3);
+    --shadow-mystic: 0 20px 40px -10px hsl(225 15% 8% / 0.6);
+    --shadow-glow: 0 0 20px hsl(45 100% 60% / 0.4);
+    
+    /* Glass morphism effects */
+    --glass-bg: hsl(225 15% 8% / 0.7);
+    --glass-border: hsl(0 0% 98% / 0.1);
+    
+    /* Animation variables */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    
+    --radius: 0.75rem;
+  }
+  
+  /* Light theme for contrast when needed */
+  .light {
+    --background: 45 23% 93%;
+    --foreground: 225 15% 8%;
+    --primary: 45 85% 35%;
+    --card: 45 23% 96%;
+    --border: 45 20% 80%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    font-family: 'Roboto', system-ui, sans-serif;
+    scroll-behavior: smooth;
+    /* Prevent overscroll on mobile */
+    overscroll-behavior: none;
+    /* Support for iPhone X+ safe areas */
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Roboto', system-ui, sans-serif;
+    /* Prevent zoom on iOS */
+    -webkit-text-size-adjust: 100%;
+    /* Smooth scrolling */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent selection on UI elements */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /* Fixed positioning for mobile */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height */
+    overflow: hidden;
+  }
+  
+  /* Allow text selection for content */
+  .selectable {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+  
+  /* Medieval heading styles */
+  .heading-medieval {
+    font-family: 'Marck Script', cursive;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 20px hsl(45 85% 47% / 0.3);
+  }
+  
+  /* Glassmorphism utility */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+  }
+  
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: hsl(225 15% 15%);
+    border-radius: 4px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: hsl(45 85% 47%);
+    border-radius: 4px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: hsl(45 100% 60%);
+  }
+}
+
+@layer components {
+  /* Interactive elements */
+  .geomarker {
+    @apply relative cursor-pointer transition-all duration-300;
+    transform-origin: center;
+  }
+  
+  .geomarker:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(var(--shadow-glow));
+  }
+  
+  .geomarker::before {
+    content: '';
+    @apply absolute inset-0 rounded-full;
+    background: radial-gradient(circle, hsl(45 85% 47% / 0.3), transparent 70%);
+    animation: pulse-glow 2s infinite;
+  }
+  
+  /* Navigation arrows */
+  .nav-arrow {
+    @apply glass rounded-full p-3 transition-all duration-300;
+    box-shadow: var(--shadow-mystic);
+  }
+  
+  .nav-arrow:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-golden);
+  }
+  
+  /* Floating panel */
+  .floating-panel {
+    @apply glass rounded-2xl;
+    box-shadow: var(--shadow-mystic);
+    border: 1px solid hsl(0 0% 98% / 0.1);
+  }
+}
+
+@layer utilities {
+  /* Animation keyframes */
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+  
+  @keyframes float-in {
+    from { 
+      opacity: 0; 
+      transform: translateY(20px) scale(0.95); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0) scale(1); 
+    }
+  }
+  
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes scale-in {
+    from {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s infinite;
+  }
+  
+  .animate-float-in {
+    animation: float-in 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .animate-fade-in-up {
+    animation: fade-in-up 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .animate-scale-in {
+    animation: scale-in 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}

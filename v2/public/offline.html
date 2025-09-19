@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Офлайн режим | Тумский остров</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', system-ui, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 500px;
+        }
+        
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            opacity: 0.7;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #d4af37;
+        }
+        
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: #d4af37;
+            color: #1a1a2e;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: transform 0.2s ease;
+        }
+        
+        .button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .features {
+            margin-top: 3rem;
+            text-align: left;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .feature::before {
+            content: "✓";
+            color: #d4af37;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">🏰</div>
+        
+        <h1>Офлайн режим</h1>
+        
+        <p>
+            Вы находитесь в офлайн режиме, но основные функции виртуальной экскурсии 
+            по Тумскому острову всё ещё доступны благодаря кешированию данных.
+        </p>
+        
+        <a href="/" class="button">Продолжить экскурсию</a>
+        
+        <div class="features">
+            <div class="feature">Просмотр основных локаций</div>
+            <div class="feature">Навигация по карте</div>
+            <div class="feature">Чтение исторической информации</div>
+            <div class="feature">Музыкальное сопровождение</div>
+        </div>
+    </div>
+
+    <script>
+        // Check if connection is restored
+        window.addEventListener('online', () => {
+            // Redirect to main app when connection is restored
+            window.location.href = '/';
+        });
+        
+        // Register service worker if not already registered
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(() => console.log('SW registered from offline page'))
+                .catch(() => console.log('SW registration failed from offline page'));
+        }
+    </script>
+</body>
+</html>
