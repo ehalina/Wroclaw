@@ -1,4 +1,12 @@
 /**
+ * Определяет, является ли устройство тач-устройством на основе CSS-медиа-запросов
+ * @returns {boolean} true если устройство поддерживает hover и fine pointer (десктоп), false если тач-устройство
+ */
+function isDesktopDevice() {
+    return window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+}
+
+/**
  * Скрывает все курсоры на странице, добавляя класс hide-cursors
  */
 function hideAllCursors() {
@@ -24,9 +32,8 @@ function isSoundEnabled() {
  * @param {HTMLAudioElement} stepSound - Звук шага
  */
 function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
-    // Используем data-input-type для определения режима, fallback на ширину экрана
-    const inputType = document.documentElement.getAttribute('data-input-type');
-    const isMobile = inputType === 'touch' || (inputType !== 'desktop' && window.innerWidth <= 700);
+    // Используем CSS-медиа-запросы для определения типа устройства
+    const isMobile = !isDesktopDevice();
     
     if (!isMobile) {
         // Обработчик движения мыши над областью курсора
@@ -132,9 +139,8 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
         return;
     }
 
-    // Используем data-input-type для определения режима, fallback на ширину экрана
-    const inputType = document.documentElement.getAttribute('data-input-type');
-    const isMobile = inputType === 'touch' || (inputType !== 'desktop' && window.innerWidth <= 700);
+    // Используем CSS-медиа-запросы для определения типа устройства
+    const isMobile = !isDesktopDevice();
     
     if (!isMobile) {
         // Обработчик движения мыши над областью курсора
@@ -535,9 +541,8 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
  * @param {Function} onLeftClick - Callback-функция для обработки клика
  */
 function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClick) {
-    // Используем data-input-type для определения режима, fallback на ширину экрана
-    const inputType = document.documentElement.getAttribute('data-input-type');
-    const isMobile = inputType === 'touch' || (inputType !== 'desktop' && window.innerWidth <= 700);
+    // Используем CSS-медиа-запросы для определения типа устройства
+    const isMobile = !isDesktopDevice();
     
     if (!isMobile) {
         console.log('🟡 Настройка обработчиков для десктопной версии стрелки влево');
@@ -660,11 +665,13 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
  * @param {Function} onBackClick - Callback-функция для обработки клика
  */
 function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClick) {
+    // Используем CSS-медиа-запросы для определения типа устройства
+    const isMobile = !isDesktopDevice();
     
     // Обработчик движения мыши над областью курсора (только для десктопа)
     cursorBackArea.addEventListener('mousemove', function(e) {
         // На мобильных устройствах отключаем mouse события
-        if (window.innerWidth <= 700) {
+        if (isMobile) {
             return;
         }
         
@@ -683,7 +690,7 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
     // Обработчик движения мыши по всему документу (только для десктопа)
     document.addEventListener('mousemove', function(e) {
         // На мобильных устройствах отключаем mouse события
-        if (window.innerWidth <= 700) {
+        if (isMobile) {
             return;
         }
         
@@ -697,7 +704,7 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
     // Скрываем курсор при уходе мыши из области (только для десктопа)
     cursorBackArea.addEventListener('mouseleave', function() {
         // На мобильных устройствах отключаем mouse события
-        if (window.innerWidth <= 700) {
+        if (isMobile) {
             return;
         }
         
@@ -707,7 +714,7 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
     // Обработчик клика по стрелке назад (только для десктопа)
     cursorBackArea.addEventListener('click', function(e) {
         // На мобильных устройствах отключаем click событие
-        if (window.innerWidth <= 700) {
+        if (isMobile) {
             return;
         }
         
@@ -763,9 +770,8 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
         return;
     }
 
-    // Используем data-input-type для определения режима, fallback на ширину экрана
-    const inputType = document.documentElement.getAttribute('data-input-type');
-    const isMobile = inputType === 'touch' || (inputType !== 'desktop' && window.innerWidth <= 700);
+    // Используем CSS-медиа-запросы для определения типа устройства
+    const isMobile = !isDesktopDevice();
     
     if (!isMobile) {
         // Обработчик движения мыши над областью курсора
@@ -1102,9 +1108,8 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
  * @param {HTMLAudioElement} stepSound - Звук шага
  */
 function setupUpArrowHandler(cursor, cursorArea, stepSound) {
-    // Используем data-input-type для определения режима, fallback на ширину экрана
-    const inputType = document.documentElement.getAttribute('data-input-type');
-    const isMobile = inputType === 'touch' || (inputType !== 'desktop' && window.innerWidth <= 700);
+    // Используем CSS-медиа-запросы для определения типа устройства
+    const isMobile = !isDesktopDevice();
     
     if (!isMobile) {
         // Обработчик движения мыши над областью курсора
@@ -1161,6 +1166,7 @@ function setupUpArrowHandler(cursor, cursorArea, stepSound) {
 }
 
 // Экспортируем функции в глобальную область видимости
+window.isDesktopDevice = isDesktopDevice;
 window.setupRightArrowHandler = setupRightArrowHandler;
 window.setupForwardArrowHandler = setupForwardArrowHandler;
 window.setupForwardLeftArrowHandler = setupForwardLeftArrowHandler;
@@ -1169,11 +1175,71 @@ window.setupLeftArrowHandler = setupLeftArrowHandler;
 window.setupUpArrowHandler = setupUpArrowHandler;
 window.hideAllCursors = hideAllCursors;
 
+/* Функция для принудительного обновления mapMarks (аналогично hideAllCursors)
+function updateMapMarksVisibility() {
+    // Используем CSS-медиа-запросы для определения типа устройства
+    const isMobile = !isDesktopDevice();
+    
+    const mapMarks = document.querySelectorAll('.map-mark');
+    const mapMarkAreas = document.querySelectorAll('.map-mark-area');
+    const paperaImages = document.querySelectorAll('.papera-image');
+    const tumskiTexts = document.querySelectorAll('.tumski-text');
+    
+    mapMarks.forEach(mark => {
+        if (isMobile) {
+            mark.style.opacity = '1';
+            mark.style.display = 'block';
+            mark.style.pointerEvents = 'auto';
+            mark.style.visibility = 'visible';
+        } else {
+            mark.style.opacity = '0';
+            mark.style.display = 'block';
+            mark.style.visibility = 'visible';
+        }
+    });
+
+    mapMarkAreas.forEach(area => {
+        if (isMobile) {
+            area.style.pointerEvents = 'auto';
+            area.style.opacity = '1';
+            area.style.display = 'block';
+            area.style.visibility = 'visible';
+        }
+    });
+
+    paperaImages.forEach(img => {
+        if (isMobile) {
+            img.style.opacity = '1';
+            img.style.display = 'block';
+            img.style.pointerEvents = 'auto';
+            img.style.visibility = 'visible';
+        } else {
+            img.style.opacity = '0';
+            img.style.display = 'block';
+            img.style.visibility = 'visible';
+        }
+    });
+
+    tumskiTexts.forEach(text => {
+        if (isMobile) {
+            text.style.opacity = '1';
+            text.style.display = 'block';
+            text.style.pointerEvents = 'auto';
+            text.style.visibility = 'visible';
+        } else {
+            text.style.opacity = '0';
+            text.style.display = 'block';
+            text.style.visibility = 'visible';
+        }
+    });
+}
+
+window.updateMapMarksVisibility = updateMapMarksVisibility; */
+
 // Обработчик изменения размера окна для корректной работы на мобильных устройствах
 window.addEventListener('resize', function() {
-    // Используем data-input-type для определения режима, fallback на ширину экрана
-    const inputType = document.documentElement.getAttribute('data-input-type');
-    const isMobile = inputType === 'touch' || (inputType !== 'desktop' && window.innerWidth <= 700);
+    // Используем CSS-медиа-запросы для определения типа устройства
+    const isMobile = !isDesktopDevice();
     
     const cursors = document.querySelectorAll('.custom-cursor, .custom-cursor-prosto, .custom-cursor-prosto-left, .custom-cursor-left, .custom-cursor-up');
     const cursorAreas = document.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-prosto-leftarea, .custom-cursor-leftarea, .custom-cursor-uparea');
@@ -1194,4 +1260,7 @@ window.addEventListener('resize', function() {
             area.style.display = 'block';
         }
     });
+
+    // Обработка mapMarks для корректной работы на мобильных устройствах
+    updateMapMarksVisibility();
 }); 

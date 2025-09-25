@@ -29,51 +29,6 @@
     <!-- <div id="musicHint" class="music-hint" data-i18n="music.hint"></div> -->
     <!-- Подсказка для возврата анимации -->
     <div id="animationHint" class="animation-hint" data-i18n="animation.hint"></div>
-    <!-- Геометка: Святая Ядвига -->
-    <div class="map-mark-area">
-        <div class="map-mark" id="swieta_jadwiga" data-x-desktop="100" data-y-desktop="500" data-x-mobile="200" data-y-mobile="500"></div>
-        <div class="content-wrapper">
-            <img class="papera-image" alt="Papera">
-            <div class="tumski-text" id="swieta-jadwiga-text" data-i18n="swieta_jadwiga.title"></div>
-        </div>
-        <audio id="bookSoundJadwiga" src="media/opening-a-book.wav"></audio>
-    </div>
-    <!-- Геометка: Тумский остров -->
-    <div class="map-mark-area">
-        <div class="map-mark" id="tumski" data-x-desktop="1500" data-y-desktop="100" data-x-mobile="1500" data-y-mobile="200"></div>
-        <div class="content-wrapper">
-            <img class="papera-image" alt="Papera">
-            <div class="tumski-text" id="tumski-text" data-i18n="tumski.title"></div>
-        </div>
-        <audio id="bookSoundTumski" src="media/opening-a-book.wav"></audio>
-    </div>
-    <!-- Геометка: Собор Святого Иоанна Крестителя (универсальная) -->
-    <div class="map-mark-area">
-        <div class="map-mark" id="tumski_cathedral" data-x-desktop="2200" data-y-desktop="400" data-x-mobile="2270" data-y-mobile=800></div>
-        <div class="content-wrapper">
-            <img class="papera-image" alt="Papera">
-            <div class="tumski-text" id="tumski-cathedral-text" data-i18n="tumski_cathedral.title"></div>
-        </div>
-        <audio id="bookSound3" src="media/opening-a-book.wav"></audio>
-    </div>
-    <!-- Геометка: Тумский мост -->
-    <div class="map-mark-area" >
-        <div class="map-mark" id="tumski_most" data-x-desktop="1800" data-y-desktop="800" data-x-mobile="1950" data-y-mobile="950"></div>
-        <div class="content-wrapper">
-            <img class="papera-image" alt="Papera">
-            <div class="tumski-text" id="tumski-most-text" data-i18n="tumski_most.title"></div>
-        </div>
-        <audio id="bookSoundMost" src="media/opening-a-book.wav"></audio>
-    </div>
-        <!-- Геометка: Соборная церковь Святого Креста и Св. Варфоломея -->
-        <div class="map-mark-area" >
-            <div class="map-mark" id="katedra_koscielna" data-x-desktop="1200" data-y-desktop="600" data-x-mobile="1400" data-y-mobile="600"></div>
-            <div class="content-wrapper">
-                <img class="papera-image" alt="Papera">
-                <div class="tumski-text" id="katedra-koscielna-text" data-i18n="katedra_koscielna.title"></div>
-            </div>
-            <audio id="bookSoundKoscielna" src="media/opening-a-book.wav"></audio>
-        </div>
 
     <!-- Главная сцена с фоновым изображением и анимацией -->
     <div class="scene">
@@ -94,6 +49,53 @@
             </div>
         </div>
        <div class="next-image-container"></div>
+       
+       <!-- Геометки внутри сцены для правильного z-index -->
+       <!-- Геометка: Святая Ядвига -->
+       <div class="map-mark-area">
+           <div class="map-mark" id="swieta_jadwiga" data-x-desktop="100" data-y-desktop="500" data-x-mobile="200" data-y-mobile="500"></div>
+           <div class="content-wrapper">
+               <img class="papera-image" alt="Papera">
+               <div class="tumski-text" id="swieta-jadwiga-text" data-i18n="swieta_jadwiga.title"></div>
+           </div>
+           <audio id="bookSoundJadwiga" src="media/opening-a-book.wav"></audio>
+       </div>
+       <!-- Геометка: Тумский остров -->
+       <div class="map-mark-area">
+           <div class="map-mark" id="tumski" data-x-desktop="1500" data-y-desktop="100" data-x-mobile="1500" data-y-mobile="200"></div>
+           <div class="content-wrapper">
+               <img class="papera-image" alt="Papera">
+               <div class="tumski-text" id="tumski-text" data-i18n="tumski.title"></div>
+           </div>
+           <audio id="bookSoundTumski" src="media/opening-a-book.wav"></audio>
+       </div>
+       <!-- Геометка: Собор Святого Иоанна Крестителя (универсальная) -->
+       <div class="map-mark-area">
+           <div class="map-mark" id="tumski_cathedral" data-x-desktop="2200" data-y-desktop="400" data-x-mobile="2270" data-y-mobile=800></div>
+           <div class="content-wrapper">
+               <img class="papera-image" alt="Papera">
+               <div class="tumski-text" id="tumski-cathedral-text" data-i18n="tumski_cathedral.title"></div>
+           </div>
+           <audio id="bookSound3" src="media/opening-a-book.wav"></audio>
+       </div>
+       <!-- Геометка: Тумский мост -->
+       <div class="map-mark-area" >
+           <div class="map-mark" id="tumski_most" data-x-desktop="1800" data-y-desktop="800" data-x-mobile="1950" data-y-mobile="950"></div>
+           <div class="content-wrapper">
+               <img class="papera-image" alt="Papera">
+               <div class="tumski-text" id="tumski-most-text" data-i18n="tumski_most.title"></div>
+           </div>
+           <audio id="bookSoundMost" src="media/opening-a-book.wav"></audio>
+       </div>
+       <!-- Геометка: Соборная церковь Святого Креста и Св. Варфоломея -->
+       <div class="map-mark-area" >
+           <div class="map-mark" id="katedra_koscielna" data-x-desktop="1200" data-y-desktop="600" data-x-mobile="1400" data-y-mobile="600"></div>
+           <div class="content-wrapper">
+               <img class="papera-image" alt="Papera">
+               <div class="tumski-text" id="katedra-koscielna-text" data-i18n="katedra_koscielna.title"></div>
+           </div>
+           <audio id="bookSoundKoscielna" src="media/opening-a-book.wav"></audio>
+       </div>
     </div>
     <script type="module" src="tumski_init.js"></script>
     

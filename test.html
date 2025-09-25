@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест отладочной кнопки для iPad 5</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-marker {
+            width: 50px;
+            height: 50px;
+            background: red;
+            border-radius: 50%;
+            margin: 10px;
+            display: inline-block;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .test-marker.visible {
+            opacity: 1;
+        }
+        
+        /* Имитируем CSS медиа-запросы для планшетов */
+        @media (hover: none), (pointer: coarse) {
+            .test-marker {
+                opacity: 1 !important;
+            }
+            
+            /* Отладочный режим - переопределяем медиа-запросы */
+            body.debug-markers-hidden .test-marker,
+            html.debug-markers-hidden .test-marker {
+                opacity: 0 !important;
+            }
+            
+            body.debug-markers-visible .test-marker,
+            html.debug-markers-visible .test-marker {
+                opacity: 1 !important;
+            }
+        }
+        
+        .debug-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            border: 2px solid white;
+            border-radius: 15px;
+            padding: 15px 20px;
+            cursor: pointer;
+            z-index: 10002;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 180px;
+        }
+        
+        .debug-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+        
+        .debug-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .debug-icon {
+            font-size: 24px;
+        }
+        
+        .debug-text {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        /* Показываем кнопку только на планшетах */
+        @media (hover: none), (pointer: coarse) {
+            .debug-button {
+                display: block !important;
+            }
+        }
+        
+        /* Скрываем на десктопе */
+        @media (hover: hover) and (pointer: fine) {
+            .debug-button {
+                display: none !important;
+            }
+        }
+        
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .markers-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .debug-info {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Тест отладочной кнопки для iPad 5</h1>
+        
+        <div class="info">
+            <h3>Инструкции для тестирования на iPad 5:</h3>
+            <ol>
+                <li>Откройте эту страницу на iPad 5-го поколения</li>
+                <li>Кнопка "Показать геометки" должна появиться в правом верхнем углу</li>
+                <li>Нажмите на кнопку - красные кружки должны стать видимыми/скрытыми</li>
+                <li>Проверьте консоль браузера для отладочной информации</li>
+            </ol>
+        </div>
+        
+        <div class="markers-container">
+            <div class="test-marker" data-marker="1"></div>
+            <div class="test-marker" data-marker="2"></div>
+            <div class="test-marker" data-marker="3"></div>
+            <div class="test-marker" data-marker="4"></div>
+            <div class="test-marker" data-marker="5"></div>
+            <div class="test-marker" data-marker="6"></div>
+        </div>
+        
+        <div class="debug-info">
+            <h3>Отладочная информация:</h3>
+            <p><strong>User Agent:</strong> <span id="userAgent">Определяется...</span></p>
+            <p><strong>Тип устройства:</strong> <span id="deviceType">Определяется...</span></p>
+            <p><strong>Старый iPad:</strong> <span id="oldIPad">Определяется...</span></p>
+            <p><strong>Видимость геометок:</strong> <span id="markersStatus">Скрыты</span></p>
+            <p><strong>Классы на body:</strong> <span id="bodyClasses">-</span></p>
+            <p><strong>Классы на html:</strong> <span id="htmlClasses">-</span></p>
+            <p><strong>Найдено геометок:</strong> <span id="markersCount">0</span></p>
+        </div>
+    </div>
+    
+    <!-- Отладочная кнопка -->
+    <div id="debugMarkersButton" class="debug-button" style="display: none;">
+        <div class="debug-content">
+            <div class="debug-icon">📍</div>
+            <div class="debug-text">Показать геометки</div>
+        </div>
+    </div>
+    
+    <script>
+        class IPad5DebugManager {
+            constructor() {
+                this.markersVisible = false;
+                this.isMobile = this.detectMobileDevice();
+                this.isOldIPad = this.detectOldIPad();
+                this.init();
+            }
+            
+            detectMobileDevice() {
+                const hasTouchScreen = ('ontouchstart' in window) || 
+                                     (navigator.maxTouchPoints > 0) || 
+                                     (navigator.msMaxTouchPoints > 0);
+                const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+                return hasTouchScreen && isCoarsePointer;
+            }
+            
+            detectOldIPad() {
+                const userAgent = navigator.userAgent;
+                return /iPad/.test(userAgent) && 
+                       (userAgent.includes('OS 12') || 
+                        userAgent.includes('OS 13') || 
+                        userAgent.includes('OS 14') || 
+                        userAgent.includes('OS 15'));
+            }
+            
+            init() {
+                this.updateDebugInfo();
+                this.setupEventListeners();
+                
+                if (this.isMobile) {
+                    document.getElementById('debugMarkersButton').style.display = 'block';
+                    // Инициализируем правильное состояние геометок
+                    this.updateMarkersVisibility();
+                }
+            }
+            
+            updateDebugInfo() {
+                document.getElementById('userAgent').textContent = navigator.userAgent;
+                document.getElementById('deviceType').textContent = this.isMobile ? 'Мобильное/Планшет' : 'Десктоп';
+                document.getElementById('oldIPad').textContent = this.isOldIPad ? 'Да' : 'Нет';
+            }
+            
+            setupEventListeners() {
+                const debugButton = document.getElementById('debugMarkersButton');
+                if (debugButton) {
+                    debugButton.addEventListener('click', () => {
+                        this.toggleMarkersVisibility();
+                    });
+                }
+            }
+            
+            toggleMarkersVisibility() {
+                this.markersVisible = !this.markersVisible;
+                this.updateMarkersVisibility();
+                this.updateButtonText();
+                this.updateStatus();
+            }
+            
+            updateMarkersVisibility() {
+                // Управляем классами на body и html для переопределения CSS
+                document.body.classList.remove('debug-markers-visible', 'debug-markers-hidden');
+                document.documentElement.classList.remove('debug-markers-visible', 'debug-markers-hidden');
+                
+                if (this.markersVisible) {
+                    document.body.classList.add('debug-markers-visible');
+                    document.documentElement.classList.add('debug-markers-visible');
+                } else {
+                    document.body.classList.add('debug-markers-hidden');
+                    document.documentElement.classList.add('debug-markers-hidden');
+                }
+                
+                // Дополнительный fallback - прямое управление стилями
+                this.applyDirectStyleOverrides();
+                
+                this.updateDebugInfo();
+            }
+            
+            applyDirectStyleOverrides() {
+                const markers = document.querySelectorAll('.test-marker');
+                
+                markers.forEach(marker => {
+                    if (this.markersVisible) {
+                        marker.style.setProperty('opacity', '1', 'important');
+                        marker.style.setProperty('pointer-events', 'auto', 'important');
+                        marker.style.setProperty('visibility', 'visible', 'important');
+                        marker.style.setProperty('display', 'block', 'important');
+                        
+                        // Дополнительные стили для старых iPad
+                        if (this.isOldIPad) {
+                            marker.style.opacity = '1';
+                            marker.style.pointerEvents = 'auto';
+                            marker.style.visibility = 'visible';
+                            marker.style.display = 'block';
+                        }
+                    } else {
+                        marker.style.setProperty('opacity', '0', 'important');
+                        marker.style.setProperty('pointer-events', 'none', 'important');
+                        marker.style.setProperty('visibility', 'visible', 'important');
+                        marker.style.setProperty('display', 'block', 'important');
+                        
+                        // Дополнительные стили для старых iPad
+                        if (this.isOldIPad) {
+                            marker.style.opacity = '0';
+                            marker.style.pointerEvents = 'none';
+                            marker.style.visibility = 'visible';
+                            marker.style.display = 'block';
+                        }
+                    }
+                });
+                
+                console.log('📍 Применены прямые стили для', markers.length, 'элементов');
+                if (this.isOldIPad) {
+                    console.log('📍 Режим совместимости для старого iPad активен');
+                }
+            }
+            
+            updateButtonText() {
+                const textElement = document.querySelector('.debug-text');
+                if (textElement) {
+                    textElement.textContent = this.markersVisible ? 'Скрыть геометки' : 'Показать геометки';
+                }
+            }
+            
+            updateStatus() {
+                document.getElementById('markersStatus').textContent = this.markersVisible ? 'Показаны' : 'Скрыты';
+                document.getElementById('bodyClasses').textContent = document.body.className || '-';
+                document.getElementById('htmlClasses').textContent = document.documentElement.className || '-';
+                document.getElementById('markersCount').textContent = document.querySelectorAll('.test-marker').length;
+            }
+        }
+        
+        // Инициализируем тест при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            new IPad5DebugManager();
+        });
+    </script>
+</body>
+</html>

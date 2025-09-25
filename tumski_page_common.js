@@ -247,9 +247,9 @@ function setupAllArrows(stepSound) {
                 }
                 
                 // Проверяем, находимся ли мы в SPA
-                if (window.parent && window.parent !== window && window.parent.SPAManager) {
+                if (window.parent && window.parent !== window && window.parent.spaManager) {
                     console.log('🎵 Fallback навигация через SPA:', url);
-                    window.parent.SPAManager.navigateToPage(url);
+                    window.parent.spaManager.navigateToPage(url);
                 } else {
                     console.log('🎵 Fallback обычная навигация:', url);
                     setTimeout(() => { window.location.href = url; }, 0);
@@ -277,15 +277,13 @@ function setupAllArrows(stepSound) {
                         console.log('🎵 Специальная логика для tumski18 -> tumski19: переключаем музыку');
                         
                         // Проверяем, находимся ли мы в SPA
-                        if (window.parent && window.parent !== window && window.parent.SPAManager) {
+                        if (window.parent && window.parent !== window && window.parent.spaManager) {
                             // Переключаем музыку на kostel через SPA
-                            if (typeof window.parent.SPAManager.switchToKostelMusic === 'function') {
-                                console.log('🎵 Переключаем музыку на kostel через SPA');
-                                window.parent.SPAManager.switchToKostelMusic();
-                            }
+                            console.log('🎵 Переключаем музыку на kostel через SPA');
+                            window.parent.spaManager.switchTrack('kostel');
                             
                             console.log('🎵 Переход через SPA:', next);
-                            window.parent.SPAManager.navigateToPage(next);
+                            window.parent.spaManager.navigateToPage(next);
                         } else {
                             console.log('🎵 Обычный переход:', next);
                             window.location.href = next;
@@ -294,15 +292,13 @@ function setupAllArrows(stepSound) {
                         console.log('🎵 Специальная логика для tumski20 -> tumski21: переключаем музыку');
                         
                         // Проверяем, находимся ли мы в SPA
-                        if (window.parent && window.parent !== window && window.parent.SPAManager) {
+                        if (window.parent && window.parent !== window && window.parent.spaManager) {
                             // Переключаем музыку на hang через SPA
-                            if (typeof window.parent.SPAManager.switchToHangMusic === 'function') {
-                                console.log('🎵 Переключаем музыку на hang через SPA');
-                                window.parent.SPAManager.switchToHangMusic();
-                            }
+                            console.log('🎵 Переключаем музыку на hang через SPA');
+                            window.parent.spaManager.switchTrack('hang');
                             
                             console.log('🎵 Переход через SPA:', next);
-                            window.parent.SPAManager.navigateToPage(next);
+                            window.parent.spaManager.navigateToPage(next);
                         } else {
                             console.log('🎵 Обычный переход:', next);
                             window.location.href = next;
@@ -311,24 +307,22 @@ function setupAllArrows(stepSound) {
                         console.log('🎵 Специальная логика для tumski15 -> ogrod13: переключаем музыку');
                         
                         // Проверяем, находимся ли мы в SPA
-                        if (window.parent && window.parent !== window && window.parent.SPAManager) {
+                        if (window.parent && window.parent !== window && window.parent.spaManager) {
                             // Переключаем музыку на birds через SPA
-                            if (typeof window.parent.SPAManager.switchToBirdsMusic === 'function') {
-                                console.log('🎵 Переключаем музыку на birds через SPA');
-                                window.parent.SPAManager.switchToBirdsMusic();
-                            }
+                            console.log('🎵 Переключаем музыку на birds через SPA');
+                            window.parent.spaManager.switchTrack('birds');
                             
                             console.log('🎵 Переход через SPA:', next);
-                            window.parent.SPAManager.navigateToPage(next);
+                            window.parent.spaManager.navigateToPage(next);
                         } else {
                             console.log('🎵 Обычный переход:', next);
                             window.location.href = next;
                         }
                     } else {
                         // Обычная логика для других переходов
-                        if (window.parent && window.parent !== window && window.parent.SPAManager) {
+                        if (window.parent && window.parent !== window && window.parent.spaManager) {
                             console.log('🎵 Переход через SPA:', next);
-                            window.parent.SPAManager.navigateToPage(next);
+                            window.parent.spaManager.navigateToPage(next);
                         } else {
                             console.log('🎵 Обычный переход:', next);
                             window.location.href = next;
@@ -353,8 +347,8 @@ function setupAllArrows(stepSound) {
                 const prev = cursorBack.getAttribute('data-prev-page');
                 if (prev) {
                     // Проверяем, находимся ли мы в SPA
-                    if (window.parent && window.parent !== window && window.parent.SPAManager) {
-                        window.parent.SPAManager.navigateToPage(prev);
+                    if (window.parent && window.parent !== window && window.parent.spaManager) {
+                        window.parent.spaManager.navigateToPage(prev);
                     } else {
                         window.location.href = prev;
                     }
@@ -371,9 +365,9 @@ function setupAllArrows(stepSound) {
                 const next = cursorLeft.getAttribute('data-next-page');
                 if (next) {
                     // Проверяем, находимся ли мы в SPA
-                    if (window.parent && window.parent !== window && window.parent.SPAManager) {
+                    if (window.parent && window.parent !== window && window.parent.spaManager) {
                         console.log('🎵 Переход через SPA:', next);
-                        window.parent.SPAManager.navigateToPage(next);
+                        window.parent.spaManager.navigateToPage(next);
                     } else {
                         console.log('🎵 Обычный переход:', next);
                         window.location.href = next;
@@ -389,9 +383,9 @@ function setupAllArrows(stepSound) {
                 const next = cursorProstoLeft.getAttribute('data-next-page');
                 if (next) {
                     // Проверяем, находимся ли мы в SPA
-                    if (window.parent && window.parent !== window && window.parent.SPAManager) {
+                    if (window.parent && window.parent !== window && window.parent.spaManager) {
                         console.log('🎵 Переход через SPA:', next);
-                        window.parent.SPAManager.navigateToPage(next);
+                        window.parent.spaManager.navigateToPage(next);
                     } else {
                         console.log('🎵 Обычный переход:', next);
                         window.location.href = next;

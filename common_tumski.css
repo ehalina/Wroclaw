@@ -11,12 +11,48 @@
     }
 }
 
-@keyframes moveForward {
+@-webkit-keyframes moveForward {
     from {
+        -webkit-transform: translateZ(0px) translateX(0);
         transform: translateZ(0px) translateX(0);
     }
     to {
+        -webkit-transform: translateZ(500px) translateX(0);
         transform: translateZ(500px) translateX(0);
+    }
+}
+
+@keyframes moveForward {
+    from {
+        -webkit-transform: translateZ(0px) translateX(0);
+        transform: translateZ(0px) translateX(0);
+    }
+    to {
+        -webkit-transform: translateZ(500px) translateX(0);
+        transform: translateZ(500px) translateX(0);
+    }
+}
+
+/* 2D-версия анимации moveForward для старых планшетов */
+@-webkit-keyframes moveForward-2d {
+    from {
+        -webkit-transform: scale(1) translateX(0);
+        transform: scale(1) translateX(0);
+    }
+    to {
+        -webkit-transform: scale(2.5) translateX(0);
+        transform: scale(2.5) translateX(0);
+    }
+}
+
+@keyframes moveForward-2d {
+    from {
+        -webkit-transform: scale(1) translateX(0);
+        transform: scale(1) translateX(0);
+    }
+    to {
+        -webkit-transform: scale(2.5) translateX(0);
+        transform: scale(2.5) translateX(0);
     }
 }
 
@@ -193,11 +229,11 @@
 /* ===== ГЕОМЕТКИ ===== */
 .map-mark-area {
     position: absolute !important;
-    z-index: 1001;
+    z-index: 10000;
     display: flex;
     align-items: center;
     gap: 10px;
-    will-change: left, top;
+    will-change: left, top, transform;
     transition: left 0.3s ease-out, top 0.3s ease-out;
     right: auto !important;
     top: auto !important;
@@ -207,10 +243,18 @@
     left: auto !important;
     margin: 0 !important;
     padding: 0 !important;
+    /* Позиционирование относительно .scene */
+    pointer-events: auto;
+    /* Принудительное создание GPU-слоя для старых iOS */
+    transform: translateZ(0) !important;
 }
 
 .map-mark {
-    position: relative !important;
+    position: absolute !important;
+    z-index: 10000;
+    /* Принудительное создание GPU-слоя для старых iOS */
+    transform: translateZ(0) !important;
+    will-change: transform !important;
 }
 
 /* Расширенная область вокруг геометки */
@@ -224,7 +268,7 @@
     background: transparent;
     border-radius: 50%;
     pointer-events: auto;
-    z-index: 1000;
+    z-index: 9999;
 }
 
 .map-mark:hover::before {
@@ -235,7 +279,7 @@
 /* Стили для JavaScript-созданных расширенных областей */
 .extended-hover-area {
     position: absolute !important;
-    z-index: 1000 !important;
+    z-index: 9999 !important;
     pointer-events: auto !important;
 }
 
@@ -428,6 +472,26 @@ html[data-input-type="desktop"] .custom-cursor-up {
 
 /* Планшеты - приоритет геометок над стрелками */
 @media (hover: none) and (pointer: coarse) and (min-width: 768px) {
+    /* Принудительно устанавливаем низкий z-index для image-container на планшетах */
+    .image-container {
+        z-index: 1 !important;
+    }
+}
+
+/* Отключаем анимацию moveForward на старых планшетах (iPad 5-9 поколения) */
+@media screen and (-webkit-min-device-pixel-ratio: 1) and (min-width: 768px) and (max-width: 1024px),
+       screen and (-webkit-min-device-pixel-ratio: 2) and (min-width: 768px) and (max-width: 1024px) {
+    .image-container {
+        -webkit-animation: none !important;
+        animation: none !important;
+        /* 2D-версия анимации moveForward для старых планшетов с вендорными префиксами */
+        -webkit-animation: moveForward-2d 40s linear infinite;
+        animation: moveForward-2d 40s linear infinite;
+    }
+}
+
+/* Планшеты - приоритет геометок над стрелками (продолжение) */
+@media (hover: none) and (pointer: coarse) and (min-width: 768px) {
     /* Геометки должны быть выше стрелок на планшетах */
     .map-mark-area {
         z-index: 10000 !important;
@@ -472,30 +536,121 @@ html[data-input-type="desktop"] .custom-cursor-up {
     }
 }
 
+/* Экраны меньше или равные 2000px - считаем тач-устройствами */
+@media (max-width: 1000px) {
+    /* Принудительно устанавливаем низкий z-index для image-container на мобильных устройствах */
+    .image-container {
+        z-index: 1 !important;
+    }
+    
+    /* Элементы управления всегда видны */
+    .custom-cursor,
+    .custom-cursor-prosto,
+    .custom-cursor-prosto-left,
+    .custom-cursor-back,
+    .custom-cursor-left,
+    .custom-cursor-up,
+    .custom-cursor-area,
+    .custom-cursor-prostoarea,
+    .custom-cursor-prosto-leftarea,
+    .custom-cursor-backarea,
+    .custom-cursor-leftarea,
+    .custom-cursor-uparea {
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+    }
+    
+    /* Геометки всегда видны и имеют приоритет над стрелками */
+    .map-mark-area,
+    .map-mark,
+    .papera-image,
+    .tumski-text {
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+    }
+    
+    /* Убираем эффекты наведения */
+    .custom-cursor-area:hover .custom-cursor,
+    .custom-cursor-prostoarea:hover .custom-cursor-prosto,
+    .custom-cursor-prosto-leftarea:hover .custom-cursor-prosto-left,
+    .custom-cursor-backarea:hover .custom-cursor-back,
+    .custom-cursor-leftarea:hover .custom-cursor-left,
+    .custom-cursor-uparea:hover .custom-cursor-up {
+        opacity: 1 !important;
+    }
+    
+    /* Геометки должны быть выше стрелок */
+    .map-mark-area {
+        z-index: 10002 !important;
+    }
+    
+    .map-mark {
+        z-index: 10002 !important;
+    }
+    
+    .map-mark::before {
+        z-index: 10001 !important;
+    }
+    
+    .extended-hover-area {
+        z-index: 10001 !important;
+    }
+    
+    /* Квест-геометки должны быть еще выше */
+    .map-mark-area:has([data-quest-number]) {
+        z-index: 10003 !important;
+    }
+    
+    .map-mark-area:has([data-quest-number]) .map-mark {
+        z-index: 10003 !important;
+    }
+    
+    .map-mark-area:has([data-quest-number]) .map-mark::before {
+        z-index: 10002 !important;
+    }
+    
+    .map-mark-area:has([data-quest-number]) .extended-hover-area {
+        z-index: 10002 !important;
+    }
+    
+    /* Quest-marker-glow должен быть выше всех стрелок */
+    .quest-marker-glow {
+        z-index: 10003 !important;
+    }
+    
+    .quest-marker-glow::after {
+        z-index: 10003 !important;
+    }
+}
+
 /* Квест-геометки на всех устройствах должны быть выше стрелок */
 .map-mark-area:has([data-quest-number]) {
-    z-index: 1002 !important;
+    z-index: 10001 !important;
 }
 
 .map-mark-area:has([data-quest-number]) .map-mark {
-    z-index: 1002 !important;
+    z-index: 10001 !important;
 }
 
 .map-mark-area:has([data-quest-number]) .map-mark::before {
-    z-index: 1001 !important;
+    z-index: 10000 !important;
 }
 
 .map-mark-area:has([data-quest-number]) .extended-hover-area {
-    z-index: 1001 !important;
+    z-index: 10000 !important;
 }
 
 /* Quest-marker-glow на всех устройствах должен быть выше стрелок */
 .quest-marker-glow {
-    z-index: 1002 !important;
+    z-index: 10001 !important;
 }
 
 .quest-marker-glow::after {
-    z-index: 1002 !important;
+    z-index: 10001 !important;
 }
 
 /* ===== ПРИОРИТЕТ ПО DATA-АТРИБУТУ ===== */

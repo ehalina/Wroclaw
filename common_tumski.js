@@ -145,8 +145,8 @@ export async function initializeTumskiPage(options = {}) {
 }
 
 /**
- * Позиционирование геометок с повторными попытками
- */
+ * Позиционирование геометок с повторными попытками  */
+ 
 async function positionMarkersWithRetry(cathedralMod) {
     cathedralMod.positionMarkersOnBg();
     
@@ -158,7 +158,7 @@ async function positionMarkersWithRetry(cathedralMod) {
     setTimeout(() => {
         cathedralMod.positionMarkersOnBg();
     }, 1000);
-}
+} 
 
 /**
  * Растягивание papera с повторными попытками

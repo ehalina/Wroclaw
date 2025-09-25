@@ -372,11 +372,13 @@
                         if (window.parent && window.parent !== window) {
                             console.log('🎵 Отправляем сообщение родительскому окну для перехода на tumski06.html');
                             // Отправляем сообщение родительскому окну
-                            window.parent.postMessage({
+                            const message = {
                                 type: 'SPA_NAVIGATE',
                                 page: 'tumski06.html',
                                 action: 'navigate'
-                            }, '*');
+                            };
+                            console.log('🎵 Отправляем сообщение:', message);
+                            window.parent.postMessage(message, '*');
                         } else {
                             console.log('🎵 Переход на tumski06.html обычным способом');
                             window.location.href = 'tumski06.html';
@@ -394,11 +396,13 @@
                         if (window.parent && window.parent !== window) {
                             console.log('🎵 Отправляем сообщение родительскому окну для перехода на tumski06.html');
                             // Отправляем сообщение родительскому окну
-                            window.parent.postMessage({
+                            const message = {
                                 type: 'SPA_NAVIGATE',
                                 page: 'tumski06.html',
                                 action: 'navigate'
-                            }, '*');
+                            };
+                            console.log('🎵 Отправляем сообщение:', message);
+                            window.parent.postMessage(message, '*');
                         } else {
                             console.log('🎵 Переход на tumski06.html обычным способом');
                             window.location.href = 'tumski06.html';
@@ -425,9 +429,17 @@
                         console.log('🎵 Клик по стрелке назад на tumski21 - отключаем hang.mp3 и запускаем квест');
                         
                         // 1. Сначала полностью отключаем hang.mp3
-                        if (window.parent && window.parent !== window && window.parent.SPAManager) {
+                        console.log('🎵 Проверяем доступность SPA:', {
+                            hasParent: !!(window.parent && window.parent !== window),
+                            hasSpaManager: !!(window.parent && window.parent.spaManager),
+                            spaManagerType: window.parent && window.parent.spaManager ? typeof window.parent.spaManager : 'undefined'
+                        });
+                        
+                        if (window.parent && window.parent !== window && window.parent.spaManager) {
                             console.log('🎵 Останавливаем hang.mp3 через SPA');
-                            window.parent.SPAManager.switchToTownMusic();
+                            window.parent.spaManager.switchTrack('town');
+                        } else {
+                            console.log('🎵 SPA недоступна, пропускаем переключение музыки');
                         }
                         
                         // Останавливаем анимацию параллакса
@@ -476,11 +488,13 @@
                                     // Квест закрыт, выполняем переход через SPA
                                     if (window.parent && window.parent !== window) {
                                         console.log('🎵 Квест закрыт через checkQuestClosed - отправляем сообщение SPA');
-                                        window.parent.postMessage({
+                                        const message = {
                                             type: 'SPA_NAVIGATE',
                                             page: 'tumski06.html',
                                             action: 'navigate'
-                                        }, '*');
+                                        };
+                                        console.log('🎵 Отправляем сообщение:', message);
+                                        window.parent.postMessage(message, '*');
                                     } else {
                                         console.log('🎵 Квест закрыт через checkQuestClosed - обычный переход');
                                         setTimeout(() => {

@@ -66,6 +66,45 @@
             display: none;
         }
         
+        /* Стили для кнопки разблокировки аудио */
+        .audio-unlock-button {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            border: 2px solid white;
+            border-radius: 15px;
+            padding: 20px 30px;
+            cursor: pointer;
+            z-index: 10001;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 250px;
+        }
+        
+        .audio-unlock-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+        
+        .audio-unlock-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .audio-unlock-icon {
+            font-size: 32px;
+        }
+        
+        .audio-unlock-text {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
         /* Стили для кнопки запуска музыки - закомментированы */
         /*
         .music-start-button {
@@ -106,30 +145,18 @@
         <div>Загрузка...</div>
     </div>
     
-    <!-- Простой аудио элемент для музыки -->
-    <audio id="backgroundMusic" loop>
+    <!-- Единый аудио элемент для всей музыки -->
+    <audio id="unifiedMusicPlayer" loop preload="auto" playsinline>
         <source src="media/zwyki/town.mp3" type="audio/mpeg">
     </audio>
     
-    <!-- Аудио элемент для kostel.mp3 -->
-    <audio id="kostelMusic" loop>
-        <source src="media/zwyki/kostel.mp3" type="audio/mpeg">
-    </audio>
-    
-    <!-- Аудио элемент для hang.mp3 -->
-    <audio id="hangMusic" loop>
-        <source src="media/zwyki/hang.mp3" type="audio/mpeg">
-    </audio>
-    
-    <!-- Аудио элемент для birds.mp3 -->
-    <audio id="birdsMusic" loop>
-        <source src="media/zwyki/birds.mp3" type="audio/mpeg">
-    </audio>
-    
-    <!-- Аудио элемент для quest.mp3 -->
-    <audio id="questMusic" loop>
-        <source src="media/zwyki/quest.mp3" type="audio/mpeg">
-    </audio>
+    <!-- Кнопка разблокировки аудио (скрыта по умолчанию) -->
+    <div id="audioUnlockButton" class="audio-unlock-button" style="display: none;">
+        <div class="audio-unlock-content">
+            <div class="audio-unlock-icon">🎵</div>
+            <div class="audio-unlock-text">Нажмите для включения музыки</div>
+        </div>
+    </div>
     
     <!-- SPA контейнер -->
     <div id="spa-container">
@@ -143,9 +170,37 @@
                 this.currentPage = null;
                 this.pages = new Map();
                 this.stepSound = null;
-                this.townMusicPaused = false;
-                this.townMusicTime = 0;
+                this.audioUnlocked = false;
+                this.currentTrack = 'town';
+                this.trackTimes = new Map(); // Сохраняем время для каждого трека
+                this.isMobile = this.detectMobileDevice();
                 this.init();
+            }
+            
+            /**
+             * Определяет, является ли устройство мобильным
+             * @returns {boolean} true если мобильное устройство, false если десктоп
+             */
+            detectMobileDevice() {
+                // Проверка на поддержку тачскрина
+                const hasTouchScreen = ('ontouchstart' in window) || 
+                                     (navigator.maxTouchPoints > 0) || 
+                                     (navigator.msMaxTouchPoints > 0);
+                
+                // Проверка медиа-запроса pointer: coarse (для устройств с грубым указателем, например, пальцем)
+                const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
+                
+                // Устройство считается мобильным, если есть тачскрин И грубый указатель
+                return hasTouchScreen && isCoarsePointer;
+            }
+            
+            /**
+             * Проверяет, является ли устройство iOS
+             * @returns {boolean} true если iOS, false если нет
+             */
+            isIOS() {
+                return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                       (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
             }
             
             /**
@@ -156,6 +211,112 @@
                 const soundMuted = localStorage.getItem('soundMuted');
                 // По умолчанию звук включен (если значение не установлено или 'false')
                 return soundMuted !== 'true';
+            }
+            
+            /**
+             * Получает единый аудио плеер
+             * @returns {HTMLAudioElement} единый аудио элемент
+             */
+            getUnifiedAudioPlayer() {
+                return document.getElementById('unifiedMusicPlayer');
+            }
+            
+            /**
+             * Показывает кнопку разблокировки аудио
+             */
+            showAudioUnlockButton() {
+                const button = document.getElementById('audioUnlockButton');
+                if (button) {
+                    button.style.display = 'block';
+                }
+            }
+            
+            /**
+             * Скрывает кнопку разблокировки аудио
+             */
+            hideAudioUnlockButton() {
+                const button = document.getElementById('audioUnlockButton');
+                if (button) {
+                    button.style.display = 'none';
+                }
+            }
+            
+            /**
+             * Разблокирует аудио по первому клику
+             */
+            async unlockAudio() {
+                const audio = this.getUnifiedAudioPlayer();
+                if (!audio) return;
+                
+                try {
+                    // Сохраняем текущее время трека
+                    this.trackTimes.set(this.currentTrack, audio.currentTime);
+                    
+                    await audio.play();
+                    this.audioUnlocked = true;
+                    this.hideAudioUnlockButton();
+                    console.log('🎵 Аудио успешно разблокировано');
+                } catch (error) {
+                    console.log('🎵 Ошибка разблокировки аудио:', error);
+                    this.showAudioUnlockButton();
+                }
+            }
+            
+            /**
+             * Переключает трек без паузы (рекомендуемый подход)
+             * @param {string} trackName - название трека (town, birds, kostel, hang, quest)
+             */
+            async switchTrack(trackName) {
+                const audio = this.getUnifiedAudioPlayer();
+                if (!audio) return;
+                
+                // Проверяем, не отключен ли звук
+                if (!this.isSoundEnabled()) {
+                    console.log('🎵 Звук отключен, не переключаем трек');
+                    return;
+                }
+                
+                // Если трек уже играет, не переключаем
+                if (this.currentTrack === trackName && !audio.paused) {
+                    console.log('🎵 Трек уже играет:', trackName);
+                    return;
+                }
+                
+                // Сохраняем время текущего трека
+                this.trackTimes.set(this.currentTrack, audio.currentTime);
+                
+                // Определяем URL нового трека
+                const trackUrls = {
+                    'town': 'media/zwyki/town.mp3',
+                    'birds': 'media/zwyki/birds.mp3',
+                    'kostel': 'media/zwyki/kostel.mp3',
+                    'hang': 'media/zwyki/hang.mp3',
+                    'quest': 'media/zwyki/quest.mp3'
+                };
+                
+                const newUrl = trackUrls[trackName];
+                if (!newUrl) {
+                    console.log('🎵 Неизвестный трек:', trackName);
+                    return;
+                }
+                
+                try {
+                    // Меняем источник и сразу играем (НЕ делаем pause!)
+                    audio.src = newUrl;
+                    audio.load();
+                    
+                    // Восстанавливаем время для нового трека, если оно было сохранено
+                    const savedTime = this.trackTimes.get(trackName) || 0;
+                    audio.currentTime = savedTime;
+                    
+                    await audio.play();
+                    this.currentTrack = trackName;
+                    console.log('🎵 Трек переключен на:', trackName);
+                } catch (error) {
+                    console.log('🎵 Ошибка переключения трека:', error);
+                    // Показываем кнопку разблокировки при ошибке
+                    this.showAudioUnlockButton();
+                }
             }
             
             /**
@@ -187,158 +348,200 @@
             
             async init() {
                 console.log('🚀 Инициализация SPA...');
+                console.log('📱 Мобильное устройство:', this.isMobile);
+                
+                // Инициализируем кастомные курсоры для десктопа
+                this.initCustomCursors();
+                
+                // Инициализируем обработчики стрелок
+                this.initArrowHandlers();
                 
                 // Инициализируем звук шага
                 this.initStepSound();
                 
-                // Запускаем музыку сразу при загрузке
-                this.startBackgroundMusic();
+                // Инициализируем единый аудио плеер
+                this.initUnifiedAudioPlayer();
                 
                 // Загружаем первую страницу (tumski.html)
                 await this.loadPage('tumski.html');
                 
                 // Инициализируем обработчики
                 this.setupEventListeners();
-                
-                // Добавляем глобальный слушатель кликов для запуска музыки
-                this.setupGlobalMusicListener();
             }
             
             /**
-             * Настраивает глобальный слушатель кликов для запуска фоновой музыки
+             * Инициализирует кастомные курсоры для десктопа
              */
-            setupGlobalMusicListener() {
-                console.log('🎵 Настройка глобального слушателя кликов для музыки...');
+            initCustomCursors() {
+                if (this.isMobile) {
+                    console.log('📱 Мобильное устройство, кастомные курсоры отключены');
+                    return;
+                }
                 
-                // Флаг для отслеживания, была ли музыка уже запущена
-                this.musicStarted = false;
+                console.log('🖱️ Инициализация кастомных курсоров для десктопа');
                 
-                const startMusicOnClick = () => {
-                    // Проверяем, не запущена ли уже музыка
-                    if (this.musicStarted) {
-                        return;
+                // Добавляем CSS для кастомных курсоров
+                const style = document.createElement('style');
+                style.textContent = `
+                    /* Кастомные курсоры для десктопа */
+                    body {
+                        cursor: url('media/strelka.png'), auto;
                     }
                     
-                    console.log('🎵 Клик пользователя - запускаем музыку для страницы:', this.currentPage);
-                    this.musicStarted = true;
+                    /* Курсор для кликабельных элементов */
+                    a, button, [data-prev-page], [data-next-page], .clickable {
+                        cursor: url('media/strelka_prosto.png'), pointer;
+                    }
                     
-                    // Запускаем музыку для текущей страницы
-                    this.switchMusicForPage(this.currentPage);
+                    /* Курсор для наведения на стрелки */
+                    .arrow-left, .arrow-right, .arrow-up, .arrow-down {
+                        cursor: url('media/strelka_prosto.png'), pointer;
+                    }
                     
-                    // Удаляем слушатель после первого успешного запуска
-                    document.removeEventListener('click', startMusicOnClick);
-                    document.removeEventListener('touchstart', startMusicOnClick);
-                };
-                
-                // Добавляем слушатели для клика и касания
-                document.addEventListener('click', startMusicOnClick);
-                document.addEventListener('touchstart', startMusicOnClick);
-                
-                console.log('🎵 Глобальный слушатель кликов настроен');
+                    /* Курсор для модальных окон */
+                    .modal, .modal-content {
+                        cursor: url('media/strelka.png'), auto;
+                    }
+                    
+                    /* Курсор для кнопок в модальных окнах */
+                    .modal button, .modal .close {
+                        cursor: url('media/strelka_prosto.png'), pointer;
+                    }
+                `;
+                document.head.appendChild(style);
             }
             
-            startBackgroundMusic() {
-                console.log('🎵 Запуск фоновой музыки town.mp3...');
+            /**
+             * Инициализирует обработчики стрелок для навигации
+             */
+            initArrowHandlers() {
+                console.log('⬅️➡️ Инициализация обработчиков стрелок');
                 
-                const audio = document.getElementById('backgroundMusic');
-                if (audio) {
-                    // Проверяем, не отключен ли звук через кнопку
-                    const isMuted = localStorage.getItem('soundMuted') === 'true';
-                    if (isMuted) {
-                        console.log('🎵 Звук отключен через кнопку, не запускаем музыку');
-                        return;
+                // Обработчики клавиатуры для навигации
+                document.addEventListener('keydown', (event) => {
+                    if (this.isMobile) return; // На мобильных устройствах не обрабатываем клавиатуру
+                    
+                    switch(event.key) {
+                        case 'ArrowLeft':
+                            event.preventDefault();
+                            this.navigateToPreviousPage();
+                            break;
+                        case 'ArrowRight':
+                            event.preventDefault();
+                            this.navigateToNextPage();
+                            break;
+                        case 'Escape':
+                            event.preventDefault();
+                            this.closeModals();
+                            break;
                     }
-                    
-                    // Добавляем обработчик зацикливания
-                    audio.addEventListener('ended', () => {
-                        console.log('🎵 Музыка закончилась, перезапускаем...');
-                        // Проверяем, не отключен ли звук
-                        const isMuted = localStorage.getItem('soundMuted') === 'true';
-                        if (!isMuted) {
-                            audio.currentTime = 0; // Сбрасываем позицию
-                            audio.play().catch(console.log);
-                        }
-                    });
-                    
-                    // Пытаемся запустить музыку
-                    audio.play().then(() => {
-                        console.log('🎵 Музыка успешно запущена');
-                        this.musicStarted = true;
-                    }).catch(error => {
-                        console.log('🎵 Ошибка автозапуска музыки (требуется взаимодействие пользователя):', error);
-                        // Не показываем подсказку, так как у нас есть глобальный слушатель кликов
-                        console.log('🎵 Ожидаем клик пользователя для запуска музыки...');
-                    });
+                });
+            }
+            
+            /**
+             * Переходит на предыдущую страницу
+             */
+            navigateToPreviousPage() {
+                const pageOrder = [
+                    'tumski.html', 'tumski02.html', 'tumski03.html', 'tumski04.html', 'tumski05.html',
+                    'tumski06.html', 'tumski07.html', 'tumski08.html', 'tumski09.html', 'tumski10.html',
+                    'tumski11.html', 'tumski12.html', 'tumski13.html', 'tumski14.html', 'tumski15.html',
+                    'tumski16.html', 'tumski17.html', 'tumski18.html', 'tumski19.html', 'tumski20.html',
+                    'tumski21.html', 'tumski22.html', 'tumski23.html', 'tumski24.html'
+                ];
+                
+                const currentIndex = pageOrder.indexOf(this.currentPage);
+                if (currentIndex > 0) {
+                    const prevPage = pageOrder[currentIndex - 1];
+                    this.navigateToPage(prevPage);
                 }
             }
             
-            showMusicHint() {
-                // Получаем текст подсказки из локализации
-                const hintText = window.i18n ? window.i18n.t('music.hint') : 'Нажмите в любом месте для запуска музыки';
+            /**
+             * Переходит на следующую страницу
+             */
+            navigateToNextPage() {
+                const pageOrder = [
+                    'tumski.html', 'tumski02.html', 'tumski03.html', 'tumski04.html', 'tumski05.html',
+                    'tumski06.html', 'tumski07.html', 'tumski08.html', 'tumski09.html', 'tumski10.html',
+                    'tumski11.html', 'tumski12.html', 'tumski13.html', 'tumski14.html', 'tumski15.html',
+                    'tumski16.html', 'tumski17.html', 'tumski18.html', 'tumski19.html', 'tumski20.html',
+                    'tumski21.html', 'tumski22.html', 'tumski23.html', 'tumski24.html'
+                ];
                 
-                const hint = document.createElement('div');
-                hint.className = 'music-hint';
-                hint.textContent = hintText;
-                hint.style.cssText = `
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    background: rgba(0, 0, 0, 0.8);
-                    color: white;
-                    padding: 20px 40px;
-                    border-radius: 10px;
-                    z-index: 10000;
-                    font-size: 18px;
-                    text-align: center;
-                `;
-                document.body.appendChild(hint);
-                
-                // Запускаем музыку при первом клике
-                const startMusic = () => {
-                    const audio = document.getElementById('backgroundMusic');
-                    if (audio) {
-                        // Проверяем, не отключен ли звук через кнопку
-                        const isMuted = localStorage.getItem('soundMuted') === 'true';
-                        if (isMuted) {
-                            console.log('🎵 Звук отключен через кнопку, не запускаем музыку');
-                            hint.remove();
-                            return;
-                        }
-                        
-                        // Добавляем обработчик зацикливания, если его еще нет
-                        if (!audio.hasAttribute('data-loop-handler-added')) {
-                            audio.addEventListener('ended', () => {
-                                console.log('🎵 Музыка закончилась, перезапускаем через подсказку...');
-                                // Проверяем, не отключен ли звук
-                                const isMuted = localStorage.getItem('soundMuted') === 'true';
-                                if (!isMuted) {
-                                    audio.currentTime = 0; // Сбрасываем позицию
-                                    audio.play().catch(console.log);
-                                }
-                            });
-                            audio.setAttribute('data-loop-handler-added', 'true');
-                        }
-                        
-                        audio.play().then(() => {
-                            console.log('🎵 Музыка запущена после взаимодействия');
-                            hint.remove();
-                        }).catch(console.log);
-                    }
-                    document.removeEventListener('click', startMusic);
-                    document.removeEventListener('touchstart', startMusic);
-                };
-                
-                document.addEventListener('click', startMusic);
-                document.addEventListener('touchstart', startMusic);
-                
-                // Автоматически скрываем подсказку через 10 секунд
-                setTimeout(() => {
-                    if (hint.parentNode) {
-                        hint.remove();
-                    }
-                }, 10000);
+                const currentIndex = pageOrder.indexOf(this.currentPage);
+                if (currentIndex < pageOrder.length - 1) {
+                    const nextPage = pageOrder[currentIndex + 1];
+                    this.navigateToPage(nextPage);
+                }
             }
+            
+            /**
+             * Закрывает все модальные окна
+             */
+            closeModals() {
+                // Закрываем модальные окна в активном iframe
+                const activeIframe = this.getActiveIframe();
+                if (activeIframe) {
+                    try {
+                        const iframeDoc = activeIframe.contentDocument || activeIframe.contentWindow.document;
+                        const modals = iframeDoc.querySelectorAll('.modal, .modal-content');
+                        modals.forEach(modal => {
+                            if (modal.style.display !== 'none') {
+                                modal.style.display = 'none';
+                            }
+                        });
+                    } catch (error) {
+                        console.log('⚠️ Не удалось закрыть модальные окна в iframe:', error);
+                    }
+                }
+            }
+            
+            /**
+             * Инициализирует единый аудио плеер
+             */
+            initUnifiedAudioPlayer() {
+                const audio = this.getUnifiedAudioPlayer();
+                if (!audio) return;
+                
+                console.log('🎵 Инициализация единого аудио плеера...');
+                
+                // Настраиваем обработчики событий
+                audio.addEventListener('ended', () => {
+                    // Автоматическое зацикливание
+                    if (this.isSoundEnabled() && this.audioUnlocked) {
+                        audio.currentTime = 0;
+                        audio.play().catch(console.log);
+                    }
+                });
+                
+                audio.addEventListener('error', (error) => {
+                    console.log('🎵 Ошибка аудио плеера:', error);
+                    this.showAudioUnlockButton();
+                });
+                
+                // Пытаемся запустить музыку сразу (может не сработать на iOS)
+                this.tryAutoStartMusic();
+            }
+            
+            /**
+             * Пытается автоматически запустить музыку
+             */
+            async tryAutoStartMusic() {
+                const audio = this.getUnifiedAudioPlayer();
+                if (!audio) return;
+                
+                try {
+                    await audio.play();
+                    this.audioUnlocked = true;
+                    console.log('🎵 Музыка автоматически запущена');
+                } catch (error) {
+                    console.log('🎵 Автозапуск заблокирован, показываем кнопку разблокировки');
+                    this.showAudioUnlockButton();
+                }
+            }
+            
+            
             
             async loadPage(pageName) {
                 console.log('📄 Загрузка страницы:', pageName);
@@ -413,6 +616,9 @@
                 try {
                     const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                     
+                    // Инициализируем кастомные курсоры в iframe
+                    this.initIframeCustomCursors(iframe);
+                    
                     // Обработчики для стрелок навигации
                     const arrowHandlers = iframeDoc.querySelectorAll('[data-prev-page], [data-next-page]');
                     arrowHandlers.forEach(handler => {
@@ -442,6 +648,60 @@
                     
                 } catch (error) {
                     console.log('⚠️ Не удалось настроить навигацию iframe (возможно, CORS):', error);
+                }
+            }
+            
+            /**
+             * Инициализирует кастомные курсоры в iframe
+             */
+            initIframeCustomCursors(iframe) {
+                if (this.isMobile) {
+                    console.log('📱 Мобильное устройство, кастомные курсоры в iframe отключены');
+                    return;
+                }
+                
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    
+                    console.log('🖱️ Инициализация кастомных курсоров в iframe');
+                    
+                    // Добавляем CSS для кастомных курсоров в iframe
+                    const style = iframeDoc.createElement('style');
+                    style.textContent = `
+                        /* Кастомные курсоры для iframe */
+                        body {
+                            cursor: url('media/strelka.png'), auto;
+                        }
+                        
+                        /* Курсор для кликабельных элементов */
+                        a, button, [data-prev-page], [data-next-page], .clickable {
+                            cursor: url('media/strelka_prosto.png'), pointer;
+                        }
+                        
+                        /* Курсор для наведения на стрелки */
+                        .arrow-left, .arrow-right, .arrow-up, .arrow-down {
+                            cursor: url('media/strelka_prosto.png'), pointer;
+                        }
+                        
+                        /* Курсор для модальных окон */
+                        .modal, .modal-content {
+                            cursor: url('media/strelka.png'), auto;
+                        }
+                        
+                        /* Курсор для кнопок в модальных окнах */
+                        .modal button, .modal .close {
+                            cursor: url('media/strelka_prosto.png'), pointer;
+                        }
+                        
+                        /* Курсор для геометок */
+                        .geo-marker, .quest-marker {
+                            cursor: url('media/strelka_prosto.png'), pointer;
+                        }
+                    `;
+                    iframeDoc.head.appendChild(style);
+                    
+                } catch (error) {
+                    console.log('⚠️ Не удалось инициализировать кастомные курсоры в iframe:', error);
                 }
             }
             
@@ -500,23 +760,28 @@
                 }
                 
                 // Определяем, какая музыка нужна
+                let targetTrack = 'town'; // По умолчанию
+                
                 if (pageName.includes('tumski19.html')) {
-                    console.log('🎵 Переключаем на kostel.mp3 для tumski19.html');
-                    this.switchToKostelMusic();
+                    targetTrack = 'kostel';
+                    console.log('🎵 Переключаем на kostel для tumski19.html');
                 } else if (pageName.includes('tumski21.html')) {
-                    console.log('🎵 Переключаем на hang.mp3 для tumski21.html');
-                    this.switchToHangMusic();
+                    targetTrack = 'hang';
+                    console.log('🎵 Переключаем на hang для tumski21.html');
                 } else if (pageName.includes('ogrod02.html') || pageName.includes('ogrod03.html') || 
                           pageName.includes('ogrod04.html') || pageName.includes('ogrod05.html') || 
                           pageName.includes('ogrod06.html') || pageName.includes('ogrod07.html') || 
                           pageName.includes('ogrod08.html') || pageName.includes('ogrod09.html') || 
                           pageName.includes('ogrod12.html') || pageName.includes('ogrod13.html')) {
-                    console.log('🎵 Переключаем на birds.mp3 для страниц ogrod:', pageName);
-                    this.switchToBirdsMusic();
+                    targetTrack = 'birds';
+                    console.log('🎵 Переключаем на birds для страниц ogrod:', pageName);
                 } else {
-                    console.log('🎵 Переключаем на town.mp3 для:', pageName);
-                    this.switchToTownMusic();
+                    targetTrack = 'town';
+                    console.log('🎵 Переключаем на town для:', pageName);
                 }
+                
+                // Переключаем трек через единый плеер
+                this.switchTrack(targetTrack);
                 
                 // Сбрасываем флаг через небольшую задержку
                 setTimeout(() => {
@@ -524,338 +789,10 @@
                 }, 100);
             }
             
-            switchToKostelMusic() {
-                console.log('🎵 switchToKostelMusic: ставим town.mp3 на паузу, останавливаем hang.mp3, birds.mp3 и quest.mp3, включаем kostel.mp3');
-                
-                // Проверяем состояние sound-menu-button в SPA
-                const soundButton = document.querySelector('.sound-menu-button');
-                const isMuted = soundButton ? soundButton.classList.contains('muted') : (localStorage.getItem('soundMuted') === 'true');
-                console.log('🎵 Состояние звука в SPA (kostel):', { isMuted, soundButtonFound: !!soundButton });
-                
-                // Ставим town.mp3 на паузу и сохраняем время
-                const townMusic = document.getElementById('backgroundMusic');
-                if (townMusic) {
-                    this.townMusicTime = townMusic.currentTime;
-                    townMusic.pause();
-                    this.townMusicPaused = true;
-                    console.log('🎵 town.mp3 поставлен на паузу, время сохранено:', this.townMusicTime);
-                }
-                
-                // Останавливаем hang.mp3
-                const hangMusic = document.getElementById('hangMusic');
-                if (hangMusic) {
-                    hangMusic.pause();
-                    console.log('🎵 hang.mp3 остановлен');
-                }
-                
-                // Останавливаем birds.mp3
-                const birdsMusic = document.getElementById('birdsMusic');
-                if (birdsMusic) {
-                    birdsMusic.pause();
-                    console.log('🎵 birds.mp3 остановлен');
-                }
-                
-                // Останавливаем quest.mp3
-                const questMusic = document.getElementById('questMusic');
-                if (questMusic) {
-                    questMusic.pause();
-                    console.log('🎵 quest.mp3 остановлен');
-                }
-                
-                // Управляем kostel.mp3 в зависимости от состояния sound-menu-button
-                const kostelMusic = document.getElementById('kostelMusic');
-                if (kostelMusic) {
-                    // Добавляем обработчик зацикливания, если его еще нет
-                    if (!kostelMusic.hasAttribute('data-loop-handler-added')) {
-                        kostelMusic.addEventListener('ended', () => {
-                            const isMuted = localStorage.getItem('soundMuted') === 'true';
-                            if (!isMuted) {
-                                kostelMusic.currentTime = 0;
-                                kostelMusic.play().catch(console.log);
-                            }
-                        });
-                        kostelMusic.setAttribute('data-loop-handler-added', 'true');
-                    }
-                    
-                    if (isMuted) {
-                        // Если звук выключен, ставим kostel музыку на паузу
-                        kostelMusic.pause();
-                        console.log('🎵 kostel.mp3 поставлен на паузу (звук выключен)');
-                    } else {
-                        // Если звук включен, запускаем kostel музыку
-                        kostelMusic.play().then(() => {
-                            console.log('🎵 kostel.mp3 успешно запущен');
-                        }).catch(error => {
-                            console.log('🎵 Ошибка запуска kostel.mp3:', error);
-                            // Если не удалось запустить, попробуем инициализировать заново
-                            kostelMusic.currentTime = 0;
-                            kostelMusic.play().catch(console.log);
-                        });
-                    }
-                } else {
-                    console.log('🎵 Элемент kostelMusic не найден');
-                }
-            }
             
-            switchToTownMusic() {
-                console.log('🎵 switchToTownMusic: останавливаем kostel.mp3, hang.mp3 и birds.mp3, возобновляем town.mp3');
-                
-                // Останавливаем kostel.mp3
-                const kostelMusic = document.getElementById('kostelMusic');
-                if (kostelMusic) {
-                    kostelMusic.pause();
-                    console.log('🎵 kostel.mp3 остановлен');
-                }
-                
-                // Останавливаем hang.mp3
-                const hangMusic = document.getElementById('hangMusic');
-                if (hangMusic) {
-                    hangMusic.pause();
-                    console.log('🎵 hang.mp3 остановлен');
-                }
-                
-                // Останавливаем birds.mp3
-                const birdsMusic = document.getElementById('birdsMusic');
-                if (birdsMusic) {
-                    birdsMusic.pause();
-                    console.log('🎵 birds.mp3 остановлен');
-                }
-                
-                // Возобновляем town.mp3 с сохраненного времени
-                const townMusic = document.getElementById('backgroundMusic');
-                if (townMusic) {
-                    // Добавляем обработчик зацикливания, если его еще нет
-                    if (!townMusic.hasAttribute('data-loop-handler-added')) {
-                        townMusic.addEventListener('ended', () => {
-                            const isMuted = localStorage.getItem('soundMuted') === 'true';
-                            if (!isMuted) {
-                                townMusic.currentTime = 0;
-                                townMusic.play().catch(console.log);
-                            }
-                        });
-                        townMusic.setAttribute('data-loop-handler-added', 'true');
-                    }
-                    
-                    // Если town музыка была на паузе, возобновляем с сохраненного времени
-                    if (this.townMusicPaused) {
-                        townMusic.currentTime = this.townMusicTime;
-                        this.townMusicPaused = false;
-                        console.log('🎵 town.mp3 возобновлен с времени:', this.townMusicTime);
-                    }
-                    
-                    townMusic.play().then(() => {
-                        console.log('🎵 town.mp3 успешно запущен');
-                    }).catch(error => {
-                        console.log('🎵 Ошибка запуска town.mp3:', error);
-                    });
-                } else {
-                    console.log('🎵 Элемент backgroundMusic не найден');
-                }
-            }
             
-            switchToHangMusic() {
-                console.log('🎵 switchToHangMusic: ставим town.mp3 на паузу, останавливаем kostel.mp3, включаем hang.mp3');
-                
-                // Проверяем состояние sound-menu-button в SPA
-                const soundButton = document.querySelector('.sound-menu-button');
-                const isMuted = soundButton ? soundButton.classList.contains('muted') : (localStorage.getItem('soundMuted') === 'true');
-                console.log('🎵 Состояние звука в SPA:', { isMuted, soundButtonFound: !!soundButton });
-                
-                // Ставим town.mp3 на паузу и сохраняем время
-                const townMusic = document.getElementById('backgroundMusic');
-                if (townMusic) {
-                    this.townMusicTime = townMusic.currentTime;
-                    townMusic.pause();
-                    this.townMusicPaused = true;
-                    console.log('🎵 town.mp3 поставлен на паузу, время сохранено:', this.townMusicTime);
-                }
-                
-                // Останавливаем kostel.mp3
-                const kostelMusic = document.getElementById('kostelMusic');
-                if (kostelMusic) {
-                    kostelMusic.pause();
-                    console.log('🎵 kostel.mp3 остановлен');
-                }
-                
-                // Останавливаем birds.mp3
-                const birdsMusic = document.getElementById('birdsMusic');
-                if (birdsMusic) {
-                    birdsMusic.pause();
-                    console.log('🎵 birds.mp3 остановлен');
-                }
-                
-                // Останавливаем quest.mp3
-                const questMusic = document.getElementById('questMusic');
-                if (questMusic) {
-                    questMusic.pause();
-                    console.log('🎵 quest.mp3 остановлен');
-                }
-                
-                // Управляем hang.mp3 в зависимости от состояния sound-menu-button
-                const hangMusic = document.getElementById('hangMusic');
-                if (hangMusic) {
-                    // Добавляем обработчик зацикливания, если его еще нет
-                    if (!hangMusic.hasAttribute('data-loop-handler-added')) {
-                        hangMusic.addEventListener('ended', () => {
-                            const isMuted = localStorage.getItem('soundMuted') === 'true';
-                            if (!isMuted) {
-                                hangMusic.currentTime = 0;
-                                hangMusic.play().catch(console.log);
-                            }
-                        });
-                        hangMusic.setAttribute('data-loop-handler-added', 'true');
-                    }
-                    
-                    if (isMuted) {
-                        // Если звук выключен, ставим hang музыку на паузу
-                        hangMusic.pause();
-                        console.log('🎵 hang.mp3 поставлен на паузу (звук выключен)');
-                    } else {
-                        // Если звук включен, запускаем hang музыку
-                        hangMusic.play().then(() => {
-                            console.log('🎵 hang.mp3 успешно запущен');
-                        }).catch(error => {
-                            console.log('🎵 Ошибка запуска hang.mp3:', error);
-                            // Если не удалось запустить, попробуем инициализировать заново
-                            hangMusic.currentTime = 0;
-                            hangMusic.play().catch(console.log);
-                        });
-                    }
-                } else {
-                    console.log('🎵 Элемент hangMusic не найден');
-                }
-            }
             
-            switchToBirdsMusic() {
-                console.log('🎵 switchToBirdsMusic: ставим town.mp3 на паузу, останавливаем kostel.mp3, hang.mp3 и quest.mp3, включаем birds.mp3');
-                
-                // Проверяем состояние sound-menu-button в SPA
-                const soundButton = document.querySelector('.sound-menu-button');
-                const isMuted = soundButton ? soundButton.classList.contains('muted') : (localStorage.getItem('soundMuted') === 'true');
-                console.log('🎵 Состояние звука в SPA (birds):', { isMuted, soundButtonFound: !!soundButton });
-                
-                // Ставим town.mp3 на паузу и сохраняем время
-                const townMusic = document.getElementById('backgroundMusic');
-                if (townMusic) {
-                    this.townMusicTime = townMusic.currentTime;
-                    townMusic.pause();
-                    this.townMusicPaused = true;
-                    console.log('🎵 town.mp3 поставлен на паузу, время сохранено:', this.townMusicTime);
-                }
-                
-                // Останавливаем kostel.mp3
-                const kostelMusic = document.getElementById('kostelMusic');
-                if (kostelMusic) {
-                    kostelMusic.pause();
-                    console.log('🎵 kostel.mp3 остановлен');
-                }
-                
-                // Останавливаем hang.mp3
-                const hangMusic = document.getElementById('hangMusic');
-                if (hangMusic) {
-                    hangMusic.pause();
-                    console.log('🎵 hang.mp3 остановлен');
-                }
-                
-                // Останавливаем quest.mp3
-                const questMusic = document.getElementById('questMusic');
-                if (questMusic) {
-                    questMusic.pause();
-                    console.log('🎵 quest.mp3 остановлен');
-                }
-                
-                // Управляем birds.mp3 в зависимости от состояния sound-menu-button
-                const birdsMusic = document.getElementById('birdsMusic');
-                if (birdsMusic) {
-                    // Добавляем обработчик зацикливания, если его еще нет
-                    if (!birdsMusic.hasAttribute('data-loop-handler-added')) {
-                        birdsMusic.addEventListener('ended', () => {
-                            const isMuted = localStorage.getItem('soundMuted') === 'true';
-                            if (!isMuted) {
-                                birdsMusic.currentTime = 0;
-                                birdsMusic.play().catch(console.log);
-                            }
-                        });
-                        birdsMusic.setAttribute('data-loop-handler-added', 'true');
-                    }
-                    
-                    if (isMuted) {
-                        // Если звук выключен, ставим birds музыку на паузу
-                        birdsMusic.pause();
-                        console.log('🎵 birds.mp3 поставлен на паузу (звук выключен)');
-                    } else {
-                        // Если звук включен, запускаем birds музыку
-                        birdsMusic.play().then(() => {
-                            console.log('🎵 birds.mp3 успешно запущен');
-                        }).catch(error => {
-                            console.log('🎵 Ошибка запуска birds.mp3:', error);
-                            // Если не удалось запустить, попробуем инициализировать заново
-                            birdsMusic.currentTime = 0;
-                            birdsMusic.play().catch(console.log);
-                        });
-                    }
-                } else {
-                    console.log('🎵 Элемент birdsMusic не найден');
-                }
-            }
             
-            switchToQuestMusic() {
-                console.log('🎵 switchToQuestMusic: ставим town.mp3 на паузу, останавливаем kostel.mp3, hang.mp3 и birds.mp3, включаем quest.mp3');
-                
-                // Ставим town.mp3 на паузу и сохраняем время
-                const townMusic = document.getElementById('backgroundMusic');
-                if (townMusic) {
-                    this.townMusicTime = townMusic.currentTime;
-                    townMusic.pause();
-                    this.townMusicPaused = true;
-                    console.log('🎵 town.mp3 поставлен на паузу, время сохранено:', this.townMusicTime);
-                }
-                
-                // Останавливаем kostel.mp3
-                const kostelMusic = document.getElementById('kostelMusic');
-                if (kostelMusic) {
-                    kostelMusic.pause();
-                    console.log('🎵 kostel.mp3 остановлен');
-                }
-                
-                // Останавливаем hang.mp3
-                const hangMusic = document.getElementById('hangMusic');
-                if (hangMusic) {
-                    hangMusic.pause();
-                    console.log('🎵 hang.mp3 остановлен');
-                }
-                
-                // Останавливаем birds.mp3
-                const birdsMusic = document.getElementById('birdsMusic');
-                if (birdsMusic) {
-                    birdsMusic.pause();
-                    console.log('🎵 birds.mp3 остановлен');
-                }
-                
-                // Запускаем quest.mp3
-                const questMusic = document.getElementById('questMusic');
-                if (questMusic) {
-                    // Добавляем обработчик зацикливания, если его еще нет
-                    if (!questMusic.hasAttribute('data-loop-handler-added')) {
-                        questMusic.addEventListener('ended', () => {
-                            const isMuted = localStorage.getItem('soundMuted') === 'true';
-                            if (!isMuted) {
-                                questMusic.currentTime = 0;
-                                questMusic.play().catch(console.log);
-                            }
-                        });
-                        questMusic.setAttribute('data-loop-handler-added', 'true');
-                    }
-                    
-                    questMusic.play().then(() => {
-                        console.log('🎵 quest.mp3 успешно запущен');
-                    }).catch(error => {
-                        console.log('🎵 Ошибка запуска quest.mp3:', error);
-                    });
-                } else {
-                    console.log('🎵 Элемент questMusic не найден');
-                }
-            }
             
             async navigateToPage(pageName) {
                 console.log('🎵 navigateToPage вызван для:', pageName);
@@ -910,92 +847,39 @@
                     }
                 });
                 
+                // Обработчик для кнопки разблокировки аудио
+                const unlockButton = document.getElementById('audioUnlockButton');
+                if (unlockButton) {
+                    unlockButton.addEventListener('click', () => {
+                        this.unlockAudio();
+                    });
+                }
+                
+                // Обработчик для разблокировки аудио по первому клику в любом месте
+                const unlockOnFirstClick = () => {
+                    if (!this.audioUnlocked) {
+                        this.unlockAudio();
+                    }
+                    // Удаляем обработчик после первого использования
+                    document.removeEventListener('click', unlockOnFirstClick);
+                    document.removeEventListener('touchstart', unlockOnFirstClick);
+                };
+                
+                document.addEventListener('click', unlockOnFirstClick);
+                document.addEventListener('touchstart', unlockOnFirstClick);
+                
+                // Обработчик для возобновления аудио при возврате на страницу
+                document.addEventListener('visibilitychange', () => {
+                    if (!document.hidden && this.audioUnlocked && this.isSoundEnabled()) {
+                        const audio = this.getUnifiedAudioPlayer();
+                        if (audio && audio.paused) {
+                            audio.play().catch(console.log);
+                        }
+                    }
+                });
+                
                 // Мониторинг iframe отключен из-за проблем с рекурсией
                 // this.startIframeMonitoring();
-                
-                // Слушатель для изменения состояния sound-menu-button
-                this.setupSoundButtonListener();
-            }
-            
-            /**
-             * Настраивает слушатель для изменения состояния sound-menu-button
-             */
-            setupSoundButtonListener() {
-                console.log('🎵 Настройка слушателя sound-menu-button...');
-                
-                // Слушаем изменения в DOM для sound-menu-button
-                const observer = new MutationObserver((mutations) => {
-                    mutations.forEach((mutation) => {
-                        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-                            const target = mutation.target;
-                            if (target.classList.contains('sound-menu-button')) {
-                                const isMuted = target.classList.contains('muted');
-                                console.log('🎵 Состояние sound-menu-button изменилось:', { isMuted });
-                                
-                                if (isMuted) {
-                                    // Если звук выключен, останавливаем всю музыку
-                                    this.pauseAllMusic();
-                                } else {
-                                    // Если звук включен, запускаем музыку для текущей страницы
-                                    this.musicStarted = false;
-                                    this.switchMusicForPage(this.currentPage);
-                                    console.log('🎵 Звук включен, запускаем музыку для страницы:', this.currentPage);
-                                }
-                            }
-                        }
-                    });
-                });
-                
-                // Начинаем наблюдение за изменениями в body
-                observer.observe(document.body, {
-                    attributes: true,
-                    subtree: true,
-                    attributeFilter: ['class']
-                });
-                
-                // Также слушаем изменения в iframe
-                this.setupIframeSoundButtonListener();
-                
-                console.log('🎵 Слушатель sound-menu-button настроен');
-            }
-            
-            /**
-             * Настраивает слушатель для sound-menu-button в iframe
-             */
-            setupIframeSoundButtonListener() {
-                // Слушаем сообщения от iframe о изменении состояния звука
-                window.addEventListener('message', (event) => {
-                    if (event.data && event.data.type === 'SOUND_STATE_CHANGED') {
-                        const isMuted = event.data.isMuted;
-                        console.log('🎵 Получено сообщение о изменении звука из iframe:', { isMuted });
-                        
-                        if (isMuted) {
-                            // Если звук выключен, останавливаем всю музыку
-                            this.pauseAllMusic();
-                        } else {
-                            // Если звук включен, запускаем музыку для текущей страницы
-                            this.musicStarted = false;
-                            this.switchMusicForPage(this.currentPage);
-                            console.log('🎵 Звук включен из iframe, запускаем музыку для страницы:', this.currentPage);
-                        }
-                    }
-                });
-            }
-            
-            /**
-             * Останавливает всю музыку
-             */
-            pauseAllMusic() {
-                console.log('🎵 Останавливаем всю музыку...');
-                
-                const musicElements = ['backgroundMusic', 'kostelMusic', 'hangMusic', 'birdsMusic', 'questMusic'];
-                musicElements.forEach(id => {
-                    const audio = document.getElementById(id);
-                    if (audio) {
-                        audio.pause();
-                        console.log(`🎵 ${id} остановлен`);
-                    }
-                });
             }
             
             startIframeMonitoring() {
@@ -1128,45 +1012,35 @@
                     
                     if (event.data.action === 'mute') {
                         // Останавливаем музыку в SPA
-                        const backgroundMusic = document.querySelector('#backgroundMusic');
-                        if (backgroundMusic) {
-                            backgroundMusic.pause();
+                        const audio = window.spaManager ? window.spaManager.getUnifiedAudioPlayer() : null;
+                        if (audio) {
+                            audio.pause();
                         }
-                        
-                        const kostelMusic = document.querySelector('#kostelMusic');
-                        if (kostelMusic) {
-                            kostelMusic.pause();
-                        }
-                        
-                        const birdsMusic = document.querySelector('#birdsMusic');
-                        if (birdsMusic) {
-                            birdsMusic.pause();
-                        }
-                        
-                        const questMusic = document.querySelector('#questMusic');
-                        if (questMusic) {
-                            questMusic.pause();
-                        }
-                        
                         console.log('🎵 Музыка в SPA остановлена');
                     } else if (event.data.action === 'unmute') {
                         // Запускаем музыку в SPA
-                        const currentPage = window.spaManager ? window.spaManager.currentPage : null;
-                        
-                        if (currentPage && currentPage.includes('tumski19.html')) {
-                            // Запускаем kostel.mp3 для tumski19
-                            const kostelMusic = document.querySelector('#kostelMusic');
-                            if (kostelMusic) {
-                                kostelMusic.currentTime = 0;
-                                kostelMusic.play().catch(console.log);
+                        if (window.spaManager) {
+                            const currentPage = window.spaManager.currentPage;
+                            
+                            if (currentPage && currentPage.includes('tumski19.html')) {
+                                // Переключаем на kostel для tumski19
+                                window.spaManager.switchTrack('kostel');
                                 console.log('🎵 Запускаем kostel музыку в SPA для tumski19');
-                            }
-                        } else {
-                            // Запускаем обычную фоновую музыку (town.mp3)
-                            const backgroundMusic = document.querySelector('#backgroundMusic');
-                            if (backgroundMusic) {
-                                backgroundMusic.currentTime = 0;
-                                backgroundMusic.play().catch(console.log);
+                            } else if (currentPage && (currentPage.includes('ogrod02.html') || currentPage.includes('ogrod03.html') || 
+                                      currentPage.includes('ogrod04.html') || currentPage.includes('ogrod05.html') || 
+                                      currentPage.includes('ogrod06.html') || currentPage.includes('ogrod07.html') || 
+                                      currentPage.includes('ogrod08.html') || currentPage.includes('ogrod09.html') || 
+                                      currentPage.includes('ogrod12.html') || currentPage.includes('ogrod13.html'))) {
+                                // Переключаем на birds для ogrod страниц
+                                window.spaManager.switchTrack('birds');
+                                console.log('🎵 Запускаем birds музыку в SPA для ogrod страниц');
+                            } else if (currentPage && currentPage.includes('tumski21.html')) {
+                                // Переключаем на hang для tumski21
+                                window.spaManager.switchTrack('hang');
+                                console.log('🎵 Запускаем hang музыку в SPA для tumski21');
+                            } else {
+                                // Запускаем обычную фоновую музыку (town)
+                                window.spaManager.switchTrack('town');
                                 console.log('🎵 Запускаем фоновую музыку в SPA');
                             }
                         }

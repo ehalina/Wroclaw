@@ -40,6 +40,8 @@ const COMMON_ELEMENTS = {
 
 // Общие функции для работы с анимацией
 function setupResetAnimation(container) {
+    let doubleClickTimeout;
+    
     // Добавляем обработчик двойного клика
     document.addEventListener('dblclick', function(e) {
         // Проверяем, что клик не по элементам управления
@@ -47,12 +49,25 @@ function setupResetAnimation(container) {
             !e.target.closest('.language-switcher') && 
             !e.target.closest('.book-overlay') && 
             !e.target.closest('.most-overlay')) {
+            
+            // Предотвращаем множественные срабатывания
+            clearTimeout(doubleClickTimeout);
+            
             // Добавляем класс для сброса анимации
             container.classList.add('reset-animation');
+            
             // Убираем класс через 100мс
             setTimeout(() => {
                 container.classList.remove('reset-animation');
             }, 100);
+            
+            // Дополнительная защита: принудительно обновляем mapMarks после двойного тапа
+            doubleClickTimeout = setTimeout(() => {
+                if (window.updateMapMarksVisibility) {
+                    console.log('🔄 Принудительное обновление mapMarks после двойного тапа');
+                    window.updateMapMarksVisibility();
+                }
+            }, 200);
         }
     });
 }

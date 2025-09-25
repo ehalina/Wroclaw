@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест Progressive Enhancement для планшетов</title>
+    <link rel="stylesheet" href="input_compatibility.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f0f0f0;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .custom-cursor-area {
+            position: relative;
+            width: 200px;
+            height: 100px;
+            background: #e0e0e0;
+            border: 2px dashed #999;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .custom-cursor {
+            width: 50px;
+            height: 50px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .papera-image {
+            width: 100px;
+            height: 100px;
+            background: #4ecdc4;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        
+        .tumski-text {
+            background: #45b7d1;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        
+        .map-mark {
+            width: 40px;
+            height: 40px;
+            background: #f9ca24;
+            border-radius: 50%;
+            margin: 10px 0;
+        }
+        
+        .info-panel {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border-left: 4px solid #007bff;
+        }
+        
+        .status {
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 3px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        
+        .status.desktop {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status.touch {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .device-info {
+            font-family: monospace;
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 3px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Тест Progressive Enhancement для планшетов</h1>
+        
+        <div class="info-panel">
+            <h3>Информация о текущем режиме:</h3>
+            <div id="current-mode"></div>
+            <div id="device-info"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Тест 1: Кастомные курсоры</h3>
+            <p>На планшетах курсоры должны быть видны всегда. На десктопе - только при наведении.</p>
+            <div class="custom-cursor-area">
+                <div class="custom-cursor"></div>
+                <span>Наведите курсор (десктоп) или тапните (планшет)</span>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Тест 2: Изображения</h3>
+            <p>На планшетах изображения должны быть видны всегда.</p>
+            <div class="papera-image"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Тест 3: Текстовые элементы</h3>
+            <p>На планшетах текст должен быть виден всегда.</p>
+            <div class="tumski-text">Этот текст должен быть виден на планшетах</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Тест 4: Геометки</h3>
+            <p>На планшетах геометки должны быть видны всегда.</p>
+            <div class="map-mark"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Инструкции для тестирования:</h3>
+            <ol>
+                <li><strong>На планшете:</strong> Все элементы должны быть видны сразу при загрузке страницы</li>
+                <li><strong>На десктопе:</strong> Элементы должны скрываться и показываться только при наведении курсора</li>
+                <li><strong>На гибридном устройстве (Surface):</strong> Должен работать hover-режим</li>
+            </ol>
+        </div>
+        
+        <div class="test-section">
+            <h3>Отладочная информация:</h3>
+            <div id="debug-info"></div>
+        </div>
+    </div>
+
+    <script src="input_detection.js"></script>
+    <script>
+        // Обновляем информацию о режиме
+        function updateModeInfo() {
+            const inputType = document.documentElement.getAttribute('data-input-type') || 'не определен';
+            const modeElement = document.getElementById('current-mode');
+            modeElement.innerHTML = `<span class="status ${inputType}">Режим: ${inputType}</span>`;
+            
+            // Информация об устройстве
+            const deviceInfo = {
+                hasTouch: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
+                screenWidth: window.innerWidth,
+                screenHeight: window.innerHeight,
+                hoverSupport: window.matchMedia ? window.matchMedia('(hover: hover)').matches : 'unknown',
+                pointerFine: window.matchMedia ? window.matchMedia('(pointer: fine)').matches : 'unknown',
+                pointerCoarse: window.matchMedia ? window.matchMedia('(pointer: coarse)').matches : 'unknown',
+                userAgent: navigator.userAgent
+            };
+            
+            const deviceElement = document.getElementById('device-info');
+            deviceElement.innerHTML = `
+                <div class="device-info">
+                    <div>Touch поддержка: ${deviceInfo.hasTouch}</div>
+                    <div>Размер экрана: ${deviceInfo.screenWidth}x${deviceInfo.screenHeight}</div>
+                    <div>Hover поддержка: ${deviceInfo.hoverSupport}</div>
+                    <div>Точный указатель: ${deviceInfo.pointerFine}</div>
+                    <div>Грубый указатель: ${deviceInfo.pointerCoarse}</div>
+                    <div>User Agent: ${deviceInfo.userAgent}</div>
+                </div>
+            `;
+            
+            // Отладочная информация
+            const debugElement = document.getElementById('debug-info');
+            const cursors = document.querySelectorAll('.custom-cursor');
+            const images = document.querySelectorAll('.papera-image');
+            const texts = document.querySelectorAll('.tumski-text');
+            const marks = document.querySelectorAll('.map-mark');
+            
+            debugElement.innerHTML = `
+                <div class="device-info">
+                    <div>Найдено курсоров: ${cursors.length}</div>
+                    <div>Найдено изображений: ${images.length}</div>
+                    <div>Найдено текстов: ${texts.length}</div>
+                    <div>Найдено геометок: ${marks.length}</div>
+                    <div>CSS классы HTML: ${document.documentElement.className}</div>
+                    <div>Data атрибуты: ${Array.from(document.documentElement.attributes).map(attr => `${attr.name}="${attr.value}"`).join(', ')}</div>
+                </div>
+            `;
+        }
+        
+        // Обновляем информацию при загрузке и изменении размера
+        document.addEventListener('DOMContentLoaded', updateModeInfo);
+        window.addEventListener('resize', updateModeInfo);
+        
+        // Обновляем информацию каждые 2 секунды для отладки
+        setInterval(updateModeInfo, 2000);
+        
+        // Добавляем обработчики для тестирования
+        document.querySelectorAll('.custom-cursor-area').forEach(area => {
+            area.addEventListener('click', () => {
+                alert('Тап зарегистрирован! Это означает, что элемент активен.');
+            });
+        });
+    </script>
+</body>
+</html>
