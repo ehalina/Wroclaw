@@ -137,63 +137,9 @@ const LanguageMenu = {
         // Добавляем меню на страницу
         document.body.insertAdjacentHTML('beforeend', menuHTML);
 
-        // Добавляем обработчик клика для кнопки разблокировки аудио
-        const audioUnlockButton = document.getElementById('audioUnlockButton');
-        console.log('🔍 Поиск кнопки разблокировки аудио:', audioUnlockButton);
-        
-        if (audioUnlockButton) {
-            console.log('✅ Кнопка разблокировки аудио найдена, добавляем обработчик');
-            audioUnlockButton.addEventListener('click', function() {
-                console.log('🎵 Клик по кнопке разблокировки аудио в SPA');
-                
-                // Активируем кнопку звука в SPA
-                const soundButton = document.querySelector('.sound-menu-button');
-                console.log('🔍 Поиск кнопки звука:', soundButton);
-                
-                if (soundButton) {
-                    console.log('✅ Кнопка звука найдена, активируем...');
-                    soundButton.classList.remove('muted');
-                    localStorage.setItem('soundMuted', 'false');
-                    console.log('🔊 Кнопка звука в SPA активирована, классы:', soundButton.className);
-                } else {
-                    console.log('❌ Кнопка звука не найдена!');
-                }
-                
-                // Вызываем функцию включения звука из LanguageMenu
-                this.unmuteAllSounds();
-                
-                // Отправляем сообщение в iframe для активации кнопки звука там
-                const activeIframe = document.querySelector('iframe');
-                if (activeIframe) {
-                    try {
-                        activeIframe.contentWindow.postMessage({
-                            type: 'AUDIO_UNLOCK_CLICKED',
-                            action: 'unmute'
-                        }, '*');
-                        console.log('🎵 Сообщение отправлено в iframe для активации звука');
-                    } catch (error) {
-                        console.log('🎵 Ошибка отправки сообщения в iframe:', error);
-                    }
-                }
-                
-                // Скрываем кнопку разблокировки аудио
-                audioUnlockButton.style.display = 'none';
-                console.log('🎵 Кнопка разблокировки аудио в SPA скрыта');
-            });
-        } else {
-            console.log('❌ Кнопка разблокировки аудио не найдена!');
-        }
-        
-        // Показываем кнопку разблокировки аудио через 2 секунды после загрузки
-        setTimeout(() => {
-            const audioUnlockButton = document.getElementById('audioUnlockButton');
-            if (audioUnlockButton) {
-                audioUnlockButton.style.display = 'block';
-                console.log('🎵 Кнопка разблокировки аудио показана');
-            } else {
-                console.log('❌ Кнопка разблокировки аудио все еще не найдена через 2 секунды');
-            }
-        }, 2000);
+        // Создаем кнопку разблокировки аудио динамически
+        console.log('🎵 Вызываем createAudioUnlockButton()');
+        this.createAudioUnlockButton();
 
         // Добавляем обработчик клика вне меню
         document.addEventListener('click', function(e) {
@@ -1070,6 +1016,85 @@ const LanguageMenu = {
     isMenuDisabled() {
         const menu = document.querySelector('.language-menu');
         return menu ? menu.classList.contains('disabled') : false;
+    },
+
+    // Создает кнопку разблокировки аудио
+    createAudioUnlockButton() {
+        console.log('🎵 createAudioUnlockButton() вызван');
+        
+        // Проверяем, не создана ли уже кнопка
+        if (document.getElementById('audioUnlockButton')) {
+            console.log('🎵 Кнопка разблокировки аудио уже существует');
+            return;
+        }
+        
+        console.log('🎵 Создаем новую кнопку разблокировки аудио');
+
+        // Создаем HTML для кнопки
+        const buttonHTML = `
+            <div id="audioUnlockButton" class="audio-unlock-button" style="display: none;">
+                <div class="audio-unlock-content">
+                    <div class="audio-unlock-icon">🎵</div>
+                    <div class="audio-unlock-text" data-i18n="music.audio_unlock_text">Нажмите для включения музыки</div>
+                </div>
+            </div>
+        `;
+
+        // Добавляем кнопку на страницу
+        document.body.insertAdjacentHTML('beforeend', buttonHTML);
+
+        // Добавляем обработчик клика
+        const audioUnlockButton = document.getElementById('audioUnlockButton');
+        console.log('🔍 Создана кнопка разблокировки аудио:', audioUnlockButton);
+        
+        if (audioUnlockButton) {
+            console.log('✅ Кнопка разблокировки аудио создана, добавляем обработчик');
+            const self = this; // Сохраняем ссылку на объект LanguageMenu
+            
+            // Создаем обработчик
+            this.handleAudioUnlockClick = function() {
+                console.log('🎵 Клик по кнопке разблокировки аудио в SPA');
+                
+                // Активируем кнопку звука в SPA
+                const soundButton = document.querySelector('.sound-menu-button');
+                console.log('🔍 Поиск кнопки звука:', soundButton);
+                
+                if (soundButton) {
+                    console.log('✅ Кнопка звука найдена, активируем...');
+                    soundButton.classList.remove('muted');
+                    localStorage.setItem('soundMuted', 'false');
+                    console.log('🔊 Кнопка звука в SPA активирована, классы:', soundButton.className);
+                } else {
+                    console.log('❌ Кнопка звука не найдена!');
+                }
+                
+                // Вызываем функцию включения звука из LanguageMenu
+                self.unmuteAllSounds();
+                
+                // Отправляем сообщение в iframe для активации кнопки звука там
+                const activeIframe = document.querySelector('iframe');
+                if (activeIframe) {
+                    try {
+                        activeIframe.contentWindow.postMessage({
+                            type: 'AUDIO_UNLOCK_CLICKED',
+                            action: 'unmute'
+                        }, '*');
+                        console.log('🎵 Сообщение отправлено в iframe для активации звука');
+                    } catch (error) {
+                        console.log('🎵 Ошибка отправки сообщения в iframe:', error);
+                    }
+                }
+                
+                // Скрываем кнопку разблокировки аудио
+                audioUnlockButton.style.display = 'none';
+                console.log('🎵 Кнопка разблокировки аудио в SPA скрыта');
+            };
+            
+            // Добавляем обработчик
+            audioUnlockButton.addEventListener('click', this.handleAudioUnlockClick);
+        } else {
+            console.log('❌ Не удалось создать кнопку разблокировки аудио!');
+        }
     }
 };
 

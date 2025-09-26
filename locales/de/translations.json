@@ -74,39 +74,39 @@
     }
   },
   "tumski_cathedral_2": {
-    "title": "Kathedrale des Heiligen Johannes des Täufers 2",
+    "title": "Presbyterium",
     "book02": {
       "zone1": {
-        "title": "Kathedrale des Heiligen Johannes des Täufers 2",
-        "text": "Dies ist die zweite Kathedrale des Heiligen Johannes des Täufers auf der Tumski-Insel. In einer späteren Zeit erbaut, stellt sie ein einzigartiges Beispiel der Architektur dar, das gotische und Renaissance-Elemente kombiniert. Ihre Fassade ist mit exquisiten Skulpturen und Basreliefs geschmückt, die die Geschichte der Stadt und ihrer Schutzpatrone erzählen."
+        "title": "Kathedrale des Heiligen Johannes des Täufers",
+        "text": "Die Kathedrale des Heiligen Johannes des Täufers in Breslau erhebt sich über der Oder, als wäre sie hier geboren worden, noch bevor die Stadt selbst entstand. Ihre Türme sind nicht nur steinerne Spitzen, sondern echte Antennen für himmlische Gespräche. Und obwohl die Kathedrale als Meisterwerk der Gotik bekannt ist, war sie für diejenigen, die etwas tiefer sehen können, immer ein Portal zwischen der Welt der Gebete und der Welt der Geheimnisse."
       },
       "zone1-2": {
         "title": "",
         "text": ""
       },
       "zone2": {
-        "title": "",
-        "text": "Die Innenausstattung der Kathedrale ist von ihrer Pracht beeindruckend. Der Altar ist aus seltenen Holzarten gefertigt und mit goldenen Elementen verziert. Die Glasmalereien schaffen ein einzigartiges Lichtspiel, das die Steinwände in verschiedenen Schattierungen färbt. Besondere Aufmerksamkeit zieht die Kanzel auf sich, die im Barockstil mit eleganten Schnitzereien gefertigt ist."
+        "title": "Presbyterium",
+        "text": "Der Chor der Kathedrale — sechsjochig, streng vertikal, wie ein Gebet, das in Stein nach oben gestreckt ist. Hier ist jede Säule nicht nur eine architektonische Stütze, sondern wie eine Bitte: zerbrechlich und hartnäckig zugleich. Die Konsolen, von Ingenieuren der 1930er Jahre erdacht, sehen einfacher aus, als es einem antiken Tempel gebührt, aber gerade deshalb scheinen sie der Moderne Ehre zu erweisen, die ein Bündnis mit der Ewigkeit eingegangen ist. Die Chorgewölbe sind sechsteilig, und der Umgang erinnert an den kreuzrippigen Atem der Gotik. Der Marmorboden ist stufenweise erhöht, so dass es scheint, als steige man höher, nicht nur körperlich, sondern auf der Skala der Realität selbst. Hier stand einst der spätgotische Altar 'Mariä Himmelfahrt' von 1522 — ein atemberaubender Pentaptych aus Lubin, der später durch Breslau reiste. Der Hauptaltar der Kathedrale war seit dem 16. Jahrhundert manieristisch, erbaut mit Mitteln von Bischof Andreas Jerin — und wie es bei alten Heiligtümern üblich ist, verschwand er mit der Zeit, kehrte zurück und nahm 2019 wieder seinen Platz ein, als hätte er den Tempel nie verlassen."
       },
       "zone2-2": {
-        "title": "Geschichte",
-        "text": "Die Kathedrale wurde im 16. Jahrhundert als Ergänzung zum Haupttempel erbaut. Ursprünglich diente sie als Ort für besondere Zeremonien und feierliche Gottesdienste. Im Laufe der Jahrhunderte wurde das Gebäude wiederholt umgebaut und restauriert, wobei das ursprüngliche architektonische Konzept beibehalten wurde."
-      },
-      "zone3": {
-        "title": "",
-        "text": "Besonders wertvoll ist die Orgel, die im 18. Jahrhundert in der Kathedrale installiert wurde. Ihr Klang zeichnet sich durch außergewöhnliche Reinheit und Tiefe aus. Viele berühmte Musiker traten hier auf und bewunderten die akustischen Eigenschaften des Raumes. Die Orgel wird noch heute für Konzerte und feierliche Gottesdienste verwendet."
+        "title": "Barocke Details",
+        "text": "Die Tatsache, dass in der Kathedrale massive Parterre-Bänke aus dem 17. Jahrhundert zu finden sind, die nach dem Krieg aus der Kirche des Heiligen Vinzenz hierher kamen, ist keineswegs zufällig, sondern die Logik des seltsamen Gedächtnisses der Stadt: Wenn ein Ort zugrunde geht, suchen seine Gegenstände Zuflucht in einem anderen. Diese schweren Bänke verdecken fast die Arkaden und scheinen zu flüstern, dass nicht alles im Tempel leicht und nach oben strebend sein muss — manchmal erfordert der Glaube schwere Formen. Die Glasmalereien der Nachkriegszeit wurden von polnischen Künstlern geschaffen — Zygmunt Acedański, Irena Nowakowska-Acedańska, Stanisław Penkalski und Antoni Michalak, und sie führen ihre eigenen Lichtdialoge mit der Morgensonne, als würden sie ein farbiges Glas-Evangelium neu zusammensetzen."
       },
       "zone3-2": {
-        "title": "Architektur",
-        "text": "Die Architektur der Kathedrale stellt eine harmonische Kombination aus gotischen und Renaissance-Elementen dar. Die Fassade ist mit exquisiten Portalen mit Basreliefs geschmückt, die Szenen aus dem Leben der Heiligen darstellen. Die Türme der Kathedrale sind mit Türmen gekrönt, die von weitem sichtbar sind und als Orientierungspunkte für die Stadtbewohner dienen."
+        "title": "Schiffe",
+        "text": "Das Hauptschiff der Kathedrale verhält sich viel ruhiger als der Chor — es übernimmt die Ästhetik der Ziegel-Reduktionsgotik: streng, eben, fast statisch, wie ein Mensch, der zu schweigen weiß. Sechs Joche und noch eines zwischen den Türmen schaffen einen Rhythmus, der von Zeit zu Zeit plötzlich abbricht, als hätten die Wände einst von einem Querschiff geträumt, aber ihre Meinung geändert. Heute überrascht das Hauptschiff mit seinem rippenlosen Gewölbe, Erbe der Renaissance-Experimente des 16. Jahrhunderts. Hier grenzen jahrhundertealte Lösungen an Ergebnisse der Nachkriegsrestaurierungen, und wenn man genau hinhört, kann man hören, wie verschiedene Epochen streiten: Was ist wichtiger — Strenge oder Weite?"
+      },
+      "zone3": {
+        "title": "Kapellen",
+        "text": "Um die Kathedrale herum ist eine ganze Konstellation von Kapellen angeordnet — jede mit ihrem eigenen Charakter, wie separate Helden eines großen Romans. Die Kapelle der Heiligen Elisabeth, Ende des 17. Jahrhunderts mit Kuppel und Fresken von Andrzej Kowalski geschaffen, bewahrt das Grabmal von Kardinal Friedrich von Hessen und seine Büste, ausgeführt in Berninis Werkstatt. Daneben — die Kapelle der Heiligen Maria aus dem 14. Jahrhundert, wo sich gotisches Gewölbe und barocker Altar mit einer Kopie der Tschenstochauer Madonna verflechten. Die Kapelle des Leibes Christi, errichtet von Johann Bernhard Fischer von Erlach im Wiener Barockstil, bewahrt die Überreste fürstlicher Personen, einschließlich der Enkelin von Jan III. Sobieski — und ihr Altar scheint dem Norden zu singen. In der Kapelle des Heiligen Johannes des Täufers aus dem 14. Jahrhundert ruhte einst Bischof John Turzon, und von seinem Renaissance-Mausoleum ist heute nur noch eine Platte mit einer Figur erhalten. Und die Kapelle des Heiligen Kasimir aus dem 15. Jahrhundert bewahrt die Namen der Bischöfe des 20. Jahrhunderts an ihren Wänden, wie eine innere Karte des kirchlichen Gedächtnisses."
       },
       "zone4": {
-        "title": "Moderne Zeit",
-        "text": "Heute dient die Kathedrale weiterhin als Ort der Anbetung und kulturelles Zentrum. Hier finden regelmäßig Gottesdienste, Orgelmusikkonzerte und Führungen für Touristen statt. Die Kathedrale ist ein wichtiger Teil des kulturellen Erbes von Breslau und ein Symbol des spirituellen Lebens der Stadt."
+        "title": "",
+        "text": "Die übrigen Glocken bewahren Phrasen aus dem Evangelium und den Psalmen über Bitten, Suchen und Segen. Alle zusammen erklingen sie nur in besonderen Momenten, wie Menschen, die zu schweigen wissen, aber wenn sie sprechen — dann so, dass die ganze Stadt erzittert."
       },
       "zone4-2": {
-        "title": "Interessante Fakten",
-        "text": "Die Kathedrale beherbergt eine einzigartige Sammlung religiöser Artefakte, darunter antike Ikonen, Kirchengeräte und Manuskripte. Besonders wertvoll ist die Bibliothek, in der seltene Bücher und Dokumente zur Geschichte der Stadt und Kirche gesammelt sind."
+        "title": "Glocken",
+        "text": "Heute hängen im Südturm der Kathedrale vier Stahlglocken, und jede hat ihre eigene Stimme — und ihr eigenes Gebet, direkt auf Bronze eingraviert. Die größte, mit einem Zitat aus dem 130. Psalm, fing einst eine Kugel während der Kämpfe bei Lubań ab und läutet jetzt mit leichtem Heiserkeit, als erinnere sie sich an alte Wunden."
       }
     }
   },
@@ -258,7 +258,265 @@
       }
     }
   },
-
+  "millennium_column": {
+    "title": "Jahrtausendsäule",
+    "book02": {
+      "zone1": {
+        "title": "Jahrtausendsäule",
+        "text": "Die Jahrtausendsäule — nicht nur ein Denkmal, sondern eine steinerne Hymne an die Zeit, in Granit und Bronze festgehalten. Sie steht auf dem Domplatz, wie eine Wache, die gleichzeitig über der Stadt thront und mit ihrem Geist verschmilzt und daran erinnert: 'Du bist nicht allein, Breslau, du bist Teil von etwas viel Größerem.'"
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Schwer wie die Ewigkeit glänzt der Zylinder der Säule golden in der Sonne. Er ist aus schwarzem und rosafarbenem Granit gefertigt — ein Kontrast, der gleichzeitig Licht und Schatten zu malen scheint und daran erinnert, dass das menschliche Jahrtausend nicht nur Glanz, sondern auch Schatten ist. Oben — der bronzene Christus König, mit Tiara gekrönt, der nicht mit arrogantem Stolz nach unten blickt, sondern als stiller Zeuge, 'allmächtig, aber geduldig.'"
+      },
+      "zone2-2": {
+        "title": "Geschichte",
+        "text": "Diese Statue wurde von Vater Czesław Mazur erdacht und vom Bildhauer Janusz Kucharski zum Leben erweckt. Zusammen errichteten sie ein Denkmal, das dem Jahrtausend des Breslauer Bistums gewidmet ist."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Die lateinische Inschrift auf der Säule klingt feierlich und geheimnisvoll, aber wenn man sie in menschliche Worte übersetzt, wird die Bedeutung klarer: 'Diözesan- und Ordensklerus der Erzdiözese Breslau, der sich an Christus, den Erlöser der Welt, erinnert. Zum Jahrtausend des Breslauer Bistums.' Das ist nicht nur eine offizielle Formel, sondern ein stilles Bekenntnis der Treue."
+      },
+      "zone3-2": {
+        "title": "Architektur",
+        "text": "Manchmal scheint es, als spräche die Säule durch die lateinische Inschrift: Clerus Dioecesanus et Religiosus Archidioecesis Wratislaviensis Memor Christi, Redemptoris Mundi. Pro Millenio Dioecesis Wratislaviensis. — Worte, die wie ein Gebet klingen, als würde die Stadt sie im Einklang singen."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Ihr Stil — nicht modische Avantgarde, sondern neoklassische Zurückhaltung. Wie aus dem Lehrbuch: Säule, Statue, Granit... Aber gerade in dieser Einfachheit verbirgt sich die Kraft. Nicht der Versuch zu überraschen, sondern der Wunsch, bemerkenswert zu sein, das zu sein, was bleibt, wenn die Stadt verstummt."
+      },
+      "zone4-2": {
+        "title": "Symbolik",
+        "text": "Wer vorbeigeht, könnte denken: 'Das ist nur eine hohe Statue.' Aber wenn man genau hinschaut — sie steht zwischen den heiligen Mauern des Doms und den Straßen Breslaus, als würde sie Irdisches und Himmlisches verbinden. Kardinal Edmund Szok weihte sie, und seitdem schweigt sie nicht, sondern lädt still alle ein — kommt, haltet an, erinnert euch, warum ihr hier seid."
+      }
+    }
+  },
+  "spiritual_seminary": {
+    "title": "Höheres Geistliches Seminar",
+    "book02": {
+      "zone1": {
+        "title": "Höheres Geistliches Seminar",
+        "text": "Das Höhere Geistliche Seminar von Breslau — nicht nur eine Bildungseinrichtung. Es ist wie ein alter Leuchtturm im Sturm der Geschichte: gegründet im Oktober 1565 durch den Willen der Bischöfe. Nach den strengen Dekreten des Konzils von Trient wurde es das erste seiner Art in Niederschlesien."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "1656 kehrte das Seminar nach Breslau zurück — wie ein Exilant, der erkannte, dass sein Zuhause hier ist, auch wenn das Zuhause zerstört und finanziell erschöpft ist. Aber der Geist des Lernens erwies sich als stärker als alle Widrigkeiten. Es entstand sogar eine philologische Fakultät — weil Worte und Bedeutung wichtig sind, besonders wenn es darum geht, Seelen und Geister zu retten."
+      },
+      "zone2-2": {
+        "title": "Geschichte",
+        "text": "Seine ersten Schritte — in kirchlicher Gelassenheit: erster Rektor Theodor Lindan, Vorlesungen in der Kirche des Heiligen Martin. Aber bereits zehn Jahre später wurde es nach Nysa getragen — wie ins Exil — um es vor der protestantischen Welle zu schützen, die damals alles um sich herum überschwemmte. Die Jesuiten führten die Studenten zu geistlicher Bescheidenheit und Disziplin, wie strenge Lehrer, die den Charme des Fortschritts ablehnten."
+      },
+      "zone3": {
+        "title": "Bildung",
+        "text": "Das Leben der Seminaristen brodelte: tägliche Gebete, Beichten, obligatorische Rekollektion von 8 Tagen nach Ostern oder vor großen Feiertagen — damit die Seele versteht, dass sie nicht für sich selbst ist, sondern für den Dienst. Und das Lesen der Schrift — nicht aus Pflichtgefühl, sondern aus der Suche nach Bedeutung. In diesem Regime verbarg sich das Streben nach innerer Ehrlichkeit, wie ein Spiegel, der jede Maske durchschneidet."
+      },
+      "zone3-2": {
+        "title": "",
+        "text": "Das 19. Jahrhundert brachte Struktur. Ab 1814 wurde die Bildung systematisch: sieben Semester, mündliche Prüfungen vor einer strengen Kommission — Lehrstuhl, Direktor, Kanoniker. Alles nach Vorschrift; damit ihr wisst: Das ist ernst, ihr seid Teil dieser Tradition. Diese Regel galt bis 1888 und beraubte die Studenten gleichzeitig nicht der Freiheit, Vorlesungen zu wählen und ihr eigenes Programm zu gestalten."
+      },
+      "zone4": {
+        "title": "",
+        "text": "In der Nachkriegszeit bildete das Seminar mehr als 1500 Diener aus — Priester, Bischöfe, Theologen. 1968 wurde die Päpstliche Theologische Fakultät eröffnet, und ab 1990 begann Annus Propedeuticus zu wirken — eine besondere Formation für Erstsemester, die erste in Polen und die zweite in Europa. Und hier ist es — das alte Seminar mit Jugend im Inneren — das weiterhin diejenigen ausbildet, die nicht nur Gott verherrlichen, sondern ihn in sich tragen."
+      },
+      "zone4-2": {
+        "title": "Krieg",
+        "text": "Der Krieg löschte diesen Ort fast von der Erdoberfläche. Seminaristen wurden nach Krakau gebracht, in Armut und Zerstörung. Aber am 8. Oktober 1947 erstand das Seminar wieder: 24 Studenten, eine Predigt von Bolesław Kominek, Hoffnung, dass die Zukunft nicht denen gehört, die Angst haben, sondern denen, die bereit sind, trotz allem vorwärts zu gehen."
+      }
+    }
+  },
+  "st_mary_church": {
+    "title": "Kirche der Heiligen Maria auf dem Sand",
+    "book02": {
+      "zone1": {
+        "title": "Kirche der Heiligen Maria auf dem Sand",
+        "text": "Die Kirche der Heiligen Maria auf dem Sand (Kościół Najświętszej Marii Panny na Piasku) — das ist nicht nur ein Tempel, sondern eine Art erstarrter Zauber, der über der Oder im Herzen der Sandinsel emporsteigt. Ihre gotischen Spitzen scheinen mit den Wolken zu sprechen — und so überzeugend, dass ganz Breslau diesem Silhouett zu vertrauen gelernt hat, als wäre es sein zweiter Horizont. Für die einen dient sie als Ort des Gebets, für andere — als Portal zu vergangenen Jahrhunderten, aber für alle bleibt sie ein stilles Wunder, das sich nicht beeilt und jeden an ihren Türen erwartet."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Die Geschichte des Tempels sieht fast wie eine Chronik eines ausdauernden Helden aus. Im 12. Jahrhundert stand auf der Insel die erste Holzkirche — bescheiden, wie ein Probenskizze. Im 13. wurde sie durch eine steinerne Basilika ersetzt, bereits viel solider, mit Anspruch auf Ewigkeit. Bis zum 14. Jahrhundert entstand die gotische Form, die wir heute sehen — dünn, nach oben strebend. Seitdem hat die Kirche Kriege, Brände, Zerstörungen und — was wichtiger ist — Restaurierungen gesehen. Dieser Zyklus von Stürzen und Wiederauferstehungen wurde für sie zu etwas wie Atmen: jedes Mal erwachte sie mit neuer Kraft, als würde sie demonstrieren, dass Stein hartnäckiger als die Zeit sein kann."
+      },
+      "zone2-2": {
+        "title": "Geschichte",
+        "text": "Es gibt eine schöne Legende: als wäre der Beginn der Kirche mit der wundersamen Erscheinung der Jungfrau Maria auf der Insel verbunden. Seitdem wurde der Ort zu einem Zentrum besonderer Verehrung, wohin Jahrhundert für Jahrhundert Pilger aus ganz Schlesien kamen. Und es scheint, dass wenn man hier der Stille lauscht, sie immer noch Echos jener Gebete bewahrt, übereinander geschichtet, wie transparente Schichten der Ewigkeit."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Die Architektur der Kirche — das ist separate Magie. Eine dreischiffige Basilika mit hohen Gewölben und Säulen ist so geschaffen, dass ein Mensch leicht atmen kann: als würde sich der Raum selbst in dir ausdehnen. Bunte Glasmalereien fangen Sonnenstrahlen ein und verwandeln sie in gläserne Zaubersprüche, die ihr eigenes, unabhängiges Leben führen. Altäre und Skulpturen — das sind kleine Chroniken, versteinerte Geschichten, durchdringend und still zugleich."
+      },
+      "zone3-2": {
+        "title": "Architektur",
+        "text": "Die Kirche — ein klassisches Beispiel der schlesischen Gotik, wo strenge Monumentalität irgendwie der Eleganz nicht im Wege steht. Die Westfassade empfängt Gäste mit einem geschnitzten Portal, dessen jedes Detail so geschaffen scheint, dass ihr stehenbleibt und nachdenkt: Wer hat sich das alles ausgedacht, und warum? Türme mit spitzen Spitzen sind von weitem sichtbar, wie ein Leuchtturm für Wanderer — und vielleicht gerade für diejenigen, die schon lange nach einem Weg suchen, nicht nur zur Stadt, sondern auch zu sich selbst."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Jetzt lebt die Kirche ihr gewöhnliches, aber immer noch etwas magisches Leben. In ihr finden Gottesdienste statt, Touristen betreten sie, und innen kann man eine besondere Mischung treffen: Konzentration des Gebets und neugierige Blicke von Reisenden. Hier werden Ikonen, Skulpturen und andere Kunst aufbewahrt, von denen jede die Besucher darauf zu testen scheint, ob sie etwas mehr sehen können als das, was dargestellt ist."
+      },
+      "zone4-2": {
+        "title": "Interessante Fakten",
+        "text": "Hier ist die Ikone der Jungfrau Maria vom Sand aus dem 15. Jahrhundert — eine der ältesten und verehrtesten in Breslau. Sie wird wundertätig genannt, und das ist durchaus natürlich: Menschen anzuziehen — das ist auch ein besonderes Wunder. Die einen kommen, um Trost zu suchen, andere Hoffnung, wieder andere — Bestätigung, dass Wunder überhaupt existieren. Und nach Gerüchten verweigert die Ikone keinem von ihnen."
+      }
+    }
+  },
+  "ogrod_papieski": {
+    "title": "Garten der Päpstlichen Theologischen Fakultät",
+    "book02": {
+      "zone1": {
+        "title": "Garten der Päpstlichen Theologischen Fakultät",
+        "text": "Es gibt einen Ort in Breslau, wo alles flüstert, sogar die Wände. Er heißt Garten der Päpstlichen Theologischen Fakultät. Ein lustiger Name, als würde er sofort staubige Bücher, langweilige Professoren und Latein von morgens bis abends versprechen. Aber in Wirklichkeit — das ist ein Garten, der vor langer Zeit gelernt hat, sein eigenes Leben zu führen, und niemand muss erklären, dass er viel klüger ist als alle Abhandlungen."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Hier wissen die Bäume mehr, als es scheint. Sie haben Studenten gesehen, die kamen, um 'Vorlesungen zu wiederholen', aber in Wirklichkeit diskutierten sie über Liebe und Angst vor Prüfungen. Sie hörten die Schritte von Priestern, die mit sich selbst sprachen, und das leise Lachen derer, die heimlich eine Flasche Wein in den Garten trugen. Wenn man lange unter der Platane in der Ecke steht, kann man im Rascheln der Blätter etwas wie Spott unterscheiden: 'Na, bist du wieder gekommen, um Rat zu suchen?'"
+      },
+      "zone2-2": {
+        "title": "Geschichte",
+        "text": "Der Garten hat eine lange und vielschichtige Geschichte. Einst gab es hier eine strenge klösterliche Ordnung: Blumenbeete nach Lineal, Büsche nach Satzung. Aber die Jahre vergingen, und der Garten wurde weiser. Jetzt widersetzt er sich nicht dem leichten Chaos: Gras wächst, wo es ihm gefällt, Vögel veranstalten Konzerte ohne Zeitplan. Und all das — viel ehrlicher als jede Symphonie nach Noten."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Natürlich versuchen die Menschen, ihn zu korrigieren. Büsche schneiden, Wege anlegen, Bänke aufstellen. Aber der Garten tut so, als würde er zustimmen. In der Tiefe bleibt er unabhängig und bewahrt immer Ecken, wo die Hand des Gärtners nicht hinkommt. Das ist seine kleine Hartnäckigkeit, eine Erinnerung: 'Denk nicht, dass ich für deinen Komfort geschaffen wurde.'"
+      },
+      "zone3-2": {
+        "title": "",
+        "text": "Hier verhält sich die Zeit seltsam. Man kann tagsüber eintreten, mit Gedanken über Geschäfte und Fristen, und bereits in der Dämmerung austreten, ohne zu bemerken, wo die Stunden geblieben sind. Oder umgekehrt: für eine Minute eintreten, und beim Ausgang stellt sich heraus, dass nur dreißig Sekunden vergangen sind, obwohl man drinnen die Hälfte seines Lebens mit sich selbst besprochen hat. Wahrscheinlich hat der Garten seinen eigenen Kalender, und er ist nicht verpflichtet, mit dem menschlichen übereinzustimmen."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Man sagt, in diesem Garten ist es leichter zu beten. Auch wenn man ein Skeptiker ist, der nur an Internetsignal und Morgenkaffee glaubt. Hier klingen Gebete irgendwie natürlich: als würde man nicht bitten, sondern einfach teilen. Der Garten verspricht keine Wunder, er nickt nur: 'Ich habe gehört.' Und das ist, seltsamerweise, genug."
+      },
+      "zone4-2": {
+        "title": "",
+        "text": "So ist er — der Garten der Päpstlichen Theologischen Fakultät. Ein Ort, wo Religion und Natur, Lärm der Studenten und Stille alter Bäume, Strenge und Chaos sich zu einem Knäuel verflechten. Hier kann man sich wie ein Teilnehmer an einer großen Aufführung fühlen, wo man scheinbar Zuschauer ist, aber die ganze Zeit vermutet, dass einem längst eine Rolle zugeteilt wurde. Und der Garten wartet darauf, dass ihr zu spielen beginnt."
+      }
+    }
+  },
+  "national_museum": {
+    "title": "Nationalmuseum",
+    "book02": {
+      "zone1": {
+        "title": "Nationalmuseum",
+        "text": "Das Nationalmuseum von Breslau gibt vor, ein Zuhause für Gemälde und Skulpturen zu sein. In Wirklichkeit ist es längst zu einem unabhängigen Helden geworden — mit Ziegelseiten, mit Efeu umrankt, und mit jenem geduldigen Gesichtsausdruck, den alte Weisen haben. Es steht am Ufer der Oder, beobachtet Passanten und seufzt gelegentlich, als wollte es sagen: 'Ihr stellt euch nicht einmal vor, was ich mich erinnere.'"
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Die Ziegel seiner Wände — wie Tagebuchseiten. Jeder Stein kennt tausend Geschichten: über Kriege und friedliche Tage, über Restauratoren mit Pinseln, über Kinder, die hier zum ersten Mal Ritterrüstungen sahen und beschlossen, große Helden zu werden. Und der Efeu — das sind seine Haare, immer leicht zerzaust, immer jung. Die Menschen denken, das Museum altert, aber das ist Täuschung: es wächst einfach langsam, wie ein Baum."
+      },
+      "zone2-2": {
+        "title": "Geschichte",
+        "text": "Das Museum hat eine schwierige Geschichte: es überlebte Kriege, Machtwechsel, Epochenwechsel. Es erinnert sich, wie man versuchte, es zu zerstören, und wie man es wieder aufrichtete. Das härtete seinen Charakter: jetzt blickt es auf alle menschlichen Leidenschaften mit sanfter Ironie. 'Ach, ihr streitet euch wieder über Politik? Na ja, na ja. Lasst uns lieber den Wandteppich aus dem 17. Jahrhundert bewundern, er ist immer noch klüger als eure Debatten.'"
+      },
+      "zone3": {
+        "title": "",
+        "text": "Innen hat es besondere Magie. Gemälde hängen, als wären sie sanftmütig, aber in Wirklichkeit flüstern sie miteinander. Skulpturen tun so, als wären sie steinern, aber bei Sonnenuntergang erwachen sie — ändern leicht ihre Pose, um nicht steif zu werden. Und jeder Besucher, der hier eintritt, wird unwillkürlich Teil dieser geheimen Aufführung: manchmal Zuschauer, manchmal Schauspieler, und manchmal sogar Exponat."
+      },
+      "zone3-2": {
+        "title": "Sammlungen",
+        "text": "Und das Museum hat auch eine geheime Fähigkeit — es weiß, wie man fremde Erinnerungen bewahrt. Wenn eine Person etwas länger an einer Vitrine verweilt als gewöhnlich — versteckt das Museum sorgfältig in seinem Ziegelgedächtnis ihre Gedanken, Emotionen, den Duft von Parfüm oder das Knarren von Schuhen. Dann gibt es sie zurück, wenn die Person Jahre später kommt: 'Schaut, ich habe bewahrt, was ihr selbst bereits vergessen habt.'"
+      },
+      "zone4": {
+        "title": "",
+        "text": "Die Oder, die in der Nähe fließt, neckt es: 'Du, Bruder, bist zu ernst.' Und das Museum lächelt nur zurück: 'Aber ich weiß, wie man bewahrt. Und du trägst und trägst weiter.' Ihre Gespräche kann man abends hören, wenn man am Ufer verweilt: einer plätschert, der andere knarrt mit Fenstern, und beide sind mit ihrer Rolle zufrieden."
+      },
+      "zone4-2": {
+        "title": "Interessante Fakten",
+        "text": "So steht das Nationalmuseum von Breslau — schön, mit Efeu umrankt, ein wenig spöttisch und sehr weise. Es blickt auf uns und wartet geduldig darauf, dass wir aufhören zu rennen und wenigstens für eine Minute in der Nähe stehenbleiben. Denn gerade in solchen Momenten flüstert es seine interessantesten Geschichten — aber nur denen, die bereit sind zuzuhören."
+      }
+    }
+  },
+  "odra": {
+    "title": "Oder",
+    "book02": {
+      "zone1": {
+        "title": "Oder",
+        "text": "Wisst ihr, was lustig ist? Ich scheine eine Stadt zu sein, Stein, Ziegel, Glas und andere menschliche Erfindungen. Aber trotzdem — ohne sie, die Oder, scheine ich nicht zu existieren. Sie fließt hier, murmelt, manchmal träge, manchmal ärgerlich, und erinnert mich jeden Tag daran, dass ich überhaupt nicht der Herr bin, sondern nur ein Mieter an ihren Ufern. Obwohl die Menschen sicher sind, dass sie Breslau erfunden haben, aber um die Wahrheit zu sagen — der Fluss hat mich erfunden."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Sie ist hartnäckig, meine Oder. Sie trug Boote, als es hier noch keine Brücken gab, und ertränkte Dörfer, als die Einheimischen zu sehr entspannten. Ich erinnere mich — nicht mit meinen eigenen Augen, natürlich, sondern mit dem Gedächtnis der Steine — wie ihre Überschwemmungen Straßen in Kanäle verwandelten. Die Menschen rannten, fluchten, retteten Hausrat auf Wagen, und sie lachte, indem sie trübe Wellen aufwarf. In solchen Momenten fühlte ich mich nicht als Stadt, sondern als zerbrechliche Barke."
+      },
+      "zone2-2": {
+        "title": "Geschichte",
+        "text": "Geschichte? Oh ja! Wir haben sie gemeinsam und lang. Wikinger segelten auf ihren Wellen, Händler zogen in Karawanen, Könige und Herzöge bauten Brücken, um zu beweisen: 'Hier, wir sind stärker als die Elemente.' Ha! Die Oder erlaubte ihnen, so zu denken, aber von Zeit zu Zeit zeigte sie ihre Zähne — damit sie nicht vergaßen, wer hier die Herrin ist."
+      },
+      "zone3": {
+        "title": "Die Elemente bezwingen",
+        "text": "Und die Menschen... hartnäckige Geschöpfe. Bauten Dämme, Kanäle, Schleusen. Zogen um mich herum ein ganzes System von Wasserbauwerken. Jetzt haben wir regulierte Pegel, Stauseen und ganze Blaupausen zum Schutz vor einer weiteren 'Apokalypse'. Die Oder toleriert sie, nickt — na ja, na ja, lasst uns in Frieden leben. Respektiert Intelligenz."
+      },
+      "zone3-2": {
+        "title": "Überschwemmungen",
+        "text": "Die Überschwemmung von 1997... ach, wie ich mich an diesen bösen Juli erinnerte. Ich stand bis zur Taille im Wasser, Brücken zitterten, Keller ertranken, Straßen verwandelten sich in schmutzige Ströme. Die Oder beschloss, es sei Zeit, mich daran zu erinnern, wer von uns älter ist. Die Menschen nannten es später die 'Jahrtausendflut', obwohl ich weiß — das ist nur eine ihrer Launen. Sie zählt die Zeit sicher nicht nach menschlichen Kalendern."
+      },
+      "zone4": {
+        "title": "",
+        "text": "So leben wir: ich — Breslau, eine Stadt, die scheinbar auf dem Land steht, aber in Wirklichkeit auf dem Wasser hält. Sie — die Oder, ein Fluss, der scheinbar vorbeifließt, aber in Wirklichkeit durch mich fließt, durch jede Straße, jeden Stein und jede Geschichte. Und wisst ihr, was das Erstaunlichste ist? Mir gefällt es sogar, ihre Geisel zu sein. Denn Geisel der Schönheit zu sein ist überhaupt nicht beängstigend."
+      },
+      "zone4-2": {
+        "title": "Schönheit",
+        "text": "Und doch... ich liebe sie. Ohne ihre silbernen Windungen wäre ich grau und trübsinnig. All diese Inseln und Brücken — mein Stolz. Wie viele Künstler malten ihre Ufer, wie viele Studenten küssten sich an ihren Ufern, wie viele Musiker hörten das Plätschern des Wassers statt eines Metronoms. Die Oder weiß, nicht nur furchterregend, sondern auch sanft, fast mütterlich zu sein."
+      }
+    }
+  },
+  "kleck_gate": {
+    "title": "Kluska-Tor",
+    "book02": {
+      "zone1": {
+        "title": "Kluska-Tor",
+        "text": "Das Kluska-Tor — nicht nur ein Bogen zwischen historischen Gebäuden, sondern eine Schwelle, durch die nicht so sehr der Körper als die Seele geht. Legende — das ist der wahre Schlüssel, der ihre Bedeutung öffnet. Denn was sind Tore ohne eine Geschichte über Agnes, die die besten Kluskas in Breslau machte?"
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Einmal kehrte Konrad von einem Markt zurück, wo er all sein Geschirr verkauft hatte, außer einer einzigen Schüssel. Hunger und Müdigkeit warfen ihn nieder. Er setzte sich an das Stadttor, legte die unverkaufte Schüssel neben sich und schlief ein. Und dann erschien ihm Agnes: lebendig, hell, wie er sie in Erinnerung hatte. Sie versprach, ihn auch nach dem Tod zu ernähren — jeden Tag mit einer frischen Schüssel Kluskas. Aber unter einer Bedingung: Konrad war verpflichtet, die letzte Kluska unberührt zu lassen."
+      },
+      "zone2-2": {
+        "title": "Legende",
+        "text": "Es war einmal in Breslau lebten Konrad und Agnes. Konrad war ein edler Töpfer, der wusste, wie man mit Ton umgeht, als würde er selbst darum bitten, sich in einen Krug zu verwandeln. Agnes kochte Kluskas — so lecker, dass, wer einmal probiert hatte, nie mehr an Essen ohne Seele glaubte. Aber eines Tages wurde Agnes krank, und bald war sie nicht mehr da. Konrad hörte vor Kummer auf zu trinken und zu essen. Agnes' mitleidige Freundinnen brachten ihm Leckereien, aber alles war vergeblich: nach ihren Kluskas schien die Welt geschmacklos."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Aber das Problem ist, dass Hunger lauter zu flüstern weiß als alle Versprechen. Konrad blickte auf diese letzte Kluska, und sein Herz tobte: 'Was, wenn Agnes Mitleid mit mir hat? Was, wenn sie vergibt? Immerhin nur eine...' Er entschied sich. Streckte die Hand aus, packte die Kluska — und sofort glitt sie aus seinen Fingern, als wäre sie lebendig."
+      },
+      "zone3-2": {
+        "title": "",
+        "text": "Er wachte auf — und konnte seinen Augen nicht trauen. In der Schüssel, bei seiner Hand, lagen die echten Agnes-Kluskas, noch warm, mit jenem Aroma, das er für ewig verloren hielt. Tränen der Dankbarkeit spritzten aus seinen Augen. Konrad aß und konnte nicht satt werden, bis er zur letzten kam. Er ließ sie, wie versprochen."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Und Jahrhunderte sind vergangen, aber die steinerne Kluska liegt immer noch auf dem Tor. Die Stadtbewohner schauen sie an und erzählen diese Geschichte neuen Generationen. Seitdem heißen die Tore Kluska, um nicht zu vergessen: Wunder erfordern immer Treue zum Wort, und es lohnt sich einmal der Schwäche nachzugeben — sogar die Liebe kann sich in Stein verwandeln."
+      },
+      "zone4-2": {
+        "title": "",
+        "text": "Er packte sie wieder — und sie drehte sich wieder und sprang direkt auf das Torblatt. Konrad war verwirrt, dann kletterte er verzweifelt hinter ihr hoch, klammerte sich an den Stein wie an einen Strohhalm. Aber dann geschah das Unmögliche: die Kluska versteinerte, verwandelte sich in einen harten Pflasterstein, fest in das Tor gewachsen. Von diesem Tag an kam Agnes nicht mehr zu ihm in Träumen. Konrad sah nie wieder eine Schüssel Kluskas. Das Essen wurde wieder geschmacklos, wie das Leben selbst. Die Stadt hatte Mitleid, aber niemand konnte seine magische Verbindung zurückgeben."
+      }
+    }
+  },
   "panorama": {
     "title": "Aussichtsplattform"
   },
@@ -271,27 +529,29 @@
   "map.platan": "Ahornblättriger Platan. Naturdenkmal",
   "map.ogrod": "Garten der Päpstlichen Theologischen Fakultät",
   "map.ogrodbot1": "Botanischer Garten der Universität Breslau",
-  "map.ogrodbot2": "Botanischer Garten der Universität Breslau",
-  "map.ogrodbot3": "Botanischer Garten der Universität Breslau",
-  "map.ogrodbot4": "Botanischer Garten der Universität Breslau",
+  "map.ogrodbot2": "",
+  "map.ogrodbot3": "",
+  "map.ogrodbot4": "",
   "map.plackat": "Domplatz",
-  "map.odra1": "Oder",
+  "map.odra1": "",
   "map.odra2": "Oder",
-  "map.odra3": "Oder",
+  "map.odra3": "",
   "map.mlynski": "Mühlenbrücke",
   "map.panny": "Straße der Allerheiligsten Jungfrau Maria",
   "map.piasek": "Sandinsel",
   "map.katedralna1": "Domstraße",
   "map.katedralna2": "Domplatz",
-  "map.katedralna3": "Domplatz",
-  "map.katedralna4": "Domplatz",
-  "map.katedralna5": "Domplatz",
+  "map.katedralna3": "",
+  "map.katedralna4": "",
+  "map.katedralna5": "",
   "map.brama": "Kluska-Tor",
   "map.kanonia": "Kanonikerstraße",
   "map.bramabot": "Botanischer Garten Tor",
   "map.kapitulna": "Kapitelstraße",
   "quest": {
     "title1": "Quest 1: Finde alle Geheimnisse der Tumski-Insel",
+    "expectation": "Erwartung",
+    "reality": "Realität",
     "intro": "Im Dachboden eines verlassenen Hauses wurden Aquarelle entdeckt. Mehrere Dutzend. Die Blätter sind staubig, hier und da von Zeit oder Mäusen angenagt (ich weiß nicht, wer von ihnen ordentlicher war), aber die Farben sind noch lebendig — solche, dass im Hals vom Geruch des Regens auf warmem Stein kitzelt, wenn man zu lange schaut. \n\nAutor? Unbekannt. Die Unterschrift ist unleserlich. Vielleicht ist es ein Name. Oder vielleicht — Koordinaten einer anderen Realität. \n\nAuf den Gemälden sind Orte. Straßen, Menschen, Fenster. Ein einsamer Laternenanzünder an einer Säule. Ein Turm mit Vögeln auf dem Dach. Alles ist seltsam vertraut. Als ob es bereits irgendwo existiert hätte. Im Traum? In einem Buch? In jenem Leben, von dem mir vergessen wurde zu erzählen? \n\nAber jetzt muss ich sie aus irgendeinem Grund finden. Alle. In der Realität sehen. \n\nObwohl wer weiß, was wirklich real ist?",
     "task1": "Mysteriöser Löwe, der die Kirche bewacht",
     "task2": "Liebesschlösser",
@@ -304,7 +564,25 @@
     "task9": "Schwarze Kluska",
     "task10": "Eingang zum botanischen Garten",
     "task11": "Garten der Päpstlichen Theologischen Fakultät",
-    "task12": "Statue der Maria Magdalena im Garten der päpstlichen theologischen Fakultät"
+    "task12": "Statue der Maria Magdalena im Garten der päpstlichen theologischen Fakultät",
+    "task13": "Platane",
+    "back1": " ",
+    "back2": "Auf der Tumski-Brücke in Breslau hinterließen Verliebte viele Jahre schwere eiserne Liebesbekundungen. 2020 wurden sie von der Brücke entfernt und zur Aufbewahrung bestimmt. Ganze 12 Tonnen Liebe. Die Stadt führte ein zehnjähriges Verbot ein, die Brücke mit Schlössern zu beschweren. Aber die Liebe siegt immer. Deshalb leuchteten bald an der benachbarten Uferpromenade frische Bekundungen.",
+    "back3": "Von allen Heiligen haben nur die Jungfrau Maria und Jan Nepomuk Sterne in ihren Heiligenscheinen. Als hätte er ein Stück des Nachthimmels mitgenommen und gehe jetzt damit herum, was bei anderen Heiligen leichte Eifersucht und Verwirrung hervorruft. Am 20. März 1393 wird Jan Nepomuk in die eisigen Wasser der Moldau geschickt — nicht aus eigenem Willen, natürlich, sondern auf Befehl von König Wenzel IV. Ein Priester, der sich weigerte, das Beichtgeheimnis der königlichen Gattin zu verraten, bezahlte das Schweigen mit dem Leben. Seitdem verehren ihn die Katholiken als Beschützer vor Verleumdung und Überschwemmungen. Deshalb ist es nicht verwunderlich, dass seine steinernen und bronzenen Kopien auf Brücken und Inseln stehen, wie Wächter, die darauf achten, dass Flüsse und Menschen sich anständig benehmen.",
+    "back4": "Das ist das älteste erhaltene Denkmal Breslaus, geboren 1694. Es wurde, wie man versichert, von der Inspiration der Jesuiten geschaffen und sollte den Triumph des Katholizismus über die Protestanten verkörpern. Der Name des Meisters, der die Figuren aus Sandstein schnitzte, ist in Vergessenheit geraten, obwohl Experten dazu neigen, die Arbeit einem Holländer namens Sulpicius Gode zuzuschreiben.",
+    "back5": "Von der Höhe der Aussichtsplattform der Breslauer Kathedrale öffnet sich die Stadt völlig anders: rote Dächer blitzen in der Sonne, die Oder flimmert mit trägen Bändern. Hier versteht man besonders deutlich, dass Breslau nicht nur eine Stadt ist, sondern ein lebendiges Herz, das im Rhythmus von Wind und Glocken schlägt. Und das Bezauberndste an diesem Spaziergang in den Himmel — dass ein Aufzug zum wunderbarsten Blick führt, versteckt in einem alten Turm. Die gotische Architektur selbst beschloss, der Moderne ein kleines Wunder zu schenken: die Möglichkeit, nach oben zu fliegen, ohne auf Hunderten von Stufen den Atem zu verlieren. Und sofort von Angesicht zu Angesicht mit dem Himmel zu stehen.",
+    "back6": "In der Wand der Breslauer Kathedrale steckt eine Granate aus der Zeit des Zweiten Weltkriegs — entschärft, aber sichtbar gelassen, eine stille Erinnerung. Sie ragt aus dem Mauerwerk heraus, wie ein Fragment fremder Wut, und gleichzeitig als Warnung: alles, was einst zerstörte, kann eines Tages einfach Teil der Wand werden.",
+    "back7": "Heinrich, armer Lehrling, verliebte sich in Barbara — Tochter eines Meisterjuweliers. Machte einen Heiratsantrag und bekam eine Absage: nicht genug Gold, zu viele Gefühle. In Wut steckte er das Haus des Beleidigers in Brand und kletterte auf das Dach der Kathedrale, um zuzusehen, wie alles brennt. Aber der Himmel billigte das Schauspiel nicht, und Heinrich verwandelte sich in Stein. Jetzt blickt er von der Wand auf alle und schweigt.",
+    "back8": "Der Laternenanzünder der Tumski-Insel — eine lebende Legende Breslaus, ein geheimnisvoller Hüter des Lichts, der jeden Abend die alten Gaslaternen anzündet. Er erscheint auf den Inselstraßen streng zur Stunde des Sonnenuntergangs — nicht früher, nicht später, als würde er einem geheimen Abkommen mit dem Himmel selbst gehorchen. Deshalb ist es nicht einfach, ihm zu begegnen: wenn man sich auch nur ein paar Minuten verspätet, scheint es, als wäre der Laternenanzünder überhaupt ein Produkt der Einbildung. In seinem Schritt — gemächliche Sicherheit, in den Bewegungen — geheimnisvolle Anmut, weshalb jeder, der das Glück hat, dieses Ritual zu sehen, unwillkürlich spürt: Tradition ist hier keine Museumsrarität, sondern der Atem der Stadt selbst, der die Wärme vergangener Jahrhunderte bewahrt.",
+    "back9": "Ein Versprechen ist eine Erinnerung an die Zukunft",
+    "back10": "Der Botanische Garten Breslaus — das ist überhaupt kein Garten, sondern ein listiges Portal zu anderen Welten, getarnt als harmlose Sammlung von Pflanzen. Sobald man durch seine Tore tritt — scheint man sich in einer Bibliothek zu befinden, wo statt Büchern Bäume wachsen, und Seiten werden vom Rascheln der Blätter umgeblättert, und jeder Busch versucht, dir eine Geschichte über jene Orte zu erzählen, wo Wasser gegen den Strom fließt und Steine zu blühen wissen. Hier kann man stundenlang wandern und sich einreden, dass man einfach Pflanzen betrachtet und die Landschaft bewundert, obwohl man in Wirklichkeit an einem langsamen und vorsichtigen Gespräch mit dem Universum teilnimmt, das aus irgendeinem Grund genau diese Ecke Breslaus gewählt hat, um sich einem hartnäckigen Besucher ein wenig zu öffnen.",
+    "back11": "In der verstecktesten Ecke der Tumski-Insel verbirgt sich ein Garten, wo die Zeit nicht nach Stunden, sondern nach dem Atem des Wassers und dem Rascheln der Blätter fließt. Das ist nicht nur eine Ecke der Natur — das ist ein Ort, wo Geschichte und Glaube Form in grünen Windungen und alten Steinen annehmen. Diese stille Ecke — ein lebendiges Denkmal, das in sich den Atem der Jahrhunderte und die Stille des Gebets bewahrt.",
+    "back12": "Die Statue der Maria Magdalena steht, als würde sie selbst wählen, wen sie bemerkt und wen nicht. Tagsüber scheint sie in Grün und Hell-Dunkel zu versinken und sich als gewöhnliche Dekoration auszugeben, und abends erwacht sie in der Dämmerung: steinerne Falten ihrer Kleidung verwandeln sich in stille Wellen, und ihr Blick, irgendwo durch die Bäume gerichtet, wird fast menschlich.",
+    "back13": "Die Platane auf der Tumski-Insel — kein Baum, sondern eine echte Kathedrale ohne Wände und Glasmalereien, nur mit Ästen, die zum Himmel streben. Ihr bunter, als hätte sie sich entkleidet, Stamm scheint wie ein lebender Körper, der seine eisige Haut abgeworfen hat, und die Krone — eine üppige Kuppel, wo immer der stille Dienst von Wind und Vögeln erklingt. Man sagt, dass hier einst ein Fluss floss, aber jetzt sind seine Arme zugeschüttet, und an ihrer Stelle wächst dieses Wunder, dessen Umfang längst fünf Meter überschritten hat. Und es scheint, dass die Platane in sich nicht nur die Säfte der Erde bewahrt, sondern auch Erinnerungen an Wasser, das einst unter ihren Wurzeln floss.",
+    "clearTooltip": "Quest-Ergebnisse löschen",
+    "clearConfirm": "Sind Sie sicher, dass Sie die Quest-Ergebnisse löschen möchten?",
+    "clearConfirmYes": "Ja",
+    "clearConfirmNo": "Nein"
   },
   "music": {
     "hint": "Klicke irgendwo, um die Klänge zu starten",
@@ -313,5 +591,7 @@
   },
   "animation": {
     "hint": "Um zur Animation zurückzukehren, doppelklicke auf einen freien Bereich des Bildschirms"
-  }
+  },
+  "expectation": "Erwartung",
+  "reality": "Realität"
 } 

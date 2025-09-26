@@ -74,39 +74,39 @@
     }
   },
   "tumski_cathedral_2": {
-    "title": "Katedrála sv. Jana Křtitele 2",
+    "title": "Presbyterium",
     "book02": {
       "zone1": {
-        "title": "Katedrála sv. Jana Křtitele 2",
-        "text": "Toto je druhá katedrála sv. Jana Křtitele na Tumském ostrově. Postavená v pozdějším období, představuje unikátní příklad architektury kombinující gotické a renesanční prvky. Její fasáda je ozdobena rafinovanými sochami a basreliéfy vyprávějícími historii města a jeho svatých patronů."
+        "title": "Katedrála svatého Jana Křtitele",
+        "text": "Katedrála svatého Jana Křtitele ve Vratislavi se tyčí nad Odrou, jako by se zde zrodila ještě dříve, než vzniklo samotné město. Její věže nejsou jen kamenné špičky, ale skutečné antény pro nebeské rozhovory. A přestože je katedrála známá jako gotické mistrovské dílo, pro ty, kteří dokážou vidět trochu hlouběji, byla vždy portálem mezi světem modliteb a světem tajemství."
       },
       "zone1-2": {
         "title": "",
         "text": ""
       },
       "zone2": {
-        "title": "",
-        "text": "Vnitřní výzdoba katedrály je ohromující svou nádherou. Oltář je vyroben z vzácných druhů dřeva a ozdoben zlatými prvky. Vitráže vytvářejí jedinečnou hru světla, barvící kamenné zdi v různých odstínech. Zvláštní pozornost přitahuje kazatelna vyrobená v barokním stylu s elegantními řezbami."
+        "title": "Presbyterium",
+        "text": "Chór katedrály — šestipole, přísně vertikální, jako modlitba natažená do kamene vzhůru. Zde každý sloup není jen architektonickou oporou, ale jako prosba: křehká a vytrvalá zároveň. Konzoly, vymyšlené inženýry třicátých let, vypadají jednodušeji, než se sluší antickému chrámu, ale právě proto se zdá, že vzdávají čest moderně, která uzavřela spojenectví s věčností. Chórové klenby jsou šestidílné a ochoz připomíná křížově žebrový dech gotiky. Mramorová podlaha je stupňovitě zvýšená, takže se zdá, jako by člověk stoupal výše, nejen fyzicky, ale na škále samotné reality. Zde kdysi stál pozdně gotický oltář 'Nanebevzetí Panny Marie' z roku 1522 — ohromující pentaptych z Lubinu, který později cestoval přes Vratislav. Hlavní oltář katedrály byl od 16. století manýristický, postavený prostředky biskupa Andrease Jerina — a jak je u starých svatyní obvyklé, časem zmizel, vrátil se a v roce 2019 znovu zaujal své místo, jako by chrám nikdy neopustil."
       },
       "zone2-2": {
-        "title": "Historie",
-        "text": "Katedrála byla postavena v 16. století jako doplněk k hlavnímu chrámu. Původně sloužila jako místo pro konání zvláštních ceremonií a slavnostních bohoslužeb. V průběhu staletí byla budova opakovaně přestavována a restaurována, přičemž si zachovala svou původní architektonickou koncepci."
-      },
-      "zone3": {
-        "title": "",
-        "text": "Zvláštní hodnotu představuje varhany instalované v katedrále v 18. století. Jejich zvuk se vyznačuje výjimečnou čistotou a hloubkou. Mnoho známých hudebníků zde vystupovalo, obdivujíc akustické vlastnosti prostoru. Varhany se dodnes používají pro koncerty a slavnostní bohoslužby."
+        "title": "Barokní detaily",
+        "text": "Skutečnost, že v katedrále najdeme masivní přízemní lavice ze 17. století, které sem po válce přišly z kostela svatého Vincence, není vůbec náhodná, ale logika podivné paměti města: když jedno místo zaniká, jeho předměty hledají útočiště v jiném. Tyto těžké lavice téměř zakrývají arkády a zdá se, že šeptají, že ne všechno v chrámu musí být lehké a směřující vzhůru — někdy víra vyžaduje těžké formy. Vitráže poválečného období vytvořili polští umělci — Zygmunt Acedański, Irena Nowakowska-Acedańska, Stanisław Penkalski a Antoni Michalak, a vedou své vlastní světelné dialogy s ranním sluncem, jako by znovu skládaly barevné skleněné evangelium."
       },
       "zone3-2": {
-        "title": "Architektura",
-        "text": "Architektura katedrály představuje harmonické spojení gotických a renesančních prvků. Fasáda je ozdobena rafinovanými portály s basreliéfy zobrazujícími scény ze života svatých. Věže katedrály jsou zakončeny věžičkami, které jsou viditelné z dálky a slouží jako orientační body pro obyvatele města."
+        "title": "Lodě",
+        "text": "Hlavní loď katedrály se chová mnohem klidněji než chór — přejímá estetiku cihlové redukční gotiky: přísná, rovná, téměř statická, jako člověk, který umí mlčet. Šest polí a ještě jedno mezi věžemi vytváří rytmus, který se čas od času náhle přeruší, jako by si stěny kdysi snily o příčné lodi, ale změnily názor. Dnes hlavní loď překvapuje svou bezžebrovou klenbou, dědictvím renesančních experimentů 16. století. Zde se stýkají staleté řešení s výsledky poválečných rekonstrukcí, a když se pozorně naslouchá, lze slyšet, jak se různé epochy přou: co je důležitější — přísnost nebo šíře?"
+      },
+      "zone3": {
+        "title": "Kaple",
+        "text": "Kolem katedrály je uspořádána celá konstelace kaplí — každá se svým vlastním charakterem, jako samostatní hrdinové velkého románu. Kaple svaté Alžběty, vytvořená koncem 17. století s kopulí a freskami od Andrzeje Kowalského, uchovává náhrobek kardinála Fridricha z Hesenska a jeho bustu, provedenou v Berniniho dílně. Vedle — kaple svaté Marie ze 14. století, kde se prolínají gotická klenba a barokní oltář s kopií čenstochovské Madony. Kaple Těla Kristova, postavená Johannem Bernhardem Fischerem z Erlachu ve vídeňském barokním stylu, uchovává ostatky knížecích osob, včetně vnučky Jana III. Sobieského — a její oltář se zdá zpívat severu. V kapli svatého Jana Křtitele ze 14. století kdysi odpočíval biskup John Turzon, a z jeho renesančního mauzolea dnes zůstala jen deska s figurou. A kaple svatého Kazimíra ze 15. století uchovává na svých stěnách jména biskupů 20. století, jako vnitřní mapa církevní paměti."
       },
       "zone4": {
-        "title": "Současnost",
-        "text": "Dnes katedrála nadále slouží jako místo uctívání a kulturní centrum. Pravidelně se zde konají bohoslužby, koncerty varhanní hudby a prohlídky pro turisty. Katedrála je důležitou součástí kulturního dědictví Vratislavi a symbolem duchovního života města."
+        "title": "",
+        "text": "Ostatní zvony uchovávají fráze z evangelia a žalmů o prosbách, hledání a požehnání. Všechny dohromady znějí jen ve zvláštních okamžicích, jako lidé, kteří umí mlčet, ale když mluví — pak tak, že celé město se třese."
       },
       "zone4-2": {
-        "title": "Zajímavé fakty",
-        "text": "V katedrále je uložena unikátní sbírka náboženských artefaktů, včetně starých ikon, církevních předmětů a rukopisů. Zvláštní hodnotu představuje knihovna, ve které jsou shromážděny vzácné knihy a dokumenty související s historií města a církve."
+        "title": "Zvony",
+        "text": "Dnes visí v jižní věži katedrály čtyři ocelové zvony, a každý má svůj vlastní hlas — a svou vlastní modlitbu, přímo vyrytou do bronzu. Největší, s citátem ze 130. žalmu, kdysi zachytil kulku během bojů u Lubáně a nyní zní s lehkým chrapotem, jako by si pamatoval staré rány."
       }
     }
   },
@@ -258,7 +258,265 @@
       }
     }
   },
-
+  "millennium_column": {
+    "title": "Tisíciletý sloup",
+    "book02": {
+      "zone1": {
+        "title": "Tisíciletý sloup",
+        "text": "Tisíciletý sloup — nejen památník, ale kamenná hymna na čas, zachycená v žule a bronzu. Stojí na Katedrálním náměstí, jako strážce, který zároveň vládne nad městem a splývá s jeho duchem, připomínaje: 'Nejsi sám, Vratislavi, jsi součástí něčeho mnohem většího.'"
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Těžký jako věčnost září válec sloupu zlatě na slunci. Je vyroben z černé a růžové žuly — kontrast, který zároveň maluje světlo a stín a připomíná, že lidské tisíciletí není jen lesk, ale také stín. Nahoře — bronzový Kristus Král, korunovaný tiárou, který se nedívá dolů s arogantní pýchou, ale jako tichý svědek, 'všemohoucí, ale trpělivý.'"
+      },
+      "zone2-2": {
+        "title": "Historie",
+        "text": "Tuto sochu vymyslel otec Czesław Mazur a sochař Janusz Kucharski ji přivedl k životu. Společně postavili památník věnovaný tisíciletí vratislavské diecéze."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Latinský nápis na sloupu zní slavnostně a tajemně, ale když se přeloží do lidských slov, význam se stává jasnějším: 'Diecézní a řeholní klérus arcidiecéze vratislavské, vzpomínající na Krista, Spasitele světa. K tisíciletí vratislavské diecéze.' To není jen oficiální formule, ale tiché vyznání věrnosti."
+      },
+      "zone3-2": {
+        "title": "Architektura",
+        "text": "Někdy se zdá, že sloup mluví prostřednictvím latinského nápisu: Clerus Dioecesanus et Religiosus Archidioecesis Wratislaviensis Memor Christi, Redemptoris Mundi. Pro Millenio Dioecesis Wratislaviensis. — slova, která znějí jako modlitba, jako by je město zpívalo v souhlasu."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Jeho styl — ne módní avantgarda, ale neoklasická zdrženlivost. Jako z učebnice: sloup, socha, žula... Ale právě v této jednoduchosti se skrývá síla. Ne pokus překvapit, ale touha být pozoruhodný, být tím, co zůstává, když město zmlkne."
+      },
+      "zone4-2": {
+        "title": "Symbolika",
+        "text": "Kdo prochází kolem, může si myslet: 'To je jen vysoká socha.' Ale když se pozorně podívá — stojí mezi posvátnými zdmi katedrály a ulicemi Vratislavi, jako by spojovala pozemské a nebeské. Kardinál Edmund Szok ji vysvětil, a od té doby nemlčí, ale tiše zve všechny — přijďte, zastavte se, vzpomeňte si, proč jste zde."
+      }
+    }
+  },
+  "spiritual_seminary": {
+    "title": "Vyšší duchovní seminář",
+    "book02": {
+      "zone1": {
+        "title": "Vyšší duchovní seminář",
+        "text": "Vyšší duchovní seminář ve Vratislavi — nejen vzdělávací instituce. Je jako starý maják v bouři dějin: založený v říjnu 1565 vůlí biskupů. Podle přísných dekretů Tridentského koncilu se stal prvním svého druhu v Dolním Slezsku."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "V roce 1656 se seminář vrátil do Vratislavi — jako vyhnanec, který poznal, že jeho domov je zde, i když je domov zničený a finančně vyčerpaný. Ale duch učení se ukázal silnější než všechny nepřízně. Dokonce vznikla filologická fakulta — protože slova a význam jsou důležité, zvláště když jde o záchranu duší a duchů."
+      },
+      "zone2-2": {
+        "title": "Historie",
+        "text": "Jeho první kroky — v církevní klidnosti: první rektor Theodor Lindan, přednášky v kostele svatého Martina. Ale už o deset let později byl přenesen do Nisy — jako do vyhnanství — aby byl chráněn před protestantskou vlnou, která tehdy zaplavovala vše kolem. Jezuité vedli studenty k duchovní skromnosti a disciplíně, jako přísní učitelé, kteří odmítali půvab pokroku."
+      },
+      "zone3": {
+        "title": "Vzdělání",
+        "text": "Život seminaristů vřel: denní modlitby, zpovědi, povinné rekolekce 8 dní po Velikonocích nebo před velkými svátky — aby duše pochopila, že není pro sebe, ale pro službu. A čtení Písma — ne z povinnosti, ale z hledání smyslu. V tomto režimu se skrývalo úsilí o vnitřní upřímnost, jako zrcadlo, které prořezává každou masku."
+      },
+      "zone3-2": {
+        "title": "",
+        "text": "19. století přineslo strukturu. Od roku 1814 se vzdělání stalo systematickým: sedm semestrů, ústní zkoušky před přísnou komisí — katedra, ředitel, kanovník. Vše podle předpisu; abyste věděli: toto je vážné, jste součástí této tradice. Toto pravidlo platilo do roku 1888 a zároveň nezbavovalo studenty svobody volit přednášky a vytvářet vlastní program."
+      },
+      "zone4": {
+        "title": "",
+        "text": "V poválečném období seminář vzdělal více než 1500 služebníků — kněží, biskupů, teologů. V roce 1968 byla otevřena Papežská teologická fakulta, a od roku 1990 začal působit Annus Propedeuticus — zvláštní formace pro prváky, první v Polsku a druhá v Evropě. A zde je — starý seminář s mládím uvnitř — který nadále vzdělává ty, kteří nejen oslavují Boha, ale nesou ho v sobě."
+      },
+      "zone4-2": {
+        "title": "Válka",
+        "text": "Válka tento míst téměř vymazala z povrchu země. Seminaristé byli odvezeni do Krakova, do chudoby a zničení. Ale 8. října 1947 seminář znovu povstal: 24 studentů, kázání Bolesława Kominka, naděje, že budoucnost nepatří těm, kteří se bojí, ale těm, kteří jsou připraveni jít kupředu navzdory všemu."
+      }
+    }
+  },
+  "st_mary_church": {
+    "title": "Kostel svaté Marie na Písku",
+    "book02": {
+      "zone1": {
+        "title": "Kostel svaté Marie na Písku",
+        "text": "Kostel svaté Marie na Písku (Kościół Najświętszej Marii Panny na Piasku) — to není jen chrám, ale jakýsi zkamenělý kouzelný příběh, který se tyčí nad Odrou v srdci Písečného ostrova. Její gotické špičky se zdají mluvit s mraky — a tak přesvědčivě, že celá Vratislav se naučila důvěřovat této siluetě, jako by to byl její druhý horizont. Pro jedny slouží jako místo modlitby, pro jiné — jako portál do minulých století, ale pro všechny zůstává tichým zázrakem, který se nespěchá a čeká na každého u svých dveří."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Historie chrámu vypadá téměř jako kronika vytrvalého hrdiny. Ve 12. století stál na ostrově první dřevěný kostel — skromný, jako náčrt. Ve 13. byl nahrazen kamennou bazilikou, už mnohem solidnější, s nárokem na věčnost. Do 14. století vznikla gotická forma, kterou dnes vidíme — štíhlá, směřující vzhůru. Od té doby chrám viděl války, požáry, zničení a — což je důležitější — rekonstrukce. Tento cyklus pádů a vzkříšení se pro ni stal něčím jako dýcháním: pokaždé se probudila s novou silou, jako by demonstrovala, že kámen může být tvrdohlavější než čas."
+      },
+      "zone2-2": {
+        "title": "Historie",
+        "text": "Existuje krásná legenda: jako by začátek chrámu byl spojen s zázračným zjevením Panny Marie na ostrově. Od té doby se místo stalo centrem zvláštní úcty, kam století za stoletím přicházeli poutníci z celého Slezska. A zdá se, že když se zde naslouchá tichu, stále uchovává ozvěny těch modliteb, navrstvené na sebe, jako průhledné vrstvy věčnosti."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Architektura chrámu — to je samostatná magie. Trojlodní bazilika s vysokými klenbami a sloupy je vytvořena tak, že člověk může snadno dýchat: jako by se prostor sám v tobě rozšiřoval. Barevné vitráže zachycují sluneční paprsky a proměňují je v skleněné zaklínadla, která vedou svůj vlastní, nezávislý život. Oltáře a sochy — to jsou malé kroniky, zkamenělé příběhy, pronikavé a tiché zároveň."
+      },
+      "zone3-2": {
+        "title": "Architektura",
+        "text": "Chrám — klasický příklad slezské gotiky, kde přísná monumentalita nějak nebrání eleganci. Západní fasáda vítá hosty vyřezávaným portálem, jehož každý detail se zdá být vytvořen tak, abyste se zastavili a přemýšleli: kdo si to všechno vymyslel a proč? Věže se špičatými vrcholy jsou viditelné z dálky, jako maják pro poutníky — a možná právě pro ty, kteří už dlouho hledají cestu, nejen do města, ale také k sobě samým."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Nyní chrám žije svůj obyčejný, ale stále trochu magický život. Konají se v něm bohoslužby, vstupují turisté, a uvnitř lze potkat zvláštní směs: soustředění modlitby a zvědavé pohledy cestovatelů. Zde jsou uchovávány ikony, sochy a jiné umění, z nichž každá se zdá testovat návštěvníky, zda dokážou vidět něco více než to, co je zobrazeno."
+      },
+      "zone4-2": {
+        "title": "Zajímavé fakty",
+        "text": "Zde je ikona Panny Marie na Písku z 15. století — jedna z nejstarších a nejctěnějších ve Vratislavi. Nazývá se zázračnou, a to je zcela přirozené: přitahovat lidi — to je také zvláštní zázrak. Jedni přicházejí hledat útěchu, jiní naději, další — potvrzení, že zázraky vůbec existují. A podle pověstí ikona nikomu z nich neodmítá."
+      }
+    }
+  },
+  "ogrod_papieski": {
+    "title": "Zahrada Papežské teologické fakulty",
+    "book02": {
+      "zone1": {
+        "title": "Zahrada Papežské teologické fakulty",
+        "text": "Existuje místo ve Vratislavi, kde všechno šeptá, dokonce i zdi. Jmenuje se Zahrada Papežské teologické fakulty. Vtipné jméno, jako by hned slibovalo zaprášené knihy, nudné profesory a latinu od rána do večera. Ale ve skutečnosti — to je zahrada, která se už dávno naučila vést svůj vlastní život, a nikdo nemusí vysvětlovat, že je mnohem chytřejší než všechny disertace."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Zde stromy vědí více, než se zdá. Viděly studenty, kteří přicházeli 'opakovat přednášky', ale ve skutečnosti diskutovali o lásce a strachu ze zkoušek. Slyšely kroky kněží, kteří mluvili sami se sebou, a tichý smích těch, kteří tajně přinášeli láhev vína do zahrady. Když se dlouho stojí pod platanem v rohu, lze v šelestu listí rozpoznat něco jako posměch: 'Tak, zase jsi přišel hledat radu?'"
+      },
+      "zone2-2": {
+        "title": "Historie",
+        "text": "Zahrada má dlouhou a mnohovrstevnou historii. Kdysi zde byla přísná klášterní řád: záhony podle pravítka, keře podle stanov. Ale roky plynuly, a zahrada se stala moudřejší. Nyní se nebrání lehkému chaosu: tráva roste, kde se jí líbí, ptáci pořádají koncerty bez rozvrhu. A to všechno — mnohem upřímněji než jakákoli symfonie podle not."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Samozřejmě lidé se ji snaží opravit. Stříhají keře, kladou cesty, staví lavičky. Ale zahrada dělá, jako by souhlasila. V hloubce zůstává nezávislá a vždy uchovává rohy, kam ruka zahradníka nedosáhne. To je její malá tvrdohlavost, připomínka: 'Nemysli si, že jsem byla vytvořena pro tvůj komfort.'"
+      },
+      "zone3-2": {
+        "title": "",
+        "text": "Zde se čas chová podivně. Můžete vejít ve dne, s myšlenkami na obchod a termíny, a už za soumraku vyjít, aniž byste si všimli, kam se poděly hodiny. Nebo naopak: vejít na minutu, a při výstupu se ukáže, že uplynulo jen třicet sekund, i když jste uvnitř probrali polovinu svého života sami se sebou. Pravděpodobně má zahrada svůj vlastní kalendář, a není povinna souhlasit s lidským."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Říká se, že v této zahradě je snadnější se modlit. I když jste skeptik, který věří jen v internetový signál a ranní kávu. Zde modlitby znějí nějak přirozeně: jako byste neprosili, ale prostě sdíleli. Zahrada neslibuje zázraky, jen kývá: 'Slyšel jsem.' A to je, kupodivu, dost."
+      },
+      "zone4-2": {
+        "title": "",
+        "text": "Taková je — Zahrada Papežské teologické fakulty. Místo, kde se náboženství a příroda, hluk studentů a ticho starých stromů, přísnost a chaos proplétají do klubka. Zde se můžete cítit jako účastník velkého představení, kde jste zdánlivě divák, ale celou dobu tušíte, že vám už dávno byla přidělena role. A zahrada čeká, až začnete hrát."
+      }
+    }
+  },
+  "national_museum": {
+    "title": "Národní muzeum",
+    "book02": {
+      "zone1": {
+        "title": "Národní muzeum",
+        "text": "Národní muzeum ve Vratislavi předstírá, že je domovem obrazů a soch. Ve skutečnosti se už dávno stalo nezávislým hrdinou — s cihlovými stranami, obrostlé břečťanem, a s tím trpělivým výrazem, který mají staří mudrci. Stojí na břehu Odry, pozoruje kolemjdoucí a občas si povzdechne, jako by chtělo říct: 'Ani si nepředstavujete, na co si pamatuji.'"
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Cihly jeho zdí — jako stránky deníku. Každý kámen zná tisíce příběhů: o válkách a mírových dnech, o restaurátorech s štětci, o dětech, které zde poprvé viděly rytířské brnění a rozhodly se stát velkými hrdiny. A břečťan — to jsou jeho vlasy, vždy trochu rozcuchané, vždy mladé. Lidé si myslí, že muzeum stárne, ale to je klam: prostě roste pomalu, jako strom."
+      },
+      "zone2-2": {
+        "title": "Historie",
+        "text": "Muzeum má těžkou historii: přežilo války, změny moci, změny epoch. Pamatuje si, jak se ho snažili zničit, a jak ho znovu stavěli. To otužilo jeho charakter: nyní se dívá na všechny lidské vášně s jemnou ironií. 'Ach, zase se hádáte o politiku? No dobře, dobře. Raději se obdivujme gobelínu ze 17. století, je stále chytřejší než vaše debaty.'"
+      },
+      "zone3": {
+        "title": "",
+        "text": "Uvnitř má zvláštní magii. Obrazy visí, jako by byly mírné, ale ve skutečnosti si šeptají. Sochy dělají, jako by byly kamenné, ale při západu slunce se probouzejí — lehce mění pózu, aby neztuhly. A každý návštěvník, který sem vstoupí, se nechtěně stává součástí tohoto tajného představení: někdy divák, někdy herec, a někdy dokonce exponát."
+      },
+      "zone3-2": {
+        "title": "Sbírky",
+        "text": "A muzeum má také tajnou schopnost — ví, jak uchovávat cizí vzpomínky. Když člověk u vitríny zůstane o něco déle než obvykle — muzeum pečlivě skryje ve svém cihlovém paměti jeho myšlenky, emoce, vůni parfému nebo vrzání bot. Pak je vrátí, když člověk přijde o roky později: 'Podívejte, uchoval jsem to, co jste sami už zapomněli.'"
+      },
+      "zone4": {
+        "title": "",
+        "text": "Odra, která teče poblíž, ho škádlí: 'Ty, bratře, jsi příliš vážný.' A muzeum se jen usměje zpět: 'Ale vím, jak uchovávat. A ty jen neseš a neseš dál.' Jejich rozhovory lze slyšet večer, když se zdržíte na břehu: jeden šplouchá, druhý vrzá okny, a oba jsou spokojeni se svou rolí."
+      },
+      "zone4-2": {
+        "title": "Zajímavé fakty",
+        "text": "Tak stojí Národní muzeum ve Vratislavi — krásné, obrostlé břečťanem, trochu posměšné a velmi moudré. Dívá se na nás a trpělivě čeká, až přestaneme běhat a alespoň na minutu se zastavíme poblíž. Protože právě v takových chvílích šeptá své nejzajímavější příběhy — ale jen těm, kteří jsou připraveni naslouchat."
+      }
+    }
+  },
+  "odra": {
+    "title": "Odra",
+    "book02": {
+      "zone1": {
+        "title": "Odra",
+        "text": "Víte, co je vtipné? Zdá se, že jsem město, kámen, cihla, sklo a jiné lidské vynálezy. Ale přesto — bez ní, bez Odry, se zdá, že vůbec neexistuji. Teče zde, mumlá, někdy líně, někdy rozzlobeně, a každý den mi připomíná, že vůbec nejsem pánem, ale jen nájemníkem na jejích březích. I když lidé jsou přesvědčeni, že vymysleli Vratislav, ale abych řekl pravdu — řeka vymyslela mě."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Je tvrdohlavá, moje Odra. Nosila lodě, když zde ještě nebyly mosty, a topila vesnice, když se místní příliš uvolnili. Pamatuji si — ne svýma očima, samozřejmě, ale pamětí kamenů — jak její záplavy proměňovaly ulice v kanály. Lidé běhali, nadávali, zachraňovali domácí nábytek na vozech, a ona se smála, házela kalné vlny. V takových chvílích jsem se necítil jako město, ale jako křehká loďka."
+      },
+      "zone2-2": {
+        "title": "Historie",
+        "text": "Historie? Ach ano! Máme ji společně a dlouhou. Vikingové pluli na jejích vlnách, obchodníci táhli v karavanách, králové a vévodové stavěli mosty, aby dokázali: 'Tady, jsme silnější než živly.' Ha! Odra jim dovolila tak myslet, ale čas od času ukázala své zuby — aby nezapomněli, kdo je zde paní."
+      },
+      "zone3": {
+        "title": "Krocení živlů",
+        "text": "A lidé... tvrdohlavá stvoření. Stavěli hráze, kanály, zdymadla. Vytáhli kolem mě celý systém vodních děl. Nyní máme regulované hladiny, přehrady a celé plány na ochranu před další 'apokalypsou'. Odra je toleruje, kývá — no dobře, dobře, žijme v míru. Respektuje inteligenci."
+      },
+      "zone3-2": {
+        "title": "Záplavy",
+        "text": "Záplava z roku 1997... ach, jak si pamatuji ten zlý červenec. Stál jsem až po pás ve vodě, mosty se třásly, sklepy se topily, ulice se proměňovaly v špinavé proudy. Odra se rozhodla, že je čas mi připomenout, kdo z nás je starší. Lidé to později nazvali 'tisíciletou povodní', i když vím — to je jen jedna z jejích rozmarů. Počítá čas určitě ne podle lidských kalendářů."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Tak žijeme: já — Vratislav, město, které zdánlivě stojí na zemi, ale ve skutečnosti se drží na vodě. Ona — Odra, řeka, která zdánlivě protéká kolem, ale ve skutečnosti protéká mnou, každou ulicí, každým kamenem a každou historií. A víte, co je nejúžasnější? Dokonce se mi líbí být jejím rukojmím. Protože být rukojmím krásy vůbec není děsivé."
+      },
+      "zone4-2": {
+        "title": "Krása",
+        "text": "A přesto... miluji ji. Bez jejích stříbrných zákrutů bych byl šedý a melancholický. Všechny tyto ostrovy a mosty — můj hrdost. Kolik umělců malovalo její břehy, kolik studentů se líbalo na jejích březích, kolik hudebníků slyšelo šplouchání vody místo metronomu. Odra umí být nejen děsivá, ale také jemná, téměř mateřská."
+      }
+    }
+  },
+  "kleck_gate": {
+    "title": "Klusková brána",
+    "book02": {
+      "zone1": {
+        "title": "Klusková brána",
+        "text": "Klusková brána — nejen oblouk mezi historickými budovami, ale práh, kterým prochází ne tolik tělo, jako duše. Legenda — to je skutečný klíč, který otevírá její význam. Protože co jsou brány bez příběhu o Anežce, která dělala nejlepší klusky ve Vratislavi?"
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Jednou se Konrád vrátil z trhu, kde prodal všechno své nádobí, kromě jedné mísy. Hlad a únava ho srazily. Posadil se k městské bráně, položil neprodanou mísu vedle sebe a usnul. A pak se mu zjevila Anežka: živá, jasná, jak si ji pamatoval. Slíbila, že ho bude živit i po smrti — každý den čerstvou mísou klusků. Ale pod jednou podmínkou: Konrád byl povinen nechat poslední klusku nedotčenou."
+      },
+      "zone2-2": {
+        "title": "Legenda",
+        "text": "Kdysi ve Vratislavi žili Konrád a Anežka. Konrád byl ušlechtilý hrnčíř, který uměl zacházet s hlínou, jako by sama prosila, aby se proměnila v džbán. Anežka vařila klusky — tak chutné, že kdo jednou ochutnal, už nikdy nevěřil v jídlo bez duše. Ale jednoho dne Anežka onemocněla, a brzy už nebyla. Konrád přestal z žalu pít a jíst. Anežčiny soucitné přítelkyně mu přinášely lahůdky, ale všechno bylo marné: po jejích kluskách se svět zdál bez chuti."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Ale problém je v tom, že hlad umí šeptat hlasitěji než všechny sliby. Konrád se podíval na tu poslední klusku, a jeho srdce zuřilo: 'Co když má Anežka se mnou soucit? Co když odpouští? Vždyť jen jedna...' Rozhodl se. Natáhl ruku, uchopil klusku — a okamžitě mu vyklouzla z prstů, jako by byla živá."
+      },
+      "zone3-2": {
+        "title": "",
+        "text": "Probudil se — a nemohl uvěřit svým očím. V míse, u jeho ruky, ležely skutečné Anežčiny klusky, ještě teplé, s tou vůní, kterou považoval za navždy ztracenou. Slzy vděčnosti mu stříkaly z očí. Konrád jedl a nemohl se nasytit, dokud nedorazil k poslední. Nechal ji, jak slíbil."
+      },
+      "zone4": {
+        "title": "",
+        "text": "A staletí plynula, ale kamenná kluska stále leží na bráně. Měšťané se na ni dívají a vyprávějí tento příběh novým generacím. Od té doby se brány jmenují Kluskové, aby nezapomněli: zázraky vždy vyžadují věrnost slovu, a jednou se vyplatí poddat se slabosti — dokonce i láska se může proměnit v kámen."
+      },
+      "zone4-2": {
+        "title": "",
+        "text": "Uchopil ji znovu — a ona se znovu otočila a skočila přímo na křídlo brány. Konrád byl zmatený, pak zoufale za ní vylezl nahoru, přidržoval se kamene jako stébla. Ale pak se stalo nemožné: kluska zkameněla, proměnila se v tvrdý dlažební kámen, pevně vrostlý do brány. Od toho dne už k němu Anežka nepřicházela ve snech. Konrád už nikdy neviděl mísu klusků. Jídlo se znovu stalo bez chuti, jako život sám. Město mělo soucit, ale nikdo nemohl vrátit jeho magické spojení."
+      }
+    }
+  },
   "panorama": {
     "title": "Vyhlídková plošina"
   },
@@ -271,27 +529,29 @@
   "map.platan": "Platan javorolistý. Přírodní památka",
   "map.ogrod": "Zahrada Papežské teologické fakulty",
   "map.ogrodbot1": "Botanická zahrada Vratislavské univerzity",
-  "map.ogrodbot2": "Botanická zahrada Vratislavské univerzity",
-  "map.ogrodbot3": "Botanická zahrada Vratislavské univerzity",
-  "map.ogrodbot4": "Botanická zahrada Vratislavské univerzity",
+  "map.ogrodbot2": "",
+  "map.ogrodbot3": "",
+  "map.ogrodbot4": "",
   "map.plackat": "Katedrální náměstí",
-  "map.odra1": "Odra",
+  "map.odra1": "",
   "map.odra2": "Odra",
-  "map.odra3": "Odra",
+  "map.odra3": "",
   "map.mlynski": "Mlýnský most",
   "map.panny": "Ulice Nejsvětější Panny Marie",
   "map.piasek": "Písečný ostrov",
   "map.katedralna1": "Katedrální ulice",
   "map.katedralna2": "Katedrální náměstí",
-  "map.katedralna3": "Katedrální náměstí",
-  "map.katedralna4": "Katedrální náměstí",
-  "map.katedralna5": "Katedrální náměstí",
+  "map.katedralna3": "",
+  "map.katedralna4": "",
+  "map.katedralna5": "",
   "map.brama": "Klusková brána",
   "map.kanonia": "Kanonická ulice",
   "map.bramabot": "Brána botanické zahrady",
   "map.kapitulna": "Kapitulní ulice",
   "quest": {
     "title1": "Quest 1: Najdi všechna tajemství Tumského ostrova",
+    "expectation": "Očekávání",
+    "reality": "Realita",
     "intro": "Na půdě opuštěného domu byly objeveny akvarely. Několik desítek. Listy jsou zaprášené, tu a tam ohlodané časem nebo myšmi (nevím, který z nich byl pečlivější), ale barvy stále žijí — takové, že v krku lechtá od vůně deště na teplém kameni, pokud se dívá příliš dlouho. \n\nAutor? Neznámý. Podpis nečitelný. Možná je to jméno. A možná — souřadnice jiné reality. \n\nNa obrazech jsou místa. Ulice, lidé, okna. Osamělý lampář u sloupu. Věž s ptáky na střeše. Všechno je podivně povědomé. Jako by to už někde existovalo. Ve snu? V knize? V tom životě, o kterém mi zapomněli vyprávět? \n\nAle teď z nějakého důvodu je musím najít. Všechny. Vidět ve skutečnosti. \n\nAčkoli kdo ví, co je opravdu skutečné?",
     "task1": "Tajemný lev strážící Kostel",
     "task2": "Zámky lásky",
@@ -304,7 +564,25 @@
     "task9": "Černá Kluska",
     "task10": "Vstup do botanické zahrady",
     "task11": "Zahrada Papežské teologické fakulty",
-    "task12": "Socha Marie Magdalény v zahradě papežské teologické fakulty"
+    "task12": "Socha Marie Magdalény v zahradě papežské teologické fakulty",
+    "task13": "Platan",
+    "back1": " ",
+    "back2": "Na Tumském mostě ve Vratislavi zanechali zamilovaní mnoho let těžké železné vyznání lásky. V roce 2020 byly odstraněny z mostu a určeny k uskladnění. Celkem 12 tun lásky. Město zavedlo desetiletý zákaz zatěžování mostu zámky. Ale láska vždy vítězí. Proto se brzy na sousedním nábřeží rozsvítila čerstvá vyznání.",
+    "back3": "Ze všech svatých mají jen Panna Maria a Jan Nepomucký hvězdy ve svých svatozářích. Jako by si vzal kousek noční oblohy a chodí s tím, což u ostatních svatých vyvolává lehkou žárlivost a zmatek. 20. března 1393 je Jan Nepomucký poslán do ledových vod Vltavy — ne z vlastní vůle, samozřejmě, ale na rozkaz krále Václava IV. Kněz, který odmítl prozradit zpovědní tajemství královské manželky, zaplatil mlčení životem. Od té doby ho katolíci uctívají jako ochránce před pomluvami a povodněmi. Proto není divu, že jeho kamenné a bronzové kopie stojí na mostech a ostrovech, jako strážci, kteří dbají na to, aby se řeky a lidé chovali slušně.",
+    "back4": "To je nejstarší zachovaný pomník Vratislavi, narozený v roce 1694. Byl vytvořen, jak se ujišťuje, inspirací jezuitů a měl ztělesnit triumf katolicismu nad protestanty. Jméno mistra, který vyřezal postavy z pískovce, upadlo v zapomnění, i když odborníci mají tendenci připisovat práci Holanďanovi jménem Sulpicius Gode.",
+    "back5": "Z výšky vyhlídkové plošiny vratislavské katedrály se město otevírá úplně jinak: červené střechy blýskají na slunci, Odra se třpytí línými pásky. Zde si člověk obzvláště jasně uvědomuje, že Vratislav není jen město, ale živé srdce, které bije v rytmu větru a zvonů. A nejokouzelnější na této procházce do nebe — že výtah vede k nejúžasnějšímu výhledu, skrytému ve staré věži. Samotná gotická architektura se rozhodla darovat moderně malý zázrak: možnost letět nahoru, aniž by člověk ztratil dech na stovkách schodů. A okamžitě stát tváří v tvář s nebem.",
+    "back6": "Ve zdi vratislavské katedrály je zaseknutý granát z doby druhé světové války — zneškodněný, ale ponechaný viditelný, tichá připomínka. Vystupuje z zdiva, jako fragment cizí zuřivosti, a zároveň jako varování: všechno, co kdysi ničilo, se jednoho dne může prostě stát součástí zdi.",
+    "back7": "Jindřich, ubohý učeň, se zamiloval do Barbory — dcery mistra klenotníka. Udělal nabídku k sňatku a dostal odmítnutí: málo zlata, příliš mnoho pocitů. V hněvu zapálil dům urážejícího a vylezl na střechu katedrály, aby sledoval, jak všechno hoří. Ale nebe neschválilo představení, a Jindřich se proměnil v kámen. Nyní se dívá ze zdi na všechny a mlčí.",
+    "back8": "Lampář Tumského ostrova — živá legenda Vratislavi, tajemný strážce světla, který každý večer zapaluje staré plynové lampy. Objevuje se na ostrovních ulicích přesně v hodinu západu slunce — ne dříve, ne později, jako by poslouchal tajnou dohodu s nebem samotným. Proto není snadné ho potkat: pokud se zpozdíte jen o několik minut, zdá se, že lampář je vůbec produktem představivosti. V jeho kroku — klidná jistota, v pohybech — tajemná půvabnost, proto každý, kdo má štěstí vidět tento rituál, nechtěně cítí: tradice zde není muzejní raritou, ale dechem samotného města, který uchovává teplo minulých století.",
+    "back9": "Slib je vzpomínka na budoucnost",
+    "back10": "Botanická zahrada Vratislavi — to vůbec není zahrada, ale lstivý portál do jiných světů, maskovaný jako neškodná sbírka rostlin. Jakmile projdete jejími branami — zdá se, že se nacházíte v knihovně, kde místo knih rostou stromy, a stránky se obracejí šelestem listů, a každý keř se snaží vyprávět vám příběh o těch místech, kde voda teče proti proudu a kameny umí kvést. Zde můžete hodiny bloudit a přesvědčovat se, že prostě pozorujete rostliny a obdivujete krajinu, i když ve skutečnosti se účastníte pomalého a opatrného rozhovoru s vesmírem, který si z nějakého důvodu vybral právě tento kout Vratislavi, aby se trochu otevřel tvrdohlavému návštěvníkovi.",
+    "back11": "V nejskrytějším rohu Tumského ostrova se skrývá zahrada, kde čas neteče podle hodin, ale podle dechu vody a šelestu listů. To není jen koutek přírody — to je místo, kde historie a víra nabývají formy v zelených zákrutech a starých kamenech. Tento tichý koutek — živý pomník, který v sobě uchovává dech století a ticho modlitby.",
+    "back12": "Socha Marie Magdalény stojí, jako by si sama vybírala, koho si všimne a koho ne. Ve dne se zdá, že se potápí v zeleni a světle-stínu a vydává se za obyčejnou dekoraci, a večer se probouzí za soumraku: kamenné záhyby jejího oblečení se proměňují v tiché vlny, a její pohled, namířený někam přes stromy, se stává téměř lidským.",
+    "back13": "Platan na Tumském ostrově — ne strom, ale skutečná katedrála bez zdí a vitráží, jen s větvemi, které se táhnou k nebi. Jeho pestrý, jako by se svlékl, kmen se zdá jako živé tělo, které shodilo svou ledovou kůži, a koruna — bujná kopule, kde vždy zní tichá služba větru a ptáků. Říká se, že zde kdysi tekla řeka, ale nyní jsou její ramena zasypána, a na jejich místě roste tento zázrak, jehož obvod už dávno překročil pět metrů. A zdá se, že platan v sobě uchovává nejen šťávy země, ale také vzpomínky na vodu, která kdysi tekla pod jeho kořeny.",
+    "clearTooltip": "Vymazat výsledky questu",
+    "clearConfirm": "Jste si jisti, že chcete vymazat výsledky questu?",
+    "clearConfirmYes": "Ano",
+    "clearConfirmNo": "Ne"
   },
   "music": {
     "hint": "Klikni kdekoli pro spuštění zvuků",
@@ -313,5 +591,7 @@
   },
   "animation": {
     "hint": "Pro návrat k animaci dvakrát klikněte na volné místo na obrazovce"
-  }
+  },
+  "expectation": "Očekávání",
+  "reality": "Realita"
 } 

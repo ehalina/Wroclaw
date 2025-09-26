@@ -74,39 +74,39 @@
     }
   },
   "tumski_cathedral_2": {
-    "title": "Cathedral of St. John the Baptist 2",
+    "title": "Presbytery",
     "book02": {
       "zone1": {
-        "title": "Cathedral of St. John the Baptist 2",
-        "text": "This is the second Cathedral of St. John the Baptist on Tumski Island. Built in a later period, it represents a unique example of architecture combining Gothic and Renaissance elements. Its facade is decorated with exquisite sculptures and bas-reliefs telling the history of the city and its patron saints."
+        "title": "Cathedral of St. John the Baptist",
+        "text": "The Cathedral of St. John the Baptist in Wrocław rises above the Oder as if it was born here even before the city itself. Its towers are not just stone spires, but real antennas for heavenly conversations. And although the cathedral is known as a masterpiece of Gothic, for those who can see a little deeper, it has always been a portal between the world of prayers and the world of secrets."
       },
       "zone1-2": {
         "title": "",
         "text": ""
       },
       "zone2": {
-        "title": "",
-        "text": "The interior decoration of the cathedral is striking in its splendor. The altar is made of rare wood species and decorated with gold elements. Stained glass creates a unique play of light, coloring the stone walls in various shades. Special attention is drawn to the pulpit, made in Baroque style with elegant carved elements."
+        "title": "Presbytery",
+        "text": "The cathedral choir — six-bay, strictly vertical, like a prayer stretched in stone upward. Here every column is not just an architectural support, but as if a request: fragile and stubborn at the same time. The consoles, invented by engineers of the 1930s, look simpler than befits an ancient temple, but precisely because of this they seem to pay homage to modernity, which entered into an alliance with eternity. The choir vaults are six-part, and the ambulatory reminds of the cross-ribbed breath of Gothic. The marble floor is raised by steps so that it seems as if you are rising higher not just physically, but on the scale of reality itself. It was here that the late Gothic altar 'Assumption of the Blessed Virgin Mary' of 1522 once stood — a stunning pentaptych from Lubin, later traveling around Wrocław. The main altar of the cathedral from the 16th century was mannerist, built with funds from Bishop Andreas Jerin — and, as is customary with old shrines, over time it disappeared, returned, and in 2019 again took its place, as if it had never left the temple."
       },
       "zone2-2": {
-        "title": "History",
-        "text": "The cathedral was built in the 16th century as an addition to the main temple. Initially, it served as a place for special ceremonies and solemn services. Over the centuries, the building was repeatedly rebuilt and restored, while maintaining its original architectural concept."
-      },
-      "zone3": {
-        "title": "",
-        "text": "The organ installed in the cathedral in the 18th century is of particular value. Its sound is distinguished by exceptional purity and depth. Many famous musicians have performed here, admiring the acoustic properties of the room. The organ is still used for concerts and solemn services."
+        "title": "Baroque Details",
+        "text": "The fact that massive parterre benches from the 17th century can be found in the cathedral, having arrived here from the Church of St. Vincent after the war, is not at all accidental, but the logic of the city's strange memory: when one place perishes, its objects seek shelter in another. These heavy benches almost hide the arcades and seem to whisper that not everything in the temple must be light and aspiring upward — sometimes faith requires heavy forms. The post-war stained glass was created by Polish artists — Zygmunt Acedański, Irena Nowakowska-Acedańska, Stanisław Penkalski, and Antoni Michalak, and they conduct their own light dialogues with the morning sun, as if reassembling a colored glass Gospel."
       },
       "zone3-2": {
-        "title": "Architecture",
-        "text": "The cathedral's architecture represents a harmonious combination of Gothic and Renaissance elements. The facade is decorated with exquisite portals with bas-reliefs depicting scenes from the lives of saints. The cathedral towers are crowned with spires that are visible from afar and serve as landmarks for city residents."
+        "title": "Naves",
+        "text": "The cathedral nave behaves much more calmly than the choir — it adopts the aesthetics of brick reductionist Gothic: strict, even, almost static, like a person who knows how to be silent. Six bays and another one between the towers create a rhythm that from time to time suddenly breaks off, as if the walls once dreamed of a transept, but changed their minds. Today the nave surprises with its ribless vault, heir to Renaissance experiments of the 16th century. Here age-old solutions neighbor with results of post-war restorations, and if you listen closely, you can hear how different epochs argue: what is more important — severity or spaciousness?"
+      },
+      "zone3": {
+        "title": "Chapels",
+        "text": "Around the cathedral is arranged a whole constellation of chapels — each with its own character, like separate heroes of one great novel. The Chapel of St. Elizabeth, created at the end of the 17th century with a dome and frescoes by Andrzej Kowalski, preserves the tomb of Cardinal Frederick of Hesse and his bust, executed in Bernini's workshop. Next to it — the Chapel of St. Mary from the 14th century, where Gothic vaulting and Baroque altar with a copy of the Częstochowa Madonna intertwine. The Chapel of the Body of Christ, erected by Johann Bernhard Fischer von Erlach in Viennese Baroque style, preserves the remains of princely persons, including the granddaughter of Jan III Sobieski — and its altar seems to sing to the north. In the Chapel of St. John the Baptist from the 14th century, Bishop John Turzon once rested, and from his Renaissance mausoleum only a slab with a figure remains today. And the Chapel of St. Casimir from the 15th century preserves the names of bishops of the 20th century on its walls, like an internal map of church memory."
       },
       "zone4": {
-        "title": "Modern Times",
-        "text": "Today, the cathedral continues to serve as a place of worship and cultural center. Regular services, organ music concerts, and tours for tourists are held here. The cathedral is an important part of Wrocław's cultural heritage and a symbol of the city's spiritual life."
+        "title": "",
+        "text": "The remaining bells preserve phrases from the Gospel and psalms about requests, searches, and blessings. All together they sound only at special moments, like people who know how to keep silence, but if they do speak — then so that the whole city trembles."
       },
       "zone4-2": {
-        "title": "Interesting Facts",
-        "text": "The cathedral houses a unique collection of religious artifacts, including ancient icons, church utensils, and manuscripts. The library is of particular value, containing rare books and documents related to the history of the city and church."
+        "title": "Bells",
+        "text": "Today in the southern tower of the cathedral hang four steel bells, and each has its own voice — and its own prayer, inscribed directly on bronze. The largest, with a quote from the 130th psalm, once caught a bullet during battles near Lubań, and now rings with a slight hoarseness, as if recalling old wounds."
       }
     }
   },
@@ -258,7 +258,265 @@
       }
     }
   },
-
+  "millennium_column": {
+    "title": "Millennium Column",
+    "book02": {
+      "zone1": {
+        "title": "Millennium Column",
+        "text": "The Millennium Column — not just a monument, but a stone hymn to time, captured in granite and bronze. It stands on Cathedral Square, like a guard who simultaneously towers over the city and merges with its spirit, reminding: 'You are not alone, Wrocław, you are part of something much greater.'"
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Heavy as eternity, the column's cylinder gleams golden in the sun. It is made of black and pink granite — a contrast that seems to paint light and shadow simultaneously, reminding that human millennium is not only brilliance, but also shadows. At the top — bronze Christ the King, crowned with a tiara, looking down not with arrogant vanity, but as a quiet witness, 'almighty, but patient.'"
+      },
+      "zone2-2": {
+        "title": "History",
+        "text": "Father Czesław Mazur conceived this statue, and sculptor Janusz Kucharski brought it to life. Together they erected a monument dedicated to the millennium of the Wrocław bishopric."
+      },
+      "zone3": {
+        "title": "",
+        "text": "The Latin inscription on the column sounds solemn and mysterious, but if you translate it into human words, the meaning becomes clearer: 'Diocesan and religious clergy of the Wrocław archdiocese, remembering Christ, Savior of the world. For the millennium of the Wrocław diocese.' This is not just an official formula, but a quiet confession of fidelity."
+      },
+      "zone3-2": {
+        "title": "Architecture",
+        "text": "Sometimes it seems that the column speaks through the Latin inscription: Clerus Dioecesanus et Religiosus Archidioecesis Wratislaviensis Memor Christi, Redemptoris Mundi. Pro Millenio Dioecesis Wratislaviensis. — words that sound like a prayer, as if the city sings it in unison."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Its style — not fashionable avant-garde, but neoclassical restraint. As if from a textbook: column, statue, granite... But it is precisely in this simplicity that strength hides. Not an attempt to surprise, but a desire to be noticeable, to be what remains when the city falls silent."
+      },
+      "zone4-2": {
+        "title": "Symbolism",
+        "text": "Those who pass by might think: 'This is just a tall statue.' But if you look closely — it stands between the sacred walls of the Cathedral and the streets of Wrocław, as if connecting earthly and heavenly. Cardinal Edmund Szok consecrated it, and since then it does not remain silent, but quietly invites everyone — come, stop, remember why you are here."
+      }
+    }
+  },
+  "spiritual_seminary": {
+    "title": "Higher Spiritual Seminary",
+    "book02": {
+      "zone1": {
+        "title": "Higher Spiritual Seminary",
+        "text": "The Higher Spiritual Seminary of Wrocław — not just an educational institution. It is like an ancient lighthouse in the storm of history: founded in October 1565 by the will of bishops. According to the strict decrees of the Council of Trent, it became the first of its kind in Lower Silesia."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "In 1656, the seminary returned to Wrocław — like an exile who realized that his home is here, even if the home is destroyed and financially exhausted. But the spirit of learning proved stronger than all adversities. Even a philological faculty appeared — because words and meaning are important, especially when saving souls and minds."
+      },
+      "zone2-2": {
+        "title": "History",
+        "text": "Its first steps — in church serenity: first rector Theodor Lindan, lectures in the Church of St. Martin. But already ten years later it was carried away to Nysa — as if into exile — to protect it from the Protestant wave that was then sweeping everything around. The Jesuits led students to spiritual modesty and discipline, like strict teachers who rejected the charm of progress."
+      },
+      "zone3": {
+        "title": "Education",
+        "text": "The life of seminarians was bustling: daily prayers, confessions, mandatory recollection of 8 days after Easter or before great holidays — so that the soul would understand that it is not for itself, but for service. And reading Scripture — not out of duty, but from the search for meaning. Within this regime lurked a striving for inner honesty, like a mirror cutting through every mask."
+      },
+      "zone3-2": {
+        "title": "",
+        "text": "The 19th century brought structure. From 1814, education became systematic: seven semesters, oral exams before a strict commission — chair, director, canon. Everything according to regulations; so that you know: this is serious, you are part of this tradition. This rule was in effect until 1888, and at the same time it did not deprive students of the freedom to choose lectures and form their own program."
+      },
+      "zone4": {
+        "title": "",
+        "text": "In the post-war period, the seminary educated more than 1500 ministers — priests, bishops, theologians. In 1968, the Papal Theological Faculty was opened, and from 1990 Annus Propedeuticus began to operate — a special formation for first-year students, the first in Poland and the second in Europe. And here it is — the old seminary with youth inside — continues to educate those who not only glorify God, but carry Him within themselves."
+      },
+      "zone4-2": {
+        "title": "War",
+        "text": "The war almost erased this place from the face of the earth. Seminarians were taken to Kraków, into poverty and destruction. But on October 8, 1947, the seminary was resurrected: 24 students, a sermon by Bolesław Kominek, hope that the future belongs not to those who are afraid, but to those who are ready to move forward, despite everything."
+      }
+    }
+  },
+  "st_mary_church": {
+    "title": "Church of St. Mary on the Sand",
+    "book02": {
+      "zone1": {
+        "title": "Church of St. Mary on the Sand",
+        "text": "The Church of St. Mary on the Sand (Kościół Najświętszej Marii Panny na Piasku) — this is not just a temple, but a kind of frozen spell, risen above the Oder River in the very heart of Sand Island. Its Gothic spires seem to talk to the clouds — and so convincingly that all of Wrocław has become accustomed to trusting this silhouette, as if it were its second horizon. For some it serves as a place of prayer, for others — as a portal to past centuries, but for everyone it remains a quiet miracle that is in no hurry and waits for everyone at its doors."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "The history of the temple looks almost like a chronicle of an enduring hero. In the 12th century, the first wooden church stood on the island — modest, like a trial sketch. In the 13th, it was replaced by a stone basilica, already much more solid, with a claim to eternity. By the 14th century, the Gothic form arose that we see today — thin, aspiring upward. Since then, the church has seen wars, fires, destruction, and — what is more important — restorations. This cycle of falls and rebirths became for it something like breathing: each time it came to life with new strength, as if demonstrating that stone can be more stubborn than time."
+      },
+      "zone2-2": {
+        "title": "History",
+        "text": "There is a beautiful legend: as if the beginning of the church is connected with the miraculous appearance of the Virgin Mary on the island. Since then, the place became a center of special veneration, where century after century pilgrims came from all over Silesia. And it seems that if you listen to the silence here, it still preserves echoes of those prayers, layered on top of each other, like transparent layers of eternity."
+      },
+      "zone3": {
+        "title": "",
+        "text": "The architecture of the church — this is separate magic. A three-nave basilica with high vaults and columns is created so that a person can breathe easily: as if space itself expands inside you. Colorful stained glass catches sun rays and turns them into glass spells that live their own, independent life. Altars and sculptures — these are small chronicles, petrified stories, piercing and silent at the same time."
+      },
+      "zone3-2": {
+        "title": "Architecture",
+        "text": "The church — a classic example of Silesian Gothic, where strict monumentality somehow does not interfere with elegance. The western facade meets guests with a carved portal, every detail of which seems created in the calculation that you will stop and think: who came up with all this, and why? Towers with pointed spires are visible from afar, like a beacon for wanderers — and, perhaps, precisely for those who have long been looking for a path not only to the city, but also to themselves."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Now the church lives its usual, but still somewhat magical life. Services are held in it, tourists enter it, and inside you can meet a special mix: concentration of prayer and curious glances of travelers. Icons, sculptures, and other art are kept here, each of which seems to test visitors on their ability to see a little more than what is depicted."
+      },
+      "zone4-2": {
+        "title": "Interesting Facts",
+        "text": "Here is the icon of the Virgin Mary of Sand from the 15th century — one of the oldest and most revered in Wrocław. It is called miraculous, and this is quite natural: attracting people to itself — this is also a special miracle. Some come seeking comfort, others hope, others — confirmation that miracles exist at all. And, according to rumors, the icon does not refuse any of them."
+      }
+    }
+  },
+  "ogrod_papieski": {
+    "title": "Garden of the Papal Theological Faculty",
+    "book02": {
+      "zone1": {
+        "title": "Garden of the Papal Theological Faculty",
+        "text": "There is a place in Wrocław where everything whispers, even the walls. It is called the Garden of the Papal Theological Faculty. A funny name, as if it immediately promises dusty books, boring professors, and Latin from morning to evening. But in reality — this is a garden that long ago learned to live its own life, and no one needs to explain that it is much smarter than any treatises."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Here the trees know more than it seems. They have seen students who came to 'review lectures,' but in fact discussed love and fear of exams. They heard the steps of priests talking to themselves, and the quiet laughter of those who secretly carried a bottle of wine into the garden. If you stand under the sycamore in the corner for a long time, you can distinguish in the rustle of leaves something like mockery: 'Well, have you come again for advice?'"
+      },
+      "zone2-2": {
+        "title": "History",
+        "text": "The garden has a long and multi-layered history. Once there was a strict monastic order here: flower beds by ruler, bushes by charter. But years passed, and the garden became wiser. Now it does not object to light chaos: grass grows where it likes, birds arrange concerts without a schedule. And all this — much more honest than any symphony by notes."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Of course, people try to correct it. Trim bushes, lay paths, install benches. But the garden pretends to agree. In the depths it remains independent and always preserves corners where the gardener's hand cannot reach. This is its small stubbornness, a reminder: 'Don't think that I was created for your comfort.'"
+      },
+      "zone3-2": {
+        "title": "",
+        "text": "Here time behaves strangely. You can enter during the day, with thoughts about business and deadlines, and exit already at dusk, not noticing where the hours went. Or vice versa: enter for a minute, and at the exit it turns out that only thirty seconds have passed, although inside you managed to discuss half your life with yourself. Probably, the garden has its own calendar, and it is not obliged to coincide with the human one."
+      },
+      "zone4": {
+        "title": "",
+        "text": "They say it's easier to pray in this garden. Even if you are a skeptic who believes only in internet signal and morning coffee. Here prayers sound somehow naturally: as if you are not asking, but simply sharing. The garden does not promise miracles, it only nods: 'I heard.' And this, strangely enough, is enough."
+      },
+      "zone4-2": {
+        "title": "",
+        "text": "Such is it — the Garden of the Papal Theological Faculty. A place where religion and nature, the noise of students and the silence of old trees, strictness and chaos intertwine into one tangle. Here you can feel like a participant in a great performance, where you seem to be a spectator, but all the time you suspect that you have long been given a role. And the garden waits for you to start playing."
+      }
+    }
+  },
+  "national_museum": {
+    "title": "National Museum",
+    "book02": {
+      "zone1": {
+        "title": "National Museum",
+        "text": "The National Museum of Wrocław pretends to be a home for paintings and sculptures. In fact, it has long become an independent hero — with brick sides, braided with ivy, and with that patient expression on its face that old sages have. It stands on the banks of the Oder, watches passersby, and occasionally sighs, as if wanting to say: 'You don't even imagine what I remember.'"
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "The bricks of its walls — like diary pages. Every stone knows a thousand stories: about wars and peaceful days, about restorers with brushes, about children who first saw knightly armor here and decided to become great heroes. And the ivy — these are its hair, always slightly disheveled, always young. People think the museum is aging, but this is deception: it simply grows slowly, like a tree."
+      },
+      "zone2-2": {
+        "title": "History",
+        "text": "The museum has a difficult history: it survived wars, changes of power, changes of epochs. It remembers how they tried to destroy it, and how it was raised again. This tempered its character: now it looks at all human passions with soft irony. 'Oh, you're arguing about politics again? Well, well. Let's better admire the tapestry from the 17th century, it's still smarter than your debates.'"
+      },
+      "zone3": {
+        "title": "",
+        "text": "Inside it has special magic. Paintings hang as if meekly, but in fact whisper to each other. Sculptures pretend to be stone, but at sunset they come to life — slightly change their pose so as not to go numb. And every visitor, entering here, involuntarily becomes part of this secret performance: sometimes a spectator, sometimes an actor, and sometimes even an exhibit."
+      },
+      "zone3-2": {
+        "title": "Collections",
+        "text": "And the museum also has a secret ability — it knows how to preserve other people's memories. If a person lingers at a display case a little longer than usual — the museum carefully hides in its brick memory his thoughts, emotions, the smell of perfume or the creaking of shoes. Then gives them back when the person comes years later: 'Look, I preserved what you yourself have already forgotten.'"
+      },
+      "zone4": {
+        "title": "",
+        "text": "The Oder, which flows nearby, teases it: 'You, brother, are too serious.' And the museum only smirks in response: 'But I know how to preserve. And you keep carrying and carrying.' Their conversations can be heard in the evening, if you linger on the embankment: one splashes, the other creaks with windows, and both are satisfied with their role."
+      },
+      "zone4-2": {
+        "title": "Interesting Facts",
+        "text": "So stands the National Museum of Wrocław — beautiful, braided with ivy, a little mocking and very wise. It looks at us and patiently waits for us to stop running and at least for a minute stop nearby. Because it is precisely in such moments that it whispers its most interesting stories — but only to those who are ready to listen."
+      }
+    }
+  },
+  "odra": {
+    "title": "Oder",
+    "book02": {
+      "zone1": {
+        "title": "Oder",
+        "text": "You know what's funny? I seem to be a city, stone, brick, glass, and other human inventions. But still — without her, the Oder, I seem to not exist. She flows here, murmurs, sometimes lazily, sometimes angrily, and every day reminds me that I am not the master at all, but just a tenant on her banks. Although people are sure that they invented Wrocław, but to tell the truth — the river invented me."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "She is stubborn, my Oder. She carried boats even when there were no bridges here, and drowned villages when the locals relaxed too much. I remember — not with my own eyes, of course, but with the memory of stones — how her floods turned streets into canals. People ran, cursed, saved utensils on carts, and she laughed, raising muddy waves. In such moments I felt myself not a city, but a fragile barge."
+      },
+      "zone2-2": {
+        "title": "History",
+        "text": "History? Oh yes! We have it in common and long. Vikings sailed on her waves, merchants stretched in caravans, kings and dukes built bridges to prove: 'Here, we are stronger than the elements.' Ha! The Oder allowed them to think so, but from time to time showed her teeth — so they wouldn't forget who is the mistress here."
+      },
+      "zone3": {
+        "title": "Conquer the Elements",
+        "text": "And people... stubborn creatures. Built dams, canals, locks. Stretched around me a whole system of hydraulic structures. Now we have regulated levels, reservoirs, and whole blueprints for protection from another 'apocalypse.' The Oder tolerates them, nods — well, well, let's live in peace. Respects intelligence."
+      },
+      "zone3-2": {
+        "title": "Floods",
+        "text": "The flood of 1997... ah, how I remembered this angry July. I stood waist-deep in water, bridges trembled, basements drowned, streets turned into dirty streams. The Oder decided it was time to remind me who of us is older. People later called it the 'millennium flood,' although I know — this is just one of her whims. She certainly doesn't count time by human calendars."
+      },
+      "zone4": {
+        "title": "",
+        "text": "So we live: I — Wrocław, a city that seems to stand on land, but in fact holds on water. She — the Oder, a river that seems to flow past, but in fact flows through me, through every street, every stone, and every story. And you know what's most amazing? I even like being her hostage. Because being a hostage of beauty is not scary at all."
+      },
+      "zone4-2": {
+        "title": "Beauty",
+        "text": "And yet... I love her. Without her silvery bends I would be gray and dull. All these islands and bridges — my pride. How many artists painted her banks, how many students kissed on her embankments, how many musicians listened to the splash of water instead of a metronome. The Oder knows how to be not only formidable, but also gentle, almost maternal."
+      }
+    }
+  },
+  "kleck_gate": {
+    "title": "Kluska Gate",
+    "book02": {
+      "zone1": {
+        "title": "Kluska Gate",
+        "text": "The Kluska Gate — not just an arch between historical buildings, but a threshold through which not so much the body passes as the soul. Legend — this is the true key that opens their meaning. After all, what are gates without a story about Agnes, who made the best kluskas in Wrocław?"
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Once Conrad was returning from a fair, where he sold all his dishes, except for one single bowl. Hunger and fatigue were knocking him down. He sat down by the city gate, put the unsold bowl next to him, and fell asleep. And then Agnes appeared to him: alive, bright, as he remembered her. She promised to feed him even after death — every day with a fresh bowl of kluskas. But on one condition: Conrad was obliged to leave the last kluska untouched."
+      },
+      "zone2-2": {
+        "title": "Legend",
+        "text": "Once upon a time in Wrocław lived Conrad and Agnes. Conrad was a noble potter, who knew how to handle clay as if it itself asked to turn into a jug. Agnes cooked kluskas — so tasty that, having tasted once, a person never believed in food without soul. But one day Agnes fell ill, and soon she was gone. Conrad stopped drinking and eating from grief. Agnes's compassionate friends brought him treats, but everything was in vain: after her kluskas the world seemed tasteless."
+      },
+      "zone3": {
+        "title": "",
+        "text": "But the trouble is that hunger knows how to whisper louder than any promises. Conrad looked at this last kluska, and his heart tossed: 'What if Agnes pities me? What if she forgives? After all, just one...' He decided. Reached out his hand, grabbed the kluska — and immediately it slipped out of his fingers, as if alive."
+      },
+      "zone3-2": {
+        "title": "",
+        "text": "He woke up — and couldn't believe his eyes. In the bowl, by his hand, lay the most real Agnes's kluskas, still warm, with that very aroma that he considered lost forever. Tears of gratitude splashed from his eyes. Conrad ate and couldn't get enough, until he reached the last one. He left it, as promised."
+      },
+      "zone4": {
+        "title": "",
+        "text": "And centuries have passed, but the stone kluska still lies on the gate. Townspeople look at it and tell this story to new generations. Since then the gates are called Kluska, so as not to forget: miracles always require fidelity to the word, and it's worth once giving in to weakness — even love can turn into stone."
+      },
+      "zone4-2": {
+        "title": "",
+        "text": "He grabbed it again — and it again twisted and jumped straight onto the gate leaf. Conrad was confused, then in despair climbed after it up, clinging to the stone like a straw. But then the impossible happened: the kluska petrified, turned into a hard cobblestone, firmly grown into the gate. From that day Agnes no longer came to him in dreams. Conrad never saw another bowl of kluskas. Food became tasteless again, like life itself. The city sympathized, but no one could return his magical connection."
+      }
+    }
+  },
   "panorama": {
     "title": "Observation Deck"
   },
@@ -271,27 +529,29 @@
   "map.platan": "Sycamore Maple. Natural Monument",
   "map.ogrod": "Garden of the Papal Theological Faculty",
   "map.ogrodbot1": "Botanical Garden of the University of Wrocław",
-  "map.ogrodbot2": "Botanical Garden of the University of Wrocław",
-  "map.ogrodbot3": "Botanical Garden of the University of Wrocław",
-  "map.ogrodbot4": "Botanical Garden of the University of Wrocław",
+  "map.ogrodbot2": "",
+  "map.ogrodbot3": "",
+  "map.ogrodbot4": "",
   "map.plackat": "Cathedral Square",
-  "map.odra1": "Oder",
+  "map.odra1": "",
   "map.odra2": "Oder",
-  "map.odra3": "Oder",
+  "map.odra3": "",
   "map.mlynski": "Mill Bridge",
   "map.panny": "Street of the Most Holy Virgin Mary",
   "map.piasek": "Sand Island",
   "map.katedralna1": "Cathedral Street",
   "map.katedralna2": "Cathedral Square",
-  "map.katedralna3": "Cathedral Square",
-  "map.katedralna4": "Cathedral Square",
-  "map.katedralna5": "Cathedral Square",
+  "map.katedralna3": "",
+  "map.katedralna4": "",
+  "map.katedralna5": "",
   "map.brama": "Kluska Gate",
   "map.kanonia": "Canon Street",
   "map.bramabot": "Botanical Garden Gate",
   "map.kapitulna": "Chapter Street",
   "quest": {
     "title1": "Quest 1: Find all the secrets of Cathedral Island",
+    "expectation": "Expectation",
+    "reality": "Reality",
     "intro": "Watercolors were discovered in the attic of an abandoned house. Several dozen. The sheets are dusty, gnawed here and there by time or mice (I don't know which of them was neater), but the colors are still alive — such that your throat tickles from the smell of rain on warm stone if you look too long. \n\nAuthor? Unknown. The signature is illegible. Maybe it's a name. Or maybe — coordinates of another reality. \n\nOn the paintings are places. Streets, people, windows. A lonely lamplighter by a column. A tower with birds on the roof. Everything is strangely familiar. As if it already existed somewhere. In a dream? In a book? In that life about which I was forgotten to be told? \n\nBut now I somehow need to find them. All of them. See in reality. \n\nAlthough who knows what's real anyway?",
     "task1": "Mysterious lion guarding the Church",
     "task2": "Locks of love",
@@ -304,7 +564,25 @@
     "task9": "Black Kluska",
     "task10": "Entrance to the botanical garden",
     "task11": "Garden of the Papal Theological Faculty",
-    "task12": "Statue of Mary Magdalene in the garden of the papal theological faculty"
+    "task12": "Statue of Mary Magdalene in the garden of the papal theological faculty",
+    "task13": "Sycamore",
+    "back1": " ",
+    "back2": "On Cathedral Bridge in Wrocław, lovers for many years left heavy iron declarations of love. In 2020, they were removed from the bridge and ordered to be preserved. A whole 12 tons of love. The city introduced a ten-year ban on weighing down the bridge with locks. But love always wins. Therefore, soon on the neighboring embankment fresh declarations shone.",
+    "back3": "Of all the saints, only the Virgin Mary and Jan Nepomuk have stars shining in their halos. As if he took a piece of the night sky with him and now walks with it, causing slight envy and bewilderment in other saints. On March 20, 1393, Jan Nepomuk will be sent into the icy waters of the Vltava — not of his own accord, of course, but by order of King Wenceslaus IV. A priest who refused to reveal the secret of the royal wife's confession paid for silence with his life. Since then, Catholics revere him as a protector from slander and floods. Therefore, it is not surprising that his stone and bronze copies stand on bridges and islands, like guards watching that rivers and people behave decently.",
+    "back4": "This is the oldest surviving monument in Wrocław, born in 1694. It was created, as they assure, by inspiration of the Jesuits and was supposed to embody the triumph of Catholicism over Protestants. The name of the master who carved the figures from sandstone has sunk into oblivion, although experts tend to attribute the work to a Dutchman named Sulpicius Gode.",
+    "back5": "From the height of the observation deck of Wrocław Cathedral, the city opens up completely differently: red roofs flash in the sun, the Oder flickers with lazy ribbons. Here you especially clearly understand that Wrocław is not just a city, but a living heart that beats to the rhythm of wind and bells. And the most charming thing in this walk to the heavens — that an elevator leads to the most wonderful view, hidden in an ancient tower. The Gothic architecture itself decided to give modernity a small miracle: the opportunity to fly up without losing breath on hundreds of steps. And immediately find yourself face to face with the sky.",
+    "back6": "A shell from World War II is stuck in the wall of Wrocław Cathedral — neutralized, but left in plain sight, a silent reminder. It sticks out of the masonry, like a fragment of someone else's fury, and at the same time as a warning: everything that once destroyed can one day become just part of the wall.",
+    "back7": "Henry, poor apprentice, fell in love with Barbara — daughter of a master jeweler. Proposed and received a refusal: not enough gold, too many feelings. In rage he set fire to the offender's house and climbed onto the cathedral roof to watch everything burn. But the heavens did not approve of the spectacle, and Henry turned to stone. Now he looks from the wall at everyone and is silent.",
+    "back8": "The lamplighter of Cathedral Island — a living legend of Wrocław, a mysterious keeper of light who every evening lights the old gas lamps. He appears on the island streets strictly at sunset hour — not earlier, not later, as if obeying a secret agreement with the sky itself. Because of this, meeting him is not easy: if you hesitate even for a few minutes, it seems as if the lamplighter was altogether a figment of imagination. In his step — unhurried confidence, in movements — mysterious grace, which is why everyone who is lucky enough to see this ritual involuntarily feels: tradition here is not a museum rarity, but the breath of the city itself, preserving the warmth of bygone centuries.",
+    "back9": "A promise is a memory of the future",
+    "back10": "The Botanical Garden of Wrocław — this is not a garden at all, but a cunning portal to other worlds, disguised as an innocent collection of plants. As soon as you step through its gates — you seem to find yourself in a library where trees grow instead of books, and pages are turned by the rustle of leaves, and every bush tries to tell you a story about those places where water flows against the current, and stones know how to bloom. Here you can wander for hours, assuring yourself that you are simply looking at plants and admiring the landscape, although in fact you are participating in a slow and careful conversation with the Universe, which for some reason chose exactly this corner of Wrocław to open up a little to a persistent visitor.",
+    "back11": "In the most secluded corner of Cathedral Island hides a garden where time flows not by hours, but by the breath of water and the rustle of leaves. This is not just a corner of nature — this is a place where history and faith take form in green curves and ancient stones. This quiet corner — a living monument preserving within itself the breath of centuries and the silence of prayer.",
+    "back12": "The statue of Mary Magdalene stands as if she herself chooses whom to notice and whom not. During the day she seems to drown in greenery and chiaroscuro, pretending to be an ordinary decoration, and in the evening comes to life in the twilight: stone folds of her clothes turn into quiet waves, and her gaze, directed somewhere through the trees, becomes almost human.",
+    "back13": "The sycamore on Cathedral Island — not a tree, but a real cathedral without walls and stained glass, only with branches reaching to the sky. Its mottled, as if stripped naked, trunk seems like a living body that has shed its icy skin, and the crown — a lush dome where the silent service of wind and birds always sounds. They say that once a river flowed here, but now its channels are filled in, and in their place grows this miracle, whose circumference has long exceeded five meters. And it seems that the Sycamore preserves within itself not only the juices of the earth, but also memories of water that once flowed under its roots.",
+    "clearTooltip": "Clear quest results",
+    "clearConfirm": "Are you sure you want to clear quest results?",
+    "clearConfirmYes": "Yes",
+    "clearConfirmNo": "No"
   },
   "music": {
     "hint": "Click anywhere to start sounds",
@@ -313,5 +591,7 @@
   },
   "animation": {
     "hint": "To return to animation, double-click in a free area of the screen"
-  }
+  },
+  "expectation": "Expectation",
+  "reality": "Reality"
 } 
