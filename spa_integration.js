@@ -10,6 +10,11 @@ window.initializePageElements = function(pageContainer) {
     
     // Инициализируем обработчики событий
     initializeEventHandlers(pageContainer);
+    
+    // Регистрируем quest музыку в менеджере видимости, если она существует
+    if (window.questMusic && window.visibilityAudioManager) {
+        window.visibilityAudioManager.registerQuestMusic();
+    }
 };
 
 window.initializeMapMarks = function(pageContainer) {

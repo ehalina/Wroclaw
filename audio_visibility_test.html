@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест управления аудио при видимости</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .audio-controls {
+            margin: 20px 0;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #e9ecef;
+        }
+        .log {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 10px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        audio {
+            width: 100%;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 Тест управления аудио при видимости страницы</h1>
+        
+        <div class="status">
+            <strong>Статус страницы:</strong> <span id="visibilityStatus">Видимая</span><br>
+            <strong>Количество аудио элементов:</strong> <span id="audioCount">0</span>
+        </div>
+        
+        <div class="audio-controls">
+            <button onclick="playAllAudio()">▶️ Воспроизвести все</button>
+            <button onclick="pauseAllAudio()">⏸️ Пауза все</button>
+            <button onclick="addNewAudio()">➕ Добавить аудио</button>
+            <button onclick="addQuestAudio()">🎯 Добавить Quest музыку</button>
+            <button onclick="registerQuestMusic()">🔗 Зарегистрировать Quest</button>
+            <button onclick="clearLog()">🗑️ Очистить лог</button>
+        </div>
+        
+        <div id="audioContainer">
+            <!-- Аудио элементы будут добавляться сюда -->
+        </div>
+        
+        <h3>📋 Лог событий:</h3>
+        <div id="log" class="log"></div>
+        
+        <h3>ℹ️ Инструкции:</h3>
+        <ul>
+            <li>Нажмите "Воспроизвести все" чтобы запустить все аудио</li>
+            <li>Сверните браузер или переключитесь на другую вкладку</li>
+            <li>Вернитесь обратно - аудио должно автоматически возобновиться</li>
+            <li>Следите за логом событий</li>
+            <li><strong>Для тестирования Quest музыки:</strong> нажмите "🎯 Добавить Quest музыку" и "🔗 Зарегистрировать Quest"</li>
+        </ul>
+    </div>
+
+    <!-- Подключаем наш менеджер видимости -->
+    <script src="visibility_audio_manager.js"></script>
+    
+    <script>
+        let audioCounter = 0;
+        
+        // Функция для логирования
+        function log(message) {
+            const logElement = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logElement.innerHTML += `[${timestamp}] ${message}<br>`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(message);
+        }
+        
+        // Обновляем статус видимости
+        function updateVisibilityStatus() {
+            const statusElement = document.getElementById('visibilityStatus');
+            const status = document.visibilityState;
+            statusElement.textContent = status === 'visible' ? 'Видимая' : 'Скрытая';
+            statusElement.style.color = status === 'visible' ? 'green' : 'red';
+        }
+        
+        // Обновляем счетчик аудио элементов
+        function updateAudioCount() {
+            const countElement = document.getElementById('audioCount');
+            const count = document.querySelectorAll('audio').length;
+            countElement.textContent = count;
+        }
+        
+        // Воспроизводим все аудио
+        function playAllAudio() {
+            const audioElements = document.querySelectorAll('audio');
+            audioElements.forEach((audio, index) => {
+                audio.play().then(() => {
+                    log(`✅ Аудио ${index + 1} запущено`);
+                }).catch(error => {
+                    log(`❌ Ошибка запуска аудио ${index + 1}: ${error.message}`);
+                });
+            });
+        }
+        
+        // Ставим все аудио на паузу
+        function pauseAllAudio() {
+            const audioElements = document.querySelectorAll('audio');
+            audioElements.forEach((audio, index) => {
+                audio.pause();
+                log(`⏸️ Аудио ${index + 1} поставлено на паузу`);
+            });
+        }
+        
+        // Добавляем новое аудио
+        function addNewAudio() {
+            audioCounter++;
+            const audioContainer = document.getElementById('audioContainer');
+            
+            const audioElement = document.createElement('audio');
+            audioElement.id = `testAudio${audioCounter}`;
+            audioElement.src = 'media/zwyki/town.mp3'; // Используем существующий файл
+            audioElement.controls = true;
+            audioElement.loop = true;
+            audioElement.volume = 0.3;
+            
+            const label = document.createElement('label');
+            label.textContent = `Аудио ${audioCounter}:`;
+            label.style.display = 'block';
+            label.style.marginTop = '10px';
+            label.style.fontWeight = 'bold';
+            
+            audioContainer.appendChild(label);
+            audioContainer.appendChild(audioElement);
+            
+            // Регистрируем новое аудио в менеджере
+            if (window.visibilityAudioManager) {
+                window.visibilityAudioManager.registerAudio(audioElement);
+            }
+            
+            updateAudioCount();
+            log(`➕ Добавлено новое аудио: testAudio${audioCounter}`);
+        }
+        
+        // Добавляем Quest музыку
+        function addQuestAudio() {
+            audioCounter++;
+            const audioContainer = document.getElementById('audioContainer');
+            
+            const audioElement = document.createElement('audio');
+            audioElement.id = `questAudio${audioCounter}`;
+            audioElement.src = 'media/zwyki/quest.mp3';
+            audioElement.controls = true;
+            audioElement.loop = true;
+            audioElement.volume = 0.7;
+            
+            const label = document.createElement('label');
+            label.textContent = `🎯 Quest Музыка ${audioCounter}:`;
+            label.style.display = 'block';
+            label.style.marginTop = '10px';
+            label.style.fontWeight = 'bold';
+            label.style.color = '#dc3545';
+            
+            audioContainer.appendChild(label);
+            audioContainer.appendChild(audioElement);
+            
+            // Регистрируем новое аудио в менеджере
+            if (window.visibilityAudioManager) {
+                window.visibilityAudioManager.registerAudio(audioElement);
+            }
+            
+            updateAudioCount();
+            log(`🎯 Добавлена Quest музыка: questAudio${audioCounter}`);
+        }
+        
+        // Принудительно регистрируем quest музыку
+        function registerQuestMusic() {
+            if (window.visibilityAudioManager) {
+                const success = window.visibilityAudioManager.registerQuestMusic();
+                if (success) {
+                    log('🔗 Quest музыка успешно зарегистрирована');
+                } else {
+                    log('❌ Quest музыка не найдена (window.questMusic не существует)');
+                }
+            } else {
+                log('❌ Менеджер видимости не загружен');
+            }
+        }
+        
+        // Очищаем лог
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+        
+        // Добавляем обработчики событий для отслеживания
+        document.addEventListener('visibilitychange', () => {
+            updateVisibilityStatus();
+            log(`🔄 Изменение видимости: ${document.visibilityState}`);
+        });
+        
+        window.addEventListener('blur', () => {
+            log('👁️ Окно потеряло фокус');
+        });
+        
+        window.addEventListener('focus', () => {
+            log('👁️ Окно получило фокус');
+        });
+        
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', () => {
+            updateVisibilityStatus();
+            updateAudioCount();
+            log('🚀 Тестовая страница загружена');
+            log('📝 Менеджер видимости аудио активен');
+            
+            // Добавляем одно тестовое аудио по умолчанию
+            addNewAudio();
+        });
+    </script>
+</body>
+</html>

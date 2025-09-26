@@ -723,11 +723,24 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         // Используем глобальную quest музыку или создаем новую, если глобальной нет
         let questSound = window.questMusic;
         if (!questSound) {
-            questSound = new Audio('media/zwyki/quest.mp3');
-            questSound.loop = true; // Зацикливаем воспроизведение
-            questSound.volume = 0.7;
+            // Сначала проверяем, есть ли quest музыка в DOM
+            questSound = document.getElementById('questMusic');
+            if (!questSound) {
+                questSound = new Audio('media/zwyki/quest.mp3');
+                questSound.loop = true; // Зацикливаем воспроизведение
+                questSound.volume = 0.7;
+                // Добавляем в DOM для лучшего управления
+                questSound.id = 'questMusic';
+                document.body.appendChild(questSound);
+            }
             // Сохраняем ссылку глобально для повторного использования
             window.questMusic = questSound;
+            
+            // Регистрируем quest музыку в менеджере видимости
+            if (window.visibilityAudioManager) {
+                window.visibilityAudioManager.registerAudio(questSound);
+                console.log('🎵 Quest музыка зарегистрирована в менеджере видимости');
+            }
         }
 
         // Открываем модальное окно

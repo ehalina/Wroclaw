@@ -1826,6 +1826,11 @@ const MapModal = {
                         // Звук и обработчики
                         const questSound = new Audio('media/zwyki/quest.mp3');
                         questSound.volume = 0.4;
+                        
+                        // Регистрируем quest звук в менеджере видимости
+                        if (window.visibilityAudioManager) {
+                            window.visibilityAudioManager.registerAudio(questSound);
+                        }
                         const flipSound = new Audio('media/opening-a-book.wav');
                         const isGloballyMuted = () => {
                             const mainSoundButton = document.querySelector('.sound-menu-button');

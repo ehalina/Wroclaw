@@ -11,6 +11,11 @@ function ensureAudioElement(id, src, loop = false) {
         audio.playsInline = true;
         audio.webkitPlaysInline = true;
         document.body.appendChild(audio);
+        
+        // Регистрируем аудио элемент в менеджере видимости
+        if (window.visibilityAudioManager) {
+            window.visibilityAudioManager.registerAudio(audio);
+        }
     }
     return audio;
 }
@@ -51,6 +56,12 @@ function createDirectAudioElement() {
     
     document.body.appendChild(audio);
     window.directMusicAudio = audio;
+    
+    // Регистрируем аудио элемент в менеджере видимости
+    if (window.visibilityAudioManager) {
+        window.visibilityAudioManager.registerAudio(audio);
+    }
+    
     console.log('🎵 Прямой аудио элемент создан и добавлен в DOM');
     return audio;
 }

@@ -849,7 +849,7 @@ const LanguageMenu = {
         console.log('🎵 Инициализируем музыку quest...');
         
         // Создаем глобальный аудио элемент для quest музыки, если его еще нет
-        let questMusic = document.getElementById('questMusic');
+        let questMusic = window.questMusic || document.getElementById('questMusic');
         if (!questMusic) {
             questMusic = document.createElement('audio');
             questMusic.id = 'questMusic';
@@ -858,6 +858,16 @@ const LanguageMenu = {
             questMusic.preload = 'auto';
             questMusic.volume = 0.7;
             document.body.appendChild(questMusic);
+            
+            // Сохраняем глобально
+            window.questMusic = questMusic;
+            
+            // Регистрируем quest музыку в менеджере видимости
+            if (window.visibilityAudioManager) {
+                window.visibilityAudioManager.registerAudio(questMusic);
+                console.log('🎵 Quest музыка зарегистрирована в менеджере видимости');
+            }
+            
             console.log('🎵 Создан глобальный аудио элемент для quest музыки');
         }
         
@@ -956,20 +966,32 @@ const LanguageMenu = {
         console.log(`🎵 Инициализируем quest музыку в iframe ${iframeIndex}...`);
         
         try {
-            // Создаем quest музыку в iframe, если ее еще нет
-            let questMusic = iframeDoc.getElementById('questMusic');
+            // Используем глобальную quest музыку из основного контекста
+            let questMusic = window.questMusic;
             if (!questMusic) {
-                questMusic = iframeDoc.createElement('audio');
-                questMusic.id = 'questMusic';
-                questMusic.src = 'media/zwyki/quest.mp3';
-                questMusic.loop = true;
-                questMusic.preload = 'auto';
-                questMusic.volume = 0.7;
-                iframeDoc.body.appendChild(questMusic);
-                console.log(`🎵 Создан аудио элемент quest музыки в iframe ${iframeIndex}`);
+                // Создаем quest музыку в основном контексте, если её нет
+                questMusic = document.getElementById('questMusic');
+                if (!questMusic) {
+                    questMusic = document.createElement('audio');
+                    questMusic.id = 'questMusic';
+                    questMusic.src = 'media/zwyki/quest.mp3';
+                    questMusic.loop = true;
+                    questMusic.preload = 'auto';
+                    questMusic.volume = 0.7;
+                    document.body.appendChild(questMusic);
+                    
+                    // Регистрируем quest музыку в менеджере видимости
+                    if (window.visibilityAudioManager) {
+                        window.visibilityAudioManager.registerAudio(questMusic);
+                        console.log('🎵 Quest музыка зарегистрирована в менеджере видимости');
+                    }
+                    
+                    console.log('🎵 Создан глобальный аудио элемент quest музыки');
+                }
+                window.questMusic = questMusic;
             }
             
-            // Принудительно инициализируем quest музыку в iframe
+            // Принудительно инициализируем quest музыку
             questMusic.muted = false;
             questMusic.volume = 0.7;
             questMusic.load();
@@ -979,15 +1001,17 @@ const LanguageMenu = {
             questMusic.play().then(() => {
                 questMusic.pause();
                 questMusic.currentTime = 0;
-                console.log(`🎵 Quest музыка в iframe ${iframeIndex} принудительно инициализирована`);
+                console.log(`🎵 Quest музыка принудительно инициализирована`);
             }).catch(error => {
-                console.log(`🎵 Ошибка принудительной инициализации quest музыки в iframe ${iframeIndex}:`, error);
+                console.log(`🎵 Ошибка принудительной инициализации quest музыки:`, error);
             });
             
             // Делаем quest музыку доступной в iframe
             if (iframeDoc.defaultView) {
                 iframeDoc.defaultView.questMusic = questMusic;
             }
+            
+            console.log(`🎵 Quest музыка передана в iframe ${iframeIndex}`);
         } catch (error) {
             console.log(`🎵 Ошибка инициализации quest музыки в iframe ${iframeIndex}:`, error);
         }
