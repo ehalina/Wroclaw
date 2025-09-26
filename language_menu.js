@@ -137,6 +137,64 @@ const LanguageMenu = {
         // Добавляем меню на страницу
         document.body.insertAdjacentHTML('beforeend', menuHTML);
 
+        // Добавляем обработчик клика для кнопки разблокировки аудио
+        const audioUnlockButton = document.getElementById('audioUnlockButton');
+        console.log('🔍 Поиск кнопки разблокировки аудио:', audioUnlockButton);
+        
+        if (audioUnlockButton) {
+            console.log('✅ Кнопка разблокировки аудио найдена, добавляем обработчик');
+            audioUnlockButton.addEventListener('click', function() {
+                console.log('🎵 Клик по кнопке разблокировки аудио в SPA');
+                
+                // Активируем кнопку звука в SPA
+                const soundButton = document.querySelector('.sound-menu-button');
+                console.log('🔍 Поиск кнопки звука:', soundButton);
+                
+                if (soundButton) {
+                    console.log('✅ Кнопка звука найдена, активируем...');
+                    soundButton.classList.remove('muted');
+                    localStorage.setItem('soundMuted', 'false');
+                    console.log('🔊 Кнопка звука в SPA активирована, классы:', soundButton.className);
+                } else {
+                    console.log('❌ Кнопка звука не найдена!');
+                }
+                
+                // Вызываем функцию включения звука из LanguageMenu
+                this.unmuteAllSounds();
+                
+                // Отправляем сообщение в iframe для активации кнопки звука там
+                const activeIframe = document.querySelector('iframe');
+                if (activeIframe) {
+                    try {
+                        activeIframe.contentWindow.postMessage({
+                            type: 'AUDIO_UNLOCK_CLICKED',
+                            action: 'unmute'
+                        }, '*');
+                        console.log('🎵 Сообщение отправлено в iframe для активации звука');
+                    } catch (error) {
+                        console.log('🎵 Ошибка отправки сообщения в iframe:', error);
+                    }
+                }
+                
+                // Скрываем кнопку разблокировки аудио
+                audioUnlockButton.style.display = 'none';
+                console.log('🎵 Кнопка разблокировки аудио в SPA скрыта');
+            });
+        } else {
+            console.log('❌ Кнопка разблокировки аудио не найдена!');
+        }
+        
+        // Показываем кнопку разблокировки аудио через 2 секунды после загрузки
+        setTimeout(() => {
+            const audioUnlockButton = document.getElementById('audioUnlockButton');
+            if (audioUnlockButton) {
+                audioUnlockButton.style.display = 'block';
+                console.log('🎵 Кнопка разблокировки аудио показана');
+            } else {
+                console.log('❌ Кнопка разблокировки аудио все еще не найдена через 2 секунды');
+            }
+        }, 2000);
+
         // Добавляем обработчик клика вне меню
         document.addEventListener('click', function(e) {
             const dropdown = document.querySelector('.language-dropdown');
@@ -571,6 +629,9 @@ const LanguageMenu = {
         document.querySelector('.language-dropdown').classList.remove('show');
         this.updateActiveLanguage();
 
+        // Отправляем сообщение о смене языка в iframe
+        this.sendLanguageChangeToIframe(lang);
+
         // Обновляем текст подсказки на карте, если модалка открыта
         const mapModal = document.getElementById('map-modal');
         if (mapModal && mapModal.style.display === 'flex') {
@@ -636,6 +697,28 @@ const LanguageMenu = {
             } catch (postError) {
                 console.log('🌐 Ошибка отправки сообщения в iframe:', postError);
             }
+        }
+    },
+
+    sendLanguageChangeToIframe(lang) {
+        console.log('🌐 Отправляем сообщение о смене языка в iframe:', lang);
+        
+        // Находим активный iframe
+        const activeIframe = this.getActiveIframe();
+        if (!activeIframe) {
+            console.log('🌐 Активный iframe не найден для отправки сообщения');
+            return;
+        }
+        
+        try {
+            // Отправляем сообщение через postMessage
+            activeIframe.contentWindow.postMessage({
+                type: 'LANGUAGE_CHANGE',
+                lang: lang
+            }, '*');
+            console.log('🌐 Сообщение отправлено в iframe');
+        } catch (error) {
+            console.log('🌐 Ошибка отправки сообщения в iframe:', error);
         }
     },
 
@@ -729,12 +812,19 @@ const LanguageMenu = {
                 // Принудительно воспроизводим короткий звук для инициализации
                 audio.currentTime = 0;
                 audio.play().then(() => {
+                    // Сразу ставим на паузу и сбрасываем время
                     audio.pause();
                     audio.currentTime = 0;
                     console.log(`🎵 Звук геометки ${index + 1} принудительно инициализирован:`, audio.src);
                 }).catch(error => {
                     console.log(`🎵 Ошибка принудительной инициализации звука геометки:`, error);
                 });
+                
+                // Дополнительно ставим на паузу сразу после play() для гарантии
+                setTimeout(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                }, 10);
             } catch (error) {
                 console.log('🎵 Ошибка инициализации звука геометки:', error);
             }
@@ -886,12 +976,19 @@ const LanguageMenu = {
                             // Принудительно воспроизводим короткий звук для инициализации
                             audio.currentTime = 0;
                             audio.play().then(() => {
+                                // Сразу ставим на паузу и сбрасываем время
                                 audio.pause();
                                 audio.currentTime = 0;
                                 console.log(`🎵 Звук геометки в iframe ${iframeIndex + 1}, звук ${index + 1} принудительно инициализирован`);
                             }).catch(error => {
                                 console.log(`🎵 Ошибка принудительной инициализации звука в iframe:`, error);
                             });
+                            
+                            // Дополнительно ставим на паузу сразу после play() для гарантии
+                            setTimeout(() => {
+                                audio.pause();
+                                audio.currentTime = 0;
+                            }, 10);
                             
                         } catch (error) {
                             console.log('🎵 Ошибка принудительной инициализации звука геометки в iframe:', error);

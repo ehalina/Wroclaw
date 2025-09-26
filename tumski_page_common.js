@@ -40,7 +40,106 @@ export async function initPageCommon() {
                     window.i18n.changeLang(event.data.lang);
                 }
             }
+            
+            // Обработчик для активации звука из SPA
+            if (event.data && event.data.type === 'AUDIO_UNLOCK_CLICKED') {
+                console.log('🎵 Получено сообщение о клике по кнопке разблокировки аудио из SPA');
+                
+                // Активируем кнопку звука в iframe
+                const soundButton = document.querySelector('.sound-menu-button');
+                console.log('🔍 Поиск кнопки звука в iframe:', soundButton);
+                
+                if (soundButton) {
+                    console.log('✅ Кнопка звука в iframe найдена, активируем...');
+                    soundButton.classList.remove('muted');
+                    localStorage.setItem('soundMuted', 'false');
+                    console.log('🔊 Кнопка звука в iframe активирована из SPA, классы:', soundButton.className);
+                } else {
+                    console.log('❌ Кнопка звука в iframe не найдена!');
+                }
+                
+                // Включаем все звуки в iframe
+                const sounds = document.querySelectorAll('audio');
+                console.log('🔊 Найдено звуков в iframe:', sounds.length);
+                sounds.forEach(sound => {
+                    sound.muted = false;
+                });
+                console.log('🔊 Все звуки в iframe включены из SPA');
+                
+                // Скрываем кнопку разблокировки аудио в iframe
+                const audioUnlockButton = document.getElementById('audioUnlockButton');
+                if (audioUnlockButton) {
+                    audioUnlockButton.style.display = 'none';
+                    console.log('🎵 Кнопка разблокировки аудио в iframe скрыта');
+                }
+            }
         });
+
+        // Функция для скрытия кнопки разблокировки аудио в iframe
+        function hideAudioUnlockButtonInIframe() {
+            const audioUnlockButton = document.getElementById('audioUnlockButton');
+            if (audioUnlockButton) {
+                audioUnlockButton.style.display = 'none';
+                audioUnlockButton.style.visibility = 'hidden';
+                audioUnlockButton.style.opacity = '0';
+                audioUnlockButton.style.pointerEvents = 'none';
+                console.log('🎵 Кнопка разблокировки аудио в iframe скрыта');
+                return true;
+            }
+            return false;
+        }
+
+        // Добавляем CSS правило для скрытия кнопки в iframe
+        const style = document.createElement('style');
+        style.textContent = `
+            #audioUnlockButton {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Проверяем состояние звука при загрузке iframe
+        const isSoundMuted = localStorage.getItem('soundMuted') === 'true';
+        if (!isSoundMuted) {
+            // Если звук уже включен, скрываем кнопку разблокировки аудио в iframe
+            hideAudioUnlockButtonInIframe();
+        }
+
+        // Дополнительная проверка через небольшую задержку на случай, если кнопка создается позже
+        setTimeout(() => {
+            const isSoundMutedDelayed = localStorage.getItem('soundMuted') === 'true';
+            if (!isSoundMutedDelayed) {
+                hideAudioUnlockButtonInIframe();
+            }
+        }, 1000);
+
+        // Проверяем при каждом изменении DOM
+        const observer = new MutationObserver(() => {
+            const isSoundMutedObserver = localStorage.getItem('soundMuted') === 'true';
+            if (!isSoundMutedObserver) {
+                hideAudioUnlockButtonInIframe();
+            }
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+
+        // Функция для отправки сообщения о смене языка в основное окно SPA
+        window.sendLanguageChangeToSPA = function(lang) {
+            console.log('🌐 Отправляем сообщение о смене языка в SPA:', lang);
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({
+                    type: 'LANGUAGE_CHANGE_FROM_IFRAME',
+                    lang: lang
+                }, '*');
+            }
+        };
+
 
         // 2) Сохраним координаты текущей точки карты (если указана)
         try {

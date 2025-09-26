@@ -222,6 +222,8 @@ function updateModalText(zoneNumber) {
         
         if (window.activeGeoMarker === 'tumski_cathedral') {
             section = 'tumski_cathedral';
+        } else if (window.activeGeoMarker === 'tumski_cathedral_2') {
+            section = 'tumski_cathedral_2';
         } else if (window.activeGeoMarker === 'tumski_most') {
             section = 'tumski_most';
         } else if (window.activeGeoMarker === 'katedra_koscielna') {
@@ -253,6 +255,7 @@ function updateModalText(zoneNumber) {
                             document.querySelector('.map-mark-area:hover') ||
                             document.querySelector('#tumski_most') ||
                             document.querySelector('#tumski_cathedral') ||
+                            document.querySelector('#tumski_cathedral_2') ||
                             document.querySelector('#ogrod_papieski') ||
                             document.querySelector('#national_museum') ||
                             document.querySelector('#odra') ||
@@ -267,6 +270,8 @@ function updateModalText(zoneNumber) {
             
             if (markerId === 'tumski_cathedral' || markerId === 'tumski_cathedral-text') {
                 section = 'tumski_cathedral';
+            } else if (markerId === 'tumski_cathedral_2' || markerId === 'tumski-cathedral-2-text') {
+                section = 'tumski_cathedral_2';
             } else if (markerId === 'tumski_most' || markerId === 'tumski_most-text') {
                 section = 'tumski_most';
             } else if (markerId === 'katedra_koscielna' || markerId === 'katedra_koscielna-text') {

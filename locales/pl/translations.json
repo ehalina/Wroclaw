@@ -12,7 +12,7 @@
       },
       "zone2": {
         "title": "",
-        "text": "W X-XI wieku wyspa stała się rezydencją pierwszej dynastii Piastów: drewniany zamek obrastał ziemnymi wałami, a kaplica św. Marcina, wzniesiona z kamienia, stopniowo stawała się symbolem siły pośród chwiejnego drewna. Do XII wieku wschodnia część Tumskiego już należała do biskupa, a pierwsza katedra zastąpiła skromny kościół, jakby cicho szeptając, że wyspa staje się miejscem, gdzie spotykają się władza i wiara."
+        "text": "W X–XI wieku wyspa stała się rezydencją pierwszej dynastii Piastów: drewniany zamek obrastał ziemnymi wałami, a kaplica św. Marcina, wzniesiona z kamienia, stopniowo stawała się symbolem siły pośród chwiejnego drewna. Do XII wieku wschodnia część Tumskiego już należała do biskupa, a pierwsza katedra zastąpiła skromny kościół, jakby cicho szeptając, że wyspa staje się miejscem, gdzie spotykają się władza i wiara."
       },
       "zone2-2": {
         "title": "Historia",
@@ -73,6 +73,43 @@
       }
     }
   },
+  "tumski_cathedral_2": {
+    "title": "Prezbiterium",
+    "book02": {
+      "zone1": {
+        "title": "Katedra św. Jana Chrzciciela",
+        "text": "Katedra św. Jana Chrzciciela we Wrocławiu wznosi się nad Odrą tak, jakby urodziła się tu jeszcze przed samym miastem. Jej wieże to nie tylko kamienne iglice, ale prawdziwe anteny do niebiańskich rozmów. I choć katedra znana jest jako arcydzieło gotyku, dla tych, którzy umieją widzieć nieco głębiej, zawsze była portalem między światem modlitw a światem tajemnic."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "Prezbiterium",
+        "text": "Chór katedry — sześcioprzęsłowy, surowo pionowy, jakby modlitwa wyciągnięta w kamieniu w górę. Tu każda kolumna to nie tylko architektoniczna podpora, ale jakby prośba: krucha i uparta jednocześnie. Konsole, wymyślone przez inżynierów lat 30. XX wieku, wyglądają prościej niż przystało starożytnej świątyni, ale właśnie dlatego jakby oddają hołd nowoczesności, która weszła w sojusz z wiecznością. Sklepienia chóru sześciodzielne, a ambulakrum przypomina o krzyżowo-żebrowym oddechu gotyku. Marmurowa posadzka podniesiona stopniami tak, że wydaje się, jakbyś wznosił się coraz wyżej nie tylko fizycznie, ale i po skali samej rzeczywistości. Właśnie tu kiedyś stał późnogotycki ołtarz 'Zaśnięcia Najświętszej Marii Panny' z 1522 roku — oszałamiający pentaptyk z Lubina, później podróżujący po Wrocławiu. Główny zaś ołtarz katedry od XVI wieku był manierystyczny, zbudowany za środki biskupa Andreasa Jerina — i, jak to bywa u starych świątyń, z czasem znikał, wracał, i w 2019 roku znowu zajął swoje miejsce, jakby nigdy nie opuszczał świątyni."
+      },
+      "zone2-2": {
+        "title": "Barokowe detale",
+        "text": "To, że w katedrze można odkryć masywne ławki parterowe z XVII wieku, przybyłe tu z kościoła św. Wincentego po wojnie, — wcale nie przypadek, ale logika dziwnej pamięci miasta: gdy jedno miejsce ginie, jego przedmioty szukają schronienia w drugim. Te ciężkie ławki prawie zasłaniają arkady i jakby szepczą, że nie wszystko w świątyni musi być lekkie i dążące w górę — czasami wiara wymaga ciężkich form. Witraże z okresu powojennego stworzyli polscy artyści — Zygmunt Acedański, Irena Nowakowska-Acedańska, Stanisław Penkalski i Antoni Michalak, i prowadzą swoje własne światowe dialogi z porannym słońcem, jakby na nowo składając kolorowe szklane Ewangelie."
+      },
+      "zone3-2": {
+        "title": "Nawy",
+        "text": "Nawa katedry zachowuje się znacznie spokojniej niż chór — przyjmuje estetykę ceglanej redukcyjnej gotyki: surowej, równej, prawie statycznej, jak człowiek umiejący milczeć. Sześć przęseł i jeszcze jedno między wieżami tworzy rytm, który od czasu do czasu nagle się przerywa, jakby mury kiedyś marzyły o transepcie, ale się rozmyśliły. Dziś nawa zadziwia swoim bezżebrowym sklepieniem, spadkobiercą renesansowych eksperymentów XVI wieku. Tu wiekowe rozwiązania sąsiadują z rezultatami powojennych renowacji, i jeśli się przysłuchać, można usłyszeć, jak spierają się różne epoki: co ważniejsze — surowość czy przestronność?"
+      },
+      "zone3": {
+        "title": "Kaplice",
+        "text": "Wokół katedry rozmieściło się całe konstelacje kaplic — każda ze swoim charakterem, jak oddzielni bohaterowie jednej wielkiej powieści. Kaplica św. Elżbiety, stworzona pod koniec XVII wieku z kopułą i freskami Andrzeja Kowalskiego, przechowuje nagrobek kardynała Fryderyka Hesji i jego popiersie, wykonane w warsztacie Berniniego. Obok — Kaplica św. Marii z XIV wieku, w której splatają się gotyckie sklepienie i barokowy ołtarz z kopią Częstochowskiej Bogurodzicy. Kaplica Ciała Chrystusa, wzniesiona przez Johanna Bernharda Fischera von Erlach w stylu wiedeńskiego baroku, przechowuje szczątki książęcych osobistości, w tym wnuczkę Jana III Sobieskiego — i jej ołtarz jakby śpiewa północy. W Kaplicy św. Jana Chrzciciela z XIV wieku kiedyś spoczywał biskup John Turzon, a z jego renesansowego mauzoleum dziś zachowała się tylko płyta z figurą. A Kaplica św. Kazimierza z XV wieku przechowuje imiona biskupów XX wieku na swoich ścianach, jakby wewnętrzną mapę kościelnej pamięci."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Pozostałe dzwony przechowują frazy z Ewangelii i psalmów o prośbach, poszukiwaniach i błogosławieństwie. Wszystkie razem brzmią tylko w szczególne momenty, jak ludzie umiejący zachować milczenie, ale jeśli już przemówią — to tak, że zadrży całe miasto."
+      },
+      "zone4-2": {
+        "title": "Dzwony",
+        "text": "Dziś w południowej wieży katedry wiszą cztery stalowe dzwony, i każdy ma swój głos — i własną modlitwę, wyrytą prosto na brązie. Największy, z cytatem z 130. psalmu, kiedyś złapał kulę podczas walk pod Lubaniem, i teraz dzwoni nieco z chrypką, jakby przypominał stare rany."
+      }
+    }
+  },
   "tumski_cathedral": {
     "title": "Katedra św. Jana Chrzciciela",
     "book02": {
@@ -90,7 +127,7 @@
       },
       "zone2-2": {
         "title": "Historia",
-        "text": "Na Ostrowie Tumskim katedra św. Jana Chrzciciela stoi tak długo, że wydaje się, że sama już zapomniała, ile razy się odradzała. Pierwszy drewniany kościół pojawił się tu już w X wieku — i teraz przypominają o nim tylko upiorne ślady w ziemi, które można zobaczyć tylko za pomocą sprytnego georadaru. Potem zastępowały go kościoły romańskie: jeden zawalił się podczas czeskiej inwazji, drugi nie wytrzymał czasu. I dopiero w XIII-XIV wieku na tym miejscu wyrósł obecny kamienny olbrzym — pierwsza naprawdę gotycka budowla na polskich ziemiach."
+        "text": "Na Ostrowie Tumskim katedra św. Jana Chrzciciela stoi tak długo, że wydaje się, że sama już zapomniała, ile razy się odradzała. Pierwszy drewniany kościół pojawił się tu już w X wieku — i teraz przypominają o nim tylko upiorne ślady w ziemi, które można zobaczyć tylko za pomocą sprytnego georadaru. Potem zastępowały go kościoły romańskie: jeden zawalił się podczas czeskiej inwazji, drugi nie wytrzymał czasu. I dopiero w XIII–XIV wieku na tym miejscu wyrósł obecny kamienny olbrzym — pierwsza naprawdę gotycka budowla na polskich ziemiach."
       },
       "zone3": {
         "title": "",
@@ -164,7 +201,7 @@
       },
       "zone2-2": {
         "title": "Historia",
-        "text": "Ten kościół narodził się z upartego pragnienia pojednania księcia Henryka IV Probusa i biskupa Tomasza II. Pod koniec XIII wieku obaj, zmęczeni wzajemnymi urazami, postanowili zbudować świątynię — żeby zadowolić Boga i pogodzić się ze sobą. Tak w 1288-1295 założono fundamenty, a do połowy XIV wieku, pod nadzorem mistrza Wilanda, mury już ciągnęły się ku niebu."
+        "text": "Ten kościół narodził się z upartego pragnienia pojednania księcia Henryka IV Probusa i biskupa Tomasza II. Pod koniec XIII wieku obaj, zmęczeni wzajemnymi urazami, postanowili zbudować świątynię — żeby zadowolić Boga i pogodzić się ze sobą. Tak w 1288–1295 założono fundamenty, a do połowy XIV wieku, pod nadzorem mistrza Wilanda, mury już ciągnęły się ku niebu."
       },
       "zone3": {
         "title": "",
@@ -221,12 +258,12 @@
       }
     }
   },
-  "ogrod_papieski": {
-    "title": "Ogród Papieskiego Wydziału Teologicznego",
+  "millennium_column": {
+    "title": "Kolumna Tysiąclecia",
     "book02": {
       "zone1": {
-        "title": "Ogród Papieskiego Wydziału Teologicznego",
-        "text": "W sercu Wrocławia, gdzie kamień spotyka się z zielenią, a historia z teraźniejszością, znajduje się miejsce szczególne — Ogród Papieskiego Wydziału Teologicznego. To nie tylko przestrzeń zielona, ale prawdziwy oaz spokoju w miejskim zgiełku, gdzie każdy krzew, każda ścieżka opowiada swoją historię. Tutaj czas płynie inaczej, a cisza ma swój własny głos."
+        "title": "Kolumna Tysiąclecia",
+        "text": "Kolumna Tysiąclecia — to nie tylko pomnik, ale kamienny hymn czasu, utrwalony w granicie i brązie. Stoi na Placu Katedralnym, jak strażnik, który jednocześnie wznosi się nad miastem i zlewa się z jego duchem, przypominając: 'Nie jesteś sam, Wrocław, jesteś częścią czegoś znacznie większego'."
       },
       "zone1-2": {
         "title": "",
@@ -234,27 +271,138 @@
       },
       "zone2": {
         "title": "",
-        "text": "Ogród powstał w miejscu, gdzie kiedyś znajdował się klasztor cysterski. Przez wieki przechodził różne transformacje, ale zawsze zachowywał swój duchowy charakter. W XVIII wieku, gdy Wrocław przeżywał okres rozkwitu, ogród stał się miejscem spotkań intelektualistów i teologów, którzy wśród zieleni szukali inspiracji do swoich rozważań."
+        "text": "Ciężki, jak wieczność, cylinder kolumny złoci się na słońcu. Zrobiony jest z czarnego i różowego granitu — kontrast, który jakby rysuje światło i cień jednocześnie, przypominając, że ludzkie tysiąclecie to nie tylko blask, ale i cienie. Na szczycie — brązowy Chrystus-Król, ukoronowany tiarą, patrzący w dół nie z arogancką próżnością, ale jak cichy świadek, 'wszechmocny, ale cierpliwy'."
       },
       "zone2-2": {
         "title": "Historia",
-        "text": "Pierwsze wzmianki o ogrodzie sięgają XIII wieku, gdy cystersi założyli tu swój klasztor. Z czasem miejsce to stało się centrum życia duchowego i intelektualnego Wrocławia. W XIX wieku ogród został przekształcony w nowoczesny park, zachowując jednak swój sakralny charakter i stając się miejscem kontemplacji i nauki."
+        "text": "Zamysł tej statuy należał do ojca Czesława Mazura, a ożywił ją rzeźbiarz Janusz Kucharski. Razem postawili pomnik, poświęcony tysiącleciu Wrocławskiego biskupstwa."
       },
       "zone3": {
         "title": "",
-        "text": "Dziś ogród to prawdziwy skarbiec przyrody w sercu miasta. Stare drzewa, które pamiętają czasy średniowiecza, sąsiadują z nowoczesnymi nasadzeniami. Wśród zieleni ukryte są rzeźby i pomniki, które opowiadają historię tego miejsca. Każda pora roku przynosi tu nowe kolory i zapachy, tworząc niepowtarzalną atmosferę spokoju i refleksji."
+        "text": "Łaciński napis na kolumnie brzmi uroczyście i tajemniczo, ale jeśli przetłumaczyć go ludzkimi słowami, sens staje się jaśniejszy: 'Duchowieństwo diecezjalne i zakonne Archidiecezji Wrocławskiej, pamiętające Chrystusa, Zbawiciela świata. Na tysiąclecie Wrocławskiej diecezji'. To nie tylko oficjalna formuła, ale ciche wyznanie wierności."
       },
       "zone3-2": {
-        "title": "Architektura krajobrazu",
-        "text": "Ogród zaprojektowano w stylu angielskim, z naturalnymi ścieżkami i malowniczymi zakątkami. Centralnym punktem jest stary platan, który od wieków daje cień wędrowcom i studentom. Wokół niego rozciągają się trawniki, klomby kwiatów i krzewów ozdobnych, tworząc harmonijną całość, która zachęca do spacerów i medytacji."
+        "title": "Architektura",
+        "text": "Czasami wydaje się, że kolumna rozmawia przez łaciński napis: Clerus Dioecesanus et Religiosus Archidioecesis Wratislaviensis Memor Christi, Redemptoris Mundi. Pro Millenio Dioecesis Wratislaviensis. — słowa, które brzmią jak modlitwa, jakby miasto śpiewało ją w unisonie."
       },
       "zone4": {
         "title": "",
-        "text": "W ogrodzie znajduje się również kaplica, która służy jako miejsce modlitwy i refleksji. Jej prosta, ale elegancka architektura doskonale wpisuje się w naturalne otoczenie. Wewnątrz panuje atmosfera skupienia i spokoju, a przez okna wpada miękkie światło, które tworzy niepowtarzalny nastrój. To miejsce, gdzie można znaleźć chwilę wytchnienia od codziennego zgiełku."
+        "text": "Jej styl — to nie modny awangard, ale neoklasyczna powściągliwość. Jak z książki: kolumna, statua, granit... Ale właśnie w tej prostocie kryje się siła. Nie próba zadziwienia, ale pragnienie bycia zauważonym, bycia tym, co pozostaje, gdy miasto ucicha."
+      },
+      "zone4-2": {
+        "title": "Symbolika",
+        "text": "Kto przechodzi obok, może pomyśleć: 'To po prostu wysoka statua'. Ale warto się przyjrzeć — stoi między świętymi murami Katedry a ulicami Wrocławia, jakby łącząc ziemskie i niebiańskie. Kardynał Edmund Szok ją poświęcił, i od tego czasu nie milczy, ale cicho zaprasza wszystkich — przyjdź, zatrzymaj się, przypomnij sobie, dlaczego tu jesteś."
+      }
+    }
+  },
+  "spiritual_seminary": {
+    "title": "Wyższe Seminarium Duchowne",
+    "book02": {
+      "zone1": {
+        "title": "Wyższe Seminarium Duchowne",
+        "text": "Wyższe Seminarium Duchowne Wrocławia — to nie tylko instytucja edukacyjna. To jak starożytna latarnia w burzy historii: założone w październiku 1565 roku z woli biskupów. Zgodnie ze surowymi postanowieniami Soboru Trydenckiego, stało się pierwszym tego rodzaju na Dolnym Śląsku."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "W 1656 roku seminarium wróciło do Wrocławia — jak wygnaniec, który zrozumiał, że jego dom jest tutaj, nawet jeśli dom jest zniszczony i finansowo wyczerpany. Ale duch nauki okazał się silniejszy od wszystkich przeciwności. Pojawił się nawet wydział filologiczny — bo słowa i sens są ważne, szczególnie gdy ratują dusze i umysły."
+      },
+      "zone2-2": {
+        "title": "Historia",
+        "text": "Jej pierwsze kroki — w kościelnej beztrosce: pierwszy rektor Teodor Lindan, wykłady w kościele św. Marcina. Ale już po dziesięciu latach zostało przeniesione do Nysy — jakby na wygnanie — żeby uchronić przed protestancką falą, która wtedy zalewała wszystko wokół. Jezuici prowadzili uczniów do duchowej skromności i dyscypliny, jak surowi pedagodzy, odrzucający urok postępu."
+      },
+      "zone3": {
+        "title": "Edukacja",
+        "text": "Życie seminarzystów wrzało: dzienne modlitwy, spowiedzi, obowiązkowa rekolekcja 8 dni po Wielkanocy lub przed wielkimi świętami — żeby dusza rozumiała, że nie jest dla siebie, ale dla służby. I czytanie Pisma — nie z poczucia obowiązku, ale z poszukiwania sensu. Wewnątrz tego reżimu kryło się dążenie do wewnętrznej uczciwości, jak lustro, przecinające każdą maskę."
+      },
+      "zone3-2": {
+        "title": "",
+        "text": "XIX wiek przyniósł strukturę. Od 1814 roku nauka stała się systematyczna: siedem semestrów, ustne egzaminy przed surową komisją — katedra, dyrektor, kanonik. Wszystko według regulaminu; tak, żebyś wiedział: to poważne, jesteś częścią tej tradycji. Ta zasada obowiązywała do 1888 roku, i przy tym nie pozbawiała studentów wolności wyboru wykładów i kształtowania swojego programu."
+      },
+      "zone4": {
+        "title": "",
+        "text": "W okresie powojennym seminarium wychowało ponad 1500 sług — kapłanów, biskupów, teologów. W 1968 roku otwarto Papieski Wydział Teologiczny, a od 1990 r. zaczął działać Annus Propedeuticus — szczególna formacja dla uczniów pierwszego roku, pierwsza w Polsce i druga w Europie. I oto jest — staruszka-seminarium z młodością w środku — nadal wychowuje tych, którzy nie tylko chwalą Boga, ale noszą Go w sobie."
+      },
+      "zone4-2": {
+        "title": "Wojna",
+        "text": "Wojna prawie zetarła to miejsce z powierzchni ziemi. Seminarzystów przenoszono do Krakowa, w nędzę i zniszczenia. Ale 8 października 1947 roku seminarium zmartwychwstało: 24 studentów, kazanie Bolesława Kominka, nadzieja, że przyszłość należy nie do tych, którzy się boją, ale do tych, którzy gotowi są iść naprzód, mimo wszystko."
+      }
+    }
+  },
+  "st_mary_church": {
+    "title": "Kościół Najświętszej Marii Panny na Piasku",
+    "book02": {
+      "zone1": {
+        "title": "Kościół Najświętszej Marii Panny na Piasku",
+        "text": "Kościół Najświętszej Marii Panny na Piasku (Kościół Najświętszej Marii Panny na Piasku) — to nie tylko świątynia, ale swego rodzaju zamrożone zaklęcie, wznoszące się nad rzeką Odrą w samym sercu Wyspy Piaskowej. Jego gotyckie iglice jakby rozmawiają z chmurami — i tak przekonująco, że cały Wrocław przyzwyczaił się ufać tej sylwetce, jakby to był jego drugi horyzont. Jednym służy jako miejsce modlitwy, innym — jako portal do minionych wieków, ale dla wszystkich pozostaje cichym cudem, który nigdzie się nie spieszy i czeka każdego u swoich drzwi."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Historia świątyni wygląda prawie jak kronika wytrzymałego bohatera. W XII wieku na wyspie stał pierwszy drewniany kościół — skromny, jak próbny szkic. W XIII zastąpiła go kamienna bazylika, już znacznie solidniejsza, z pretensją do wieczności. Do XIV wieku powstała gotycka forma, którą widzimy i dziś — subtelna, dążąca w górę. Od tego czasu kościół widział wojny, pożary, zniszczenia i — co ważniejsze — odbudowy. Ten cykl upadków i odrodzeń stał się dla niego czymś w rodzaju oddechu: za każdym razem ożywał z nową siłą, jakby demonstrując, że kamień może być upartszy od czasu."
+      },
+      "zone2-2": {
+        "title": "Historia",
+        "text": "Jest piękna legenda: jakby początek kościoła związany był z cudownym objawieniem się Dziewicy Marii na wyspie. Od tego czasu miejsce stało się centrum szczególnego kultu, dokąd wiek za wiekiem ciągnęli pielgrzymi z całego Śląska. I wydaje się, że jeśli tu przysłuchać się ciszy, wciąż przechowuje echa tych modlitw, nałożone na siebie, jak przezroczyste warstwy wieczności."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Architektura kościoła — to osobna magia. Trójnawowa bazylika z wysokimi sklepieniami i kolumnami stworzona jest po to, żeby człowiekowi stało się łatwo oddychać: jakby przestrzeń sama rozszerza się w tobie. Kolorowe witraże łapią promienie słoneczne i zamieniają je w szklane zaklęcia, które żyją własnym, niezależnym życiem. Ołtarze i rzeźby — to małe kroniki, skamieniałe opowieści, przenikliwe i milczące jednocześnie."
+      },
+      "zone3-2": {
+        "title": "Architektura",
+        "text": "Kościół — klasyczny przykład śląskiego gotyku, gdzie surowa monumentalność jakoś nie przeszkadza elegancji. Zachodnia fasada spotyka gości rzeźbionym portalem, każdy szczegół którego jakby stworzony w kalkulacji na to, że zatrzymasz się i zastanowisz: kto to wszystko wymyślił, i po co? Wieże z ostrymi iglicami widoczne są z daleka, jak latarnia dla wędrowców — i, być może, właśnie dla tych, którzy dawno szukają drogi nie tylko do miasta, ale i do siebie."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Teraz kościół żyje swoim zwykłym, ale jednak trochę magicznym życiem. W nim odbywają się nabożeństwa, do niego wchodzą turyści, i wewnątrz można spotkać szczególny miks: skupienie modlitwy i ciekawskie spojrzenia podróżników. Tu przechowywane są ikony, rzeźby i inne sztuki, każde z których jakby testuje odwiedzających na umiejętność widzenia nieco więcej, niż jest przedstawione."
       },
       "zone4-2": {
         "title": "Ciekawe fakty",
-        "text": "W ogrodzie rośnie jeden z najstarszych platanów w Polsce, który ma ponad 200 lat. Drzewo to jest pomnikiem przyrody i świadkiem wielu ważnych wydarzeń w historii Wrocławia. Pod jego koroną odbywały się spotkania intelektualistów, a dziś daje cień studentom i turystom, którzy szukają tu spokoju i inspiracji."
+        "text": "Tu znajduje się ikona Dziewicy Marii Piaskowej z XV wieku — jedna z najstarszych i najbardziej czczonych we Wrocławiu. Nazywają ją cudotwórczą, i to całkiem logicznie: przyciągać do siebie ludzi — to też szczególny cud. Jedni przychodzą szukać pocieszenia, inni nadziei, trzeci — potwierdzenia, że cuda w ogóle istnieją. I, według plotek, ikona żadnemu z nich nie odmawia."
+      }
+    }
+  },
+  "ogrod_papieski": {
+    "title": "Ogród Papieskiego Wydziału Teologicznego",
+    "book02": {
+      "zone1": {
+        "title": "Ogród Papieskiego Wydziału Teologicznego",
+        "text": "Jest we Wrocławiu miejsce, gdzie wszystko szepcze, nawet mury. Nazywa się Ogród Papieskiego Wydziału Teologicznego. Śmieszna nazwa, jakby od razu obiecywała zakurzone książki, nudnych profesorów i łacinę od rana do wieczora. A w rzeczywistości — to ogród, który dawno nauczył się żyć swoim życiem, i nikomu nie trzeba wyjaśniać, że jest znacznie mądrzejszy od jakichkolwiek traktatów."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Tu drzewa wiedzą więcej, niż się wydaje. Widziały studentów, którzy przychodzili 'powtórzyć wykłady', ale w rzeczywistości omawiali miłość i strach przed egzaminami. Słyszały kroki kapłanów, rozmawiających sami ze sobą, i cichy śmiech tych, którzy potajemnie przynieśli do ogrodu butelkę wina. Jeśli długo stać pod platanem w kącie, można rozróżnić w szelestie liści coś w rodzaju drwiny: 'No co, znowu przyszedłeś po radę?'"
+      },
+      "zone2-2": {
+        "title": "Historia",
+        "text": "Historia ogrodu długa i wielowarstwowa. Kiedyś był tu surowy klasztorny porządek: rabaty po linii, krzewy według statutu. Ale lata minęły, i ogród stał się mądrzejszy. Teraz nie sprzeciwia się lekkiej anarchii: trawki rosną tam, gdzie im się podoba, ptaki urządzają koncerty bez harmonogramu. I wszystko to — znacznie szczerzej niż jakakolwiek symfonia z nut."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Oczywiście, ludzie próbują go poprawiać. Podcinają krzewy, układają ścieżki, ustawiają ławki. Ale ogród udaje, że się zgadza. W głębi pozostaje niezależny i zawsze przechowuje zakątki, dokąd ręka ogrodnika nie sięgnie. To jego małe upór, przypomnienie: 'Nie myśl, że zostałem stworzony dla twojego komfortu'."
+      },
+      "zone3-2": {
+        "title": "",
+        "text": "Tu czas zachowuje się dziwnie. Można wejść w dzień, z myślami o sprawach i terminach, a wyjść już o zmierzchu, nie zauważając, gdzie podziały się godziny. A można odwrotnie: wejść na minutę, a przy wyjściu okaże się, że minęło tylko trzydzieści sekund, chociaż wewnątrz zdążyłeś omówić z sobą połowę życia. Prawdopodobnie ogród ma własny kalendarz, i nie jest obowiązany pokrywać się z ludzkim."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Mówią, że w tym ogrodzie łatwiej się modlić. Nawet jeśli jesteś sceptykiem, który wierzy co najwyżej w sygnał internetowy i kawę rano. Tu modlitwy brzmią jakoś naturalnie: jakbyś nie prosił, ale po prostu dzielił się. Ogród nie obiecuje cudów, tylko kiwa: 'Słyszałem'. I tego, dziwnym sposobem, wystarczy."
+      },
+      "zone4-2": {
+        "title": "",
+        "text": "Taki jest — Ogród Papieskiego Wydziału Teologicznego. Miejsce, gdzie religia i przyroda, hałas studentów i cisza starych drzew, surowość i anarchia splatają się w jeden kłębek. Tu można poczuć się uczestnikiem wielkiego spektaklu, gdzie wydaje się, że jesteś widzem, ale cały czas podejrzewasz, że dawno już otrzymałeś rolę. I ogród czeka, kiedy zaczniesz grać."
       }
     }
   },
@@ -292,6 +440,8 @@
   "map.kapitulna": "Ulica Kapitulna",
   "quest": {
     "title1": "Quest 1: Znajdź wszystkie tajemnice Ostrowa Tumskiego",
+    "expectation": "Oczekiwanie",
+    "reality": "Rzeczywistość",
     "intro": "Na strychu opuszczonego domu odkryto akwarele. Kilkadziesiąt. Kartki są zakurzone, tu i tam podgryzione przez czas lub myszy (nie wiem, który z nich był staranniejszy), ale kolory wciąż żyją — takie, że w gardle łaskocze od zapachu deszczu na ciepłym kamieniu, jeśli patrzy się za długo. \n\nAutor? Nieznany. Podpis nieczytelny. Może to imię. A może — współrzędne innej rzeczywistości. \n\nNa obrazach są miejsca. Ulice, ludzie, okna. Samotny latarnik przy kolumnie. Wieża z ptakami na dachu. Wszystko jest dziwnie znajome. Jakby już gdzieś istniało. We śnie? W książce? W tym życiu, o którym zapomniano mi opowiedzieć? \n\nAle teraz z jakiegoś powodu muszę je znaleźć. Wszystkie. Zobaczyć w rzeczywistości. \n\nChociaż kto wie, co naprawdę jest rzeczywiste?",
     "task1": "Tajemniczy lew strzegący Kościoła",
     "task2": "Zamki miłości",
@@ -304,13 +454,145 @@
     "task9": "Czarna kluska",
     "task10": "Wejście do ogrodu botanicznego",
     "task11": "Ogród Papieskiego Wydziału Teologicznego",
-    "task12": "Statua Marii Magdaleny w ogrodzie papieskiego wydziału teologicznego"
+    "task12": "Statua Marii Magdaleny",
+    "task13": "Platan",
+    "back1": " ",
+    "back2": "Na Moście Tumskim we Wrocławiu zakochani przez długie lata zostawiali ciężkie żelazne wyznania miłości. W 2020 roku zdjęto je z mostu i nakazano zachować. Całe 12 ton miłości. Miasto wprowadziło dziesięcioletni zakaz obciążania mostu kłódkami. Ale miłość zawsze zwycięża. Dlatego wkrótce na sąsiedniej nabrzeżnej zabłysły świeże wyznania.",
+    "back3": "Ze wszystkich świętych tylko u Dziewicy Marii i Jana Nepomucena w nimbie błyszczą gwiazdy. Jakby zabrał ze sobą kawałek nocnego nieba i teraz chodzi z nim, wywołując u pozostałych świętych lekką zazdrość i zdziwienie. 20 marca 1393 roku Jana Nepomucena wyślą w lodowate wody Wełtawy — nie z własnej woli, oczywiście, ale na rozkaz króla Wacława IV. Kapłan, który odmówił wyjawienia tajemnicy spowiedzi królewskiej małżonki, zapłacił za milczenie życiem. Od tego czasu katolicy czczą go jako obrońcę przed oszczerstwem i powodziami. Dlatego nie dziwi, że jego kamienne i brązowe kopie stoją na mostach i wyspach, jak strażnicy, pilnujący, żeby rzeki i ludzie zachowywali się przyzwoicie.",
+    "back4": "To — najstarszy z zachowanych pomników Wrocławia, powstały w 1694 roku. Tworzony był, jak zapewniają, z inspiracji jezuitów i miał uosabiać triumf katolicyzmu nad protestantami. Imię mistrza, który wyrzeźbił figury z piaskowca, zaginęło w nieznanych, chociaż znawcy skłonni są przypisywać pracę Holendrowi o imieniu Sulpicjusz Gode.",
+    "back5": "Z wysokości platformy widokowej wrocławskiej katedry miasto otwiera się zupełnie inaczej: czerwone dachy błyskają na słońcu, Odra migocze leniwymi wstążkami. Tu szczególnie jasno rozumiesz, że Wrocław — to nie tylko miasto, ale żywe serce, które bije w takt wiatru i dzwonów. I najbardziej urocze w tej wycieczce w niebiosa — to, że do najwspanialszego widoku prowadzi winda, ukryta w starożytnej wieży. Sama gotycka architektura zdecydowała podarować nowoczesności małe cudo: możliwość wzlecieć w górę, nie tracąc oddechu na setkach stopni. I od razu znaleźć się twarzą w twarz z niebem.",
+    "back6": "W ścianie wrocławskiej katedry utknął pocisk z czasów II wojny światowej — rozbrojony, ale pozostawiony na widoku, milczącym przypomnieniem. Sterczy z muru, jak odłamek obcej wściekłości, i jednocześnie jak ostrzeżenie: wszystko, co kiedyś niszczyło, może pewnego dnia stać się po prostu częścią ściany.",
+    "back7": "Henryk, biedny czeladnik, zakochał się w Barbarze — córce znakomitego jubilera. Oświadczył się i otrzymał odmowę: za mało złota, za dużo uczuć. W wściekłości podpalił dom obrażającego i wdrapał się na dach katedry, żeby patrzeć, jak wszystko płonie. Ale niebiosa nie pochwaliły spektaklu, i Henryk zamienił się w kamień. Teraz patrzy ze ściany na wszystkich i milczy.",
+    "back8": "Latarnik Ostrowa Tumskiego — żywa legenda Wrocławia, tajemniczy strażnik światła, który każdego wieczoru zapala stare gazowe latarnie. Pojawia się na wyspiarskich uliczkach ściśle o godzinie zachodu słońca — nie wcześniej, nie później, jakby słuchał tajemnej umowy z samym niebem. Z tego powodu spotkać go niełatwo: wystarczy się spóźnić choć o kilka minut, i wydaje się, jakby latarnik w ogóle był owocem wyobraźni. W jego kroku — niespieszna pewność, w ruchach — tajemnicza gracja, przez co każdy, komu szczęście ujrzeć ten obrzęd, mimowolnie odczuwa: tradycja tu nie jest muzealną rzadkością, ale oddechem samego miasta, zachowującym ciepło minionych wieków.",
+    "back9": "Obietnica — to pamięć o przyszłości",
+    "back10": "Ogród Botaniczny Wrocławia — to wcale nie ogród, ale sprytny portal do innych światów, zamaskowany pod niewinnym zbiorem roślin. Wystarczy przekroczyć jego bramy — i jakby znajdujesz się w bibliotece, gdzie zamiast książek rosną drzewa, a strony przewracają się szelestem liści, i każdy krzew próbuje opowiedzieć ci historię o tych miejscach, gdzie woda płynie pod prąd, a kamienie umieją kwitnąć. Tu można błądzić godzinami, zapewniając siebie, że po prostu patrzysz na rośliny i podziwiasz krajobraz, chociaż w rzeczywistości uczestniczysz w powolnej i ostrożnej rozmowie z Wszechświatem, który z jakiegoś powodu wybrał właśnie ten zakątek Wrocławia, żeby otworzyć się trochę natarczywemu odwiedzającemu.",
+    "back11": "W samym ukrytym zakątku Ostrowa Tumskiego kryje się ogród, gdzie czas płynie nie według zegarów, ale według oddechu wody i szelestu liści. To nie tylko zakątek przyrody — to miejsce, gdzie historia i wiara nabierają kształtu w zielonych zakrętach i starożytnych kamieniach. Ten cichy zakątek — żywy pomnik, przechowujący w sobie oddech wieków i ciszę modlitwy.",
+    "back12": "Statua Marii Magdaleny stoi tak, jakby sama wybierała, kogo zauważyć, a kogo — nie. W dzień jakby tonie w zieleni i światłocieniu, udając zwykłą ozdobę, a wieczorem ożywa w półmroku: kamienne fałdy jej ubrania zamieniają się w ciche fale, a spojrzenie, skierowane gdzieś przez drzewa, staje się prawie ludzkim.",
+    "back13": "Platan na Ostrowie Tumskim — to nie drzewo, ale prawdziwa katedra bez ścian i witraży, tylko z gałęziami, ciągnącymi się ku niebu. Jego pstry, jakby rozebrany do naga, pień wydaje się żywym ciałem, zrzucającym lodową skórę, a korona — bujną kopułą, gdzie zawsze brzmi niema służba wiatru i ptaków. Mówią, że kiedyś tu płynęła rzeka, ale teraz jej ramiona zasypane, i na ich miejscu rośnie to cudo, którego obwód dawno przekroczył pięć metrów. I wydaje się, że Platan przechowuje w sobie nie tylko soki ziemi, ale i wspomnienia o wodzie, która kiedyś płynęła pod jego korzeniami.",
+    "clearTooltip": "Wyczyść wyniki questu",
+    "clearConfirm": "Czy na pewno chcesz wyczyścić wyniki questu?",
+    "clearConfirmYes": "Tak",
+    "clearConfirmNo": "Nie"
+  },
+  "national_museum": {
+    "title": "Muzeum Narodowe",
+    "book02": {
+      "zone1": {
+        "title": "Muzeum Narodowe",
+        "text": "Muzeum Narodowe Wrocławia udaje dom dla obrazów i rzeźb. W rzeczywistości dawno stało się samodzielnym bohaterem — z ceglanymi bokami, oplecionymi bluszczem, i z tym cierpliwym wyrazem twarzy, jaki mają starzy mędrcy. Stoi sobie na brzegu Odry, obserwuje przechodniów i czasami wzdycha, jakby chciało powiedzieć: 'Nawet nie wyobrażacie sobie, co pamiętam'."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Cegły jego ścian — jak strony dziennika. Każdy kamień zna tysiąc historii: o wojnach i spokojnych dniach, o restauratorach z pędzlami, o dzieciach, które po raz pierwszy zobaczyły tu rycerskie zbroje i postanowiły zostać wielkimi bohaterami. A bluszcz — to jego włosy, zawsze trochę rozczochrane, zawsze młode. Ludzie myślą, że muzeum się starzeje, ale to oszustwo: po prostu powoli rośnie, jak drzewo."
+      },
+      "zone2-2": {
+        "title": "Historia",
+        "text": "Historia muzeum niełatwa: przetrwało wojny, zmianę władzy, przemiany epok. Pamięta, jak próbowano je zniszczyć, i jak je znowu podnoszono. To zahartowało jego charakter: teraz patrzy na wszystkie ludzkie namiętności z miękką ironią. 'Ach, znowu kłócicie się o politykę? No-no. Lepiej podziwiajmy gobelin z XVII wieku, on i tak jest mądrzejszy od waszych debat'."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Wewnątrz ma szczególną magię. Obrazy wiszą jakby spokojnie, ale w rzeczywistości szepczą do siebie. Rzeźby udają, że są kamienne, ale o zachodzie ożywają — lekko zmieniają pozę, żeby nie zdrętwieć. I każdy odwiedzający, wchodząc tu, mimowolnie staje się częścią tego tajnego spektaklu: czasami widzem, czasami aktorem, a czasami nawet eksponatem."
+      },
+      "zone3-2": {
+        "title": "Kolekcje",
+        "text": "A jeszcze muzeum ma tajemną zdolność — umie przechowywać cudze wspomnienia. Wystarczy człowiekowi zatrzymać się przy witrynie nieco dłużej niż zwykle — i muzeum ostrożnie chowa w swojej ceglanej pamięci jego myśli, emocje, zapach perfum czy skrzypienie butów. Potem oddaje je z powrotem, gdy człowiek przychodzi po latach: 'Patrz, zachowałem to, co sam już zapomniałeś'."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Odra, która płynie nieopodal, żartuje z niego: 'Ty, bracie, zbyt poważny'. A muzeum tylko uśmiecha się w odpowiedzi: 'Ale umiem przechowywać. A ty wszystko nosisz i nosisz'. Ich rozmowy można usłyszeć wieczorem, jeśli zatrzymać się na nabrzeżnej: jeden pluska, drugi skrzypi oknami, i obaj zadowoleni ze swojej roli."
+      },
+      "zone4-2": {
+        "title": "Ciekawe fakty",
+        "text": "Tak stoi Muzeum Narodowe Wrocławia — piękne, oplecione bluszczem, trochę szydercze i bardzo mądre. Patrzy na nas i cierpliwie czeka, kiedy przestaniemy biegać i choć na minutę zatrzymamy się obok. Bo właśnie w takie minuty szepcze swoje najciekawsze historie — ale tylko tym, którzy gotowi są słuchać."
+      }
+    }
+  },
+  "odra": {
+    "title": "Odra",
+    "book02": {
+      "zone1": {
+        "title": "Odra",
+        "text": "Wiesz, co zabawne? Ja niby jestem miastem, kamieniem, cegłą, szkłem i innymi ludzkimi wymysłami. A mimo to — bez niej, Odry, mnie jakby w ogóle nie ma. Ona tu płynie, szemrze, to leniwie, to gniewnie, i każdego dnia przypomina mi, że wcale nie jestem gospodarzem, ale tylko lokatorem na jej brzegach. Choć ludzie są pewni, że to oni wymyślili Wrocław, ale szczerze mówiąc — mnie wymyśliła rzeka."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Ona uparta, moja Odra. Nosiła łodzie jeszcze wtedy, gdy tu nie było mostów, i topiła wioski, gdy miejscowi zbyt się rozluźnili. Pamiętam — nie własnymi oczami, oczywiście, ale pamięcią kamieni — jak jej rozlewy zamieniały ulice w kanały. Ludzie uciekali, klęli, ratowali sprzęt na wozach, a ona śmiała się, wznosząc mętne fale. W takie chwile czułem się nie miastem, ale kruchej barką."
+      },
+      "zone2-2": {
+        "title": "Historia",
+        "text": "Historia? O, tak! Mamy wspólną i długą. Wikingowie chodzili po jej falach, kupcy ciągnęli karawanami, królowie i książęta budowali mosty, żeby udowodnić: 'Oto, jesteśmy silniejsi od żywiołu'. Ha! Odra pozwalała im tak myśleć, ale od czasu do czasu pokazywała zęby — żeby nie zapomnieli, kto tu gospodarz."
+      },
+      "zone3": {
+        "title": "Pokonać żywioł",
+        "text": "A ludzie… uparte stworzenia. Zbudowali tamy, kanały, śluzy. Rozciągnęli wokół mnie cały system hydrotechniczny. Teraz mamy regulowane poziomy, zbiorniki i całe plany ochrony przed kolejnym 'apokalipsą'. Odra ich toleruje, kiwa — mówi, dobrze, dobrze, żyjmy w zgodzie. Szanuje intelekt."
+      },
+      "zone3-2": {
+        "title": "Powodzie",
+        "text": "Powódź 1997 roku… ach, jak zapamiętałem ten zły lipiec. Stałem po pas w wodzie, mosty drżały, piwnice utonęły, ulice zamieniły się w brudne strumienie. Odra zdecydowała, że czas przypomnieć mi, który z nas starszy. Ludzie potem nazwali to 'powodzią tysiąclecia', chociaż ja wiem — to tylko jeden z jej kaprysów. Ona na pewno nie liczy czasu ludzkimi kalendarzami."
+      },
+      "zone4": {
+        "title": "",
+        "text": "Tak żyjemy: ja — Wrocław, miasto, które niby stoi na ziemi, ale w rzeczywistości trzyma się na wodzie. Ona — Odra, rzeka, która niby płynie obok, ale w rzeczywistości płynie przeze mnie, przez każdą uliczkę, każdy kamień i każdą historię. I wiecie, co najbardziej zadziwiające? Nawet lubię być jej zakładnikiem. Bo być zakładnikiem piękna wcale nie jest strasznie."
+      },
+      "zone4-2": {
+        "title": "Piękno",
+        "text": "I mimo to… ją kocham. Bez jej srebrnych zakrętów byłbym szary i ponury. Wszystkie te wyspy i mosty — moja duma. Ilu artystów malowało jej brzegi, ilu studentów całowało się na jej nabrzeżnych, ilu muzyków słuchało plusku wody zamiast metronomu. Odra umie być nie tylko groźna, ale i czuła, prawie matczyna."
+      }
+    }
+  },
+  "kleck_gate": {
+    "title": "Brama Kluskowa",
+    "book02": {
+      "zone1": {
+        "title": "Brama Kluskowa",
+        "text": "Brama Kluskowa — to nie tylko łuk między historycznymi budynkami, ale próg, przez który przechodzi nie tyle ciało, ile dusza. Legenda — oto prawdziwy klucz, który otwiera ich sens. Bo co to za brama bez historii o Agnieszce, lepiącej najlepsze kluski we Wrocławiu?"
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Pewnego razu Konrad wracał z jarmarku, gdzie sprzedał całą swoją ceramikę, oprócz jednej jedynej miski. Głód i zmęczenie waliły go z nóg. Przysiadł przy miejskiej bramie, położył obok niesprzedaną miskę i zasnął. I tu przyśniła mu się Agnieszka: żywa, jasna, taka, jaką ją pamiętał. Obiecała karmić go i po śmierci — każdego dnia świeżą miską klusek. Ale pod jednym warunkiem: ostatnią kluskę Konrad musiał zostawić nietkniętą."
+      },
+      "zone2-2": {
+        "title": "Legenda",
+        "text": "Żyli sobie we Wrocławiu Konrad i Agnieszka. Konrad był znakomitym garncarzem, umiejącym obchodzić się z gliną tak, jakby sama prosiła, żeby zamienić się w dzban. Agnieszka zaś gotowała kluski — takie smaczne, że spróbowawszy raz, człowiek już nigdy nie wierzył w jedzenie bez duszy. Ale pewnego razu Agnieszka zachorowała, i wkrótce jej nie stało. Konrad z żalu przestał pić i jeść. Litościwe przyjaciółki Agnieszki nosiły mu przysmaki, ale wszystko na próżno: po jej kluskach świat wydawał się bez smaku."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Ale bieda w tym, że głód umie szeptać głośniej niż jakiekolwiek obietnice. Konrad patrzył na tę ostatnią kluskę, i serce w nim miotało się: 'A co, jeśli Agnieszka zlituje się nade mną? Co, jeśli wybaczy? Przecież tylko jedna…' Zdecydował się. Wyciągnął rękę, chwycił kluskę — i zaraz wyślizgnęła się z palców, jakby żywa."
+      },
+      "zone3-2": {
+        "title": "",
+        "text": "Obudził się — i nie uwierzył oczom. W misce, przy jego ręce, leżały najprawdziwsze kluski Agnieszki, jeszcze ciepłe, z tym samym aromatem, który uważał za stracony na zawsze. Łzy wdzięczności bryznęły mu z oczu. Konrad jadł i nie mógł się nasycić, aż doszedł do ostatniej. Jej, jak obiecał, zostawił."
+      },
+      "zone4": {
+        "title": "",
+        "text": "I oto już wieki minęły, a kamienna kluska wciąż tak samo leży na bramie. Mieszczanie patrzą na nią i opowiadają tę historię nowym pokoleniom. Od tego czasu bramę nazywają Kluskową, żeby nie zapomnieć: cuda zawsze wymagają wierności słowu, i wystarczy raz ulec słabości — nawet miłość może zamienić się w kamień."
+      },
+      "zone4-2": {
+        "title": "",
+        "text": "Chwycił ją znowu — a ona znowu wywinęła się i skoczyła prosto na skrzydło bramy. Konrad się zmieszał, potem w rozpaczy wlazł za nią w górę, czepiając się kamienia, jakby słomki. Ale tu stało się niemożliwe: kluska skamieniała, zamieniła się w twardy kamień, na śmierć przyrosły do bramy. Od tego dnia Agnieszka już nie przychodziła do niego we śnie. Ani jednej miski klusek Konrad już nie zobaczył. Jedzenie znowu stało się bez smaku, jak i samo życie. Miasto współczuło, ale nikt nie mógł przywrócić mu magicznej więzi."
+      }
+    }
   },
   "music": {
     "hint": "Kliknij gdziekolwiek, żeby uruchomić dźwięki",
-    "enable_sound_hint": "Włącz dźwięki"
+    "enable_sound_hint": "Włącz dźwięki",
+    "audio_unlock_text": "Kliknij, aby włączyć muzykę"
   },
   "animation": {
     "hint": "Aby wrócić do animacji, kliknij dwukrotnie w wolne miejsce na ekranie"
-  }
+  },
+  "expectation": "Oczekiwanie",
+  "reality": ""
 } 

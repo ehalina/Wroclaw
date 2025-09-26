@@ -73,6 +73,43 @@
       }
     }
   },
+  "tumski_cathedral_2": {
+    "title": "Kathedrale des Heiligen Johannes des Täufers 2",
+    "book02": {
+      "zone1": {
+        "title": "Kathedrale des Heiligen Johannes des Täufers 2",
+        "text": "Dies ist die zweite Kathedrale des Heiligen Johannes des Täufers auf der Tumski-Insel. In einer späteren Zeit erbaut, stellt sie ein einzigartiges Beispiel der Architektur dar, das gotische und Renaissance-Elemente kombiniert. Ihre Fassade ist mit exquisiten Skulpturen und Basreliefs geschmückt, die die Geschichte der Stadt und ihrer Schutzpatrone erzählen."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Die Innenausstattung der Kathedrale ist von ihrer Pracht beeindruckend. Der Altar ist aus seltenen Holzarten gefertigt und mit goldenen Elementen verziert. Die Glasmalereien schaffen ein einzigartiges Lichtspiel, das die Steinwände in verschiedenen Schattierungen färbt. Besondere Aufmerksamkeit zieht die Kanzel auf sich, die im Barockstil mit eleganten Schnitzereien gefertigt ist."
+      },
+      "zone2-2": {
+        "title": "Geschichte",
+        "text": "Die Kathedrale wurde im 16. Jahrhundert als Ergänzung zum Haupttempel erbaut. Ursprünglich diente sie als Ort für besondere Zeremonien und feierliche Gottesdienste. Im Laufe der Jahrhunderte wurde das Gebäude wiederholt umgebaut und restauriert, wobei das ursprüngliche architektonische Konzept beibehalten wurde."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Besonders wertvoll ist die Orgel, die im 18. Jahrhundert in der Kathedrale installiert wurde. Ihr Klang zeichnet sich durch außergewöhnliche Reinheit und Tiefe aus. Viele berühmte Musiker traten hier auf und bewunderten die akustischen Eigenschaften des Raumes. Die Orgel wird noch heute für Konzerte und feierliche Gottesdienste verwendet."
+      },
+      "zone3-2": {
+        "title": "Architektur",
+        "text": "Die Architektur der Kathedrale stellt eine harmonische Kombination aus gotischen und Renaissance-Elementen dar. Die Fassade ist mit exquisiten Portalen mit Basreliefs geschmückt, die Szenen aus dem Leben der Heiligen darstellen. Die Türme der Kathedrale sind mit Türmen gekrönt, die von weitem sichtbar sind und als Orientierungspunkte für die Stadtbewohner dienen."
+      },
+      "zone4": {
+        "title": "Moderne Zeit",
+        "text": "Heute dient die Kathedrale weiterhin als Ort der Anbetung und kulturelles Zentrum. Hier finden regelmäßig Gottesdienste, Orgelmusikkonzerte und Führungen für Touristen statt. Die Kathedrale ist ein wichtiger Teil des kulturellen Erbes von Breslau und ein Symbol des spirituellen Lebens der Stadt."
+      },
+      "zone4-2": {
+        "title": "Interessante Fakten",
+        "text": "Die Kathedrale beherbergt eine einzigartige Sammlung religiöser Artefakte, darunter antike Ikonen, Kirchengeräte und Manuskripte. Besonders wertvoll ist die Bibliothek, in der seltene Bücher und Dokumente zur Geschichte der Stadt und Kirche gesammelt sind."
+      }
+    }
+  },
   "tumski_cathedral": {
     "title": "Kathedrale des Heiligen Johannes des Täufers",
     "book02": {
@@ -271,7 +308,8 @@
   },
   "music": {
     "hint": "Klicke irgendwo, um die Klänge zu starten",
-    "enable_sound_hint": "Töne aktivieren"
+    "enable_sound_hint": "Töne aktivieren",
+    "audio_unlock_text": "Klicken Sie, um Musik zu aktivieren"
   },
   "animation": {
     "hint": "Um zur Animation zurückzukehren, doppelklicke auf einen freien Bereich des Bildschirms"

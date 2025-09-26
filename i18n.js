@@ -29,8 +29,11 @@ function t(key) {
     // Используем переводы из window.i18n.translations, если они есть
     const currentTranslations = window.i18n ? window.i18n.translations : translations;
     
+    console.log('🌐 Ищем перевод для ключа:', key, 'в переводах:', currentTranslations ? 'загружены' : 'не загружены');
+    
     // Сначала ищем плоский ключ
     if (currentTranslations && currentTranslations.hasOwnProperty(key)) {
+        console.log('🌐 Найден плоский ключ:', key, '->', currentTranslations[key]);
         return currentTranslations[key];
     }
     // Если не найдено — ищем вложенный ключ
@@ -40,25 +43,63 @@ function t(key) {
         if (result && result[k]) {
             result = result[k];
         } else {
+            console.log('🌐 Ключ не найден:', key, 'возвращаем ключ как есть');
             return key;
         }
     }
+    console.log('🌐 Найден вложенный ключ:', key, '->', result);
     return result;
 }
 
 // Функция для смены языка
 async function changeLang(lang) {
+    console.log('🌐 Смена языка на:', lang);
     await loadTranslations(lang);
+    console.log('🌐 Переводы загружены, обновляем контент...');
     updatePageContent();
+    console.log('🌐 Контент обновлен');
+    
+    // Отправляем сообщение в SPA, если мы находимся в iframe
+    if (window.sendLanguageChangeToSPA && typeof window.sendLanguageChangeToSPA === 'function') {
+        window.sendLanguageChangeToSPA(lang);
+    }
 }
 
 // Функция для обновления контента на странице
 function updatePageContent() {
+    console.log('🌐 Начинаем обновление контента страницы...');
+    
     // Обновляем все элементы с атрибутом data-i18n
-    document.querySelectorAll('[data-i18n]').forEach(element => {
+    const elementsWithI18n = document.querySelectorAll('[data-i18n]');
+    console.log('🌐 Найдено элементов с data-i18n:', elementsWithI18n.length);
+    
+    elementsWithI18n.forEach(element => {
         const key = element.getAttribute('data-i18n');
-                    element.innerHTML = t(key);
+        const newText = t(key);
+        element.innerHTML = newText;
+        console.log('🌐 Обновлен элемент:', key, '->', newText);
     });
+
+    // Специально обновляем кнопку разблокировки аудио
+    const audioUnlockText = document.querySelector('.audio-unlock-text[data-i18n]');
+    if (audioUnlockText) {
+        const newText = t('music.audio_unlock_text');
+        audioUnlockText.innerHTML = newText;
+        console.log('🌐 Обновлен текст кнопки разблокировки аудио:', newText);
+    } else {
+        // Дополнительная проверка: ищем кнопку по ID
+        const audioUnlockButton = document.getElementById('audioUnlockButton');
+        if (audioUnlockButton) {
+            const textElement = audioUnlockButton.querySelector('.audio-unlock-text');
+            if (textElement) {
+                const newText = t('music.audio_unlock_text');
+                textElement.innerHTML = newText;
+                console.log('🌐 Обновлен текст кнопки разблокировки аудио (по ID):', newText);
+            }
+        } else {
+            console.log('🌐 Кнопка разблокировки аудио не найдена на странице');
+        }
+    }
 
     // Обновляем заголовки маркеров
     const mapMarkWyspa = document.getElementById('tumska_wyspa');

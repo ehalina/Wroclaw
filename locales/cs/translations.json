@@ -73,6 +73,43 @@
       }
     }
   },
+  "tumski_cathedral_2": {
+    "title": "Katedrála sv. Jana Křtitele 2",
+    "book02": {
+      "zone1": {
+        "title": "Katedrála sv. Jana Křtitele 2",
+        "text": "Toto je druhá katedrála sv. Jana Křtitele na Tumském ostrově. Postavená v pozdějším období, představuje unikátní příklad architektury kombinující gotické a renesanční prvky. Její fasáda je ozdobena rafinovanými sochami a basreliéfy vyprávějícími historii města a jeho svatých patronů."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "Vnitřní výzdoba katedrály je ohromující svou nádherou. Oltář je vyroben z vzácných druhů dřeva a ozdoben zlatými prvky. Vitráže vytvářejí jedinečnou hru světla, barvící kamenné zdi v různých odstínech. Zvláštní pozornost přitahuje kazatelna vyrobená v barokním stylu s elegantními řezbami."
+      },
+      "zone2-2": {
+        "title": "Historie",
+        "text": "Katedrála byla postavena v 16. století jako doplněk k hlavnímu chrámu. Původně sloužila jako místo pro konání zvláštních ceremonií a slavnostních bohoslužeb. V průběhu staletí byla budova opakovaně přestavována a restaurována, přičemž si zachovala svou původní architektonickou koncepci."
+      },
+      "zone3": {
+        "title": "",
+        "text": "Zvláštní hodnotu představuje varhany instalované v katedrále v 18. století. Jejich zvuk se vyznačuje výjimečnou čistotou a hloubkou. Mnoho známých hudebníků zde vystupovalo, obdivujíc akustické vlastnosti prostoru. Varhany se dodnes používají pro koncerty a slavnostní bohoslužby."
+      },
+      "zone3-2": {
+        "title": "Architektura",
+        "text": "Architektura katedrály představuje harmonické spojení gotických a renesančních prvků. Fasáda je ozdobena rafinovanými portály s basreliéfy zobrazujícími scény ze života svatých. Věže katedrály jsou zakončeny věžičkami, které jsou viditelné z dálky a slouží jako orientační body pro obyvatele města."
+      },
+      "zone4": {
+        "title": "Současnost",
+        "text": "Dnes katedrála nadále slouží jako místo uctívání a kulturní centrum. Pravidelně se zde konají bohoslužby, koncerty varhanní hudby a prohlídky pro turisty. Katedrála je důležitou součástí kulturního dědictví Vratislavi a symbolem duchovního života města."
+      },
+      "zone4-2": {
+        "title": "Zajímavé fakty",
+        "text": "V katedrále je uložena unikátní sbírka náboženských artefaktů, včetně starých ikon, církevních předmětů a rukopisů. Zvláštní hodnotu představuje knihovna, ve které jsou shromážděny vzácné knihy a dokumenty související s historií města a církve."
+      }
+    }
+  },
   "tumski_cathedral": {
     "title": "Katedrála sv. Jana Křtitele",
     "book02": {
@@ -271,7 +308,8 @@
   },
   "music": {
     "hint": "Klikni kdekoli pro spuštění zvuků",
-    "enable_sound_hint": "Zapnout zvuky"
+    "enable_sound_hint": "Zapnout zvuky",
+    "audio_unlock_text": "Klikněte pro zapnutí hudby"
   },
   "animation": {
     "hint": "Pro návrat k animaci dvakrát klikněte na volné místo na obrazovce"

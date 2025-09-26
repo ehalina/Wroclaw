@@ -73,6 +73,43 @@
       }
     }
   },
+  "tumski_cathedral_2": {
+    "title": "Cathedral of St. John the Baptist 2",
+    "book02": {
+      "zone1": {
+        "title": "Cathedral of St. John the Baptist 2",
+        "text": "This is the second Cathedral of St. John the Baptist on Tumski Island. Built in a later period, it represents a unique example of architecture combining Gothic and Renaissance elements. Its facade is decorated with exquisite sculptures and bas-reliefs telling the history of the city and its patron saints."
+      },
+      "zone1-2": {
+        "title": "",
+        "text": ""
+      },
+      "zone2": {
+        "title": "",
+        "text": "The interior decoration of the cathedral is striking in its splendor. The altar is made of rare wood species and decorated with gold elements. Stained glass creates a unique play of light, coloring the stone walls in various shades. Special attention is drawn to the pulpit, made in Baroque style with elegant carved elements."
+      },
+      "zone2-2": {
+        "title": "History",
+        "text": "The cathedral was built in the 16th century as an addition to the main temple. Initially, it served as a place for special ceremonies and solemn services. Over the centuries, the building was repeatedly rebuilt and restored, while maintaining its original architectural concept."
+      },
+      "zone3": {
+        "title": "",
+        "text": "The organ installed in the cathedral in the 18th century is of particular value. Its sound is distinguished by exceptional purity and depth. Many famous musicians have performed here, admiring the acoustic properties of the room. The organ is still used for concerts and solemn services."
+      },
+      "zone3-2": {
+        "title": "Architecture",
+        "text": "The cathedral's architecture represents a harmonious combination of Gothic and Renaissance elements. The facade is decorated with exquisite portals with bas-reliefs depicting scenes from the lives of saints. The cathedral towers are crowned with spires that are visible from afar and serve as landmarks for city residents."
+      },
+      "zone4": {
+        "title": "Modern Times",
+        "text": "Today, the cathedral continues to serve as a place of worship and cultural center. Regular services, organ music concerts, and tours for tourists are held here. The cathedral is an important part of Wrocław's cultural heritage and a symbol of the city's spiritual life."
+      },
+      "zone4-2": {
+        "title": "Interesting Facts",
+        "text": "The cathedral houses a unique collection of religious artifacts, including ancient icons, church utensils, and manuscripts. The library is of particular value, containing rare books and documents related to the history of the city and church."
+      }
+    }
+  },
   "tumski_cathedral": {
     "title": "Cathedral of St. John the Baptist",
     "book02": {
@@ -271,7 +308,8 @@
   },
   "music": {
     "hint": "Click anywhere to start sounds",
-    "enable_sound_hint": "Enable sounds"
+    "enable_sound_hint": "Enable sounds",
+    "audio_unlock_text": "Click to enable music"
   },
   "animation": {
     "hint": "To return to animation, double-click in a free area of the screen"

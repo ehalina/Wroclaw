@@ -683,4 +683,43 @@ html[data-input-type="touch"] .custom-cursor-prostoarea:hover .custom-cursor-pro
     }
 }
 
-/* УДАЛЕНО: .modal-right-content, .most-title, .most-description (модальное окно) и их медиа-запросы */ 
+/* УДАЛЕНО: .modal-right-content, .most-title, .most-description (модальное окно) и их медиа-запросы */
+
+/* Стили для кнопки разблокировки аудио */
+.audio-unlock-button {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    border: 2px solid white;
+    border-radius: 15px;
+    padding: 20px 30px;
+    cursor: pointer;
+    z-index: 99999;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-width: 250px;
+}
+
+.audio-unlock-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translate(-50%, -50%) scale(1.05);
+}
+
+.audio-unlock-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.audio-unlock-icon {
+    font-size: 32px;
+}
+
+.audio-unlock-text {
+    font-size: 16px;
+    font-weight: bold;
+} 

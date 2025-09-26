@@ -465,6 +465,27 @@ function openTumskiMostOverlay(bookSound, mostOverlay, container, mostTitle) {
     }
 }
 
+// Обработчик сообщений от iframe для синхронизации локализации
+window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'LANGUAGE_CHANGE_FROM_IFRAME') {
+        console.log('🌐 Получено сообщение о смене языка из iframe:', event.data.lang);
+        
+        // Обновляем локализацию в основном окне SPA
+        if (window.i18n && typeof window.i18n.changeLang === 'function') {
+            window.i18n.changeLang(event.data.lang);
+        }
+        
+        // Специально обновляем кнопку разблокировки аудио
+        const audioUnlockText = document.querySelector('.audio-unlock-text[data-i18n]');
+        if (audioUnlockText && window.i18n && typeof window.i18n.t === 'function') {
+            const newText = window.i18n.t('music.audio_unlock_text');
+            audioUnlockText.innerHTML = newText;
+            console.log('🌐 Обновлен текст кнопки разблокировки аудио из iframe:', newText);
+        }
+    }
+});
+
+
 // Экспорт функций и констант
 window.Common = {
     COMMON_ELEMENTS,
