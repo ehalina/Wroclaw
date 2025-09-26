@@ -100,6 +100,14 @@ function updatePageContent() {
             console.log('🌐 Кнопка разблокировки аудио не найдена на странице');
         }
     }
+    
+    // Дополнительная проверка для всех элементов с data-i18n="music.audio_unlock_text"
+    const allAudioUnlockElements = document.querySelectorAll('[data-i18n="music.audio_unlock_text"]');
+    allAudioUnlockElements.forEach((element, index) => {
+        const newText = t('music.audio_unlock_text');
+        element.innerHTML = newText;
+        console.log(`🌐 Обновлен элемент ${index + 1} с music.audio_unlock_text:`, newText);
+    });
 
     // Обновляем заголовки маркеров
     const mapMarkWyspa = document.getElementById('tumska_wyspa');
@@ -175,4 +183,12 @@ window.i18n = {
     updatePageContent,
     getCurrentLang: () => currentLang,
     translations: translations
-}; 
+};
+
+// Автоматически загружаем переводы и обновляем контент при загрузке страницы
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('🌐 DOM загружен, загружаем переводы...');
+    await loadTranslations('ru'); // Загружаем русские переводы по умолчанию
+    console.log('🌐 Переводы загружены, обновляем контент...');
+    updatePageContent();
+}); 
