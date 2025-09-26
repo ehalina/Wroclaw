@@ -1,11 +1,11 @@
 // Текущий язык
-let currentLang = 'ru';
+let currentLang = 'pl';
 
 // Кэш для переводов
 let translations = {};
 
 // Функция для загрузки переводов
-async function loadTranslations(lang = 'ru') {
+async function loadTranslations(lang = 'pl') {
     try {
         const response = await fetch(`locales/${lang}/translations.json`);
         translations = await response.json();
@@ -188,7 +188,7 @@ window.i18n = {
 // Автоматически загружаем переводы и обновляем контент при загрузке страницы
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('🌐 DOM загружен, загружаем переводы...');
-    await loadTranslations('ru'); // Загружаем русские переводы по умолчанию
+    await loadTranslations('pl'); // Загружаем польские переводы по умолчанию
     console.log('🌐 Переводы загружены, обновляем контент...');
     updatePageContent();
 }); 

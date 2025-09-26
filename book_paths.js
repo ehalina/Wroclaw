@@ -211,7 +211,7 @@ function updateModalText(zoneNumber) {
     // console.log('Структура левого блока:', leftTextBlock.innerHTML);
     
     // Получаем текущий язык
-    const currentLang = window.currentLanguage || 'ru';
+    const currentLang = window.currentLanguage || 'pl';
     
     // Определяем, какая секция активна в зависимости от того, какая геометка была нажата
     let section = 'tumski_most'; // по умолчанию
