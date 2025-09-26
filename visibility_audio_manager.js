@@ -6,6 +6,9 @@ class VisibilityAudioManager {
         this.audioElements = new Set();
         this.pausedStates = new Map(); // Сохраняем состояние каждого аудио
         this.isInitialized = false;
+        this.visibilityTimeout = null; // Таймер для задержки обработки
+        this.lastVisibilityState = document.visibilityState; // Последнее состояние видимости
+        this.hiddenStartTime = null; // Время, когда страница стала невидимой
         
         this.init();
     }
@@ -50,15 +53,39 @@ class VisibilityAudioManager {
     
     // Обработка изменения видимости страницы
     handleVisibilityChange() {
-        if (document.visibilityState === 'hidden') {
-            this.handlePageHidden();
-        } else if (document.visibilityState === 'visible') {
-            this.handlePageVisible();
+        const currentState = document.visibilityState;
+        
+        // Игнорируем, если состояние не изменилось
+        if (currentState === this.lastVisibilityState) {
+            return;
         }
+        
+        // Очищаем предыдущий таймер
+        if (this.visibilityTimeout) {
+            clearTimeout(this.visibilityTimeout);
+        }
+        
+        // Добавляем задержку для предотвращения ложных срабатываний
+        this.visibilityTimeout = setTimeout(() => {
+            if (currentState === 'hidden') {
+                this.hiddenStartTime = Date.now();
+                this.handlePageHidden();
+            } else if (currentState === 'visible') {
+                this.handlePageVisible();
+                this.hiddenStartTime = null;
+            }
+            this.lastVisibilityState = currentState;
+        }, 100); // Задержка 100мс
     }
     
     // Страница стала невидимой - ставим все аудио на паузу
     handlePageHidden() {
+        // Дополнительная проверка: убеждаемся, что страница действительно невидима
+        if (document.visibilityState !== 'hidden') {
+            console.log('🎵 Страница не невидима, игнорируем handlePageHidden');
+            return;
+        }
+        
         console.log('🎵 Страница стала невидимой - ставим аудио на паузу');
         
         this.audioElements.forEach(audio => {
@@ -87,6 +114,18 @@ class VisibilityAudioManager {
     
     // Страница стала видимой - возобновляем воспроизведение
     handlePageVisible() {
+        // Дополнительная проверка: убеждаемся, что страница действительно видима
+        if (document.visibilityState !== 'visible') {
+            console.log('🎵 Страница не видима, игнорируем handlePageVisible');
+            return;
+        }
+        
+        // Проверяем, что страница была скрыта достаточно долго (больше 200мс)
+        if (this.hiddenStartTime && (Date.now() - this.hiddenStartTime) < 200) {
+            console.log('🎵 Страница была скрыта слишком короткое время, игнорируем handlePageVisible');
+            return;
+        }
+        
         console.log('🎵 Страница стала видимой - возобновляем аудио');
         
         this.audioElements.forEach(audio => {
@@ -155,6 +194,21 @@ class VisibilityAudioManager {
             return true;
         }
         return false;
+    }
+    
+    // Очистка ресурсов
+    destroy() {
+        if (this.visibilityTimeout) {
+            clearTimeout(this.visibilityTimeout);
+            this.visibilityTimeout = null;
+        }
+        
+        document.removeEventListener('visibilitychange', this.handleVisibilityChange.bind(this));
+        this.audioElements.clear();
+        this.pausedStates.clear();
+        this.isInitialized = false;
+        
+        console.log('🎵 Менеджер видимости аудио уничтожен');
     }
 }
 

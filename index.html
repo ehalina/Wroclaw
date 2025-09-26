@@ -246,20 +246,121 @@
              * Разблокирует аудио по первому клику
              */
             async unlockAudio() {
+                // Защита от повторного вызова
+                if (this.audioUnlocked) {
+                    console.log('🎵 Аудио уже разблокировано, пропускаем');
+                    return;
+                }
+                
                 const audio = this.getUnifiedAudioPlayer();
                 if (!audio) return;
                 
                 try {
-                    // Сохраняем текущее время трека
-                    this.trackTimes.set(this.currentTrack, audio.currentTime);
+                    console.log('🎵 Начинаем разблокировку аудио...');
                     
+                    // 1. Запускаем звук town.mp3
                     await audio.play();
                     this.audioUnlocked = true;
                     this.hideAudioUnlockButton();
+                    console.log('🎵 Town.mp3 запущен');
+                    
+                    // 2. Загружаем и ставим на паузу фоновую музыку
+                    await this.preloadBackgroundMusic();
+                    
+                    // 3. Загружаем и ставим на паузу звуки
+                    await this.preloadSounds();
+                    
+                    // 4. Передаем информацию о разблокировке в tumski.html
+                    this.notifyTumskiPageUnlock();
+                    
                     console.log('🎵 Аудио успешно разблокировано');
                 } catch (error) {
                     console.log('🎵 Ошибка разблокировки аудио:', error);
                     this.showAudioUnlockButton();
+                }
+            }
+            
+            /**
+             * Предзагружает фоновую музыку и ставит на паузу
+             */
+            async preloadBackgroundMusic() {
+                const musicTracks = [
+                    { name: 'birds', src: 'media/zwyki/birds.mp3' },
+                    { name: 'kostel', src: 'media/zwyki/kostel.mp3' },
+                    { name: 'hang', src: 'media/zwyki/hang.mp3' },
+                    { name: 'quest', src: 'media/zwyki/quest.mp3' }
+                ];
+                
+                console.log('🎵 Предзагружаем фоновую музыку...');
+                
+                for (const track of musicTracks) {
+                    try {
+                        const audio = new Audio(track.src);
+                        audio.preload = 'auto';
+                        audio.volume = 0.7;
+                        audio.loop = true;
+                        
+                        // Загружаем и сразу ставим на паузу
+                        await audio.load();
+                        audio.pause();
+                        
+                        // Сохраняем ссылку для дальнейшего использования
+                        this.trackTimes.set(track.name, 0);
+                        
+                        console.log(`🎵 ${track.name} загружен и поставлен на паузу`);
+                    } catch (error) {
+                        console.log(`🎵 Ошибка загрузки ${track.name}:`, error);
+                    }
+                }
+            }
+            
+            /**
+             * Предзагружает звуки и ставит на паузу
+             */
+            async preloadSounds() {
+                const sounds = [
+                    { name: 'opening-a-book', src: 'media/opening-a-book.wav' },
+                    { name: 'step', src: 'media/step.wav' }
+                ];
+                
+                console.log('🎵 Предзагружаем звуки...');
+                
+                for (const sound of sounds) {
+                    try {
+                        const audio = new Audio(sound.src);
+                        audio.preload = 'auto';
+                        audio.volume = 1.0;
+                        
+                        // Загружаем и сразу ставим на паузу
+                        await audio.load();
+                        audio.pause();
+                        
+                        console.log(`🎵 ${sound.name} загружен и поставлен на паузу`);
+                    } catch (error) {
+                        console.log(`🎵 Ошибка загрузки ${sound.name}:`, error);
+                    }
+                }
+            }
+            
+            /**
+             * Уведомляет страницу tumski.html о разблокировке аудио
+             */
+            notifyTumskiPageUnlock() {
+                console.log('🎵 Уведомляем tumski.html о разблокировке аудио...');
+                
+                // Находим активный iframe
+                const activeIframe = this.getActiveIframe();
+                if (activeIframe) {
+                    try {
+                        // Отправляем сообщение в iframe
+                        activeIframe.contentWindow.postMessage({
+                            type: 'AUDIO_UNLOCKED',
+                            source: 'spa'
+                        }, '*');
+                        console.log('🎵 Сообщение о разблокировке отправлено в tumski.html');
+                    } catch (error) {
+                        console.log('🎵 Ошибка отправки сообщения в iframe:', error);
+                    }
                 }
             }
             
@@ -280,6 +381,12 @@
                 // Если трек уже играет, не переключаем
                 if (this.currentTrack === trackName && !audio.paused) {
                     console.log('🎵 Трек уже играет:', trackName);
+                    return;
+                }
+                
+                // Дополнительная защита: если аудио уже разблокировано и играет town, не переключаем на town
+                if (this.audioUnlocked && this.currentTrack === 'town' && trackName === 'town' && !audio.paused) {
+                    console.log('🎵 Town уже играет и аудио разблокировано, не переключаем');
                     return;
                 }
                 
@@ -318,6 +425,17 @@
                     // Показываем кнопку разблокировки при ошибке
                     this.showAudioUnlockButton();
                 }
+            }
+            
+            /**
+             * Получает предзагруженный трек по имени
+             * @param {string} trackName - название трека
+             * @returns {HTMLAudioElement|null} предзагруженный аудио элемент
+             */
+            getPreloadedTrack(trackName) {
+                // Ищем предзагруженный трек в DOM
+                const trackElement = document.querySelector(`audio[src*="${trackName}.mp3"]`);
+                return trackElement || null;
             }
             
             /**
@@ -857,13 +975,17 @@
                 }
                 
                 // Обработчик для разблокировки аудио по первому клику в любом месте
-                const unlockOnFirstClick = () => {
-                    if (!this.audioUnlocked) {
+                const unlockOnFirstClick = (event) => {
+                    // Проверяем, что клик не по интерактивным элементам
+                    const target = event.target;
+                    const isInteractive = target.closest('button, a, input, select, textarea, [data-prev-page], [data-next-page], .map-mark, .geo-marker, .quest-marker');
+                    
+                    if (!this.audioUnlocked && !isInteractive) {
                         this.unlockAudio();
+                        // Удаляем обработчик только после успешной разблокировки
+                        document.removeEventListener('click', unlockOnFirstClick);
+                        document.removeEventListener('touchstart', unlockOnFirstClick);
                     }
-                    // Удаляем обработчик после первого использования
-                    document.removeEventListener('click', unlockOnFirstClick);
-                    document.removeEventListener('touchstart', unlockOnFirstClick);
                 };
                 
                 document.addEventListener('click', unlockOnFirstClick);
@@ -1006,48 +1128,54 @@
             window.spaManager = new SPAManager();
             window.SPAManager = window.spaManager; // Делаем доступным для iframe страниц
             
-            // Обработчик сообщений от iframe для управления музыкой
-            window.addEventListener('message', function(event) {
-                if (event.data && event.data.type === 'soundControl' && event.data.source === 'languageMenu') {
-                    console.log('🎵 Получено сообщение от iframe для управления музыкой:', event.data.action);
-                    
-                    if (event.data.action === 'mute') {
-                        // Останавливаем музыку в SPA
-                        const audio = window.spaManager ? window.spaManager.getUnifiedAudioPlayer() : null;
-                        if (audio) {
-                            audio.pause();
+                // Обработчик сообщений от iframe для управления музыкой
+                window.addEventListener('message', function(event) {
+                    if (event.data && event.data.type === 'soundControl') {
+                        console.log('🎵 Получено сообщение от iframe для управления музыкой:', event.data.action, 'от', event.data.source);
+                        
+                        // Проверяем, не пришло ли сообщение от tumski.html после разблокировки аудио
+                        if (event.data.source === 'tumski' && event.data.action === 'unmute') {
+                            console.log('🎵 Игнорируем сообщение unmute от tumski.html после разблокировки аудио');
+                            return;
                         }
-                        console.log('🎵 Музыка в SPA остановлена');
-                    } else if (event.data.action === 'unmute') {
-                        // Запускаем музыку в SPA
-                        if (window.spaManager) {
-                            const currentPage = window.spaManager.currentPage;
-                            
-                            if (currentPage && currentPage.includes('tumski19.html')) {
-                                // Переключаем на kostel для tumski19
-                                window.spaManager.switchTrack('kostel');
-                                console.log('🎵 Запускаем kostel музыку в SPA для tumski19');
-                            } else if (currentPage && (currentPage.includes('ogrod02.html') || currentPage.includes('ogrod03.html') || 
-                                      currentPage.includes('ogrod04.html') || currentPage.includes('ogrod05.html') || 
-                                      currentPage.includes('ogrod06.html') || currentPage.includes('ogrod07.html') || 
-                                      currentPage.includes('ogrod08.html') || currentPage.includes('ogrod09.html') || 
-                                      currentPage.includes('ogrod12.html') || currentPage.includes('ogrod13.html'))) {
-                                // Переключаем на birds для ogrod страниц
-                                window.spaManager.switchTrack('birds');
-                                console.log('🎵 Запускаем birds музыку в SPA для ogrod страниц');
-                            } else if (currentPage && currentPage.includes('tumski21.html')) {
-                                // Переключаем на hang для tumski21
-                                window.spaManager.switchTrack('hang');
-                                console.log('🎵 Запускаем hang музыку в SPA для tumski21');
-                            } else {
-                                // Запускаем обычную фоновую музыку (town)
-                                window.spaManager.switchTrack('town');
-                                console.log('🎵 Запускаем фоновую музыку в SPA');
+                        
+                        if (event.data.action === 'mute') {
+                            // Останавливаем музыку в SPA
+                            const audio = window.spaManager ? window.spaManager.getUnifiedAudioPlayer() : null;
+                            if (audio) {
+                                audio.pause();
+                            }
+                            console.log('🎵 Музыка в SPA остановлена');
+                        } else if (event.data.action === 'unmute') {
+                            // Запускаем музыку в SPA
+                            if (window.spaManager) {
+                                const currentPage = window.spaManager.currentPage;
+                                
+                                if (currentPage && currentPage.includes('tumski19.html')) {
+                                    // Переключаем на kostel для tumski19
+                                    window.spaManager.switchTrack('kostel');
+                                    console.log('🎵 Запускаем kostel музыку в SPA для tumski19');
+                                } else if (currentPage && (currentPage.includes('ogrod02.html') || currentPage.includes('ogrod03.html') || 
+                                          currentPage.includes('ogrod04.html') || currentPage.includes('ogrod05.html') || 
+                                          currentPage.includes('ogrod06.html') || currentPage.includes('ogrod07.html') || 
+                                          currentPage.includes('ogrod08.html') || currentPage.includes('ogrod09.html') || 
+                                          currentPage.includes('ogrod12.html') || currentPage.includes('ogrod13.html'))) {
+                                    // Переключаем на birds для ogrod страниц
+                                    window.spaManager.switchTrack('birds');
+                                    console.log('🎵 Запускаем birds музыку в SPA для ogrod страниц');
+                                } else if (currentPage && currentPage.includes('tumski21.html')) {
+                                    // Переключаем на hang для tumski21
+                                    window.spaManager.switchTrack('hang');
+                                    console.log('🎵 Запускаем hang музыку в SPA для tumski21');
+                                } else {
+                                    // Запускаем обычную фоновую музыку (town)
+                                    window.spaManager.switchTrack('town');
+                                    console.log('🎵 Запускаем фоновую музыку в SPA');
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
         });
         
         // Экспортируем для использования в других модулях
