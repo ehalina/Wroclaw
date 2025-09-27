@@ -248,7 +248,7 @@
             async unlockAudio() {
                 // Защита от повторного вызова
                 if (this.audioUnlocked) {
-                    console.log('🎵 Аудио уже разблокировано, пропускаем');
+    // console.log('🎵 Аудио уже разблокировано, пропускаем');
                     return;
                 }
                 
@@ -256,13 +256,13 @@
                 if (!audio) return;
                 
                 try {
-                    console.log('🎵 Начинаем разблокировку аудио...');
+    // console.log('🎵 Начинаем разблокировку аудио...');
                     
                     // 1. Запускаем звук town.mp3
                     await audio.play();
                     this.audioUnlocked = true;
                     this.hideAudioUnlockButton();
-                    console.log('🎵 Town.mp3 запущен');
+    // console.log('🎵 Town.mp3 запущен');
                     
                     // 2. Загружаем и ставим на паузу фоновую музыку
                     await this.preloadBackgroundMusic();
@@ -273,9 +273,9 @@
                     // 4. Передаем информацию о разблокировке в tumski.html
                     this.notifyTumskiPageUnlock();
                     
-                    console.log('🎵 Аудио успешно разблокировано');
+    // console.log('🎵 Аудио успешно разблокировано');
                 } catch (error) {
-                    console.log('🎵 Ошибка разблокировки аудио:', error);
+    // console.log('🎵 Ошибка разблокировки аудио:', error);
                     this.showAudioUnlockButton();
                 }
             }
@@ -291,7 +291,7 @@
                     { name: 'quest', src: 'media/zwyki/quest.mp3' }
                 ];
                 
-                console.log('🎵 Предзагружаем фоновую музыку...');
+    // console.log('🎵 Предзагружаем фоновую музыку...');
                 
                 for (const track of musicTracks) {
                     try {
@@ -307,9 +307,9 @@
                         // Сохраняем ссылку для дальнейшего использования
                         this.trackTimes.set(track.name, 0);
                         
-                        console.log(`🎵 ${track.name} загружен и поставлен на паузу`);
+    // console.log(`🎵 ${track.name} загружен и поставлен на паузу`);
                     } catch (error) {
-                        console.log(`🎵 Ошибка загрузки ${track.name}:`, error);
+    // console.log(`🎵 Ошибка загрузки ${track.name}:`, error);
                     }
                 }
             }
@@ -323,7 +323,7 @@
                     { name: 'step', src: 'media/step.wav' }
                 ];
                 
-                console.log('🎵 Предзагружаем звуки...');
+    // console.log('🎵 Предзагружаем звуки...');
                 
                 for (const sound of sounds) {
                     try {
@@ -335,9 +335,9 @@
                         await audio.load();
                         audio.pause();
                         
-                        console.log(`🎵 ${sound.name} загружен и поставлен на паузу`);
+    // console.log(`🎵 ${sound.name} загружен и поставлен на паузу`);
                     } catch (error) {
-                        console.log(`🎵 Ошибка загрузки ${sound.name}:`, error);
+    // console.log(`🎵 Ошибка загрузки ${sound.name}:`, error);
                     }
                 }
             }
@@ -346,7 +346,7 @@
              * Уведомляет страницу tumski.html о разблокировке аудио
              */
             notifyTumskiPageUnlock() {
-                console.log('🎵 Уведомляем tumski.html о разблокировке аудио...');
+    // console.log('🎵 Уведомляем tumski.html о разблокировке аудио...');
                 
                 // Находим активный iframe
                 const activeIframe = this.getActiveIframe();
@@ -357,9 +357,9 @@
                             type: 'AUDIO_UNLOCKED',
                             source: 'spa'
                         }, '*');
-                        console.log('🎵 Сообщение о разблокировке отправлено в tumski.html');
+    // console.log('🎵 Сообщение о разблокировке отправлено в tumski.html');
                     } catch (error) {
-                        console.log('🎵 Ошибка отправки сообщения в iframe:', error);
+    // console.log('🎵 Ошибка отправки сообщения в iframe:', error);
                     }
                 }
             }
@@ -374,19 +374,19 @@
                 
                 // Проверяем, не отключен ли звук
                 if (!this.isSoundEnabled()) {
-                    console.log('🎵 Звук отключен, не переключаем трек');
+    // console.log('🎵 Звук отключен, не переключаем трек');
                     return;
                 }
                 
                 // Если трек уже играет, не переключаем
                 if (this.currentTrack === trackName && !audio.paused) {
-                    console.log('🎵 Трек уже играет:', trackName);
+    // console.log('🎵 Трек уже играет:', trackName);
                     return;
                 }
                 
                 // Дополнительная защита: если аудио уже разблокировано и играет town, не переключаем на town
                 if (this.audioUnlocked && this.currentTrack === 'town' && trackName === 'town' && !audio.paused) {
-                    console.log('🎵 Town уже играет и аудио разблокировано, не переключаем');
+    // console.log('🎵 Town уже играет и аудио разблокировано, не переключаем');
                     return;
                 }
                 
@@ -404,7 +404,7 @@
                 
                 const newUrl = trackUrls[trackName];
                 if (!newUrl) {
-                    console.log('🎵 Неизвестный трек:', trackName);
+    // console.log('🎵 Неизвестный трек:', trackName);
                     return;
                 }
                 
@@ -419,9 +419,9 @@
                     
                     await audio.play();
                     this.currentTrack = trackName;
-                    console.log('🎵 Трек переключен на:', trackName);
+    // console.log('🎵 Трек переключен на:', trackName);
                 } catch (error) {
-                    console.log('🎵 Ошибка переключения трека:', error);
+    // console.log('🎵 Ошибка переключения трека:', error);
                     // Показываем кнопку разблокировки при ошибке
                     this.showAudioUnlockButton();
                 }
@@ -457,17 +457,17 @@
                     try {
                         this.stepSound.currentTime = 0;
                         this.stepSound.play().catch(error => {
-                            console.log('🎵 Ошибка воспроизведения step.wav:', error);
+    // console.log('🎵 Ошибка воспроизведения step.wav:', error);
                         });
                     } catch (error) {
-                        console.log('🎵 Ошибка воспроизведения step.wav:', error);
+    // console.log('🎵 Ошибка воспроизведения step.wav:', error);
                     }
                 }
             }
             
             async init() {
-                console.log('🚀 Инициализация SPA...');
-                console.log('📱 Мобильное устройство:', this.isMobile);
+    // console.log('🚀 Инициализация SPA...');
+    // console.log('📱 Мобильное устройство:', this.isMobile);
                 
                 // Инициализируем кастомные курсоры для десктопа
                 this.initCustomCursors();
@@ -493,11 +493,11 @@
              */
             initCustomCursors() {
                 if (this.isMobile) {
-                    console.log('📱 Мобильное устройство, кастомные курсоры отключены');
-                    return;
-                }
-                
-                console.log('🖱️ Инициализация кастомных курсоров для десктопа');
+    // console.log('📱 Мобильное устройство, кастомные курсоры отключены');
+                        return;
+                    }
+                    
+    // console.log('🖱️ Инициализация кастомных курсоров для десктопа');
                 
                 // Добавляем CSS для кастомных курсоров
                 const style = document.createElement('style');
@@ -534,7 +534,7 @@
              * Инициализирует обработчики стрелок для навигации
              */
             initArrowHandlers() {
-                console.log('⬅️➡️ Инициализация обработчиков стрелок');
+    // console.log('⬅️➡️ Инициализация обработчиков стрелок');
                 
                 // Обработчики клавиатуры для навигации
                 document.addEventListener('keydown', (event) => {
@@ -611,7 +611,7 @@
                             }
                         });
                     } catch (error) {
-                        console.log('⚠️ Не удалось закрыть модальные окна в iframe:', error);
+    // console.log('⚠️ Не удалось закрыть модальные окна в iframe:', error);
                     }
                 }
             }
@@ -623,19 +623,19 @@
                 const audio = this.getUnifiedAudioPlayer();
                 if (!audio) return;
                 
-                console.log('🎵 Инициализация единого аудио плеера...');
+    // console.log('🎵 Инициализация единого аудио плеера...');
                 
                 // Настраиваем обработчики событий
-                audio.addEventListener('ended', () => {
+                            audio.addEventListener('ended', () => {
                     // Автоматическое зацикливание
                     if (this.isSoundEnabled() && this.audioUnlocked) {
                         audio.currentTime = 0;
-                        audio.play().catch(console.log);
-                    }
-                });
+                                    audio.play().catch(console.log);
+                                }
+                            });
                 
                 audio.addEventListener('error', (error) => {
-                    console.log('🎵 Ошибка аудио плеера:', error);
+    // console.log('🎵 Ошибка аудио плеера:', error);
                     this.showAudioUnlockButton();
                 });
                 
@@ -653,9 +653,9 @@
                 try {
                     await audio.play();
                     this.audioUnlocked = true;
-                    console.log('🎵 Музыка автоматически запущена');
+    // console.log('🎵 Музыка автоматически запущена');
                 } catch (error) {
-                    console.log('🎵 Автозапуск заблокирован, показываем кнопку разблокировки');
+    // console.log('🎵 Автозапуск заблокирован, показываем кнопку разблокировки');
                     this.showAudioUnlockButton();
                 }
             }
@@ -663,7 +663,7 @@
             
             
             async loadPage(pageName) {
-                console.log('📄 Загрузка страницы:', pageName);
+    // console.log('📄 Загрузка страницы:', pageName);
                 
                 // Показываем индикатор загрузки
                 this.showLoading();
@@ -703,9 +703,9 @@
                     
                     // Ждем загрузки iframe
                     iframe.onload = () => {
-                        console.log('✅ iframe загружен:', pageName);
-                        console.log('🎵 iframe src:', iframe.src);
-                        console.log('🎵 iframe contentWindow location:', iframe.contentWindow.location.href);
+    // console.log('✅ iframe загружен:', pageName);
+    // console.log('🎵 iframe src:', iframe.src);
+    // console.log('🎵 iframe contentWindow location:', iframe.contentWindow.location.href);
                         this.setupIframeNavigation(iframe, pageName);
                         
                         // Инициализируем звуки геометок в iframe
@@ -714,7 +714,7 @@
                         // Инициализируем quest музыку в iframe
                         this.initializeIframeQuestMusic(iframe);
                         
-                        console.log('🎵 Вызываем showPage для:', pageName);
+    // console.log('🎵 Вызываем showPage для:', pageName);
                         this.showPage(pageName);
                         this.hideLoading();
                     };
@@ -766,7 +766,7 @@
                     // Обработчики для модальных окон также работают в iframe
                     
                 } catch (error) {
-                    console.log('⚠️ Не удалось настроить навигацию iframe (возможно, CORS):', error);
+    // console.log('⚠️ Не удалось настроить навигацию iframe (возможно, CORS):', error);
                 }
             }
             
@@ -775,14 +775,14 @@
              */
             initIframeCustomCursors(iframe) {
                 if (this.isMobile) {
-                    console.log('📱 Мобильное устройство, кастомные курсоры в iframe отключены');
+    // console.log('📱 Мобильное устройство, кастомные курсоры в iframe отключены');
                     return;
                 }
                 
                 try {
                     const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                     
-                    console.log('🖱️ Инициализация кастомных курсоров в iframe');
+    // console.log('🖱️ Инициализация кастомных курсоров в iframe');
                     
                     // Добавляем CSS для кастомных курсоров в iframe
                     const style = iframeDoc.createElement('style');
@@ -820,7 +820,7 @@
                     iframeDoc.head.appendChild(style);
                     
                 } catch (error) {
-                    console.log('⚠️ Не удалось инициализировать кастомные курсоры в iframe:', error);
+    // console.log('⚠️ Не удалось инициализировать кастомные курсоры в iframe:', error);
                 }
             }
             
@@ -829,14 +829,14 @@
             // Обработчики модального окна карты теперь работают в iframe страницы
             
             showPage(pageName) {
-                console.log('🎵 showPage вызван для:', pageName);
-                console.log('🎵 Текущая страница была:', this.currentPage);
-                console.log('🎵 Доступные страницы:', Array.from(this.pages.keys()));
+    // console.log('🎵 showPage вызван для:', pageName);
+    // console.log('🎵 Текущая страница была:', this.currentPage);
+    // console.log('🎵 Доступные страницы:', Array.from(this.pages.keys()));
                 
                 // Скрываем все страницы
                 this.pages.forEach((page, name) => {
                     page.classList.remove('active');
-                    console.log('🎵 Скрываем страницу:', name);
+    // console.log('🎵 Скрываем страницу:', name);
                 });
                 
                 // Показываем нужную страницу
@@ -844,28 +844,28 @@
                 if (targetPage) {
                     targetPage.classList.add('active');
                     this.currentPage = pageName;
-                    console.log('🎵 Показываем страницу:', pageName);
+    // console.log('🎵 Показываем страницу:', pageName);
                     
                     // Обновляем URL без перезагрузки страницы
                     history.pushState({ page: pageName }, '', `#${pageName}`);
-                    console.log('🎵 URL обновлен на:', window.location.href);
+    // console.log('🎵 URL обновлен на:', window.location.href);
                     
                     // Переключаем музыку в зависимости от страницы
                     this.switchMusicForPage(pageName);
                 } else {
-                    console.log('🎵 Страница не найдена:', pageName);
-                    console.log('🎵 Доступные страницы:', Array.from(this.pages.keys()));
+    // console.log('🎵 Страница не найдена:', pageName);
+    // console.log('🎵 Доступные страницы:', Array.from(this.pages.keys()));
                 }
                 
                 this.hideLoading();
             }
             
             switchMusicForPage(pageName) {
-                console.log('🎵 switchMusicForPage вызван для:', pageName);
+    // console.log('🎵 switchMusicForPage вызван для:', pageName);
                 
                 // Защита от рекурсии
                 if (this._switchingMusic) {
-                    console.log('🎵 Переключение музыки уже в процессе, пропускаем');
+    // console.log('🎵 Переключение музыки уже в процессе, пропускаем');
                     return;
                 }
                 this._switchingMusic = true;
@@ -873,7 +873,7 @@
                 // Проверяем, не отключен ли звук через кнопку
                 const isMuted = localStorage.getItem('soundMuted') === 'true';
                 if (isMuted) {
-                    console.log('🎵 Звук отключен, пропускаем переключение');
+    // console.log('🎵 Звук отключен, пропускаем переключение');
                     this._switchingMusic = false;
                     return;
                 }
@@ -883,20 +883,20 @@
                 
                 if (pageName.includes('tumski19.html')) {
                     targetTrack = 'kostel';
-                    console.log('🎵 Переключаем на kostel для tumski19.html');
+    // console.log('🎵 Переключаем на kostel для tumski19.html');
                 } else if (pageName.includes('tumski21.html')) {
                     targetTrack = 'hang';
-                    console.log('🎵 Переключаем на hang для tumski21.html');
+    // console.log('🎵 Переключаем на hang для tumski21.html');
                 } else if (pageName.includes('ogrod02.html') || pageName.includes('ogrod03.html') || 
                           pageName.includes('ogrod04.html') || pageName.includes('ogrod05.html') || 
                           pageName.includes('ogrod06.html') || pageName.includes('ogrod07.html') || 
                           pageName.includes('ogrod08.html') || pageName.includes('ogrod09.html') || 
                           pageName.includes('ogrod12.html') || pageName.includes('ogrod13.html')) {
                     targetTrack = 'birds';
-                    console.log('🎵 Переключаем на birds для страниц ogrod:', pageName);
+    // console.log('🎵 Переключаем на birds для страниц ogrod:', pageName);
                 } else {
                     targetTrack = 'town';
-                    console.log('🎵 Переключаем на town для:', pageName);
+    // console.log('🎵 Переключаем на town для:', pageName);
                 }
                 
                 // Переключаем трек через единый плеер
@@ -914,18 +914,18 @@
             
             
             async navigateToPage(pageName) {
-                console.log('🎵 navigateToPage вызван для:', pageName);
-                console.log('🎵 Загруженные страницы:', Array.from(this.pages.keys()));
+    // console.log('🎵 navigateToPage вызван для:', pageName);
+    // console.log('🎵 Загруженные страницы:', Array.from(this.pages.keys()));
                 
                 // Воспроизводим звук шага при навигации
                 this.playStepSound();
                 
                 // Загружаем страницу, если она ещё не загружена
                 if (!this.pages.has(pageName)) {
-                    console.log('🎵 Страница не загружена, загружаем:', pageName);
+    // console.log('🎵 Страница не загружена, загружаем:', pageName);
                     await this.loadPage(pageName);
                 } else {
-                    console.log('🎵 Страница уже загружена, принудительно перезагружаем:', pageName);
+    // console.log('🎵 Страница уже загружена, принудительно перезагружаем:', pageName);
                     // Удаляем старую страницу и загружаем заново
                     const oldPage = this.pages.get(pageName);
                     if (oldPage) {
@@ -954,11 +954,11 @@
                 
                 // Обработчик сообщений от iframe для навигации
                 window.addEventListener('message', (event) => {
-                    console.log('🎵 Получено сообщение от iframe:', event.data);
+    // console.log('🎵 Получено сообщение от iframe:', event.data);
                     
                     if (event.data && event.data.type === 'SPA_NAVIGATE') {
                         const targetPage = event.data.page;
-                        console.log('🎵 Выполняем навигацию на страницу:', targetPage);
+    // console.log('🎵 Выполняем навигацию на страницу:', targetPage);
                         
                         if (targetPage) {
                             this.navigateToPage(targetPage);
@@ -1047,7 +1047,7 @@
                     const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                     const iframeSounds = iframeDoc.querySelectorAll('audio[src*="opening-a-book.wav"]');
                     
-                    console.log('🎵 Инициализируем звуки геометок в iframe:', iframeSounds.length);
+    // console.log('🎵 Инициализируем звуки геометок в iframe:', iframeSounds.length);
                     
                     iframeSounds.forEach((audio, index) => {
                         try {
@@ -1056,13 +1056,13 @@
                             }
                             audio.preload = 'auto';
                             audio.load();
-                            console.log(`🎵 Звук геометки в iframe ${index + 1} инициализирован:`, audio.src);
+    // console.log(`🎵 Звук геометки в iframe ${index + 1} инициализирован:`, audio.src);
                         } catch (error) {
-                            console.log('🎵 Ошибка инициализации звука геометки в iframe:', error);
+    // console.log('🎵 Ошибка инициализации звука геометки в iframe:', error);
                         }
                     });
                 } catch (error) {
-                    console.log('🎵 Не удалось получить доступ к iframe для инициализации звуков:', error);
+    // console.log('🎵 Не удалось получить доступ к iframe для инициализации звуков:', error);
                 }
             }
             
@@ -1070,7 +1070,7 @@
                 try {
                     const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                     
-                    console.log('🎵 Инициализируем quest музыку в iframe...');
+    // console.log('🎵 Инициализируем quest музыку в iframe...');
                     
                     // Создаем quest музыку в iframe, если ее еще нет
                     let questMusic = iframeDoc.getElementById('questMusic');
@@ -1082,7 +1082,7 @@
                         questMusic.preload = 'auto';
                         questMusic.volume = 0.7;
                         iframeDoc.body.appendChild(questMusic);
-                        console.log('🎵 Создан аудио элемент quest музыки в iframe');
+    // console.log('🎵 Создан аудио элемент quest музыки в iframe');
                     }
                     
                     // Принудительно инициализируем quest музыку в iframe
@@ -1095,9 +1095,9 @@
                     questMusic.play().then(() => {
                         questMusic.pause();
                         questMusic.currentTime = 0;
-                        console.log('🎵 Quest музыка в iframe принудительно инициализирована');
+    // console.log('🎵 Quest музыка в iframe принудительно инициализирована');
                     }).catch(error => {
-                        console.log('🎵 Ошибка принудительной инициализации quest музыки в iframe:', error);
+    // console.log('🎵 Ошибка принудительной инициализации quest музыки в iframe:', error);
                     });
                     
                     // Делаем quest музыку доступной в iframe
@@ -1105,7 +1105,7 @@
                         iframe.contentWindow.questMusic = questMusic;
                     }
                 } catch (error) {
-                    console.log('🎵 Ошибка инициализации quest музыки в iframe:', error);
+    // console.log('🎵 Ошибка инициализации quest музыки в iframe:', error);
                 }
             }
         }
@@ -1114,13 +1114,13 @@
         document.addEventListener('DOMContentLoaded', async () => {
             // Проверяем, не конфликтует ли с расширениями браузера
             if (window.chrome && window.chrome.runtime && window.chrome.runtime.id) {
-                console.log('⚠️ Обнаружено расширение браузера, отключаем проблемные функции');
+    // console.log('⚠️ Обнаружено расширение браузера, отключаем проблемные функции');
             }
             
             // Инициализируем локализацию
             if (window.i18n && typeof window.i18n.loadTranslations === 'function') {
                 await window.i18n.loadTranslations('pl');
-                console.log('🔍 Локализация загружена, переводы:', window.i18n.translations);
+    // console.log('🔍 Локализация загружена, переводы:', window.i18n.translations);
             }
             
             // LanguageMenu теперь инициализируется в iframe страницы
@@ -1131,11 +1131,11 @@
                 // Обработчик сообщений от iframe для управления музыкой
                 window.addEventListener('message', function(event) {
                     if (event.data && event.data.type === 'soundControl') {
-                        console.log('🎵 Получено сообщение от iframe для управления музыкой:', event.data.action, 'от', event.data.source);
+    // console.log('🎵 Получено сообщение от iframe для управления музыкой:', event.data.action, 'от', event.data.source);
                         
                         // Проверяем, не пришло ли сообщение от tumski.html после разблокировки аудио
                         if (event.data.source === 'tumski' && event.data.action === 'unmute') {
-                            console.log('🎵 Игнорируем сообщение unmute от tumski.html после разблокировки аудио');
+    // console.log('🎵 Игнорируем сообщение unmute от tumski.html после разблокировки аудио');
                             return;
                         }
                         
@@ -1145,7 +1145,7 @@
                             if (audio) {
                                 audio.pause();
                             }
-                            console.log('🎵 Музыка в SPA остановлена');
+    // console.log('🎵 Музыка в SPA остановлена');
                         } else if (event.data.action === 'unmute') {
                             // Запускаем музыку в SPA
                             if (window.spaManager) {
@@ -1154,7 +1154,7 @@
                                 if (currentPage && currentPage.includes('tumski19.html')) {
                                     // Переключаем на kostel для tumski19
                                     window.spaManager.switchTrack('kostel');
-                                    console.log('🎵 Запускаем kostel музыку в SPA для tumski19');
+    // console.log('🎵 Запускаем kostel музыку в SPA для tumski19');
                                 } else if (currentPage && (currentPage.includes('ogrod02.html') || currentPage.includes('ogrod03.html') || 
                                           currentPage.includes('ogrod04.html') || currentPage.includes('ogrod05.html') || 
                                           currentPage.includes('ogrod06.html') || currentPage.includes('ogrod07.html') || 
@@ -1162,15 +1162,15 @@
                                           currentPage.includes('ogrod12.html') || currentPage.includes('ogrod13.html'))) {
                                     // Переключаем на birds для ogrod страниц
                                     window.spaManager.switchTrack('birds');
-                                    console.log('🎵 Запускаем birds музыку в SPA для ogrod страниц');
+    // console.log('🎵 Запускаем birds музыку в SPA для ogrod страниц');
                                 } else if (currentPage && currentPage.includes('tumski21.html')) {
                                     // Переключаем на hang для tumski21
                                     window.spaManager.switchTrack('hang');
-                                    console.log('🎵 Запускаем hang музыку в SPA для tumski21');
+    // console.log('🎵 Запускаем hang музыку в SPA для tumski21');
                                 } else {
                                     // Запускаем обычную фоновую музыку (town)
                                     window.spaManager.switchTrack('town');
-                                    console.log('🎵 Запускаем фоновую музыку в SPA');
+    // console.log('🎵 Запускаем фоновую музыку в SPA');
                                 }
                             }
                         }

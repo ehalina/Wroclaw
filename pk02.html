@@ -61,76 +61,76 @@
     <!-- Дополнительная логика предзагрузки изображений для мобильной версии -->
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('🟡 DOMContentLoaded: начинаем настройку предзагрузки для pk02.html');
+        // console.log('🟡 DOMContentLoaded: начинаем настройку предзагрузки для pk02.html');
         
         const isMobile = window.innerWidth <= 768;
-        console.log('🟡 Мобильная версия:', isMobile, 'Ширина экрана:', window.innerWidth);
+        // console.log('🟡 Мобильная версия:', isMobile, 'Ширина экрана:', window.innerWidth);
         
         if (!isMobile) {
-            console.log('🟡 Не мобильная версия, пропускаем настройку предзагрузки');
+            // console.log('🟡 Не мобильная версия, пропускаем настройку предзагрузки');
             return;
         }
         
         const nextImageContainer = document.querySelector('.next-image-container');
-        console.log('🟡 next-image-container найден:', !!nextImageContainer);
+        // console.log('🟡 next-image-container найден:', !!nextImageContainer);
         if (!nextImageContainer) return;
         
         // Функция предзагрузки изображения
         const preloadImage = (imageUrl, description) => {
-            console.log(`🖼️ Предзагружаем ${description}: ${imageUrl}`);
+            // console.log(`🖼️ Предзагружаем ${description}: ${imageUrl}`);
             nextImageContainer.style.backgroundImage = `url('${imageUrl}')`;
             nextImageContainer.style.backgroundPosition = 'left top';
             nextImageContainer.style.backgroundSize = 'auto 100%';
             nextImageContainer.style.display = 'block';
             nextImageContainer.style.opacity = '0';
-            console.log(`✅ ${description} предзагружено успешно`);
+            // console.log(`✅ ${description} предзагружено успешно`);
         };
         
         // Предзагрузка для стрелки прямо вправо (tumski07.html)
         const prostoArea = document.querySelector('.custom-cursor-prostoarea');
-        console.log('🟡 Стрелка прямо вправо найдена:', !!prostoArea);
+        // console.log('🟡 Стрелка прямо вправо найдена:', !!prostoArea);
         if (prostoArea) {
             const handleRightTouch = () => preloadImage('media/tumski/tumski_07.jpg', 'стрелка прямо вправо');
             prostoArea.addEventListener('touchstart', handleRightTouch);
             prostoArea.addEventListener('touchmove', handleRightTouch);
-            console.log('🟡 Обработчики для стрелки прямо вправо установлены');
+            // console.log('🟡 Обработчики для стрелки прямо вправо установлены');
         }
         
         // Предзагрузка для стрелки прямо влево (dwor01.html)
         const prostoLeftArea = document.querySelector('.custom-cursor-prosto-leftarea');
         const prostoLeftCursor = document.querySelector('.custom-cursor-prosto-left');
-        console.log('🟡 Стрелка прямо влево найдена:', !!prostoLeftArea);
-        console.log('🟡 Курсор прямо влево найден:', !!prostoLeftCursor);
+        // console.log('🟡 Стрелка прямо влево найдена:', !!prostoLeftArea);
+        // console.log('🟡 Курсор прямо влево найден:', !!prostoLeftCursor);
         
         if (prostoLeftArea) {
             const handleLeftTouch = (e) => {
-                console.log('🟡 Событие touchstart на стрелке прямо влево');
+                // console.log('🟡 Событие touchstart на стрелке прямо влево');
                 preloadImage('media/tumski/dwor_01.jpg', 'стрелка прямо влево');
             };
             
             prostoLeftArea.addEventListener('touchstart', handleLeftTouch);
             prostoLeftArea.addEventListener('touchmove', handleLeftTouch);
             prostoLeftArea.addEventListener('click', () => {
-                console.log('🟡 Click на стрелке прямо влево (для отладки)');
+                // console.log('🟡 Click на стрелке прямо влево (для отладки)');
                 preloadImage('media/tumski/dwor_01.jpg', 'стрелка прямо влево (click)');
             });
             
-            console.log('🟡 Обработчики для стрелки прямо влево установлены');
+            // console.log('🟡 Обработчики для стрелки прямо влево установлены');
         }
         
         // Дополнительно устанавливаем обработчики на курсор
         if (prostoLeftCursor) {
             const handleLeftCursorTouch = (e) => {
-                console.log('🟡 Событие touchstart на курсоре прямо влево');
+                // console.log('🟡 Событие touchstart на курсоре прямо влево');
                 preloadImage('media/tumski/dwor_01.jpg', 'курсор прямо влево');
             };
             
             prostoLeftCursor.addEventListener('touchstart', handleLeftCursorTouch);
             prostoLeftCursor.addEventListener('touchmove', handleLeftCursorTouch);
-            console.log('🟡 Обработчики для курсора прямо влево установлены');
+            // console.log('🟡 Обработчики для курсора прямо влево установлены');
         }
         
-        console.log('🟡 Настройка предзагрузки завершена');
+        // console.log('🟡 Настройка предзагрузки завершена');
     });
     </script>
 </body>

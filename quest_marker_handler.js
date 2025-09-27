@@ -394,6 +394,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                             expectationText.style.fontFamily = '"Marck Script", cursive, serif';
                             expectationText.style.fontWeight = 'normal';
                             expectationText.style.zIndex = '2';
+                            expectationText.style.backfaceVisibility = 'hidden';
                             front.appendChild(expectationText);
                         }
 
@@ -518,6 +519,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                             realityText.style.fontFamily = '"Marck Script", cursive, serif';
                             realityText.style.fontWeight = 'normal';
                             realityText.style.zIndex = '2';
+                            realityText.style.backfaceVisibility = 'hidden';
                             back.appendChild(realityText);
                         }
 
@@ -739,7 +741,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
             // Регистрируем quest музыку в менеджере видимости
             if (window.visibilityAudioManager) {
                 window.visibilityAudioManager.registerAudio(questSound);
-                console.log('🎵 Quest музыка зарегистрирована в менеджере видимости');
+                // console.log('🎵 Quest музыка зарегистрирована в менеджере видимости');
             }
         }
 
@@ -748,10 +750,10 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         
         // Отключаем language-menu при открытии модалки
         if (window.LanguageMenu && typeof window.LanguageMenu.disableMenu === 'function') {
-            console.log('🚫 Quest: отключаем language-menu');
+            // console.log('🚫 Quest: отключаем language-menu');
             window.LanguageMenu.disableMenu();
         } else {
-            console.log('⚠️ Quest: LanguageMenu не найден для отключения');
+            // console.log('⚠️ Quest: LanguageMenu не найден для отключения');
         }
 
         // Сбрасываем прокрутку контента к началу после того, как окно стало видимым
@@ -781,10 +783,10 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
             
             // Включаем language-menu при закрытии модалки
             if (window.LanguageMenu && typeof window.LanguageMenu.enableMenu === 'function') {
-                console.log('✅ Quest: включаем language-menu');
+                // console.log('✅ Quest: включаем language-menu');
                 window.LanguageMenu.enableMenu();
             } else {
-                console.log('⚠️ Quest: LanguageMenu не найден для включения');
+                // console.log('⚠️ Quest: LanguageMenu не найден для включения');
             }
             
             // Сбрасываем сдвиг для планшетов при закрытии модалки
@@ -1074,7 +1076,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                             frontImg.style.borderRadius = '5px';
                                             front.appendChild(frontImg);
 
-                                            // Добавляем текст "Ожидание:" для первого квеста
+                                            // Добавляем текст "Ожидание:" для первого квеста на лицевую сторону
                                             if (questNumber === 1) {
                                                 const expectationText = document.createElement('div');
                                                 expectationText.textContent = window.i18n ? window.i18n.t('quest.expectation') : 'Ожидание:';
@@ -1087,6 +1089,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                                 expectationText.style.fontFamily = '"Marck Script", cursive, serif';
                                                 expectationText.style.fontWeight = 'normal';
                                                 expectationText.style.zIndex = '2';
+                                                expectationText.style.backfaceVisibility = 'hidden';
                                                 front.appendChild(expectationText);
                                             }
 
@@ -1160,7 +1163,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                             back.appendChild(backImg);
                                             back.appendChild(backCard);
 
-                                            // Добавляем текст "Реальность:" для первого квеста
+                                            // Добавляем текст "Реальность:" для первого квеста на обратную сторону
                                             if (questNumber === 1) {
                                                 const realityText = document.createElement('div');
                                                 realityText.textContent = window.i18n ? window.i18n.t('quest.reality') : 'Реальность:';
@@ -1173,6 +1176,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                                 realityText.style.fontFamily = '"Marck Script", cursive, serif';
                                                 realityText.style.fontWeight = 'normal';
                                                 realityText.style.zIndex = '2';
+                                                realityText.style.backfaceVisibility = 'hidden';
                                                 back.appendChild(realityText);
                                             }
 

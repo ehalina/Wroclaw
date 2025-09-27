@@ -202,10 +202,10 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
             const nextImageContainer = document.querySelector('.next-image-container');
             
     // console.log('🟡 Найденные элементы:', {
-    //     imageContainer: !!imageContainer,
-    //     currentImage: !!currentImage,
-    //     nextImageContainer: !!nextImageContainer
-    // });
+                imageContainer: !!imageContainer,
+                currentImage: !!currentImage,
+                nextImageContainer: !!nextImageContainer
+            });
             
             if (!imageContainer || !currentImage || !nextImageContainer) {
                 console.error('❌ Не все элементы найдены, прерываем выполнение');
@@ -551,15 +551,15 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
         cursorLeftArea.addEventListener('mousemove', function(e) {
             const rect = this.getBoundingClientRect();
     // console.log('🟡 Движение мыши над областью стрелки влево:', {
-    //     mouseX: e.clientX,
-    //     mouseY: e.clientY,
-    //     area: {
-    //         left: rect.left,
-    //         right: rect.right,
-    //         top: rect.top,
-    //         bottom: rect.bottom
-    //     }
-    // });
+                mouseX: e.clientX,
+                mouseY: e.clientY,
+                area: {
+                    left: rect.left,
+                    right: rect.right,
+                    top: rect.top,
+                    bottom: rect.bottom
+                }
+            });
             
             if (e.clientX >= rect.left && e.clientX <= rect.right &&
                 e.clientY >= rect.top && e.clientY <= rect.bottom) {
@@ -832,10 +832,10 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
             const nextImageContainer = document.querySelector('.next-image-container');
             
     // console.log('🟡 Найденные элементы:', {
-    //     imageContainer: !!imageContainer,
-    //     currentImage: !!currentImage,
-    //     nextImageContainer: !!nextImageContainer
-    // });
+                imageContainer: !!imageContainer,
+                currentImage: !!currentImage,
+                nextImageContainer: !!nextImageContainer
+            });
             
             if (!imageContainer || !currentImage || !nextImageContainer) {
                 console.error('❌ Не все элементы найдены, прерываем выполнение');

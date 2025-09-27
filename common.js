@@ -1,3 +1,6 @@
+// ===== ОБЩИЕ ФУНКЦИИ =====
+// console.log('📦 common.js загружен');
+
 /**
  * Проверяет, включен ли звук
  * @returns {boolean} true если звук включен, false если выключен
@@ -64,7 +67,7 @@ function setupResetAnimation(container) {
             // Дополнительная защита: принудительно обновляем mapMarks после двойного тапа
             doubleClickTimeout = setTimeout(() => {
                 if (window.updateMapMarksVisibility) {
-                    console.log('🔄 Принудительное обновление mapMarks после двойного тапа');
+                    // console.log('🔄 Принудительное обновление mapMarks после двойного тапа');
                     window.updateMapMarksVisibility();
                 }
             }, 200);
@@ -205,7 +208,7 @@ function openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIn
     // Воспроизводим звук открытия книги только если звук включен
     if (bookSound && isSoundEnabled()) {
         bookSound.currentTime = 0;
-        bookSound.play().catch(console.log);
+        bookSound.play().catch(/* console.log */);
     }
     
     bookOverlay.style.display = 'flex';
@@ -233,7 +236,7 @@ function openMost(bookSound, mostOverlay, container, mostTitle) {
     // Воспроизводим звук открытия книги только если звук включен
     if (bookSound && isSoundEnabled()) {
         bookSound.currentTime = 0;
-        bookSound.play().catch(console.log);
+        bookSound.play().catch(/* console.log */);
     }
     
     mostOverlay.style.display = 'flex';
@@ -468,7 +471,7 @@ function openTumskiMostOverlay(bookSound, mostOverlay, container, mostTitle) {
 // Обработчик сообщений от iframe для синхронизации локализации
 window.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'LANGUAGE_CHANGE_FROM_IFRAME') {
-        console.log('🌐 Получено сообщение о смене языка из iframe:', event.data.lang);
+        // console.log('🌐 Получено сообщение о смене языка из iframe:', event.data.lang);
         
         // Обновляем локализацию в основном окне SPA
         if (window.i18n && typeof window.i18n.changeLang === 'function') {
@@ -480,11 +483,12 @@ window.addEventListener('message', (event) => {
         if (audioUnlockText && window.i18n && typeof window.i18n.t === 'function') {
             const newText = window.i18n.t('music.audio_unlock_text');
             audioUnlockText.innerHTML = newText;
-            console.log('🌐 Обновлен текст кнопки разблокировки аудио из iframe:', newText);
+            // console.log('🌐 Обновлен текст кнопки разблокировки аудио из iframe:', newText);
         }
     }
 });
 
+// Функции позиционирования для планшетов удалены - используется существующая логика в tumski_cathedral_handler.js
 
 // Экспорт функций и констант
 window.Common = {

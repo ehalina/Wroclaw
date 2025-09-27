@@ -3,7 +3,7 @@
 
 // Глобальные функции для инициализации элементов страницы
 window.initializePageElements = function(pageContainer) {
-    console.log('🔧 Инициализация элементов страницы...');
+    // console.log('🔧 Инициализация элементов страницы...');
     
     // Инициализируем позиционирование элементов
     initializeElementPositions(pageContainer);
@@ -18,7 +18,7 @@ window.initializePageElements = function(pageContainer) {
 };
 
 window.initializeMapMarks = function(pageContainer) {
-    console.log('📍 Инициализация геометок...');
+    // console.log('📍 Инициализация геометок...');
     
     const mapMarks = pageContainer.querySelectorAll('.map-mark-area');
     mapMarks.forEach(mark => {
@@ -28,7 +28,7 @@ window.initializeMapMarks = function(pageContainer) {
 };
 
 window.initializeArrows = function(pageContainer) {
-    console.log('➡️ Инициализация стрелок...');
+    // console.log('➡️ Инициализация стрелок...');
     
     const arrows = pageContainer.querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-prosto-leftarea, .custom-cursor-backarea, .custom-cursor-leftarea, .custom-cursor-uparea');
     arrows.forEach(arrow => {
@@ -109,7 +109,7 @@ function setupMapMarkEvents(mapMarkArea) {
     // Обработчик клика по геометке
     mapMark.addEventListener('click', (e) => {
         e.preventDefault();
-        console.log('Клик по геометке:', mapMark.id);
+    // console.log('Клик по геометке:', mapMark.id);
         
         // Здесь можно добавить логику для обработки кликов по геометкам
         // Например, открытие модального окна или переход к другой странице
@@ -141,7 +141,7 @@ function setupArrowEvents(arrowArea) {
         
         const targetPage = arrowArea.dataset.prevPage || arrowArea.dataset.nextPage;
         if (targetPage && window.spaManager) {
-            console.log('Навигация к странице:', targetPage);
+    // console.log('Навигация к странице:', targetPage);
             window.spaManager.navigateToPage(targetPage);
         }
     });
@@ -201,7 +201,7 @@ window.addEventListener('resize', handleResize);
 
 // Функция для активации страницы
 window.onPageActivated = function(pageName, pageContainer) {
-    console.log('📄 Активация страницы:', pageName);
+    // console.log('📄 Активация страницы:', pageName);
     
     // Инициализируем элементы для активированной страницы
     initializeElementPositions(pageContainer);
@@ -214,7 +214,7 @@ window.onPageActivated = function(pageName, pageContainer) {
 
 // Специфичная инициализация для tumski.html
 function initializeTumskiSpecific(pageContainer) {
-    console.log('🏰 Инициализация tumski-специфичной логики...');
+    // console.log('🏰 Инициализация tumski-специфичной логики...');
     
     // Инициализируем анимации
     initializeAnimations(pageContainer);

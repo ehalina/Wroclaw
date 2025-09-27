@@ -11,6 +11,8 @@ function isSoundEnabled() {
     return soundMuted !== 'true';
 }
 
+// Функции позиционирования для планшетов перенесены в common.js
+
 /**
  * Общая инициализация для всех tumski страниц
  * @param {Object} options - опции инициализации
@@ -79,7 +81,7 @@ export async function initializeTumskiPage(options = {}) {
     }
 
     // 6. Фоновая музыка управляется через SPA
-    console.log('🎵 Фоновая музыка управляется через SPA');
+    // console.log('🎵 Фоновая музыка управляется через SPA');
 
     // 7. Инициализация логики книги
     if (window.BookPaths && typeof window.BookPaths.initBookHandlers === 'function') {
@@ -119,7 +121,7 @@ export async function initializeTumskiPage(options = {}) {
 
     // 10. Принудительное применение стилей в зависимости от типа ввода
     const inputType = document.documentElement.getAttribute('data-input-type') || 'desktop';
-    console.log('Current input type:', inputType);
+    // console.log('Current input type:', inputType);
     
     // Применяем стили через общий скрипт определения типа ввода
     if (window.InputDetection && typeof window.InputDetection.applyInputMode === 'function') {
@@ -138,7 +140,9 @@ export async function initializeTumskiPage(options = {}) {
     // 12. Добавляем обработчик события load для изображения
     addLoadHandler();
 
-    // 13. Вызываем дополнительную инициализацию если предоставлена
+    // 13. Позиционирование для планшетов теперь обрабатывается в tumski_cathedral_handler.js
+
+    // 14. Вызываем дополнительную инициализацию если предоставлена
     if (customInit && typeof customInit === 'function') {
         customInit();
     }
@@ -281,6 +285,14 @@ function addResizeHandler() {
                 const cathedralMod = await import('./tumski_cathedral_handler.js');
                 if (cathedralMod && typeof cathedralMod.positionMarkersOnBg === 'function') {
                     cathedralMod.positionMarkersOnBg();
+                }
+                
+                // Позиционирование для планшетов теперь обрабатывается в tumski_cathedral_handler.js
+                // Дополнительно позиционируем стрелки по центру областей для планшетов
+                if (window.positionCursorsInCenterOfAreas && window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches) {
+                    setTimeout(() => {
+                        window.positionCursorsInCenterOfAreas();
+                    }, 200);
                 }
             } catch (error) {
                 console.error('Ошибка обработки изменения размера:', error);

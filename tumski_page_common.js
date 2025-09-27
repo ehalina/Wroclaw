@@ -20,7 +20,7 @@ function isSoundEnabled() {
 }
 
 export async function initPageCommon() {
-    console.log('🎵 initPageCommon вызван для страницы:', window.location.pathname);
+    // console.log('🎵 initPageCommon вызван для страницы:', window.location.pathname);
     try {
         // 1) I18n
         if (window.i18n && typeof window.i18n.loadTranslations === 'function') {
@@ -35,7 +35,7 @@ export async function initPageCommon() {
         // Добавляем обработчик сообщений для смены языка из SPA
         window.addEventListener('message', (event) => {
             if (event.data && event.data.type === 'LANGUAGE_CHANGE') {
-                console.log('🌐 Получено сообщение о смене языка:', event.data.lang);
+                // console.log('🌐 Получено сообщение о смене языка:', event.data.lang);
                 if (window.i18n && typeof window.i18n.changeLang === 'function') {
                     window.i18n.changeLang(event.data.lang);
                 }
@@ -46,7 +46,7 @@ export async function initPageCommon() {
 
         // Функция для отправки сообщения о смене языка в основное окно SPA
         window.sendLanguageChangeToSPA = function(lang) {
-            console.log('🌐 Отправляем сообщение о смене языка в SPA:', lang);
+            // console.log('🌐 Отправляем сообщение о смене языка в SPA:', lang);
             if (window.parent && window.parent !== window) {
                 window.parent.postMessage({
                     type: 'LANGUAGE_CHANGE_FROM_IFRAME',
@@ -100,7 +100,7 @@ export async function initPageCommon() {
         } catch (_) {}
 
         // 6) Стрелки: навесим обработчики, если элементы присутствуют
-        console.log('🎵 Настраиваем обработчики стрелок...');
+        // console.log('🎵 Настраиваем обработчики стрелок...');
         setupAllArrows(stepSound);
 
         // 7) Квест-метки (унифицировано): ищем любые .map-mark с data-quest-number
@@ -229,7 +229,7 @@ function ensureQuestGlowStyles() {
 }
 
 function setupAllArrows(stepSound) {
-    console.log('🎵 setupAllArrows: ищем элементы стрелок...');
+    // console.log('🎵 setupAllArrows: ищем элементы стрелок...');
     try {
         const cursorRight = document.querySelector('.custom-cursor');
         const areaRight = document.querySelector('.custom-cursor-area');
@@ -242,12 +242,12 @@ function setupAllArrows(stepSound) {
         const cursorProstoLeft = document.querySelector('.custom-cursor-prosto-left');
         const areaProstoLeft = document.querySelector('.custom-cursor-prosto-leftarea');
         
-        console.log('🎵 Найденные элементы стрелок:', {
-            cursorBack: !!cursorBack,
-            areaBack: !!areaBack,
-            cursorLeft: !!cursorLeft,
-            areaLeft: !!areaLeft
-        });
+        // console.log('🎵 Найденные элементы стрелок:', {
+        //     cursorBack: !!cursorBack,
+        //     areaBack: !!areaBack,
+        //     cursorLeft: !!cursorLeft,
+        //     areaLeft: !!areaLeft
+        // });
         
 
         // Fallback обработчик клика (для мобильных), читает data-* со стрелки
@@ -262,10 +262,10 @@ function setupAllArrows(stepSound) {
                 
                 // Проверяем, находимся ли мы в SPA
                 if (window.parent && window.parent !== window && window.parent.spaManager) {
-                    console.log('🎵 Fallback навигация через SPA:', url);
+                    // console.log('🎵 Fallback навигация через SPA:', url);
                     window.parent.spaManager.navigateToPage(url);
                 } else {
-                    console.log('🎵 Fallback обычная навигация:', url);
+                    // console.log('🎵 Fallback обычная навигация:', url);
                     setTimeout(() => { window.location.href = url; }, 0);
                 }
             };
@@ -288,57 +288,57 @@ function setupAllArrows(stepSound) {
                     // Специальная логика для tumski18.html -> tumski19.html
                     const currentPage = window.location.pathname.split('/').pop();
                     if (currentPage === 'tumski18.html' && next === 'tumski19.html') {
-                        console.log('🎵 Специальная логика для tumski18 -> tumski19: переключаем музыку');
+                        // console.log('🎵 Специальная логика для tumski18 -> tumski19: переключаем музыку');
                         
                         // Проверяем, находимся ли мы в SPA
                         if (window.parent && window.parent !== window && window.parent.spaManager) {
                             // Переключаем музыку на kostel через SPA
-                            console.log('🎵 Переключаем музыку на kostel через SPA');
+                            // console.log('🎵 Переключаем музыку на kostel через SPA');
                             window.parent.spaManager.switchTrack('kostel');
                             
-                            console.log('🎵 Переход через SPA:', next);
+                            // console.log('🎵 Переход через SPA:', next);
                             window.parent.spaManager.navigateToPage(next);
                         } else {
-                            console.log('🎵 Обычный переход:', next);
+                            // console.log('🎵 Обычный переход:', next);
                             window.location.href = next;
                         }
                     } else if (currentPage === 'tumski20.html' && next === 'tumski21.html') {
-                        console.log('🎵 Специальная логика для tumski20 -> tumski21: переключаем музыку');
+                        // console.log('🎵 Специальная логика для tumski20 -> tumski21: переключаем музыку');
                         
                         // Проверяем, находимся ли мы в SPA
                         if (window.parent && window.parent !== window && window.parent.spaManager) {
                             // Переключаем музыку на hang через SPA
-                            console.log('🎵 Переключаем музыку на hang через SPA');
+                            // console.log('🎵 Переключаем музыку на hang через SPA');
                             window.parent.spaManager.switchTrack('hang');
                             
-                            console.log('🎵 Переход через SPA:', next);
+                            // console.log('🎵 Переход через SPA:', next);
                             window.parent.spaManager.navigateToPage(next);
                         } else {
-                            console.log('🎵 Обычный переход:', next);
+                            // console.log('🎵 Обычный переход:', next);
                             window.location.href = next;
                         }
                     } else if (currentPage === 'tumski15.html' && next === 'ogrod13.html') {
-                        console.log('🎵 Специальная логика для tumski15 -> ogrod13: переключаем музыку');
+                        // console.log('🎵 Специальная логика для tumski15 -> ogrod13: переключаем музыку');
                         
                         // Проверяем, находимся ли мы в SPA
                         if (window.parent && window.parent !== window && window.parent.spaManager) {
                             // Переключаем музыку на birds через SPA
-                            console.log('🎵 Переключаем музыку на birds через SPA');
+                            // console.log('🎵 Переключаем музыку на birds через SPA');
                             window.parent.spaManager.switchTrack('birds');
                             
-                            console.log('🎵 Переход через SPA:', next);
+                            // console.log('🎵 Переход через SPA:', next);
                             window.parent.spaManager.navigateToPage(next);
                         } else {
-                            console.log('🎵 Обычный переход:', next);
+                            // console.log('🎵 Обычный переход:', next);
                             window.location.href = next;
                         }
                     } else {
                         // Обычная логика для других переходов
                         if (window.parent && window.parent !== window && window.parent.spaManager) {
-                            console.log('🎵 Переход через SPA:', next);
+                            // console.log('🎵 Переход через SPA:', next);
                             window.parent.spaManager.navigateToPage(next);
                         } else {
-                            console.log('🎵 Обычный переход:', next);
+                            // console.log('🎵 Обычный переход:', next);
                             window.location.href = next;
                         }
                     }
@@ -348,13 +348,13 @@ function setupAllArrows(stepSound) {
         }
 
         // Назад (data-prev-page на .custom-cursor-back)
-        console.log('🎵 Проверяем стрелку назад:', {
-            cursorBack: !!cursorBack,
-            areaBack: !!areaBack,
-            setupBackArrowHandler: typeof window.setupBackArrowHandler,
-            dataPrevPage: cursorBack ? cursorBack.getAttribute('data-prev-page') : 'нет cursorBack',
-            currentPage: window.location.pathname
-        });
+        // console.log('🎵 Проверяем стрелку назад:', {
+        //     cursorBack: !!cursorBack,
+        //     areaBack: !!areaBack,
+        //     setupBackArrowHandler: typeof window.setupBackArrowHandler,
+        //     dataPrevPage: cursorBack ? cursorBack.getAttribute('data-prev-page') : 'нет cursorBack',
+        //     currentPage: window.location.pathname
+        // });
         
         if (cursorBack && areaBack && typeof window.setupBackArrowHandler === 'function') {
             window.setupBackArrowHandler(cursorBack, areaBack, stepSound, () => {
@@ -370,7 +370,7 @@ function setupAllArrows(stepSound) {
             });
             attachDirectNav(cursorBack, areaBack, 'data-prev-page');
         } else {
-            console.log('🎵 Стрелка назад не настроена - отсутствуют элементы или функция');
+            // console.log('🎵 Стрелка назад не настроена - отсутствуют элементы или функция');
         }
 
         // Влево (data-next-page на .custom-cursor-left)
@@ -380,10 +380,10 @@ function setupAllArrows(stepSound) {
                 if (next) {
                     // Проверяем, находимся ли мы в SPA
                     if (window.parent && window.parent !== window && window.parent.spaManager) {
-                        console.log('🎵 Переход через SPA:', next);
+                        // console.log('🎵 Переход через SPA:', next);
                         window.parent.spaManager.navigateToPage(next);
                     } else {
-                        console.log('🎵 Обычный переход:', next);
+                        // console.log('🎵 Обычный переход:', next);
                         window.location.href = next;
                     }
                 }
@@ -398,10 +398,10 @@ function setupAllArrows(stepSound) {
                 if (next) {
                     // Проверяем, находимся ли мы в SPA
                     if (window.parent && window.parent !== window && window.parent.spaManager) {
-                        console.log('🎵 Переход через SPA:', next);
+                        // console.log('🎵 Переход через SPA:', next);
                         window.parent.spaManager.navigateToPage(next);
                     } else {
-                        console.log('🎵 Обычный переход:', next);
+                        // console.log('🎵 Обычный переход:', next);
                         window.location.href = next;
                     }
                 }

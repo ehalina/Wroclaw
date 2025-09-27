@@ -360,7 +360,7 @@
                 const closeButton = bookOverlay.querySelector('.close-button');
                 if (closeButton) {
                     closeButton.addEventListener('click', () => {
-                        console.log('🎵 Квест закрыт - переходим на tumski06.html');
+                        // console.log('🎵 Квест закрыт - переходим на tumski06.html');
                         bookOverlay.style.display = 'none';
                         
                         // Включаем language-menu при закрытии модалки
@@ -370,17 +370,17 @@
                         
                         // Переходим на страницу 06 через SPA
                         if (window.parent && window.parent !== window) {
-                            console.log('🎵 Отправляем сообщение родительскому окну для перехода на tumski06.html');
+                            // console.log('🎵 Отправляем сообщение родительскому окну для перехода на tumski06.html');
                             // Отправляем сообщение родительскому окну
                             const message = {
                                 type: 'SPA_NAVIGATE',
                                 page: 'tumski06.html',
                                 action: 'navigate'
                             };
-                            console.log('🎵 Отправляем сообщение:', message);
+                            // console.log('🎵 Отправляем сообщение:', message);
                             window.parent.postMessage(message, '*');
                         } else {
-                            console.log('🎵 Переход на tumski06.html обычным способом');
+                            // console.log('🎵 Переход на tumski06.html обычным способом');
                             window.location.href = 'tumski06.html';
                         }
                     });
@@ -389,22 +389,22 @@
                 // Закрытие по клику вне модального окна
                 bookOverlay.addEventListener('click', (e) => {
                     if (e.target === bookOverlay) {
-                        console.log('🎵 Квест закрыт (клик вне окна) - переходим на tumski06.html');
+                        // console.log('🎵 Квест закрыт (клик вне окна) - переходим на tumski06.html');
                         bookOverlay.style.display = 'none';
                         
                         // Переходим на страницу 06 через SPA
                         if (window.parent && window.parent !== window) {
-                            console.log('🎵 Отправляем сообщение родительскому окну для перехода на tumski06.html');
+                            // console.log('🎵 Отправляем сообщение родительскому окну для перехода на tumski06.html');
                             // Отправляем сообщение родительскому окну
                             const message = {
                                 type: 'SPA_NAVIGATE',
                                 page: 'tumski06.html',
                                 action: 'navigate'
                             };
-                            console.log('🎵 Отправляем сообщение:', message);
+                            // console.log('🎵 Отправляем сообщение:', message);
                             window.parent.postMessage(message, '*');
                         } else {
-                            console.log('🎵 Переход на tumski06.html обычным способом');
+                            // console.log('🎵 Переход на tumski06.html обычным способом');
                             window.location.href = 'tumski06.html';
                         }
                     }
@@ -426,20 +426,20 @@
                     
                     // Добавляем кастомный обработчик
                     const handleBackClick = () => {
-                        console.log('🎵 Клик по стрелке назад на tumski21 - отключаем hang.mp3 и запускаем квест');
+                        // console.log('🎵 Клик по стрелке назад на tumski21 - отключаем hang.mp3 и запускаем квест');
                         
                         // 1. Сначала полностью отключаем hang.mp3
-                        console.log('🎵 Проверяем доступность SPA:', {
-                            hasParent: !!(window.parent && window.parent !== window),
-                            hasSpaManager: !!(window.parent && window.parent.spaManager),
-                            spaManagerType: window.parent && window.parent.spaManager ? typeof window.parent.spaManager : 'undefined'
-                        });
+                        // console.log('🎵 Проверяем доступность SPA:', {
+                        //     hasParent: !!(window.parent && window.parent !== window),
+                        //     hasSpaManager: !!(window.parent && window.parent.spaManager),
+                        //     spaManagerType: window.parent && window.parent.spaManager ? typeof window.parent.spaManager : 'undefined'
+                        // });
                         
                         if (window.parent && window.parent !== window && window.parent.spaManager) {
-                            console.log('🎵 Останавливаем hang.mp3 через SPA');
+                            // console.log('🎵 Останавливаем hang.mp3 через SPA');
                             window.parent.spaManager.switchTrack('town');
                         } else {
-                            console.log('🎵 SPA недоступна, пропускаем переключение музыки');
+                            // console.log('🎵 SPA недоступна, пропускаем переключение музыки');
                         }
                         
                         // Останавливаем анимацию параллакса
@@ -487,16 +487,16 @@
                                 if (bookOverlay && bookOverlay.style.display === 'none') {
                                     // Квест закрыт, выполняем переход через SPA
                                     if (window.parent && window.parent !== window) {
-                                        console.log('🎵 Квест закрыт через checkQuestClosed - отправляем сообщение SPA');
+                                        // console.log('🎵 Квест закрыт через checkQuestClosed - отправляем сообщение SPA');
                                         const message = {
                                             type: 'SPA_NAVIGATE',
                                             page: 'tumski06.html',
                                             action: 'navigate'
                                         };
-                                        console.log('🎵 Отправляем сообщение:', message);
+                                        // console.log('🎵 Отправляем сообщение:', message);
                                         window.parent.postMessage(message, '*');
                                     } else {
-                                        console.log('🎵 Квест закрыт через checkQuestClosed - обычный переход');
+                                        // console.log('🎵 Квест закрыт через checkQuestClosed - обычный переход');
                                         setTimeout(() => {
                                             window.location.href = 'tumski06.html';
                                         }, 100);

@@ -98,7 +98,7 @@ const LanguageMenu = {
     init() {
         // Проверяем, не инициализировано ли уже меню
         if (document.querySelector('.language-menu')) {
-            console.log('🔧 Language menu уже инициализирован, пропускаем повторную инициализацию');
+    // console.log('🔧 Language menu уже инициализирован, пропускаем повторную инициализацию');
             return;
         }
 
@@ -138,7 +138,7 @@ const LanguageMenu = {
         document.body.insertAdjacentHTML('beforeend', menuHTML);
 
         // Создаем кнопку разблокировки аудио динамически
-        console.log('🎵 Вызываем createAudioUnlockButton()');
+    // console.log('🎵 Вызываем createAudioUnlockButton()');
         this.createAudioUnlockButton();
 
         // Добавляем обработчик клика вне меню
@@ -172,7 +172,7 @@ const LanguageMenu = {
                 // Первая загрузка - принудительно выключаем звук
                 soundButton.classList.add('muted');
                 localStorage.setItem('soundMuted', 'true');
-                console.log('🔇 Первая загрузка - звук выключен по умолчанию');
+    // console.log('🔇 Первая загрузка - звук выключен по умолчанию');
                 // Добавляем задержку, чтобы страница полностью загрузилась
                 setTimeout(() => {
                     this.showSoundHint();
@@ -181,10 +181,10 @@ const LanguageMenu = {
                 // Восстанавливаем сохраненное состояние
                 if (isMuted) {
                     soundButton.classList.add('muted');
-                    console.log('🔇 Восстанавливаем сохраненное состояние - звук выключен');
+    // console.log('🔇 Восстанавливаем сохраненное состояние - звук выключен');
                 } else {
                     soundButton.classList.remove('muted');
-                    console.log('🔊 Восстанавливаем сохраненное состояние - звук включен');
+    // console.log('🔊 Восстанавливаем сохраненное состояние - звук включен');
                 }
             }
         }
@@ -210,10 +210,10 @@ const LanguageMenu = {
             const isMuted = localStorage.getItem('soundMuted') === 'true';
             if (isMuted) {
                 soundButton.classList.add('muted');
-                console.log('🔇 Обновляем визуальное состояние - звук выключен');
+    // console.log('🔇 Обновляем визуальное состояние - звук выключен');
             } else {
                 soundButton.classList.remove('muted');
-                console.log('🔊 Обновляем визуальное состояние - звук включен');
+    // console.log('🔊 Обновляем визуальное состояние - звук включен');
             }
         }
     },
@@ -221,7 +221,7 @@ const LanguageMenu = {
     toggleSound() {
         // Проверяем, не отключено ли меню
         if (this.isMenuDisabled()) {
-            console.log('🚫 Language menu отключен, игнорируем клик по кнопке звука');
+    // console.log('🚫 Language menu отключен, игнорируем клик по кнопке звука');
             return;
         }
         
@@ -233,7 +233,7 @@ const LanguageMenu = {
             localStorage.setItem('soundMuted', 'false');
             
             // Инициализируем звуки геометок при первом включении звука
-            console.log('🎵 Включаем звук - инициализируем звуки геометок...');
+    // console.log('🎵 Включаем звук - инициализируем звуки геометок...');
             this.initializeGeoMarkerSounds();
             
             // Принудительно инициализируем звуки в iframe при первом клике
@@ -260,7 +260,7 @@ const LanguageMenu = {
     manageSPAMusic(action) {
         // Отправляем сообщение в родительское окно SPA для управления музыкой
         if (window.parent && window.parent !== window) {
-            console.log('🎵 Отправляем сообщение в SPA для управления музыкой:', action);
+    // console.log('🎵 Отправляем сообщение в SPA для управления музыкой:', action);
             window.parent.postMessage({
                 type: 'soundControl',
                 action: action,
@@ -268,7 +268,7 @@ const LanguageMenu = {
             }, '*');
         } else {
             // Если мы не в iframe, управляем музыкой напрямую
-            console.log('🎵 Управляем музыкой напрямую (не в iframe):', action);
+    // console.log('🎵 Управляем музыкой напрямую (не в iframe):', action);
             if (action === 'unmute') {
                 this.unmuteSPAMusic();
             } else {
@@ -312,21 +312,21 @@ const LanguageMenu = {
     unmuteSPAMusic() {
         // Если музыка еще не инициализирована, инициализируем town и kostel
         if (!this.musicInitialized) {
-            console.log('🎵 Первая инициализация музыки - запускаем town и kostel в фоне');
+    // console.log('🎵 Первая инициализация музыки - запускаем town и kostel в фоне');
             this.startTownMusic();
         } else {
             // Используем SPA менеджер для правильного переключения музыки
             if (window.spaManager && typeof window.spaManager.switchMusicForPage === 'function') {
                 const currentPage = window.spaManager.currentPage;
                 if (currentPage) {
-                    console.log('🎵 Используем SPA менеджер для переключения музыки на странице:', currentPage);
+    // console.log('🎵 Используем SPA менеджер для переключения музыки на странице:', currentPage);
                     window.spaManager.switchMusicForPage(currentPage);
                 } else {
-                    console.log('🎵 SPA менеджер не найден, запускаем town музыку напрямую');
+    // console.log('🎵 SPA менеджер не найден, запускаем town музыку напрямую');
                     this.startTownMusic();
                 }
             } else {
-                console.log('🎵 SPA менеджер не найден, запускаем town музыку напрямую');
+    // console.log('🎵 SPA менеджер не найден, запускаем town музыку напрямую');
                 this.startTownMusic();
             }
         }
@@ -350,7 +350,7 @@ const LanguageMenu = {
             
             backgroundMusic.currentTime = 0;
             backgroundMusic.play().catch(console.log);
-            console.log('🎵 Запускаем фоновую музыку');
+    // console.log('🎵 Запускаем фоновую музыку');
             
             // После успешного запуска town музыки инициализируем kostel в фоне
             if (!this.musicInitialized) {
@@ -361,7 +361,7 @@ const LanguageMenu = {
     },
     
     initializeKostelInBackground() {
-        console.log('🎵 Инициализируем kostel, birds и hang музыку в фоне...');
+    // console.log('🎵 Инициализируем kostel, birds и hang музыку в фоне...');
         
         // Инициализируем kostel музыку
         const kostelMusic = document.querySelector('#kostelMusic');
@@ -385,12 +385,12 @@ const LanguageMenu = {
             // Принудительно инициализируем kostel музыку для iOS
             kostelMusic.play().then(() => {
                 kostelMusic.pause();
-                console.log('🎵 Kostel музыка инициализирована и поставлена на паузу');
+    // console.log('🎵 Kostel музыка инициализирована и поставлена на паузу');
             }).catch(error => {
-                console.log('🎵 Ошибка инициализации kostel музыки:', error);
+    // console.log('🎵 Ошибка инициализации kostel музыки:', error);
             });
         } else {
-            console.log('🎵 Элемент kostelMusic не найден');
+    // console.log('🎵 Элемент kostelMusic не найден');
         }
         
         // Инициализируем birds музыку
@@ -415,12 +415,12 @@ const LanguageMenu = {
             // Принудительно инициализируем birds музыку для iOS
             birdsMusic.play().then(() => {
                 birdsMusic.pause();
-                console.log('🎵 Birds музыка инициализирована и поставлена на паузу');
+    // console.log('🎵 Birds музыка инициализирована и поставлена на паузу');
             }).catch(error => {
-                console.log('🎵 Ошибка инициализации birds музыки:', error);
+    // console.log('🎵 Ошибка инициализации birds музыки:', error);
             });
         } else {
-            console.log('🎵 Элемент birdsMusic не найден');
+    // console.log('🎵 Элемент birdsMusic не найден');
         }
         
         // Инициализируем hang музыку
@@ -445,12 +445,12 @@ const LanguageMenu = {
             // Принудительно инициализируем hang музыку для iOS
             hangMusic.play().then(() => {
                 hangMusic.pause();
-                console.log('🎵 Hang музыка инициализирована и поставлена на паузу');
+    // console.log('🎵 Hang музыка инициализирована и поставлена на паузу');
             }).catch(error => {
-                console.log('🎵 Ошибка инициализации hang музыки:', error);
+    // console.log('🎵 Ошибка инициализации hang музыки:', error);
             });
         } else {
-            console.log('🎵 Элемент hangMusic не найден');
+    // console.log('🎵 Элемент hangMusic не найден');
         }
     },
 
@@ -555,7 +555,7 @@ const LanguageMenu = {
     toggleDropdown() {
         // Проверяем, не отключено ли меню
         if (this.isMenuDisabled()) {
-            console.log('🚫 Language menu отключен, игнорируем клик');
+    // console.log('🚫 Language menu отключен, игнорируем клик');
             return;
         }
         
@@ -566,7 +566,7 @@ const LanguageMenu = {
     async changeLang(lang) {
         // Проверяем, не отключено ли меню
         if (this.isMenuDisabled()) {
-            console.log('🚫 Language menu отключен, игнорируем смену языка');
+    // console.log('🚫 Language menu отключен, игнорируем смену языка');
             return;
         }
         
@@ -604,12 +604,12 @@ const LanguageMenu = {
     },
 
     updateIframeLocalization(lang) {
-        console.log('🌐 Обновляем локализацию в iframe для языка:', lang);
+    // console.log('🌐 Обновляем локализацию в iframe для языка:', lang);
         
         // Находим активный iframe
         const activeIframe = this.getActiveIframe();
         if (!activeIframe) {
-            console.log('🌐 Активный iframe не найден');
+    // console.log('🌐 Активный iframe не найден');
             return;
         }
         
@@ -621,10 +621,10 @@ const LanguageMenu = {
                 // Пытаемся вызвать функцию обновления локализации в iframe
                 if (typeof iframeDoc.defaultView.i18n !== 'undefined' && 
                     typeof iframeDoc.defaultView.i18n.changeLang === 'function') {
-                    console.log('🌐 Вызываем changeLang в iframe');
+    // console.log('🌐 Вызываем changeLang в iframe');
                     iframeDoc.defaultView.i18n.changeLang(lang);
                 } else {
-                    console.log('🌐 i18n не найден в iframe, отправляем сообщение');
+    // console.log('🌐 i18n не найден в iframe, отправляем сообщение');
                     // Отправляем сообщение через postMessage
                     activeIframe.contentWindow.postMessage({
                         type: 'LANGUAGE_CHANGE',
@@ -633,7 +633,7 @@ const LanguageMenu = {
                 }
             }
         } catch (error) {
-            console.log('🌐 Ошибка доступа к iframe:', error);
+    // console.log('🌐 Ошибка доступа к iframe:', error);
             // Fallback: отправляем сообщение через postMessage
             try {
                 activeIframe.contentWindow.postMessage({
@@ -641,18 +641,18 @@ const LanguageMenu = {
                     lang: lang
                 }, '*');
             } catch (postError) {
-                console.log('🌐 Ошибка отправки сообщения в iframe:', postError);
+    // console.log('🌐 Ошибка отправки сообщения в iframe:', postError);
             }
         }
     },
 
     sendLanguageChangeToIframe(lang) {
-        console.log('🌐 Отправляем сообщение о смене языка в iframe:', lang);
+    // console.log('🌐 Отправляем сообщение о смене языка в iframe:', lang);
         
         // Находим активный iframe
         const activeIframe = this.getActiveIframe();
         if (!activeIframe) {
-            console.log('🌐 Активный iframe не найден для отправки сообщения');
+    // console.log('🌐 Активный iframe не найден для отправки сообщения');
             return;
         }
         
@@ -662,9 +662,9 @@ const LanguageMenu = {
                 type: 'LANGUAGE_CHANGE',
                 lang: lang
             }, '*');
-            console.log('🌐 Сообщение отправлено в iframe');
+    // console.log('🌐 Сообщение отправлено в iframe');
         } catch (error) {
-            console.log('🌐 Ошибка отправки сообщения в iframe:', error);
+    // console.log('🌐 Ошибка отправки сообщения в iframe:', error);
         }
     },
 
@@ -677,7 +677,7 @@ const LanguageMenu = {
         const languageMenu = document.querySelector('.language-menu');
         
         if (!soundButton || !languageMenu) {
-            console.log('⚠️ Не найдены элементы для показа подсказки');
+    // console.log('⚠️ Не найдены элементы для показа подсказки');
             return;
         }
         
@@ -734,11 +734,11 @@ const LanguageMenu = {
     },
 
     initializeGeoMarkerSounds() {
-        console.log('🎵 Инициализируем звуки геометок...');
+    // console.log('🎵 Инициализируем звуки геометок...');
         
         // Находим все аудио элементы с opening-a-book.wav
         const geoMarkerSounds = document.querySelectorAll('audio[src*="opening-a-book.wav"]');
-        console.log('🎵 Найдено звуков геометок:', geoMarkerSounds.length);
+    // console.log('🎵 Найдено звуков геометок:', geoMarkerSounds.length);
         
         geoMarkerSounds.forEach((audio, index) => {
             try {
@@ -761,9 +761,9 @@ const LanguageMenu = {
                     // Сразу ставим на паузу и сбрасываем время
                     audio.pause();
                     audio.currentTime = 0;
-                    console.log(`🎵 Звук геометки ${index + 1} принудительно инициализирован:`, audio.src);
+    // console.log(`🎵 Звук геометки ${index + 1} принудительно инициализирован:`, audio.src);
                 }).catch(error => {
-                    console.log(`🎵 Ошибка принудительной инициализации звука геометки:`, error);
+    // console.log(`🎵 Ошибка принудительной инициализации звука геометки:`, error);
                 });
                 
                 // Дополнительно ставим на паузу сразу после play() для гарантии
@@ -772,7 +772,7 @@ const LanguageMenu = {
                     audio.currentTime = 0;
                 }, 10);
             } catch (error) {
-                console.log('🎵 Ошибка инициализации звука геометки:', error);
+    // console.log('🎵 Ошибка инициализации звука геометки:', error);
             }
         });
         
@@ -785,7 +785,7 @@ const LanguageMenu = {
                 const iframeDoc = activeIframe.contentDocument || activeIframe.contentWindow.document;
                 const iframeSounds = iframeDoc.querySelectorAll('audio[src*="opening-a-book.wav"]');
                 
-                console.log('🎵 Найдено звуков геометок в iframe:', iframeSounds.length);
+    // console.log('🎵 Найдено звуков геометок в iframe:', iframeSounds.length);
                 
                 iframeSounds.forEach((audio, index) => {
                     try {
@@ -799,15 +799,15 @@ const LanguageMenu = {
                         audio.muted = false;
                         audio.volume = 1.0;
                         
-                        console.log(`🎵 Звук геометки в iframe ${index + 1} инициализирован:`, audio.src);
+    // console.log(`🎵 Звук геометки в iframe ${index + 1} инициализирован:`, audio.src);
                     } catch (error) {
-                        console.log('🎵 Ошибка инициализации звука геометки в iframe:', error);
+    // console.log('🎵 Ошибка инициализации звука геометки в iframe:', error);
                     }
                 });
                 
                 // Quest музыка в iframe инициализируется только при открытии геометки квеста
             } catch (error) {
-                console.log('🎵 Не удалось получить доступ к iframe для инициализации звуков:', error);
+    // console.log('🎵 Не удалось получить доступ к iframe для инициализации звуков:', error);
             }
         }
         
@@ -819,7 +819,7 @@ const LanguageMenu = {
                 const iframeSounds = iframeDoc.querySelectorAll('audio[src*="opening-a-book.wav"]');
                 
                 if (iframeSounds.length > 0) {
-                    console.log(`🎵 Инициализируем звуки в iframe ${iframeIndex + 1}:`, iframeSounds.length);
+    // console.log(`🎵 Инициализируем звуки в iframe ${iframeIndex + 1}:`, iframeSounds.length);
                     
                     iframeSounds.forEach((audio, index) => {
                         try {
@@ -831,22 +831,22 @@ const LanguageMenu = {
                             audio.muted = false;
                             audio.volume = 1.0;
                             
-                            console.log(`🎵 Звук геометки в iframe ${iframeIndex + 1}, звук ${index + 1} инициализирован:`, audio.src);
+    // console.log(`🎵 Звук геометки в iframe ${iframeIndex + 1}, звук ${index + 1} инициализирован:`, audio.src);
                         } catch (error) {
-                            console.log('🎵 Ошибка инициализации звука геометки в iframe:', error);
+    // console.log('🎵 Ошибка инициализации звука геометки в iframe:', error);
                         }
                     });
                 }
                 
                 // Quest музыка в iframe инициализируется только при открытии геометки квеста
             } catch (error) {
-                console.log('🎵 Не удалось получить доступ к iframe для инициализации звуков:', error);
+    // console.log('🎵 Не удалось получить доступ к iframe для инициализации звуков:', error);
             }
         });
     },
 
     initializeQuestMusic() {
-        console.log('🎵 Инициализируем музыку quest...');
+    // console.log('🎵 Инициализируем музыку quest...');
         
         // Создаем глобальный аудио элемент для quest музыки, если его еще нет
         let questMusic = window.questMusic || document.getElementById('questMusic');
@@ -865,10 +865,10 @@ const LanguageMenu = {
             // Регистрируем quest музыку в менеджере видимости
             if (window.visibilityAudioManager) {
                 window.visibilityAudioManager.registerAudio(questMusic);
-                console.log('🎵 Quest музыка зарегистрирована в менеджере видимости');
+    // console.log('🎵 Quest музыка зарегистрирована в менеджере видимости');
             }
             
-            console.log('🎵 Создан глобальный аудио элемент для quest музыки');
+    // console.log('🎵 Создан глобальный аудио элемент для quest музыки');
         }
         
         // Принудительно инициализируем quest музыку
@@ -882,12 +882,12 @@ const LanguageMenu = {
             questMusic.play().then(() => {
                 questMusic.pause();
                 questMusic.currentTime = 0;
-                console.log('🎵 Quest музыка принудительно инициализирована');
+    // console.log('🎵 Quest музыка принудительно инициализирована');
             }).catch(error => {
-                console.log('🎵 Ошибка принудительной инициализации quest музыки:', error);
+    // console.log('🎵 Ошибка принудительной инициализации quest музыки:', error);
             });
         } catch (error) {
-            console.log('🎵 Ошибка инициализации quest музыки:', error);
+    // console.log('🎵 Ошибка инициализации quest музыки:', error);
         }
         
         // Делаем quest музыку доступной глобально для quest_marker_handler.js
@@ -905,11 +905,11 @@ const LanguageMenu = {
     },
 
     forceInitializeIframeSounds() {
-        console.log('🎵 Принудительно инициализируем звуки в iframe...');
+    // console.log('🎵 Принудительно инициализируем звуки в iframe...');
         
         // Инициализируем звуки во всех iframe на странице
         const allIframes = document.querySelectorAll('iframe');
-        console.log('🎵 Найдено iframe:', allIframes.length);
+    // console.log('🎵 Найдено iframe:', allIframes.length);
         
         allIframes.forEach((iframe, iframeIndex) => {
             try {
@@ -917,7 +917,7 @@ const LanguageMenu = {
                 const iframeSounds = iframeDoc.querySelectorAll('audio[src*="opening-a-book.wav"]');
                 
                 if (iframeSounds.length > 0) {
-                    console.log(`🎵 Принудительно инициализируем звуки в iframe ${iframeIndex + 1}:`, iframeSounds.length);
+    // console.log(`🎵 Принудительно инициализируем звуки в iframe ${iframeIndex + 1}:`, iframeSounds.length);
                     
                     iframeSounds.forEach((audio, index) => {
                         try {
@@ -935,9 +935,9 @@ const LanguageMenu = {
                                 // Сразу ставим на паузу и сбрасываем время
                                 audio.pause();
                                 audio.currentTime = 0;
-                                console.log(`🎵 Звук геометки в iframe ${iframeIndex + 1}, звук ${index + 1} принудительно инициализирован`);
+    // console.log(`🎵 Звук геометки в iframe ${iframeIndex + 1}, звук ${index + 1} принудительно инициализирован`);
                             }).catch(error => {
-                                console.log(`🎵 Ошибка принудительной инициализации звука в iframe:`, error);
+    // console.log(`🎵 Ошибка принудительной инициализации звука в iframe:`, error);
                             });
                             
                             // Дополнительно ставим на паузу сразу после play() для гарантии
@@ -947,7 +947,7 @@ const LanguageMenu = {
                             }, 10);
                             
                         } catch (error) {
-                            console.log('🎵 Ошибка принудительной инициализации звука геометки в iframe:', error);
+    // console.log('🎵 Ошибка принудительной инициализации звука геометки в iframe:', error);
                         }
                     });
                 }
@@ -955,7 +955,7 @@ const LanguageMenu = {
                 // Также инициализируем quest музыку в iframe
                 this.initializeQuestMusicInIframe(iframeDoc, iframeIndex + 1);
             } catch (error) {
-                console.log('🎵 Не удалось получить доступ к iframe для принудительной инициализации звуков:', error);
+    // console.log('🎵 Не удалось получить доступ к iframe для принудительной инициализации звуков:', error);
             }
         });
         
@@ -963,7 +963,7 @@ const LanguageMenu = {
     },
 
     initializeQuestMusicInIframe(iframeDoc, iframeIndex) {
-        console.log(`🎵 Инициализируем quest музыку в iframe ${iframeIndex}...`);
+    // console.log(`🎵 Инициализируем quest музыку в iframe ${iframeIndex}...`);
         
         try {
             // Используем глобальную quest музыку из основного контекста
@@ -983,10 +983,10 @@ const LanguageMenu = {
                     // Регистрируем quest музыку в менеджере видимости
                     if (window.visibilityAudioManager) {
                         window.visibilityAudioManager.registerAudio(questMusic);
-                        console.log('🎵 Quest музыка зарегистрирована в менеджере видимости');
+    // console.log('🎵 Quest музыка зарегистрирована в менеджере видимости');
                     }
                     
-                    console.log('🎵 Создан глобальный аудио элемент quest музыки');
+    // console.log('🎵 Создан глобальный аудио элемент quest музыки');
                 }
                 window.questMusic = questMusic;
             }
@@ -1001,9 +1001,9 @@ const LanguageMenu = {
             questMusic.play().then(() => {
                 questMusic.pause();
                 questMusic.currentTime = 0;
-                console.log(`🎵 Quest музыка принудительно инициализирована`);
+    // console.log(`🎵 Quest музыка принудительно инициализирована`);
             }).catch(error => {
-                console.log(`🎵 Ошибка принудительной инициализации quest музыки:`, error);
+    // console.log(`🎵 Ошибка принудительной инициализации quest музыки:`, error);
             });
             
             // Делаем quest музыку доступной в iframe
@@ -1011,9 +1011,9 @@ const LanguageMenu = {
                 iframeDoc.defaultView.questMusic = questMusic;
             }
             
-            console.log(`🎵 Quest музыка передана в iframe ${iframeIndex}`);
+    // console.log(`🎵 Quest музыка передана в iframe ${iframeIndex}`);
         } catch (error) {
-            console.log(`🎵 Ошибка инициализации quest музыки в iframe ${iframeIndex}:`, error);
+    // console.log(`🎵 Ошибка инициализации quest музыки в iframe ${iframeIndex}:`, error);
         }
     },
 
@@ -1021,9 +1021,9 @@ const LanguageMenu = {
         const menu = document.querySelector('.language-menu');
         if (menu) {
             menu.classList.add('disabled');
-            console.log('🚫 Language menu отключен');
+    // console.log('🚫 Language menu отключен');
         } else {
-            console.log('⚠️ Language menu не найден для отключения');
+    // console.log('⚠️ Language menu не найден для отключения');
         }
     },
 
@@ -1031,9 +1031,9 @@ const LanguageMenu = {
         const menu = document.querySelector('.language-menu');
         if (menu) {
             menu.classList.remove('disabled');
-            console.log('✅ Language menu включен');
+    // console.log('✅ Language menu включен');
         } else {
-            console.log('⚠️ Language menu не найден для включения');
+    // console.log('⚠️ Language menu не найден для включения');
         }
     },
 
@@ -1044,15 +1044,15 @@ const LanguageMenu = {
 
     // Создает кнопку разблокировки аудио
     createAudioUnlockButton() {
-        console.log('🎵 createAudioUnlockButton() вызван');
+    // console.log('🎵 createAudioUnlockButton() вызван');
         
         // Проверяем, не создана ли уже кнопка
         if (document.getElementById('audioUnlockButton')) {
-            console.log('🎵 Кнопка разблокировки аудио уже существует');
+    // console.log('🎵 Кнопка разблокировки аудио уже существует');
             return;
         }
         
-        console.log('🎵 Создаем новую кнопку разблокировки аудио');
+    // console.log('🎵 Создаем новую кнопку разблокировки аудио');
 
         // Создаем HTML для кнопки
         const buttonHTML = `
@@ -1069,27 +1069,27 @@ const LanguageMenu = {
 
         // Добавляем обработчик клика
         const audioUnlockButton = document.getElementById('audioUnlockButton');
-        console.log('🔍 Создана кнопка разблокировки аудио:', audioUnlockButton);
+    // console.log('🔍 Создана кнопка разблокировки аудио:', audioUnlockButton);
         
         if (audioUnlockButton) {
-            console.log('✅ Кнопка разблокировки аудио создана, добавляем обработчик');
+    // console.log('✅ Кнопка разблокировки аудио создана, добавляем обработчик');
             const self = this; // Сохраняем ссылку на объект LanguageMenu
             
             // Создаем обработчик
             this.handleAudioUnlockClick = function() {
-                console.log('🎵 Клик по кнопке разблокировки аудио в SPA');
+    // console.log('🎵 Клик по кнопке разблокировки аудио в SPA');
                 
                 // Активируем кнопку звука в SPA
                 const soundButton = document.querySelector('.sound-menu-button');
-                console.log('🔍 Поиск кнопки звука:', soundButton);
+    // console.log('🔍 Поиск кнопки звука:', soundButton);
                 
                 if (soundButton) {
-                    console.log('✅ Кнопка звука найдена, активируем...');
+    // console.log('✅ Кнопка звука найдена, активируем...');
                     soundButton.classList.remove('muted');
                     localStorage.setItem('soundMuted', 'false');
-                    console.log('🔊 Кнопка звука в SPA активирована, классы:', soundButton.className);
+    // console.log('🔊 Кнопка звука в SPA активирована, классы:', soundButton.className);
                 } else {
-                    console.log('❌ Кнопка звука не найдена!');
+    // console.log('❌ Кнопка звука не найдена!');
                 }
                 
                 // Вызываем функцию включения звука из LanguageMenu
@@ -1103,21 +1103,21 @@ const LanguageMenu = {
                             type: 'AUDIO_UNLOCK_CLICKED',
                             action: 'unmute'
                         }, '*');
-                        console.log('🎵 Сообщение отправлено в iframe для активации звука');
+    // console.log('🎵 Сообщение отправлено в iframe для активации звука');
                     } catch (error) {
-                        console.log('🎵 Ошибка отправки сообщения в iframe:', error);
+    // console.log('🎵 Ошибка отправки сообщения в iframe:', error);
                     }
                 }
                 
                 // Скрываем кнопку разблокировки аудио
                 audioUnlockButton.style.display = 'none';
-                console.log('🎵 Кнопка разблокировки аудио в SPA скрыта');
+    // console.log('🎵 Кнопка разблокировки аудио в SPA скрыта');
             };
             
             // Добавляем обработчик
             audioUnlockButton.addEventListener('click', this.handleAudioUnlockClick);
         } else {
-            console.log('❌ Не удалось создать кнопку разблокировки аудио!');
+    // console.log('❌ Не удалось создать кнопку разблокировки аудио!');
         }
     }
 };

@@ -1270,7 +1270,7 @@ const MapModal = {
             const bookSound = document.getElementById('bookSound');
             if (bookSound && window.isSoundEnabled && window.isSoundEnabled()) {
                 bookSound.currentTime = 0;
-                bookSound.play().catch(console.log);
+                bookSound.play().catch(/* console.log */);
             }
             
             // Получаем номер точки из data-атрибута
@@ -1445,7 +1445,7 @@ const MapModal = {
             // Воспроизводим звук книги только если звук включен
             if (bookSound && window.isSoundEnabled && window.isSoundEnabled()) {
                 bookSound.currentTime = 0;
-                bookSound.play().catch(console.log);
+                bookSound.play().catch(/* console.log */);
             }
 
             // Заполняем список заданий
@@ -2033,7 +2033,7 @@ const MapModal = {
             // Воспроизведение звука книги только если звук включен
             if (bookSound && window.isSoundEnabled && window.isSoundEnabled()) {
                 bookSound.currentTime = 0;
-                bookSound.play().catch(console.log);
+                bookSound.play().catch(/* console.log */);
             }
             
             // Скрываем элементы книги внутри модалки, которые не нужны для картинки квеста
@@ -2576,7 +2576,7 @@ async function showQuestConfirmDialog(message) {
         const bookSound = document.getElementById('bookSound');
         if (bookSound && window.isSoundEnabled && window.isSoundEnabled()) {
             bookSound.currentTime = 0;
-            bookSound.play().catch(console.log);
+            bookSound.play().catch(/* console.log */);
         }
 
         // Обработчики кнопок

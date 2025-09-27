@@ -89,7 +89,7 @@
        </div>
        <!-- Геометка: Тумский мост -->
        <div class="map-mark-area" >
-           <div class="map-mark" id="tumski_most" data-x-desktop="1800" data-y-desktop="800" data-x-mobile="1950" data-y-mobile="800"></div>
+           <div class="map-mark" id="tumski_most" data-x-desktop="1800" data-y-desktop="700" data-x-mobile="1950" data-y-mobile="800"></div>
            <div class="content-wrapper">
                <img class="papera-image" alt="Papera">
                <div class="tumski-text" id="tumski-most-text" data-i18n="tumski_most.title"></div>
@@ -98,7 +98,7 @@
        </div>
        <!-- Геометка: Соборная церковь Святого Креста и Св. Варфоломея -->
        <div class="map-mark-area" >
-           <div class="map-mark" id="katedra_koscielna" data-x-desktop="1200" data-y-desktop="600" data-x-mobile="1400" data-y-mobile="500"></div>
+           <div class="map-mark" id="katedra_koscielna" data-x-desktop="1200" data-y-desktop="500" data-x-mobile="1400" data-y-mobile="500"></div>
            <div class="content-wrapper">
                <img class="papera-image" alt="Papera">
                <div class="tumski-text" id="katedra-koscielna-text" data-i18n="katedra_koscielna.title"></div>
@@ -112,7 +112,7 @@
         // Добавляем обработчик сообщений для смены языка из SPA
         window.addEventListener('message', (event) => {
             if (event.data && event.data.type === 'LANGUAGE_CHANGE') {
-                console.log('🌐 Получено сообщение о смене языка в tumski.html:', event.data.lang);
+                // console.log('🌐 Получено сообщение о смене языка в tumski.html:', event.data.lang);
                 if (window.i18n && typeof window.i18n.changeLang === 'function') {
                     window.i18n.changeLang(event.data.lang);
                 }
@@ -120,7 +120,7 @@
             
             // Обработчик сообщения о разблокировке аудио
             if (event.data && event.data.type === 'AUDIO_UNLOCKED' && event.data.source === 'spa') {
-                console.log('🎵 Получено сообщение о разблокировке аудио в tumski.html');
+                // console.log('🎵 Получено сообщение о разблокировке аудио в tumski.html');
                 handleAudioUnlocked();
             }
         });
@@ -129,7 +129,7 @@
          * Обрабатывает разблокировку аудио
          */
         function handleAudioUnlocked() {
-            console.log('🎵 Обрабатываем разблокировку аудио в tumski.html...');
+            // console.log('🎵 Обрабатываем разблокировку аудио в tumski.html...');
             
             // Ищем кнопку sound-menu-button
             const soundButton = document.querySelector('.sound-menu-button');
@@ -137,7 +137,7 @@
                 // Если кнопка была выключена (muted), включаем её
                 if (soundButton.classList.contains('muted')) {
                     soundButton.classList.remove('muted');
-                    console.log('🎵 Кнопка sound-menu-button включена');
+                    // console.log('🎵 Кнопка sound-menu-button включена');
                     
                     // Обновляем иконку кнопки
                     const icon = soundButton.querySelector('i');
@@ -149,12 +149,12 @@
                     localStorage.setItem('soundMuted', 'false');
                     
                     // Не отправляем сообщение unmute, так как это может вызвать переключение музыки
-                    console.log('🎵 Кнопка sound-menu-button включена, сообщение в SPA не отправляем');
+                    // console.log('🎵 Кнопка sound-menu-button включена, сообщение в SPA не отправляем');
                 } else {
-                    console.log('🎵 Кнопка sound-menu-button уже была включена');
+                    // console.log('🎵 Кнопка sound-menu-button уже была включена');
                 }
             } else {
-                console.log('🎵 Кнопка sound-menu-button не найдена');
+                // console.log('🎵 Кнопка sound-menu-button не найдена');
             }
         }
     </script>

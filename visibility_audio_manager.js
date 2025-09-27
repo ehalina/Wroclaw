@@ -16,7 +16,7 @@ class VisibilityAudioManager {
     init() {
         if (this.isInitialized) return;
         
-        console.log('🎵 Инициализация менеджера видимости аудио');
+    // console.log('🎵 Инициализация менеджера видимости аудио');
         
         // Добавляем обработчик изменения видимости
         document.addEventListener('visibilitychange', () => {
@@ -39,7 +39,7 @@ class VisibilityAudioManager {
     registerAudio(audioElement) {
         if (audioElement && audioElement.tagName === 'AUDIO') {
             this.audioElements.add(audioElement);
-            console.log('🎵 Зарегистрирован аудио элемент:', audioElement.id || audioElement.src);
+    // console.log('🎵 Зарегистрирован аудио элемент:', audioElement.id || audioElement.src);
         }
     }
     
@@ -82,11 +82,11 @@ class VisibilityAudioManager {
     handlePageHidden() {
         // Дополнительная проверка: убеждаемся, что страница действительно невидима
         if (document.visibilityState !== 'hidden') {
-            console.log('🎵 Страница не невидима, игнорируем handlePageHidden');
+    // console.log('🎵 Страница не невидима, игнорируем handlePageHidden');
             return;
         }
         
-        console.log('🎵 Страница стала невидимой - ставим аудио на паузу');
+    // console.log('🎵 Страница стала невидимой - ставим аудио на паузу');
         
         this.audioElements.forEach(audio => {
             if (audio && !audio.paused) {
@@ -97,7 +97,7 @@ class VisibilityAudioManager {
                 });
                 
                 audio.pause();
-                console.log('🎵 Аудио поставлено на паузу:', audio.id || audio.src);
+    // console.log('🎵 Аудио поставлено на паузу:', audio.id || audio.src);
             }
         });
         
@@ -108,7 +108,7 @@ class VisibilityAudioManager {
                 wasPlaying: true
             });
             window.questMusic.pause();
-            console.log('🎵 Quest музыка поставлена на паузу');
+    // console.log('🎵 Quest музыка поставлена на паузу');
         }
     }
     
@@ -116,17 +116,17 @@ class VisibilityAudioManager {
     handlePageVisible() {
         // Дополнительная проверка: убеждаемся, что страница действительно видима
         if (document.visibilityState !== 'visible') {
-            console.log('🎵 Страница не видима, игнорируем handlePageVisible');
+    // console.log('🎵 Страница не видима, игнорируем handlePageVisible');
             return;
         }
         
         // Проверяем, что страница была скрыта достаточно долго (больше 200мс)
         if (this.hiddenStartTime && (Date.now() - this.hiddenStartTime) < 200) {
-            console.log('🎵 Страница была скрыта слишком короткое время, игнорируем handlePageVisible');
+    // console.log('🎵 Страница была скрыта слишком короткое время, игнорируем handlePageVisible');
             return;
         }
         
-        console.log('🎵 Страница стала видимой - возобновляем аудио');
+    // console.log('🎵 Страница стала видимой - возобновляем аудио');
         
         this.audioElements.forEach(audio => {
             if (audio && this.pausedStates.has(audio)) {
@@ -138,9 +138,9 @@ class VisibilityAudioManager {
                     
                     // Возобновляем воспроизведение
                     audio.play().then(() => {
-                        console.log('🎵 Аудио возобновлено:', audio.id || audio.src);
+    // console.log('🎵 Аудио возобновлено:', audio.id || audio.src);
                     }).catch(error => {
-                        console.log('🎵 Ошибка при возобновлении аудио:', error);
+    // console.log('🎵 Ошибка при возобновлении аудио:', error);
                     });
                 }
                 
@@ -156,9 +156,9 @@ class VisibilityAudioManager {
             if (state.wasPlaying) {
                 window.questMusic.currentTime = state.currentTime;
                 window.questMusic.play().then(() => {
-                    console.log('🎵 Quest музыка возобновлена');
+    // console.log('🎵 Quest музыка возобновлена');
                 }).catch(error => {
-                    console.log('🎵 Ошибка при возобновлении quest музыки:', error);
+    // console.log('🎵 Ошибка при возобновлении quest музыки:', error);
                 });
             }
             
@@ -183,14 +183,14 @@ class VisibilityAudioManager {
             this.registerAudio(window.questMusic);
         }
         
-        console.log(`🎵 Автоматически зарегистрировано ${allAudio.length} аудио элементов`);
+    // console.log(`🎵 Автоматически зарегистрировано ${allAudio.length} аудио элементов`);
     }
     
     // Принудительная регистрация quest музыки
     registerQuestMusic() {
         if (window.questMusic) {
             this.registerAudio(window.questMusic);
-            console.log('🎵 Quest музыка принудительно зарегистрирована');
+    // console.log('🎵 Quest музыка принудительно зарегистрирована');
             return true;
         }
         return false;
@@ -208,7 +208,7 @@ class VisibilityAudioManager {
         this.pausedStates.clear();
         this.isInitialized = false;
         
-        console.log('🎵 Менеджер видимости аудио уничтожен');
+    // console.log('🎵 Менеджер видимости аудио уничтожен');
     }
 }
 
@@ -262,4 +262,4 @@ observer.observe(document.body, {
     subtree: true
 });
 
-console.log('🎵 Менеджер видимости аудио загружен и готов к работе');
+    // console.log('🎵 Менеджер видимости аудио загружен и готов к работе');

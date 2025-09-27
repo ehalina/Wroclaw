@@ -29,11 +29,11 @@ function t(key) {
     // Используем переводы из window.i18n.translations, если они есть
     const currentTranslations = window.i18n ? window.i18n.translations : translations;
     
-    console.log('🌐 Ищем перевод для ключа:', key, 'в переводах:', currentTranslations ? 'загружены' : 'не загружены');
+    // console.log('🌐 Ищем перевод для ключа:', key, 'в переводах:', currentTranslations ? 'загружены' : 'не загружены');
     
     // Сначала ищем плоский ключ
     if (currentTranslations && currentTranslations.hasOwnProperty(key)) {
-        console.log('🌐 Найден плоский ключ:', key, '->', currentTranslations[key]);
+        // console.log('🌐 Найден плоский ключ:', key, '->', currentTranslations[key]);
         return currentTranslations[key];
     }
     // Если не найдено — ищем вложенный ключ
@@ -43,21 +43,21 @@ function t(key) {
         if (result && result[k]) {
             result = result[k];
         } else {
-            console.log('🌐 Ключ не найден:', key, 'возвращаем ключ как есть');
+            // console.log('🌐 Ключ не найден:', key, 'возвращаем ключ как есть');
             return key;
         }
     }
-    console.log('🌐 Найден вложенный ключ:', key, '->', result);
+    // console.log('🌐 Найден вложенный ключ:', key, '->', result);
     return result;
 }
 
 // Функция для смены языка
 async function changeLang(lang) {
-    console.log('🌐 Смена языка на:', lang);
+    // console.log('🌐 Смена языка на:', lang);
     await loadTranslations(lang);
-    console.log('🌐 Переводы загружены, обновляем контент...');
+    // console.log('🌐 Переводы загружены, обновляем контент...');
     updatePageContent();
-    console.log('🌐 Контент обновлен');
+    // console.log('🌐 Контент обновлен');
     
     // Отправляем сообщение в SPA, если мы находимся в iframe
     if (window.sendLanguageChangeToSPA && typeof window.sendLanguageChangeToSPA === 'function') {
@@ -67,17 +67,17 @@ async function changeLang(lang) {
 
 // Функция для обновления контента на странице
 function updatePageContent() {
-    console.log('🌐 Начинаем обновление контента страницы...');
+    // console.log('🌐 Начинаем обновление контента страницы...');
     
     // Обновляем все элементы с атрибутом data-i18n
     const elementsWithI18n = document.querySelectorAll('[data-i18n]');
-    console.log('🌐 Найдено элементов с data-i18n:', elementsWithI18n.length);
+    // console.log('🌐 Найдено элементов с data-i18n:', elementsWithI18n.length);
     
     elementsWithI18n.forEach(element => {
         const key = element.getAttribute('data-i18n');
         const newText = t(key);
         element.innerHTML = newText;
-        console.log('🌐 Обновлен элемент:', key, '->', newText);
+        // console.log('🌐 Обновлен элемент:', key, '->', newText);
     });
 
     // Специально обновляем кнопку разблокировки аудио
@@ -85,7 +85,7 @@ function updatePageContent() {
     if (audioUnlockText) {
         const newText = t('music.audio_unlock_text');
         audioUnlockText.innerHTML = newText;
-        console.log('🌐 Обновлен текст кнопки разблокировки аудио:', newText);
+        // console.log('🌐 Обновлен текст кнопки разблокировки аудио:', newText);
     } else {
         // Дополнительная проверка: ищем кнопку по ID
         const audioUnlockButton = document.getElementById('audioUnlockButton');
@@ -94,10 +94,10 @@ function updatePageContent() {
             if (textElement) {
                 const newText = t('music.audio_unlock_text');
                 textElement.innerHTML = newText;
-                console.log('🌐 Обновлен текст кнопки разблокировки аудио (по ID):', newText);
+                // console.log('🌐 Обновлен текст кнопки разблокировки аудио (по ID):', newText);
             }
         } else {
-            console.log('🌐 Кнопка разблокировки аудио не найдена на странице');
+            // console.log('🌐 Кнопка разблокировки аудио не найдена на странице');
         }
     }
     
@@ -106,7 +106,7 @@ function updatePageContent() {
     allAudioUnlockElements.forEach((element, index) => {
         const newText = t('music.audio_unlock_text');
         element.innerHTML = newText;
-        console.log(`🌐 Обновлен элемент ${index + 1} с music.audio_unlock_text:`, newText);
+        // console.log(`🌐 Обновлен элемент ${index + 1} с music.audio_unlock_text:`, newText);
     });
 
     // Обновляем заголовки маркеров
@@ -187,8 +187,8 @@ window.i18n = {
 
 // Автоматически загружаем переводы и обновляем контент при загрузке страницы
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('🌐 DOM загружен, загружаем переводы...');
+    // console.log('🌐 DOM загружен, загружаем переводы...');
     await loadTranslations('pl'); // Загружаем польские переводы по умолчанию
-    console.log('🌐 Переводы загружены, обновляем контент...');
+    // console.log('🌐 Переводы загружены, обновляем контент...');
     updatePageContent();
 }); 

@@ -1069,3 +1069,29 @@ html[data-input-type="touch"] .tumski-text {
         pointer-events: none !important;
     }
 }
+
+/* ===== ПЛАНШЕТЫ ===== */
+/* Медиа-запрос для планшетов: устройства с touch-интерфейсом и шириной от 768px */
+@media (hover: none) and (pointer: coarse) and (min-width: 768px) {
+    /* Кастомные курсоры для планшетов */
+    [data-x-mobile] {
+        position: absolute !important;
+        z-index: 10;
+    }
+    
+    /* Все геометки для планшетов (включая квест-геометки) */
+    .map-mark[data-x-mobile] {
+        position: absolute !important;
+        z-index: 5;
+    }
+    
+    /* Обеспечиваем видимость элементов на планшетах */
+    .map-mark,
+    .map-mark-area,
+    [data-x-mobile] {
+        opacity: 1 !important;
+        display: block !important;
+        pointer-events: auto !important;
+        visibility: visible !important;
+    }
+}

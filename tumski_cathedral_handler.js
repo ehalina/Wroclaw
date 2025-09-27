@@ -619,7 +619,19 @@ export function positionMarkersOnBg() {
     positionMarkersRetryCount = 0;
     
     // Определяем, поддерживает ли устройство hover (указывает на touch-устройство)
-    const isMobile = !window.matchMedia('(hover: hover)').matches;
+    // Для планшетов используем десктопную логику
+    const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
+    const isMobile = !window.matchMedia('(hover: hover)').matches && !isTablet;
+    
+    // console.log('📱 Определение типа устройства:', {
+    //     isTablet: isTablet,
+    //     isMobile: isMobile,
+    //     hover: window.matchMedia('(hover: hover)').matches,
+    //     pointer: window.matchMedia('(pointer: coarse)').matches,
+    //     minWidth: window.matchMedia('(min-width: 768px)').matches,
+    //     screenWidth: window.innerWidth,
+    //     screenHeight: window.innerHeight
+    // });
 
     // Геометки и стрелки должны иметь data-x-desktop/data-y-desktop или data-x-mobile/data-y-mobile
     const markers = document.querySelectorAll('[data-x-desktop][data-y-desktop], [data-x-mobile][data-y-mobile]');
@@ -629,6 +641,7 @@ export function positionMarkersOnBg() {
             // Выбираем координаты в зависимости от размера экрана
             let x, y;
             if (isMobile) {
+                // console.log(`📱 Мобильная логика для маркера ${index + 1}`);
                 // Для мобильных используем старую логику с размерами картинки
                 const imgNaturalWidth = 2624;
                 const imgNaturalHeight = 1824;
@@ -648,6 +661,7 @@ export function positionMarkersOnBg() {
                 marker.style.setProperty('left', left + 'px', 'important');
                 marker.style.setProperty('top', top + 'px', 'important');
             } else {
+                // console.log(`🖥️ Десктопная логика для маркера ${index + 1} (включая планшеты)`);
                 // Для десктопа: улучшенная логика позиционирования
                 // 1. Получаем элемент .image
                 const imageElement = document.querySelector('.image');
@@ -717,6 +731,11 @@ export function positionMarkersOnBg() {
     
     // После позиционирования маркеров позиционируем content-wrapper относительно map-mark
     positionContentWrapperRelativeToMapMark();
+    
+    // Для планшетов позиционируем стрелки по центру их областей
+    if (isTablet) {
+        positionCursorsInCenterOfAreas();
+    }
     
     // Растягиваем картинки papera по размеру текста
     stretchPaperaToTextWidth();
@@ -998,6 +1017,66 @@ export function setupMobileResetAnimation() {
     });
 }
 
+/**
+ * Позиционирует стрелки по центру их областей для планшетов
+ */
+function positionCursorsInCenterOfAreas() {
+    // console.log('🎯 Позиционирование стрелок по центру областей для планшетов');
+    
+    // Список соответствий стрелок и их областей
+    const cursorAreaPairs = [
+        { cursor: 'custom-cursor-left', area: 'custom-cursor-leftarea' },
+        { cursor: 'custom-cursor-right', area: 'custom-cursor-rightarea' },
+        { cursor: 'custom-cursor-up', area: 'custom-cursor-uparea' },
+        { cursor: 'custom-cursor-back', area: 'custom-cursor-backarea' },
+        { cursor: 'custom-cursor-prosto', area: 'custom-cursor-prostoarea' },
+        { cursor: 'custom-cursor-prosto-left', area: 'custom-cursor-prosto-leftarea' }
+    ];
+    
+    cursorAreaPairs.forEach(pair => {
+        const cursor = document.querySelector(`.${pair.cursor}`);
+        const area = document.querySelector(`.${pair.area}`);
+        
+        if (cursor && area) {
+            // Получаем позицию и размеры области
+            const areaRect = area.getBoundingClientRect();
+            const containerRect = document.querySelector('.image-container').getBoundingClientRect();
+            
+            // Вычисляем относительные координаты области
+            const areaLeft = areaRect.left - containerRect.left;
+            const areaTop = areaRect.top - containerRect.top;
+            const areaWidth = areaRect.width;
+            const areaHeight = areaRect.height;
+            
+            // Вычисляем центр области
+            const centerX = areaLeft + (areaWidth / 2);
+            const centerY = areaTop + (areaHeight / 2);
+            
+            // Получаем размеры стрелки
+            const cursorWidth = cursor.offsetWidth;
+            const cursorHeight = cursor.offsetHeight;
+            
+            // Позиционируем стрелку по центру области
+            const finalX = centerX - (cursorWidth / 2);
+            const finalY = centerY - (cursorHeight / 2);
+            
+            // console.log(`🎯 ${pair.cursor}:`, {
+            //     area: `${areaLeft}, ${areaTop}, ${areaWidth}x${areaHeight}`,
+            //     center: `${centerX}, ${centerY}`,
+            //     cursor: `${cursorWidth}x${cursorHeight}`,
+            //     final: `${finalX}, ${finalY}`
+            // });
+            
+            // Применяем позицию
+            cursor.style.setProperty('position', 'absolute', 'important');
+            cursor.style.setProperty('left', finalX + 'px', 'important');
+            cursor.style.setProperty('top', finalY + 'px', 'important');
+        } else {
+            // console.log(`⚠️ Не найдены элементы: ${pair.cursor} или ${pair.area}`);
+        }
+    });
+}
+
 // Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', function() {
     // Создаем расширенные области для геометок
@@ -1008,6 +1087,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.positionMarkersOnBg = positionMarkersOnBg;
     window.positionContentWrapperRelativeToMapMark = positionContentWrapperRelativeToMapMark;
     window.stretchPaperaToTextWidth = stretchPaperaToTextWidth;
+    window.positionCursorsInCenterOfAreas = positionCursorsInCenterOfAreas;
     window.setupMobileResetAnimation = setupMobileResetAnimation;
     window.setupZoomTracking = setupZoomTracking;
     window.setupKatedraKoscielnaHandler = setupKatedraKoscielnaHandler;
