@@ -552,6 +552,9 @@
     "title1": "Quest 1: Find all the secrets of Cathedral Island",
     "expectation": "Expectation",
     "reality": "Reality",
+    "completion": {
+      "title": "Congratulations, wanderer: your quest has been successfully completed, and the world has become a little brighter because you managed to see it through to the end. It's funny how every ending turns out to be a beginning, and the joy of victory is just a harbinger of new wonders. So don't sheathe your sword for too long — new quests are already stomping at the doorstep, waiting to meet you."
+    },
     "intro": "Watercolors were discovered in the attic of an abandoned house. Several dozen. The sheets are dusty, gnawed here and there by time or mice (I don't know which of them was neater), but the colors are still alive — such that your throat tickles from the smell of rain on warm stone if you look too long. \n\nAuthor? Unknown. The signature is illegible. Maybe it's a name. Or maybe — coordinates of another reality. \n\nOn the paintings are places. Streets, people, windows. A lonely lamplighter by a column. A tower with birds on the roof. Everything is strangely familiar. As if it already existed somewhere. In a dream? In a book? In that life about which I was forgotten to be told? \n\nBut now I somehow need to find them. All of them. See in reality. \n\nAlthough who knows what's real anyway?",
     "task1": "Mysterious lion guarding the Church",
     "task2": "Locks of love",

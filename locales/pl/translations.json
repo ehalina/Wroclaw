@@ -442,6 +442,9 @@
     "title1": "Quest 1: Znajdź wszystkie tajemnice Ostrowa Tumskiego",
     "expectation": "Oczekiwanie",
     "reality": "Rzeczywistość",
+    "completion": {
+      "title": "Gratulacje, wędrowcze: twoja misja została pomyślnie zakończona, a świat stał się odrobinę jaśniejszy, ponieważ udało ci się doprowadzić ją do końca. Zabawne, jak każdy finał okazuje się początkiem, a radość zwycięstwa to tylko zapowiedź nowych cudów. Więc nie chowaj miecza zbyt długo — nowe misje już tupią u progu i czekają na spotkanie z tobą."
+    },
     "intro": "Na strychu opuszczonego domu odkryto akwarele. Kilkadziesiąt. Kartki są zakurzone, tu i tam podgryzione przez czas lub myszy (nie wiem, który z nich był staranniejszy), ale kolory wciąż żyją — takie, że w gardle łaskocze od zapachu deszczu na ciepłym kamieniu, jeśli patrzy się za długo. \n\nAutor? Nieznany. Podpis nieczytelny. Może to imię. A może — współrzędne innej rzeczywistości. \n\nNa obrazach są miejsca. Ulice, ludzie, okna. Samotny latarnik przy kolumnie. Wieża z ptakami na dachu. Wszystko jest dziwnie znajome. Jakby już gdzieś istniało. We śnie? W książce? W tym życiu, o którym zapomniano mi opowiedzieć? \n\nAle teraz z jakiegoś powodu muszę je znaleźć. Wszystkie. Zobaczyć w rzeczywistości. \n\nChociaż kto wie, co naprawdę jest rzeczywiste?",
     "task1": "Tajemniczy lew strzegący Kościoła",
     "task2": "Zamki miłości",

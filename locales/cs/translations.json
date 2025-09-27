@@ -552,6 +552,9 @@
     "title1": "Quest 1: Najdi všechna tajemství Tumského ostrova",
     "expectation": "Očekávání",
     "reality": "Realita",
+    "completion": {
+      "title": "Gratuluji, poutníku: tvůj úkol byl úspěšně dokončen a svět se stal o trochu jasnějším, protože jsi ho dokázal dovést až do konce. Je zábavné, jak se každý konec ukáže být začátkem a radost z vítězství je jen předzvěstí nových zázraků. Takže neschovávej meč příliš dlouho zpět do pochvy — nové úkoly už dupou u dveří a čekají na setkání s tebou."
+    },
     "intro": "Na půdě opuštěného domu byly objeveny akvarely. Několik desítek. Listy jsou zaprášené, tu a tam ohlodané časem nebo myšmi (nevím, který z nich byl pečlivější), ale barvy stále žijí — takové, že v krku lechtá od vůně deště na teplém kameni, pokud se dívá příliš dlouho. \n\nAutor? Neznámý. Podpis nečitelný. Možná je to jméno. A možná — souřadnice jiné reality. \n\nNa obrazech jsou místa. Ulice, lidé, okna. Osamělý lampář u sloupu. Věž s ptáky na střeše. Všechno je podivně povědomé. Jako by to už někde existovalo. Ve snu? V knize? V tom životě, o kterém mi zapomněli vyprávět? \n\nAle teď z nějakého důvodu je musím najít. Všechny. Vidět ve skutečnosti. \n\nAčkoli kdo ví, co je opravdu skutečné?",
     "task1": "Tajemný lev strážící Kostel",
     "task2": "Zámky lásky",

@@ -552,6 +552,9 @@
     "title1": "Quest 1: Finde alle Geheimnisse der Tumski-Insel",
     "expectation": "Erwartung",
     "reality": "Realität",
+    "completion": {
+      "title": "Glückwunsch, Wanderer: deine Quest wurde erfolgreich abgeschlossen, und die Welt ist ein wenig heller geworden, weil du es geschafft hast, sie bis zum Ende zu durchlaufen. Es ist lustig, wie sich jedes Ende als Anfang herausstellt, und die Freude über den Sieg ist nur ein Vorbote neuer Wunder. Also stecke dein Schwert nicht zu lange in die Scheide zurück — neue Quests trampeln bereits vor der Tür und warten darauf, dich kennenzulernen."
+    },
     "intro": "Im Dachboden eines verlassenen Hauses wurden Aquarelle entdeckt. Mehrere Dutzend. Die Blätter sind staubig, hier und da von Zeit oder Mäusen angenagt (ich weiß nicht, wer von ihnen ordentlicher war), aber die Farben sind noch lebendig — solche, dass im Hals vom Geruch des Regens auf warmem Stein kitzelt, wenn man zu lange schaut. \n\nAutor? Unbekannt. Die Unterschrift ist unleserlich. Vielleicht ist es ein Name. Oder vielleicht — Koordinaten einer anderen Realität. \n\nAuf den Gemälden sind Orte. Straßen, Menschen, Fenster. Ein einsamer Laternenanzünder an einer Säule. Ein Turm mit Vögeln auf dem Dach. Alles ist seltsam vertraut. Als ob es bereits irgendwo existiert hätte. Im Traum? In einem Buch? In jenem Leben, von dem mir vergessen wurde zu erzählen? \n\nAber jetzt muss ich sie aus irgendeinem Grund finden. Alle. In der Realität sehen. \n\nObwohl wer weiß, was wirklich real ist?",
     "task1": "Mysteriöser Löwe, der die Kirche bewacht",
     "task2": "Liebesschlösser",
