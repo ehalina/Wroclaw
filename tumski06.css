@@ -18,7 +18,7 @@
 
 /* Индивидуальные размеры областей стрелок */
 .custom-cursor-backarea {
-    width: 60%;
+    width: 30%;
     height: 25%;
 }
 
