@@ -1046,6 +1046,13 @@ const LanguageMenu = {
     createAudioUnlockButton() {
     // console.log('🎵 createAudioUnlockButton() вызван');
         
+        // Проверяем, что мы на главной SPA странице (index.html)
+        const isMainSPAPage = document.getElementById('spa-container') !== null;
+        if (!isMainSPAPage) {
+    // console.log('🎵 Не главная SPA страница, пропускаем создание кнопки разблокировки аудио');
+            return;
+        }
+        
         // Проверяем, не создана ли уже кнопка
         if (document.getElementById('audioUnlockButton')) {
     // console.log('🎵 Кнопка разблокировки аудио уже существует');

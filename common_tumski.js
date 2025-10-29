@@ -335,8 +335,12 @@ export async function initializeArrowHandlers(arrowConfigs = []) {
                 const inputType = document.documentElement.getAttribute('data-input-type') || 'desktop';
                 
                 if (inputType === 'touch') {
-                    // Тач-обработчики
-                    const handleClick = () => {
+                    // Тач: клик только по самому изображению стрелки
+                    const handleClick = (e) => {
+                        if (e) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
                         if (stepSound && isSoundEnabled()) {
                             stepSound.play().then(() => {
                                 if (callback) callback();
@@ -348,10 +352,9 @@ export async function initializeArrowHandlers(arrowConfigs = []) {
                         }
                     };
 
+                    // Навешиваем только на сам элемент курсора (картинку стрелки)
                     cursor.addEventListener('click', handleClick);
                     cursor.addEventListener('touchend', handleClick);
-                    cursorArea.addEventListener('click', handleClick);
-                    cursorArea.addEventListener('touchend', handleClick);
                 } else {
                     // Десктопные обработчики
                     if (typeof window[handlerType] === 'function') {

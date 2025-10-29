@@ -135,20 +135,34 @@ function setupMapMarkEvents(mapMarkArea) {
 
 // Функция для настройки событий стрелок
 function setupArrowEvents(arrowArea) {
-    // Обработчик клика по области стрелки
-    arrowArea.addEventListener('click', (e) => {
-        e.preventDefault();
-        
+    // Элемент самой стрелки (картинка курсора)
+    const arrowElement = arrowArea.querySelector('.custom-cursor, .custom-cursor-prosto, .custom-cursor-prosto-left, .custom-cursor-back, .custom-cursor-left, .custom-cursor-up');
+
+    // Тач-устройства: кликаем только по самому изображению стрелки
+    const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+    const navigate = (e) => {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         const targetPage = arrowArea.dataset.prevPage || arrowArea.dataset.nextPage;
         if (targetPage && window.spaManager) {
-    // console.log('Навигация к странице:', targetPage);
             window.spaManager.navigateToPage(targetPage);
         }
-    });
-    
-    // Обработчики для hover эффектов стрелок
-    const arrowElement = arrowArea.querySelector('.custom-cursor, .custom-cursor-prosto, .custom-cursor-prosto-left, .custom-cursor-back, .custom-cursor-left, .custom-cursor-up');
-    
+    };
+
+    if (isTouch) {
+        if (arrowElement) {
+            arrowElement.addEventListener('click', navigate);
+            arrowElement.addEventListener('touchend', navigate);
+        }
+    } else {
+        // Десктоп: оставляем клики по всей области
+        arrowArea.addEventListener('click', navigate);
+    }
+
+    // Hover-эффекты для десктопа
     if (arrowElement) {
         arrowArea.addEventListener('mouseenter', () => {
             arrowElement.style.opacity = '1';

@@ -143,7 +143,7 @@
     
     <!-- Индикатор загрузки -->
     <div id="loadingOverlay" class="loading-overlay">
-        <div>Загрузка...</div>
+        <div>Loading...</div>
     </div>
     
     <!-- Единый аудио элемент для всей музыки -->
@@ -422,8 +422,11 @@
     // console.log('🎵 Трек переключен на:', trackName);
                 } catch (error) {
     // console.log('🎵 Ошибка переключения трека:', error);
-                    // Показываем кнопку разблокировки при ошибке
-                    this.showAudioUnlockButton();
+                    // Показываем кнопку разблокировки только для town (первоначальный запуск)
+                    // Для birds, hang, kostel и других треков не показываем кнопку
+                    if (trackName === 'town' && !this.audioUnlocked) {
+                        this.showAudioUnlockButton();
+                    }
                 }
             }
             
@@ -636,7 +639,11 @@
                 
                 audio.addEventListener('error', (error) => {
     // console.log('🎵 Ошибка аудио плеера:', error);
-                    this.showAudioUnlockButton();
+                    // Показываем кнопку разблокировки только для town (первоначальный запуск)
+                    // Для birds, hang, kostel и других треков не показываем кнопку
+                    if (this.currentTrack === 'town' && !this.audioUnlocked) {
+                        this.showAudioUnlockButton();
+                    }
                 });
                 
                 // Пытаемся запустить музыку сразу (может не сработать на iOS)
