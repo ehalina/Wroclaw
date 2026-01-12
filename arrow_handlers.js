@@ -445,16 +445,30 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
     let lastTouchTime = 0;
     
     // Блокируем click на мобильных в capture phase (до всех других обработчиков)
-    if (isMobile) {
-        cursorProstoArea.addEventListener('click', function(e) {
-            const timeSinceTouch = Date.now() - lastTouchTime;
+    // Проверяем в момент события, а не при инициализации
+    cursorProstoArea.addEventListener('click', function(e) {
+        const isMobileNow = !isDesktopDevice();
+        const timeSinceTouch = Date.now() - lastTouchTime;
+        if (isMobileNow) {
             console.log('🟢 FORWARD CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
             return false;
-        }, { capture: true, passive: false });
-    }
+        }
+    }, { capture: true, passive: false });
+    
+    cursorProsto.addEventListener('click', function(e) {
+        const isMobileNow = !isDesktopDevice();
+        const timeSinceTouch = Date.now() - lastTouchTime;
+        if (isMobileNow) {
+            console.log('🟢 FORWARD CURSOR CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            return false;
+        }
+    }, { capture: true, passive: false });
     
     // Обработчик клика по стрелке прямо
     cursorProstoArea.addEventListener('click', function(e) {
@@ -659,14 +673,8 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
         let touchCount = 0;
         let touchTimer = null;
         
-        cursorProstoArea.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            cursorProsto.style.opacity = '1';
-            lastTouchTime = Date.now();
-            console.log('🟢 FORWARD TOUCHSTART: lastTouchTime =', lastTouchTime);
-        });
-        
-        cursorProstoArea.addEventListener('touchend', function(e) {
+        // Общая функция обработки двойного клика
+        const handleDoubleTouch = (e) => {
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
@@ -844,10 +852,30 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
                     }
                 }, 1500);
                 
-                    } catch (error) {
+            } catch (error) {
                 console.error('❌ Ошибка при обработке касания по стрелке прямо:', error);
-        }
+            }
+        };
+        
+        // Обработчики для области курсора
+        cursorProstoArea.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            cursorProsto.style.opacity = '1';
+            lastTouchTime = Date.now();
+            console.log('🟢 FORWARD AREA TOUCHSTART: lastTouchTime =', lastTouchTime);
         });
+        
+        cursorProstoArea.addEventListener('touchend', handleDoubleTouch);
+        
+        // Обработчики для самого элемента курсора
+        cursorProsto.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            cursorProsto.style.opacity = '1';
+            lastTouchTime = Date.now();
+            console.log('🟢 FORWARD CURSOR TOUCHSTART: lastTouchTime =', lastTouchTime);
+        });
+        
+        cursorProsto.addEventListener('touchend', handleDoubleTouch);
     }
 }
 
@@ -926,23 +954,38 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
     let lastTouchTime = 0;
     
     // Блокируем click на мобильных в capture phase (до всех других обработчиков)
-    if (isMobile) {
-        cursorLeftArea.addEventListener('click', function(e) {
-            const timeSinceTouch = Date.now() - lastTouchTime;
+    // Проверяем в момент события, а не при инициализации
+    cursorLeftArea.addEventListener('click', function(e) {
+        const isMobileNow = !isDesktopDevice();
+        const timeSinceTouch = Date.now() - lastTouchTime;
+        if (isMobileNow) {
             console.log('🟠 LEFT CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
             return false;
-        }, { capture: true, passive: false });
-    }
+        }
+    }, { capture: true, passive: false });
+    
+    cursorLeft.addEventListener('click', function(e) {
+        const isMobileNow = !isDesktopDevice();
+        const timeSinceTouch = Date.now() - lastTouchTime;
+        if (isMobileNow) {
+            console.log('🟠 LEFT CURSOR CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            return false;
+        }
+    }, { capture: true, passive: false });
     
     // Обработчик клика по стрелке влево (только для десктопа)
     cursorLeftArea.addEventListener('click', function(e) {
-        console.log('🟠 LEFT CLICK: isMobile =', isMobile, 'touchHandled =', touchHandled);
+        const isMobileNow = !isDesktopDevice();
+        console.log('🟠 LEFT CLICK: isMobileNow =', isMobileNow, 'touchHandled =', touchHandled);
         
         // На мобильных устройствах отключаем click событие
-        if (isMobile || touchHandled) {
+        if (isMobileNow || touchHandled) {
             console.log('🟠 LEFT CLICK: БЛОКИРУЕМ click на мобильном или touchHandled=true');
             e.preventDefault();
             e.stopPropagation();
@@ -978,14 +1021,8 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
         let touchCount = 0;
         let touchTimer = null;
         
-        cursorLeftArea.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            cursorLeft.style.opacity = '1';
-            lastTouchTime = Date.now();
-            console.log('🟠 LEFT TOUCHSTART: lastTouchTime =', lastTouchTime);
-        });
-        
-        cursorLeftArea.addEventListener('touchend', function(e) {
+        // Общая функция обработки двойного клика
+        const handleDoubleTouch = (e) => {
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
@@ -1006,12 +1043,21 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
                 clearTimeout(touchTimer);
                 touchCount = 0;
                 touchHandled = true; // Устанавливаем флаг для блокировки click
-                
+            } else {
+                console.log('🟠 LEFT TOUCHEND: touchCount > 2, сбрасываем');
+                touchCount = 0;
+                return;
+            }
+            
+            try {
+                console.log('🟠 LEFT TOUCHEND: Выполняем действие');
                 hideAllCursors();
+                
                 if (stepSound && isSoundEnabled()) {
                     stepSound.currentTime = 0;
                     stepSound.play();
                 }
+                
                 setTimeout(() => {
                     if (onLeftClick && typeof onLeftClick === 'function') {
                         onLeftClick();
@@ -1019,16 +1065,42 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
                         // Fallback: используем атрибут data-next-page или переходим на index.html
                         const nextPage = cursorLeft.getAttribute('data-next-page');
                         if (nextPage) {
-                            window.location.href = nextPage;
+                            // Проверяем, находимся ли мы в SPA
+                            if (window.parent && window.parent !== window && window.parent.spaManager) {
+                                window.parent.spaManager.navigateToPage(nextPage);
+                            } else {
+                                window.location.href = nextPage;
+                            }
                         } else {
                             window.location.href = 'index.html';
                         }
                     }
                 }, 300);
-            } else {
-                return;
+                
+            } catch (error) {
+                console.error('❌ Ошибка при обработке касания по стрелке влево:', error);
             }
+        };
+        
+        // Обработчики для области курсора
+        cursorLeftArea.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            cursorLeft.style.opacity = '1';
+            lastTouchTime = Date.now();
+            console.log('🟠 LEFT AREA TOUCHSTART: lastTouchTime =', lastTouchTime);
         });
+        
+        cursorLeftArea.addEventListener('touchend', handleDoubleTouch);
+        
+        // Обработчики для самого элемента курсора
+        cursorLeft.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            cursorLeft.style.opacity = '1';
+            lastTouchTime = Date.now();
+            console.log('🟠 LEFT CURSOR TOUCHSTART: lastTouchTime =', lastTouchTime);
+        });
+        
+        cursorLeft.addEventListener('touchend', handleDoubleTouch);
     }
 }
 
@@ -1279,16 +1351,30 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
     let lastTouchTime = 0;
     
     // Блокируем click на мобильных в capture phase (до всех других обработчиков)
-    if (isMobile) {
-        cursorProstoLeftArea.addEventListener('click', function(e) {
-            const timeSinceTouch = Date.now() - lastTouchTime;
+    // Проверяем в момент события, а не при инициализации
+    cursorProstoLeftArea.addEventListener('click', function(e) {
+        const isMobileNow = !isDesktopDevice();
+        const timeSinceTouch = Date.now() - lastTouchTime;
+        if (isMobileNow) {
             console.log('🟡 FORWARD-LEFT CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
             return false;
-        }, { capture: true, passive: false });
-    }
+        }
+    }, { capture: true, passive: false });
+    
+    cursorProstoLeft.addEventListener('click', function(e) {
+        const isMobileNow = !isDesktopDevice();
+        const timeSinceTouch = Date.now() - lastTouchTime;
+        if (isMobileNow) {
+            console.log('🟡 FORWARD-LEFT CURSOR CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            return false;
+        }
+    }, { capture: true, passive: false });
     
     // Обработчик клика по стрелке прямо влево
     cursorProstoLeftArea.addEventListener('click', function(e) {
@@ -1447,13 +1533,8 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
         let touchCount = 0;
         let touchTimer = null;
         
-        cursorProstoLeftArea.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            cursorProstoLeft.style.opacity = '1';
-            lastTouchTime = Date.now();
-            console.log('🟡 FORWARD-LEFT TOUCHSTART: lastTouchTime =', lastTouchTime);
-            
-            // Предзагрузка изображения на касание для pk02 -> dwor01
+        // Функция предзагрузки изображения
+        const preloadImage = () => {
             try {
                 const nextImageContainer = document.querySelector('.next-image-container');
                 if (nextImageContainer) {
@@ -1468,9 +1549,10 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
                     }
                 }
             } catch (_) {}
-        });
+        };
         
-        cursorProstoLeftArea.addEventListener('touchend', function(e) {
+        // Общая функция обработки двойного клика
+        const handleDoubleTouch = (e) => {
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
@@ -1620,7 +1702,29 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
             } catch (error) {
                 console.error('❌ Ошибка при обработке касания по стрелке прямо влево:', error);
             }
+        };
+        
+        // Обработчики для области курсора
+        cursorProstoLeftArea.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            cursorProstoLeft.style.opacity = '1';
+            lastTouchTime = Date.now();
+            console.log('🟡 FORWARD-LEFT AREA TOUCHSTART: lastTouchTime =', lastTouchTime);
+            preloadImage();
         });
+        
+        cursorProstoLeftArea.addEventListener('touchend', handleDoubleTouch);
+        
+        // Обработчики для самого элемента курсора
+        cursorProstoLeft.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            cursorProstoLeft.style.opacity = '1';
+            lastTouchTime = Date.now();
+            console.log('🟡 FORWARD-LEFT CURSOR TOUCHSTART: lastTouchTime =', lastTouchTime);
+            preloadImage();
+        });
+        
+        cursorProstoLeft.addEventListener('touchend', handleDoubleTouch);
     }
 }
 
