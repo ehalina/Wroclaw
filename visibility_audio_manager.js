@@ -80,13 +80,7 @@ class VisibilityAudioManager {
     
     // Страница стала невидимой - ставим все аудио на паузу
     handlePageHidden() {
-        // Дополнительная проверка: убеждаемся, что страница действительно невидима
-        if (document.visibilityState !== 'hidden') {
-    // console.log('🎵 Страница не невидима, игнорируем handlePageHidden');
-            return;
-        }
-        
-    // console.log('🎵 Страница стала невидимой - ставим аудио на паузу');
+    // console.log('🎵 Страница потеряла фокус - ставим аудио на паузу');
         
         this.audioElements.forEach(audio => {
             if (audio && !audio.paused) {
@@ -110,23 +104,43 @@ class VisibilityAudioManager {
             window.questMusic.pause();
     // console.log('🎵 Quest музыка поставлена на паузу');
         }
+        
+        // Останавливаем фоновую музыку из iframe
+        if (window.musicIframe && window.musicIframe.contentWindow && window.musicIframe.contentWindow.musicAPI) {
+            const api = window.musicIframe.contentWindow.musicAPI;
+            if (!api.isPaused()) {
+                // Сохраняем состояние фоновой музыки
+                this.pausedStates.set(window.musicIframe, {
+                    currentTime: api.getCurrentTime(),
+                    wasPlaying: true,
+                    isBackgroundMusic: true
+                });
+                api.pause();
+    // console.log('🎵 Фоновая музыка (iframe) поставлена на паузу');
+            }
+        }
+        
+        // Останавливаем прямую фоновую музыку (для iOS)
+        if (window.directMusicAudio && !window.directMusicAudio.paused) {
+            this.pausedStates.set(window.directMusicAudio, {
+                currentTime: window.directMusicAudio.currentTime,
+                wasPlaying: true,
+                isBackgroundMusic: true
+            });
+            window.directMusicAudio.pause();
+    // console.log('🎵 Фоновая музыка (direct) поставлена на паузу');
+        }
     }
     
     // Страница стала видимой - возобновляем воспроизведение
     handlePageVisible() {
-        // Дополнительная проверка: убеждаемся, что страница действительно видима
-        if (document.visibilityState !== 'visible') {
-    // console.log('🎵 Страница не видима, игнорируем handlePageVisible');
-            return;
-        }
-        
         // Проверяем, что страница была скрыта достаточно долго (больше 200мс)
         if (this.hiddenStartTime && (Date.now() - this.hiddenStartTime) < 200) {
     // console.log('🎵 Страница была скрыта слишком короткое время, игнорируем handlePageVisible');
             return;
         }
         
-    // console.log('🎵 Страница стала видимой - возобновляем аудио');
+    // console.log('🎵 Страница получила фокус - возобновляем аудио');
         
         this.audioElements.forEach(audio => {
             if (audio && this.pausedStates.has(audio)) {
@@ -163,6 +177,37 @@ class VisibilityAudioManager {
             }
             
             this.pausedStates.delete(window.questMusic);
+        }
+        
+        // Возобновляем фоновую музыку из iframe
+        if (window.musicIframe && this.pausedStates.has(window.musicIframe)) {
+            const state = this.pausedStates.get(window.musicIframe);
+            const api = window.musicIframe.contentWindow?.musicAPI;
+            
+            if (state.wasPlaying && api) {
+                api.setCurrentTime(state.currentTime);
+                api.play().catch(error => {
+    // console.log('🎵 Ошибка при возобновлении фоновой музыки (iframe):', error);
+                });
+    // console.log('🎵 Фоновая музыка (iframe) возобновлена');
+            }
+            
+            this.pausedStates.delete(window.musicIframe);
+        }
+        
+        // Возобновляем прямую фоновую музыку (для iOS)
+        if (window.directMusicAudio && this.pausedStates.has(window.directMusicAudio)) {
+            const state = this.pausedStates.get(window.directMusicAudio);
+            
+            if (state.wasPlaying) {
+                window.directMusicAudio.currentTime = state.currentTime;
+                window.directMusicAudio.play().catch(error => {
+    // console.log('🎵 Ошибка при возобновлении фоновой музыки (direct):', error);
+                });
+    // console.log('🎵 Фоновая музыка (direct) возобновлена');
+            }
+            
+            this.pausedStates.delete(window.directMusicAudio);
         }
     }
     
