@@ -335,26 +335,55 @@ export async function initializeArrowHandlers(arrowConfigs = []) {
                 const inputType = document.documentElement.getAttribute('data-input-type') || 'desktop';
                 
                 if (inputType === 'touch') {
-                    // Тач: клик только по самому изображению стрелки
-                    const handleClick = (e) => {
+                    // Тач: двойной клик по самому изображению стрелки
+                    let touchCount = 0;
+                    let touchTimer = null;
+                    
+                    const handleDoubleClick = (e) => {
                         if (e) {
                             e.preventDefault();
                             e.stopPropagation();
                         }
-                        if (stepSound && isSoundEnabled()) {
-                            stepSound.play().then(() => {
+                        
+                        touchCount++;
+                        
+                        if (touchCount === 1) {
+                            // Первое касание - ждем второго
+                            touchTimer = setTimeout(() => {
+                                touchCount = 0;
+                            }, 400);
+                            return;
+                        } else if (touchCount === 2) {
+                            // Двойной клик - выполняем действие
+                            clearTimeout(touchTimer);
+                            touchCount = 0;
+                            
+                            if (stepSound && isSoundEnabled()) {
+                                stepSound.play().then(() => {
+                                    if (callback) callback();
+                                }).catch(() => {
+                                    if (callback) callback();
+                                });
+                            } else {
                                 if (callback) callback();
-                            }).catch(() => {
-                                if (callback) callback();
-                            });
+                            }
                         } else {
-                            if (callback) callback();
+                            // Больше двух касаний - сбрасываем
+                            touchCount = 0;
+                            return;
                         }
                     };
 
-                    // Навешиваем только на сам элемент курсора (картинку стрелки)
-                    cursor.addEventListener('click', handleClick);
-                    cursor.addEventListener('touchend', handleClick);
+                    // Блокируем одинарный click на мобильных
+                    cursor.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        e.stopImmediatePropagation();
+                        return false;
+                    }, { capture: true, passive: false });
+                    
+                    // Навешиваем двойной клик только на touchend
+                    cursor.addEventListener('touchend', handleDoubleClick);
                 } else {
                     // Десктопные обработчики
                     if (typeof window[handlerType] === 'function') {

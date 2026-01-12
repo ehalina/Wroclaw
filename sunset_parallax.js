@@ -4,7 +4,8 @@ class SunsetParallax {
         this.direction = 1; // 1 = вперед, -1 = назад
         this.zoomSpeed = 0.3;
         this.initialScale = 1.2;
-        this.maxScale = 3.0;
+        // Уменьшаем maxScale для мобильных для экономии памяти
+        this.maxScale = window.innerWidth <= 768 ? 2.0 : 3.0;
         this.animationStarted = false;
         
         this.pageContainer = document.querySelector('.page-container');
@@ -143,9 +144,11 @@ class SunsetParallax {
         });
 
         // Определяем масштабы в зависимости от направления
-        const skyScale = this.direction === 1 ? [1, 2] : [2, 1];
-        const horizonScale = this.direction === 1 ? [1, 2.5] : [2.5, 1];
-        const buildingsScale = this.direction === 1 ? [1, 3] : [3, 1];
+        // Уменьшаем масштабы на мобильных для экономии памяти
+        const isMobile = window.innerWidth <= 768;
+        const skyScale = this.direction === 1 ? [1, isMobile ? 1.5 : 2] : [isMobile ? 1.5 : 2, 1];
+        const horizonScale = this.direction === 1 ? [1, isMobile ? 1.7 : 2.5] : [isMobile ? 1.7 : 2.5, 1];
+        const buildingsScale = this.direction === 1 ? [1, isMobile ? 2.0 : 3] : [isMobile ? 2.0 : 3, 1];
 
         // Создаем анимацию для каждого слоя
         this.timeline.to(this.layers.sky, {

@@ -315,5 +315,52 @@ export function checkTooltipArea(x, y) {
   return null;
 }
 
+/**
+ * Маппинг точек на страницы (для точек, которые используются несколькими страницами)
+ * Используется только для определения "двойных" точек на карте.
+ * Если точку используют больше двух страниц, здесь берём первые две.
+ * @type {Object<number, string[]>}
+ */
+export const pointToPages = {
+  // Tumski: одна и та же точка у нескольких страниц
+  3:  ['tumski03.html',  'tumski23.html'],
+  6:  ['tumski06.html',  'tumski22.html'],
+  11: ['tumski11.html',  'tumski12.html'],   // tumski13.html тоже использует 11
+  17: ['tumski16.html',  'tumski17.html'],   // tumski24.html тоже использует 17
+  19: ['tumski19.html',  'tumski20.html'],   // tumski21.html тоже использует 19
+  28: ['tumski10.html',  'tumski14.html'],
+
+  // Ogrod: общие точки для нескольких садов
+  22: ['ogrod02.html',   'ogrod12.html'],
+  24: ['ogrod04.html',   'ogrod05.html'],    // ogrod07.html тоже использует 24
+  27: ['ogrod08.html',   'ogrod09.html'],
+
+  // Dwory: общие точки во дворах
+  35: ['dwor09.html',    'dwor12.html'],
+  37: ['dwor05.html',    'dwor13.html'],
+  38: ['dwor06.html',    'dwor10.html'],
+  39: ['dwor07.html',    'dwor08.html'],
+  40: ['dwor01.html',    'dwor02.html']      // dwor03.html и dwor11.html тоже используют 40
+};
+
+/**
+ * Получить список страниц для точки
+ * @param {number} pointNumber - номер точки
+ * @returns {string[]} - массив страниц
+ */
+export function getPagesForPoint(pointNumber) {
+  return pointToPages[pointNumber] || [];
+}
+
+/**
+ * Проверить, является ли точка двойной (имеет несколько страниц)
+ * @param {number} pointNumber - номер точки
+ * @returns {boolean}
+ */
+export function isDoublePoint(pointNumber) {
+  const pages = pointToPages[pointNumber];
+  return pages && pages.length > 1;
+}
+
 // Пример использования:
 // const coords = getMapPointCoords(5); // { x: 36, y: 46 } 

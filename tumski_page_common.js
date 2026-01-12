@@ -103,6 +103,24 @@ export async function initPageCommon() {
         // console.log('🎵 Настраиваем обработчики стрелок...');
         setupAllArrows(stepSound);
 
+        // Если пришли через карту, мягко простимулируем появление курсора
+        try {
+            const viaMap = sessionStorage.getItem('navigateViaMap') === '1';
+            if (viaMap) {
+                sessionStorage.removeItem('navigateViaMap');
+                const areaLeft = document.querySelector('.custom-cursor-leftarea');
+                if (areaLeft) {
+                    const rect = areaLeft.getBoundingClientRect();
+                    const evt = new MouseEvent('mousemove', {
+                        bubbles: true,
+                        clientX: Math.round(rect.left + rect.width / 2),
+                        clientY: Math.round(rect.top + rect.height / 2)
+                    });
+                    areaLeft.dispatchEvent(evt);
+                }
+            }
+        } catch (_) {}
+
         // 7) Квест-метки (унифицировано): ищем любые .map-mark с data-quest-number
         try {
             const questMarks = Array.from(document.querySelectorAll('.map-mark[data-quest-number]'));

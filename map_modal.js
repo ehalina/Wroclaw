@@ -18,6 +18,100 @@ const mapStyles = `
         display: none;
     }
 
+    /* Метки посещённых страниц на карте */
+    .visited-markers-layer {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1003;
+    }
+
+    .visited-marker {
+        position: absolute;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: #c79c6a; /* светло-коричневый */
+        border: 2px solid #5b4636; /* тёмно-коричневый бордер */
+        box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+        pointer-events: auto;
+        transition: transform 0.12s ease;
+    }
+
+    .visited-marker:hover {
+        transform: translate(-50%, -50%) scale(1.12);
+    }
+
+    .visited-marker.current-page {
+        background: #5b4636; /* тёмно-коричневый для активной */
+        border-color: #3e2d23;
+    }
+
+    .visited-marker::after {
+        content: '';
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.35);
+        bottom: -4px;
+        left: 50%;
+        transform: translateX(-50%);
+        filter: blur(2px);
+    }
+
+    /* Стили для двойных маркеров:
+       одна точка светлая, вторая тёмная */
+    .visited-marker-double-light {
+        background: #c79c6a; /* светлая, как обычная */
+        border-color: #5b4636;
+    }
+
+    .visited-marker-double-dark {
+        background: #5b4636; /* тёмная, как current-page */
+        border-color: #3e2d23;
+    }
+
+    /* Превью‑картинка рядом с маркером (только на развёрнутой карте) */
+    .map-preview-image {
+        position: absolute;
+        width: 90px;
+        height: 60px;
+        border-radius: 6px;
+        border: 2px solid rgba(255, 255, 255, 0.9);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        top: 50%;
+        left: 130%;
+        transform: translateY(-50%);
+        z-index: 1100;
+        display: none;
+        backdrop-filter: blur(2px);
+    }
+
+    .map-preview-image::after {
+        content: '';
+        position: absolute;
+        left: -8px;
+        top: 50%;
+        transform: translateY(-50%);
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-right: 8px solid rgba(255, 255, 255, 0.9);
+    }
+
+    @media (max-width: 768px) {
+        .map-preview-image {
+            width: 110px;
+            height: 74px;
+            left: 140%;
+        }
+    }
+
     .quest-confirm-dialog .dialog-text {
         font-size: 24px;
         margin-bottom: 25px;
@@ -85,6 +179,15 @@ const mapStyles = `
         gap: 10px; /* Расстояние между кнопками */
         z-index: 1000;
     }
+    
+    /* Кнопка карты в левом нижнем углу */
+    .map-button {
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 20px !important;
+        z-index: 2000 !important;
+        top: auto !important;
+    }
 
     .map-button, .quest-button {
         width: 64px;
@@ -121,6 +224,12 @@ const mapStyles = `
             gap: 10px;
         }
 
+        .map-button {
+            bottom: 100px !important;
+            top: auto !important;
+            left: 20px !important;
+        }
+
         .map-button, .quest-button {
             width: 64px;
             height: 64px;
@@ -133,6 +242,12 @@ const mapStyles = `
             top: 20px;
             left: 20px;
             gap: 10px;
+        }
+
+        .map-button {
+            bottom: 100px !important;
+            top: auto !important;
+            left: 20px !important;
         }
 
         .map-button, .quest-button {
@@ -1064,6 +1179,97 @@ async function getCurrentMapPoint() {
     return getMapPointCoords(mapPoint || 1);
 }
 
+// === Учёт посещённых страниц ===
+function getVisitedPages() {
+    try {
+        return JSON.parse(localStorage.getItem('visitedPages') || '{}');
+    } catch (_) {
+        return {};
+    }
+}
+
+// Надёжное определение имени текущей страницы
+function getCurrentPageName() {
+    let page = '';
+    
+    // Пробуем получить из location
+    const pathname = window.location.pathname;
+    if (pathname) {
+        page = pathname.split('/').pop() || '';
+    }
+    
+    // Если страница не определена или это index.html, пробуем другие способы
+    if (!page || page === '' || page === 'index.html') {
+        // Пробуем из href
+        const href = window.location.href;
+        if (href && href !== 'about:blank') {
+            const url = new URL(href);
+            page = url.pathname.split('/').pop() || '';
+        }
+        
+        // Если всё ещё не определили и мы в iframe, пробуем через frameElement
+        if ((!page || page === '' || page === 'index.html') && window.frameElement) {
+            try {
+                if (window.frameElement.src) {
+                    const iframeSrc = window.frameElement.src.split('?')[0];
+                    page = iframeSrc.split('/').pop() || '';
+                }
+            } catch (_) {}
+        }
+    }
+    
+    // Удаляем query параметры и хеш, если есть
+    page = page.split('?')[0].split('#')[0];
+    
+    return (page || 'index.html').trim();
+}
+
+async function saveVisitedPageIfNeeded() {
+    try {
+        const imageContainer = document.querySelector('.image-container');
+        const mapPointAttr = imageContainer ? imageContainer.getAttribute('data-map-point') : null;
+        const mapPoint = mapPointAttr ? parseInt(mapPointAttr) : null;
+        if (!mapPoint || Number.isNaN(mapPoint)) return;
+
+        // Надёжное определение имени страницы
+        const page = getCurrentPageName();
+
+        const store = getVisitedPages();
+        
+        // Если страница уже сохранена, проверяем соответствие point
+        if (store[page]) {
+            // Если point не совпадает, обновляем (возможно, страница изменилась)
+            if (store[page].point !== mapPoint) {
+                store[page].point = mapPoint;
+                store[page].title = document.title || page;
+                localStorage.setItem('visitedPages', JSON.stringify(store));
+            }
+        } else {
+            // Проверяем, является ли точка двойной (может иметь несколько страниц)
+            const { isDoublePoint } = await import('./map_points.js');
+            const isDouble = isDoublePoint(mapPoint);
+            
+            if (!isDouble) {
+                // Для обычных точек удаляем старую запись с таким же point
+                for (const [storedPage, data] of Object.entries(store)) {
+                    if (data && data.point === mapPoint && storedPage !== page) {
+                        delete store[storedPage];
+                    }
+                }
+            }
+            // Для двойных точек сохраняем все страницы с этой точкой
+            
+            // Сохраняем новую страницу
+            store[page] = {
+                point: mapPoint,
+                page,
+                title: document.title || page
+            };
+            localStorage.setItem('visitedPages', JSON.stringify(store));
+        }
+    } catch (_) {}
+}
+
 // Функционал модального окна карты
 const MapModal = {
     init() {
@@ -1075,17 +1281,18 @@ const MapModal = {
         // Создаем структуру модального окна и кнопок
         const modalHTML = `
             <div class="map-and-quest-buttons">
-                <a href="" class="map-button" id="open-map-modal">
-                    <img src="media/maps_i.jpg" alt="Карта">
-                </a>
                 <button class="quest-button" id="open-quest">
                      <img src="media/quest_i.jpg" alt="Квесты">
                 </button>
             </div>
+            <a href="" class="map-button" id="open-map-modal">
+                <img src="media/maps_i.jpg" alt="Карта">
+            </a>
             <div id="map-modal">
                 <div>
                     <img id="map-image" src="media/tumski/map.jpg" alt="Карта">
                     <img id="map-marker" src="media/mapmark.png" alt="Маркер">
+                    <div class="visited-markers-layer" id="visited-markers-layer"></div>
                     <div id="map-tooltip"></div>
                     <button id="close-map-modal">×</button>
                     <button id="toggle-tooltips" style="display: none;">👁️</button>
@@ -1162,6 +1369,9 @@ const MapModal = {
         // Добавляем модальное окно и кнопки на страницу
         document.body.insertAdjacentHTML('afterbegin', modalHTML);
 
+        // Зафиксировать посещение текущей страницы
+        saveVisitedPageIfNeeded().catch(() => {});
+
         // Удалены принудительные скрытия most-overlay, чтобы клики по геометкам могли открывать модалку
 
         // === Автоматическая ширина most-container по ширине most-image ===
@@ -1232,6 +1442,8 @@ const MapModal = {
                         // Ошибка при перепозиционировании маркера
                     }
                 }, 200);
+                // Обновляем позиции меток посещённых страниц
+                setTimeout(() => { MapModal.renderVisitedMarkers(); }, 240);
             }
         });
 
@@ -1250,8 +1462,8 @@ const MapModal = {
             return; // Прекращаем выполнение, если элементы не найдены
         }
 
-        openMapBtn.addEventListener('click', async function(e) {
-            e.preventDefault();
+        // Функция для открытия полноэкранной модалки карты
+        const openFullscreenMap = async function() {
             mapModal.style.display = 'flex';
             
             // Отключаем language-menu при открытии модалки карты
@@ -1283,11 +1495,13 @@ const MapModal = {
             // После загрузки изображения корректно позиционируем маркер
             mapImage.onload = function() {
                 MapModal.positionMarker(coords);
+                MapModal.renderVisitedMarkers();
             };
             
             // Если картинка уже загружена
             if (mapImage.complete) {
                 MapModal.positionMarker(coords);
+                MapModal.renderVisitedMarkers();
             }
 
             // Добавляем поддержку свайпов для мобильных устройств
@@ -1350,24 +1564,17 @@ const MapModal = {
                 if (toggleButton) {
                     toggleButton.style.display = 'flex';
                 }
-                // Показываем все подсказки по умолчанию
-                setTimeout(() => {
-                    MapModal.showAllTooltips();
-                }, 100);
+                // Подсказки не показываем по умолчанию - только по нажатию на кнопку
             }
 
             // === Для планшетов (hover: none, но экран шире мобильного) ===
-            // Показываем подсказки по умолчанию, но оставляем десктопный режим
             if (window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches) {
                 // Показываем кнопку переключения подсказок
                 const toggleButton = document.getElementById('toggle-tooltips');
                 if (toggleButton) {
                     toggleButton.style.display = 'flex';
                 }
-                // Показываем все подсказки по умолчанию
-                setTimeout(() => {
-                    MapModal.showAllTooltips();
-                }, 100);
+                // Подсказки не показываем по умолчанию - только по нажатию на кнопку
             }
 
             // Добавляем обработчик изменения языка для обновления текста подсказки
@@ -1382,17 +1589,56 @@ const MapModal = {
                      // под какой областью курсор и показать подсказку с новым текстом.
                 }
                 
-                // Обновляем мобильные подсказки при смене языка
+                // Обновляем мобильные подсказки при смене языка только если они уже показаны
                 if (window.innerWidth <= 768) {
-                    MapModal.showAllTooltips();
+                    const tooltips = document.querySelectorAll('.mobile-tooltip');
+                    const isVisible = tooltips.length > 0 && tooltips[0].style.display !== 'none';
+                    if (isVisible) {
+                        MapModal.showAllTooltips();
+                    }
                 }
                 
-                // Обновляем подсказки на планшетах при смене языка
+                // Обновляем подсказки на планшетах при смене языка только если они уже показаны
                 if (window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches) {
-                    MapModal.showAllTooltips();
+                    const tooltips = document.querySelectorAll('.mobile-tooltip');
+                    const isVisible = tooltips.length > 0 && tooltips[0].style.display !== 'none';
+                    if (isVisible) {
+                        MapModal.showAllTooltips();
+                    }
                 }
             });
+        };
+        
+        // Делаем функцию доступной глобально для кнопки "развернуть" на мини-карте
+        window.openFullscreenMap = openFullscreenMap;
+        
+        // Обработчик сообщений от родительского окна для открытия полноэкранной карты
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'OPEN_FULLSCREEN_MAP') {
+                openFullscreenMap();
+            }
         });
+        
+        // Обработчик для кнопки карты - открывает мини-карту
+        // Проверяем, находимся ли мы в iframe или в главном окне
+        if (window.parent !== window) {
+            // Мы в iframe - отправляем сообщение в родительское окно
+            openMapBtn.addEventListener('click', async function(e) {
+                e.preventDefault();
+                window.parent.postMessage({
+                    type: 'OPEN_MINI_MAP',
+                    source: 'iframe'
+                }, '*');
+            });
+        } else {
+            // Мы в главном окне - обрабатываем напрямую
+            openMapBtn.addEventListener('click', async function(e) {
+                e.preventDefault();
+                if (window.miniMapManager) {
+                    window.miniMapManager.expand();
+                }
+            });
+        }
 
         // TODO: Add click handler for openQuestBtn
         openQuestBtn.addEventListener('click', function() {
@@ -2078,7 +2324,7 @@ const MapModal = {
         });
 
         // Обработчик для кнопки переключения подсказок
-        toggleTooltipsBtn.addEventListener('click', function() {
+        toggleTooltipsBtn.addEventListener('click', async function() {
             const tooltips = document.querySelectorAll('.mobile-tooltip');
             const isVisible = tooltips.length > 0 && tooltips[0].style.display !== 'none';
             
@@ -2089,11 +2335,22 @@ const MapModal = {
                 });
                 toggleTooltipsBtn.textContent = '👁️‍🗨️';
             } else {
-                // Показываем подсказки
-                tooltips.forEach(tooltip => {
-                    tooltip.style.display = 'block';
-                });
-                toggleTooltipsBtn.textContent = '👁️';
+                // Если подсказок еще нет, создаем их
+                if (tooltips.length === 0) {
+                    await MapModal.showAllTooltips();
+                    // После создания перечитываем список подсказок
+                    const newTooltips = document.querySelectorAll('.mobile-tooltip');
+                    if (newTooltips.length > 0) {
+                        // Подсказки созданы и видны (display по умолчанию 'block')
+                        toggleTooltipsBtn.textContent = '👁️';
+                    }
+                } else {
+                    // Показываем существующие подсказки
+                    tooltips.forEach(tooltip => {
+                        tooltip.style.display = 'block';
+                    });
+                    toggleTooltipsBtn.textContent = '👁️';
+                }
             }
         });
 
@@ -2162,6 +2419,238 @@ const MapModal = {
             mapMarker.style.left = `${coords.x}%`;
             mapMarker.style.top = `${coords.y}%`;
             mapMarker.style.transform = 'translate(-50%, -50%)';
+        }
+    },
+
+    async renderVisitedMarkers() {
+        try {
+            const layer = document.getElementById('visited-markers-layer');
+            const mapImage = document.getElementById('map-image');
+            if (!layer || !mapImage) return;
+
+            layer.innerHTML = '';
+
+            const visited = getVisitedPages();
+            const entries = Object.values(visited);
+            if (!entries.length) return;
+
+            const { getMapPointCoords, isDoublePoint } = await import('./map_points.js');
+            const isMobile = window.innerWidth <= 768;
+            const isSmallScreen = window.innerWidth <= 1024; // мобильный + планшет
+            const currentPage = getCurrentPageName();
+
+            // Группируем записи по точкам
+            const entriesByPoint = {};
+            for (const entry of entries) {
+                if (!entry || !entry.point) continue;
+                if (!entriesByPoint[entry.point]) {
+                    entriesByPoint[entry.point] = [];
+                }
+                entriesByPoint[entry.point].push(entry);
+            }
+
+            // Рендерим маркеры
+            for (const [pointNum, pointEntries] of Object.entries(entriesByPoint)) {
+                const point = parseInt(pointNum);
+                const coords = getMapPointCoords(point);
+                if (!coords) continue;
+
+                const isDouble = isDoublePoint(point);
+                const markerDiameter = 18; // диаметр маркера в пикселях
+
+                if (isDouble && pointEntries.length > 1) {
+                    // Двойная точка - создаем два маркера,
+                    // каждый отвечает за свою страницу
+                    const firstEntry = pointEntries[0];
+                    const secondEntry = pointEntries[1];
+                    
+                    // Первый маркер (верхний, светлый)
+                    const marker1 = document.createElement('div');
+                    marker1.className = 'visited-marker visited-marker-double-light';
+                    marker1.title = firstEntry.title || firstEntry.page;
+                    
+                    if (isMobile) {
+                        const imageWidth = mapImage.offsetWidth;
+                        const imageHeight = mapImage.offsetHeight;
+                        const x = (coords.x / 100) * imageWidth;
+                        const y = (coords.y / 100) * imageHeight + 15 - markerDiameter / 2;
+                        marker1.style.left = `${x}px`;
+                        marker1.style.top = `${y}px`;
+                    } else {
+                        marker1.style.left = `${coords.x}%`;
+                        marker1.style.top = `calc(${coords.y}% + 15px - ${markerDiameter / 2}px)`;
+                    }
+
+                    this.attachMarkerHandlers(marker1, firstEntry.page, isSmallScreen);
+                    layer.appendChild(marker1);
+
+                    // Второй маркер (нижний, смещен на диаметр, тёмный)
+                    const marker2 = document.createElement('div');
+                    marker2.className = 'visited-marker visited-marker-double-dark';
+                    marker2.title = secondEntry.title || secondEntry.page;
+                    
+                    if (isMobile) {
+                        const imageWidth = mapImage.offsetWidth;
+                        const imageHeight = mapImage.offsetHeight;
+                        const x = (coords.x / 100) * imageWidth;
+                        const y = (coords.y / 100) * imageHeight + 15 + markerDiameter / 2;
+                        marker2.style.left = `${x}px`;
+                        marker2.style.top = `${y}px`;
+                    } else {
+                        marker2.style.left = `${coords.x}%`;
+                        marker2.style.top = `calc(${coords.y}% + 15px + ${markerDiameter / 2}px)`;
+                    }
+
+                    this.attachMarkerHandlers(marker2, secondEntry.page, isSmallScreen);
+                    layer.appendChild(marker2);
+                } else {
+                    // Обычная точка - один маркер
+                    const entry = pointEntries[0];
+                    const marker = document.createElement('div');
+                    marker.className = 'visited-marker' + (entry.page === currentPage ? ' current-page' : '');
+                    marker.title = entry.title || entry.page;
+
+                    if (isMobile) {
+                        const imageWidth = mapImage.offsetWidth;
+                        const imageHeight = mapImage.offsetHeight;
+                        const x = (coords.x / 100) * imageWidth;
+                        const y = (coords.y / 100) * imageHeight + 15;
+                        marker.style.left = `${x}px`;
+                        marker.style.top = `${y}px`;
+                    } else {
+                        marker.style.left = `${coords.x}%`;
+                        marker.style.top = `calc(${coords.y}% + 15px)`;
+                    }
+
+                    this.attachMarkerHandlers(marker, entry.page, isSmallScreen);
+
+                    layer.appendChild(marker);
+                }
+            }
+        } catch (_) {}
+    },
+
+    /**
+     * Назначает обработчики для маркера:
+     * - на мобильных/планшетах первый клик показывает/скрывает превью,
+     *   клик по самому превью ведёт на страницу
+     * - на десктопе клик по маркеру сразу ведёт на страницу
+     */
+    attachMarkerHandlers(marker, page, isSmallScreen) {
+        const previewSrc = this.getPreviewImageForPage(page);
+
+        // Создаём превью, если есть источник
+        let previewEl = null;
+        if (previewSrc) {
+            previewEl = document.createElement('div');
+            previewEl.className = 'map-preview-image';
+            previewEl.style.backgroundImage = `url('${previewSrc}')`;
+            marker.appendChild(previewEl);
+
+            previewEl.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.handleMarkerClick(page);
+            });
+        }
+
+        marker._previewEl = previewEl;
+        marker._previewVisible = false;
+
+        marker.addEventListener('click', (e) => {
+            e.stopPropagation();
+
+            // На маленьких экранах сначала показываем/скрываем превью
+            if (isSmallScreen && previewEl) {
+                if (marker._previewVisible) {
+                    previewEl.style.display = 'none';
+                    marker._previewVisible = false;
+                } else {
+                    // Прячем предыдущее открытое превью
+                    if (this._openPreviewMarker && this._openPreviewMarker._previewEl) {
+                        this._openPreviewMarker._previewEl.style.display = 'none';
+                        this._openPreviewMarker._previewVisible = false;
+                    }
+                    previewEl.style.display = 'block';
+                    marker._previewVisible = true;
+                    this._openPreviewMarker = marker;
+                }
+                return;
+            }
+
+            // Десктоп или нет превью — сразу навигация
+            this.handleMarkerClick(page);
+        });
+    },
+
+    /**
+     * Возвращает путь к превью‑картинке для страницы.
+     * По соглашению: берём файл из подпапки thumbs относительно оригинальной картинки.
+     * Пока настроено только для tumski07.html → tumski_08.jpg.
+     */
+    getPreviewImageForPage(page) {
+        const baseImages = {
+            'tumski07.html': 'media/tumski/tumski_08.jpg',
+        };
+
+        const original = baseImages[page];
+        if (!original) return null;
+
+        // media/tumski/tumski_08.jpg -> media/tumski/thumbs/tumski_08.jpg
+        const parts = original.split('/');
+        if (parts.length < 3) return original;
+        const folder = parts[0]; // media
+        const sub = parts[1];    // tumski
+        const file = parts.slice(2).join('/');
+        return `${folder}/${sub}/thumbs/${file}`;
+    },
+
+    handleMarkerClick(page) {
+        // Закрываем модалку карты и выполняем стандартную очистку
+        try {
+            const mapModalEl = document.getElementById('map-modal');
+            if (mapModalEl) mapModalEl.style.display = 'none';
+            if (window.LanguageMenu && typeof window.LanguageMenu.enableMenu === 'function') {
+                window.LanguageMenu.enableMenu();
+            }
+            const mapContainer = document.querySelector('#map-modal > div');
+            if (mapContainer && mapContainer._removeSwipeListeners) {
+                mapContainer._removeSwipeListeners();
+            }
+            const mapSound = document.getElementById('mapSound');
+            if (mapSound) { mapSound.pause(); mapSound.currentTime = 0; }
+        } catch (_) {}
+        // Помечаем переход через карту для инициализации курсоров на новой странице
+        try {
+            sessionStorage.setItem('navigateViaMap', '1');
+        } catch (_) {}
+        
+        // Открываем страницу
+        const firstPage = page;
+        try {
+            if (window.SPAManager && typeof window.SPAManager.loadPage === 'function') {
+                window.SPAManager.loadPage(firstPage);
+                // Если есть вторая страница, открываем её через небольшую задержку
+                if (pages.length > 1) {
+                    setTimeout(() => {
+                        if (window.SPAManager && typeof window.SPAManager.loadPage === 'function') {
+                            window.SPAManager.loadPage(pages[1]);
+                        }
+                    }, 100);
+                }
+            } else if (window.parent && window.parent.SPAManager && typeof window.parent.SPAManager.loadPage === 'function') {
+                window.parent.SPAManager.loadPage(firstPage);
+                if (pages.length > 1) {
+                    setTimeout(() => {
+                        if (window.parent.SPAManager && typeof window.parent.SPAManager.loadPage === 'function') {
+                            window.parent.SPAManager.loadPage(pages[1]);
+                        }
+                    }, 100);
+                }
+            } else {
+                location.href = firstPage;
+            }
+        } catch (_) {
+            location.href = firstPage;
         }
     },
 
