@@ -158,7 +158,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                 return;
             }
         }
-
+ 
         // Состояние квеста в сессии (сохранение готовности для повторных открытий)
         const loadQuestState = async () => {
             try {
