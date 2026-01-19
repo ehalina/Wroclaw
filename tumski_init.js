@@ -1,3 +1,10 @@
+// Загружаем базу данных перед инициализацией
+if (!document.querySelector('script[src="user_database.js"]')) {
+    const dbScript = document.createElement('script');
+    dbScript.src = 'user_database.js';
+    document.head.appendChild(dbScript);
+}
+
 // Инициализатор страницы tumski19: вызывает общий модуль и настраивает обработчики
 document.addEventListener('DOMContentLoaded', async () => {
     // Эффект разворота камеры при загрузке tumski08.html

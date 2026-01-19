@@ -10,7 +10,7 @@ const languageMenuStyles = `
         z-index: 1000;
     }
 
-    .language-menu-button, .sound-menu-button {
+    .language-menu-button, .sound-menu-button, .account-menu-button {
         width: 64px;
         height: 64px;
         background: rgba(0, 0, 0, 0.7);
@@ -22,9 +22,10 @@ const languageMenuStyles = `
         display: flex;
         align-items: center;
         justify-content: center;
+        color: white;
     }
 
-    .language-menu-button:hover, .sound-menu-button:hover {
+    .language-menu-button:hover, .sound-menu-button:hover, .account-menu-button:hover {
         background: rgba(0, 0, 0, 0.9);
     }
 
@@ -78,7 +79,6 @@ const languageMenuStyles = `
     }
 
     .language-menu.disabled {
-        pointer-events: none;
         opacity: 0.3;
         transition: opacity 0.3s ease;
     }
@@ -88,6 +88,14 @@ const languageMenuStyles = `
         cursor: not-allowed;
         opacity: 0.3;
         pointer-events: none;
+    }
+
+    /* Важно: даже когда меню отключено (например, во время сцен/оверлеев),
+       кнопка аккаунта должна оставаться кликабельной */
+    .language-menu.disabled .account-menu-button {
+        pointer-events: auto;
+        opacity: 1;
+        cursor: pointer;
     }
 `;
 
@@ -122,6 +130,9 @@ const LanguageMenu = {
                 <button class="sound-menu-button muted" onclick="LanguageMenu.toggleSound()">
                     <img src="media/sound.jpg" alt="Sound" class="sound-icon">
                 </button>
+                <button class="account-menu-button" title="Аккаунт">
+                    <span style="font-size: 24px;">👤</span>
+                </button>
                 <div class="language-dropdown">
                     <a href="#" class="language-option" data-lang="pl" onclick="LanguageMenu.changeLang('pl')">PL</a>
                     <a href="#" class="language-option" data-lang="ru" onclick="LanguageMenu.changeLang('ru')">RU</a>
@@ -136,6 +147,14 @@ const LanguageMenu = {
 
         // Добавляем меню на страницу
         document.body.insertAdjacentHTML('beforeend', menuHTML);
+
+        // Добавляем обработчик для кнопки аккаунта
+        const accountButton = document.querySelector('.account-menu-button');
+        if (accountButton) {
+            accountButton.addEventListener('click', () => {
+                this.showAccountMenu();
+            });
+        }
 
         // Создаем кнопку разблокировки аудио динамически
     // console.log('🎵 Вызываем createAudioUnlockButton()');
@@ -1125,6 +1144,58 @@ const LanguageMenu = {
             audioUnlockButton.addEventListener('click', this.handleAudioUnlockClick);
         } else {
     // console.log('❌ Не удалось создать кнопку разблокировки аудио!');
+        }
+    },
+
+    // Показать меню аккаунта
+    showAccountMenu() {
+        this.ensureAccountManagerReady(() => {
+            if (window.userAccountManager && typeof window.userAccountManager.showAccountMenu === 'function') {
+                window.userAccountManager.showAccountMenu();
+            }
+        });
+    },
+
+    // Гарантирует, что user_account.js загружен и менеджер доступен
+    ensureAccountManagerReady(callback) {
+        // Если уже есть менеджер — сразу выполняем
+        if (window.userAccountManager) {
+            callback && callback();
+            return;
+        }
+
+        // Если класс доступен, но экземпляр не создан — создаем
+        if (!window.userAccountManager && window.UserAccountManager) {
+            try {
+                window.userAccountManager = new window.UserAccountManager();
+                callback && callback();
+                return;
+            } catch (err) {
+                console.error('Не удалось создать экземпляр userAccountManager', err);
+            }
+        }
+
+        // Проверяем, не загружаем ли уже скрипт
+        let loader = document.querySelector('script[data-user-account-loader]');
+        if (!loader) {
+            loader = document.createElement('script');
+            loader.src = 'user_account.js';
+            loader.dataset.userAccountLoader = '1';
+            loader.onload = () => {
+                // Небольшая задержка, чтобы инициализировался менеджер
+                setTimeout(() => callback && window.userAccountManager && callback(), 0);
+            };
+            loader.onerror = () => {
+                console.error('Не удалось загрузить user_account.js');
+            };
+            document.head.appendChild(loader);
+        } else {
+            // Если уже грузится — пробуем позже
+            setTimeout(() => {
+                if (window.userAccountManager) {
+                    callback && callback();
+                }
+            }, 150);
         }
     }
 };

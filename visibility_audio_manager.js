@@ -301,10 +301,21 @@ const observer = new MutationObserver((mutations) => {
     }
 });
 
-// Начинаем наблюдение за изменениями в DOM
-observer.observe(document.body, {
-    childList: true,
-    subtree: true
-});
+// Начинаем наблюдение за изменениями в DOM (после загрузки)
+if (document.body) {
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+} else {
+    document.addEventListener('DOMContentLoaded', () => {
+        if (document.body) {
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        }
+    });
+}
 
     // console.log('🎵 Менеджер видимости аудио загружен и готов к работе');

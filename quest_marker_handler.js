@@ -6,9 +6,19 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
     // Находим родительский элемент map-mark-area и в нем ищем название геометки
     const markArea = marker.closest('.map-mark-area');
     const markerTitle = markArea ? markArea.querySelector('.tumski-text') : null;
+    const isTouchDevice = (() => {
+        try {
+            return window.matchMedia && window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+        } catch (_) {
+            return false;
+        }
+    })();
 
     // Добавляем обработчик на значок геометки
     marker.addEventListener('click', openQuest);
+
+    // Даем возможность открыть квест программно (для SPA/тач-устройств, где click может не приходить)
+    try { marker.__openQuest = openQuest; } catch (_) {}
 
     // Добавляем обработчик на название геометки, если оно найдено
     if (markerTitle) {
@@ -16,26 +26,155 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         markerTitle.addEventListener('click', openQuest);
     }
 
+    // Расширенная зона клика (extended-hover-area)
+    // Важно: для квест-меток клик часто попадает именно в неё, поэтому навешиваем обработчик напрямую.
+    try {
+        let extendedArea = marker.querySelector('.extended-hover-area') || markArea?.querySelector('.extended-hover-area');
+
+        // Если по какой-то причине не создано — создадим минимальную версию (квестам нужна кликабельность)
+        if (!extendedArea) {
+            extendedArea = document.createElement('div');
+            extendedArea.className = 'extended-hover-area';
+            // размеры/позиционирование как в tumski_cathedral_handler.js (упрощённо)
+            const extendedSize = window.innerWidth > 700 ? 80 : 60;
+            extendedArea.style.cssText = `
+                position: absolute;
+                top: -${extendedSize}px;
+                left: -${extendedSize}px;
+                width: calc(100% + ${extendedSize * 2}px);
+                height: calc(100% + ${extendedSize * 2}px);
+                background: transparent;
+                border-radius: 50%;
+                pointer-events: auto;
+                z-index: 10001;
+                cursor: pointer;
+            `;
+            marker.insertBefore(extendedArea, marker.firstChild);
+        }
+
+        // Ставим обработчики на саму расширенную зону
+        const onExtendedActivate = (e) => {
+            // На тач-устройствах предотвращаем "лишние" эффекты скролла/клика
+            if (isTouchDevice && e) {
+                try { e.preventDefault(); } catch (_) {}
+            }
+            return openQuest(e);
+        };
+
+        extendedArea.addEventListener('click', onExtendedActivate);
+        // Для некоторых мобильных браузеров click может не прийти корректно — добавляем touchend
+        extendedArea.addEventListener('touchend', onExtendedActivate, { passive: false });
+    } catch (_) {}
+
     // Функция обработчик для открытия квеста
     async function openQuest(e) {
+        const debugQuest = (() => {
+            try { return localStorage.getItem('__quest_debug') === '1'; } catch (_) { return false; }
+        })();
+
+        if (debugQuest) {
+            try {
+                console.log('🧩 Quest openQuest() triggered', {
+                    markerId,
+                    questNumber,
+                    target: e?.target?.className || e?.target?.id || e?.target?.tagName
+                });
+            } catch (_) {}
+        }
+
         // Определяем, открыто ли через клик по map-mark с эффектом свечения (quest-marker-glow)
         const openedViaGlowMarker = !!(e && e.currentTarget === marker && marker.classList && marker.classList.contains('quest-marker-glow'));
         const suppressEffects = !!window.__quest_suppress_effects;
-        const bookOverlay = document.querySelector('.book-overlay');
+        // В SPA страницы часто загружаются в iframe, а .book-overlay может быть создан в родительском документе.
+        // Поэтому сначала ищем в текущем документе, затем — в parent (если доступен).
+        let overlayDoc = document;
+        let bookOverlay = overlayDoc.querySelector('.book-overlay');
+        if (!bookOverlay && window.parent && window.parent !== window) {
+            try {
+                const parentDoc = window.parent.document;
+                const parentOverlay = parentDoc.querySelector('.book-overlay');
+                if (parentOverlay) {
+                    overlayDoc = parentDoc;
+                    bookOverlay = parentOverlay;
+                }
+            } catch (_) {}
+        }
+
         const bookContainer = bookOverlay?.querySelector('.book-container');
         const bookTitle = bookOverlay?.querySelector('.book-title');
-        const bookSound = document.getElementById('bookSound');
+        // bookSound НЕ должен быть обязательным для открытия квеста
+        const bookSound = overlayDoc.getElementById('bookSound') || null;
         const questTasksList = bookOverlay?.querySelector('.quest-tasks');
         const bookImageContentWrapper = bookOverlay?.querySelector('.book-image-content-wrapper');
         const bookContentArea = bookOverlay?.querySelector('.book-content-area');
 
-        if (!bookOverlay || !bookContainer || !bookTitle || !bookSound || !questTasksList || !bookImageContentWrapper || !bookContentArea) {
-            return;
+        if (!bookOverlay || !bookContainer || !bookTitle || !questTasksList || !bookImageContentWrapper || !bookContentArea) {
+            // Fallback: иногда .book-overlay создаётся только после MapModal.init().
+            // После добавления аккаунтов/скриптов порядок инициализации мог измениться,
+            // поэтому пробуем лениво поднять MapModal и повторить поиск.
+            try {
+                if (window.parent && window.parent !== window && window.parent.MapModal && typeof window.parent.MapModal.init === 'function') {
+                    window.parent.MapModal.init();
+                } else if (window.MapModal && typeof window.MapModal.init === 'function') {
+                    window.MapModal.init();
+                }
+            } catch (_) {}
+
+            // Повторный поиск (в текущем документе или parent)
+            try {
+                overlayDoc = document;
+                bookOverlay = overlayDoc.querySelector('.book-overlay');
+                if (!bookOverlay && window.parent && window.parent !== window) {
+                    const parentDoc = window.parent.document;
+                    const parentOverlay = parentDoc.querySelector('.book-overlay');
+                    if (parentOverlay) {
+                        overlayDoc = parentDoc;
+                        bookOverlay = parentOverlay;
+                    }
+                }
+            } catch (_) {}
+
+            const retryBookContainer = bookOverlay?.querySelector('.book-container');
+            const retryBookTitle = bookOverlay?.querySelector('.book-title');
+            const retryBookSound = overlayDoc.getElementById('bookSound') || null;
+            const retryQuestTasksList = bookOverlay?.querySelector('.quest-tasks');
+            const retryBookImageContentWrapper = bookOverlay?.querySelector('.book-image-content-wrapper');
+            const retryBookContentArea = bookOverlay?.querySelector('.book-content-area');
+
+            if (!bookOverlay || !retryBookContainer || !retryBookTitle || !retryQuestTasksList || !retryBookImageContentWrapper || !retryBookContentArea) {
+                if (debugQuest) {
+                    console.warn('🧩 Quest openQuest() early return: missing overlay parts', {
+                        markerId,
+                        hasBookOverlay: !!bookOverlay,
+                        hasBookContainer: !!retryBookContainer,
+                        hasBookTitle: !!retryBookTitle,
+                        hasBookSound: !!retryBookSound,
+                        hasQuestTasksList: !!retryQuestTasksList,
+                        hasBookImageContentWrapper: !!retryBookImageContentWrapper,
+                        hasBookContentArea: !!retryBookContentArea,
+                        overlayDoc: overlayDoc === document ? 'document' : 'parent'
+                    });
+                }
+                return;
+            }
         }
 
         // Состояние квеста в сессии (сохранение готовности для повторных открытий)
-        const loadQuestState = () => {
+        const loadQuestState = async () => {
             try {
+                // Сначала пытаемся загрузить из аккаунта пользователя
+                if (window.userAccountManager) {
+                    const user = await window.userAccountManager.getCurrentUser();
+                    if (user) {
+                        const accountState = await window.userAccountManager.loadQuestState();
+                        if (accountState && accountState.tasks) {
+                            // Синхронизируем с sessionStorage
+                            sessionStorage.setItem('questState', JSON.stringify(accountState));
+                            return accountState;
+                        }
+                    }
+                }
+                // Fallback на sessionStorage
                 const raw = JSON.parse(sessionStorage.getItem('questState') || '{}');
                 if (!raw.tasks) {
                     raw.tasks = {};
@@ -43,10 +182,16 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                 return raw;
             } catch (_) { return { tasks: {} }; }
         };
-        const saveQuestState = (state) => {
-            try { sessionStorage.setItem('questState', JSON.stringify(state)); } catch (_) {}
+        const saveQuestState = async (state) => {
+            try { 
+                sessionStorage.setItem('questState', JSON.stringify(state));
+                // Сохраняем в аккаунт пользователя
+                if (window.userAccountManager) {
+                    await window.userAccountManager.saveQuestState(state);
+                }
+            } catch (_) {}
         };
-        const questState = loadQuestState();
+        const questState = await loadQuestState();
         const tasksPrepared = questState.tasks || {};
         const isPrepared = !!tasksPrepared[questNumber];
 
@@ -1058,7 +1203,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                         span.style.opacity = '0';
                                         span.style.transition = 'opacity 0.3s ease';
                                         brightText.appendChild(span);
-                                        setTimeout(() => {
+                                        setTimeout(async () => {
                                             span.style.opacity = '1';
                                         }, 100 * index);
                                     });
@@ -1162,7 +1307,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
 
                                         const totalRevealDelayMs = isPrepared ? 0 : Math.max(800, text.length * 100 + 500);
 
-                                        setTimeout(() => {
+                                        setTimeout(async () => {
                                             // Создаем обертку для 3D-переворота
                                             const flipScene = document.createElement('div');
                                             flipScene.style.position = 'relative';
@@ -1461,32 +1606,34 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                                             };
                                             addRetroHover(localSoundButton, false); // без обводки
                                             addRetroHover(flipButton, true); // с обводкой
-                                        }, totalRevealDelayMs);
-                                        
-                                        // Сохраняем состояние как подготовленное и запоминаем последний подготовленный пункт
-                                        const current = loadQuestState();
-                                        current.tasks = current.tasks || {};
-                                        current.tasks[questNumber] = { prepared: true, image: questImage };
-                                        current.__lastPreparedNumber = questNumber;
-                                        saveQuestState(current);
 
-                                        // Проверяем, завершен ли весь квест
-                                        setTimeout(() => {
-                                            const updatedState = loadQuestState();
-                                            const updatedTasksPrepared = updatedState.tasks || {};
-                                            let completedTasks = 0;
-                                            for (let i = 1; i <= 13; i++) {
-                                                if (updatedTasksPrepared[i]) {
-                                                    completedTasks++;
-                                                }
-                                            }
-                                            if (completedTasks === 13) {
-                                                // Показываем модальное окно завершения квеста
-                                                setTimeout(() => {
-                                                    showQuestCompletionModal();
-                                                }, 2000); // Небольшая задержка для завершения анимации
-                                            }
-                                        }, 1000);
+                                            // Сохраняем состояние как подготовленное и запоминаем последний подготовленный пункт
+                                            try {
+                                                const current = await loadQuestState();
+                                                current.tasks = current.tasks || {};
+                                                current.tasks[questNumber] = { prepared: true, image: questImage };
+                                                current.__lastPreparedNumber = questNumber;
+                                                await saveQuestState(current);
+
+                                                // Проверяем, завершен ли весь квест
+                                                setTimeout(async () => {
+                                                    const updatedState = await loadQuestState();
+                                                    const updatedTasksPrepared = updatedState.tasks || {};
+                                                    let completedTasks = 0;
+                                                    for (let i = 1; i <= 13; i++) {
+                                                        if (updatedTasksPrepared[i]) {
+                                                            completedTasks++;
+                                                        }
+                                                    }
+                                                    if (completedTasks === 13) {
+                                                        // Показываем модальное окно завершения квеста
+                                                        setTimeout(() => {
+                                                            showQuestCompletionModal();
+                                                        }, 2000); // Небольшая задержка для завершения анимации
+                                                    }
+                                                }, 1000);
+                                            } catch (_) {}
+                                        }, totalRevealDelayMs);
                                     }
                                     
                                     // Плавно скрываем старый текст

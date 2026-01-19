@@ -127,7 +127,7 @@ export async function initPageCommon() {
             if (questMarks.length > 0) {
                 const questMod = await import('./quest_marker_handler.js');
                 // Добавим glow-стили один раз
-                ensureQuestGlowStyles();
+                try { ensureQuestGlowStyles(); } catch (_) {}
                 for (const el of questMarks) {
                     try {
                         const markerId = el.id;
@@ -136,9 +136,106 @@ export async function initPageCommon() {
                         if (markerId && questNumber && questMod && typeof questMod.setupQuestGeoMarker === 'function') {
                             questMod.setupQuestGeoMarker({ markerId, questNumber, questImage });
                             el.classList.add('quest-marker-glow');
+                            // Маркер успешно инициализирован (используется как флаг для ленивой инициализации по клику)
+                            try { el.dataset.questHandlerInitialized = '1'; } catch (_) {}
                         }
                     } catch (_) {}
                 }
+            }
+        } catch (_) {}
+
+        // 7.1) Страховка: лениво инициализируем квест-маркер по клику/тапу,
+        // если по какой-то причине шаг (7) не успел/не отработал.
+        // Важно: обработчик в capture, чтобы сработать даже при клике по перекрывающим слоям.
+        try {
+            if (!window.__questDelegatedInitHooked) {
+                window.__questDelegatedInitHooked = true;
+                let inProgress = false;
+                const delegatedQuestHandler = async (e) => {
+                    const debugQuest = (() => { try { return localStorage.getItem('__quest_debug') === '1'; } catch (_) { return false; } })();
+                    if (inProgress) return;
+                    const target = e && e.target && e.target.closest
+                        ? e.target.closest('.map-mark[data-quest-number], .map-mark-area')
+                        : null;
+                    if (!target) return;
+
+                    const mark = target.classList.contains('map-mark')
+                        ? target
+                        : (target.querySelector ? target.querySelector('.map-mark[data-quest-number]') : null);
+                    if (!mark) return;
+                    if (!mark.hasAttribute('data-quest-number')) return;
+
+                    if (debugQuest) {
+                        try {
+                            console.log('🧩 delegatedQuestHandler hit', {
+                                event: e?.type,
+                                target: e?.target?.className || e?.target?.tagName,
+                                markId: mark.id,
+                                questNumber: mark.getAttribute('data-quest-number'),
+                                hasOpenQuest: typeof mark.__openQuest === 'function',
+                                initializedFlag: mark.dataset ? mark.dataset.questHandlerInitialized : undefined
+                            });
+                        } catch (_) {}
+                    }
+
+                    // Уже инициализировано — ничего не делаем только если реально можно открыть квест
+                    if (mark.dataset && mark.dataset.questHandlerInitialized && typeof mark.__openQuest === 'function') return;
+
+                    const markerId = mark.id;
+                    const questNumber = parseInt(mark.getAttribute('data-quest-number'));
+                    const questImage = mark.getAttribute('data-quest-image') || '';
+                    if (!markerId || !questNumber) return;
+
+                    // Инициализируем и сразу же повторяем клик, чтобы открыть квест.
+                    inProgress = true;
+                    try {
+                        try { e.preventDefault(); } catch (_) {}
+                        try { e.stopPropagation(); } catch (_) {}
+                        const questMod = await import('./quest_marker_handler.js');
+                        if (debugQuest) {
+                            console.log('🧩 delegatedQuestHandler imported quest_marker_handler.js', {
+                                hasSetup: !!questMod && typeof questMod.setupQuestGeoMarker === 'function'
+                            });
+                        }
+
+                        if (questMod && typeof questMod.setupQuestGeoMarker === 'function') {
+                            questMod.setupQuestGeoMarker({ markerId, questNumber, questImage });
+                            try { mark.classList.add('quest-marker-glow'); } catch (_) {}
+                            try { mark.dataset.questHandlerInitialized = '1'; } catch (_) {}
+
+                            if (debugQuest) {
+                                console.log('🧩 delegatedQuestHandler after setupQuestGeoMarker', {
+                                    markId: mark.id,
+                                    hasOpenQuest: typeof mark.__openQuest === 'function'
+                                });
+                            }
+
+                            // Открываем квест напрямую (не через synthetic click)
+                            setTimeout(() => {
+                                try {
+                                    if (typeof mark.__openQuest === 'function') {
+                                        mark.__openQuest(e);
+                                    } else {
+                                        // Фоллбек: попробуем обычный клик
+                                        mark.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+                                    }
+                                } catch (err) {
+                                    if (debugQuest) console.error('🧩 delegatedQuestHandler open attempt failed', err);
+                                }
+                            }, 0);
+                        } else if (debugQuest) {
+                            console.warn('🧩 delegatedQuestHandler: setupQuestGeoMarker not found', questMod);
+                        }
+                    } catch (err) {
+                        if (debugQuest) console.error('🧩 delegatedQuestHandler failed', err);
+                    } finally {
+                        setTimeout(() => { inProgress = false; }, 0);
+                    }
+                };
+
+                // На тач-устройствах click может не срабатывать — слушаем также touchend (capture)
+                document.addEventListener('click', delegatedQuestHandler, true);
+                document.addEventListener('touchend', delegatedQuestHandler, { capture: true, passive: false });
             }
         } catch (_) {}
 

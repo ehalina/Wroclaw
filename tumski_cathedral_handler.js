@@ -185,6 +185,73 @@ function createExtendedHoverArea() {
                     extendedArea.style.background = 'transparent';
                 });
             }
+
+            // ВАЖНО: если extendedArea уже существовала, нам всё равно нужно гарантировать обработчик клика.
+            // Ранее использовался флаг questClickHooked, но он мог ставиться без реального навешивания (в старых версиях).
+            // Поэтому используем отдельный флаг questClickListenerAttached.
+            if (extendedArea) {
+                if (!extendedArea.dataset.questClickHooked) {
+                    extendedArea.dataset.questClickHooked = '1';
+                }
+            }
+
+            if (extendedArea && !extendedArea.dataset.questClickListenerAttached) {
+                extendedArea.dataset.questClickListenerAttached = '1';
+
+                // Клик по расширенной области должен срабатывать так же, как клик по самой метке.
+                // Для квест-меток (data-quest-number) дополнительно гарантируем инициализацию обработчиков.
+                const handleExtendedClick = async (e) => {
+                    const debugQuest = (() => { try { return localStorage.getItem('__quest_debug') === '1'; } catch (_) { return false; } })();
+                    if (debugQuest) {
+                        try {
+                            console.log('🧩 extended-hover-area click', {
+                                id: mapMark?.id,
+                                questNumber: mapMark?.getAttribute?.('data-quest-number') || null,
+                                target: e?.target?.className || e?.target?.tagName
+                            });
+                        } catch (_) {}
+                    }
+                    try {
+                        e && e.preventDefault && e.preventDefault();
+                        e && e.stopPropagation && e.stopPropagation();
+                    } catch (_) {}
+
+                    try {
+                        if (mapMark && mapMark.hasAttribute('data-quest-number') && mapMark.id) {
+                            const alreadyUsable = (mapMark.dataset.questHandlerInitialized && typeof mapMark.__openQuest === 'function');
+                            if (!alreadyUsable && !mapMark.dataset.questHandlerInitInProgress) {
+                                mapMark.dataset.questHandlerInitInProgress = '1';
+                                try {
+                                    const questMod = await import('./quest_marker_handler.js');
+                                    if (questMod && typeof questMod.setupQuestGeoMarker === 'function') {
+                                        const questNumber = parseInt(mapMark.getAttribute('data-quest-number'));
+                                        const questImage = mapMark.getAttribute('data-quest-image') || '';
+                                        questMod.setupQuestGeoMarker({ markerId: mapMark.id, questNumber, questImage });
+                                        // Ставим initialized только после успешного вызова setupQuestGeoMarker
+                                        mapMark.dataset.questHandlerInitialized = '1';
+                                    }
+                                } catch (err) {
+                                    if (debugQuest) console.error('🧩 import/setupQuestGeoMarker failed', err);
+                                    // не оставляем "залипший" initialized
+                                    try { delete mapMark.dataset.questHandlerInitialized; } catch (_) {}
+                                } finally {
+                                    try { delete mapMark.dataset.questHandlerInitInProgress; } catch (_) {}
+                                }
+                            }
+                        }
+
+                        // Пробрасываем "клик по метке" (если обработчики уже есть — они отработают)
+                        if (mapMark) {
+                            mapMark.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+                        }
+                    } catch (err) {
+                        if (debugQuest) console.error('🧩 handleExtendedClick failed', err);
+                    }
+                };
+
+                extendedArea.addEventListener('click', handleExtendedClick, { passive: false });
+                extendedArea.addEventListener('touchend', handleExtendedClick, { passive: false });
+            }
             
         } catch (error) {
             // Ошибка при создании расширенной области для маркера

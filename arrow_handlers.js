@@ -84,9 +84,9 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
     
     // Блокируем click на мобильных в capture phase (до всех других обработчиков)
     // Проверяем в момент события, а не при инициализации
-    cursorArea.addEventListener('click', function(e) {
+        cursorArea.addEventListener('click', function(e) {
         const isMobileNow = !isDesktopDevice();
-        const timeSinceTouch = Date.now() - lastTouchTime;
+            const timeSinceTouch = Date.now() - lastTouchTime;
         if (isMobileNow) {
             console.log('🔵 RIGHT CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
             e.preventDefault();
@@ -94,7 +94,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
             e.stopImmediatePropagation();
             return false;
         }
-    }, { capture: true, passive: false });
+        }, { capture: true, passive: false });
     
     cursor.addEventListener('click', function(e) {
         const isMobileNow = !isDesktopDevice();
@@ -446,9 +446,9 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
     
     // Блокируем click на мобильных в capture phase (до всех других обработчиков)
     // Проверяем в момент события, а не при инициализации
-    cursorProstoArea.addEventListener('click', function(e) {
+        cursorProstoArea.addEventListener('click', function(e) {
         const isMobileNow = !isDesktopDevice();
-        const timeSinceTouch = Date.now() - lastTouchTime;
+            const timeSinceTouch = Date.now() - lastTouchTime;
         if (isMobileNow) {
             console.log('🟢 FORWARD CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
             e.preventDefault();
@@ -456,7 +456,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
             e.stopImmediatePropagation();
             return false;
         }
-    }, { capture: true, passive: false });
+        }, { capture: true, passive: false });
     
     cursorProsto.addEventListener('click', function(e) {
         const isMobileNow = !isDesktopDevice();
@@ -852,9 +852,9 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
                     }
                 }, 1500);
                 
-            } catch (error) {
+                    } catch (error) {
                 console.error('❌ Ошибка при обработке касания по стрелке прямо:', error);
-            }
+        }
         };
         
         // Обработчики для области курсора
@@ -955,9 +955,9 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
     
     // Блокируем click на мобильных в capture phase (до всех других обработчиков)
     // Проверяем в момент события, а не при инициализации
-    cursorLeftArea.addEventListener('click', function(e) {
+        cursorLeftArea.addEventListener('click', function(e) {
         const isMobileNow = !isDesktopDevice();
-        const timeSinceTouch = Date.now() - lastTouchTime;
+            const timeSinceTouch = Date.now() - lastTouchTime;
         if (isMobileNow) {
             console.log('🟠 LEFT CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
             e.preventDefault();
@@ -965,7 +965,7 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
             e.stopImmediatePropagation();
             return false;
         }
-    }, { capture: true, passive: false });
+        }, { capture: true, passive: false });
     
     cursorLeft.addEventListener('click', function(e) {
         const isMobileNow = !isDesktopDevice();
@@ -1048,7 +1048,7 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
                 touchCount = 0;
                 return;
             }
-            
+                
             try {
                 console.log('🟠 LEFT TOUCHEND: Выполняем действие');
                 hideAllCursors();
@@ -1069,7 +1069,7 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
                             if (window.parent && window.parent !== window && window.parent.spaManager) {
                                 window.parent.spaManager.navigateToPage(nextPage);
                             } else {
-                                window.location.href = nextPage;
+                            window.location.href = nextPage;
                             }
                         } else {
                             window.location.href = 'index.html';
@@ -1352,9 +1352,9 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
     
     // Блокируем click на мобильных в capture phase (до всех других обработчиков)
     // Проверяем в момент события, а не при инициализации
-    cursorProstoLeftArea.addEventListener('click', function(e) {
+        cursorProstoLeftArea.addEventListener('click', function(e) {
         const isMobileNow = !isDesktopDevice();
-        const timeSinceTouch = Date.now() - lastTouchTime;
+            const timeSinceTouch = Date.now() - lastTouchTime;
         if (isMobileNow) {
             console.log('🟡 FORWARD-LEFT CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
             e.preventDefault();
@@ -1362,7 +1362,7 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
             e.stopImmediatePropagation();
             return false;
         }
-    }, { capture: true, passive: false });
+        }, { capture: true, passive: false });
     
     cursorProstoLeft.addEventListener('click', function(e) {
         const isMobileNow = !isDesktopDevice();

@@ -358,15 +358,15 @@ export async function initializeArrowHandlers(arrowConfigs = []) {
                             clearTimeout(touchTimer);
                             touchCount = 0;
                             
-                            if (stepSound && isSoundEnabled()) {
-                                stepSound.play().then(() => {
-                                    if (callback) callback();
-                                }).catch(() => {
-                                    if (callback) callback();
-                                });
-                            } else {
+                        if (stepSound && isSoundEnabled()) {
+                            stepSound.play().then(() => {
                                 if (callback) callback();
-                            }
+                            }).catch(() => {
+                                if (callback) callback();
+                            });
+                        } else {
+                            if (callback) callback();
+                        }
                         } else {
                             // Больше двух касаний - сбрасываем
                             touchCount = 0;
