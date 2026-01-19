@@ -29,7 +29,7 @@ const languageMenuStyles = `
         background: rgba(0, 0, 0, 0.9);
     }
 
-    .language-menu-button img, .sound-menu-button img {
+    .language-menu-button img, .sound-menu-button img, .account-menu-button img {
         width: 100%;
         height: 100%;
         object-fit: contain;
@@ -131,7 +131,7 @@ const LanguageMenu = {
                     <img src="media/sound.jpg" alt="Sound" class="sound-icon">
                 </button>
                 <button class="account-menu-button" title="Аккаунт">
-                    <span style="font-size: 24px;">👤</span>
+                    <img src="media/user.jpg" alt="Account" class="account-icon">
                 </button>
                 <div class="language-dropdown">
                     <a href="#" class="language-option" data-lang="pl" onclick="LanguageMenu.changeLang('pl')">PL</a>
@@ -152,6 +152,9 @@ const LanguageMenu = {
         const accountButton = document.querySelector('.account-menu-button');
         if (accountButton) {
             accountButton.addEventListener('click', () => {
+                // Важно: если звук уже включен, делаем "ещё одну активацию" в рамках user-gesture,
+                // чтобы браузер не блокировал аудио после открытия оверлеев/меню.
+                this.reactivateSoundIfEnabled();
                 this.showAccountMenu();
             });
         }
@@ -274,6 +277,40 @@ const LanguageMenu = {
         
         // Принудительно обновляем визуальное состояние после изменения
         this.updateSoundButtonVisualState();
+    },
+
+    // Если звук включен — повторно активируем аудио в рамках текущего user-gesture (клик по account)
+    reactivateSoundIfEnabled() {
+        try {
+            const soundButton = document.querySelector('.sound-menu-button');
+            const isMuted = localStorage.getItem('soundMuted') === 'true';
+            const isButtonMuted = soundButton ? soundButton.classList.contains('muted') : true;
+
+            // "Активна" = звук включен (не muted)
+            if (!soundButton || isMuted || isButtonMuted) return;
+
+            // Повторно применяем состояние "unmute" без переключения в mute
+            this.manageSPAMusic('unmute');
+            this.unmuteAllSounds();
+
+            // Если есть SPA-менеджер — попытаться разблокировать аудио (в user-gesture это легально)
+            if (window.spaManager && typeof window.spaManager.unlockAudio === 'function') {
+                window.spaManager.unlockAudio();
+            }
+
+            // На всякий случай пытаемся возобновить unified audio player
+            if (window.spaManager && typeof window.spaManager.getUnifiedAudioPlayer === 'function') {
+                const audio = window.spaManager.getUnifiedAudioPlayer();
+                if (audio && audio.paused) audio.play().catch(() => {});
+            }
+
+            // iOS direct audio fallback
+            if (window.directMusicAudio && window.directMusicAudio.paused) {
+                window.directMusicAudio.play().catch(() => {});
+            }
+        } catch (_) {
+            // no-op
+        }
     },
 
     manageSPAMusic(action) {

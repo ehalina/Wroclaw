@@ -9,8 +9,39 @@ class VisibilityAudioManager {
         this.visibilityTimeout = null; // Таймер для задержки обработки
         this.lastVisibilityState = document.visibilityState; // Последнее состояние видимости
         this.hiddenStartTime = null; // Время, когда страница стала невидимой
+        this._lastHasFocus = (typeof document.hasFocus === 'function') ? document.hasFocus() : true;
+        this._focusPollInterval = null;
         
         this.init();
+    }
+
+    // Проверяем, можно ли безопасно возобновлять аудио (без триггера autoplay-блокировки)
+    canResumeAudio() {
+        try {
+            // Глобальный флаг выключенного звука
+            const muted = localStorage.getItem('soundMuted') === 'true';
+            if (muted) return false;
+
+            // Если есть SPA-менеджер — уважим его политику разблокировки
+            if (window.spaManager) {
+                if (typeof window.spaManager.isSoundEnabled === 'function' && !window.spaManager.isSoundEnabled()) {
+                    return false;
+                }
+                if (window.spaManager.audioUnlocked === false) {
+                    return false;
+                }
+            }
+
+            // Если в глобале есть helper — используем
+            if (typeof window.isSoundEnabled === 'function' && !window.isSoundEnabled()) {
+                return false;
+            }
+
+            return true;
+        } catch (_) {
+            // В случае проблем — лучше НЕ пытаться играть автоматически
+            return false;
+        }
     }
     
     init() {
@@ -31,6 +62,30 @@ class VisibilityAudioManager {
         window.addEventListener('focus', () => {
             this.handlePageVisible();
         });
+
+        // Страховка: в некоторых браузерах window blur/focus может быть нестабильным.
+        // Поэтому дополнительно отслеживаем фокус через document.hasFocus().
+        if (!this._focusPollInterval && typeof document.hasFocus === 'function') {
+            this._focusPollInterval = setInterval(() => {
+                try {
+                    const hasFocus = document.hasFocus();
+                    if (hasFocus === this._lastHasFocus) return;
+
+                    // Переход фокуса окна
+                    if (!hasFocus) {
+                        this.hiddenStartTime = Date.now();
+                        this.handlePageHidden();
+                    } else {
+                        this.handlePageVisible();
+                        this.hiddenStartTime = null;
+                    }
+
+                    this._lastHasFocus = hasFocus;
+                } catch (_) {
+                    // no-op
+                }
+            }, 250);
+        }
         
         this.isInitialized = true;
     }
@@ -137,6 +192,14 @@ class VisibilityAudioManager {
         // Проверяем, что страница была скрыта достаточно долго (больше 200мс)
         if (this.hiddenStartTime && (Date.now() - this.hiddenStartTime) < 200) {
     // console.log('🎵 Страница была скрыта слишком короткое время, игнорируем handlePageVisible');
+            return;
+        }
+
+        // Важно: не пытаемся автоматически play(), если звук выключен или аудио не разблокировано.
+        // Иначе браузер (особенно iOS/Safari) может включить autoplay-блокировку после blur/focus.
+        if (!this.canResumeAudio()) {
+            // Сбрасываем сохраненные состояния, чтобы не копились и не пытались возобновляться снова
+            this.pausedStates.clear();
             return;
         }
         
@@ -246,6 +309,11 @@ class VisibilityAudioManager {
         if (this.visibilityTimeout) {
             clearTimeout(this.visibilityTimeout);
             this.visibilityTimeout = null;
+        }
+
+        if (this._focusPollInterval) {
+            clearInterval(this._focusPollInterval);
+            this._focusPollInterval = null;
         }
         
         document.removeEventListener('visibilitychange', this.handleVisibilityChange.bind(this));
