@@ -597,5 +597,29 @@
     "hint": "Aby wrócić do animacji, kliknij dwukrotnie w wolne miejsce na ekranie"
   },
   "expectation": "Oczekiwanie",
-  "reality": ""
+  "reality": "",
+  "account": {
+    "guest": "Gość",
+    "user": "Użytkownik",
+    "stats": {
+      "locations": "Otwartych lokacji",
+      "quests": "Ukończonych questów",
+      "gnomes": "Znalezionych krasnali",
+      "books": "Przeczytanych książek",
+      "not_available": "—"
+    },
+    "actions": {
+      "close": "Zamknij",
+      "retry": "Ponów",
+      "save_title": "Zapisz",
+      "save_email": "Email",
+      "save_google": "Google",
+      "save_facebook": "Facebook",
+      "logout": "Wyloguj"
+    },
+    "errors": {
+      "profile_not_ready": "Profil nie jest gotowy. Spróbuj ponownie za chwilę.",
+      "open_failed": "Nie udało się otworzyć menu konta"
+    }
+  }
 } 

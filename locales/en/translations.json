@@ -596,5 +596,29 @@
     "hint": "To return to animation, double-click in a free area of the screen"
   },
   "expectation": "Expectation",
-  "reality": "Reality"
+  "reality": "Reality",
+  "account": {
+    "guest": "Guest",
+    "user": "User",
+    "stats": {
+      "locations": "Locations opened",
+      "quests": "Quests completed",
+      "gnomes": "Gnomes found",
+      "books": "Books read",
+      "not_available": "—"
+    },
+    "actions": {
+      "close": "Close",
+      "retry": "Retry",
+      "save_title": "Save",
+      "save_email": "Email",
+      "save_google": "Google",
+      "save_facebook": "Facebook",
+      "logout": "Log out"
+    },
+    "errors": {
+      "profile_not_ready": "Profile is not ready. Try again in a couple of seconds.",
+      "open_failed": "Failed to open account menu"
+    }
+  }
 } 

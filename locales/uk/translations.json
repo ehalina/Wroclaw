@@ -597,5 +597,29 @@
     "hint": "Для повернення анімації натисніть двічі у вільному місці екрану"
   },
   "expectation": "Очікування",
-  "reality": "Реальність"
+  "reality": "Реальність",
+  "account": {
+    "guest": "Гість",
+    "user": "Користувач",
+    "stats": {
+      "locations": "Відкрито локацій",
+      "quests": "Пройдено квестів",
+      "gnomes": "Знайдено гномів",
+      "books": "Прочитано книг",
+      "not_available": "—"
+    },
+    "actions": {
+      "close": "Закрити",
+      "retry": "Повторити",
+      "save_title": "Зберегти",
+      "save_email": "Email",
+      "save_google": "Google",
+      "save_facebook": "Facebook",
+      "logout": "Вийти"
+    },
+    "errors": {
+      "profile_not_ready": "Профіль не готовий. Спробуйте ще раз за кілька секунд.",
+      "open_failed": "Помилка відкриття меню акаунта"
+    }
+  }
 } 

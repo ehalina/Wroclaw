@@ -596,5 +596,29 @@
     "hint": "Для вяртання анімацыі націсніце двойчы ў вольным месцы экрана"
   },
   "expectation": "Чаканне",
-  "reality": "Рэальнасць"
+  "reality": "Рэальнасць",
+  "account": {
+    "guest": "Госць",
+    "user": "Карыстальнік",
+    "stats": {
+      "locations": "Адкрыта лакацый",
+      "quests": "Пройдзена квэстаў",
+      "gnomes": "Знойдзена гномаў",
+      "books": "Прачытана кніг",
+      "not_available": "—"
+    },
+    "actions": {
+      "close": "Закрыць",
+      "retry": "Паўтарыць",
+      "save_title": "Захаваць",
+      "save_email": "Email",
+      "save_google": "Google",
+      "save_facebook": "Facebook",
+      "logout": "Выйсці"
+    },
+    "errors": {
+      "profile_not_ready": "Профіль не гатовы. Паспрабуйце яшчэ раз праз пару секунд.",
+      "open_failed": "Памылка адкрыцця меню акаўнта"
+    }
+  }
 } 

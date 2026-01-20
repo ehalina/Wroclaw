@@ -502,6 +502,19 @@ export function setupUniversalGeoMarker({ markerId, i18nKey, position }) {
 
     // --- Обработчик клика ---
     function openModal() {
+        // Трекинг: "прочитано книг" (геометки, не квесты)
+        try {
+            if (window.userAccountManager && typeof window.userAccountManager.trackGeoMarkerOpened === 'function') {
+                window.userAccountManager.trackGeoMarkerOpened(markerId);
+            } else {
+                const store = (() => { try { return JSON.parse(localStorage.getItem('openedGeoMarkers') || '{}'); } catch (_) { return {}; } })();
+                if (!store[markerId]) {
+                    store[markerId] = Date.now();
+                    localStorage.setItem('openedGeoMarkers', JSON.stringify(store));
+                }
+            }
+        } catch (_) {}
+
         // Ищем audio внутри родителя marker
         let soundElem = null;
         if (marker && marker.parentElement) {

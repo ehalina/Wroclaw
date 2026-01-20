@@ -7,7 +7,145 @@ class UserAccountManager {
         this.currentUser = null;
         this.firebaseReady = false;
         this._anonSignInRequested = false;
+        this._progressSyncTimeout = null;
         this.init();
+    }
+
+    _isAccountDebug() {
+        try { return localStorage.getItem('__account_debug') === '1'; } catch (_) { return false; }
+    }
+
+    _alog(...args) {
+        if (!this._isAccountDebug()) return;
+        try { console.log('[account]', ...args); } catch (_) {}
+    }
+
+    _isOauthRedirectInProgress() {
+        try {
+            if (sessionStorage.getItem('__oauth_in_progress') === '1') return true;
+        } catch (_) {}
+        try {
+            if (localStorage.getItem('__oauth_in_progress') === '1') return true;
+        } catch (_) {}
+        return false;
+    }
+
+    // --- Константы прогресса (фиксируем на уровне проекта) ---
+    static TOTAL_QUEST_TASKS = 13;
+    // Все "локации" = страницы, где есть data-map-point (кроме index.html)
+    static LOCATION_PAGES = [
+        "dwor01.html",
+        "dwor02.html",
+        "dwor03.html",
+        "dwor04.html",
+        "dwor05.html",
+        "dwor06.html",
+        "dwor07.html",
+        "dwor08.html",
+        "dwor09.html",
+        "dwor10.html",
+        "dwor11.html",
+        "dwor12.html",
+        "dwor13.html",
+        "ogrod02.html",
+        "ogrod03.html",
+        "ogrod04.html",
+        "ogrod05.html",
+        "ogrod06.html",
+        "ogrod07.html",
+        "ogrod08.html",
+        "ogrod09.html",
+        "ogrod12.html",
+        "ogrod13.html",
+        "pk01.html",
+        "pk02.html",
+        "tumski.html",
+        "tumski02.html",
+        "tumski03.html",
+        "tumski04.html",
+        "tumski05.html",
+        "tumski06.html",
+        "tumski07.html",
+        "tumski08.html",
+        "tumski09.html",
+        "tumski10.html",
+        "tumski11.html",
+        "tumski12.html",
+        "tumski13.html",
+        "tumski14.html",
+        "tumski15.html",
+        "tumski16.html",
+        "tumski17.html",
+        "tumski18.html",
+        "tumski19.html",
+        "tumski20.html",
+        "tumski21.html",
+        "tumski22.html",
+        "tumski23.html",
+        "tumski24.html"
+    ];
+    // Геометки (книги) = .map-mark без data-quest-number. Посчитано по HTML в репозитории.
+    static TOTAL_BOOKS = 114;
+
+    _t(key, fallback = '') {
+        try {
+            if (window.i18n && typeof window.i18n.t === 'function') {
+                const v = window.i18n.t(key);
+                if (v && v !== key) return v;
+            }
+        } catch (_) {}
+        return fallback || key;
+    }
+
+    _safeJsonParse(str, fallback) {
+        try { return JSON.parse(str); } catch (_) { return fallback; }
+    }
+
+    _getVisitedPages() {
+        const store = this._safeJsonParse(localStorage.getItem('visitedPages') || '{}', {});
+        return store && typeof store === 'object' ? store : {};
+    }
+
+    _getOpenedGeoMarkers() {
+        const store = this._safeJsonParse(localStorage.getItem('openedGeoMarkers') || '{}', {});
+        return store && typeof store === 'object' ? store : {};
+    }
+
+    trackGeoMarkerOpened(markerId) {
+        if (!markerId) return;
+        try {
+            const store = this._getOpenedGeoMarkers();
+            if (!store[markerId]) {
+                store[markerId] = Date.now();
+                localStorage.setItem('openedGeoMarkers', JSON.stringify(store));
+            }
+        } catch (_) {}
+
+        // Если пользователь залогинен — попробуем иногда синкать прогресс (не на каждый клик)
+        this.scheduleProgressSync();
+    }
+
+    scheduleProgressSync() {
+        try {
+            clearTimeout(this._progressSyncTimeout);
+        } catch (_) {}
+        this._progressSyncTimeout = setTimeout(async () => {
+            try {
+                const user = await this.getCurrentUser();
+                if (!user || user.isAnonymous) return;
+                if (!window.userDatabase || typeof window.userDatabase.updateUserMetadata !== 'function') return;
+
+                // Пишем только агрегаты (не огромные списки) — безопаснее и дешевле
+                const openedBooks = Object.keys(this._getOpenedGeoMarkers()).length;
+                const openedLocations = Object.keys(this._getVisitedPages()).length;
+                await window.userDatabase.updateUserMetadata({
+                    progress: {
+                        openedBooks,
+                        openedLocations
+                    }
+                });
+            } catch (_) {}
+        }, 1200);
     }
 
     async init() {
@@ -36,9 +174,29 @@ class UserAccountManager {
         // Слушаем изменения состояния аутентификации
         if (this.firebaseReady && window.userDatabase && window.userDatabase.auth) {
             window.userDatabase.auth.onAuthStateChanged(async (firebaseUser) => {
+                const authInfo = {
+                    hasUser: !!firebaseUser,
+                    uid: firebaseUser?.uid,
+                    isAnonymous: firebaseUser?.isAnonymous,
+                    email: firebaseUser?.email || null,
+                    displayName: firebaseUser?.displayName || null,
+                    providers: firebaseUser?.providerData ? (firebaseUser.providerData || []).map(p => p?.providerId).filter(Boolean) : []
+                };
+                this._alog('onAuthStateChanged', authInfo);
+                console.log('[account] onAuthStateChanged', authInfo);
                 if (firebaseUser) {
                     // Пользователь авторизован
+                    console.log('[account] loading user from Firestore', { uid: firebaseUser.uid });
                     this.currentUser = await window.userDatabase.getUser(firebaseUser.uid);
+                    console.log('[account] loaded user from Firestore', {
+                        uid: firebaseUser.uid,
+                        firestoreUser: this.currentUser ? {
+                            id: this.currentUser.id,
+                            isAnonymous: this.currentUser.isAnonymous,
+                            email: this.currentUser.email || null,
+                            username: this.currentUser.username
+                        } : null
+                    });
                     if (!this.currentUser) {
                         // Создаем запись пользователя в Firestore
                         await window.userDatabase.saveUser({
@@ -53,20 +211,73 @@ class UserAccountManager {
                         });
                         this.currentUser = await window.userDatabase.getUser(firebaseUser.uid);
                     } else {
-                        // Синхронизируем флаги с реальным Auth пользователем (важно при входе email-аккаунтом)
-                        const needsSync =
-                            (this.currentUser.isAnonymous !== firebaseUser.isAnonymous) ||
-                            ((this.currentUser.email || null) !== (firebaseUser.email || null));
-
-                        if (needsSync) {
+                        // КРИТИЧНО: Если Auth пользователь НЕ гость, но Firestore еще показывает гостя - принудительно обновляем
+                        // Это важно для случая, когда пользователь входит через Google и аккаунт уже существует
+                        if (!firebaseUser.isAnonymous && this.currentUser.isAnonymous) {
                             try {
-                                await window.userDatabase.updateUserMetadata({
-                                    isAnonymous: firebaseUser.isAnonymous,
+                                const syncInfo = {
+                                    auth: { isAnonymous: false, email: firebaseUser.email || null, displayName: firebaseUser.displayName || null },
+                                    profile: { isAnonymous: true, email: this.currentUser.email || null, username: this.currentUser.username }
+                                };
+                                this._alog('force sync: auth non-anon but profile anon -> update', syncInfo);
+                                console.log('[account] force sync: auth non-anon but profile anon -> update', syncInfo);
+                                const updateData = {
+                                    isAnonymous: false,
                                     email: firebaseUser.email || null
-                                });
+                                };
+                                if (firebaseUser.displayName && (!this.currentUser.username || this.currentUser.username === 'Гость' || this.currentUser.username.toLowerCase() === 'гость')) {
+                                    updateData.username = firebaseUser.displayName;
+                                }
+                                await window.userDatabase.updateUserMetadata(updateData);
+                                // Небольшая задержка для гарантии обновления Firestore
+                                await new Promise(resolve => setTimeout(resolve, 150));
+                                // Перезагружаем пользователя из Firestore
                                 this.currentUser = await window.userDatabase.getUser(firebaseUser.uid);
+                                const updatedInfo = {
+                                    isAnonymous: this.currentUser?.isAnonymous,
+                                    email: this.currentUser?.email || null,
+                                    username: this.currentUser?.username
+                                };
+                                this._alog('force sync: profile updated', updatedInfo);
+                                console.log('[account] force sync: profile updated', updatedInfo);
                             } catch (e) {
-                                // не критично, просто покажем по данным как есть
+                                this._alog('force sync updateUserMetadata failed', e?.message || String(e));
+                                // Fallback: используем данные из Auth напрямую
+                                this.currentUser = {
+                                    ...this.currentUser,
+                                    isAnonymous: false,
+                                    email: firebaseUser.email || null,
+                                    username: firebaseUser.displayName || this.currentUser.username || 'Пользователь'
+                                };
+                            }
+                        } else {
+                            // Синхронизируем флаги с реальным Auth пользователем (важно при входе через OAuth для существующего аккаунта)
+                            const needsSync =
+                                (this.currentUser.isAnonymous !== firebaseUser.isAnonymous) ||
+                                ((this.currentUser.email || null) !== (firebaseUser.email || null));
+
+                            if (needsSync) {
+                                try {
+                                    this._alog('needsSync -> updateUserMetadata', {
+                                        prev: { isAnonymous: this.currentUser.isAnonymous, email: this.currentUser.email || null },
+                                        next: { isAnonymous: firebaseUser.isAnonymous, email: firebaseUser.email || null }
+                                    });
+                                    // Обновляем метаданные, включая username если есть displayName
+                                    const updateData = {
+                                        isAnonymous: firebaseUser.isAnonymous,
+                                        email: firebaseUser.email || null
+                                    };
+                                    // Если есть displayName и текущий username пустой или "Гость", обновляем username
+                                    if (firebaseUser.displayName && (!this.currentUser.username || this.currentUser.username === 'Гость' || this.currentUser.username.toLowerCase() === 'гость')) {
+                                        updateData.username = firebaseUser.displayName;
+                                    }
+                                    await window.userDatabase.updateUserMetadata(updateData);
+                                    // Перезагружаем пользователя из Firestore после обновления
+                                    this.currentUser = await window.userDatabase.getUser(firebaseUser.uid);
+                                } catch (e) {
+                                    this._alog('needsSync updateUserMetadata failed', e?.message || String(e));
+                                    // не критично, просто покажем по данным как есть
+                                }
                             }
                         }
                     }
@@ -75,6 +286,10 @@ class UserAccountManager {
                 } else {
                     // Пользователь вышел - создаем анонимного
                     try {
+                        if (this._isOauthRedirectInProgress()) {
+                            this._alog('skip createAnonymousUser: oauth redirect in progress');
+                            return;
+                        }
                         if (this.firebaseReady && !this._anonSignInRequested) {
                             this._anonSignInRequested = true;
                             await window.userDatabase.createAnonymousUser();
@@ -90,6 +305,10 @@ class UserAccountManager {
         if (this.firebaseReady && window.userDatabase && window.userDatabase.auth) {
             const currentAuthUser = window.userDatabase.getCurrentAuthUser();
             if (!currentAuthUser && !this._anonSignInRequested) {
+                if (this._isOauthRedirectInProgress()) {
+                    this._alog('skip initial createAnonymousUser: oauth redirect in progress');
+                    return;
+                }
                 this._anonSignInRequested = true;
                 try {
                     await window.userDatabase.createAnonymousUser();
@@ -245,31 +464,11 @@ class UserAccountManager {
             border: 3px solid #8B4513;
         `;
 
-        const title = document.createElement('h2');
-        title.textContent = 'Аккаунт';
-        title.style.cssText = `
-            color: #8B4513;
-            margin-bottom: 20px;
-            font-size: 28px;
-        `;
-
-        const status = document.createElement('div');
-        status.style.cssText = `
-            color: #654321;
-            margin-bottom: 20px;
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.65);
-            border-radius: 8px;
-            padding: 12px;
-            border: 2px solid #8B4513;
-        `;
-        status.textContent = 'Загрузка профиля...';
-
         const body = document.createElement('div');
 
         const closeBtnTop = document.createElement('button');
         closeBtnTop.textContent = '✕';
-        closeBtnTop.title = 'Закрыть';
+        closeBtnTop.title = this._t('account.actions.close', 'Закрыть');
         closeBtnTop.style.cssText = `
             position: absolute;
             top: 12px;
@@ -286,8 +485,6 @@ class UserAccountManager {
         closeBtnTop.onclick = () => overlay.remove();
 
         menuCard.appendChild(closeBtnTop);
-        menuCard.appendChild(title);
-        menuCard.appendChild(status);
         menuCard.appendChild(body);
         overlay.appendChild(menuCard);
         document.body.appendChild(overlay);
@@ -295,124 +492,200 @@ class UserAccountManager {
         const renderUser = (currentUser) => {
             body.innerHTML = '';
 
-            const userInfo = document.createElement('div');
-            userInfo.style.cssText = 'margin-bottom: 22px;';
-
-            const userName = document.createElement('div');
-            userName.textContent = currentUser.username || 'Пользователь';
-            userName.style.cssText = `
-                font-size: 24px;
+            const headerName = document.createElement('div');
+            headerName.style.cssText = `
+                font-size: 26px;
                 font-weight: bold;
                 color: #654321;
-                margin-bottom: 10px;
+                margin-bottom: 18px;
             `;
+            // Auth = source of truth: после OAuth (в т.ч. 2FA) Auth может стать non-anon раньше, чем обновится Firestore.
+            const authUser = window.userDatabase?.getCurrentAuthUser?.() || null;
+            const isGuest = authUser ? !!authUser.isAnonymous : !!currentUser.isAnonymous;
+            this._alog('renderUser', {
+                auth: authUser ? {
+                    uid: authUser.uid,
+                    isAnonymous: !!authUser.isAnonymous,
+                    email: authUser.email || null,
+                    displayName: authUser.displayName || null,
+                    providers: (authUser.providerData || []).map(p => p?.providerId).filter(Boolean)
+                } : null,
+                profile: {
+                    id: currentUser.id,
+                    isAnonymous: !!currentUser.isAnonymous,
+                    username: currentUser.username,
+                    email: currentUser.email || null
+                },
+                chosenIsGuest: isGuest
+            });
+            const rawUsername = (currentUser.username != null ? String(currentUser.username) : '').trim();
+            const email = (currentUser.email != null ? String(currentUser.email) : '').trim();
+            const hasRealName = rawUsername && rawUsername.toLowerCase() !== 'гость';
+            headerName.textContent = isGuest
+                ? this._t('account.guest', 'Гость')
+                : (hasRealName ? rawUsername : (email || this._t('account.user', 'Пользователь')));
 
-            const userEmail = document.createElement('div');
-            userEmail.textContent = currentUser.email || (currentUser.isAnonymous ? 'Гостевой аккаунт' : '');
-            userEmail.style.cssText = `
-                font-size: 14px;
-                color: #666;
-                margin-bottom: 12px;
-            `;
+            // Если Auth уже не гость, а Firestore ещё гость — догоняем метаданные (без падений)
+            try {
+                if (authUser && !authUser.isAnonymous && currentUser.isAnonymous) {
+                    const e = authUser.email || null;
+                    const u = authUser.displayName || (e ? e.split('@')[0] : '') || undefined;
+                    this._alog('catch-up Firestore meta (auth non-anon, profile anon)', { email: e, username: u });
+                    window.userDatabase?.updateUserMetadata?.({
+                        isAnonymous: false,
+                        email: e,
+                        username: u
+                    }).catch?.((err) => {
+                        this._alog('catch-up updateUserMetadata failed', err?.message || String(err));
+                    });
+                }
+            } catch (_) {}
 
-            const completedCount = Object.keys(currentUser.questState?.tasks || {}).length;
-            const progress = document.createElement('div');
-            progress.textContent = `Прогресс: ${completedCount}/13 задач`;
-            progress.style.cssText = `
-                font-size: 16px;
+            // --- Статистика ---
+            const visitedPages = this._getVisitedPages();
+            const visitedPageKeys = Object.keys(visitedPages);
+            const totalLocations = UserAccountManager.LOCATION_PAGES.length;
+            const openedLocations = visitedPageKeys.filter((p) => UserAccountManager.LOCATION_PAGES.includes(p)).length;
+
+            const tasks = currentUser.questState?.tasks || {};
+            const completedTasks = Object.values(tasks).filter(Boolean).length;
+            const totalTasks = UserAccountManager.TOTAL_QUEST_TASKS;
+
+            const openedBooks = Object.keys(this._getOpenedGeoMarkers()).length;
+            const totalBooks = UserAccountManager.TOTAL_BOOKS;
+
+            const statsBox = document.createElement('div');
+            statsBox.style.cssText = `
+                background: rgba(255, 255, 255, 0.72);
+                border-radius: 10px;
+                padding: 14px 14px;
+                border: 2px solid #8B4513;
+                text-align: left;
                 color: #654321;
-                margin-bottom: 10px;
+                margin-bottom: 18px;
+                font-size: 16px;
+                line-height: 1.45;
             `;
 
-            const uid = document.createElement('div');
-            uid.style.cssText = 'font-size: 12px; color: #666;';
-            uid.textContent = `ID: ${currentUser.id}`;
+            const mkRow = (label, value) => {
+                const row = document.createElement('div');
+                row.style.cssText = 'display:flex; justify-content:space-between; gap:12px; padding:6px 0; border-bottom: 1px solid rgba(139,69,19,0.25);';
+                const l = document.createElement('div');
+                l.textContent = label;
+                const v = document.createElement('div');
+                v.style.cssText = 'font-weight: bold;';
+                v.textContent = value;
+                row.appendChild(l);
+                row.appendChild(v);
+                return row;
+            };
 
-            userInfo.appendChild(userName);
-            if (currentUser.email || currentUser.isAnonymous) userInfo.appendChild(userEmail);
-            userInfo.appendChild(progress);
-            userInfo.appendChild(uid);
+            statsBox.appendChild(mkRow(
+                this._t('account.stats.locations', 'Открыто локаций'),
+                `${openedLocations} / ${totalLocations}`
+            ));
+            statsBox.appendChild(mkRow(
+                this._t('account.stats.quests', 'Пройдено квестов'),
+                `${completedTasks} / ${totalTasks}`
+            ));
+            statsBox.appendChild(mkRow(
+                this._t('account.stats.gnomes', 'Найдено гномов'),
+                this._t('account.stats.not_available', '—')
+            ));
+            // последняя строка без бордера
+            const booksRow = mkRow(
+                this._t('account.stats.books', 'Прочитано книг'),
+                `${openedBooks} / ${totalBooks}`
+            );
+            booksRow.style.borderBottom = 'none';
+            statsBox.appendChild(booksRow);
 
             const buttonsContainer = document.createElement('div');
             buttonsContainer.style.cssText = 'display: flex; flex-direction: column; gap: 12px;';
 
-            if (currentUser.isAnonymous) {
-                const linkAccountBtn = document.createElement('button');
-                linkAccountBtn.textContent = '🔗 Привязать email (сохранить прогресс навсегда)';
-                linkAccountBtn.style.cssText = `
+            if (isGuest) {
+                const saveTitle = document.createElement('div');
+                saveTitle.textContent = this._t('account.actions.save_title', 'Сохранить');
+                saveTitle.style.cssText = 'margin-top: 6px; margin-bottom: 2px; font-weight: bold; color:#654321;';
+                buttonsContainer.appendChild(saveTitle);
+
+                const mkBtn = (text, bg) => {
+                    const b = document.createElement('button');
+                    b.textContent = text;
+                    b.style.cssText = `
+                        padding: 12px 16px;
+                        background: ${bg};
+                        color: white;
+                        border: none;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        font-size: 16px;
+                    `;
+                    return b;
+                };
+
+                const btnEmail = mkBtn(this._t('account.actions.save_email', 'Email'), '#2196F3');
+                btnEmail.onclick = () => {
+                    overlay.remove();
+                    this.showLinkAccountDialog();
+                };
+
+                const btnGoogle = mkBtn(this._t('account.actions.save_google', 'Google'), '#8B4513');
+                btnGoogle.onclick = async () => {
+                    try {
+                        if (window.userDatabase && typeof window.userDatabase.linkAccountWithGoogle === 'function') {
+                            await window.userDatabase.linkAccountWithGoogle();
+                            overlay.remove();
+                            // Переоткрываем меню, чтобы подтянуть обновлённый профиль (isAnonymous=false)
+                            this.showAccountMenu();
+                        } else {
+                            alert('Google auth не настроен');
+                        }
+                    } catch (e) {
+                        alert(e?.message || String(e));
+                    }
+                };
+
+                const btnFacebook = mkBtn(this._t('account.actions.save_facebook', 'Facebook'), '#3b5998');
+                btnFacebook.onclick = async () => {
+                    try {
+                        if (window.userDatabase && typeof window.userDatabase.linkAccountWithFacebook === 'function') {
+                            await window.userDatabase.linkAccountWithFacebook();
+                            overlay.remove();
+                            this.showAccountMenu();
+                        } else {
+                            alert('Facebook auth не настроен');
+                        }
+                    } catch (e) {
+                        alert(e?.message || String(e));
+                    }
+                };
+
+                buttonsContainer.appendChild(btnEmail);
+                buttonsContainer.appendChild(btnGoogle);
+                buttonsContainer.appendChild(btnFacebook);
+            } else {
+                const signOutBtn = document.createElement('button');
+                signOutBtn.textContent = this._t('account.actions.logout', 'Выйти');
+                signOutBtn.style.cssText = `
+                    margin-top: 10px;
                     padding: 12px 16px;
-                    background: #2196F3;
+                    background: #d32f2f;
                     color: white;
                     border: none;
                     border-radius: 6px;
                     cursor: pointer;
                     font-size: 16px;
                 `;
-                linkAccountBtn.onclick = () => {
+                signOutBtn.onclick = async () => {
+                    try { await window.userDatabase?.signOut?.(); } catch (_) {}
                     overlay.remove();
-                    this.showLinkAccountDialog();
                 };
-                buttonsContainer.appendChild(linkAccountBtn);
-            } else {
-                const ok = document.createElement('div');
-                ok.textContent = '✅ Аккаунт привязан — прогресс сохраняется в облаке.';
-                ok.style.cssText = 'color:#1b5e20; background: rgba(255,255,255,0.7); padding:10px; border-radius:8px; border:2px solid #8B4513;';
-                buttonsContainer.appendChild(ok);
+                buttonsContainer.appendChild(signOutBtn);
             }
 
-            const signInBtn = document.createElement('button');
-            signInBtn.textContent = 'Войти по email (на другом устройстве)';
-            signInBtn.style.cssText = `
-                padding: 12px 16px;
-                background: #8B4513;
-                color: white;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                font-size: 16px;
-            `;
-            signInBtn.onclick = () => {
-                overlay.remove();
-                this.showSignInDialog();
-            };
-            buttonsContainer.appendChild(signInBtn);
-
-            const signOutBtn = document.createElement('button');
-            signOutBtn.textContent = 'Выйти (создать нового гостя)';
-            signOutBtn.style.cssText = `
-                padding: 12px 16px;
-                background: #d32f2f;
-                color: white;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                font-size: 16px;
-            `;
-            signOutBtn.onclick = async () => {
-                if (confirm('Выйти? После выхода автоматически создастся новый гостевой аккаунт.')) {
-                    try {
-                        await window.userDatabase.signOut();
-                    } catch (e) {}
-                    overlay.remove();
-                }
-            };
-            buttonsContainer.appendChild(signOutBtn);
-
-            const closeBtn = document.createElement('button');
-            closeBtn.textContent = 'Закрыть';
-            closeBtn.style.cssText = `
-                padding: 12px 16px;
-                background: rgba(0,0,0,0.65);
-                color: white;
-                border: none;
-                border-radius: 6px;
-                cursor: pointer;
-                font-size: 16px;
-            `;
-            closeBtn.onclick = () => overlay.remove();
-            buttonsContainer.appendChild(closeBtn);
-
-            body.appendChild(userInfo);
+            body.appendChild(headerName);
+            body.appendChild(statsBox);
             body.appendChild(buttonsContainer);
         };
 
@@ -437,9 +710,12 @@ class UserAccountManager {
             }
 
             if (!currentUser) {
-                status.textContent = 'Профиль не готов. Попробуйте через пару секунд.';
+                body.innerHTML = '';
+                const msg = document.createElement('div');
+                msg.style.cssText = 'color:#654321; background: rgba(255,255,255,0.7); padding:12px; border-radius:8px; border:2px solid #8B4513; margin-bottom: 12px;';
+                msg.textContent = this._t('account.errors.profile_not_ready', 'Профиль не готов. Попробуйте через пару секунд.');
                 const retry = document.createElement('button');
-                retry.textContent = 'Повторить';
+                retry.textContent = this._t('account.actions.retry', 'Повторить');
                 retry.style.cssText = `
                     padding: 12px 16px;
                     background: #8B4513;
@@ -453,21 +729,20 @@ class UserAccountManager {
                     overlay.remove();
                     this.showAccountMenu();
                 };
-                body.innerHTML = '';
+                body.appendChild(msg);
                 body.appendChild(retry);
                 return;
             }
 
-            status.textContent = currentUser.isAnonymous
-                ? 'Вы сейчас в гостевом режиме. Нажмите “Привязать email”, чтобы сохранить прогресс навсегда.'
-                : 'Вы вошли в аккаунт. Прогресс сохраняется в облаке.';
-
             renderUser(currentUser);
         } catch (error) {
             console.error('Ошибка открытия меню аккаунта:', error);
-            status.textContent = `Ошибка: ${error?.message || error}`;
+            body.innerHTML = '';
+            const msg = document.createElement('div');
+            msg.style.cssText = 'color:#654321; background: rgba(255,255,255,0.7); padding:12px; border-radius:8px; border:2px solid #8B4513; margin-bottom: 12px;';
+            msg.textContent = this._t('account.errors.open_failed', 'Ошибка открытия меню аккаунта') + ': ' + (error?.message || String(error));
             const retry = document.createElement('button');
-            retry.textContent = 'Повторить';
+            retry.textContent = this._t('account.actions.retry', 'Повторить');
             retry.style.cssText = `
                 padding: 12px 16px;
                 background: #8B4513;
@@ -481,7 +756,7 @@ class UserAccountManager {
                 overlay.remove();
                 this.showAccountMenu();
             };
-            body.innerHTML = '';
+            body.appendChild(msg);
             body.appendChild(retry);
         }
 
@@ -796,6 +1071,24 @@ class UserAccountManager {
             }
         };
 
+        const signInBtn = document.createElement('button');
+        signInBtn.textContent = 'Войти';
+        signInBtn.style.cssText = `
+            padding: 12px 24px;
+            background: #5c3b1e;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            flex: 1;
+        `;
+        signInBtn.onclick = () => {
+            const email = emailInput.value.trim();
+            overlay.remove();
+            this.showSignInDialog(email);
+        };
+
         const cancelBtn = document.createElement('button');
         cancelBtn.textContent = 'Отмена';
         cancelBtn.style.cssText = `
@@ -808,9 +1101,13 @@ class UserAccountManager {
             font-size: 16px;
             flex: 1;
         `;
-        cancelBtn.onclick = () => overlay.remove();
+        cancelBtn.onclick = () => {
+            overlay.remove();
+            this.showAccountMenu();
+        };
 
         buttonsContainer.appendChild(linkBtn);
+        buttonsContainer.appendChild(signInBtn);
         buttonsContainer.appendChild(cancelBtn);
 
         dialog.appendChild(title);

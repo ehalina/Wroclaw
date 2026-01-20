@@ -596,5 +596,29 @@
     "hint": "Um zur Animation zurückzukehren, doppelklicke auf einen freien Bereich des Bildschirms"
   },
   "expectation": "Erwartung",
-  "reality": "Realität"
+  "reality": "Realität",
+  "account": {
+    "guest": "Gast",
+    "user": "Benutzer",
+    "stats": {
+      "locations": "Geöffnete Orte",
+      "quests": "Abgeschlossene Quests",
+      "gnomes": "Gefundene Zwerge",
+      "books": "Gelesene Bücher",
+      "not_available": "—"
+    },
+    "actions": {
+      "close": "Schließen",
+      "retry": "Erneut versuchen",
+      "save_title": "Speichern",
+      "save_email": "E‑Mail",
+      "save_google": "Google",
+      "save_facebook": "Facebook",
+      "logout": "Abmelden"
+    },
+    "errors": {
+      "profile_not_ready": "Profil ist nicht bereit. Versuchen Sie es in ein paar Sekunden erneut.",
+      "open_failed": "Konto-Menü konnte nicht geöffnet werden"
+    }
+  }
 } 

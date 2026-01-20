@@ -596,5 +596,29 @@
     "hint": "Pro návrat k animaci dvakrát klikněte na volné místo na obrazovce"
   },
   "expectation": "Očekávání",
-  "reality": "Realita"
+  "reality": "Realita",
+  "account": {
+    "guest": "Host",
+    "user": "Uživatel",
+    "stats": {
+      "locations": "Otevřené lokace",
+      "quests": "Dokončené questy",
+      "gnomes": "Nalezení trpaslíci",
+      "books": "Přečtené knihy",
+      "not_available": "—"
+    },
+    "actions": {
+      "close": "Zavřít",
+      "retry": "Zkusit znovu",
+      "save_title": "Uložit",
+      "save_email": "Email",
+      "save_google": "Google",
+      "save_facebook": "Facebook",
+      "logout": "Odhlásit"
+    },
+    "errors": {
+      "profile_not_ready": "Profil není připraven. Zkuste to za pár sekund znovu.",
+      "open_failed": "Nepodařilo se otevřít menu účtu"
+    }
+  }
 } 
