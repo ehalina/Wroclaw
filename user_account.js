@@ -83,7 +83,8 @@ class UserAccountManager {
         "tumski21.html",
         "tumski22.html",
         "tumski23.html",
-        "tumski24.html"
+        "tumski24.html",
+        "minsk01.html"
     ];
     // Геометки (книги) = .map-mark без data-quest-number. Посчитано по HTML в репозитории.
     static TOTAL_BOOKS = 114;

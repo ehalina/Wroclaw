@@ -613,6 +613,31 @@
     "drukarz_kacper": {
       "title": "Drukarz Kacper",
       "description": "The dwarf Drukarz Kacper commemorates the Wrocław printer Kasper Elyan, in whose workshop the first printed text in the Polish language was created."
+    },
+    "bagazhovy": {
+      "title": "Bagazhovy",
+      "description": "Who is the Baggage Gnome? He is a faithful helper of all those who arrive here with suitcases and backpacks. What does he do? He takes care of travelers and is always ready to help with luggage – even if only symbolically. How to recognize him? He holds a cart full of suitcases in his hands, as if he is about to come to the aid of another guest. Why here? Because Cathedral Island is a place where people arrive... and where the Wrocław adventure begins."
+    },
+    "ksiegarz": {
+      "title": "Ksiegarz",
+      "description": "On Cathedral Island in Wrocław, a unique gnome hides – the Bookseller. He guards the nearby bookstore and encourages passersby to immerse themselves in the world of books for a moment."
+    },
+    "trisomek": {
+      "title": "Trisomek",
+      "description": "Trisomek is a friend of the three elves from the Wrocław City Hall: W-skers, Ślepaka and Głuchaka. The other dwarves with impairments unanimously welcomed Trisomka into their clique in March of 2014. An official welcoming ceremony took place in the presence of children and parents of the Lower Silesian Association for Persons with Down Syndrome \"Together.\" Since then Trisomek welcomes and encourages children with trisomy to participate in workshops conducted by the Environmental Club „Pozytywka\" (Music Box). Visit Trisomek on Ostrów Tumski (Cathedral Island), he has a lot of interesting things to talk about!"
+    },
+    "patsa_vatsa": {
+      "title": "Patsa-Vatsa",
+      "description": "He smiled too correctly, this gnome, and his shadow was not the shape that real Wrocław gnomes should have... But you realized this too late, when the ground beneath your feet had already softly folded like the event horizon of a black hole. Lightning exploded in white light, then red, then white again. \"I pressed something and everything disappeared,\" you only had time to think. The fake gnome cheerfully waved his hand and dissolved, leaving you in an unknown world where signs lie and time moves in all directions. You've been here before, haven't you? But if we want to return to Wrocław, we'll have to do the only sensible thing — find a real gnome, the one whose beard is slightly soiled by city rain, and whose pockets are stuffed with keys to doors whose existence we have long forgotten."
+    },
+    "blue_goat": {
+      "title": "Blue Goat",
+      "description": "When I was little, I was very afraid of waking up in the morning not myself. Waking up not in my own body. Waking up not in my own life. Waking up as a port loader in Lisbon. Waking up as a fluffy cat in Arzamas. Waking up as a blue goat.<br><br>Well, I mean, how afraid. Rather, I hoped that's exactly how everything works.<br>I'm still a bit afraid, to be honest. What if that's exactly how everything works.<br><br>When I was little, I was afraid of growing up and forgetting everything. Forgetting how I deliciously ate a pancake today. Forgetting how there was a rainbow over the roof. Forgetting how green currants look like giant ant eggs.<br>Grandma was making breakfast. A jar of fresh milk stood on the table. I sat on a stool. Closed my eyes. And whispered to the world:<br>- Dear memory, I want to remember this moment forever.<br>I grew up long ago. Forgot how I ate the pancake. Forgot the rainbow.<br>But I always remember the moment on the stool.<br><br>While our children are little, they don't know how everything works. They think that if no one is home, the intercom will ring endlessly. And pearls are extracted from oysters at lunch. But they can wake up one morning as a blue goat.<br>And remember this moment forever."
+    },
+    "crafter": {
+      "title": "Crafter",
+      "description": "Crafter is a true gnome, one of those who know the secret seams of reality and can quietly guide you back along them, into the real world. With his deeds and time, as if closing an invisible door behind you. And everything would be fine, you're in place, everything's right. But there remains a light, warm regret — not because it was better there, but because that world was a little more pliable, almost yours. And it's always a little sad to leave it.",
+      "backToWroclaw": "Return to Wrocław"
     }
   },
   "account": {

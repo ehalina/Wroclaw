@@ -613,6 +613,31 @@
     "drukarz_kacper": {
       "title": "Drukarz Kacper",
       "description": "Postavička Drukarz Kacper připomíná vratislavského tiskaře Kaspra Elyana, v jehož tiskárně vznikl první tisk v polském jazyce."
+    },
+    "bagazhovy": {
+      "title": "Bagazhovy",
+      "description": "Kdo je Trpaslík s Batohem? Je to věrný pomocník všech, kteří sem přijíždějí s kufry a batohy. Čím se zabývá? Stará se o cestovatele a je vždy připraven pomoci s batohem – i kdyby jen symbolicky. Jak ho poznat? V rukou drží vozík plný kufrů, jako by se právě chystal přijít na pomoc dalšímu hostovi. Proč právě zde? Protože Katedrální ostrov je místo, kam lidé přijíždějí... a kde začíná vratislavské dobrodružství."
+    },
+    "ksiegarz": {
+      "title": "Ksiegarz",
+      "description": "Na Katedrálním ostrově ve Vratislavi se skrývá výjimečný skřítek – Knihkupec. Střeží nedalekou knihkupectví a vybízí kolemjdoucí, aby se na chvíli ponořili do světa knih."
+    },
+    "trisomek": {
+      "title": "Trisomek",
+      "description": "Trisomek je přítelem tří elfů z vratislavské radnice: W-skera, Ślepaka a Głuchaka. Ostatní trpaslíci s postižením jednomyslně přijali Trisomka do své skupiny v březnu 2014. Oficiální uvítací ceremoniál se konal za přítomnosti dětí a rodičů z Dolnoslezského sdružení osob s Downovým syndromem \"Společně\". Od té doby Trisomek vítá a povzbuzuje děti s trisomií, aby se účastnily workshopů pořádaných Ekologickým klubem „Pozytywka\" (Hrací skříňka). Navštivte Trisomka na Katedrálním ostrově, má mnoho zajímavých věcí k vyprávění!"
+    },
+    "patsa_vatsa": {
+      "title": "Paca-Vaca",
+      "description": "Usmíval se příliš správně, tento trpaslík, a jeho stín neměl tvar, jaký by měli mít opravdoví vratislavští trpaslíci... Ale uvědomili jste si to příliš pozdě, když se země pod nohama už jemně složila jako horizont událostí černé díry. Blesky explodovaly bílým světlem, pak červeným, pak znovu bílým. \"Něco jsem stiskl a všechno zmizelo\", stihli jste si jen pomyslet. Falešný trpaslík radostně zamával rukou a rozpustil se, zanechávaje vás v neznámém světě, kde značky lžou a čas se pohybuje všemi směry. Už jste tu byli, že? Ale pokud se chceme vrátit do Vratislavi, budeme muset udělat jedinou rozumnou věc — najít opravdového trpaslíka, toho, jehož vousy jsou lehce znečištěné městským deštěm a jehož kapsy jsou nacpané klíči od dveří, jejichž existenci jsme dávno zapomněli."
+    },
+    "blue_goat": {
+      "title": "Modrá Koza",
+      "description": "Když jsem byla malá, velmi jsem se bála probudit se ráno ne sama sebou. Probudit se ne ve vlastním těle. Probudit se ne ve vlastním životě. Probudit se přístavním dělníkem v Lisabonu. Probudit se nadýchanou kočkou v Arzamasu. Probudit se modrou kozou.<br><br>No, to znamená, jak jsem se bála. Spíše jsem doufala, že přesně tak všechno funguje.<br>Stále se trochu bojím, abych byla upřímná. Co když všechno přesně tak funguje.<br><br>Když jsem byla malá, bála jsem se vyrůst a všechno zapomenout. Zapomenout, jak jsem dnes chutně jedla palačinku. Zapomenout, jak nad střechou byla duha. Zapomenout, jak zelený rybíz vypadá jako vejce obřího mravence.<br>Babička připravovala snídani. Na stole stála sklenice čerstvého mléka. Sedla jsem si na stoličku. Zavřela oči. A zašeptala do světa:<br>- Drahá paměti, chci si tento okamžik zapamatovat navždy.<br>Dávno jsem vyrostla. Zapomněla jsem, jak jsem jedla palačinku. Zapomněla jsem duhu.<br>Ale okamžik na stoličce si vždy pamatuji.<br><br>Dokud jsou naše děti malé, nevědí, jak všechno funguje. Myslí si, že pokud nikdo nebude doma, domofon bude zvonit nekonečně. A perly se získávají z ústřic k obědu. Ale mohou se jednoho rána probudit jako modrá koza.<br>A zapamatovat si tento okamžik navždy."
+    },
+    "crafter": {
+      "title": "Řemeslník",
+      "description": "Řemeslník — skutečný trpaslík, jeden z těch, kteří znají tajné švy reality a umí nenápadně provést po nich zpět, do skutečného světa. Se svými skutky a časem, jako by za vámi zavíral neviditelné dveře. A všechno by bylo v pořádku, jste na místě, všechno je správně. Ale zůstává lehká, teplá lítost — ne proto, že tam bylo lépe, ale proto, že ten svět byl trochu poddajnější, téměř váš. A vždy je trochu smutné ho opustit.",
+      "backToWroclaw": "Vrátit se do Vratislavi"
     }
   },
   "account": {

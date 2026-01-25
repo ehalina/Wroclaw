@@ -112,14 +112,6 @@ export function setupGnomeGeoMarker({ markerId, gnomeId, imageSrc, title, descri
         marker.id ||
         '';
 
-    const resolvedImage = resolveGnomeImage({
-        marker,
-        gnomeId: effectiveGnomeId,
-        explicitImage: imageSrc
-    });
-    const resolvedTitle = title || resolveGnomeTitle({ marker, gnomeId: effectiveGnomeId });
-    const resolvedDescription = description || resolveGnomeDescription({ marker, gnomeId: effectiveGnomeId });
-
     const openGnome = (e) => {
         try {
             if (e && typeof e.preventDefault === 'function') e.preventDefault();
@@ -129,7 +121,46 @@ export function setupGnomeGeoMarker({ markerId, gnomeId, imageSrc, title, descri
         // 1) Обновляем прогресс пользователя
         trackGnomeFound(effectiveGnomeId);
 
-        // 2) Строим попап с подложкой oldgard
+        // Специальная обработка для гнома Паца-Ваца
+        if (effectiveGnomeId === 'patsa_vatsa') {
+            // Проверяем, находимся ли мы уже на странице minsk01.html
+            const currentPage = window.location.pathname.split('/').pop() || '';
+            if (currentPage === 'minsk01.html') {
+                // Если уже на странице minsk01.html, открываем попап
+                // Продолжаем выполнение функции для создания попапа
+            } else {
+                // Если не на странице minsk01.html, перенаправляем на неё
+                try {
+                    // Пытаемся открыть через SPA менеджер (если доступен)
+                    if (window.parent && window.parent !== window && window.parent.spaManager) {
+                        window.parent.spaManager.loadPage('minsk01.html');
+                    } else if (window.spaManager) {
+                        window.spaManager.loadPage('minsk01.html');
+                    } else {
+                        // Fallback: обычная навигация
+                        window.location.href = 'minsk01.html';
+                    }
+                } catch (err) {
+                    console.error('Ошибка при открытии страницы minsk01.html:', err);
+                    // Fallback: обычная навигация
+                    try {
+                        window.location.href = 'minsk01.html';
+                    } catch (_) {}
+                }
+                return;
+            }
+        }
+
+        // 2) Получаем актуальные переводы (динамически при открытии попапа)
+        const resolvedImage = resolveGnomeImage({
+            marker,
+            gnomeId: effectiveGnomeId,
+            explicitImage: imageSrc
+        });
+        const resolvedTitle = title || resolveGnomeTitle({ marker, gnomeId: effectiveGnomeId });
+        const resolvedDescription = description || resolveGnomeDescription({ marker, gnomeId: effectiveGnomeId });
+
+        // 3) Строим попап с подложкой oldgard
         const overlayDoc = getOverlayDocument();
 
         // Удаляем предыдущий попап гнома, если есть
@@ -164,10 +195,10 @@ export function setupGnomeGeoMarker({ markerId, gnomeId, imageSrc, title, descri
             background: url('media/watercolor/oldcard.jpg') center/cover no-repeat;
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            padding: 28px 24px 24px 24px;
+            padding: 20px 24px 20px 24px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
             overflow: auto;
             font-family: "Marck Script", cursive, serif;
             color: #5b4636;
@@ -179,7 +210,7 @@ export function setupGnomeGeoMarker({ markerId, gnomeId, imageSrc, title, descri
         titleEl.style.cssText = `
             font-size: clamp(22px, 3.2vw, 30px);
             text-align: center;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.35);
         `;
 
@@ -188,15 +219,15 @@ export function setupGnomeGeoMarker({ markerId, gnomeId, imageSrc, title, descri
         contentWrapper.style.cssText = `
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 12px;
         `;
 
         const textBlock = overlayDoc.createElement('div');
         textBlock.className = 'gnome-description';
         textBlock.style.cssText = `
             font-size: clamp(16px, 2.4vw, 20px);
-            line-height: 1.6;
-            padding: 16px 18px;
+            line-height: 1.3;
+            padding: 12px 14px;
         `;
         if (resolvedDescription) {
             // Позволяем разработчику использовать простой HTML в описании при необходимости
@@ -213,10 +244,13 @@ export function setupGnomeGeoMarker({ markerId, gnomeId, imageSrc, title, descri
             align-items: center;
         `;
 
-        if (resolvedImage) {
+        // Специальная обработка для "Синей козы" - показываем koza.jpg
+        const imageToShow = effectiveGnomeId === 'blue_goat' ? 'media/krasnolud/koza.jpg' : resolvedImage;
+
+        if (imageToShow) {
             const img = overlayDoc.createElement('img');
             img.className = 'gnome-image';
-            img.src = resolvedImage;
+            img.src = imageToShow;
             img.alt = resolvedTitle || 'Gnome';
             img.style.cssText = `
                 max-width: 80%;
@@ -230,6 +264,120 @@ export function setupGnomeGeoMarker({ markerId, gnomeId, imageSrc, title, descri
 
         contentWrapper.appendChild(textBlock);
         contentWrapper.appendChild(imageWrapper);
+
+        // Добавляем кнопку "Вернуться во Вроцлав" для гнома Крафтера
+        if (effectiveGnomeId === 'crafter') {
+            const navButton = overlayDoc.createElement('button');
+            navButton.type = 'button';
+            navButton.className = 'gnome-nav-button';
+            
+            // Получаем текст кнопки из переводов
+            let buttonText = 'Вернуться во Вроцлав';
+            try {
+                if (window.i18n && typeof window.i18n.t === 'function') {
+                    const key = 'gnomes.crafter.backToWroclaw';
+                    const translated = window.i18n.t(key);
+                    if (translated && translated !== key) {
+                        buttonText = translated;
+                    }
+                }
+            } catch (_) {}
+            
+            navButton.textContent = buttonText;
+            navButton.style.cssText = `
+                padding: 12px 24px;
+                margin-top: 8px;
+                border: none;
+                border-radius: 8px;
+                background: rgba(91, 70, 54, 0.85);
+                color: #fff;
+                font-family: "Marck Script", cursive, serif;
+                font-size: clamp(18px, 2.5vw, 22px);
+                cursor: pointer;
+                transition: background 0.3s ease;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+            `;
+            
+            navButton.addEventListener('mouseenter', () => {
+                navButton.style.background = 'rgba(91, 70, 54, 1)';
+            });
+            navButton.addEventListener('mouseleave', () => {
+                navButton.style.background = 'rgba(91, 70, 54, 0.85)';
+            });
+            
+            navButton.addEventListener('click', () => {
+                // Останавливаем музыку с minsk страниц перед переходом
+                try {
+                    // Останавливаем музыку в текущем окне (если мы на minsk странице)
+                    const currentAudio = document.getElementById('minskMusic');
+                    if (currentAudio && !currentAudio.paused) {
+                        currentAudio.pause();
+                        // Сохраняем состояние как paused
+                        try {
+                            if (window.parent && window.parent !== window) {
+                                window.parent.localStorage.setItem('minskMusicState', 'paused');
+                            } else {
+                                localStorage.setItem('minskMusicState', 'paused');
+                            }
+                        } catch (_) {}
+                    }
+                    
+                    // Останавливаем музыку в родительском окне (SPA) через iframe
+                    if (window.parent && window.parent !== window) {
+                        // Отправляем сообщение в родительское окно для остановки музыки
+                        window.parent.postMessage({
+                            type: 'soundControl',
+                            action: 'mute',
+                            source: 'crafterNav'
+                        }, '*');
+                        
+                        // Также пытаемся остановить музыку напрямую в iframe
+                        try {
+                            const iframes = window.parent.document.querySelectorAll('iframe');
+                            for (const iframe of iframes) {
+                                try {
+                                    if (iframe.contentWindow && iframe.src && 
+                                        (iframe.src.includes('minsk01.html') || iframe.src.includes('minsk02.html'))) {
+                                        iframe.contentWindow.postMessage({
+                                            type: 'soundControl',
+                                            action: 'mute'
+                                        }, '*');
+                                    }
+                                } catch (e) {
+                                    // Игнорируем ошибки доступа к iframe
+                                }
+                            }
+                        } catch (_) {}
+                    }
+                } catch (err) {
+                    console.error('Ошибка при остановке музыки minsk:', err);
+                }
+                
+                // Закрываем попап
+                closeOverlay();
+                
+                // Переходим на tumski14.html через SPA менеджер
+                try {
+                    if (window.parent && window.parent !== window && window.parent.spaManager) {
+                        window.parent.spaManager.loadPage('tumski14.html');
+                    } else if (window.spaManager) {
+                        window.spaManager.loadPage('tumski14.html');
+                    } else {
+                        // Fallback: обычная навигация
+                        window.location.href = 'tumski14.html';
+                    }
+                } catch (err) {
+                    console.error('Ошибка при переходе на tumski14.html:', err);
+                    // Fallback: обычная навигация
+                    try {
+                        window.location.href = 'tumski14.html';
+                    } catch (_) {}
+                }
+            });
+            
+            contentWrapper.appendChild(navButton);
+        }
 
         const closeBtn = overlayDoc.createElement('button');
         closeBtn.type = 'button';

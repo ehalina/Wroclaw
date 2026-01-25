@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Минск - Вроцлав</title>
+    
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="common_tumski.css">
+    <link rel="stylesheet" href="minsk02.css">
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
+    <script src="i18n.js"></script>
+    <script src="common.js"></script>
+    <script src="arrow_handlers.js"></script>
+    <script src="book_paths.js"></script>
+    <script src="common_buttons.js"></script>
+    <script src="language_menu.js"></script>
+    <script src="map_modal.js"></script>
+    <script type="module" src="tumski_cathedral_handler.js"></script>
+    <script type="module" src="map_points.js"></script>
+</head>
+<body>
+
+    <!-- Подсказка для запуска музыки -->
+    <div id="musicHint" class="music-hint" data-i18n="music.hint"></div>
+    <!-- Подсказка для возврата анимации -->
+    <div id="animationHint" class="animation-hint" data-i18n="animation.hint"></div>
+
+    <!-- Геометка: Гном Крафтер -->
+    <div class="map-mark-area">
+        <div
+            class="map-mark"
+            id="gnome_crafter"
+            data-gnome-id="crafter"
+            data-gnome-image="media/krasnolud/krasnal_tumski142.jpg"
+            data-x-desktop="500"
+            data-y-desktop="1500"
+            data-x-mobile="1312"
+            data-y-mobile="912"
+            style="background-image: url('media/krasnal.png');"
+        ></div>
+        <div class="content-wrapper">
+            <img class="papera-image" alt="Papera">
+            <div class="tumski-text" id="gnome-crafter-text" data-i18n="gnomes.crafter.title"></div>
+        </div>
+    </div>
+
+    <!-- Главная сцена с фоновым изображением и анимацией -->
+    <div class="scene">
+        <div class="image-container" data-map-point="41">
+            <div class="image-scroll-wrapper">
+                <div class="image">
+                <!-- Стрелка прямо вправо -->
+                <div class="custom-cursor-prosto" data-x-desktop="1400" data-y-desktop="1200" data-x-mobile="1900" data-y-mobile="1200" data-next-page="minsk01.html"></div>
+                <div class="custom-cursor-prostoarea" data-x-desktop="1300" data-y-desktop="1200" data-x-mobile="1900" data-y-mobile="1200">
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="next-image-container"></div>
+    </div>
+
+    <!-- Аудио для музыки (не запускаем автоматически, используем музыку с предыдущей страницы) -->
+    <!-- <audio id="minskMusic" autoplay loop>
+        <source src="media/zwyki/maksim-mrvica-croatian-rhapsody.mp3" type="audio/mpeg">
+    </audio> -->
+
+    <script type="module" src="tumski_init.js"></script>
+    <script type="module">
+        // Закрываем модальное окно карты, если оно открыто
+        function closeMapModal() {
+            try {
+                // Закрываем в родительском окне (SPA)
+                if (window.parent && window.parent !== window) {
+                    const mapModal = window.parent.document.getElementById('map-modal');
+                    if (mapModal) {
+                        mapModal.style.display = 'none';
+                        // Останавливаем звук карты, если есть
+                        const mapSound = window.parent.document.getElementById('mapSound');
+                        if (mapSound) {
+                            mapSound.pause();
+                            mapSound.currentTime = 0;
+                        }
+                    }
+                }
+            } catch (_) {}
+            
+            // Закрываем в текущем окне (если есть)
+            try {
+                const mapModal = document.getElementById('map-modal');
+                if (mapModal) {
+                    mapModal.style.display = 'none';
+                    const mapSound = document.getElementById('mapSound');
+                    if (mapSound) {
+                        mapSound.pause();
+                        mapSound.currentTime = 0;
+                    }
+                }
+            } catch (_) {}
+        }
+
+        // Отключаем карту на этой странице
+        function disableMapButton() {
+            // Отключаем кнопку карты в родительском окне (SPA)
+            try {
+                if (window.parent && window.parent !== window) {
+                    const mapButton = window.parent.document.getElementById('open-map-modal');
+                    if (mapButton) {
+                        mapButton.style.display = 'none';
+                        mapButton.style.pointerEvents = 'none';
+                        mapButton.style.opacity = '0';
+                        // Удаляем обработчики событий
+                        const newButton = mapButton.cloneNode(true);
+                        mapButton.parentNode.replaceChild(newButton, mapButton);
+                    }
+                }
+            } catch (_) {}
+            
+            // Отключаем кнопку карты в текущем окне (если есть)
+            try {
+                const mapButton = document.getElementById('open-map-modal');
+                if (mapButton) {
+                    mapButton.style.display = 'none';
+                    mapButton.style.pointerEvents = 'none';
+                    mapButton.style.opacity = '0';
+                    // Удаляем обработчики событий
+                    const newButton = mapButton.cloneNode(true);
+                    mapButton.parentNode.replaceChild(newButton, mapButton);
+                }
+            } catch (_) {}
+        }
+
+        // Закрываем модальное окно карты и отключаем карту сразу и после загрузки
+        closeMapModal();
+        disableMapButton();
+        document.addEventListener('DOMContentLoaded', function() {
+            closeMapModal();
+            disableMapButton();
+            // Повторяем через небольшую задержку на случай, если элементы создаются позже
+            setTimeout(() => {
+                closeMapModal();
+                disableMapButton();
+            }, 100);
+            setTimeout(() => {
+                closeMapModal();
+                disableMapButton();
+            }, 500);
+            setTimeout(() => {
+                closeMapModal();
+                disableMapButton();
+            }, 1000);
+        });
+
+        // Музыка не запускается на этой странице - используем музыку с предыдущей страницы (minsk01.html)
+        // Управление музыкой происходит через index.html (SPA)
+        
+        // Сохраняем информацию о текущей странице в sessionStorage перед переходом на minsk01
+        document.addEventListener('DOMContentLoaded', function() {
+            // Сохраняем текущую страницу в sessionStorage
+            try {
+                sessionStorage.setItem('previousPage', 'minsk02.html');
+            } catch (e) {
+                // Игнорируем ошибки
+            }
+        });
+    </script>
+</body>
+</html>

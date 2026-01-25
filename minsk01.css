@@ -1,0 +1,10 @@
+/* Уникальные стили страницы minsk01 */
+
+.image {
+    background-image: url('media/minsk01.jpg');
+}
+
+
+.next-image-container {
+    background-image: url('media/minsk02.jpg');
+}

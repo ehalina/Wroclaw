@@ -613,6 +613,31 @@
     "drukarz_kacper": {
       "title": "Drukarz Kacper",
       "description": "Die Figur Drukarz Kacper erinnert an den Breslauer Drucker Kasper Elyan, in dessen Druckerei der erste Druck in polnischer Sprache entstanden ist."
+    },
+    "bagazhovy": {
+      "title": "Bagazhovy",
+      "description": "Wer ist der Gepäckzwerg? Er ist ein treuer Helfer aller, die hier mit Koffern und Rucksäcken ankommen. Was macht er? Er kümmert sich um Reisende und ist immer bereit, beim Gepäck zu helfen – wenn auch nur symbolisch. Wie erkennt man ihn? In den Händen hält er einen Wagen voller Koffer, als würde er gleich einem weiteren Gast zu Hilfe kommen. Warum gerade hier? Weil die Dominsel der Ort ist, an dem Menschen ankommen... und an dem das Breslauer Abenteuer beginnt."
+    },
+    "ksiegarz": {
+      "title": "Ksiegarz",
+      "description": "Auf der Dominsel in Breslau verbirgt sich ein besonderer Zwerg – der Buchhändler. Er bewacht die nahegelegene Buchhandlung und lädt Passanten ein, sich für einen Moment in die Welt der Bücher zu vertiefen."
+    },
+    "trisomek": {
+      "title": "Trisomek",
+      "description": "Trisomek ist ein Freund der drei Elfen aus dem Breslauer Rathaus: W-skera, Ślepaka und Głuchaka. Die anderen Zwerge mit Beeinträchtigungen nahmen Trisomka im März 2014 einstimmig in ihre Gruppe auf. Eine offizielle Begrüßungszeremonie fand in Anwesenheit von Kindern und Eltern der Niederschlesischen Vereinigung für Menschen mit Down-Syndrom \"Zusammen\" statt. Seitdem begrüßt Trisomek Kinder mit Trisomie und ermutigt sie, an Workshops teilzunehmen, die vom Umweltklub „Pozytywka\" (Spieldose) durchgeführt werden. Besuchen Sie Trisomek auf der Dominsel, er hat viel Interessantes zu erzählen!"
+    },
+    "patsa_vatsa": {
+      "title": "Patsa-Watsa",
+      "description": "Er lächelte zu korrekt, dieser Zwerg, und sein Schatten hatte nicht die Form, die echte Breslauer Zwerge haben sollten... Aber ihr habt das zu spät bemerkt, als der Boden unter euren Füßen sich bereits sanft wie der Ereignishorizont eines schwarzen Lochs gefaltet hatte. Blitze explodierten in weißem Licht, dann rot, dann wieder weiß. \"Ich habe etwas gedrückt und alles ist verschwunden\", hattet ihr gerade noch Zeit zu denken. Der falsche Zwerg winkte fröhlich mit der Hand und löste sich auf, ließ euch in einer unbekannten Welt zurück, wo Schilder lügen und die Zeit sich in alle Richtungen bewegt. Ihr wart schon einmal hier, nicht wahr? Aber wenn wir nach Breslau zurückkehren wollen, müssen wir das einzig Vernünftige tun — einen echten Zwerg finden, den, dessen Bart leicht vom Stadtregen beschmutzt ist und dessen Taschen voller Schlüssel zu Türen sind, deren Existenz wir längst vergessen haben."
+    },
+    "blue_goat": {
+      "title": "Blaue Ziege",
+      "description": "Als ich klein war, hatte ich große Angst davor, morgens nicht ich selbst aufzuwachen. Nicht in meinem eigenen Körper aufzuwachen. Nicht in meinem eigenen Leben aufzuwachen. Als Hafenarbeiter in Lissabon aufzuwachen. Als flauschige Katze in Arsamas aufzuwachen. Als Blaue Ziege aufzuwachen.<br><br>Nun, ich meine, wie sehr ich mich fürchtete. Eher hoffte ich, dass genau so alles funktioniert.<br>Ich habe immer noch ein bisschen Angst, ehrlich gesagt. Was, wenn alles genau so funktioniert.<br><br>Als ich klein war, hatte ich Angst davor, groß zu werden und alles zu vergessen. Zu vergessen, wie ich heute lecker einen Pfannkuchen aß. Zu vergessen, wie ein Regenbogen über dem Dach war. Zu vergessen, wie grüne Johannisbeeren wie Eier einer riesigen Ameise aussehen.<br>Oma bereitete das Frühstück zu. Auf dem Tisch stand ein Glas frischer Milch. Ich setzte mich auf einen Hocker. Schloss die Augen. Und flüsterte in die Welt:<br>- Liebe Erinnerung, ich möchte diesen Moment für immer behalten.<br>Ich bin längst erwachsen geworden. Vergaß, wie ich den Pfannkuchen aß. Vergaß den Regenbogen.<br>Aber den Moment auf dem Hocker erinnere ich mich immer.<br><br>Solange unsere Kinder klein sind, wissen sie nicht, wie alles funktioniert. Sie denken, dass, wenn niemand zu Hause ist, die Gegensprechanlage endlos klingeln wird. Und Perlen werden zum Mittagessen aus Austern gewonnen. Aber sie können eines Morgens als Blaue Ziege aufwachen.<br>Und diesen Moment für immer behalten."
+    },
+    "crafter": {
+      "title": "Handwerker",
+      "description": "Handwerker — ein echter Zwerg, einer von denen, die die geheimen Nähte der Realität kennen und unmerklich entlang ihnen zurückführen können, in die wirkliche Welt. Mit seinen Taten und der Zeit, als würde er eine unsichtbare Tür hinter dir schließen. Und alles wäre in Ordnung, du bist an Ort und Stelle, alles ist richtig. Aber es bleibt eine leichte, warme Reue — nicht weil es dort besser war, sondern weil jene Welt etwas nachgiebiger war, fast deine. Und es ist immer ein wenig traurig, sie zu verlassen.",
+      "backToWroclaw": "Nach Breslau zurückkehren"
     }
   },
   "account": {

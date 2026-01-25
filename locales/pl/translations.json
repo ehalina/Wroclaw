@@ -614,6 +614,31 @@
     "drukarz_kacper": {
       "title": "Drukarz Kacper",
       "description": "Figura upamiętnia wrocławskiego drukarza Kaspra Elyana, w którego drukarni powstał pierwszy druk w języku polskim."
+    },
+    "bagazhovy": {
+      "title": "Bagażowy",
+      "description": "Kim jest Krasnal Bagażowy? To wierny pomocnik wszystkich, którzy przyjeżdżają tutaj z walizkami i plecakami. Czym się zajmuje? Troszczy się o podróżników i zawsze jest gotowy pomóc z bagażem – choćby symbolicznie. Jak go rozpoznać? W rękach trzyma wózek pełen walizek, jakby za chwilę miał przyjść z pomocą kolejnemu gościowi. Dlaczego właśnie tutaj? Bo Ostrów Tumski to miejsce, do którego przyjeżdżają... i od którego zaczyna się wrocławska przygoda."
+    },
+    "ksiegarz": {
+      "title": "Księgarz",
+      "description": "Na Ostrowie Tumskim we Wrocławiu ukrywa się wyjątkowy krasnal – Księgarz. Strzeże pobliskiej księgarni i zachęca przechodniów, by na chwilę zanurzyli się w świecie książek"
+    },
+    "trisomek": {
+      "title": "Trisomek",
+      "description": "Trisomek jest przyjacielem trzech elfów z wrocławskiego Ratusza: W-skera, Ślepaka i Głuchaka. Inni krasnale z niepełnosprawnościami jednogłośnie przyjęli Trisomka do swojej grupy w marcu 2014 roku. Oficjalna ceremonia powitania odbyła się w obecności dzieci i rodziców z Dolnośląskiego Stowarzyszenia Osób z Zespołem Downa \"Razem\". Od tamtej pory Trisomek wita i zachęca dzieci z trisomią do udziału w warsztatach prowadzonych przez Klub Ekologiczny „Pozytywka\". Odwiedź Trisomka na Ostrowie Tumskim, ma wiele ciekawych rzeczy do opowiedzenia!"
+    },
+    "patsa_vatsa": {
+      "title": "Paca-Waca",
+      "description": "Uśmiechał się zbyt poprawnie, ten krasnal, a jego cień nie miał takiego kształtu, jaki powinny mieć prawdziwe wrocławskie krasnale... Ale zrozumieliście to zbyt późno, gdy ziemia pod stopami już delikatnie złożyła się jak horyzont zdarzeń czarnej dziury. Błyskawice eksplodowały białym światłem, potem czerwonym, potem znowu białym. \"Coś nacisnąłem i wszystko zniknęło\", zdążyliście tylko pomyśleć. Niefałszywy krasnal radośnie pomachał ręką i rozpuścił się, zostawiając was w nieznanym świecie, gdzie znaki kłamią, a czas porusza się we wszystkich kierunkach. Byliście tu już kiedyś, prawda? Ale jeśli chcemy wrócić do Wrocławia, będziemy musieli zrobić jedyną rozsądną rzecz — znaleźć prawdziwego krasnala, tego, którego broda jest lekko zabrudzona miejskim deszczem, a kieszenie wypchane kluczami do drzwi, o których istnieniu dawno zapomnieliśmy."
+    },
+    "blue_goat": {
+      "title": "Niebieska Koza",
+      "description": "Kiedy byłam mała, bardzo bałam się obudzić rano nie sobą.<br>Obudzić się nie w swoim ciele.<br>Obudzić się nie w swoim życiu.<br><br>Obudzić się jako portowy tragarz w Lizbonie.<br>Obudzić się jako puszysty kotek w Arzamasie.<br>Obudzić się jako niebieska koza.<br><br>No, może nie tyle się bałam.<br>Raczej miałam nadzieję, że właśnie tak to wszystko jest urządzone.<br><br>Do dziś, szczerze mówiąc, trochę się boję.<br>A co, jeśli naprawdę tak to wszystko działa?<br><br>Kiedy byłam mała, bałam się dorosnąć i wszystko zapomnieć.<br>Zapomnieć, jak dziś smakował mi naleśnik.<br>Zapomnieć, że nad dachem była tęcza.<br>Zapomnieć, że zielona porzeczka wygląda jak jajka gigantycznej mrówki.<br><br>Babcia przygotowywała śniadanie.<br>Na stole stał słoik świeżego mleka.<br>Usiadłam na stołku.<br>Zamknęłam oczy.<br>I wyszeptałam do świata:<br>— Droga pamięci, chcę zapamiętać tę chwilę na zawsze.<br><br>Dawno już dorosłam.<br>Zapomniałam, jak jadłam naleśnik.<br>Zapomniałam tęczę.<br><br>Ale chwilę na stołku pamiętam zawsze.<br><br>Dopóki nasze dzieci są małe, nie wiedzą, jak wszystko jest urządzone.<br>Myślą, że jeśli nikogo nie ma w domu, domofon będzie dzwonił bez końca.<br>A perły wydobywa się z ostryg podczas obiadu.<br><br>Za to mogą pewnego ranka obudzić się jako niebieska koza.<br>I zapamiętać tę chwilę na zawsze."
+    },
+    "crafter": {
+      "title": "Rzemieślnik",
+      "description": "Rzemieślnik — to prawdziwy krasnal, jeden z tych, którzy znają tajemne szwy rzeczywistości i potrafią niezauważalnie przeprowadzić po nich z powrotem, do prawdziwego świata. Ze swoimi sprawami i czasem, jakby zamykając za tobą niewidzialne drzwi. I wszystko byłoby w porządku, jesteś na miejscu, wszystko w porządku. Ale pozostaje lekkie, ciepłe żal — nie dlatego, że tam było lepiej, ale dlatego, że tamten świat był nieco bardziej podatnym, prawie twoim. I zawsze trochę żal go opuszczać.",
+      "backToWroclaw": "Wrócić do Wrocławia"
     }
   },
   "account": {
