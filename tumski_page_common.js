@@ -143,7 +143,7 @@ export async function initPageCommon() {
                 }
             }
         } catch (_) {}
-
+        
         // 7.1) Страховка: лениво инициализируем квест-маркер по клику/тапу,
         // если по какой-то причине шаг (7) не успел/не отработал.
         // Важно: обработчик в capture, чтобы сработать даже при клике по перекрывающим слоям.
@@ -238,11 +238,38 @@ export async function initPageCommon() {
                 document.addEventListener('touchend', delegatedQuestHandler, { capture: true, passive: false });
             }
         } catch (_) {}
-
-        // 8) Универсальные геометки: все .map-mark без data-quest-number
+        
+        // 7.2) Геометки-гномы: .map-mark с data-gnome-id
+        try {
+            const gnomeMarks = Array.from(document.querySelectorAll('.map-mark[data-gnome-id]'));
+            if (gnomeMarks.length > 0) {
+                const gnomeMod = await import('./gnome_marker_handler.js');
+                if (gnomeMod && typeof gnomeMod.setupGnomeGeoMarker === 'function') {
+                    for (const el of gnomeMarks) {
+                        try {
+                            const markerId = el.id;
+                            const gnomeId = el.getAttribute('data-gnome-id') || markerId || '';
+                            const imageSrc = el.getAttribute('data-gnome-image') || '';
+                            const title = el.getAttribute('data-gnome-title') || '';
+                            const description = el.getAttribute('data-gnome-description') || '';
+                            if (!markerId || !gnomeId) continue;
+                            gnomeMod.setupGnomeGeoMarker({
+                                markerId,
+                                gnomeId,
+                                imageSrc: imageSrc || undefined,
+                                title: title || undefined,
+                                description: description || undefined
+                            });
+                        } catch (_) {}
+                    }
+                }
+            }
+        } catch (_) {}
+        
+        // 8) Универсальные геометки: все .map-mark без data-quest-number и без data-gnome-id
         try {
             const marks = Array.from(document.querySelectorAll('.map-mark'))
-                .filter(el => !el.hasAttribute('data-quest-number'));
+                .filter(el => !el.hasAttribute('data-quest-number') && !el.hasAttribute('data-gnome-id'));
             if (marks.length > 0) {
                 const cathedral = await import('./tumski_cathedral_handler.js');
                 if (cathedral && typeof cathedral.setupUniversalGeoMarker === 'function') {

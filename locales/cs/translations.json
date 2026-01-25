@@ -597,6 +597,24 @@
   },
   "expectation": "Očekávání",
   "reality": "Realita",
+  "gnomes": {
+    "tumski": {
+      "title": "Milostrazh",
+      "description": "Víš, kdo ve Vratislavi hlídá lásku? To je trpaslík Milostrazh – strážce zamilovaných srdcí na Tumském mostě! Tento malý hrdina každý den dohlíží na to, aby city, které procházejí tímto kouzelným místem, zůstávaly plné tepla a stálosti."
+    },
+    "gazus": {
+      "title": "Gazus",
+      "description": "Skřítek Gazus pracuje na Katedrálním ostrově a často ho lze spatřit na Mostě zamilovaných. Šplhá po stožáru plynové lampy – odtud přezdívka Gazus, lampář – a zapaluje plamen. I když byl jeho otec původně pekařem, po večerech pomáhal se zapalováním lamp a už vynalézavý dědeček kdysi osvětloval historické centrum města olejovými lampami. Gazusovým nejnovějším úkolem je počítat visací zámky, které na most věší zamilované páry; podle dosavadních důkazů se láska dotkla už několika tisíc lidí, a to ještě ani nezačala zima."
+    },
+    "rachciach": {
+      "title": "Rachciach",
+      "description": "Trpaslík Rachciach je výjimečný skřítek s neobvyklým úkolem – přestřihuje zámky zamilovaných! 🔒 Podle nové vratislavské legendy přináší zamykání lásky „na klíček“ smůlu místo štěstí, a tak Rachciach most od těchto zámků osvobozuje."
+    },
+    "drukarz_kacper": {
+      "title": "Drukarz Kacper",
+      "description": "Postavička Drukarz Kacper připomíná vratislavského tiskaře Kaspra Elyana, v jehož tiskárně vznikl první tisk v polském jazyce."
+    }
+  },
   "account": {
     "guest": "Host",
     "user": "Uživatel",

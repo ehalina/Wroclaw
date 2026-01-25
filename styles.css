@@ -528,6 +528,7 @@ html[data-input-type="touch"] .custom-cursor-prostoarea:hover .custom-cursor-pro
     background-image: url('media/mapmark.png');
     background-size: contain;
     background-repeat: no-repeat;
+    background-position: center center;
     cursor: pointer;
     opacity: 0;
     transition: opacity 0.3s ease;

@@ -597,6 +597,24 @@
   },
   "expectation": "Expectation",
   "reality": "Reality",
+  "gnomes": {
+    "tumski": {
+      "title": "Milostrazh",
+      "description": "Do you know who protects love in Wrocław? This is the gnome Milostrazh – guardian of lovers' hearts on Tumski Bridge! Every day this little hero makes sure that the feelings passing through this magical place stay warm and true."
+    },
+    "gazus": {
+      "title": "Gazus",
+      "description": "Working on Cathedral Island, this illuminating dwarf can frequently be seen on the Bridge of Lovers. Climbing up the gas lamp pole (hence the nickname Gazus or lamplighter), he ignites the flame of the lamp. Though the lamplighter's father was a baker by trade, he dabbled in lighting the lamps, and before that his ingenious grandfather lit up the historical part of the city with olive‑oil lamps. Gazus' latest task is to count the padlocks hung on the bridge by couples in love. By the evidence so far, love has already touched several thousand, and it's not even winter."
+    },
+    "rachciach": {
+      "title": "Rachciach",
+      "description": "Rachciach is a very unusual dwarf with a rather special task – he cuts through lovers' padlocks. 🔒 According to a new Wrocław legend, locking love “with a key” brings bad luck instead of happiness, so Rachciach frees the bridge from such enchanted locks."
+    },
+    "drukarz_kacper": {
+      "title": "Drukarz Kacper",
+      "description": "The dwarf Drukarz Kacper commemorates the Wrocław printer Kasper Elyan, in whose workshop the first printed text in the Polish language was created."
+    }
+  },
   "account": {
     "guest": "Guest",
     "user": "User",

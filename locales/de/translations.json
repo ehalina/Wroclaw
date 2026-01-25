@@ -597,6 +597,24 @@
   },
   "expectation": "Erwartung",
   "reality": "Realität",
+  "gnomes": {
+    "tumski": {
+      "title": "Milostrazh",
+      "description": "Weißt du, wer die Liebe in Breslau beschützt? Das ist der Zwerg Milostrazh – Hüter der verliebten Herzen auf der Dombrücke! Jeden Tag achtet dieser kleine Held darauf, dass die Gefühle, die diesen magischen Ort kreuzen, voller Wärme und Beständigkeit bleiben."
+    },
+    "gazus": {
+      "title": "Gazus",
+      "description": "Der Zwerg Gazus arbeitet auf der Dominsel und ist oft auf der Brücke der Verliebten zu sehen. Er klettert den Mast der Gaslaterne hinauf – daher sein Spitzname Gazus, der Lampenanzünder – und entzündet die Flamme. Obwohl sein Vater eigentlich Bäcker war, half er abends beim Anzünden der Lampen, und schon sein erfinderischer Großvater beleuchtete die historische Altstadt mit Öllampen. Gazus’ neueste Aufgabe besteht darin, die Vorhängeschlösser zu zählen, die verliebte Paare an der Brücke befestigen – den bisherigen Zeichen nach hat die Liebe schon mehrere Tausend Menschen berührt, und es ist noch nicht einmal Winter."
+    },
+    "rachciach": {
+      "title": "Rachciach",
+      "description": "Der Zwerg Rachciach ist ein ungewöhnlicher Zwerg mit einer besonderen Aufgabe – er durchschneidet die Liebesschlösser der Paare. 🔒 Einer neuen Breslauer Legende zufolge bringt es Pech statt Glück, die Liebe „mit einem Schlüssel“ zuzusperren, deshalb befreit Rachciach die Brücke von solchen Schlössern."
+    },
+    "drukarz_kacper": {
+      "title": "Drukarz Kacper",
+      "description": "Die Figur Drukarz Kacper erinnert an den Breslauer Drucker Kasper Elyan, in dessen Druckerei der erste Druck in polnischer Sprache entstanden ist."
+    }
+  },
   "account": {
     "guest": "Gast",
     "user": "Benutzer",

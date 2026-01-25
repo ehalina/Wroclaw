@@ -598,6 +598,24 @@
   },
   "expectation": "Oczekiwanie",
   "reality": "",
+  "gnomes": {
+    "tumski": {
+      "title": "Miłostróż",
+      "description": "Wiecie, kto pilnuje miłości we Wrocławiu? To krasnal Miłostróż – strażnik serc zakochanych na Moście Tumskim! Ten mały bohater codziennie czuwa nad tym, by uczucia przechodzące przez to magiczne miejsce były pełne ciepła i wierności."
+    },
+    "gazus": {
+      "title": "Gazuś",
+      "description": "Pracując na Ostrowie Tumskim, ten świetlisty krasnal często pojawia się na Moście Zakochanych. Wspina się po słupie gazowej latarni (stąd przydomek Gazuś, czyli latarnik) i zapala płomień światła. Choć ojciec latarnika z zawodu był piekarzem, po godzinach dorabiał przy zapalaniu lamp, a wcześniej pomysłowy dziadek oświetlał historyczną część miasta lampami oliwnymi. Najnowszym zadaniem Gazusia jest liczenie kłódek zawieszonych na moście przez zakochane pary – wszystko wskazuje na to, że miłość dotknęła już kilku tysięcy osób, i to jeszcze przed zimą."
+    },
+    "rachciach": {
+      "title": "Rachciach",
+      "description": "Krasnal Rachciach to wyjątkowy krasnal, który ma niecodzienne zadanie – przecina kłódki zakochanych! 🔒 Wszystko za sprawą nowej wrocławskiej legendy, która mówi, że zamykanie miłości „na kluczyk” przynosi pecha zamiast szczęścia."
+    },
+    "drukarz_kacper": {
+      "title": "Drukarz Kacper",
+      "description": "Figura upamiętnia wrocławskiego drukarza Kaspra Elyana, w którego drukarni powstał pierwszy druk w języku polskim."
+    }
+  },
   "account": {
     "guest": "Gość",
     "user": "Użytkownik",

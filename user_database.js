@@ -13,6 +13,8 @@ class UserDatabase {
         this._permissionDeniedLogged = false;
         this._initPromise = null;
         this._redirectHandled = false;
+        this._leaderboardSyncTimeout = null; // Debounce для синхронизации leaderboard
+        this._lastLeaderboardSync = {}; // Кэш последней синхронизации для каждого userId
     }
 
     _isAccountDebug() {
@@ -147,7 +149,6 @@ class UserDatabase {
         } catch (_) {}
 
         if (this._redirectHandled || handledInStorage) {
-            console.log('[oauth] _handleRedirectResultOnce: already handled (instance or storage flag)');
             return;
         }
         this._redirectHandled = true;
@@ -174,17 +175,58 @@ class UserDatabase {
 
             if (!u.isAnonymous) {
                 const email = u.email || null;
-                const username = (u.displayName || (email ? email.split('@')[0] : '') || 'Пользователь');
                 try {
-                    await this.updateUserMetadata({
+                    // Проверяем, есть ли уже username в Firestore
+                    let existingUsername = null;
+                    try {
+                        const userDoc = await this.db.collection('users').doc(u.uid).get();
+                        if (userDoc.exists) {
+                            const userData = userDoc.data();
+                            existingUsername = userData.username;
+                        }
+                    } catch (getError) {
+                        // Игнорируем ошибки получения - возможно, документ еще не создан
+                        this._dlog('finalize: cannot get existing user', { uid: u.uid, error: getError?.message });
+                    }
+                    
+                    // Определяем, нужно ли обновлять username
+                    // НЕ перезаписываем, если уже есть валидный username (не пустой и не "Гость")
+                    const hasValidUsername = existingUsername && 
+                        existingUsername.trim() !== '' && 
+                        existingUsername !== 'Гость' && 
+                        existingUsername.toLowerCase() !== 'гость';
+                    
+                    const updateData = {
                         email,
-                        username,
                         isAnonymous: false,
                         linkedAt: new Date().toISOString()
-                    });
+                    };
+                    
+                    // Обновляем username только если его нет или он равен "Гость"
+                    if (!hasValidUsername) {
+                        const newUsername = (u.displayName || (email ? email.split('@')[0] : '') || 'Пользователь');
+                        updateData.username = newUsername;
+                        this._dlog('finalize: updating username', { 
+                            oldUsername: existingUsername, 
+                            newUsername: newUsername,
+                            uid: u.uid 
+                        });
+                    } else {
+                        this._dlog('finalize: preserving existing username', { 
+                            username: existingUsername,
+                            displayName: u.displayName,
+                            uid: u.uid 
+                        });
+                    }
+                    
+                    await this.updateUserMetadata(updateData);
                     await this._wait(200);
-                    console.log('[oauth] finalize: metadata updated', { email, username, isAnonymous: false, uid: u.uid });
-                    this._dlog('finalize: metadata updated', { email, username, isAnonymous: false, uid: u.uid });
+                    this._dlog('finalize: metadata updated', { 
+                        email, 
+                        username: updateData.username || existingUsername, 
+                        isAnonymous: false, 
+                        uid: u.uid 
+                    });
                 } catch (e) {
                     console.error('[oauth] finalize updateUserMetadata failed', e?.message || String(e));
                     this._dlog('finalize updateUserMetadata failed', e?.message || String(e));
@@ -196,13 +238,6 @@ class UserDatabase {
             const res = await this.auth.getRedirectResult();
             if (res && res.user) {
                 const u = res.user;
-                console.log('[oauth] getRedirectResult user', {
-                    uid: u.uid,
-                    isAnonymous: !!u.isAnonymous,
-                    email: u.email || null,
-                    displayName: u.displayName || null,
-                    providers: (u.providerData || []).map(p => p?.providerId).filter(Boolean)
-                });
                 this._dlog('getRedirectResult user', {
                     uid: u.uid,
                     isAnonymous: !!u.isAnonymous,
@@ -214,59 +249,21 @@ class UserDatabase {
             } else {
                 this._dlog('getRedirectResult: no result');
                 const authUser = this.getCurrentAuthUser();
-                console.log('[oauth] getRedirectResult: no result', {
-                    currentUser: authUser
-                        ? {
-                            uid: authUser.uid,
-                            isAnonymous: !!authUser.isAnonymous,
-                            email: authUser.email || null,
-                            displayName: authUser.displayName || null,
-                            providers: (authUser.providerData || []).map(p => p?.providerId).filter(Boolean)
-                        }
-                        : null,
-                    oauthInProgress: {
-                        session: sessionStorage.getItem('__oauth_in_progress'),
-                        local: localStorage.getItem('__oauth_in_progress')
-                    },
-                    guestUid: {
-                        session: sessionStorage.getItem('__oauth_guest_uid'),
-                        local: localStorage.getItem('__oauth_guest_uid')
-                    }
-                });
                 try {
                     const hasAuthNonAnon = authUser && !authUser.isAnonymous;
                     const oauthInProgress =
                         (sessionStorage.getItem('__oauth_in_progress') === '1') ||
                         (localStorage.getItem('__oauth_in_progress') === '1');
-                    console.log('[oauth] fallback check', {
-                        hasAuthNonAnon,
-                        oauthInProgress,
-                        authUser: authUser ? { uid: authUser.uid, isAnonymous: !!authUser.isAnonymous, email: authUser.email } : null
-                    });
                     if (hasAuthNonAnon && oauthInProgress) {
                         await finalizeOAuthUser(authUser);
                     } else if (oauthInProgress && authUser && authUser.isAnonymous) {
                         // OAuth в процессе, но пользователь еще гость - возможно redirect еще не обработан
-                        // Ждем немного и проверяем снова (может быть race condition)
-                        console.log('[oauth] fallback: waiting for auth state to update after redirect', {
-                            uid: authUser.uid,
-                            isAnonymous: authUser.isAnonymous
-                        });
                         // Даем время на обновление auth state после redirect
                         await this._wait(500);
                         const updatedAuthUser = this.getCurrentAuthUser();
                         if (updatedAuthUser && !updatedAuthUser.isAnonymous) {
-                            console.log('[oauth] fallback: auth state updated after wait', {
-                                uid: updatedAuthUser.uid,
-                                isAnonymous: updatedAuthUser.isAnonymous,
-                                email: updatedAuthUser.email || null
-                            });
                             await finalizeOAuthUser(updatedAuthUser);
                         } else {
-                            console.log('[oauth] fallback: still guest after wait, clearing oauth flags to prevent loop', {
-                                uid: updatedAuthUser?.uid,
-                                isAnonymous: updatedAuthUser?.isAnonymous
-                            });
                             // Очищаем флаги, чтобы не было бесконечного цикла
                             try { sessionStorage.removeItem('__oauth_in_progress'); } catch (_) {}
                             try { localStorage.removeItem('__oauth_in_progress'); } catch (_) {}
@@ -613,13 +610,47 @@ class UserDatabase {
                 // Обновляем метаданные, чтобы снять гостевой режим
                 if (!u.isAnonymous) {
                     const email = u.email || null;
-                    const username = u.displayName || (email ? email.split('@')[0] : '') || 'Пользователь';
-                    await this.updateUserMetadata({
+                    
+                    // Проверяем существующий username в Firestore перед перезаписью
+                    let existingUsername = null;
+                    try {
+                        const userDoc = await this.db.collection('users').doc(u.uid).get();
+                        if (userDoc.exists) {
+                            const userData = userDoc.data();
+                            existingUsername = userData.username;
+                        }
+                    } catch (getError) {
+                        this._dlog('popup: cannot get existing user', { uid: u.uid, error: getError?.message });
+                    }
+                    
+                    // НЕ перезаписываем, если уже есть валидный username
+                    const hasValidUsername = existingUsername && 
+                        existingUsername.trim() !== '' && 
+                        existingUsername !== 'Гость' && 
+                        existingUsername.toLowerCase() !== 'гость';
+                    
+                    const updateData = {
                         email,
-                        username,
                         isAnonymous: false,
                         linkedAt: new Date().toISOString()
-                    });
+                    };
+                    
+                    // Обновляем username только если его нет или он равен "Гость"
+                    if (!hasValidUsername) {
+                        const newUsername = u.displayName || (email ? email.split('@')[0] : '') || 'Пользователь';
+                        updateData.username = newUsername;
+                        this._dlog('popup: updating username', { 
+                            oldUsername: existingUsername, 
+                            newUsername: newUsername 
+                        });
+                    } else {
+                        this._dlog('popup: preserving existing username', { 
+                            username: existingUsername,
+                            displayName: u.displayName
+                        });
+                    }
+                    
+                    await this.updateUserMetadata(updateData);
                     await this._wait(150);
                 }
             }
@@ -643,7 +674,6 @@ class UserDatabase {
             }
             try { sessionStorage.setItem('__oauth_in_progress', '1'); } catch (_) {}
             try { localStorage.setItem('__oauth_in_progress', '1'); } catch (_) {}
-            console.log('[oauth] google: popup failed -> redirect', { code, guestUid: user.isAnonymous ? user.uid : null });
             this._dlog('google auth: signInWithRedirect', { guestUid: user.isAnonymous ? user.uid : null, code });
             await this.auth.signInWithRedirect(provider);
             return null; // redirect
@@ -665,7 +695,6 @@ class UserDatabase {
             }
             try { sessionStorage.setItem('__oauth_in_progress', '1'); } catch (_) {}
             try { localStorage.setItem('__oauth_in_progress', '1'); } catch (_) {}
-            console.log('[oauth] start facebook redirect', { guestUid: user.isAnonymous ? user.uid : null });
             this._dlog('facebook auth: signInWithRedirect', { guestUid: user.isAnonymous ? user.uid : null });
             await this.auth.signInWithRedirect(provider);
             return null;
@@ -739,12 +768,6 @@ class UserDatabase {
             throw new Error('Пользователь не авторизован');
         }
 
-        console.log('[userDatabase] updateUserMetadata', {
-            uid: currentUser.uid,
-            metadata: safeMeta,
-            firestoreMeta: safeFirestoreMeta
-        });
-
         try {
             // update() падает, если документа ещё нет. set+merge безопаснее и для "гостя -> OAuth" (2FA тоже).
             let updatePayload = {
@@ -766,7 +789,42 @@ class UserDatabase {
                 payload: updatePayload
             });
             await this.db.collection('users').doc(currentUser.uid).set(updatePayload, { merge: true });
-            console.log('[userDatabase] updateUserMetadata: success', { uid: currentUser.uid });
+            
+            // Синхронизируем в leaderboard для публичного доступа
+            // Пытаемся получить данные пользователя для синхронизации
+            try {
+                // Если username передан явно в metadata, используем его (приоритет над Firestore)
+                const explicitUsername = safeFirestoreMeta.username;
+                
+                const userDoc = await this.db.collection('users').doc(currentUser.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    // Используем явно переданный username, если он есть, иначе из Firestore
+                    const usernameToUse = explicitUsername || userData.username || currentUser.displayName || currentUser.email?.split('@')[0] || 'Гость';
+                    // Немедленная синхронизация для обновления метаданных (username, email)
+                    await this._syncToLeaderboard(currentUser.uid, {
+                        username: usernameToUse,
+                        email: userData.email || null,
+                        createdAt: userData.createdAt || null,
+                        progress: userData.progress || { openedLocations: 0, openedBooks: 0 },
+                        questState: userData.questState || { tasks: {} }
+                    }, true); // immediate = true
+                } else {
+                    // Если документа нет, используем данные из auth или переданный username
+                    const usernameToUse = explicitUsername || currentUser.displayName || currentUser.email?.split('@')[0] || 'Гость';
+                    // Немедленная синхронизация для обновления метаданных
+                    await this._syncToLeaderboard(currentUser.uid, {
+                        username: usernameToUse,
+                        email: null,
+                        createdAt: null,
+                        progress: { openedLocations: 0, openedBooks: 0 },
+                        questState: { tasks: {} }
+                    }, true); // immediate = true
+                }
+            } catch (syncError) {
+                // Если не можем синхронизировать, не критично
+                this._dlog('_syncToLeaderboard in updateUserMetadata failed', syncError?.message || String(syncError));
+            }
         } catch (error) {
             console.error('❌ Ошибка обновления метаданных:', {
                 uid: currentUser?.uid,
@@ -774,6 +832,192 @@ class UserDatabase {
                 error: error?.message || String(error)
             });
             throw error;
+        }
+    }
+
+    // Синхронизация данных пользователя в публичную коллекцию leaderboard
+    async _syncToLeaderboard(userId, userData = null, immediate = false) {
+        try {
+            if (!userId) {
+                console.error('[leaderboard] _syncToLeaderboard: userId is undefined!', { userId, hasUserData: !!userData, userDataUsername: userData?.username });
+                return;
+            }
+            
+            // Debounce для частых вызовов (например, при сохранении состояния квеста)
+            // immediate = true для важных обновлений (username, email)
+            if (!immediate) {
+                // Очищаем предыдущий таймаут для этого userId
+                if (this._leaderboardSyncTimeout) {
+                    clearTimeout(this._leaderboardSyncTimeout);
+                }
+                
+                // Сохраняем данные для отложенной синхронизации
+                this._lastLeaderboardSync[userId] = userData;
+                
+                // Устанавливаем таймаут на 2 секунды
+                this._leaderboardSyncTimeout = setTimeout(async () => {
+                    const cachedData = this._lastLeaderboardSync[userId];
+                    delete this._lastLeaderboardSync[userId];
+                    if (cachedData) {
+                        await this._syncToLeaderboardInternal(userId, cachedData);
+                    }
+                }, 2000);
+                
+                return; // Выходим, синхронизация произойдет через 2 секунды
+            }
+            
+            // Немедленная синхронизация для важных обновлений
+            await this._syncToLeaderboardInternal(userId, userData);
+        } catch (error) {
+            // Не критично, просто логируем
+            console.error('[leaderboard] _syncToLeaderboard: ERROR', { userId, error: error?.message || String(error) });
+            this._dlog('_syncToLeaderboard failed', error?.message || String(error));
+        }
+    }
+    
+    // Внутренняя функция синхронизации
+    async _syncToLeaderboardInternal(userId, userData = null) {
+        try {
+            console.log('[leaderboard] _syncToLeaderboard START', { userId, hasUserData: !!userData, userDataUsername: userData?.username });
+            
+            // Если данные не переданы, пытаемся получить из Firestore
+            let user = userData;
+            if (!user) {
+                try {
+                    user = await this.getUser(userId);
+                    console.log('[leaderboard] _syncToLeaderboard: got user from Firestore', { userId, username: user?.username });
+                } catch (error) {
+                    console.log('[leaderboard] _syncToLeaderboard: cannot get from Firestore, using auth', { userId, error: error?.message });
+                    // Если не можем прочитать, используем данные из auth
+                    const authUser = this.getCurrentAuthUser();
+                    if (authUser && authUser.uid === userId) {
+                        user = {
+                            username: authUser.displayName || authUser.email?.split('@')[0] || 'Гость',
+                            progress: { openedLocations: 0, openedBooks: 0 },
+                            questState: { tasks: {} }
+                        };
+                        console.log('[leaderboard] _syncToLeaderboard: created user from auth', { userId, username: user.username });
+                    } else {
+                        console.log('[leaderboard] _syncToLeaderboard: no auth user, cannot sync', { userId });
+                        return; // Не можем синхронизировать без данных
+                    }
+                }
+            }
+            if (!user) {
+                console.log('[leaderboard] _syncToLeaderboard: no user data, returning', { userId });
+                return;
+            }
+
+            // Определяем username: приоритет у переданного userData.username, затем Firestore, затем auth
+            let finalUsername = null;
+            const authUser = this.getCurrentAuthUser();
+            const wasUserDataPassed = !!userData; // Запоминаем, были ли данные переданы явно
+            
+            console.log('[leaderboard] _syncToLeaderboard: determining username', { 
+                userId, 
+                userDataUsername: userData?.username,
+                userUsername: user.username, 
+                wasUserDataPassed,
+                authUserId: authUser?.uid,
+                authDisplayName: authUser?.displayName,
+                authEmail: authUser?.email
+            });
+            
+            // Приоритет 1: Если данные переданы явно (userData), используем их username
+            if (wasUserDataPassed && userData.username && userData.username !== 'Гость') {
+                finalUsername = userData.username;
+                console.log('[leaderboard] _syncToLeaderboard: using passed userData.username', { userId, finalUsername });
+            }
+            // Приоритет 2: username из Firestore (если не пустой и не 'Гость')
+            else if (user.username && user.username !== 'Гость') {
+                finalUsername = user.username;
+                console.log('[leaderboard] _syncToLeaderboard: using Firestore username', { userId, finalUsername });
+            }
+            // Приоритет 3: Если username пустой или 'Гость', пытаемся взять из auth (только для текущего пользователя)
+            else if (authUser && authUser.uid === userId) {
+                const authUsername = authUser.displayName || authUser.email?.split('@')[0];
+                if (authUsername) {
+                    finalUsername = authUsername;
+                    console.log('[leaderboard] _syncToLeaderboard: using auth username', { userId, finalUsername });
+                } else {
+                    finalUsername = 'Гость';
+                    console.log('[leaderboard] _syncToLeaderboard: no auth username, using Гость', { userId });
+                }
+            }
+            // Приоритет 4: Если передан userData с username (даже если 'Гость'), используем его
+            else if (wasUserDataPassed && userData.username) {
+                finalUsername = userData.username;
+                console.log('[leaderboard] _syncToLeaderboard: using passed userData.username (even if Гость)', { userId, finalUsername });
+            }
+            // Fallback: 'Гость'
+            else {
+                finalUsername = 'Гость';
+                console.log('[leaderboard] _syncToLeaderboard: fallback to Гость', { userId });
+            }
+            
+            const leaderboardData = {
+                userId: userId,
+                username: finalUsername,
+                email: user.email || null,
+                createdAt: user.createdAt || null,
+                openedLocations: user.progress?.openedLocations || 0,
+                openedBooks: user.progress?.openedBooks || 0,
+                tasks: user.questState?.tasks || {},
+                updatedAt: new Date().toISOString()
+            };
+
+            console.log('[leaderboard] _syncToLeaderboard: writing to leaderboard', { userId, username: finalUsername, leaderboardData });
+            const realm = this._firebaseRealm || window;
+            const safeData = realm.JSON.parse(JSON.stringify(leaderboardData));
+
+            await this.db.collection('leaderboard').doc(userId).set(safeData, { merge: true });
+            console.log('[leaderboard] _syncToLeaderboard: SUCCESS', { userId, username: finalUsername });
+        } catch (error) {
+            // Не критично, просто логируем
+            console.error('[leaderboard] _syncToLeaderboard: ERROR', { userId, error: error?.message || String(error) });
+            this._dlog('_syncToLeaderboard failed', error?.message || String(error));
+        }
+    }
+
+    // Синхронизация всех пользователей из users в leaderboard (если есть права)
+    async syncAllUsersToLeaderboard() {
+        try {
+            console.log('[leaderboard] syncAllUsersToLeaderboard: starting...');
+            const allUsers = await this.getAllUsers();
+            console.log('[leaderboard] getAllUsers result:', Object.keys(allUsers || {}).length, 'users');
+            if (!allUsers || Object.keys(allUsers).length === 0) {
+                console.log('[leaderboard] no users to sync');
+                return;
+            }
+
+            let synced = 0;
+            for (const [userId, user] of Object.entries(allUsers)) {
+                try {
+                    const leaderboardData = {
+                        userId: userId,
+                        username: user.username || 'Гость',
+                        openedLocations: user.progress?.openedLocations || 0,
+                        openedBooks: user.progress?.openedBooks || 0,
+                        tasks: user.questState?.tasks || {},
+                        updatedAt: new Date().toISOString()
+                    };
+
+                    const realm = this._firebaseRealm || window;
+                    const safeData = realm.JSON.parse(JSON.stringify(leaderboardData));
+
+                    await this.db.collection('leaderboard').doc(userId).set(safeData, { merge: true });
+                    synced++;
+                    console.log(`[leaderboard] synced user ${userId}: ${user.username || 'Гость'}`);
+                } catch (error) {
+                    console.error(`[leaderboard] sync failed for ${userId}:`, error?.message || String(error));
+                    this._dlog(`syncAllUsersToLeaderboard failed for ${userId}`, error?.message || String(error));
+                }
+            }
+            console.log(`[leaderboard] syncAllUsersToLeaderboard: synced ${synced} users`);
+        } catch (error) {
+            console.error('[leaderboard] syncAllUsersToLeaderboard error:', error?.message || String(error));
+            // Если нет прав на getAllUsers, просто игнорируем
+            this._dlog('syncAllUsersToLeaderboard: no access to getAllUsers', error?.message || String(error));
         }
     }
 
@@ -785,12 +1029,11 @@ class UserDatabase {
             const doc = await this.db.collection('users').doc(userId).get();
             
             if (!doc.exists) {
-                console.log('[userDatabase] getUser: doc not exists', { userId });
                 return null;
             }
 
             const data = doc.data();
-            const user = {
+            return {
                 id: doc.id,
                 username: data.username || 'Гость',
                 email: data.email || null,
@@ -799,16 +1042,6 @@ class UserDatabase {
                 questState: data.questState || { tasks: {}, completedQuests: [] },
                 isAnonymous: data.isAnonymous !== undefined ? data.isAnonymous : true
             };
-            console.log('[userDatabase] getUser result', {
-                userId,
-                user: {
-                    id: user.id,
-                    isAnonymous: user.isAnonymous,
-                    email: user.email || null,
-                    username: user.username
-                }
-            });
-            return user;
         } catch (error) {
             if (String(error?.message || '').toLowerCase().includes('insufficient permissions')) {
                 this._logPermissionDeniedOnce('getUser');
@@ -890,6 +1123,36 @@ class UserDatabase {
             const firestorePayload = this._toFirestoreData(payload) || payload;
             await this.db.collection('users').doc(currentUser.uid).set(firestorePayload, { merge: true });
             console.log('✅ Состояние квеста сохранено');
+            
+            // Синхронизируем в leaderboard
+            // Пытаемся получить данные пользователя для синхронизации
+            try {
+                const userDoc = await this.db.collection('users').doc(currentUser.uid).get();
+                if (userDoc.exists) {
+                    const userData = userDoc.data();
+                    // Отложенная синхронизация для сохранения состояния квеста (debounce)
+                    await this._syncToLeaderboard(currentUser.uid, {
+                        username: userData.username || currentUser.displayName || currentUser.email?.split('@')[0] || 'Гость',
+                        email: userData.email || null,
+                        createdAt: userData.createdAt || null,
+                        progress: userData.progress || { openedLocations: 0, openedBooks: 0 },
+                        questState: userData.questState || { tasks: {} }
+                    }, false); // immediate = false - debounce
+                } else {
+                    // Если документа нет, используем данные из auth
+                    // Отложенная синхронизация для сохранения состояния квеста (debounce)
+                    await this._syncToLeaderboard(currentUser.uid, {
+                        username: currentUser.displayName || currentUser.email?.split('@')[0] || 'Гость',
+                        email: null,
+                        createdAt: null,
+                        progress: { openedLocations: 0, openedBooks: 0 },
+                        questState: { tasks: {} }
+                    }, false); // immediate = false - debounce
+                }
+            } catch (syncError) {
+                // Если не можем синхронизировать, не критично
+                this._dlog('_syncToLeaderboard in saveQuestState failed', syncError?.message || String(syncError));
+            }
         } catch (error) {
             console.error('❌ Ошибка сохранения состояния квеста:', error);
             throw error;

@@ -173,10 +173,24 @@ class AdminPanel {
         `;
         refreshBtn.onclick = () => this.loadUsers();
 
+        const syncLeaderboardBtn = document.createElement('button');
+        syncLeaderboardBtn.textContent = '📊 Синхронизировать рейтинг';
+        syncLeaderboardBtn.style.cssText = `
+            padding: 12px 24px;
+            background: #9C27B0;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        `;
+        syncLeaderboardBtn.onclick = () => this.syncLeaderboard();
+
         actionsSection.appendChild(exportBtn);
         actionsSection.appendChild(importBtn);
         actionsSection.appendChild(clearBtn);
         actionsSection.appendChild(refreshBtn);
+        actionsSection.appendChild(syncLeaderboardBtn);
 
         panel.appendChild(header);
         panel.appendChild(statsSection);
@@ -501,6 +515,36 @@ class AdminPanel {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    async syncLeaderboard() {
+        if (!window.userDatabase) {
+            alert('База данных не загружена');
+            return;
+        }
+
+        const btn = event?.target;
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = '⏳ Синхронизация...';
+        }
+
+        try {
+            await window.userDatabase.init();
+            await window.userDatabase.syncAllUsersToLeaderboard();
+            alert('✅ Рейтинг синхронизирован! Все пользователи обновлены в leaderboard.');
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = '📊 Синхронизировать рейтинг';
+            }
+        } catch (error) {
+            console.error('Ошибка синхронизации рейтинга:', error);
+            alert('❌ Ошибка синхронизации: ' + (error?.message || String(error)));
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = '📊 Синхронизировать рейтинг';
+            }
+        }
     }
 }
 
