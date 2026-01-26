@@ -268,6 +268,16 @@ const mapStyles = `
             transform: none;
         }
 
+        .map-button {
+            position: fixed !important;
+            bottom: 20px !important;
+            left: 20px !important;
+            top: auto !important;
+            z-index: 2000 !important;
+            /* Убеждаемся, что кнопка не уходит за пределы экрана */
+            max-height: calc(100vh - 40px);
+        }
+
         .map-button, .quest-button {
             width: 64px;
             height: 64px;
