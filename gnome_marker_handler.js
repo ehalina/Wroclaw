@@ -123,28 +123,31 @@ export function setupGnomeGeoMarker({ markerId, gnomeId, imageSrc, title, descri
 
         // Специальная обработка для гнома Паца-Ваца
         if (effectiveGnomeId === 'patsa_vatsa') {
-            // Проверяем, находимся ли мы уже на странице minsk01.html
+            // Проверяем, находимся ли мы уже на странице tumski14.html
             const currentPage = window.location.pathname.split('/').pop() || '';
-            if (currentPage === 'minsk01.html') {
-                // Если уже на странице minsk01.html, открываем попап
+            const currentHash = window.location.hash.replace('#', '') || '';
+            const isOnTumski14 = currentPage === 'tumski14.html' || currentHash === 'tumski14.html';
+            
+            if (isOnTumski14) {
+                // Если уже на странице tumski14.html, открываем попап
                 // Продолжаем выполнение функции для создания попапа
             } else {
-                // Если не на странице minsk01.html, перенаправляем на неё
+                // Если не на странице tumski14.html, перенаправляем на неё с параметром для открытия попапа
                 try {
                     // Пытаемся открыть через SPA менеджер (если доступен)
                     if (window.parent && window.parent !== window && window.parent.spaManager) {
-                        window.parent.spaManager.loadPage('minsk01.html');
+                        window.parent.spaManager.loadPage('tumski14.html#patsa_vatsa');
                     } else if (window.spaManager) {
-                        window.spaManager.loadPage('minsk01.html');
+                        window.spaManager.loadPage('tumski14.html#patsa_vatsa');
                     } else {
                         // Fallback: обычная навигация
-                        window.location.href = 'minsk01.html';
+                        window.location.href = 'tumski14.html#patsa_vatsa';
                     }
                 } catch (err) {
-                    console.error('Ошибка при открытии страницы minsk01.html:', err);
+                    console.error('Ошибка при открытии страницы tumski14.html:', err);
                     // Fallback: обычная навигация
                     try {
-                        window.location.href = 'minsk01.html';
+                        window.location.href = 'tumski14.html#patsa_vatsa';
                     } catch (_) {}
                 }
                 return;

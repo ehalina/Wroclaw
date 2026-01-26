@@ -262,6 +262,37 @@ export async function initPageCommon() {
                             });
                         } catch (_) {}
                     }
+                    
+                    // Проверяем hash для автоматического открытия попапа гнома
+                    try {
+                        const hash = window.location.hash.replace('#', '') || '';
+                        if (hash) {
+                            // Ищем гнома по ID из hash
+                            const targetGnome = gnomeMarks.find(el => {
+                                const gnomeId = el.getAttribute('data-gnome-id') || '';
+                                return gnomeId === hash || el.id === hash;
+                            });
+                            
+                            if (targetGnome) {
+                                // Небольшая задержка для полной инициализации
+                                setTimeout(() => {
+                                    try {
+                                        const markerId = targetGnome.id;
+                                        const gnomeId = targetGnome.getAttribute('data-gnome-id') || markerId || '';
+                                        // Имитируем клик для открытия попапа
+                                        if (markerId && gnomeId) {
+                                            const marker = document.getElementById(markerId);
+                                            if (marker) {
+                                                marker.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+                                            }
+                                        }
+                                    } catch (err) {
+                                        console.error('Ошибка при автоматическом открытии попапа гнома:', err);
+                                    }
+                                }, 300);
+                            }
+                        }
+                    } catch (_) {}
                 }
             }
         } catch (_) {}
