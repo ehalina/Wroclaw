@@ -1121,6 +1121,21 @@
                     
                     // Переключаем музыку в зависимости от страницы
                     this.switchMusicForPage(pageName);
+                    
+                    // Отправляем сообщение в iframe для повторной инициализации
+                    const iframe = targetPage.querySelector('iframe');
+                    if (iframe && iframe.contentWindow) {
+                        setTimeout(() => {
+                            try {
+                                iframe.contentWindow.postMessage({
+                                    type: 'PAGE_SHOWN',
+                                    pageName: pageName
+                                }, '*');
+                            } catch (err) {
+                                console.error('❌ [SPA] Ошибка при отправке PAGE_SHOWN:', err);
+                            }
+                        }, 100);
+                    }
                 } else {
     // console.log('🎵 Страница не найдена:', pageName);
     // console.log('🎵 Доступные страницы:', Array.from(this.pages.keys()));
@@ -1189,11 +1204,17 @@
     // console.log('🎵 navigateToPage вызван для:', pageName);
     // console.log('🎵 Загруженные страницы:', Array.from(this.pages.keys()));
                 
+                // Извлекаем actualPageName из pageName (без hash) для проверки
+                let actualPageName = pageName;
+                if (pageName.includes('#')) {
+                    actualPageName = pageName.split('#')[0];
+                }
+                
                 // Воспроизводим звук шага при навигации
                 this.playStepSound();
                 
                 // Загружаем страницу, если она ещё не загружена
-                if (!this.pages.has(pageName)) {
+                if (!this.pages.has(actualPageName)) {
     // console.log('🎵 Страница не загружена, загружаем:', pageName);
                     await this.loadPage(pageName);
                 } else {

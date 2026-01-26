@@ -68,6 +68,47 @@ export async function initPageCommon() {
                     }
                 }, 500);
             }
+            
+            // Обработка сообщения о показе страницы - повторная инициализация стрелок
+            if (event.data && event.data.type === 'PAGE_SHOWN') {
+                console.log('🟡 [tumski_page_common] Получен PAGE_SHOWN, повторная инициализация стрелок для:', event.data.pageName);
+                // Повторно инициализируем стрелки через небольшую задержку
+                setTimeout(() => {
+                    try {
+                        // Проверяем, что мы на правильной странице
+                        const currentPage = window.location.pathname.split('/').pop() || '';
+                        const expectedPage = event.data.pageName || '';
+                        console.log('🟡 [tumski_page_common] Текущая страница:', currentPage, 'Ожидаемая:', expectedPage);
+                        
+                        // Получаем stepSound если он есть
+                        let stepSound = null;
+                        try {
+                            const stepSoundEl = document.getElementById('stepSound');
+                            if (stepSoundEl) {
+                                stepSound = stepSoundEl;
+                            }
+                        } catch (_) {}
+                        
+                        // Проверяем наличие стрелок на странице
+                        const arrows = document.querySelectorAll('[data-next-page], [data-prev-page]');
+                        console.log('🟡 [tumski_page_common] Найдено стрелок на странице:', arrows.length);
+                        
+                        // Проверяем наличие гномов на странице
+                        const gnomes = document.querySelectorAll('.map-mark[data-gnome-id]');
+                        console.log('🟡 [tumski_page_common] Найдено гномов на странице:', gnomes.length);
+                        gnomes.forEach(gnome => {
+                            const gnomeId = gnome.getAttribute('data-gnome-id');
+                            console.log('🟡 [tumski_page_common] Гном на странице:', gnomeId, 'ID:', gnome.id);
+                        });
+                        
+                        // Настраиваем стрелки заново (функция уже доступна в этом модуле)
+                        setupAllArrows(stepSound);
+                        console.log('✅ [tumski_page_common] Стрелки повторно инициализированы');
+                    } catch (err) {
+                        console.error('❌ [tumski_page_common] Ошибка при повторной инициализации стрелок:', err);
+                    }
+                }, 200);
+            }
         });
 
 
@@ -476,7 +517,7 @@ function ensureQuestGlowStyles() {
     document.head.appendChild(s);
 }
 
-function setupAllArrows(stepSound) {
+export function setupAllArrows(stepSound) {
     // console.log('🎵 setupAllArrows: ищем элементы стрелок...');
     try {
         const cursorRight = document.querySelector('.custom-cursor');
