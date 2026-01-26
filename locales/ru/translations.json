@@ -647,7 +647,9 @@
       "quests": "Пройдено квестов",
       "gnomes": "Найдено гномов",
       "books": "Прочитано книг",
-      "not_available": "—"
+      "not_available": "—",
+      "rating": "Общий рейтинг",
+      "save_result": "Сохранить результат"
     },
     "actions": {
       "close": "Закрыть",
@@ -661,6 +663,62 @@
     "errors": {
       "profile_not_ready": "Профиль не готов. Попробуйте через пару секунд.",
       "open_failed": "Ошибка открытия меню аккаунта"
+    },
+    "guest_rating": {
+      "title": "Сохранить рейтинг Гостя",
+      "warning": "⚠️ Внимание: Прогресс может не сохраниться на вашем устройстве при очистке данных браузера.",
+      "info_message": "Прогресс может не сохраниться на вашем устройстве при очистке данных браузера. Для надежного сохранения используйте e-mail или аккаунт Google.",
+      "name_label": "Введите ваше имя (обязательно):",
+      "name_placeholder": "Ваше имя",
+      "name_required": "Имя обязательно для сохранения рейтинга!",
+      "save_success": "Рейтинг сохранен!",
+      "save_error": "Ошибка сохранения:",
+      "saving": "Сохранение...",
+      "save": "Сохранить",
+      "cancel": "Отмена"
+    },
+    "edit_username": {
+      "title": "Изменить имя",
+      "label": "Имя пользователя:",
+      "placeholder": "Введите имя",
+      "empty_error": "Имя не может быть пустым!",
+      "update_error": "Не удалось обновить имя:",
+      "saving": "Сохранение...",
+      "save": "Сохранить",
+      "cancel": "Отмена"
+    },
+    "link_account": {
+      "email_placeholder": "Email",
+      "password_placeholder": "Пароль (минимум 6 символов)",
+      "username_placeholder": "Имя пользователя",
+      "link_button": "Привязать аккаунт",
+      "signin_button": "Войти",
+      "have_account_button": "У меня уже есть аккаунт",
+      "email_already_registered": "Этот email уже зарегистрирован. Нажмите «У меня уже есть аккаунт» или используйте другой email.",
+      "email_password_required": "Введите email и пароль",
+      "all_fields_required": "Заполните все поля",
+      "error": "Ошибка:"
+    },
+    "rating_list": {
+      "title": "Общий рейтинг",
+      "loading": "Загрузка рейтинга...",
+      "load_error": "Ошибка загрузки рейтинга",
+      "details_format": "Л:{locations} К:{tasks} Б:{books}",
+      "show_full": "Показать полный рейтинг"
+    },
+    "progress_choice": {
+      "title": "Какой прогресс сохранить?",
+      "guest_title": "Гость",
+      "guest_locations": "Открыто локаций:",
+      "guest_quests": "Пройдено квестов:",
+      "guest_books": "Прочитано книг:",
+      "save_guest": "Сохранить прогресс Гостя",
+      "account_title": "Аккаунт",
+      "account_locations": "Открыто локаций:",
+      "account_quests": "Пройдено квестов:",
+      "account_books": "Прочитано книг:",
+      "save_account": "Сохранить прогресс аккаунта",
+      "save_error": "Ошибка сохранения:"
     }
   }
 }

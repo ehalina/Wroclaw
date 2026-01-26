@@ -662,6 +662,62 @@
     "errors": {
       "profile_not_ready": "Профіль не гатовы. Паспрабуйце яшчэ раз праз пару секунд.",
       "open_failed": "Памылка адкрыцця меню акаўнта"
+    },
+    "guest_rating": {
+      "title": "Захаваць рэйтынг Госця",
+      "warning": "⚠️ Увага: Прагрэс можа не захавацца на вашай прыладзе пры ачыстцы даных браўзера.",
+      "info_message": "Прагрэс можа не захавацца на вашай прыладзе пры ачыстцы даных браўзера. Для надзейнага захавання выкарыстоўвайце e-mail або акаўнт Google.",
+      "name_label": "Увядзіце ваша імя (абавязкова):",
+      "name_placeholder": "Ваша імя",
+      "name_required": "Імя абавязкова для захавання рэйтынгу!",
+      "save_success": "Рэйтынг захаваны!",
+      "save_error": "Памылка захавання:",
+      "saving": "Захаванне...",
+      "save": "Захаваць",
+      "cancel": "Адмена"
+    },
+    "edit_username": {
+      "title": "Змяніць імя",
+      "label": "Імя карыстальніка:",
+      "placeholder": "Увядзіце імя",
+      "empty_error": "Імя не можа быць пустым!",
+      "update_error": "Не ўдалося абнавіць імя:",
+      "saving": "Захаванне...",
+      "save": "Захаваць",
+      "cancel": "Адмена"
+    },
+    "link_account": {
+      "email_placeholder": "Email",
+      "password_placeholder": "Пароль (мінімум 6 сімвалаў)",
+      "username_placeholder": "Імя карыстальніка",
+      "link_button": "Прывязаць акаўнт",
+      "signin_button": "Увайсці",
+      "have_account_button": "У мяне ўжо ёсць акаўнт",
+      "email_already_registered": "Гэты email ужо зарэгістраваны. Націсніце «У мяне ўжо ёсць акаўнт» або выкарыстоўвайце іншы email.",
+      "email_password_required": "Увядзіце email і пароль",
+      "all_fields_required": "Запоўніце ўсе палі",
+      "error": "Памылка:"
+    },
+    "rating_list": {
+      "title": "Агульны рэйтынг",
+      "loading": "Загрузка рэйтынгу...",
+      "load_error": "Памылка загрузкі рэйтынгу",
+      "details_format": "Л:{locations} К:{tasks} Б:{books}",
+      "show_full": "Паказаць поўны рэйтынг"
+    },
+    "progress_choice": {
+      "title": "Які прагрэс захаваць?",
+      "guest_title": "Госць",
+      "guest_locations": "Адкрыта лакацый:",
+      "guest_quests": "Пройдзена квэстаў:",
+      "guest_books": "Прачытана кніг:",
+      "save_guest": "Захаваць прагрэс Госця",
+      "account_title": "Акаўнт",
+      "account_locations": "Адкрыта лакацый:",
+      "account_quests": "Пройдзена квэстаў:",
+      "account_books": "Прачытана кніг:",
+      "save_account": "Захаваць прагрэс акаўнта",
+      "save_error": "Памылка захавання:"
     }
   },
   "blue_goat": {

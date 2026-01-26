@@ -648,7 +648,9 @@
       "quests": "Abgeschlossene Quests",
       "gnomes": "Gefundene Zwerge",
       "books": "Gelesene Bücher",
-      "not_available": "—"
+      "not_available": "—",
+      "rating": "Gesamtrangliste",
+      "save_result": "Ergebnis speichern"
     },
     "actions": {
       "close": "Schließen",
@@ -662,6 +664,62 @@
     "errors": {
       "profile_not_ready": "Profil ist nicht bereit. Versuchen Sie es in ein paar Sekunden erneut.",
       "open_failed": "Konto-Menü konnte nicht geöffnet werden"
+    },
+    "guest_rating": {
+      "title": "Gast-Ranking speichern",
+      "warning": "⚠️ Achtung: Der Fortschritt wird möglicherweise nicht auf Ihrem Gerät gespeichert, wenn Sie Browser-Daten löschen.",
+      "info_message": "Der Fortschritt wird möglicherweise nicht auf Ihrem Gerät gespeichert, wenn Sie Browser-Daten löschen. Für zuverlässiges Speichern verwenden Sie E-Mail oder Google-Konto.",
+      "name_label": "Geben Sie Ihren Namen ein (erforderlich):",
+      "name_placeholder": "Ihr Name",
+      "name_required": "Name ist erforderlich, um das Ranking zu speichern!",
+      "save_success": "Ranking gespeichert!",
+      "save_error": "Speicherfehler:",
+      "saving": "Speichern...",
+      "save": "Speichern",
+      "cancel": "Abbrechen"
+    },
+    "edit_username": {
+      "title": "Namen ändern",
+      "label": "Benutzername:",
+      "placeholder": "Namen eingeben",
+      "empty_error": "Name darf nicht leer sein!",
+      "update_error": "Name konnte nicht aktualisiert werden:",
+      "saving": "Speichern...",
+      "save": "Speichern",
+      "cancel": "Abbrechen"
+    },
+    "link_account": {
+      "email_placeholder": "E-Mail",
+      "password_placeholder": "Passwort (mindestens 6 Zeichen)",
+      "username_placeholder": "Benutzername",
+      "link_button": "Konto verknüpfen",
+      "signin_button": "Anmelden",
+      "have_account_button": "Ich habe bereits ein Konto",
+      "email_already_registered": "Diese E-Mail ist bereits registriert. Klicken Sie auf «Ich habe bereits ein Konto» oder verwenden Sie eine andere E-Mail.",
+      "email_password_required": "E-Mail und Passwort eingeben",
+      "all_fields_required": "Alle Felder ausfüllen",
+      "error": "Fehler:"
+    },
+    "rating_list": {
+      "title": "Gesamtrangliste",
+      "loading": "Rangliste wird geladen...",
+      "load_error": "Fehler beim Laden der Rangliste",
+      "details_format": "L:{locations} Q:{tasks} B:{books}",
+      "show_full": "Vollständige Rangliste anzeigen"
+    },
+    "progress_choice": {
+      "title": "Welchen Fortschritt speichern?",
+      "guest_title": "Gast",
+      "guest_locations": "Geöffnete Standorte:",
+      "guest_quests": "Abgeschlossene Quests:",
+      "guest_books": "Gelesene Bücher:",
+      "save_guest": "Gast-Fortschritt speichern",
+      "account_title": "Konto",
+      "account_locations": "Geöffnete Standorte:",
+      "account_quests": "Abgeschlossene Quests:",
+      "account_books": "Gelesene Bücher:",
+      "save_account": "Konto-Fortschritt speichern",
+      "save_error": "Speicherfehler:"
     }
   }
 } 

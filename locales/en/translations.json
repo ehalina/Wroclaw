@@ -648,7 +648,9 @@
       "quests": "Quests completed",
       "gnomes": "Gnomes found",
       "books": "Books read",
-      "not_available": "—"
+      "not_available": "—",
+      "rating": "Overall rating",
+      "save_result": "Save result"
     },
     "actions": {
       "close": "Close",
@@ -662,6 +664,62 @@
     "errors": {
       "profile_not_ready": "Profile is not ready. Try again in a couple of seconds.",
       "open_failed": "Failed to open account menu"
+    },
+    "guest_rating": {
+      "title": "Save Guest Rating",
+      "warning": "⚠️ Warning: Progress may not be saved on your device when clearing browser data.",
+      "info_message": "Progress may not be saved on your device when clearing browser data. For reliable saving, use e-mail or Google account.",
+      "name_label": "Enter your name (required):",
+      "name_placeholder": "Your name",
+      "name_required": "Name is required to save rating!",
+      "save_success": "Rating saved!",
+      "save_error": "Save error:",
+      "saving": "Saving...",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "edit_username": {
+      "title": "Change name",
+      "label": "Username:",
+      "placeholder": "Enter name",
+      "empty_error": "Name cannot be empty!",
+      "update_error": "Failed to update name:",
+      "saving": "Saving...",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "link_account": {
+      "email_placeholder": "Email",
+      "password_placeholder": "Password (minimum 6 characters)",
+      "username_placeholder": "Username",
+      "link_button": "Link account",
+      "signin_button": "Sign in",
+      "have_account_button": "I already have an account",
+      "email_already_registered": "This email is already registered. Click «I already have an account» or use another email.",
+      "email_password_required": "Enter email and password",
+      "all_fields_required": "Fill in all fields",
+      "error": "Error:"
+    },
+    "rating_list": {
+      "title": "Overall rating",
+      "loading": "Loading rating...",
+      "load_error": "Error loading rating",
+      "details_format": "L:{locations} Q:{tasks} B:{books}",
+      "show_full": "Show full rating"
+    },
+    "progress_choice": {
+      "title": "Which progress to save?",
+      "guest_title": "Guest",
+      "guest_locations": "Locations opened:",
+      "guest_quests": "Quests completed:",
+      "guest_books": "Books read:",
+      "save_guest": "Save Guest progress",
+      "account_title": "Account",
+      "account_locations": "Locations opened:",
+      "account_quests": "Quests completed:",
+      "account_books": "Books read:",
+      "save_account": "Save account progress",
+      "save_error": "Save error:"
     }
   }
-} 
+}

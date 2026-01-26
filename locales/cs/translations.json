@@ -648,7 +648,9 @@
       "quests": "Dokončené questy",
       "gnomes": "Nalezení trpaslíci",
       "books": "Přečtené knihy",
-      "not_available": "—"
+      "not_available": "—",
+      "rating": "Celkové hodnocení",
+      "save_result": "Uložit výsledek"
     },
     "actions": {
       "close": "Zavřít",
@@ -662,6 +664,62 @@
     "errors": {
       "profile_not_ready": "Profil není připraven. Zkuste to za pár sekund znovu.",
       "open_failed": "Nepodařilo se otevřít menu účtu"
+    },
+    "guest_rating": {
+      "title": "Uložit hodnocení hosta",
+      "warning": "⚠️ Varování: Pokrok nemusí být uložen na vašem zařízení při vymazání dat prohlížeče.",
+      "info_message": "Pokrok nemusí být uložen na vašem zařízení při vymazání dat prohlížeče. Pro spolehlivé uložení použijte e-mail nebo účet Google.",
+      "name_label": "Zadejte své jméno (povinné):",
+      "name_placeholder": "Vaše jméno",
+      "name_required": "Jméno je povinné pro uložení hodnocení!",
+      "save_success": "Hodnocení uloženo!",
+      "save_error": "Chyba uložení:",
+      "saving": "Ukládání...",
+      "save": "Uložit",
+      "cancel": "Zrušit"
+    },
+    "edit_username": {
+      "title": "Změnit jméno",
+      "label": "Uživatelské jméno:",
+      "placeholder": "Zadejte jméno",
+      "empty_error": "Jméno nemůže být prázdné!",
+      "update_error": "Nepodařilo se aktualizovat jméno:",
+      "saving": "Ukládání...",
+      "save": "Uložit",
+      "cancel": "Zrušit"
+    },
+    "link_account": {
+      "email_placeholder": "Email",
+      "password_placeholder": "Heslo (minimálně 6 znaků)",
+      "username_placeholder": "Uživatelské jméno",
+      "link_button": "Propojit účet",
+      "signin_button": "Přihlásit se",
+      "have_account_button": "Již mám účet",
+      "email_already_registered": "Tento email je již registrován. Klikněte na «Již mám účet» nebo použijte jiný email.",
+      "email_password_required": "Zadejte email a heslo",
+      "all_fields_required": "Vyplňte všechna pole",
+      "error": "Chyba:"
+    },
+    "rating_list": {
+      "title": "Celkové hodnocení",
+      "loading": "Načítání hodnocení...",
+      "load_error": "Chyba načítání hodnocení",
+      "details_format": "L:{locations} K:{tasks} B:{books}",
+      "show_full": "Zobrazit celkové hodnocení"
+    },
+    "progress_choice": {
+      "title": "Který pokrok uložit?",
+      "guest_title": "Host",
+      "guest_locations": "Otevřené lokace:",
+      "guest_quests": "Dokončené questy:",
+      "guest_books": "Přečtené knihy:",
+      "save_guest": "Uložit pokrok hosta",
+      "account_title": "Účet",
+      "account_locations": "Otevřené lokace:",
+      "account_quests": "Dokončené questy:",
+      "account_books": "Přečtené knihy:",
+      "save_account": "Uložit pokrok účtu",
+      "save_error": "Chyba uložení:"
     }
   }
 } 

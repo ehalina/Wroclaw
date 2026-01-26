@@ -277,6 +277,7 @@ class AdminPanel {
                 <tr style="background: #333;">
                     <th style="padding: 12px; text-align: left; border-bottom: 2px solid #444;">Имя</th>
                     <th style="padding: 12px; text-align: left; border-bottom: 2px solid #444;">ID</th>
+                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #444;">IP-адрес</th>
                     <th style="padding: 12px; text-align: left; border-bottom: 2px solid #444;">Создан</th>
                     <th style="padding: 12px; text-align: left; border-bottom: 2px solid #444;">Прогресс</th>
                     <th style="padding: 12px; text-align: left; border-bottom: 2px solid #444;">Действия</th>
@@ -296,6 +297,7 @@ class AdminPanel {
                 row.innerHTML = `
                     <td style="padding: 12px;">${this.escapeHtml(user.username)}</td>
                     <td style="padding: 12px; font-family: monospace; font-size: 12px; color: #aaa;">${userId.substring(0, 20)}...</td>
+                    <td style="padding: 12px; font-size: 12px; color: #888; font-family: monospace;">${user.ipAddress || '—'}</td>
                     <td style="padding: 12px; font-size: 12px; color: #aaa;">${new Date(user.createdAt).toLocaleDateString('ru-RU')}</td>
                     <td style="padding: 12px;">
                         <div style="display: flex; align-items: center; gap: 10px;">

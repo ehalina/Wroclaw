@@ -295,6 +295,30 @@ class UserAccountManager {
                             }
                         }
                     } else {
+                        // Проверяем, вернулись ли мы с OAuth redirect
+                        const oauthInProgress = 
+                            sessionStorage.getItem('__oauth_in_progress') === '1' ||
+                            localStorage.getItem('__oauth_in_progress') === '1';
+                        
+                        // Если OAuth был в процессе и теперь пользователь не анонимный - показываем диалог выбора прогресса
+                        if (oauthInProgress && !firebaseUser.isAnonymous && this.currentUser.isAnonymous) {
+                            // Очищаем флаг
+                            try { sessionStorage.removeItem('__oauth_in_progress'); } catch (_) {}
+                            try { localStorage.removeItem('__oauth_in_progress'); } catch (_) {}
+                            
+                            // Показываем диалог выбора прогресса после небольшой задержки
+                            setTimeout(async () => {
+                                try {
+                                    const accountUser = await this.getCurrentUser();
+                                    if (accountUser) {
+                                        await this.showProgressChoiceDialog(accountUser);
+                                    }
+                                } catch (error) {
+                                    console.warn('Ошибка показа диалога выбора прогресса после OAuth (не критично):', error);
+                                }
+                            }, 500);
+                        }
+                        
                         // КРИТИЧНО: Если Auth пользователь НЕ гость, но Firestore еще показывает гостя - принудительно обновляем
                         // Это важно для случая, когда пользователь входит через Google и аккаунт уже существует
                         if (!firebaseUser.isAnonymous && this.currentUser.isAnonymous) {
@@ -610,23 +634,27 @@ class UserAccountManager {
             min-height: ${minHeight};
             max-width: ${maxWidth};
             max-height: ${maxHeight};
-            margin-top: ${isMobile ? '20px' : isTablet ? '40px' : '60px'};
             background: url('media/book/quest2.jpg') center no-repeat;
             background-size: contain;
             padding: ${padding};
             box-shadow: 0 4px 32px rgba(0,0,0,0.2);
             text-align: center;
-            overflow: auto;
+            overflow: hidden;
         `;
 
         const body = document.createElement('div');
         body.style.cssText = `
-            width: 80%;
-            max-width: 80%;
-            max-height: ${isMobile ? 'calc(85vh - 100px)' : isTablet ? 'calc(80vh - 100px)' : 'calc(80vh - 120px)'};
+            width: 70%;
+            max-width: 70%;
+            max-height: calc(100% - ${padding} * 2);
             overflow-y: auto;
             padding: ${isMobile ? '4px' : '6px'} 0;
             line-height: 1.2;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         `;
 
         const closeBtnTop = document.createElement('button');
@@ -673,7 +701,7 @@ class UserAccountManager {
                 justify-content: center;
                 gap: 10px;
                 margin-bottom: 18px;
-                margin-top: calc(${minHeight} / 6);
+                margin-top: calc(${minHeight} / 12);
             `;
 
             const headerName = document.createElement('div');
@@ -885,20 +913,20 @@ class UserAccountManager {
             ratingRow.style.cssText = 'display:flex; justify-content:space-between; align-items:center; gap:12px; padding:4px 0; margin-top: 8px; border-top: 1px solid rgba(139,69,19,0.25);';
             
             const ratingLabel = document.createElement('div');
-            ratingLabel.textContent = 'Общий рейтинг';
+            ratingLabel.textContent = this._t('account.stats.rating', 'Общий рейтинг');
             ratingLabel.style.cssText = `
                 font-weight: bold;
                 cursor: pointer;
             `;
             ratingLabel.onclick = () => this.showRatingList();
-            ratingLabel.title = 'Показать полный рейтинг';
+            ratingLabel.title = this._t('account.rating_list.show_full', 'Показать полный рейтинг');
             
             const ratingValue = document.createElement('div');
             ratingValue.textContent = '...';
             ratingValue.style.cssText = 'font-weight: bold;';
             
             const ratingButton = document.createElement('button');
-            ratingButton.title = 'Показать полный рейтинг';
+            ratingButton.title = this._t('account.rating_list.show_full', 'Показать полный рейтинг');
             ratingButton.style.cssText = `
                 padding: 6px 10px;
                 background: rgba(139, 69, 19, 0.2);
@@ -912,7 +940,7 @@ class UserAccountManager {
             
             const ratingIcon = document.createElement('img');
             ratingIcon.src = 'media/r.jpg';
-            ratingIcon.alt = 'Показать полный рейтинг';
+            ratingIcon.alt = this._t('account.rating_list.show_full', 'Показать полный рейтинг');
             ratingIcon.style.cssText = `
                 width: ${isMobile ? '20px' : isTablet ? '22px' : '24px'};
                 height: ${isMobile ? '20px' : isTablet ? '22px' : '24px'};
@@ -987,40 +1015,44 @@ class UserAccountManager {
                     const input = document.createElement('input');
                     input.type = 'text';
                     input.value = currentText === 'Гость' ? '' : currentText;
-                    input.placeholder = 'Введите имя';
+                    input.placeholder = this._t('account.edit_username.placeholder', 'Введите имя');
                     input.style.cssText = headerName.style.cssText + `
                         border: 2px solid #8B4513;
                         border-radius: 6px;
-                        padding: 4px 8px;
+                        padding: ${isMobile ? '4px 6px' : '4px 8px'};
                         background: rgba(255, 255, 255, 0.9);
                         outline: none;
-                        width: 200px;
+                        width: ${isMobile ? '140px' : '200px'};
+                        max-width: ${isMobile ? '140px' : '200px'};
+                        font-size: ${isMobile ? '13px' : fontSizeTitle};
+                        box-sizing: border-box;
                     `;
                     
                     // Создаем кнопку "Сохранить"
                     const saveBtn = document.createElement('button');
-                    saveBtn.textContent = 'Сохранить';
+                    saveBtn.textContent = this._t('account.guest_rating.save', 'Сохранить');
                     saveBtn.style.cssText = `
-                        padding: 6px 12px;
+                        padding: ${isMobile ? '4px 8px' : '6px 12px'};
                         background: #8B4513;
                         color: white;
                         border: none;
                         border-radius: 6px;
                         cursor: pointer;
-                        font-size: 14px;
-                        margin-left: 8px;
+                        font-size: ${isMobile ? '12px' : '14px'};
+                        margin-left: ${isMobile ? '4px' : '8px'};
+                        white-space: nowrap;
                     `;
                     
                     const saveGuestData = async () => {
                         const username = input.value.trim();
                         if (!username) {
-                            alert('Имя обязательно для сохранения рейтинга!');
+                            alert(this._t('account.guest_rating.name_required', 'Имя обязательно для сохранения рейтинга!'));
                             input.focus();
                             return;
                         }
                         
                         saveBtn.disabled = true;
-                        saveBtn.textContent = 'Сохранение...';
+                        saveBtn.textContent = this._t('account.guest_rating.saving', 'Сохранение...');
                         
                         try {
                             // Получаем текущего пользователя
@@ -1087,7 +1119,7 @@ class UserAccountManager {
                             headerRow.removeChild(saveBtn);
                             
                             // Показываем сообщение в стиле книги
-                            this.showInfoDialog('Прогресс может не сохраниться на вашем устройстве при очистке данных браузера. Для надежного сохранения используйте e-mail, аккаунт Google или Facebook.');
+                            this.showInfoDialog(this._t('account.guest_rating.info_message', 'Прогресс может не сохраниться на вашем устройстве при очистке данных браузера. Для надежного сохранения используйте e-mail или аккаунт Google.'));
                             
                             // Перерисовываем страницу для обновления данных с обновленным пользователем
                             const finalUser = updatedUser || this.currentUser || user;
@@ -1100,9 +1132,9 @@ class UserAccountManager {
                             }
                         } catch (error) {
                             console.error('Ошибка сохранения рейтинга гостя:', error);
-                            alert('Ошибка сохранения: ' + (error?.message || String(error)));
+                            alert(this._t('account.guest_rating.save_error', 'Ошибка сохранения:') + ' ' + (error?.message || String(error)));
                             saveBtn.disabled = false;
-                            saveBtn.textContent = 'Сохранить';
+                            saveBtn.textContent = this._t('account.guest_rating.save', 'Сохранить');
                             input.focus();
                         }
                     };
@@ -1137,7 +1169,14 @@ class UserAccountManager {
                 btnGoogle.onclick = async () => {
                     try {
                         if (window.userDatabase && typeof window.userDatabase.linkAccountWithGoogle === 'function') {
-                            await window.userDatabase.linkAccountWithGoogle();
+                            const result = await window.userDatabase.linkAccountWithGoogle();
+                            
+                            // Если result === null, значит произошел redirect, страница перезагрузится
+                            // Не нужно закрывать overlay или переоткрывать меню
+                            if (result === null) {
+                                return; // Redirect произойдет, страница перезагрузится
+                            }
+                            
                             overlay.remove();
                             
                             // Ждем немного для синхронизации данных
@@ -1167,43 +1206,9 @@ class UserAccountManager {
                     }
                 };
 
-                const btnFacebook = mkBtn(this._t('account.actions.save_facebook', 'Facebook'), '#3b5998', 'media/facebook.jpg');
-                btnFacebook.onclick = async () => {
-                    try {
-                        if (window.userDatabase && typeof window.userDatabase.linkAccountWithFacebook === 'function') {
-                            await window.userDatabase.linkAccountWithFacebook();
-                            overlay.remove();
-                            
-                            // Ждем немного для синхронизации данных
-                            await new Promise(resolve => setTimeout(resolve, 1000));
-                            
-                            // Получаем данные пользователя после входа
-                            const authUser = window.userDatabase?.getCurrentAuthUser?.();
-                            if (authUser && !authUser.isAnonymous) {
-                                try {
-                                    const accountUser = await this.getCurrentUser();
-                                    if (accountUser) {
-                                        await this.showProgressChoiceDialog(accountUser);
-                                    }
-                                } catch (error) {
-                                    console.warn('Ошибка получения данных пользователя после OAuth (не критично):', error);
-                                    // Продолжаем работу даже если не удалось получить данные
-                                }
-                            }
-                            
-                            this.showAccountMenu();
-                        } else {
-                            alert('Facebook auth не настроен');
-                        }
-                    } catch (e) {
-                        alert(e?.message || String(e));
-                    }
-                };
-
                 buttonsContainer.appendChild(btnGuest);
                 buttonsContainer.appendChild(btnEmail);
                 buttonsContainer.appendChild(btnGoogle);
-                buttonsContainer.appendChild(btnFacebook);
             } else {
                 const signOutBtn = document.createElement('button');
                 signOutBtn.textContent = this._t('account.actions.logout', 'Выйти');
@@ -1260,7 +1265,7 @@ class UserAccountManager {
             // Заголовок "Сохранить результат" (только для гостей) - после блока рейтинга
             if (isGuest) {
                 const saveTitle = document.createElement('div');
-                saveTitle.textContent = 'Сохранить результат';
+                saveTitle.textContent = this._t('account.stats.save_result', 'Сохранить результат');
                 saveTitle.style.cssText = `
                     margin-top: 12px;
                     margin-bottom: 8px;
@@ -1383,7 +1388,7 @@ class UserAccountManager {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
             width: auto;
             height: 100%;
             max-width: 100%;
@@ -1399,22 +1404,25 @@ class UserAccountManager {
             padding: ${padding};
             box-shadow: 0 4px 32px rgba(0,0,0,0.2);
             text-align: center;
-            overflow: auto;
+            overflow: hidden;
         `;
         
         // Контейнер для содержимого с ограничением ширины
         const contentContainer = document.createElement('div');
         contentContainer.style.cssText = `
-            width: 100%;
-            max-width: 400px;
+            width: ${isMobile ? '60%' : '70%'};
+            max-width: ${isMobile ? '220px' : '400px'};
+            max-height: calc(100% - ${padding} * 2);
             display: flex;
             flex-direction: column;
-            align-items: stretch;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
         `;
 
         const closeBtn = document.createElement('button');
         closeBtn.textContent = '✕';
-        closeBtn.title = 'Закрыть';
+        closeBtn.title = this._t('account.actions.close', 'Закрыть');
         closeBtn.style.cssText = `
             position: absolute;
             top: 12px;
@@ -1431,17 +1439,17 @@ class UserAccountManager {
         closeBtn.onclick = () => overlay.remove();
 
         const title = document.createElement('div');
-        title.textContent = 'Сохранить рейтинг Гостя';
+        title.textContent = this._t('account.guest_rating.title', 'Сохранить рейтинг Гостя');
         title.style.cssText = `
             font-size: ${isMobile ? '20px' : isTablet ? '22px' : '24px'};
             font-weight: bold;
             color: #654321;
             margin-bottom: 20px;
-            margin-top: calc(${minHeight} / 6);
+            text-align: center;
         `;
 
         const warning = document.createElement('div');
-        warning.textContent = '⚠️ Внимание: Прогресс может не сохраниться на вашем устройстве при очистке данных браузера.';
+        warning.textContent = this._t('account.guest_rating.warning', '⚠️ Внимание: Прогресс может не сохраниться на вашем устройстве при очистке данных браузера.');
         warning.style.cssText = `
             font-size: 14px;
             color: #8B4513;
@@ -1453,7 +1461,7 @@ class UserAccountManager {
         `;
 
         const usernameLabel = document.createElement('label');
-        usernameLabel.textContent = 'Введите ваше имя (обязательно):';
+        usernameLabel.textContent = this._t('account.guest_rating.name_label', 'Введите ваше имя (обязательно):');
         usernameLabel.style.cssText = `
             display: block;
             font-size: 16px;
@@ -1464,14 +1472,15 @@ class UserAccountManager {
 
         const usernameInput = document.createElement('input');
         usernameInput.type = 'text';
-        usernameInput.placeholder = 'Ваше имя';
+        usernameInput.placeholder = this._t('account.guest_rating.name_placeholder', 'Ваше имя');
         usernameInput.style.cssText = `
             width: 100%;
-            padding: 10px;
+            max-width: ${isMobile ? '180px' : '100%'};
+            padding: ${isMobile ? '8px' : '10px'};
             margin-bottom: 20px;
             border: 2px solid #8B4513;
             border-radius: 6px;
-            font-size: 16px;
+            font-size: ${isMobile ? '14px' : '16px'};
             font-family: serif;
             color: #654321;
             background: rgba(255, 255, 255, 0.9);
@@ -1488,32 +1497,34 @@ class UserAccountManager {
         `;
 
         const buttonsContainer = document.createElement('div');
-        buttonsContainer.style.cssText = 'display: flex; flex-direction: column; gap: 12px; align-items: center;';
+        buttonsContainer.style.cssText = `display: flex; flex-direction: column; gap: 12px; align-items: ${isMobile ? 'flex-start' : 'center'}; width: 100%;`;
 
         const saveBtn = document.createElement('button');
-        saveBtn.textContent = 'Сохранить';
+        saveBtn.textContent = this._t('account.guest_rating.save', 'Сохранить');
         saveBtn.style.cssText = `
-            padding: 12px 24px;
+            padding: ${isMobile ? '8px 12px' : '12px 24px'};
             background: #8B4513;
             color: white;
             border: none;
             border-radius: 6px;
-            font-size: 16px;
+            font-size: ${isMobile ? '13px' : '16px'};
             font-weight: bold;
             cursor: pointer;
             font-family: serif;
+            width: ${isMobile ? '100%' : 'auto'};
+            max-width: ${isMobile ? '150px' : 'none'};
         `;
         saveBtn.onclick = async () => {
             const username = usernameInput.value.trim();
             if (!username) {
-                errorMsg.textContent = 'Имя обязательно для сохранения рейтинга!';
+                errorMsg.textContent = this._t('account.guest_rating.name_required', 'Имя обязательно для сохранения рейтинга!');
                 errorMsg.style.display = 'block';
                 return;
             }
 
             errorMsg.style.display = 'none';
             saveBtn.disabled = true;
-            saveBtn.textContent = 'Сохранение...';
+            saveBtn.textContent = this._t('account.guest_rating.saving', 'Сохранение...');
 
             try {
                 // Получаем текущий прогресс через единую функцию
@@ -1569,16 +1580,16 @@ class UserAccountManager {
                 }, true); // immediate = true для важных обновлений
 
                 overlay.remove();
-                alert('Рейтинг сохранен!');
+                alert(this._t('account.guest_rating.save_success', 'Рейтинг сохранен!'));
                 // Небольшая задержка перед открытием меню, чтобы данные точно обновились
                 await new Promise(resolve => setTimeout(resolve, 200));
                 this.showAccountMenu(); // Обновляем меню (там будет обновленный username)
             } catch (error) {
                 console.error('Ошибка сохранения рейтинга гостя:', error);
-                errorMsg.textContent = 'Ошибка сохранения: ' + (error?.message || String(error));
+                errorMsg.textContent = this._t('account.guest_rating.save_error', 'Ошибка сохранения:') + ' ' + (error?.message || String(error));
                 errorMsg.style.display = 'block';
                 saveBtn.disabled = false;
-                saveBtn.textContent = 'Сохранить';
+                saveBtn.textContent = this._t('account.guest_rating.save', 'Сохранить');
             }
         };
 
@@ -1681,7 +1692,7 @@ class UserAccountManager {
 
         const closeBtn = document.createElement('button');
         closeBtn.textContent = '✕';
-        closeBtn.title = 'Закрыть';
+        closeBtn.title = this._t('account.actions.close', 'Закрыть');
         closeBtn.style.cssText = `
             position: absolute;
             top: 12px;
@@ -1702,22 +1713,25 @@ class UserAccountManager {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             max-width: 400px;
             width: 80%;
-            margin-top: calc(${minHeight} / 6);
+            max-height: calc(100% - ${padding} * 2);
+            overflow-y: auto;
         `;
 
         const title = document.createElement('h2');
-        title.textContent = 'Изменить имя';
+        title.textContent = this._t('account.edit_username.title', 'Изменить имя');
         title.style.cssText = `
             color: #8B4513;
             margin-bottom: 20px;
             font-size: ${isMobile ? '20px' : isTablet ? '22px' : '26px'};
             font-weight: bold;
+            text-align: center;
         `;
 
         const usernameLabel = document.createElement('label');
-        usernameLabel.textContent = 'Имя пользователя:';
+        usernameLabel.textContent = this._t('account.edit_username.label', 'Имя пользователя:');
         usernameLabel.style.cssText = `
             color: #654321;
             font-size: ${isMobile ? '14px' : '16px'};
@@ -1729,7 +1743,7 @@ class UserAccountManager {
         const usernameInput = document.createElement('input');
         usernameInput.type = 'text';
         usernameInput.value = currentUsername || '';
-        usernameInput.placeholder = 'Введите имя';
+        usernameInput.placeholder = this._t('account.edit_username.placeholder', 'Введите имя');
         usernameInput.style.cssText = `
             width: 100%;
             padding: 12px;
@@ -1763,7 +1777,7 @@ class UserAccountManager {
         `;
 
         const saveBtn = document.createElement('button');
-        saveBtn.textContent = 'Сохранить';
+        saveBtn.textContent = this._t('account.edit_username.save', 'Сохранить');
         saveBtn.style.cssText = `
             padding: 12px 24px;
             background: #8B4513;
@@ -1780,14 +1794,14 @@ class UserAccountManager {
         saveBtn.onclick = async () => {
             const newName = usernameInput.value.trim();
             if (!newName) {
-                errorMsg.textContent = 'Имя не может быть пустым!';
+                errorMsg.textContent = this._t('account.edit_username.empty_error', 'Имя не может быть пустым!');
                 errorMsg.style.display = 'block';
                 return;
             }
 
             errorMsg.style.display = 'none';
             saveBtn.disabled = true;
-            saveBtn.textContent = 'Сохранение...';
+            saveBtn.textContent = this._t('account.edit_username.saving', 'Сохранение...');
 
             try {
                 await window.userDatabase.updateUserMetadata({ username: newName });
@@ -1809,15 +1823,15 @@ class UserAccountManager {
                 renderUserCallback({ ...currentUser, username: newName });
             } catch (e) {
                 console.error('Ошибка обновления имени:', e);
-                errorMsg.textContent = 'Не удалось обновить имя: ' + (e?.message || String(e));
+                errorMsg.textContent = this._t('account.edit_username.update_error', 'Не удалось обновить имя:') + ' ' + (e?.message || String(e));
                 errorMsg.style.display = 'block';
                 saveBtn.disabled = false;
-                saveBtn.textContent = 'Сохранить';
+                saveBtn.textContent = this._t('account.edit_username.save', 'Сохранить');
             }
         };
 
         const cancelBtn = document.createElement('button');
-        cancelBtn.textContent = 'Отмена';
+        cancelBtn.textContent = this._t('account.edit_username.cancel', 'Отмена');
         cancelBtn.style.cssText = `
             padding: 12px 24px;
             background: rgba(101, 67, 33, 0.3);
@@ -1893,7 +1907,7 @@ class UserAccountManager {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
             width: auto;
             height: 100%;
             max-width: 100%;
@@ -1909,13 +1923,13 @@ class UserAccountManager {
             padding: ${padding};
             box-shadow: 0 4px 32px rgba(0,0,0,0.2);
             text-align: center;
-            overflow: auto;
+            overflow: hidden;
         `;
 
         // Кнопка закрытия
         const closeBtn = document.createElement('button');
         closeBtn.textContent = '✕';
-        closeBtn.title = 'Закрыть';
+        closeBtn.title = this._t('account.actions.close', 'Закрыть');
         closeBtn.style.cssText = `
             position: absolute;
             top: 12px;
@@ -1983,7 +1997,7 @@ class UserAccountManager {
         buttonsContainer.style.cssText = 'display: flex; flex-direction: column; gap: 10px; width: 100%;';
 
         const signInBtn = document.createElement('button');
-        signInBtn.textContent = 'Войти';
+        signInBtn.textContent = this._t('account.link_account.signin_button', 'Войти');
         signInBtn.style.cssText = `
             padding: 12px 24px;
             background: #A0826D;
@@ -1998,7 +2012,7 @@ class UserAccountManager {
             const email = emailInput.value.trim();
             const password = passwordInput.value;
             if (!email || !password) {
-                errorMsg.textContent = 'Введите email и пароль';
+                errorMsg.textContent = this._t('account.link_account.email_password_required', 'Введите email и пароль');
                 return;
             }
             signInBtn.disabled = true;
@@ -2254,7 +2268,7 @@ class UserAccountManager {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
             width: auto;
             height: 100%;
             max-width: 100%;
@@ -2268,25 +2282,14 @@ class UserAccountManager {
             background: url('media/book/quest2.jpg') center no-repeat;
             background-size: contain;
             padding: ${padding};
-            padding-top: calc(${minHeight} / 6);
             box-shadow: 0 4px 32px rgba(0,0,0,0.2);
             text-align: center;
             overflow: hidden;
         `;
 
-        const title = document.createElement('h2');
-        title.textContent = 'Общий рейтинг';
-        title.style.cssText = `
-            color: #8B4513;
-            margin-bottom: 20px;
-            margin-top: calc(${minHeight} / 6);
-            font-size: ${isMobile ? '20px' : isTablet ? '22px' : '26px'};
-            font-weight: bold;
-        `;
-
         const closeBtn = document.createElement('button');
         closeBtn.textContent = '✕';
-        closeBtn.title = 'Закрыть';
+        closeBtn.title = this._t('account.actions.close', 'Закрыть');
         closeBtn.style.cssText = `
             position: absolute;
             top: 12px;
@@ -2319,18 +2322,31 @@ class UserAccountManager {
             font-size: 18px;
         `;
 
+        const contentContainer = document.createElement('div');
+        contentContainer.style.cssText = `
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 100%;
+            max-height: calc(100% - ${padding} * 2);
+            overflow-y: auto;
+        `;
+
+        const title = document.createElement('h2');
+        title.textContent = this._t('account.rating_list.title', 'Общий рейтинг');
+        title.style.cssText = `
+            color: #8B4513;
+            margin-bottom: 20px;
+            font-size: ${isMobile ? '20px' : isTablet ? '22px' : '26px'};
+            font-weight: bold;
+        `;
+
         const listContainer = document.createElement('div');
         // Ограничиваем высоту списка, чтобы он не выходил за пределы фона
-        // Учитываем: padding-top (1/6 minHeight), заголовок (~60px), отступы (~40px)
-        // Уменьшаем на одну позицию списка (~60-80px в зависимости от устройства)
         const titleHeight = isMobile ? 60 : isTablet ? 70 : 80;
-        const paddingTopValue = isMobile ? 85 : isTablet ? 125 : 160;
-        const itemHeight = isMobile ? 60 : isTablet ? 70 : 80; // Высота одной позиции
-        const listMaxHeight = isMobile 
-            ? `calc(${maxHeight} - ${paddingTopValue}px - ${titleHeight}px - 40px - ${itemHeight}px)` 
-            : isTablet 
-            ? `calc(${maxHeight} - ${paddingTopValue}px - ${titleHeight}px - 50px - ${itemHeight}px)`
-            : `calc(${maxHeight} - ${paddingTopValue}px - ${titleHeight}px - 60px - ${itemHeight}px)`;
+        const listMaxHeight = `calc(100% - ${titleHeight}px - 40px)`;
         listContainer.style.cssText = `
             text-align: left; 
             color: #654321; 
@@ -2344,20 +2360,22 @@ class UserAccountManager {
         `;
 
         const loadingMsg = document.createElement('div');
-        loadingMsg.textContent = 'Загрузка рейтинга...';
+        loadingMsg.textContent = this._t('account.rating_list.loading', 'Загрузка рейтинга...');
         loadingMsg.style.cssText = 'text-align: center; padding: 20px; color: #654321;';
         listContainer.appendChild(loadingMsg);
 
+        contentContainer.appendChild(title);
+        contentContainer.appendChild(listContainer);
+
         ratingCard.appendChild(closeBtn);
         ratingCard.appendChild(refreshBtn);
-        ratingCard.appendChild(title);
-        ratingCard.appendChild(listContainer);
+        ratingCard.appendChild(contentContainer);
         overlay.appendChild(ratingCard);
         document.body.appendChild(overlay);
 
         // Функция для загрузки данных рейтинга
         const loadRatingData = async () => {
-            loadingMsg.textContent = 'Загрузка рейтинга...';
+            loadingMsg.textContent = this._t('account.rating_list.loading', 'Загрузка рейтинга...');
             listContainer.innerHTML = '';
             listContainer.appendChild(loadingMsg);
             
@@ -2584,7 +2602,8 @@ class UserAccountManager {
             // Рассчитываем прогресс всех пользователей
             const userProgress = [];
             
-            // Добавляем текущего пользователя в список (только если прогресс > 0)
+            // Добавляем текущего пользователя в список (только если прогресс > 0 и не "Гость")
+            const currentUsername = currentUser?.username || 'Гость';
             const currentProgress = {
                 locations: (currentOpenedLocations / totalLocations) * 100,
                 quests: (currentTasks / totalTasks) * 100,
@@ -2592,10 +2611,12 @@ class UserAccountManager {
             };
             const currentTotal = (currentProgress.locations + currentProgress.quests + currentProgress.books) / 3;
             
-            if (currentTotal > 0 || currentOpenedLocations > 0 || currentTasks > 0 || currentOpenedBooks > 0) {
+            // Пропускаем гостей
+            if (currentUsername !== 'Гость' && currentUsername.toLowerCase() !== 'гость' && 
+                (currentTotal > 0 || currentOpenedLocations > 0 || currentTasks > 0 || currentOpenedBooks > 0)) {
                 userProgress.push({
                     uid: currentUserId,
-                    username: currentUser?.username || 'Гость',
+                    username: currentUsername,
                     email: currentUser?.email || null,
                     createdAt: currentUser?.createdAt || null,
                     total: Math.round(currentTotal * 10) / 10,
@@ -2621,9 +2642,9 @@ class UserAccountManager {
                 };
                 const total = (progress.locations + progress.quests + progress.books) / 3;
                 
-                // Пропускаем гостей с нулевым рейтингом
+                // Пропускаем всех гостей (независимо от рейтинга)
                 const username = user.username || 'Гость';
-                if (username === 'Гость' && total === 0 && userLocations === 0 && userTasks === 0 && userBooks === 0) {
+                if (username === 'Гость' || username.toLowerCase() === 'гость') {
                     continue;
                 }
                 
@@ -2671,7 +2692,8 @@ class UserAccountManager {
                 progress.style.cssText = 'font-weight: bold; font-size: 16px; width: 80px; text-align: right;';
 
                 const details = document.createElement('div');
-                details.textContent = `Л:${user.locations} К:${user.tasks} Б:${user.books}`;
+                const detailsText = this._t('account.rating_list.details_format', 'Л:{locations} К:{tasks} Б:{books}');
+                details.textContent = detailsText.replace('{locations}', user.locations).replace('{tasks}', user.tasks).replace('{books}', user.books);
                 details.style.cssText = 'font-size: 12px; color: rgba(101, 67, 33, 0.7); width: 100px; text-align: right; margin-left: 12px;';
 
                 topRow.appendChild(rank);
@@ -2684,7 +2706,7 @@ class UserAccountManager {
             });
             } catch (error) {
                 console.error('Ошибка загрузки рейтинга:', error);
-                loadingMsg.textContent = 'Ошибка загрузки рейтинга';
+                loadingMsg.textContent = this._t('account.rating_list.load_error', 'Ошибка загрузки рейтинга');
             }
         };
 
@@ -2737,7 +2759,7 @@ class UserAccountManager {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
             width: auto;
             height: 100%;
             max-width: 100%;
@@ -2753,13 +2775,13 @@ class UserAccountManager {
             padding: ${padding};
             box-shadow: 0 4px 32px rgba(0,0,0,0.2);
             text-align: center;
-            overflow: auto;
+            overflow: hidden;
         `;
 
         // Кнопка закрытия
         const closeBtn = document.createElement('button');
         closeBtn.textContent = '✕';
-        closeBtn.title = 'Закрыть';
+        closeBtn.title = this._t('account.actions.close', 'Закрыть');
         closeBtn.style.cssText = `
             position: absolute;
             top: 12px;
@@ -2782,10 +2804,11 @@ class UserAccountManager {
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 100%;
+            justify-content: center;
+            width: ${isMobile ? '70%' : '80%'};
             max-width: 400px;
-            margin: 0 auto;
-            margin-top: calc(${minHeight} / 4);
+            max-height: calc(100% - ${padding} * 2);
+            overflow-y: auto;
         `;
 
 
@@ -2804,7 +2827,7 @@ class UserAccountManager {
 
         const passwordInput = document.createElement('input');
         passwordInput.type = 'password';
-        passwordInput.placeholder = 'Пароль (минимум 6 символов)';
+        passwordInput.placeholder = this._t('account.link_account.password_placeholder', 'Пароль (минимум 6 символов)');
         passwordInput.style.cssText = `
             width: 100%;
             padding: 12px;
@@ -2817,7 +2840,7 @@ class UserAccountManager {
 
         const usernameInput = document.createElement('input');
         usernameInput.type = 'text';
-        usernameInput.placeholder = 'Имя пользователя';
+        usernameInput.placeholder = this._t('account.link_account.username_placeholder', 'Имя пользователя');
         usernameInput.required = true;
         usernameInput.style.cssText = `
             width: 100%;
@@ -2841,7 +2864,7 @@ class UserAccountManager {
         buttonsContainer.style.cssText = 'display: flex; flex-direction: column; gap: 10px; width: 100%;';
 
         const linkBtn = document.createElement('button');
-        linkBtn.textContent = 'Сохранить';
+        linkBtn.textContent = this._t('account.link_account.link_button', 'Привязать аккаунт');
         linkBtn.style.cssText = `
             padding: 12px 24px;
             background: #A0826D;
@@ -2858,7 +2881,7 @@ class UserAccountManager {
             const username = usernameInput.value.trim();
 
             if (!email || !password || !username) {
-                errorMsg.textContent = 'Заполните все поля';
+                errorMsg.textContent = this._t('account.link_account.all_fields_required', 'Заполните все поля');
                 return;
             }
 
@@ -2884,20 +2907,20 @@ class UserAccountManager {
                 console.error('Ошибка привязки email:', error);
                 const code = error?.code || '';
                 if (code === 'auth/email-already-in-use') {
-                    errorMsg.textContent = 'Этот email уже зарегистрирован. Нажмите «У меня уже есть аккаунт» или используйте другой email.';
+                    errorMsg.textContent = this._t('account.link_account.email_already_registered', 'Этот email уже зарегистрирован. Нажмите «У меня уже есть аккаунт» или используйте другой email.');
                     linkBtn.disabled = false;
-                    linkBtn.textContent = 'Сохранить';
+                    linkBtn.textContent = this._t('account.link_account.link_button', 'Привязать аккаунт');
                     return;
                 }
 
                 errorMsg.textContent = error.message || 'Ошибка привязки email. Попробуйте еще раз.';
                 linkBtn.disabled = false;
-                linkBtn.textContent = 'Сохранить';
+                linkBtn.textContent = this._t('account.link_account.link_button', 'Привязать аккаунт');
             }
         };
 
         const signInBtn = document.createElement('button');
-        signInBtn.textContent = 'У меня уже есть аккаунт';
+        signInBtn.textContent = this._t('account.link_account.have_account_button', 'У меня уже есть аккаунт');
         signInBtn.style.cssText = `
             padding: 12px 24px;
             background: #5c3b1e;
@@ -2987,7 +3010,7 @@ class UserAccountManager {
         // Кнопка закрытия
         const closeBtn = document.createElement('button');
         closeBtn.textContent = '✕';
-        closeBtn.title = 'Закрыть';
+        closeBtn.title = this._t('account.actions.close', 'Закрыть');
         closeBtn.style.cssText = `
             position: absolute;
             top: 12px;
@@ -3207,12 +3230,12 @@ class UserAccountManager {
             padding: ${padding};
             box-shadow: 0 4px 32px rgba(0,0,0,0.2);
             text-align: center;
-            overflow: auto;
+            overflow: hidden;
         `;
 
         const closeBtn = document.createElement('button');
         closeBtn.textContent = '✕';
-        closeBtn.title = 'Закрыть';
+        closeBtn.title = this._t('account.actions.close', 'Закрыть');
         closeBtn.style.cssText = `
             position: absolute;
             top: 12px;
@@ -3234,16 +3257,18 @@ class UserAccountManager {
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 100%;
+            justify-content: center;
+            width: ${isMobile ? '70%' : '80%'};
             max-width: 350px;
-            margin: 0 auto;
+            max-height: calc(100% - ${padding} * 2);
+            overflow-y: auto;
         `;
 
         const title = document.createElement('h2');
-        title.textContent = 'Какой прогресс сохранить?';
+        title.textContent = this._t('account.progress_choice.title', 'Какой прогресс сохранить?');
         title.style.cssText = `
             color: #8B4513;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             font-size: ${isMobile ? '20px' : isTablet ? '22px' : '26px'};
             font-weight: bold;
         `;
@@ -3260,7 +3285,7 @@ class UserAccountManager {
         `;
 
         const guestTitle = document.createElement('div');
-        guestTitle.textContent = 'Гость';
+        guestTitle.textContent = this._t('account.progress_choice.guest_title', 'Гость');
         guestTitle.style.cssText = `
             color: #654321;
             font-size: ${isMobile ? '15px' : '16px'};
@@ -3277,13 +3302,13 @@ class UserAccountManager {
             line-height: 1.3;
         `;
         guestStats.innerHTML = `
-            Открыто локаций: ${guestOpenedLocations}<br>
-            Пройдено квестов: ${guestCompletedTasks}<br>
-            Прочитано книг: ${guestOpenedBooks}
+            ${this._t('account.progress_choice.guest_locations', 'Открыто локаций:')} ${guestOpenedLocations}<br>
+            ${this._t('account.progress_choice.guest_quests', 'Пройдено квестов:')} ${guestCompletedTasks}<br>
+            ${this._t('account.progress_choice.guest_books', 'Прочитано книг:')} ${guestOpenedBooks}
         `;
 
         const saveGuestBtn = document.createElement('button');
-        saveGuestBtn.textContent = 'Сохранить прогресс Гостя';
+        saveGuestBtn.textContent = this._t('account.progress_choice.save_guest', 'Сохранить прогресс Гостя');
         saveGuestBtn.style.cssText = `
             padding: 8px 16px;
             background: #A0826D;
@@ -3324,7 +3349,7 @@ class UserAccountManager {
                 await this.updateAccountButton();
             } catch (error) {
                 console.error('Ошибка сохранения прогресса гостя:', error);
-                alert('Ошибка сохранения: ' + (error?.message || String(error)));
+                alert(this._t('account.progress_choice.save_error', 'Ошибка сохранения:') + ' ' + (error?.message || String(error)));
             }
         };
 
@@ -3344,7 +3369,7 @@ class UserAccountManager {
         `;
 
         const accountTitle = document.createElement('div');
-        accountTitle.textContent = accountUser?.username || accountUser?.email || 'Аккаунт';
+        accountTitle.textContent = accountUser?.username || accountUser?.email || this._t('account.progress_choice.account_title', 'Аккаунт');
         accountTitle.style.cssText = `
             color: #654321;
             font-size: ${isMobile ? '15px' : '16px'};
@@ -3372,13 +3397,14 @@ class UserAccountManager {
         });
         
         accountStats.innerHTML = `
-            Открыто локаций: ${accountOpenedLocations}<br>
-            Пройдено квестов: ${accountCompletedTasks}<br>
-            Прочитано книг: ${accountOpenedBooks}
+            ${this._t('account.progress_choice.account_locations', 'Открыто локаций:')} ${accountOpenedLocations}<br>
+            ${this._t('account.progress_choice.account_quests', 'Пройдено квестов:')} ${accountCompletedTasks}<br>
+            ${this._t('account.progress_choice.account_books', 'Прочитано книг:')} ${accountOpenedBooks}
         `;
 
         const saveAccountBtn = document.createElement('button');
-        saveAccountBtn.textContent = `Сохранить прогресс ${accountUser?.username || 'аккаунта'}`;
+        const accountProgressText = this._t('account.progress_choice.save_account', 'Сохранить прогресс аккаунта');
+        saveAccountBtn.textContent = accountUser?.username ? accountProgressText.replace('аккаунта', accountUser.username) : accountProgressText;
         saveAccountBtn.style.cssText = `
             padding: 8px 16px;
             background: #5c3b1e;

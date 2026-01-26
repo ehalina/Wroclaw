@@ -649,7 +649,9 @@
       "quests": "Ukończonych questów",
       "gnomes": "Znalezionych krasnali",
       "books": "Przeczytanych książek",
-      "not_available": "—"
+      "not_available": "—",
+      "rating": "Ogólny ranking",
+      "save_result": "Zapisz wynik"
     },
     "actions": {
       "close": "Zamknij",
@@ -663,6 +665,62 @@
     "errors": {
       "profile_not_ready": "Profil nie jest gotowy. Spróbuj ponownie za chwilę.",
       "open_failed": "Nie udało się otworzyć menu konta"
+    },
+    "guest_rating": {
+      "title": "Zapisz ranking Gościa",
+      "warning": "⚠️ Uwaga: Postęp może nie zostać zapisany na Twoim urządzeniu po wyczyszczeniu danych przeglądarki.",
+      "info_message": "Postęp może nie zostać zapisany na Twoim urządzeniu po wyczyszczeniu danych przeglądarki. Aby zapewnić niezawodne zapisywanie, użyj e-maila lub konta Google.",
+      "name_label": "Wprowadź swoje imię (wymagane):",
+      "name_placeholder": "Twoje imię",
+      "name_required": "Imię jest wymagane do zapisania rankingu!",
+      "save_success": "Ranking zapisany!",
+      "save_error": "Błąd zapisu:",
+      "saving": "Zapisywanie...",
+      "save": "Zapisz",
+      "cancel": "Anuluj"
+    },
+    "edit_username": {
+      "title": "Zmień imię",
+      "label": "Nazwa użytkownika:",
+      "placeholder": "Wprowadź imię",
+      "empty_error": "Imię nie może być puste!",
+      "update_error": "Nie udało się zaktualizować imienia:",
+      "saving": "Zapisywanie...",
+      "save": "Zapisz",
+      "cancel": "Anuluj"
+    },
+    "link_account": {
+      "email_placeholder": "Email",
+      "password_placeholder": "Hasło (minimum 6 znaków)",
+      "username_placeholder": "Nazwa użytkownika",
+      "link_button": "Powiąż konto",
+      "signin_button": "Zaloguj się",
+      "have_account_button": "Mam już konto",
+      "email_already_registered": "Ten email jest już zarejestrowany. Kliknij «Mam już konto» lub użyj innego emaila.",
+      "email_password_required": "Wprowadź email i hasło",
+      "all_fields_required": "Wypełnij wszystkie pola",
+      "error": "Błąd:"
+    },
+    "rating_list": {
+      "title": "Ogólny ranking",
+      "loading": "Ładowanie rankingu...",
+      "load_error": "Błąd ładowania rankingu",
+      "details_format": "L:{locations} K:{tasks} B:{books}",
+      "show_full": "Pokaż pełny ranking"
+    },
+    "progress_choice": {
+      "title": "Który postęp zapisać?",
+      "guest_title": "Gość",
+      "guest_locations": "Otwartych lokacji:",
+      "guest_quests": "Ukończonych questów:",
+      "guest_books": "Przeczytanych książek:",
+      "save_guest": "Zapisz postęp Gościa",
+      "account_title": "Konto",
+      "account_locations": "Otwartych lokacji:",
+      "account_quests": "Ukończonych questów:",
+      "account_books": "Przeczytanych książek:",
+      "save_account": "Zapisz postęp konta",
+      "save_error": "Błąd zapisu:"
     }
   }
 } 

@@ -93,7 +93,8 @@ class VisibilityAudioManager {
     // Регистрируем аудио элемент для отслеживания
     registerAudio(audioElement) {
         if (audioElement && audioElement.tagName === 'AUDIO') {
-            // Исключаем unifiedMusicPlayer - он управляется через SPA менеджер
+            // unifiedMusicPlayer обрабатывается отдельно только через visibilitychange
+            // не добавляем его в audioElements, чтобы blur/focus не влияли на него
             if (audioElement.id === 'unifiedMusicPlayer') {
                 return;
             }
@@ -129,12 +130,58 @@ class VisibilityAudioManager {
             if (currentState === 'hidden') {
                 this.hiddenStartTime = Date.now();
                 this.handlePageHidden();
+                // Для unifiedMusicPlayer обрабатываем только через visibilitychange
+                this.handleUnifiedMusicPlayerHidden();
             } else if (currentState === 'visible') {
                 this.handlePageVisible();
+                // Для unifiedMusicPlayer обрабатываем только через visibilitychange
+                this.handleUnifiedMusicPlayerVisible();
                 this.hiddenStartTime = null;
             }
             this.lastVisibilityState = currentState;
         }, 100); // Задержка 100мс
+    }
+    
+    // Обработка unifiedMusicPlayer при скрытии страницы (только через visibilitychange)
+    handleUnifiedMusicPlayerHidden() {
+        try {
+            const audio = document.getElementById('unifiedMusicPlayer');
+            if (audio && !audio.paused) {
+                // Сохраняем текущее время воспроизведения
+                if (!this.pausedStates.has(audio)) {
+                    this.pausedStates.set(audio, {
+                        currentTime: audio.currentTime,
+                        wasPlaying: true,
+                        isUnifiedPlayer: true
+                    });
+                }
+                audio.pause();
+            }
+        } catch (_) {}
+    }
+    
+    // Обработка unifiedMusicPlayer при показе страницы (только через visibilitychange)
+    handleUnifiedMusicPlayerVisible() {
+        try {
+            const audio = document.getElementById('unifiedMusicPlayer');
+            if (audio && this.pausedStates.has(audio)) {
+                const state = this.pausedStates.get(audio);
+                if (state && state.wasPlaying && state.isUnifiedPlayer) {
+                    // Восстанавливаем время воспроизведения
+                    audio.currentTime = state.currentTime;
+                    
+                    // Проверяем, не отключен ли звук
+                    const isMuted = localStorage.getItem('soundMuted') === 'true';
+                    if (!isMuted) {
+                        // Возобновляем воспроизведение
+                        audio.play().catch(() => {});
+                    }
+                }
+                
+                // Удаляем сохраненное состояние
+                this.pausedStates.delete(audio);
+            }
+        } catch (_) {}
     }
     
     // Страница стала невидимой - ставим все аудио на паузу
@@ -142,7 +189,7 @@ class VisibilityAudioManager {
     // console.log('🎵 Страница потеряла фокус - ставим аудио на паузу');
         
         this.audioElements.forEach(audio => {
-            // Исключаем unifiedMusicPlayer - он управляется через SPA менеджер
+            // unifiedMusicPlayer обрабатывается отдельно только через visibilitychange
             if (audio && audio.id === 'unifiedMusicPlayer') {
                 return;
             }
@@ -215,7 +262,7 @@ class VisibilityAudioManager {
     // console.log('🎵 Страница получила фокус - возобновляем аудио');
         
         this.audioElements.forEach(audio => {
-            // Исключаем unifiedMusicPlayer - он управляется через SPA менеджер
+            // unifiedMusicPlayer обрабатывается отдельно только через visibilitychange
             if (audio && audio.id === 'unifiedMusicPlayer') {
                 return;
             }
@@ -297,7 +344,7 @@ class VisibilityAudioManager {
     autoRegisterExistingAudio() {
         const allAudio = this.getAllAudioElements();
         allAudio.forEach(audio => {
-            // Исключаем unifiedMusicPlayer - он управляется через SPA менеджер
+            // unifiedMusicPlayer обрабатывается отдельно только через visibilitychange
             if (audio.id !== 'unifiedMusicPlayer') {
                 this.registerAudio(audio);
             }
@@ -366,7 +413,7 @@ const observer = new MutationObserver((mutations) => {
             if (node.nodeType === Node.ELEMENT_NODE) {
                 // Проверяем, является ли добавленный узел аудио элементом
                 if (node.tagName === 'AUDIO') {
-                    // Исключаем unifiedMusicPlayer - он управляется через SPA менеджер
+                    // unifiedMusicPlayer обрабатывается отдельно только через visibilitychange
                     if (node.id !== 'unifiedMusicPlayer') {
                         window.visibilityAudioManager.registerAudio(node);
                     }
@@ -376,7 +423,7 @@ const observer = new MutationObserver((mutations) => {
                 const audioElements = node.querySelectorAll && node.querySelectorAll('audio');
                 if (audioElements) {
                     audioElements.forEach(audio => {
-                        // Исключаем unifiedMusicPlayer - он управляется через SPA менеджер
+                        // unifiedMusicPlayer обрабатывается отдельно только через visibilitychange
                         if (audio.id !== 'unifiedMusicPlayer') {
                             window.visibilityAudioManager.registerAudio(audio);
                         }

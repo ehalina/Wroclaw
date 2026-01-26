@@ -596,7 +596,26 @@ class UserDatabase {
 
         const provider = new fb.auth.GoogleAuthProvider();
 
-        // Сначала пробуем popup (на desktop стабильнее). При явных проблемах popup — fallback на redirect.
+        // Проверяем, мобильное ли устройство
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                         (window.innerWidth <= 768);
+
+        // На мобильных сразу используем redirect, popup часто не работает
+        if (isMobile) {
+            console.log('[oauth] google: mobile detected, using redirect flow');
+            try { sessionStorage.removeItem('__oauth_redirect_handled'); } catch (_) {}
+            if (user.isAnonymous) {
+                try { sessionStorage.setItem('__oauth_guest_uid', user.uid); } catch (_) {}
+                try { localStorage.setItem('__oauth_guest_uid', user.uid); } catch (_) {}
+            }
+            try { sessionStorage.setItem('__oauth_in_progress', '1'); } catch (_) {}
+            try { localStorage.setItem('__oauth_in_progress', '1'); } catch (_) {}
+            this._dlog('google auth: signInWithRedirect (mobile)', { guestUid: user.isAnonymous ? user.uid : null });
+            await this.auth.signInWithRedirect(provider);
+            return null; // redirect
+        }
+
+        // На desktop сначала пробуем popup (стабильнее). При явных проблемах popup — fallback на redirect.
         try {
             console.log('[oauth] google: try popup flow');
             const res = await this.auth.signInWithPopup(provider);
@@ -688,19 +707,123 @@ class UserDatabase {
         if (!user) throw new Error('Пользователь не авторизован');
 
         const provider = new fb.auth.FacebookAuthProvider();
-        try {
+
+        // Проверяем, мобильное ли устройство
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                         (window.innerWidth <= 768);
+
+        // На мобильных сразу используем redirect, popup часто не работает
+        if (isMobile) {
+            console.log('[oauth] facebook: mobile detected, using redirect flow');
+            try { sessionStorage.removeItem('__oauth_redirect_handled'); } catch (_) {}
             if (user.isAnonymous) {
                 try { sessionStorage.setItem('__oauth_guest_uid', user.uid); } catch (_) {}
                 try { localStorage.setItem('__oauth_guest_uid', user.uid); } catch (_) {}
             }
             try { sessionStorage.setItem('__oauth_in_progress', '1'); } catch (_) {}
             try { localStorage.setItem('__oauth_in_progress', '1'); } catch (_) {}
-            this._dlog('facebook auth: signInWithRedirect', { guestUid: user.isAnonymous ? user.uid : null });
+            this._dlog('facebook auth: signInWithRedirect (mobile)', { guestUid: user.isAnonymous ? user.uid : null });
             await this.auth.signInWithRedirect(provider);
-            return null;
-        } catch (e) {
-            throw e;
+            return null; // redirect
         }
+
+        // На desktop сначала пробуем popup (стабильнее). При явных проблемах popup — fallback на redirect.
+        try {
+            console.log('[oauth] facebook: try popup flow');
+            const res = await this.auth.signInWithPopup(provider);
+            const u = res?.user || this.getCurrentAuthUser();
+            if (u) {
+                // Если был гость — сохраним его uid для мержа прогресса
+                if (user.isAnonymous && user.uid !== u.uid) {
+                    await this._maybeMergeGuestProgressToCurrentUser(user.uid);
+                }
+
+                // Обновляем метаданные, чтобы снять гостевой режим
+                if (!u.isAnonymous) {
+                    const email = u.email || null;
+                    
+                    // Проверяем существующий username в Firestore перед перезаписью
+                    let existingUsername = null;
+                    try {
+                        const userDoc = await this.db.collection('users').doc(u.uid).get();
+                        if (userDoc.exists) {
+                            const userData = userDoc.data();
+                            existingUsername = userData.username;
+                        }
+                    } catch (getError) {
+                        this._dlog('popup: cannot get existing user', { uid: u.uid, error: getError?.message });
+                    }
+                    
+                    // НЕ перезаписываем, если уже есть валидный username
+                    const hasValidUsername = existingUsername && 
+                        existingUsername.trim() !== '' && 
+                        existingUsername !== 'Гость' && 
+                        existingUsername.toLowerCase() !== 'гость';
+                    
+                    const updateData = {
+                        email,
+                        isAnonymous: false,
+                        linkedAt: new Date().toISOString()
+                    };
+                    
+                    // Обновляем username только если его нет или он равен "Гость"
+                    if (!hasValidUsername) {
+                        const newUsername = u.displayName || (email ? email.split('@')[0] : '') || 'Пользователь';
+                        updateData.username = newUsername;
+                        this._dlog('popup: updating username', { 
+                            oldUsername: existingUsername, 
+                            newUsername: newUsername 
+                        });
+                    } else {
+                        this._dlog('popup: preserving existing username', { 
+                            username: existingUsername,
+                            displayName: u.displayName
+                        });
+                    }
+                    
+                    await this.updateUserMetadata(updateData);
+                    await this._wait(150);
+                }
+            }
+            return u;
+        } catch (e) {
+            const code = e?.code || '';
+            const shouldRedirect =
+                code === 'auth/popup-blocked' ||
+                code === 'auth/popup-closed-by-user' ||
+                code === 'auth/operation-not-supported-in-this-environment';
+
+            if (!shouldRedirect) {
+                throw e;
+            }
+
+            // Redirect fallback
+            try { sessionStorage.removeItem('__oauth_redirect_handled'); } catch (_) {}
+            if (user.isAnonymous) {
+                try { sessionStorage.setItem('__oauth_guest_uid', user.uid); } catch (_) {}
+                try { localStorage.setItem('__oauth_guest_uid', user.uid); } catch (_) {}
+            }
+            try { sessionStorage.setItem('__oauth_in_progress', '1'); } catch (_) {}
+            try { localStorage.setItem('__oauth_in_progress', '1'); } catch (_) {}
+            this._dlog('facebook auth: signInWithRedirect', { guestUid: user.isAnonymous ? user.uid : null, code });
+            await this.auth.signInWithRedirect(provider);
+            return null; // redirect
+        }
+    }
+
+    // Получение IP-адреса пользователя
+    async _getUserIP() {
+        try {
+            // Используем внешний сервис для получения IP
+            const response = await fetch('https://api.ipify.org?format=json');
+            if (response.ok) {
+                const data = await response.json();
+                return data.ip || null;
+            }
+        } catch (error) {
+            this._dlog('getUserIP failed', { error: error?.message });
+        }
+        return null;
     }
 
     // Сохранение пользователя в Firestore
@@ -719,6 +842,16 @@ class UserDatabase {
             validatedData.id = currentUser.uid;
         }
 
+        // Получаем IP-адрес (только при первом создании или если не указан)
+        let userIP = validatedData.ipAddress || null;
+        if (!userIP) {
+            try {
+                userIP = await this._getUserIP();
+            } catch (ipError) {
+                this._dlog('Failed to get IP', { error: ipError?.message });
+            }
+        }
+
         const authUser = this.getCurrentAuthUser();
         const userDoc = {
             username: validatedData.username || 'Гость',
@@ -730,7 +863,9 @@ class UserDatabase {
             // Если isAnonymous не задан — берём из текущего authUser (если есть)
             isAnonymous: validatedData.isAnonymous !== undefined
                 ? validatedData.isAnonymous
-                : (authUser ? !!authUser.isAnonymous : true)
+                : (authUser ? !!authUser.isAnonymous : true),
+            // IP-адрес (сохраняем только если получили)
+            ...(userIP ? { ipAddress: userIP } : {})
         };
         const firestoreDoc = this._toFirestoreData(userDoc) || userDoc;
 
@@ -1080,7 +1215,8 @@ class UserDatabase {
                     createdAt: data.createdAt?.toDate?.()?.toISOString() || data.createdAt,
                     updatedAt: data.updatedAt?.toDate?.()?.toISOString() || data.updatedAt,
                     questState: data.questState || { tasks: {}, completedQuests: [] },
-                    isAnonymous: data.isAnonymous !== undefined ? data.isAnonymous : true
+                    isAnonymous: data.isAnonymous !== undefined ? data.isAnonymous : true,
+                    ipAddress: data.ipAddress || null
                 };
             });
 
