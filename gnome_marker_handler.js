@@ -123,31 +123,51 @@ export function setupGnomeGeoMarker({ markerId, gnomeId, imageSrc, title, descri
 
         // Специальная обработка для гнома Паца-Ваца
         if (effectiveGnomeId === 'patsa_vatsa') {
-            // Проверяем, находимся ли мы уже на странице tumski14.html
-            const currentPage = window.location.pathname.split('/').pop() || '';
-            const currentHash = window.location.hash.replace('#', '') || '';
-            const isOnTumski14 = currentPage === 'tumski14.html' || currentHash === 'tumski14.html';
+            // Проверяем, находимся ли мы уже на странице minsk01.html
+            // В SPA контексте проверяем через parent window или hash
+            let isOnMinsk01 = false;
+            try {
+                const currentPage = window.location.pathname.split('/').pop() || '';
+                const currentHash = window.location.hash.replace('#', '') || '';
+                const parentLocation = window.parent && window.parent !== window ? window.parent.location : null;
+                const parentHash = parentLocation ? (parentLocation.hash || '').replace('#', '') : '';
+                
+                isOnMinsk01 = currentPage === 'minsk01.html' || 
+                              currentHash === 'minsk01.html' ||
+                              parentHash === 'minsk01.html' ||
+                              parentHash.includes('minsk01');
+            } catch (_) {
+                // Если нет доступа к parent, проверяем текущую страницу
+                const currentPage = window.location.pathname.split('/').pop() || '';
+                const currentHash = window.location.hash.replace('#', '') || '';
+                isOnMinsk01 = currentPage === 'minsk01.html' || currentHash === 'minsk01.html';
+            }
             
-            if (isOnTumski14) {
-                // Если уже на странице tumski14.html, открываем попап
+            if (isOnMinsk01) {
+                // Если уже на странице minsk01.html, открываем попап
+                console.log('🟡 [gnome_marker_handler] Уже на minsk01.html, открываем попап');
                 // Продолжаем выполнение функции для создания попапа
             } else {
-                // Если не на странице tumski14.html, перенаправляем на неё с параметром для открытия попапа
+                // Если не на странице minsk01.html, перенаправляем на неё с параметром для открытия попапа
+                console.log('🟡 [gnome_marker_handler] Переход на minsk01.html#patsa_vatsa');
                 try {
                     // Пытаемся открыть через SPA менеджер (если доступен)
                     if (window.parent && window.parent !== window && window.parent.spaManager) {
-                        window.parent.spaManager.loadPage('tumski14.html#patsa_vatsa');
+                        console.log('✅ [gnome_marker_handler] Используем parent.spaManager');
+                        window.parent.spaManager.loadPage('minsk01.html#patsa_vatsa');
                     } else if (window.spaManager) {
-                        window.spaManager.loadPage('tumski14.html#patsa_vatsa');
+                        console.log('✅ [gnome_marker_handler] Используем window.spaManager');
+                        window.spaManager.loadPage('minsk01.html#patsa_vatsa');
                     } else {
+                        console.log('⚠️ [gnome_marker_handler] Fallback: обычная навигация');
                         // Fallback: обычная навигация
-                        window.location.href = 'tumski14.html#patsa_vatsa';
+                        window.location.href = 'minsk01.html#patsa_vatsa';
                     }
                 } catch (err) {
-                    console.error('Ошибка при открытии страницы tumski14.html:', err);
+                    console.error('❌ [gnome_marker_handler] Ошибка при открытии страницы minsk01.html:', err);
                     // Fallback: обычная навигация
                     try {
-                        window.location.href = 'tumski14.html#patsa_vatsa';
+                        window.location.href = 'minsk01.html#patsa_vatsa';
                     } catch (_) {}
                 }
                 return;
@@ -418,5 +438,48 @@ export function setupGnomeGeoMarker({ markerId, gnomeId, imageSrc, title, descri
 
     // На мобильных/планшетах расширенная кликабельная область создаётся отдельным модулем,
     // поэтому здесь ничего дополнительно не делаем.
+}
+
+// Экспортируемая функция для прямого открытия попапа гнома без маркера
+export function openGnomePopupDirectly({ gnomeId, imageSrc, title, description }) {
+    console.log('🟡 [openGnomePopupDirectly] Вызвана с параметрами:', { gnomeId, imageSrc, title, description });
+    if (!gnomeId) {
+        console.error('❌ [openGnomePopupDirectly] gnomeId не передан');
+        return;
+    }
+    
+    // Создаем временный маркер для использования существующей логики
+    const tempMarker = document.createElement('div');
+    tempMarker.id = `gnome_${gnomeId}_temp_${Date.now()}`;
+    tempMarker.setAttribute('data-gnome-id', gnomeId);
+    tempMarker.style.display = 'none';
+    document.body.appendChild(tempMarker);
+    console.log('🟡 [openGnomePopupDirectly] Создан временный маркер:', tempMarker.id);
+    
+    // Используем существующую функцию setupGnomeGeoMarker
+    setupGnomeGeoMarker({
+        markerId: tempMarker.id,
+        gnomeId: gnomeId,
+        imageSrc: imageSrc,
+        title: title,
+        description: description
+    });
+    console.log('🟡 [openGnomePopupDirectly] setupGnomeGeoMarker вызван');
+    
+    // Открываем попап программно
+    setTimeout(() => {
+        try {
+            const marker = document.getElementById(tempMarker.id);
+            console.log('🟡 [openGnomePopupDirectly] Ищем маркер:', tempMarker.id, 'найден:', !!marker);
+            if (marker) {
+                console.log('✅ [openGnomePopupDirectly] Открываем попап через клик');
+                marker.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+            } else {
+                console.error('❌ [openGnomePopupDirectly] Маркер не найден после создания');
+            }
+        } catch (err) {
+            console.error('❌ [openGnomePopupDirectly] Ошибка при открытии попапа гнома:', err);
+        }
+    }, 100);
 }
 

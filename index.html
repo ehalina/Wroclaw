@@ -868,9 +868,50 @@
                 this.showLoading();
                 
                 try {
+                    // Извлекаем hash из pageName (если есть)
+                    let actualPageName = pageName;
+                    let pageHash = '';
+                    if (pageName.includes('#')) {
+                        const parts = pageName.split('#');
+                        actualPageName = parts[0];
+                        pageHash = parts.slice(1).join('#');
+                    }
+                    
                     // Если страница уже загружена, просто переключаемся на неё
-                    if (this.pages.has(pageName)) {
-                        this.showPage(pageName);
+                    if (this.pages.has(actualPageName)) {
+                        console.log('🟡 [SPA] Страница уже загружена:', actualPageName, 'hash:', pageHash);
+                        this.showPage(actualPageName);
+                        // Если есть hash, передаем его в iframe
+                        if (pageHash) {
+                            const pageContainer = this.pages.get(actualPageName);
+                            const iframe = pageContainer?.querySelector('iframe');
+                            if (iframe && iframe.contentWindow) {
+                                console.log('🟡 [SPA] Передаем hash в существующий iframe:', pageHash);
+                                setTimeout(() => {
+                                    try {
+                                        iframe.contentWindow.postMessage({
+                                            type: 'PAGE_HASH',
+                                            hash: pageHash
+                                        }, '*');
+                                        console.log('✅ [SPA] postMessage отправлен в существующий iframe с hash:', pageHash);
+                                    } catch (err) {
+                                        console.error('❌ [SPA] Ошибка при отправке postMessage в существующий iframe:', err);
+                                    }
+                                }, 500);
+                                // Дублируем отправку через большую задержку
+                                setTimeout(() => {
+                                    try {
+                                        iframe.contentWindow.postMessage({
+                                            type: 'PAGE_HASH',
+                                            hash: pageHash
+                                        }, '*');
+                                        console.log('✅ [SPA] postMessage отправлен повторно в существующий iframe с hash:', pageHash);
+                                    } catch (err) {
+                                        console.error('❌ [SPA] Ошибка при повторной отправке postMessage в существующий iframe:', err);
+                                    }
+                                }, 1000);
+                            }
+                        }
                         this.hideLoading();
                         return;
                     }
@@ -879,7 +920,7 @@
                     const iframe = document.createElement('iframe');
                     // Добавляем timestamp для предотвращения кэширования
                     const timestamp = new Date().getTime();
-                    iframe.src = `${pageName}?t=${timestamp}`;
+                    iframe.src = `${actualPageName}?t=${timestamp}`;
                     iframe.style.width = '100%';
                     iframe.style.height = '100%';
                     iframe.style.border = 'none';
@@ -891,21 +932,21 @@
                     // Создаем контейнер для страницы
                     const pageContainer = document.createElement('div');
                     pageContainer.className = 'page-content';
-                    pageContainer.id = `page-${pageName.replace('.html', '')}`;
+                    pageContainer.id = `page-${actualPageName.replace('.html', '')}`;
                     pageContainer.appendChild(iframe);
                     
                     // Добавляем в SPA контейнер
                     document.getElementById('spa-container').appendChild(pageContainer);
                     
                     // Сохраняем страницу
-                    this.pages.set(pageName, pageContainer);
+                    this.pages.set(actualPageName, pageContainer);
                     
                     // Ждем загрузки iframe
                     iframe.onload = () => {
-    // console.log('✅ iframe загружен:', pageName);
+    // console.log('✅ iframe загружен:', actualPageName);
     // console.log('🎵 iframe src:', iframe.src);
     // console.log('🎵 iframe contentWindow location:', iframe.contentWindow.location.href);
-                        this.setupIframeNavigation(iframe, pageName);
+                        this.setupIframeNavigation(iframe, actualPageName);
                         
                         // Инициализируем звуки геометок в iframe
                         this.initializeIframeGeoMarkerSounds(iframe);
@@ -913,8 +954,37 @@
                         // Инициализируем quest музыку в iframe
                         this.initializeIframeQuestMusic(iframe);
                         
-    // console.log('🎵 Вызываем showPage для:', pageName);
-                        this.showPage(pageName);
+                        // Если есть hash, передаем его в iframe через postMessage
+                        if (pageHash) {
+                            console.log('🟡 [SPA] Передаем hash в iframe:', pageHash, 'для страницы:', actualPageName);
+                            // Увеличиваем задержку для надежности
+                            setTimeout(() => {
+                                try {
+                                    iframe.contentWindow.postMessage({
+                                        type: 'PAGE_HASH',
+                                        hash: pageHash
+                                    }, '*');
+                                    console.log('✅ [SPA] postMessage отправлен с hash:', pageHash);
+                                } catch (err) {
+                                    console.error('❌ [SPA] Ошибка при отправке postMessage:', err);
+                                }
+                            }, 500);
+                            // Дублируем отправку через большую задержку на случай, если первая не сработала
+                            setTimeout(() => {
+                                try {
+                                    iframe.contentWindow.postMessage({
+                                        type: 'PAGE_HASH',
+                                        hash: pageHash
+                                    }, '*');
+                                    console.log('✅ [SPA] postMessage отправлен повторно с hash:', pageHash);
+                                } catch (err) {
+                                    console.error('❌ [SPA] Ошибка при повторной отправке postMessage:', err);
+                                }
+                            }, 1000);
+                        }
+                        
+    // console.log('🎵 Вызываем showPage для:', actualPageName);
+                        this.showPage(actualPageName);
                         this.hideLoading();
                     };
                     
@@ -1128,10 +1198,10 @@
                     await this.loadPage(pageName);
                 } else {
                     // Для minsk01.html перезагружаем страницу, но сохраняем состояние музыки
-                    if (pageName.includes('minsk01.html')) {
+                    if (actualPageName.includes('minsk01.html')) {
     // console.log('🎵 Страница minsk01.html уже загружена, перезагружаем для правильного отображения');
                         // Сохраняем состояние музыки перед перезагрузкой
-                        const targetPage = this.pages.get(pageName);
+                        const targetPage = this.pages.get(actualPageName);
                         let savedMusicTime = null;
                         if (targetPage) {
                             const iframe = targetPage.querySelector('iframe');
@@ -1157,17 +1227,17 @@
                         // Удаляем старую страницу и загружаем заново
                         if (targetPage) {
                             targetPage.remove();
-                            this.pages.delete(pageName);
+                            this.pages.delete(actualPageName);
                         }
                         await this.loadPage(pageName);
                         return;
                     }
     // console.log('🎵 Страница уже загружена, принудительно перезагружаем:', pageName);
                     // Удаляем старую страницу и загружаем заново
-                    const oldPage = this.pages.get(pageName);
+                    const oldPage = this.pages.get(actualPageName);
                     if (oldPage) {
                         oldPage.remove();
-                        this.pages.delete(pageName);
+                        this.pages.delete(actualPageName);
                     }
                     await this.loadPage(pageName);
                 }

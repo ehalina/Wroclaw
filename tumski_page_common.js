@@ -41,6 +41,33 @@ export async function initPageCommon() {
                 }
             }
             
+            // Обработка hash, переданного из SPA
+            if (event.data && event.data.type === 'PAGE_HASH' && event.data.hash) {
+                const hash = event.data.hash;
+                console.log('🟡 [tumski_page_common] Получен PAGE_HASH от SPA:', hash);
+                // Сохраняем hash для последующей обработки после инициализации гномов
+                window.__pendingGnomeHash = hash;
+                
+                // Если гномы уже инициализированы, обрабатываем hash сразу
+                setTimeout(async () => {
+                    try {
+                        const gnomeMarks = Array.from(document.querySelectorAll('.map-mark[data-gnome-id]'));
+                        if (gnomeMarks.length > 0) {
+                            console.log('🟡 [tumski_page_common] Гномы уже инициализированы, обрабатываем hash сразу');
+                            const gnomeMod = await import('./gnome_marker_handler.js');
+                            if (hash === 'patsa_vatsa' && gnomeMod && typeof gnomeMod.openGnomePopupDirectly === 'function') {
+                                console.log('✅ [tumski_page_common] Открываем попап Паца-Ваца через postMessage');
+                                gnomeMod.openGnomePopupDirectly({
+                                    gnomeId: 'patsa_vatsa',
+                                    imageSrc: 'media/krasnolud/krasnal_tumski14.jpg'
+                                });
+                            }
+                        }
+                    } catch (err) {
+                        console.error('❌ [tumski_page_common] Ошибка при обработке hash через postMessage:', err);
+                    }
+                }, 500);
+            }
         });
 
 
@@ -265,9 +292,57 @@ export async function initPageCommon() {
                     
                     // Проверяем hash для автоматического открытия попапа гнома
                     try {
-                        const hash = window.location.hash.replace('#', '') || '';
+                        // Проверяем hash из URL или из сообщения SPA
+                        let hash = window.location.hash.replace('#', '') || '';
+                        if (window.__pendingGnomeHash) {
+                            hash = window.__pendingGnomeHash;
+                            delete window.__pendingGnomeHash;
+                        }
+                        console.log('🟡 [tumski_page_common] Проверка hash:', hash);
                         if (hash) {
-                            // Ищем гнома по ID из hash
+                            // Специальная обработка для гнома Паца-Ваца на странице minsk01.html
+                            if (hash === 'patsa_vatsa') {
+                                console.log('🟡 [tumski_page_common] Найден hash patsa_vatsa, открываем попап');
+                                // Открываем попап Паца-Ваца напрямую (hash уже указывает, что мы на нужной странице)
+                                setTimeout(() => {
+                                    try {
+                                        console.log('🟡 [tumski_page_common] Вызываем openGnomePopupDirectly, gnomeMod:', !!gnomeMod);
+                                        if (gnomeMod && typeof gnomeMod.openGnomePopupDirectly === 'function') {
+                                            console.log('✅ [tumski_page_common] openGnomePopupDirectly найден, вызываем');
+                                            gnomeMod.openGnomePopupDirectly({
+                                                gnomeId: 'patsa_vatsa',
+                                                imageSrc: 'media/krasnolud/krasnal_tumski14.jpg'
+                                            });
+                                        } else {
+                                            console.log('⚠️ [tumski_page_common] openGnomePopupDirectly не найден, используем fallback');
+                                            // Fallback: создаем временный маркер
+                                            const tempMarker = document.createElement('div');
+                                            tempMarker.id = 'gnome_patsa_vatsa_temp';
+                                            tempMarker.setAttribute('data-gnome-id', 'patsa_vatsa');
+                                            tempMarker.style.display = 'none';
+                                            document.body.appendChild(tempMarker);
+                                            
+                                            gnomeMod.setupGnomeGeoMarker({
+                                                markerId: 'gnome_patsa_vatsa_temp',
+                                                gnomeId: 'patsa_vatsa',
+                                                imageSrc: 'media/krasnolud/krasnal_tumski14.jpg'
+                                            });
+                                            
+                                            setTimeout(() => {
+                                                const marker = document.getElementById('gnome_patsa_vatsa_temp');
+                                                if (marker) {
+                                                    marker.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+                                                }
+                                            }, 200);
+                                        }
+                                    } catch (err) {
+                                        console.error('Ошибка при открытии попапа Паца-Ваца:', err);
+                                    }
+                                }, 800);
+                                return; // Выходим, чтобы не проверять другие гномы
+                            }
+                            
+                            // Обычная обработка для других гномов
                             const targetGnome = gnomeMarks.find(el => {
                                 const gnomeId = el.getAttribute('data-gnome-id') || '';
                                 return gnomeId === hash || el.id === hash;
