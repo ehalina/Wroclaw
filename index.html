@@ -563,6 +563,18 @@
                     return;
                 }
                 
+                // Если трек тот же, но на паузе - возобновляем воспроизведение
+                if (this.currentTrack === trackName && audio.paused) {
+    // console.log('🎵 Трек на паузе, возобновляем:', trackName);
+                    try {
+                        await audio.play();
+                        return;
+                    } catch (error) {
+    // console.log('🎵 Ошибка возобновления трека:', error);
+                        // Если не удалось возобновить, продолжаем переключение
+                    }
+                }
+                
                 // Дополнительная защита: если аудио уже разблокировано и играет town, не переключаем на town
                 if (this.audioUnlocked && this.currentTrack === 'town' && trackName === 'town' && !audio.paused) {
     // console.log('🎵 Town уже играет и аудио разблокировано, не переключаем');
@@ -578,7 +590,8 @@
                     'birds': 'media/zwyki/birds.mp3',
                     'kostel': 'media/zwyki/kostel.mp3',
                     'hang': 'media/zwyki/hang.mp3',
-                    'quest': 'media/zwyki/quest.mp3'
+                    'quest': 'media/zwyki/quest.mp3',
+                    'minsk': 'media/zwyki/maksim-mrvica-croatian-rhapsody.mp3'
                 };
                 
                 const newUrl = trackUrls[trackName];
@@ -1064,35 +1077,13 @@
                     return;
                 }
                 
-                // Для minsk страниц отправляем сообщение unmute в iframe вместо переключения SPA музыки
-                if (pageName.includes('minsk01.html') || pageName.includes('minsk02.html')) {
-                    try {
-                        const iframes = document.querySelectorAll('iframe');
-                        for (const iframe of iframes) {
-                            try {
-                                if (iframe.contentWindow && iframe.src && 
-                                    (iframe.src.includes('minsk01.html') || iframe.src.includes('minsk02.html'))) {
-                                    iframe.contentWindow.postMessage({
-                                        type: 'soundControl',
-                                        action: 'unmute'
-                                    }, '*');
-                                }
-                            } catch (e) {
-                                // Игнорируем ошибки доступа к iframe
-                            }
-                        }
-                    } catch (_) {}
-                    // Сбрасываем флаг
-                    setTimeout(() => {
-                        this._switchingMusic = false;
-                    }, 100);
-                    return;
-                }
-                
                 // Определяем, какая музыка нужна
                 let targetTrack = 'town'; // По умолчанию
                 
-                if (pageName.includes('tumski19.html')) {
+                if (pageName.includes('minsk01.html') || pageName.includes('minsk02.html')) {
+                    targetTrack = 'minsk';
+    // console.log('🎵 Переключаем на minsk для страниц minsk:', pageName);
+                } else if (pageName.includes('tumski19.html')) {
                     targetTrack = 'kostel';
     // console.log('🎵 Переключаем на kostel для tumski19.html');
                 } else if (pageName.includes('tumski21.html')) {
@@ -1391,23 +1382,6 @@
                             if (audio) {
                                 audio.pause();
                             }
-                            
-                            // Отправляем сообщение в iframe minsk01.html для управления музыкой
-                            try {
-                                const iframes = document.querySelectorAll('iframe');
-                                for (const iframe of iframes) {
-                                    try {
-                                        if (iframe.contentWindow && iframe.src && iframe.src.includes('minsk01.html')) {
-                                            iframe.contentWindow.postMessage({
-                                                type: 'soundControl',
-                                                action: 'mute'
-                                            }, '*');
-                                        }
-                                    } catch (e) {
-                                        // Игнорируем ошибки доступа к iframe
-                                    }
-                                }
-                            } catch (_) {}
     // console.log('🎵 Музыка в SPA остановлена');
                         } else if (event.data.action === 'unmute') {
                             // Запускаем музыку в SPA
@@ -1431,23 +1405,9 @@
                                     window.spaManager.switchTrack('hang');
     // console.log('🎵 Запускаем hang музыку в SPA для tumski21');
                                 } else if (currentPage && (currentPage.includes('minsk01.html') || currentPage.includes('minsk02.html'))) {
-                                    // Для minsk страниц не запускаем SPA музыку, используем музыку из iframe minsk01.html
-                                    try {
-                                        const iframes = document.querySelectorAll('iframe');
-                                        for (const iframe of iframes) {
-                                            try {
-                                                if (iframe.contentWindow && iframe.src && iframe.src.includes('minsk01.html')) {
-                                                    iframe.contentWindow.postMessage({
-                                                        type: 'soundControl',
-                                                        action: 'unmute'
-                                                    }, '*');
-                                                }
-                                            } catch (e) {
-                                                // Игнорируем ошибки доступа к iframe
-                                            }
-                                        }
-                                    } catch (_) {}
-    // console.log('🎵 Запускаем музыку из iframe minsk01.html');
+                                    // Переключаем на minsk для minsk страниц
+                                    window.spaManager.switchTrack('minsk');
+    // console.log('🎵 Запускаем minsk музыку в SPA для minsk страниц');
                                 } else {
                                     // Запускаем обычную фоновую музыку (town)
                                     window.spaManager.switchTrack('town');

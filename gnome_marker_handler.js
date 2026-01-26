@@ -307,51 +307,16 @@ export function setupGnomeGeoMarker({ markerId, gnomeId, imageSrc, title, descri
             });
             
             navButton.addEventListener('click', () => {
-                // Останавливаем музыку с minsk страниц перед переходом
+                // Переключаем музыку на town.mp3 в SPA при возврате во Вроцлав
                 try {
-                    // Останавливаем музыку в текущем окне (если мы на minsk странице)
-                    const currentAudio = document.getElementById('minskMusic');
-                    if (currentAudio && !currentAudio.paused) {
-                        currentAudio.pause();
-                        // Сохраняем состояние как paused
-                        try {
-                            if (window.parent && window.parent !== window) {
-                                window.parent.localStorage.setItem('minskMusicState', 'paused');
-                            } else {
-                                localStorage.setItem('minskMusicState', 'paused');
-                            }
-                        } catch (_) {}
-                    }
-                    
-                    // Останавливаем музыку в родительском окне (SPA) через iframe
-                    if (window.parent && window.parent !== window) {
-                        // Отправляем сообщение в родительское окно для остановки музыки
-                        window.parent.postMessage({
-                            type: 'soundControl',
-                            action: 'mute',
-                            source: 'crafterNav'
-                        }, '*');
-                        
-                        // Также пытаемся остановить музыку напрямую в iframe
-                        try {
-                            const iframes = window.parent.document.querySelectorAll('iframe');
-                            for (const iframe of iframes) {
-                                try {
-                                    if (iframe.contentWindow && iframe.src && 
-                                        (iframe.src.includes('minsk01.html') || iframe.src.includes('minsk02.html'))) {
-                                        iframe.contentWindow.postMessage({
-                                            type: 'soundControl',
-                                            action: 'mute'
-                                        }, '*');
-                                    }
-                                } catch (e) {
-                                    // Игнорируем ошибки доступа к iframe
-                                }
-                            }
-                        } catch (_) {}
+                    if (window.parent && window.parent !== window && window.parent.spaManager) {
+                        const isMuted = window.parent.localStorage.getItem('soundMuted') === 'true';
+                        if (!isMuted) {
+                            window.parent.spaManager.switchTrack('town');
+                        }
                     }
                 } catch (err) {
-                    console.error('Ошибка при остановке музыки minsk:', err);
+                    console.error('Ошибка при переключении музыки на town:', err);
                 }
                 
                 // Закрываем попап

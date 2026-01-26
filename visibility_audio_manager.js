@@ -93,6 +93,10 @@ class VisibilityAudioManager {
     // Регистрируем аудио элемент для отслеживания
     registerAudio(audioElement) {
         if (audioElement && audioElement.tagName === 'AUDIO') {
+            // Исключаем unifiedMusicPlayer - он управляется через SPA менеджер
+            if (audioElement.id === 'unifiedMusicPlayer') {
+                return;
+            }
             this.audioElements.add(audioElement);
     // console.log('🎵 Зарегистрирован аудио элемент:', audioElement.id || audioElement.src);
         }
@@ -138,6 +142,11 @@ class VisibilityAudioManager {
     // console.log('🎵 Страница потеряла фокус - ставим аудио на паузу');
         
         this.audioElements.forEach(audio => {
+            // Исключаем unifiedMusicPlayer - он управляется через SPA менеджер
+            if (audio && audio.id === 'unifiedMusicPlayer') {
+                return;
+            }
+            
             if (audio && !audio.paused) {
                 // Сохраняем текущее время воспроизведения
                 this.pausedStates.set(audio, {
@@ -206,6 +215,11 @@ class VisibilityAudioManager {
     // console.log('🎵 Страница получила фокус - возобновляем аудио');
         
         this.audioElements.forEach(audio => {
+            // Исключаем unifiedMusicPlayer - он управляется через SPA менеджер
+            if (audio && audio.id === 'unifiedMusicPlayer') {
+                return;
+            }
+            
             if (audio && this.pausedStates.has(audio)) {
                 const state = this.pausedStates.get(audio);
                 
@@ -283,7 +297,10 @@ class VisibilityAudioManager {
     autoRegisterExistingAudio() {
         const allAudio = this.getAllAudioElements();
         allAudio.forEach(audio => {
-            this.registerAudio(audio);
+            // Исключаем unifiedMusicPlayer - он управляется через SPA менеджер
+            if (audio.id !== 'unifiedMusicPlayer') {
+                this.registerAudio(audio);
+            }
         });
         
         // Также регистрируем quest музыку, если она уже существует
@@ -349,14 +366,20 @@ const observer = new MutationObserver((mutations) => {
             if (node.nodeType === Node.ELEMENT_NODE) {
                 // Проверяем, является ли добавленный узел аудио элементом
                 if (node.tagName === 'AUDIO') {
-                    window.visibilityAudioManager.registerAudio(node);
+                    // Исключаем unifiedMusicPlayer - он управляется через SPA менеджер
+                    if (node.id !== 'unifiedMusicPlayer') {
+                        window.visibilityAudioManager.registerAudio(node);
+                    }
                 }
                 
                 // Проверяем аудио элементы внутри добавленного узла
                 const audioElements = node.querySelectorAll && node.querySelectorAll('audio');
                 if (audioElements) {
                     audioElements.forEach(audio => {
-                        window.visibilityAudioManager.registerAudio(audio);
+                        // Исключаем unifiedMusicPlayer - он управляется через SPA менеджер
+                        if (audio.id !== 'unifiedMusicPlayer') {
+                            window.visibilityAudioManager.registerAudio(audio);
+                        }
                     });
                 }
             }

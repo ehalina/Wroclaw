@@ -61,11 +61,6 @@
         <div class="next-image-container"></div>
     </div>
 
-    <!-- Аудио для музыки (не запускаем автоматически, используем музыку с предыдущей страницы) -->
-    <!-- <audio id="minskMusic" autoplay loop>
-        <source src="media/zwyki/maksim-mrvica-croatian-rhapsody.mp3" type="audio/mpeg">
-    </audio> -->
-
     <script type="module" src="tumski_init.js"></script>
     <script type="module">
         // Закрываем модальное окно карты, если оно открыто
@@ -150,19 +145,6 @@
                 closeMapModal();
                 disableMapButton();
             }, 1000);
-        });
-
-        // Музыка не запускается на этой странице - используем музыку с предыдущей страницы (minsk01.html)
-        // Управление музыкой происходит через index.html (SPA)
-        
-        // Сохраняем информацию о текущей странице в sessionStorage перед переходом на minsk01
-        document.addEventListener('DOMContentLoaded', function() {
-            // Сохраняем текущую страницу в sessionStorage
-            try {
-                sessionStorage.setItem('previousPage', 'minsk02.html');
-            } catch (e) {
-                // Игнорируем ошибки
-            }
         });
     </script>
 </body>

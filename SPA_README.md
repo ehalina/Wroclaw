@@ -36,6 +36,7 @@
   - `town.mp3` - для большинства страниц
   - `birds.mp3` - для страниц садов (ogrod03-ogrod09)
   - `kostel.mp3` - для tumski19.html
+  - `maksim-mrvica-croatian-rhapsody.mp3` - для minsk01.html и minsk02.html
   - Отключение музыки для tumski21.html
 - **Полная интеграция** с существующей системой `background_music.js`
 - **Сохранение состояния** музыки при переходах между страницами
