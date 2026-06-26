@@ -199,6 +199,7 @@ Status 2026-06-26:
 - добавлен Playwright smoke для повторного `MapModal.init()` на direct Tumski page.
 - Stage 4.2 выполнен: inline `modalHTML` вынесен в `getMapModalTemplate()`, DOM insertion - в `ensureMapModalDom()`, smoke закрепляет ключевые ids/classes template.
 - Stage 4.3 выполнен: `map_modal_template.js` отложен из-за classic script load order, основной CSS вынесен в `map_modal.css`, `#map-modal-styles` теперь является stylesheet link.
+- Stage 4.4 выполнен: marker navigation вынесен в `map_marker_navigation.js`, `map_modal.js` лениво подключает helper через `#map-marker-navigation-script`, smoke проверяет SPA priority/fallback и реальный click по `.visited-marker`.
 
 ### CR-08 - MEDIUM - `index.html` содержит крупные inline-классы и бизнес-логику SPA
 

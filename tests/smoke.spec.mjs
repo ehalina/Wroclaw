@@ -150,6 +150,134 @@ test.describe('Wroclaw static app smoke', () => {
     });
   });
 
+  test('MapMarkerNavigation keeps SPA priority and location fallback behavior', async ({ page }) => {
+    await page.goto('/tumski.html');
+    await page.waitForFunction(() => window.MapMarkerNavigation?.navigate);
+
+    const result = await page.evaluate(async () => {
+      const localCalls = [];
+      const parentCalls = [];
+      const localStorageCalls = [];
+      const fallbackStorageCalls = [];
+      const localLocation = { href: '' };
+      const fallbackLocation = { href: '' };
+      const localStorage = {
+        setItem(key, value) {
+          localStorageCalls.push([key, value]);
+        }
+      };
+      const fallbackStorage = {
+        setItem(key, value) {
+          fallbackStorageCalls.push([key, value]);
+        }
+      };
+
+      const localRoot = {
+        SPAManager: {
+          loadPage(pageName) {
+            localCalls.push(pageName);
+          }
+        },
+        location: localLocation,
+        parent: {
+          SPAManager: {
+            loadPage(pageName) {
+              parentCalls.push(pageName);
+            }
+          }
+        },
+        sessionStorage: localStorage
+      };
+
+      const localResult = window.MapMarkerNavigation.navigate(
+        ['tumski05.html', 'tumski06.html'],
+        {
+          location: localLocation,
+          root: localRoot,
+          secondaryDelayMs: 0,
+          sessionStorage: localStorage
+        }
+      );
+
+      await new Promise(resolve => setTimeout(resolve, 20));
+
+      const fallbackRoot = {
+        location: fallbackLocation,
+        parent: null,
+        sessionStorage: fallbackStorage
+      };
+      const fallbackResult = window.MapMarkerNavigation.navigate('tumski08.html', {
+        location: fallbackLocation,
+        root: fallbackRoot,
+        sessionStorage: fallbackStorage
+      });
+
+      return {
+        fallbackHref: fallbackLocation.href,
+        fallbackResult,
+        fallbackStorageCalls,
+        localCalls,
+        localHref: localLocation.href,
+        localResult,
+        localStorageCalls,
+        parentCalls
+      };
+    });
+
+    expect(result).toEqual({
+      fallbackHref: 'tumski08.html',
+      fallbackResult: {
+        mode: 'location',
+        page: 'tumski08.html',
+        pages: ['tumski08.html']
+      },
+      fallbackStorageCalls: [['navigateViaMap', '1']],
+      localCalls: ['tumski05.html', 'tumski06.html'],
+      localHref: '',
+      localResult: {
+        mode: 'spa',
+        page: 'tumski05.html',
+        pages: ['tumski05.html', 'tumski06.html']
+      },
+      localStorageCalls: [['navigateViaMap', '1']],
+      parentCalls: []
+    });
+  });
+
+  test('visited marker click delegates route changes to MapMarkerNavigation', async ({ page }) => {
+    await page.goto('/tumski.html');
+    await expect(page.locator('#open-map-modal')).toBeVisible();
+
+    await page.evaluate(() => {
+      window.__stage4MarkerNavigationCalls = [];
+      window.SPAManager = {
+        loadPage(pageName) {
+          window.__stage4MarkerNavigationCalls.push(pageName);
+        }
+      };
+      localStorage.setItem('visitedPages', JSON.stringify({
+        'tumski05.html': {
+          page: 'tumski05.html',
+          point: 5,
+          title: 'Smoke target'
+        }
+      }));
+    });
+
+    await page.waitForFunction(() => window.MapMarkerNavigation?.navigate);
+    await page.evaluate(async () => {
+      await window.openFullscreenMap();
+    });
+
+    const marker = page.locator('#visited-markers-layer .visited-marker').first();
+    await expect(marker).toBeAttached();
+    await marker.click({ force: true });
+
+    await expect.poll(() => page.evaluate(() => window.__stage4MarkerNavigationCalls)).toEqual(['tumski05.html']);
+    await expect.poll(() => page.evaluate(() => sessionStorage.getItem('navigateViaMap'))).toBe('1');
+    await expect.poll(() => page.evaluate(() => getComputedStyle(document.getElementById('map-modal')).display)).toBe('none');
+  });
+
   test('SPA config exposes page registry, selectors and audio policy', async ({ page }) => {
     await page.goto('/');
 

@@ -255,11 +255,12 @@ class SPAManager {
 **Implementation:**
 - Сохранение: при инициализации страницы считываем `data-map-point` у `.image-container` и сохраняем `{ page, point, title }` в `localStorage.visitedPages`.
 - Отрисовка: при открытии карты (`map_modal.js`) создаём слой `#visited-markers-layer` и для каждой посещённой страницы ставим `.visited-marker` в координатах точки (`getMapPointCoords`).
-- Навигация: по клику — `SPAManager.loadPage(page)` если доступен, иначе `location.href = page`.
+- Навигация: по клику `map_marker_navigation.js` сохраняет `sessionStorage.navigateViaMap = "1"` и использует текущий приоритет `window.SPAManager.loadPage(page)` → `window.parent.SPAManager.loadPage(page)` → `location.href = page`.
 - Адаптация: проценты для desktop, пересчёт в пиксели для mobile, обновление позиций на `resize`.
 
 **Locations:**
-- `map_modal.js` — сохранение посещения, рендер и позиционирование маркеров, переход по клику.
+- `map_modal.js` — сохранение посещения, рендер/позиционирование маркеров, mobile preview и cleanup модалки перед переходом.
+- `map_marker_navigation.js` — isolated helper для route decision по marker click; подключается из `map_modal.js` через `<script id="map-marker-navigation-script">`, чтобы не менять HTML load order.
 - `map_points.js` — источник координат точек.
 
 ### 1.6. Map modal lifecycle

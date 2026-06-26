@@ -260,6 +260,11 @@
   - Files: `map_modal.css`, `map_modal.js`, `tests/smoke.spec.mjs`
   - Benefit: the largest static style block is out of `map_modal.js` without editing 54 HTML script includes
 
+- [x] **Refactor: Map marker navigation extraction** - Moved visited-marker route decisions into a standalone helper
+  - Completed: 2026-06-27
+  - Files: `map_marker_navigation.js`, `map_modal.js`, `tests/smoke.spec.mjs`
+  - Benefit: marker clicks now delegate SPA/fallback navigation through a focused helper while `map_modal.js` keeps modal cleanup and marker rendering
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

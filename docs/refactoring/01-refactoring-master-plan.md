@@ -180,3 +180,8 @@ make smoke
   - основной `mapStyles` вынесен в `map_modal.css`;
   - `map_modal.js` подключает CSS через `<link id="map-modal-styles" rel="stylesheet">`;
   - Playwright smoke проверяет внешний stylesheet вместо legacy inline style.
+- Stage 4.4 выполнен:
+  - marker route decision вынесен в `map_marker_navigation.js`;
+  - `map_modal.js` лениво подключает helper через stable `#map-marker-navigation-script`;
+  - сохранён приоритет `window.SPAManager` → `window.parent.SPAManager` → `location.href`;
+  - Playwright smoke проверяет helper modes и реальный click по `.visited-marker`.

@@ -53,9 +53,9 @@
    - ✅ Проверить, что CSS порядок не ломается.
    - ⏳ Малый `.mobile-tooltip` style пока остаётся inline.
 
-4. Изолировать marker navigation.
-   - Использовать fix из Stage 2 как baseline.
-   - Не менять route behavior.
+4. ✅ Изолировать marker navigation.
+   - ✅ Использовать fix из Stage 2 как baseline.
+   - ✅ Не менять route behavior.
 
 5. Изолировать visited markers.
    - Оставить текущий storage key.
@@ -152,3 +152,24 @@ Stage 4.3 выполнен:
 - изолировать marker navigation из `map_modal.js`;
 - сохранить текущий route behavior и fallback на `location.href`;
 - использовать существующие smoke checks как baseline, при необходимости добавить marker click smoke.
+
+## Status Update - 2026-06-27 - Stage 4.4
+
+Stage 4.4 выполнен:
+
+- Добавлен `map_marker_navigation.js` как classic-script helper с global API `window.MapMarkerNavigation`.
+- `map_modal.js` лениво подключает helper через `<script id="map-marker-navigation-script" src="map_marker_navigation.js">`, поэтому 51 runtime HTML-файл с `<script src="map_modal.js">` не менялись.
+- `handleMarkerClick()` больше не содержит route decision; он закрывает карту/чистит menu, swipe и audio state, затем делегирует переход в `MapMarkerNavigation`.
+- Сохранён прежний приоритет перехода: `window.SPAManager.loadPage(page)` → `window.parent.SPAManager.loadPage(page)` → `location.href = page`.
+- Сохранён `sessionStorage.navigateViaMap = "1"` и delay 100 ms для второго page entry.
+- Добавлены smoke checks:
+  - helper сохраняет local SPA priority и fake-location fallback;
+  - реальный click по `.visited-marker` делегирует переход в `MapMarkerNavigation`;
+  - проверки выполняются на desktop/mobile.
+- Проверка после изменения: `make smoke` - 26 тестов прошли на desktop/mobile.
+
+Следующий подэтап Stage 4.5:
+
+- изолировать visited markers storage/rendering из `map_modal.js`;
+- оставить storage key `visitedPages` и tolerant parsing;
+- не менять координаты, классы маркеров и mobile/desktop positioning.

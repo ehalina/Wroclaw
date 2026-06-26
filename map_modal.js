@@ -1,6 +1,9 @@
 // Стили для кнопки карты и модального окна
 const MAP_MODAL_STYLE_ID = 'map-modal-styles';
 const MAP_MODAL_MOBILE_TOOLTIP_STYLE_ID = 'map-modal-mobile-tooltip-styles';
+const MAP_MARKER_NAVIGATION_SCRIPT_ID = 'map-marker-navigation-script';
+
+let mapMarkerNavigationPromise = null;
 
 const mobileTooltipStyles = `
     .mobile-tooltip {
@@ -48,6 +51,88 @@ function ensureMapModalStyles() {
 
 function ensureMobileTooltipStyles() {
     ensureStyleElement(MAP_MODAL_MOBILE_TOOLTIP_STYLE_ID, mobileTooltipStyles);
+}
+
+function getMapMarkerNavigation() {
+    if (window.MapMarkerNavigation && typeof window.MapMarkerNavigation.navigate === 'function') {
+        return window.MapMarkerNavigation;
+    }
+
+    return null;
+}
+
+function ensureMapMarkerNavigationScript() {
+    const navigation = getMapMarkerNavigation();
+    if (navigation) {
+        return Promise.resolve(navigation);
+    }
+
+    if (mapMarkerNavigationPromise) {
+        return mapMarkerNavigationPromise;
+    }
+
+    mapMarkerNavigationPromise = new Promise((resolve, reject) => {
+        let scriptElement = document.getElementById(MAP_MARKER_NAVIGATION_SCRIPT_ID);
+
+        const resolveIfReady = () => {
+            const loadedNavigation = getMapMarkerNavigation();
+            if (loadedNavigation) {
+                resolve(loadedNavigation);
+                return;
+            }
+
+            scriptElement.remove();
+            mapMarkerNavigationPromise = null;
+            reject(new Error('Map marker navigation script did not expose MapMarkerNavigation.'));
+        };
+
+        const rejectLoad = () => {
+            scriptElement.remove();
+            mapMarkerNavigationPromise = null;
+            reject(new Error('Map marker navigation script failed to load.'));
+        };
+
+        if (!scriptElement) {
+            scriptElement = document.createElement('script');
+            scriptElement.id = MAP_MARKER_NAVIGATION_SCRIPT_ID;
+            scriptElement.src = 'map_marker_navigation.js';
+            scriptElement.async = true;
+            scriptElement.addEventListener('load', resolveIfReady, { once: true });
+            scriptElement.addEventListener('error', rejectLoad, { once: true });
+            document.head.appendChild(scriptElement);
+            return;
+        }
+
+        scriptElement.addEventListener('load', resolveIfReady, { once: true });
+        scriptElement.addEventListener('error', rejectLoad, { once: true });
+    });
+
+    return mapMarkerNavigationPromise;
+}
+
+function fallbackMarkerNavigation(page) {
+    const pages = (Array.isArray(page) ? page : [page]).filter(Boolean);
+    const firstPage = pages[0];
+
+    if (!firstPage) {
+        return;
+    }
+
+    try {
+        sessionStorage.setItem('navigateViaMap', '1');
+    } catch (_) {}
+
+    location.href = firstPage;
+}
+
+function navigateToMarkerPage(page) {
+    ensureMapMarkerNavigationScript()
+        .then((navigation) => {
+            navigation.navigate(page);
+        })
+        .catch(() => {
+            fallbackMarkerNavigation(page);
+        });
 }
 
 function getMapModalTemplate() {
@@ -292,6 +377,7 @@ const MapModal = {
     init() {
         ensureMapModalStyles();
         ensureMapModalDom();
+        ensureMapMarkerNavigationScript().catch(() => {});
 
         // Зафиксировать посещение текущей страницы
         saveVisitedPageIfNeeded().catch(() => {});
@@ -1560,37 +1646,8 @@ const MapModal = {
             const mapSound = document.getElementById('mapSound');
             if (mapSound) { mapSound.pause(); mapSound.currentTime = 0; }
         } catch (_) {}
-        // Помечаем переход через карту для инициализации курсоров на новой странице
-        try {
-            sessionStorage.setItem('navigateViaMap', '1');
-        } catch (_) {}
-        
-        try {
-            if (window.SPAManager && typeof window.SPAManager.loadPage === 'function') {
-                window.SPAManager.loadPage(firstPage);
-                // Если есть вторая страница, открываем её через небольшую задержку
-                if (pages.length > 1) {
-                    setTimeout(() => {
-                        if (window.SPAManager && typeof window.SPAManager.loadPage === 'function') {
-                            window.SPAManager.loadPage(pages[1]);
-                        }
-                    }, 100);
-                }
-            } else if (window.parent && window.parent.SPAManager && typeof window.parent.SPAManager.loadPage === 'function') {
-                window.parent.SPAManager.loadPage(firstPage);
-                if (pages.length > 1) {
-                    setTimeout(() => {
-                        if (window.parent.SPAManager && typeof window.parent.SPAManager.loadPage === 'function') {
-                            window.parent.SPAManager.loadPage(pages[1]);
-                        }
-                    }, 100);
-                }
-            } else {
-                location.href = firstPage;
-            }
-        } catch (_) {
-            location.href = firstPage;
-        }
+
+        navigateToMarkerPage(pages);
     },
 
     setupMobileSwipe() {
