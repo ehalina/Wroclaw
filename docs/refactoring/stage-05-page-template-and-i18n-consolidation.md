@@ -4,6 +4,17 @@
 
 Снизить дублирование HTML-страниц и сделать локализацию безопасной и проверяемой.
 
+## Technology Gate Input - 2026-06-26
+
+POC `tools/template-poc` показал, что data-driven страницы можно генерировать в static HTML без смены runtime framework.
+
+Stage 5 должен использовать это как кандидат, но не начинать массовую миграцию:
+
+- сначала новая или низкорисковая страница;
+- metadata для markers/arrows/page shell;
+- generated HTML остается обычным HTML;
+- замена production page только после `make test`, `make test-e2e`, `make build`.
+
 ## Scope
 
 Входит:
@@ -90,4 +101,3 @@ make security
 - В переводах много намеренного HTML, который нельзя быстро классифицировать.
 - Старые страницы зависят от side effects `innerHTML`.
 - Дубли `translation.json`/`translations.json` используются внешним workflow.
-

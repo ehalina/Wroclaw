@@ -138,3 +138,13 @@ make smoke
 - SPA, карта, квесты, язык и аудио имеют хотя бы smoke-проверки.
 - Крупные файлы разбиты по ответственностям без смены поведения.
 - `BACKLOG.md`, `ARCHITECTURE.md`, `README.md` и `AGENTS.md` обновлены там, где изменения реально затронули процессы или архитектуру.
+
+## Status Update - 2026-06-26
+
+- Stage 1 baseline/tooling выполнен.
+- Stage 2 runtime fixes выполнен.
+- Technology Review Gate выполнен:
+  - ESLint/Playwright/static checkers остаются принятыми safety-net технологиями;
+  - runtime framework не меняется;
+  - templating/static generation принят как Stage 5 candidate через internal metadata generator POC;
+  - Howler/Vite/i18next отложены до более сильных сигналов.

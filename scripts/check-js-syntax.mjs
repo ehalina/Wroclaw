@@ -12,6 +12,8 @@ const ignoredDirectories = new Set([
   'Init',
   'ios',
   'node_modules',
+  'playwright-report',
+  'test-results',
   'www',
   '__BestPractice'
 ]);
@@ -78,4 +80,3 @@ if (failures.length > 0) {
 }
 
 console.log(`JS syntax check passed (${files.length} files).`);
-

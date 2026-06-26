@@ -1,0 +1,154 @@
+{
+  "pages": [
+    {
+      "output": "tumski05.html",
+      "title": "Тумский остров - Вроцлав",
+      "stylesheet": "tumski05.css",
+      "mapPoint": 5,
+      "hints": false,
+      "markers": [
+        {
+          "comment": "Геометка: Собор Святого Иоанна Крестителя (универсальная)",
+          "id": "tumski_cathedral",
+          "xDesktop": 1500,
+          "yDesktop": 300,
+          "xMobile": 1400,
+          "yMobile": 300,
+          "textId": "tumski-cathedral-text",
+          "i18n": "tumski_cathedral.title",
+          "audioId": "bookSound3"
+        }
+      ],
+      "arrows": [
+        {
+          "comment": "Область иконки \"стрелка прямо\" в правом нижнем углу",
+          "cursorClass": "custom-cursor-prosto",
+          "areaClass": "custom-cursor-prostoarea",
+          "xDesktop": 1200,
+          "yDesktop": 1200,
+          "xMobile": 1500,
+          "yMobile": 1200,
+          "areaXDesktop": 1000,
+          "areaYDesktop": 1200,
+          "areaXMobile": 1500,
+          "areaYMobile": 1200,
+          "nextPage": "tumski06.html",
+          "layer": "image"
+        },
+        {
+          "comment": "Стрелка назад",
+          "cursorClass": "custom-cursor-back",
+          "areaClass": "custom-cursor-backarea",
+          "xDesktop": 800,
+          "yDesktop": 1400,
+          "xMobile": 1600,
+          "yMobile": 1400,
+          "areaXDesktop": 600,
+          "areaYDesktop": 1400,
+          "areaXMobile": 1600,
+          "areaYMobile": 1400,
+          "prevPage": "tumski04.html",
+          "layer": "image"
+        }
+      ]
+    },
+    {
+      "output": "tumski06.html",
+      "title": "Тумский остров - Вроцлав",
+      "stylesheet": "tumski06.css",
+      "mapPoint": 6,
+      "hints": true,
+      "markers": [
+        {
+          "comment": "Геометка: Собор Святого Иоанна Крестителя (универсальная)",
+          "id": "tumski_cathedral",
+          "xDesktop": 1200,
+          "yDesktop": 300,
+          "xMobile": 1400,
+          "yMobile": 300,
+          "textId": "tumski-cathedral-text",
+          "i18n": "tumski_cathedral.title",
+          "audioId": "bookSound3"
+        },
+        {
+          "comment": "Геометка: Богоматерь с младенцем Квест",
+          "id": "bogomater_quest",
+          "xDesktop": 1100,
+          "yDesktop": 1000,
+          "xMobile": 1350,
+          "yMobile": 1000,
+          "textId": null,
+          "i18n": "quest.task4",
+          "paperaSrc": "media/papera1.png",
+          "audioId": "bookSoundBogomater",
+          "extraAttrs": {
+            "data-quest-number": "4",
+            "data-quest-image": "media/watercolor/42.jpg"
+          }
+        }
+      ],
+      "arrows": [
+        {
+          "comment": "Стрелка влево",
+          "cursorClass": "custom-cursor-left",
+          "areaClass": "custom-cursor-leftarea",
+          "xDesktop": 1310,
+          "yDesktop": 1300,
+          "xMobile": 1650,
+          "yMobile": 1500,
+          "areaXDesktop": 1300,
+          "areaYDesktop": 1200,
+          "areaXMobile": 1650,
+          "areaYMobile": 1500,
+          "nextPage": "tumski18.html",
+          "layer": "image"
+        },
+        {
+          "comment": "Стрелка прямо вправо",
+          "cursorClass": "custom-cursor-prosto",
+          "areaClass": "custom-cursor-prostoarea",
+          "xDesktop": 1400,
+          "yDesktop": 1200,
+          "xMobile": 1900,
+          "yMobile": 1200,
+          "areaXDesktop": 1300,
+          "areaYDesktop": 1200,
+          "areaXMobile": 1900,
+          "areaYMobile": 1200,
+          "nextPage": "tumski11.html",
+          "layer": "image"
+        },
+        {
+          "comment": "Стрелка прямо влево",
+          "cursorClass": "custom-cursor-prosto-left",
+          "areaClass": "custom-cursor-prosto-leftarea",
+          "xDesktop": 400,
+          "yDesktop": 1200,
+          "xMobile": 600,
+          "yMobile": 1300,
+          "areaXDesktop": 400,
+          "areaYDesktop": 1200,
+          "areaXMobile": 600,
+          "areaYMobile": 1300,
+          "nextPage": "pk01.html",
+          "layer": "image"
+        },
+        {
+          "comment": "Стрелка назад",
+          "cursorClass": "custom-cursor-back",
+          "areaClass": "custom-cursor-backarea",
+          "xDesktop": 100,
+          "yDesktop": 1400,
+          "xMobile": 400,
+          "yMobile": 1600,
+          "areaXDesktop": 100,
+          "areaYDesktop": 1300,
+          "areaXMobile": 400,
+          "areaYMobile": 1600,
+          "prevPage": "tumski05.html",
+          "layer": "scroll-wrapper"
+        }
+      ]
+    }
+  ]
+}

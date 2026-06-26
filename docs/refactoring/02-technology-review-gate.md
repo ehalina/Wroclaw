@@ -138,3 +138,22 @@ Howler.js проверять только если аудио остается �
 
 Vite проверять после того, как routes/assets стали чистыми, иначе POC будет диагностировать старые path-проблемы, а не пользу Vite.
 
+## Gate Result - 2026-06-26
+
+Выполнен POC для templating/static generation:
+
+- `tools/template-poc/pages.json`;
+- `tools/template-poc/generate.mjs`;
+- `tools/template-poc/generated/tumski05.html`;
+- `tools/template-poc/generated/tumski06.html`;
+- запуск через `make poc-template`.
+
+Решение:
+
+- принять internal metadata + static generator как Stage 5 candidate;
+- не добавлять Eleventy/Nunjucks до массовой миграции страниц;
+- Vite отложить до завершения SPA/message boundary и page-template cleanup;
+- Howler.js отложить до отдельного audio lifecycle POC, если Audio Unlock Improvement останется хрупким;
+- i18next не внедрять до появления pluralization/interpolation/external workflow.
+
+Детали: `docs/refactoring/02-template-poc-result.md`.

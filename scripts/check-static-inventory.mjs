@@ -13,6 +13,8 @@ const ignoredDirectories = new Set([
   'ios',
   'locales',
   'node_modules',
+  'playwright-report',
+  'test-results',
   'www',
   '__BestPractice'
 ]);
