@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 76% (16/21 основных задач)
+**Общий прогресс:** 77% (17/22 основных задач)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -61,6 +61,7 @@ Wroclaw/
 ├── map_modal.js ✅                 # Модальные окна, template helper, идемпотентный init
 ├── map_modal.css ✅                # Основные стили карты и квестовых overlays
 ├── map_marker_navigation.js ✅     # Переходы по visited markers
+├── visited_markers.js ✅           # Storage/render visited markers
 ├── language_menu.js ✅              # Меню языков
 ├── arrow_handlers.js ✅            # Обработчики навигации
 ├── Makefile ✅                      # Стандартизированные команды
@@ -107,6 +108,7 @@ Wroclaw/
 12. ✅ Stage 4.2 MapModal template helper extraction
 13. ✅ Stage 4.3 MapModal CSS extraction
 14. ✅ Stage 4.4 Map marker navigation extraction
+15. ✅ Stage 4.5 Visited markers storage/render extraction
 
 ---
 
@@ -189,6 +191,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 4.5 выполнен
+- visited marker storage/rendering вынесены из `map_modal.js` в `visited_markers.js`
+- `map_modal.js` лениво подключает helper через stable `#visited-markers-script`
+- сохранены `visitedPages`, классы маркеров, координаты и mobile/desktop positioning
+- smoke расширен до 28 тестов: parsing/save/render contract и idempotent script injection
 
 ### 2026-06-27 - Refactoring Stage 4.4 выполнен
 - marker route decision вынесен из `map_modal.js` в `map_marker_navigation.js`

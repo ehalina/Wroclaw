@@ -123,11 +123,13 @@ test.describe('Wroclaw static app smoke', () => {
         legacyInlineMainStyles: document.querySelectorAll('style#map-modal-styles').length,
         mainStyleHref: document.getElementById('map-modal-styles')?.getAttribute('href'),
         mainStyles: document.querySelectorAll('link#map-modal-styles[rel="stylesheet"]').length,
+        markerNavigationScripts: document.querySelectorAll('script#map-marker-navigation-script[src="map_marker_navigation.js"]').length,
         mapButtons: document.querySelectorAll('#open-map-modal').length,
         mapModals: document.querySelectorAll('#map-modal').length,
         missingTemplateSelectors: templateSelectors.filter(selector => document.querySelectorAll(selector).length !== 1),
         questButtons: document.querySelectorAll('#open-quest').length,
         tooltipStyles: document.querySelectorAll('#map-modal-mobile-tooltip-styles').length,
+        visitedMarkerScripts: document.querySelectorAll('script#visited-markers-script[src="visited_markers.js"]').length,
         windowListenersAdded
       };
     });
@@ -141,11 +143,13 @@ test.describe('Wroclaw static app smoke', () => {
       legacyInlineMainStyles: 0,
       mainStyleHref: 'map_modal.css',
       mainStyles: 1,
+      markerNavigationScripts: 1,
       mapButtons: 1,
       mapModals: 1,
       missingTemplateSelectors: [],
       questButtons: 1,
       tooltipStyles: 1,
+      visitedMarkerScripts: 1,
       windowListenersAdded: 0
     });
   });
@@ -276,6 +280,86 @@ test.describe('Wroclaw static app smoke', () => {
     await expect.poll(() => page.evaluate(() => window.__stage4MarkerNavigationCalls)).toEqual(['tumski05.html']);
     await expect.poll(() => page.evaluate(() => sessionStorage.getItem('navigateViaMap'))).toBe('1');
     await expect.poll(() => page.evaluate(() => getComputedStyle(document.getElementById('map-modal')).display)).toBe('none');
+  });
+
+  test('VisitedMarkers helper preserves storage parsing, save and render contract', async ({ page }) => {
+    await page.goto('/tumski.html');
+    await expect(page.locator('#open-map-modal')).toBeVisible();
+    await page.waitForFunction(() => window.VisitedMarkers?.renderVisitedMarkers);
+
+    const result = await page.evaluate(async () => {
+      localStorage.setItem('visitedPages', '{not valid json');
+      const malformedStore = window.VisitedMarkers.getVisitedPages();
+
+      localStorage.removeItem('visitedPages');
+      await window.VisitedMarkers.saveVisitedPageIfNeeded();
+
+      const currentPage = window.VisitedMarkers.getCurrentPageName();
+      const savedStore = JSON.parse(localStorage.getItem('visitedPages') || '{}');
+      const currentPoint = Number(document.querySelector('.image-container')?.getAttribute('data-map-point'));
+
+      localStorage.setItem('visitedPages', JSON.stringify({
+        [currentPage]: {
+          page: currentPage,
+          point: currentPoint,
+          title: 'Current smoke'
+        },
+        'tumski05.html': {
+          page: 'tumski05.html',
+          point: 5,
+          title: 'Smoke target'
+        }
+      }));
+
+      document.getElementById('map-modal').style.display = 'flex';
+      await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+
+      const attachedPages = [];
+      const renderResult = await window.VisitedMarkers.renderVisitedMarkers({
+        attachMarkerHandlers(marker, pageName, isSmallScreen) {
+          marker.dataset.smokePage = pageName;
+          marker.dataset.smokeSmallScreen = String(isSmallScreen);
+          attachedPages.push(pageName);
+        }
+      });
+
+      const markers = Array.from(document.querySelectorAll('#visited-markers-layer .visited-marker')).map(marker => ({
+        className: marker.className,
+        left: marker.style.left,
+        page: marker.dataset.smokePage,
+        smallScreen: marker.dataset.smokeSmallScreen,
+        title: marker.title,
+        top: marker.style.top
+      }));
+
+      return {
+        attachedPages,
+        currentPage,
+        malformedStore,
+        markers,
+        renderResult,
+        savedCurrent: savedStore[currentPage]
+      };
+    });
+
+    expect(result.malformedStore).toEqual({});
+    expect(result.currentPage).toBe('tumski.html');
+    expect(result.savedCurrent.page).toBe('tumski.html');
+    expect(result.savedCurrent.point).toBeGreaterThan(0);
+    expect(result.renderResult).toEqual({ markerCount: 2 });
+    expect(result.attachedPages).toEqual(['tumski.html', 'tumski05.html']);
+    expect(result.markers).toHaveLength(2);
+    expect(result.markers[0]).toEqual(expect.objectContaining({
+      className: 'visited-marker current-page',
+      page: 'tumski.html',
+      title: 'Current smoke'
+    }));
+    expect(result.markers[1]).toEqual(expect.objectContaining({
+      className: 'visited-marker',
+      page: 'tumski05.html',
+      title: 'Smoke target'
+    }));
+    expect(result.markers.every(marker => marker.left && marker.top)).toBe(true);
   });
 
   test('SPA config exposes page registry, selectors and audio policy', async ({ page }) => {

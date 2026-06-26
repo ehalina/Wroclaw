@@ -185,3 +185,8 @@ make smoke
   - `map_modal.js` лениво подключает helper через stable `#map-marker-navigation-script`;
   - сохранён приоритет `window.SPAManager` → `window.parent.SPAManager` → `location.href`;
   - Playwright smoke проверяет helper modes и реальный click по `.visited-marker`.
+- Stage 4.5 выполнен:
+  - visited-marker storage/rendering вынесены в `visited_markers.js`;
+  - `map_modal.js` лениво подключает helper через stable `#visited-markers-script`;
+  - сохранены `visitedPages`, классы маркеров, координаты, double offsets и mobile/desktop positioning;
+  - Playwright smoke проверяет tolerant parsing, save contract, render contract и idempotent script injection.

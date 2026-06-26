@@ -57,10 +57,10 @@
    - ✅ Использовать fix из Stage 2 как baseline.
    - ✅ Не менять route behavior.
 
-5. Изолировать visited markers.
-   - Оставить текущий storage key.
-   - Добавить функции чтения/записи с tolerant parsing.
-   - Проверить старые данные в localStorage.
+5. ✅ Изолировать visited markers.
+   - ✅ Оставить текущий storage key.
+   - ✅ Добавить функции чтения/записи с tolerant parsing.
+   - ✅ Проверить старые данные в localStorage.
 
 6. Изолировать quest overlay.
    - Разделить открытие/закрытие, заполнение текста, картинки, звук.
@@ -173,3 +173,21 @@ Stage 4.4 выполнен:
 - изолировать visited markers storage/rendering из `map_modal.js`;
 - оставить storage key `visitedPages` и tolerant parsing;
 - не менять координаты, классы маркеров и mobile/desktop positioning.
+
+## Status Update - 2026-06-27 - Stage 4.5
+
+Stage 4.5 выполнен:
+
+- Добавлен `visited_markers.js` как classic-script helper с global API `window.VisitedMarkers`.
+- `map_modal.js` лениво подключает helper через `<script id="visited-markers-script" src="visited_markers.js">`, поэтому runtime HTML-файлы не менялись.
+- Из `map_modal.js` вынесены current-page detection, tolerant parsing `localStorage.visitedPages`, запись посещённой страницы и render layer `#visited-markers-layer`.
+- `MapModal.renderVisitedMarkers()` сохранён как публичный wrapper и передаёт `attachMarkerHandlers`, поэтому preview/navigation поведение остаётся в `map_modal.js`.
+- Сохранены storage key `visitedPages`, классы `.visited-marker`, `.visited-marker-double-light`, `.visited-marker-double-dark`, `.current-page`, координаты, double-marker offsets и mobile/desktop positioning.
+- Playwright smoke добавлен для invalid storage parsing, save contract, render contract и idempotent script injection.
+- Проверка после изменения: `make smoke` - 28 тестов прошли на desktop/mobile.
+
+Следующий подэтап Stage 4.6:
+
+- изолировать quest/book overlay behavior из `map_modal.js`;
+- разделить открытие/закрытие, заполнение текста, картинки и звук;
+- не менять структуру данных квестов до отдельной задачи.

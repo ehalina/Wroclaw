@@ -265,6 +265,11 @@
   - Files: `map_marker_navigation.js`, `map_modal.js`, `tests/smoke.spec.mjs`
   - Benefit: marker clicks now delegate SPA/fallback navigation through a focused helper while `map_modal.js` keeps modal cleanup and marker rendering
 
+- [x] **Refactor: Visited markers storage/render extraction** - Moved visited-marker persistence and DOM rendering into a standalone helper
+  - Completed: 2026-06-27
+  - Files: `visited_markers.js`, `map_modal.js`, `tests/smoke.spec.mjs`
+  - Benefit: `map_modal.js` keeps modal/preview/navigation wiring while visited-page parsing, saving and marker layer rendering are isolated behind a focused helper
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

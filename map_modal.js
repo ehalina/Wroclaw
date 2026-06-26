@@ -2,8 +2,10 @@
 const MAP_MODAL_STYLE_ID = 'map-modal-styles';
 const MAP_MODAL_MOBILE_TOOLTIP_STYLE_ID = 'map-modal-mobile-tooltip-styles';
 const MAP_MARKER_NAVIGATION_SCRIPT_ID = 'map-marker-navigation-script';
+const VISITED_MARKERS_SCRIPT_ID = 'visited-markers-script';
 
 let mapMarkerNavigationPromise = null;
+let visitedMarkersPromise = null;
 
 const mobileTooltipStyles = `
     .mobile-tooltip {
@@ -133,6 +135,65 @@ function navigateToMarkerPage(page) {
         .catch(() => {
             fallbackMarkerNavigation(page);
         });
+}
+
+function getVisitedMarkers() {
+    if (window.VisitedMarkers &&
+        typeof window.VisitedMarkers.saveVisitedPageIfNeeded === 'function' &&
+        typeof window.VisitedMarkers.renderVisitedMarkers === 'function') {
+        return window.VisitedMarkers;
+    }
+
+    return null;
+}
+
+function ensureVisitedMarkersScript() {
+    const visitedMarkers = getVisitedMarkers();
+    if (visitedMarkers) {
+        return Promise.resolve(visitedMarkers);
+    }
+
+    if (visitedMarkersPromise) {
+        return visitedMarkersPromise;
+    }
+
+    visitedMarkersPromise = new Promise((resolve, reject) => {
+        let scriptElement = document.getElementById(VISITED_MARKERS_SCRIPT_ID);
+
+        const resolveIfReady = () => {
+            const loadedVisitedMarkers = getVisitedMarkers();
+            if (loadedVisitedMarkers) {
+                resolve(loadedVisitedMarkers);
+                return;
+            }
+
+            scriptElement.remove();
+            visitedMarkersPromise = null;
+            reject(new Error('Visited markers script did not expose VisitedMarkers.'));
+        };
+
+        const rejectLoad = () => {
+            scriptElement.remove();
+            visitedMarkersPromise = null;
+            reject(new Error('Visited markers script failed to load.'));
+        };
+
+        if (!scriptElement) {
+            scriptElement = document.createElement('script');
+            scriptElement.id = VISITED_MARKERS_SCRIPT_ID;
+            scriptElement.src = 'visited_markers.js';
+            scriptElement.async = true;
+            scriptElement.addEventListener('load', resolveIfReady, { once: true });
+            scriptElement.addEventListener('error', rejectLoad, { once: true });
+            document.head.appendChild(scriptElement);
+            return;
+        }
+
+        scriptElement.addEventListener('load', resolveIfReady, { once: true });
+        scriptElement.addEventListener('error', rejectLoad, { once: true });
+    });
+
+    return visitedMarkersPromise;
 }
 
 function getMapModalTemplate() {
@@ -281,94 +342,10 @@ async function getCurrentMapPoint() {
     return getMapPointCoords(mapPoint || 1);
 }
 
-// === Учёт посещённых страниц ===
-function getVisitedPages() {
-    try {
-        return JSON.parse(localStorage.getItem('visitedPages') || '{}');
-    } catch (_) {
-        return {};
-    }
-}
-
-// Надёжное определение имени текущей страницы
-function getCurrentPageName() {
-    let page = '';
-    
-    // Пробуем получить из location
-    const pathname = window.location.pathname;
-    if (pathname) {
-        page = pathname.split('/').pop() || '';
-    }
-    
-    // Если страница не определена или это index.html, пробуем другие способы
-    if (!page || page === '' || page === 'index.html') {
-        // Пробуем из href
-        const href = window.location.href;
-        if (href && href !== 'about:blank') {
-            const url = new URL(href);
-            page = url.pathname.split('/').pop() || '';
-        }
-        
-        // Если всё ещё не определили и мы в iframe, пробуем через frameElement
-        if ((!page || page === '' || page === 'index.html') && window.frameElement) {
-            try {
-                if (window.frameElement.src) {
-                    const iframeSrc = window.frameElement.src.split('?')[0];
-                    page = iframeSrc.split('/').pop() || '';
-                }
-            } catch (_) {}
-        }
-    }
-    
-    // Удаляем query параметры и хеш, если есть
-    page = page.split('?')[0].split('#')[0];
-    
-    return (page || 'index.html').trim();
-}
-
 async function saveVisitedPageIfNeeded() {
     try {
-        const imageContainer = document.querySelector('.image-container');
-        const mapPointAttr = imageContainer ? imageContainer.getAttribute('data-map-point') : null;
-        const mapPoint = mapPointAttr ? parseInt(mapPointAttr) : null;
-        if (!mapPoint || Number.isNaN(mapPoint)) return;
-
-        // Надёжное определение имени страницы
-        const page = getCurrentPageName();
-
-        const store = getVisitedPages();
-        
-        // Если страница уже сохранена, проверяем соответствие point
-        if (store[page]) {
-            // Если point не совпадает, обновляем (возможно, страница изменилась)
-            if (store[page].point !== mapPoint) {
-                store[page].point = mapPoint;
-                store[page].title = document.title || page;
-                localStorage.setItem('visitedPages', JSON.stringify(store));
-            }
-        } else {
-            // Проверяем, является ли точка двойной (может иметь несколько страниц)
-            const { isDoublePoint } = await import('./map_points.js');
-            const isDouble = isDoublePoint(mapPoint);
-            
-            if (!isDouble) {
-                // Для обычных точек удаляем старую запись с таким же point
-                for (const [storedPage, data] of Object.entries(store)) {
-                    if (data && data.point === mapPoint && storedPage !== page) {
-                        delete store[storedPage];
-                    }
-                }
-            }
-            // Для двойных точек сохраняем все страницы с этой точкой
-            
-            // Сохраняем новую страницу
-            store[page] = {
-                point: mapPoint,
-                page,
-                title: document.title || page
-            };
-            localStorage.setItem('visitedPages', JSON.stringify(store));
-        }
+        const visitedMarkers = await ensureVisitedMarkersScript();
+        await visitedMarkers.saveVisitedPageIfNeeded();
     } catch (_) {}
 }
 
@@ -378,6 +355,7 @@ const MapModal = {
         ensureMapModalStyles();
         ensureMapModalDom();
         ensureMapMarkerNavigationScript().catch(() => {});
+        ensureVisitedMarkersScript().catch(() => {});
 
         // Зафиксировать посещение текущей страницы
         saveVisitedPageIfNeeded().catch(() => {});
@@ -1444,109 +1422,12 @@ const MapModal = {
 
     async renderVisitedMarkers() {
         try {
-            const layer = document.getElementById('visited-markers-layer');
-            const mapImage = document.getElementById('map-image');
-            if (!layer || !mapImage) return;
-
-            layer.innerHTML = '';
-
-            const visited = getVisitedPages();
-            const entries = Object.values(visited);
-            if (!entries.length) return;
-
-            const { getMapPointCoords, isDoublePoint } = await import('./map_points.js');
-            const isMobile = window.innerWidth <= 768;
-            const isSmallScreen = window.innerWidth <= 1024; // мобильный + планшет
-            const currentPage = getCurrentPageName();
-
-            // Группируем записи по точкам
-            const entriesByPoint = {};
-            for (const entry of entries) {
-                if (!entry || !entry.point) continue;
-                if (!entriesByPoint[entry.point]) {
-                    entriesByPoint[entry.point] = [];
+            const visitedMarkers = await ensureVisitedMarkersScript();
+            return await visitedMarkers.renderVisitedMarkers({
+                attachMarkerHandlers: (marker, page, isSmallScreen) => {
+                    this.attachMarkerHandlers(marker, page, isSmallScreen);
                 }
-                entriesByPoint[entry.point].push(entry);
-            }
-
-            // Рендерим маркеры
-            for (const [pointNum, pointEntries] of Object.entries(entriesByPoint)) {
-                const point = parseInt(pointNum);
-                const coords = getMapPointCoords(point);
-                if (!coords) continue;
-
-                const isDouble = isDoublePoint(point);
-                const markerDiameter = 18; // диаметр маркера в пикселях
-
-                if (isDouble && pointEntries.length > 1) {
-                    // Двойная точка - создаем два маркера,
-                    // каждый отвечает за свою страницу
-                    const firstEntry = pointEntries[0];
-                    const secondEntry = pointEntries[1];
-                    
-                    // Первый маркер (верхний, светлый)
-                    const marker1 = document.createElement('div');
-                    marker1.className = 'visited-marker visited-marker-double-light';
-                    marker1.title = firstEntry.title || firstEntry.page;
-                    
-                    if (isMobile) {
-                        const imageWidth = mapImage.offsetWidth;
-                        const imageHeight = mapImage.offsetHeight;
-                        const x = (coords.x / 100) * imageWidth;
-                        const y = (coords.y / 100) * imageHeight + 15 - markerDiameter / 2;
-                        marker1.style.left = `${x}px`;
-                        marker1.style.top = `${y}px`;
-                    } else {
-                        marker1.style.left = `${coords.x}%`;
-                        marker1.style.top = `calc(${coords.y}% + 15px - ${markerDiameter / 2}px)`;
-                    }
-
-                    this.attachMarkerHandlers(marker1, firstEntry.page, isSmallScreen);
-                    layer.appendChild(marker1);
-
-                    // Второй маркер (нижний, смещен на диаметр, тёмный)
-                    const marker2 = document.createElement('div');
-                    marker2.className = 'visited-marker visited-marker-double-dark';
-                    marker2.title = secondEntry.title || secondEntry.page;
-                    
-                    if (isMobile) {
-                        const imageWidth = mapImage.offsetWidth;
-                        const imageHeight = mapImage.offsetHeight;
-                        const x = (coords.x / 100) * imageWidth;
-                        const y = (coords.y / 100) * imageHeight + 15 + markerDiameter / 2;
-                        marker2.style.left = `${x}px`;
-                        marker2.style.top = `${y}px`;
-                    } else {
-                        marker2.style.left = `${coords.x}%`;
-                        marker2.style.top = `calc(${coords.y}% + 15px + ${markerDiameter / 2}px)`;
-                    }
-
-                    this.attachMarkerHandlers(marker2, secondEntry.page, isSmallScreen);
-                    layer.appendChild(marker2);
-                } else {
-                    // Обычная точка - один маркер
-                    const entry = pointEntries[0];
-                    const marker = document.createElement('div');
-                    marker.className = 'visited-marker' + (entry.page === currentPage ? ' current-page' : '');
-                    marker.title = entry.title || entry.page;
-
-                    if (isMobile) {
-                        const imageWidth = mapImage.offsetWidth;
-                        const imageHeight = mapImage.offsetHeight;
-                        const x = (coords.x / 100) * imageWidth;
-                        const y = (coords.y / 100) * imageHeight + 15;
-                        marker.style.left = `${x}px`;
-                        marker.style.top = `${y}px`;
-                    } else {
-                        marker.style.left = `${coords.x}%`;
-                        marker.style.top = `calc(${coords.y}% + 15px)`;
-                    }
-
-                    this.attachMarkerHandlers(marker, entry.page, isSmallScreen);
-
-                    layer.appendChild(marker);
-                }
-            }
+            });
         } catch (_) {}
     },
 
