@@ -195,8 +195,8 @@ Status 2026-06-26:
 Файлы:
 
 - `index.html:348+`: `SPAManager`;
-- `index.html:1517+`: `MiniMapManager`;
-- весь файл около 1881 строк.
+- `spa_minimap_manager.js:35+`: `MiniMapManager` после Stage 3.4;
+- `index.html` после Stage 3.4 уменьшен примерно до 1616 строк, но всё ещё содержит крупный `SPAManager`.
 
 Риск:
 
@@ -215,7 +215,8 @@ Status 2026-06-26:
 - Stage 3 first pass: message contract вынесен в `spa_message_contract.js`;
 - Stage 3.2: page registry, стартовая страница, iframe selectors и audio route policy вынесены в `spa_config.js`;
 - Stage 3.3: первый слой pure SPA lifecycle helpers вынесен в `spa_lifecycle.js`;
-- остаются крупные inline-ответственности: stateful SPA lifecycle, audio state details и `MiniMapManager`.
+- Stage 3.4: `MiniMapManager` вынесен в `spa_minimap_manager.js`, `index.html` оставляет только dependency wiring и listener для `OPEN_MINI_MAP`;
+- остаются крупные inline-ответственности: stateful SPA lifecycle и audio state details в `SPAManager`.
 
 ### CR-09 - MEDIUM - Дублирующий `id="bookSound"` на странице панорамы
 

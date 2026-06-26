@@ -162,3 +162,7 @@ make smoke
   - добавлен `spa_lifecycle.js`;
   - из `index.html` вынесен первый слой pure lifecycle helpers: page/hash parsing, iframe/container creation, DOM lookup;
   - добавлены Playwright smoke для lifecycle helpers, `PAGE_HASH` и `AUDIO_UNLOCKED` boundary.
+- Stage 3.4 выполнен:
+  - добавлен `spa_minimap_manager.js`;
+  - `MiniMapManager` вынесен из inline `index.html` в отдельный модуль с явными shell dependencies;
+  - добавлены Playwright smoke для `OPEN_MINI_MAP` и `OPEN_FULLSCREEN_MAP` boundary.

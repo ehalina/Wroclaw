@@ -1,6 +1,6 @@
 # PROJECT SNAPSHOT — Текущее состояние проекта
 
-*Последнее обновление: 2025-01-11*
+*Последнее обновление: 2026-06-27*
 
 > 📋 **Процесс обновления этого файла:** см. [`PROCESS.md`](./PROCESS.md)
 >
@@ -23,12 +23,14 @@
 ## 📦 Установленные зависимости
 
 ### Production:
-- Нет внешних npm зависимостей (vanilla JavaScript проект)
+- Capacitor runtime: `@capacitor/core`, `@capacitor/android`, `@capacitor/ios`
 
 ### Development:
-- Нет специальных dev зависимостей
+- ESLint
+- Playwright
+- Capacitor CLI
 
-**Примечание:** Проект использует только нативные веб-технологии (HTML5, CSS3, ES6+)
+**Примечание:** Web runtime остаётся vanilla JavaScript без frontend framework/build bundler; Node scripts используются для проверок и сборки Capacitor assets.
 
 ---
 
@@ -47,6 +49,10 @@ Wroclaw/
 ├── common_tumski.css ✅             # Общие стили для tumski
 ├── tumski*.css ✅                   # Специфичные стили (24 файла)
 │
+├── spa_message_contract.js ✅       # Safe postMessage contract
+├── spa_config.js ✅                 # SPA registry/config
+├── spa_lifecycle.js ✅              # SPA lifecycle helpers
+├── spa_minimap_manager.js ✅        # MiniMapManager
 ├── spa_integration.js ✅            # Интеграция SPA
 ├── common_tumski.js ✅             # Общая логика tumski страниц
 ├── tumski_cathedral_handler.js ✅  # Обработчик геометок
@@ -55,6 +61,8 @@ Wroclaw/
 ├── map_modal.js ✅                 # Модальные окна
 ├── language_menu.js ✅              # Меню языков
 ├── arrow_handlers.js ✅            # Обработчики навигации
+├── Makefile ✅                      # Стандартизированные команды
+├── scripts/ ✅                      # Static checks и Capacitor web build
 │
 ├── locales/ ✅                      # Переводы (7 языков)
 │   ├── ru/, pl/, en/, de/, cs/, be/, uk/
@@ -90,6 +98,9 @@ Wroclaw/
 5. ✅ Адаптивный дизайн для desktop/mobile
 6. ✅ Кастомные курсоры навигации
 7. ✅ Квест-маркеры система
+8. ✅ Capacitor Android/iOS wrapper
+9. ✅ Refactoring safety net: ESLint, static checks, Playwright smoke
+10. ✅ Stage 3 SPA shell helpers: message contract, config, lifecycle, MiniMapManager
 
 ---
 
@@ -137,12 +148,13 @@ Wroclaw/
 
 ### Build команды:
 ```bash
-# Нет специальных команд сборки
-# Проект работает напрямую через index.html
-# Локальный сервер (опционально):
-python -m http.server 8000
-# или
-npx serve .
+make dev
+make test
+make lint
+make smoke
+make build
+make security
+make audit
 ```
 
 ### Безопасность:
@@ -172,6 +184,11 @@ npx serve .
 
 ## 🔄 История обновлений
 
+### 2026-06-27 - Refactoring Stage 3.4 выполнен
+- `MiniMapManager` вынесен из `index.html` в `spa_minimap_manager.js`
+- Добавлены smoke checks для `OPEN_MINI_MAP` и `OPEN_FULLSCREEN_MAP`
+- Stage 3 SPA shell теперь разделён на message contract, config, lifecycle helpers и mini-map manager
+
 ### 2025-01-11 - Phase 2 начата
 - Документация проекта создана
 - PROJECT_INTAKE.md заполнен
@@ -198,6 +215,9 @@ npx serve .
 | Music System | ✅ Готов | SPAManager | ✅ Passed |
 | Modal System | ✅ Готов | Нет | ✅ Passed |
 | Navigation System | ✅ Готов | SPAManager | ✅ Passed |
+| SPA Message Contract | ✅ Готов | SPAManager | ✅ Smoke |
+| SPA Config/Lifecycle Helpers | ✅ Готов | SPAManager | ✅ Smoke |
+| MiniMapManager | ✅ Готов | SPAManager, Map Points | ✅ Smoke |
 | Content (Pages) | 🔄 В работе | Все модули | ⏳ Pending |
 | Localization (Full) | 🔄 В работе | i18n | ⏳ Pending |
 | Optimization | ⏳ Ожидает | Все модули | ⏳ Pending |

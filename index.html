@@ -12,6 +12,7 @@
     <script src="spa_message_contract.js"></script>
     <script src="spa_config.js"></script>
     <script src="spa_lifecycle.js"></script>
+    <script src="spa_minimap_manager.js"></script>
     <script src="i18n.js"></script>
     <script src="common.js"></script>
     <script src="arrow_handlers.js"></script>
@@ -1565,362 +1566,34 @@
         // Экспортируем для использования в других модулях
         window.SPAManager = SPAManager;
         
-        // === Управление мини-картой ===
-        class MiniMapManager {
-            constructor() {
-                this.container = null;
-                this.expandBtn = null;
-                this.closeBtn = null;
-                this.mapImage = null;
-                this.mapMarker = null;
-                this.visitedMarkers = null;
-                this.currentState = 'collapsed'; // 'collapsed', 'mini'
-                this.init();
-            }
-            
-            init() {
-                // Мини-карта создается динамически при первом открытии
-                // Настраиваем обновление карты при смене страницы
-                let lastPage = '';
-                setInterval(() => {
-                    if (this.currentState === 'mini' && this.container) {
-                        const currentPage = window.spaManager?.currentPage;
-                        if (currentPage && currentPage !== lastPage) {
-                            lastPage = currentPage;
-                            setTimeout(() => this.updateMap(), 500);
-                        }
-                    }
-                }, 500);
-                
-                // Обновляем карту при смене страницы через сообщения
-                window.addEventListener('message', (event) => {
-                    const message = parseSpaMessage(event);
-                    if (
-                        message &&
-                        message.type === spaMessageType('SPA_NAVIGATE', 'SPA_NAVIGATE') &&
-                        this.currentState === 'mini' &&
-                        isTrustedActiveIframeMessage(event)
-                    ) {
-                        setTimeout(() => this.updateMap(), 500);
-                    }
-                });
-                
-                // Обновляем карту при изменении размера окна
-                window.addEventListener('resize', () => {
-                    if (this.currentState === 'mini' && this.container) {
-                        setTimeout(() => this.updateMap(), 100);
-                    }
-                });
-            }
-            
-            createMiniMap() {
-                if (this.container) return; // Уже создана
-                
-                // Создаем контейнер мини-карты
-                this.container = document.createElement('div');
-                this.container.id = 'mini-map-container';
-                this.container.className = 'mini-map-container mini-map-mini';
-                
-                // Создаем заголовок с кнопками
-                const header = document.createElement('div');
-                header.className = 'mini-map-header';
-                
-                this.expandBtn = document.createElement('button');
-                this.expandBtn.id = 'mini-map-expand';
-                this.expandBtn.className = 'mini-map-expand';
-                this.expandBtn.title = 'Развернуть в полный экран';
-                this.expandBtn.textContent = '⛶';
-                
-                this.closeBtn = document.createElement('button');
-                this.closeBtn.id = 'mini-map-close';
-                this.closeBtn.className = 'mini-map-close';
-                this.closeBtn.title = 'Свернуть';
-                this.closeBtn.textContent = '−';
-                
-                header.appendChild(this.expandBtn);
-                header.appendChild(this.closeBtn);
-                
-                // Создаем контент
-                const content = document.createElement('div');
-                content.className = 'mini-map-content';
-                
-                this.mapImage = document.createElement('img');
-                this.mapImage.id = 'mini-map-image';
-                this.mapImage.src = 'media/tumski/map.jpg';
-                this.mapImage.alt = 'Карта';
-                
-                this.mapMarker = document.createElement('img');
-                this.mapMarker.id = 'mini-map-marker';
-                this.mapMarker.src = 'media/mapmark.png';
-                this.mapMarker.alt = 'Маркер';
-                this.mapMarker.style.display = 'none';
-                
-                this.visitedMarkers = document.createElement('div');
-                this.visitedMarkers.id = 'mini-map-visited-markers';
-                this.visitedMarkers.className = 'mini-map-visited-markers';
-                
-                content.appendChild(this.mapImage);
-                content.appendChild(this.mapMarker);
-                content.appendChild(this.visitedMarkers);
-                
-                this.container.appendChild(header);
-                this.container.appendChild(content);
-                
-                document.body.appendChild(this.container);
-                
-                // Инициализируем обработчики
-                this.setupEventHandlers();
-            }
-            
-            setupEventHandlers() {
-                if (!this.container) return;
-                
-                // Удаляем старые обработчики, если они есть
-                if (this.expandBtn) {
-                    // Клонируем элемент, чтобы удалить все обработчики
-                    const newExpandBtn = this.expandBtn.cloneNode(true);
-                    this.expandBtn.parentNode.replaceChild(newExpandBtn, this.expandBtn);
-                    this.expandBtn = newExpandBtn;
-                    
-                    this.expandBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        this.openFullscreenMap();
-                    });
-                }
-                
-                if (this.closeBtn) {
-                    // Клонируем элемент, чтобы удалить все обработчики
-                    const newCloseBtn = this.closeBtn.cloneNode(true);
-                    this.closeBtn.parentNode.replaceChild(newCloseBtn, this.closeBtn);
-                    this.closeBtn = newCloseBtn;
-                    
-                    this.closeBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        this.collapse();
-                    });
-                }
-            }
-            
-            collapse() {
-                if (!this.container) return;
-                this.container.remove();
-                this.container = null;
-                this.currentState = 'collapsed';
-            }
-            
-            expand() {
-                // Проверяем, не на странице ли tumski21 (параллакс)
-                const activeIframe = window.spaManager?.getActiveIframe();
-                if (activeIframe) {
-                    try {
-                        const iframeSrc = activeIframe.src || '';
-                        if (iframeSrc.includes('tumski21.html')) {
-                            console.log('🗺️ Мини-карта отключена на странице tumski21 для экономии памяти');
-                            return; // Не открываем мини-карту на tumski21
-                        }
-                    } catch (e) {
-                        // Ignore CORS errors
-                    }
-                }
-                
-                // Создаем мини-карту если еще не создана
-                if (!this.container) {
-                    this.createMiniMap();
-                }
-                this.container.className = 'mini-map-container mini-map-mini';
-                this.currentState = 'mini';
-                // Обновляем карту после создания
-                setTimeout(() => this.updateMap(), 500);
-            }
-            
-            openFullscreenMap() {
-                // Закрываем мини-карту
-                this.collapse();
-                // Отправляем сообщение в iframe для открытия полноэкранной карты
-                const activeIframe = window.spaManager?.getActiveIframe();
-                if (activeIframe) {
-                    try {
-                        postSpaMessageToIframe(activeIframe, spaMessageType('OPEN_FULLSCREEN_MAP', 'OPEN_FULLSCREEN_MAP'), {
-                            source: 'parent'
-                        });
-                    } catch (e) {
-                        // CORS может блокировать доступ
-                    }
-                }
-            }
-            
-            async updateMap() {
-                if (this.currentState === 'collapsed') return;
-                
-                try {
-                    // Получаем текущую страницу из SPA
-                    const activeIframe = window.spaManager?.getActiveIframe();
-                    if (!activeIframe) {
-                        // Если iframe ещё не загружен, пробуем через текущую страницу
-                        const currentPage = window.spaManager?.currentPage;
-                        if (currentPage) {
-                            // Используем данные из localStorage для определения точки
-                            const visited = JSON.parse(localStorage.getItem('visitedPages') || '{}');
-                            const pageData = visited[currentPage];
-                            if (pageData && pageData.point) {
-                                const { getMapPointCoords } = await import('./map_points.js');
-                                const coords = getMapPointCoords(pageData.point);
-                                if (coords && this.mapMarker) {
-                                    this.mapMarker.style.display = 'block';
-                                    this.mapMarker.style.left = `${coords.x}%`;
-                                    this.mapMarker.style.top = `${coords.y}%`;
-                                }
-                            }
-                            await this.renderVisitedMarkers(null);
-                        }
+        function createMiniMapDependencies() {
+            return {
+                document,
+                getActiveIframe: () => window.spaManager?.getActiveIframe?.() || null,
+                getCurrentPage: () => window.spaManager?.currentPage || '',
+                importMapPoints: () => import('./map_points.js'),
+                isTrustedActiveIframeMessage,
+                messageType: spaMessageType,
+                navigateToPage: (page) => {
+                    if (window.SPAManager && typeof window.SPAManager.loadPage === 'function') {
+                        window.SPAManager.loadPage(page);
                         return;
                     }
-                    
-                    let iframeDoc;
-                    try {
-                        iframeDoc = activeIframe.contentDocument || activeIframe.contentWindow.document;
-                    } catch (e) {
-                        // CORS может блокировать доступ
-                        await this.renderVisitedMarkers(null);
-                        return;
-                    }
-                    
-                    const imageContainer = iframeDoc.querySelector('.image-container');
-                    const mapPoint = imageContainer ? parseInt(imageContainer.getAttribute('data-map-point')) : 1;
-                    
-                    // Получаем координаты точки
-                    const { getMapPointCoords } = await import('./map_points.js');
-                    const coords = getMapPointCoords(mapPoint || 1);
-                    
-                    if (coords && this.mapMarker) {
-                        // Позиционируем маркер
-                        this.mapMarker.style.display = 'block';
-                        this.mapMarker.style.left = `${coords.x}%`;
-                        this.mapMarker.style.top = `${coords.y}%`;
-                    }
-                    
-                    // Рендерим посещённые страницы
-                    await this.renderVisitedMarkers(iframeDoc);
-                    
-                } catch (error) {
-                    // Ошибка при обновлении карты
-                }
-            }
-            
-            async renderVisitedMarkers(iframeDoc) {
-                if (!this.visitedMarkers) return;
-                
-                try {
-                    this.visitedMarkers.innerHTML = '';
-                    
-                    // Получаем посещённые страницы из localStorage
-                    const visited = JSON.parse(localStorage.getItem('visitedPages') || '{}');
-                    const entries = Object.values(visited);
-                    if (!entries.length) return;
-                    
-                    // Получаем текущую страницу
-                    const activeIframe = window.spaManager?.getActiveIframe();
-                    let currentPage = '';
-                    if (activeIframe) {
-                        try {
-                            const src = activeIframe.src.split('?')[0];
-                            currentPage = src.split('/').pop() || '';
-                        } catch (_) {}
-                    }
-                    
-                    const { getMapPointCoords, isDoublePoint } = await import('./map_points.js');
-                    
-                    // Группируем записи по точкам
-                    const entriesByPoint = {};
-                    for (const entry of entries) {
-                        if (!entry || !entry.point) continue;
-                        if (!entriesByPoint[entry.point]) {
-                            entriesByPoint[entry.point] = [];
-                        }
-                        entriesByPoint[entry.point].push(entry);
-                    }
-                    
-                    // Рендерим маркеры
-                    for (const [pointNum, pointEntries] of Object.entries(entriesByPoint)) {
-                        const point = parseInt(pointNum);
-                        const coords = getMapPointCoords(point);
-                        if (!coords) continue;
-                        
-                        const isDouble = isDoublePoint(point);
-                        const markerDiameter = 10; // диаметр маркера мини-карты в пикселях
-                        
-                        if (isDouble && pointEntries.length > 1) {
-                            // Двойная точка - создаем два маркера,
-                            // каждый отвечает за свою страницу
-                            const firstEntry = pointEntries[0];
-                            const secondEntry = pointEntries[1];
-                            
-                            // Первый маркер (верхний, светлый)
-                            const marker1 = document.createElement('div');
-                            marker1.className = 'mini-map-visited-marker mini-map-visited-marker-double-light';
-                            marker1.title = firstEntry.title || firstEntry.page;
-                            marker1.style.left = `${coords.x}%`;
-                            marker1.style.top = `calc(${coords.y}% - ${markerDiameter / 2}px)`;
-                            
-                            marker1.addEventListener('click', (e) => {
-                                e.stopPropagation();
-                                const page = firstEntry.page;
-                                if (window.SPAManager && typeof window.SPAManager.loadPage === 'function') {
-                                    window.SPAManager.loadPage(page);
-                                } else {
-                                    location.href = page;
-                                }
-                            });
-                            this.visitedMarkers.appendChild(marker1);
-                            
-                            // Второй маркер (нижний, смещен на диаметр, тёмный)
-                            const marker2 = document.createElement('div');
-                            marker2.className = 'mini-map-visited-marker mini-map-visited-marker-double-dark';
-                            marker2.title = secondEntry.title || secondEntry.page;
-                            marker2.style.left = `${coords.x}%`;
-                            marker2.style.top = `calc(${coords.y}% + ${markerDiameter / 2}px)`;
-                            
-                            marker2.addEventListener('click', (e) => {
-                                e.stopPropagation();
-                                const page = secondEntry.page;
-                                if (window.SPAManager && typeof window.SPAManager.loadPage === 'function') {
-                                    window.SPAManager.loadPage(page);
-                                } else {
-                                    location.href = page;
-                                }
-                            });
-                            this.visitedMarkers.appendChild(marker2);
-                        } else {
-                            // Обычная точка - один маркер
-                            const entry = pointEntries[0];
-                            const marker = document.createElement('div');
-                            marker.className = 'mini-map-visited-marker' + (entry.page === currentPage ? ' current-page' : '');
-                            marker.title = entry.title || entry.page;
-                            marker.style.left = `${coords.x}%`;
-                            marker.style.top = `${coords.y}%`;
-                            
-                            marker.addEventListener('click', (e) => {
-                                e.stopPropagation();
-                                const page = entry.page;
-                                if (window.SPAManager && typeof window.SPAManager.loadPage === 'function') {
-                                    window.SPAManager.loadPage(page);
-                                } else {
-                                    location.href = page;
-                                }
-                            });
-                            
-                            this.visitedMarkers.appendChild(marker);
-                        }
-                    }
-                } catch (_) {}
-            }
+
+                    location.href = page;
+                },
+                parseMessage: parseSpaMessage,
+                postToIframe: postSpaMessageToIframe,
+                root: window
+            };
         }
         
         // Инициализируем мини-карту после загрузки DOM
         document.addEventListener('DOMContentLoaded', () => {
-            window.miniMapManager = new MiniMapManager();
+            const MiniMapManager = window.SpaMiniMap?.MiniMapManager;
+            if (typeof MiniMapManager === 'function') {
+                window.miniMapManager = new MiniMapManager(createMiniMapDependencies());
+            }
             
             // Обработчик сообщений от iframe для открытия мини-карты
             window.addEventListener('message', (event) => {

@@ -175,6 +175,58 @@ test.describe('Wroclaw static app smoke', () => {
     await expect.poll(() => frame.evaluate(() => localStorage.getItem('soundMuted'))).toBe('false');
   });
 
+  test('OPEN_MINI_MAP is accepted only from the active iframe', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForFunction(() => window.spaManager?.currentPage === 'tumski.html');
+
+    await page.evaluate(() => {
+      window.postMessage(
+        { type: 'OPEN_MINI_MAP', source: 'iframe' },
+        window.location.origin
+      );
+    });
+
+    await page.waitForTimeout(250);
+    await expect(page.locator('#mini-map-container')).toHaveCount(0);
+
+    const frame = await getActiveFrame(page);
+    await frame.waitForFunction(() => window.SpaMessages);
+    await frame.evaluate(() => {
+      window.SpaMessages.postToParent(window.SpaMessages.TYPES.OPEN_MINI_MAP, { source: 'iframe' });
+    });
+
+    await expect(page.locator('#mini-map-container')).toBeVisible();
+    await expect(page.locator('#mini-map-image')).toHaveAttribute('src', 'media/tumski/map.jpg');
+  });
+
+  test('mini map expand opens fullscreen map through the parent message boundary', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForFunction(() => window.spaManager?.currentPage === 'tumski.html');
+
+    const frame = await getActiveFrame(page);
+    await frame.waitForFunction(() => window.SpaMessages && document.getElementById('map-modal'));
+
+    await frame.evaluate(() => {
+      window.postMessage(
+        { type: 'OPEN_FULLSCREEN_MAP', source: 'parent' },
+        window.location.origin
+      );
+    });
+
+    await page.waitForTimeout(250);
+    expect(await frame.evaluate(() => getComputedStyle(document.getElementById('map-modal')).display)).not.toBe('flex');
+
+    await frame.evaluate(() => {
+      window.SpaMessages.postToParent(window.SpaMessages.TYPES.OPEN_MINI_MAP, { source: 'iframe' });
+    });
+    await expect(page.locator('#mini-map-container')).toBeVisible();
+
+    await page.locator('#mini-map-expand').click();
+
+    await expect(page.locator('#mini-map-container')).toHaveCount(0);
+    await expect.poll(() => frame.evaluate(() => getComputedStyle(document.getElementById('map-modal')).display)).toBe('flex');
+  });
+
   test('iframe language message is accepted only from the parent window', async ({ page }) => {
     await page.goto('/');
     await page.waitForFunction(() => window.spaManager?.currentPage === 'tumski.html');

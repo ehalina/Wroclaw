@@ -240,6 +240,11 @@
   - Files: `spa_lifecycle.js`, `index.html`, `tests/smoke.spec.mjs`
   - Benefit: page/hash parsing, iframe/container creation and active iframe lookup are isolated before stateful SPA lifecycle extraction
 
+- [x] **Refactor: MiniMapManager extraction** - Moved mini-map UI/state class out of `index.html`
+  - Completed: 2026-06-27
+  - Files: `spa_minimap_manager.js`, `index.html`, `tests/smoke.spec.mjs`
+  - Benefit: mini-map DOM/state/message handoff logic is isolated before `map_modal.js` and quest modularization
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

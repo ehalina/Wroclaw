@@ -59,7 +59,7 @@
    - ✅ Первый безопасный вынос: pure constants/config.
    - ✅ Второй: message helpers.
    - ✅ Третий: первый вынос SPA lifecycle helpers.
-   - Четвертый: MiniMapManager.
+   - ✅ Четвертый: MiniMapManager.
 
 6. 🚧 Добавить smoke для SPA boundary/config.
    - ✅ iframe -> parent navigation;
@@ -67,6 +67,7 @@
    - ✅ page registry/audio route policy/selectors config;
    - ✅ audio unlock notification;
    - ✅ hash handoff.
+   - ✅ `OPEN_MINI_MAP` / `OPEN_FULLSCREEN_MAP` handoff.
 
 ## Status Update - 2026-06-26
 
@@ -105,7 +106,7 @@
 - повторяющаяся отправка `PAGE_HASH` с задержками 500/1000 мс собрана в один метод `sendPageHashToIframe()`;
 - добавлены Playwright smoke для `SpaLifecycle`, trusted `PAGE_HASH` handoff и trusted `AUDIO_UNLOCKED` handoff.
 
-Отложено:
+На момент Stage 3.3 было отложено:
 
 - полный вынос stateful SPA lifecycle methods из `SPAManager`;
 - вынос `MiniMapManager`;
@@ -121,6 +122,34 @@ make audit
 ```
 
 Результат: все проверки прошли. `make smoke` выполняет 16 Playwright тестов на desktop/mobile.
+
+## Status Update - 2026-06-27, Stage 3.4
+
+Четвертый проход Stage 3 выполнен.
+
+Сделано:
+
+- добавлен `spa_minimap_manager.js` с `MiniMapManager` и default dependency factory;
+- `index.html` подключает mini-map модуль до inline SPA module;
+- из `index.html` удален inline `MiniMapManager`, оставлен только `createMiniMapDependencies()` и `DOMContentLoaded` wiring;
+- `MiniMapManager` получает текущие shell helpers явно: active iframe lookup, message parsing, trusted source guard, parent -> iframe post helper, map points import и SPA navigation fallback;
+- добавлены Playwright smoke для trusted `OPEN_MINI_MAP` и parent-driven `OPEN_FULLSCREEN_MAP` handoff.
+
+Отложено:
+
+- полный вынос stateful SPA lifecycle methods из `SPAManager`;
+- дальнейшая декомпозиция audio state в `SPAManager`;
+- Stage 4: `map_modal.js` / quest modularization.
+
+Проверки:
+
+```bash
+make test
+make lint
+make smoke
+```
+
+Результат: все проверки прошли. `make smoke` выполняет 20 Playwright тестов на desktop/mobile.
 
 ## Проверки
 

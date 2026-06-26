@@ -2,7 +2,7 @@
 
 **Project:** Wroclaw - Interactive Tumski Island Tour
 **Version:** 0.1.0
-**Last Updated:** 2025-01-11
+**Last Updated:** 2026-06-27
 
 ---
 
@@ -93,6 +93,7 @@ Wroclaw/
 │
 ├── spa_config.js           # Pure SPA registry/config: pages, selectors, audio policy
 ├── spa_lifecycle.js        # Pure SPA page lifecycle helpers
+├── spa_minimap_manager.js  # SPA mini-map UI/state manager
 ├── spa_message_contract.js # Safe postMessage contract for SPA shell and iframes
 ├── spa_integration.js      # SPA интеграция для совместимости
 ├── common_tumski.js        # Общая логика tumski страниц (ES6 module)
@@ -226,7 +227,23 @@ class SPAManager {
 - `SpaLifecycle.createPageContainer(pageName, iframe)` создаёт `.page-content` container с текущим id format.
 - `SpaLifecycle.getSpaContainer()`, `getIframeFromPage()`, `getActivePage()`, `getActiveIframe()` централизуют lookup selectors.
 
-### 1.4. Маркеры посещённых страниц на карте
+### 1.4. SPA mini-map manager
+
+**Decision:** Mini-map UI/state manager живет в `spa_minimap_manager.js`, а `index.html` оставляет только shell wiring и trusted `OPEN_MINI_MAP` listener.
+
+**Reasoning:**
+- ✅ `index.html` больше не содержит отдельный inline-класс для мини-карты
+- ✅ Mini-map DOM creation, collapse/expand state, visited markers and fullscreen handoff тестируются как отдельная shell responsibility
+- ✅ Зависимости на `SPAManager`, `SpaMessages` и `map_points.js` передаются явно через dependency object
+- ✅ Stage 4 может разбирать `map_modal.js` без одновременного перемещения mini-map state
+
+**Implementation:**
+- `spa_minimap_manager.js` публикует `window.SpaMiniMap.MiniMapManager`.
+- `index.html` создаёт `createMiniMapDependencies()` и сохраняет прежний `window.miniMapManager` instance.
+- `OPEN_MINI_MAP` принимается только от active iframe через существующий message guard.
+- `OPEN_FULLSCREEN_MAP` отправляется в active iframe через `SpaMessages.postToFrame()`.
+
+### 1.5. Маркеры посещённых страниц на карте
 
 **Decision:** Сохраняем факт первого посещения страницы и показываем на карте кликабельную метку в координатах точки страницы. Клик по метке переносит пользователя на соответствующую страницу.
 
