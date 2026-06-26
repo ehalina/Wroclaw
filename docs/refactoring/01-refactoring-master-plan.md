@@ -153,3 +153,8 @@ make smoke
   - центральные `postMessage` listeners проверяют schema/source/origin;
   - wildcard target заменен в центральных потоках на same-origin helper;
   - добавлены Playwright smoke для iframe -> parent navigation и parent -> iframe language change.
+- Stage 3.2 выполнен:
+  - добавлен `spa_config.js`;
+  - из `index.html` вынесены page registry, стартовая страница, iframe selectors и audio route policy;
+  - `SPAManager` использует config для prev/next navigation и выбора фонового трека;
+  - добавлен Playwright smoke для SPA config.

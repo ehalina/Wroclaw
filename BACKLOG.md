@@ -230,6 +230,11 @@
   - Files: `spa_message_contract.js`, `index.html`, `tumski_page_common.js`, `tumski.html`, `language_menu.js`, `map_modal.js`, `tests/smoke.spec.mjs`
   - Benefit: iframe navigation and language messages now have schema/source/origin checks before deeper SPA extraction
 
+- [x] **Refactor: SPA config extraction** - Moved pure SPA shell constants out of `index.html`
+  - Completed: 2026-06-26
+  - Files: `spa_config.js`, `index.html`, `tests/smoke.spec.mjs`
+  - Benefit: page order, start page, iframe selectors and audio route policy now have one source before lifecycle extraction
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

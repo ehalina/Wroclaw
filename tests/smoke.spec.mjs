@@ -34,6 +34,34 @@ test.describe('Wroclaw static app smoke', () => {
     await expect(page.locator('#open-quest')).toBeVisible();
   });
 
+  test('SPA config exposes page registry, selectors and audio policy', async ({ page }) => {
+    await page.goto('/');
+
+    const config = await page.evaluate(() => ({
+      activeIframeSelector: window.SpaConfig.SELECTORS.activeIframe,
+      defaultTrack: window.SpaConfig.getAudioTrackForPage('tumski02.html'),
+      firstPage: window.SpaConfig.PAGE_ORDER[0],
+      minskTrack: window.SpaConfig.getAudioTrackForPage('minsk01.html#patsa_vatsa'),
+      nextFromStart: window.SpaConfig.getNextPage('tumski.html'),
+      ogrodTrack: window.SpaConfig.getAudioTrackForPage('ogrod13.html'),
+      previousFromSecond: window.SpaConfig.getPreviousPage('tumski02.html'),
+      startPage: window.SpaConfig.START_PAGE,
+      tumski19Track: window.SpaConfig.getAudioTrackForPage('tumski19.html')
+    }));
+
+    expect(config).toEqual({
+      activeIframeSelector: '.page-content.active iframe',
+      defaultTrack: 'town',
+      firstPage: 'tumski.html',
+      minskTrack: 'minsk',
+      nextFromStart: 'tumski02.html',
+      ogrodTrack: 'birds',
+      previousFromSecond: 'tumski.html',
+      startPage: 'tumski.html',
+      tumski19Track: 'kostel'
+    });
+  });
+
   test('SPA navigation message is accepted only from the active iframe', async ({ page }) => {
     await page.goto('/');
     await page.waitForFunction(() => window.spaManager?.currentPage === 'tumski.html');

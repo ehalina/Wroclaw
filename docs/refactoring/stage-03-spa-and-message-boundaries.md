@@ -49,21 +49,22 @@
    - Сначала добавить проверки и оставить старый payload.
    - Проверить язык, hash navigation, audio unlock.
 
-4. ⏳ Подготовить constants.
+4. ✅ Подготовить constants.
    - Page registry;
    - стартовая страница;
    - audio route policy;
    - iframe selectors.
 
 5. 🚧 Начать вынос из `index.html`.
-   - Первый безопасный вынос: pure constants/config.
+   - ✅ Первый безопасный вынос: pure constants/config.
    - ✅ Второй: message helpers.
    - Третий: SPA lifecycle methods.
    - Четвертый: MiniMapManager.
 
-6. 🚧 Добавить smoke для SPA boundary.
+6. 🚧 Добавить smoke для SPA boundary/config.
    - ✅ iframe -> parent navigation;
    - ✅ parent -> iframe language change;
+   - ✅ page registry/audio route policy/selectors config;
    - audio unlock notification;
    - hash handoff.
 
@@ -80,10 +81,22 @@
 - добавлен execution-plan: `docs/refactoring/stage-03-execution-plan.md`;
 - добавлены Playwright smoke-проверки для `SPA_NAVIGATE` и `LANGUAGE_CHANGE` boundary.
 
+## Status Update - 2026-06-26, Stage 3.2
+
+Второй проход Stage 3 выполнен.
+
+Сделано:
+
+- добавлен `spa_config.js` с page registry, стартовой страницей, iframe selectors и audio route policy;
+- `index.html` подключает config до inline SPA module;
+- `SPAManager` использует config для стартовой страницы, keyboard prev/next navigation, active iframe lookup и выбора фонового трека;
+- дублированная audio-policy в `soundControl` unmute path заменена на тот же config helper;
+- добавлен Playwright smoke для `SpaConfig`: порядок страниц, selectors и audio route policy.
+
 Отложено:
 
-- вынос page registry/audio route policy/iframe selectors;
-- вынос SPA lifecycle methods и `MiniMapManager`;
+- вынос SPA lifecycle methods;
+- вынос `MiniMapManager`;
 - отдельные smoke для `AUDIO_UNLOCKED`, `PAGE_HASH`, `OPEN_MINI_MAP`/`OPEN_FULLSCREEN_MAP`.
 
 Проверки:

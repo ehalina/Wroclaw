@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
     <script src="spa_message_contract.js"></script>
+    <script src="spa_config.js"></script>
     <script src="i18n.js"></script>
     <script src="common.js"></script>
     <script src="arrow_handlers.js"></script>
@@ -346,9 +347,36 @@
     
     <script type="module">
         const SPA_MESSAGE_TYPES = window.SpaMessages?.TYPES || {};
+        const SPA_CONFIG = window.SpaConfig || {};
 
         function spaMessageType(name, fallback) {
             return SPA_MESSAGE_TYPES[name] || fallback;
+        }
+
+        function spaSelector(name, fallback) {
+            return SPA_CONFIG.SELECTORS?.[name] || fallback;
+        }
+
+        function spaStartPage() {
+            return SPA_CONFIG.START_PAGE || 'tumski.html';
+        }
+
+        function spaPreviousPage(pageName) {
+            return typeof SPA_CONFIG.getPreviousPage === 'function'
+                ? SPA_CONFIG.getPreviousPage(pageName)
+                : null;
+        }
+
+        function spaNextPage(pageName) {
+            return typeof SPA_CONFIG.getNextPage === 'function'
+                ? SPA_CONFIG.getNextPage(pageName)
+                : null;
+        }
+
+        function spaAudioTrackForPage(pageName) {
+            return typeof SPA_CONFIG.getAudioTrackForPage === 'function'
+                ? SPA_CONFIG.getAudioTrackForPage(pageName)
+                : 'town';
         }
 
         function parseSpaMessage(event) {
@@ -718,8 +746,8 @@
                 // Инициализируем единый аудио плеер
                 this.initUnifiedAudioPlayer();
                 
-                // Загружаем первую страницу (tumski.html)
-                await this.loadPage('tumski.html');
+                // Загружаем стартовую страницу
+                await this.loadPage(spaStartPage());
                 
                 // Инициализируем обработчики
                 this.setupEventListeners();
@@ -798,17 +826,8 @@
              * Переходит на предыдущую страницу
              */
             navigateToPreviousPage() {
-                const pageOrder = [
-                    'tumski.html', 'tumski02.html', 'tumski03.html', 'tumski04.html', 'tumski05.html',
-                    'tumski06.html', 'tumski07.html', 'tumski08.html', 'tumski09.html', 'tumski10.html',
-                    'tumski11.html', 'tumski12.html', 'tumski13.html', 'tumski14.html', 'tumski15.html',
-                    'tumski16.html', 'tumski17.html', 'tumski18.html', 'tumski19.html', 'tumski20.html',
-                    'tumski21.html', 'tumski22.html', 'tumski23.html', 'tumski24.html'
-                ];
-                
-                const currentIndex = pageOrder.indexOf(this.currentPage);
-                if (currentIndex > 0) {
-                    const prevPage = pageOrder[currentIndex - 1];
+                const prevPage = spaPreviousPage(this.currentPage);
+                if (prevPage) {
                     this.navigateToPage(prevPage);
                 }
             }
@@ -817,17 +836,8 @@
              * Переходит на следующую страницу
              */
             navigateToNextPage() {
-                const pageOrder = [
-                    'tumski.html', 'tumski02.html', 'tumski03.html', 'tumski04.html', 'tumski05.html',
-                    'tumski06.html', 'tumski07.html', 'tumski08.html', 'tumski09.html', 'tumski10.html',
-                    'tumski11.html', 'tumski12.html', 'tumski13.html', 'tumski14.html', 'tumski15.html',
-                    'tumski16.html', 'tumski17.html', 'tumski18.html', 'tumski19.html', 'tumski20.html',
-                    'tumski21.html', 'tumski22.html', 'tumski23.html', 'tumski24.html'
-                ];
-                
-                const currentIndex = pageOrder.indexOf(this.currentPage);
-                if (currentIndex < pageOrder.length - 1) {
-                    const nextPage = pageOrder[currentIndex + 1];
+                const nextPage = spaNextPage(this.currentPage);
+                if (nextPage) {
                     this.navigateToPage(nextPage);
                 }
             }
@@ -926,7 +936,7 @@
                         // Если есть hash, передаем его в iframe
                         if (pageHash) {
                             const pageContainer = this.pages.get(actualPageName);
-                            const iframe = pageContainer?.querySelector('iframe');
+                            const iframe = pageContainer?.querySelector(spaSelector('iframe', 'iframe'));
                             if (iframe && iframe.contentWindow) {
                                 console.log('🟡 [SPA] Передаем hash в существующий iframe:', pageHash);
                                 setTimeout(() => {
@@ -976,7 +986,7 @@
                     pageContainer.appendChild(iframe);
                     
                     // Добавляем в SPA контейнер
-                    document.getElementById('spa-container').appendChild(pageContainer);
+                    document.querySelector(spaSelector('spaContainer', '#spa-container')).appendChild(pageContainer);
                     
                     // Сохраняем страницу
                     this.pages.set(actualPageName, pageContainer);
@@ -1161,7 +1171,7 @@
                     this.switchMusicForPage(pageName);
                     
                     // Отправляем сообщение в iframe для повторной инициализации
-                    const iframe = targetPage.querySelector('iframe');
+                    const iframe = targetPage.querySelector(spaSelector('iframe', 'iframe'));
                     if (iframe && iframe.contentWindow) {
                         setTimeout(() => {
                             try {
@@ -1199,29 +1209,7 @@
                     return;
                 }
                 
-                // Определяем, какая музыка нужна
-                let targetTrack = 'town'; // По умолчанию
-                
-                if (pageName.includes('minsk01.html') || pageName.includes('minsk02.html')) {
-                    targetTrack = 'minsk';
-    // console.log('🎵 Переключаем на minsk для страниц minsk:', pageName);
-                } else if (pageName.includes('tumski19.html')) {
-                    targetTrack = 'kostel';
-    // console.log('🎵 Переключаем на kostel для tumski19.html');
-                } else if (pageName.includes('tumski21.html')) {
-                    targetTrack = 'hang';
-    // console.log('🎵 Переключаем на hang для tumski21.html');
-                } else if (pageName.includes('ogrod02.html') || pageName.includes('ogrod03.html') || 
-                          pageName.includes('ogrod04.html') || pageName.includes('ogrod05.html') || 
-                          pageName.includes('ogrod06.html') || pageName.includes('ogrod07.html') || 
-                          pageName.includes('ogrod08.html') || pageName.includes('ogrod09.html') || 
-                          pageName.includes('ogrod12.html') || pageName.includes('ogrod13.html')) {
-                    targetTrack = 'birds';
-    // console.log('🎵 Переключаем на birds для страниц ogrod:', pageName);
-                } else {
-                    targetTrack = 'town';
-    // console.log('🎵 Переключаем на town для:', pageName);
-                }
+                const targetTrack = spaAudioTrackForPage(pageName);
                 
                 // Переключаем трек через единый плеер
                 this.switchTrack(targetTrack);
@@ -1262,7 +1250,7 @@
                         const targetPage = this.pages.get(actualPageName);
                         let savedMusicTime = null;
                         if (targetPage) {
-                            const iframe = targetPage.querySelector('iframe');
+                            const iframe = targetPage.querySelector(spaSelector('iframe', 'iframe'));
                             if (iframe && iframe.contentWindow) {
                                 try {
                                     const audio = iframe.contentWindow.document.getElementById('minskMusic');
@@ -1404,9 +1392,9 @@
             
             getActiveIframe() {
                 // Находим активную страницу и её iframe
-                const activePage = document.querySelector('.page-content.active');
+                const activePage = document.querySelector(spaSelector('activePage', '.page-content.active'));
                 if (activePage) {
-                    const iframe = activePage.querySelector('iframe');
+                    const iframe = activePage.querySelector(spaSelector('iframe', 'iframe'));
                     return iframe;
                 }
                 return null;
@@ -1526,31 +1514,7 @@
                             if (window.spaManager) {
                                 const currentPage = window.spaManager.currentPage;
                                 
-                                if (currentPage && currentPage.includes('tumski19.html')) {
-                                    // Переключаем на kostel для tumski19
-                                    window.spaManager.switchTrack('kostel');
-    // console.log('🎵 Запускаем kostel музыку в SPA для tumski19');
-                                } else if (currentPage && (currentPage.includes('ogrod02.html') || currentPage.includes('ogrod03.html') || 
-                                          currentPage.includes('ogrod04.html') || currentPage.includes('ogrod05.html') || 
-                                          currentPage.includes('ogrod06.html') || currentPage.includes('ogrod07.html') || 
-                                          currentPage.includes('ogrod08.html') || currentPage.includes('ogrod09.html') || 
-                                          currentPage.includes('ogrod12.html') || currentPage.includes('ogrod13.html'))) {
-                                    // Переключаем на birds для ogrod страниц
-                                    window.spaManager.switchTrack('birds');
-    // console.log('🎵 Запускаем birds музыку в SPA для ogrod страниц');
-                                } else if (currentPage && currentPage.includes('tumski21.html')) {
-                                    // Переключаем на hang для tumski21
-                                    window.spaManager.switchTrack('hang');
-    // console.log('🎵 Запускаем hang музыку в SPA для tumski21');
-                                } else if (currentPage && (currentPage.includes('minsk01.html') || currentPage.includes('minsk02.html'))) {
-                                    // Переключаем на minsk для minsk страниц
-                                    window.spaManager.switchTrack('minsk');
-    // console.log('🎵 Запускаем minsk музыку в SPA для minsk страниц');
-                                } else {
-                                    // Запускаем обычную фоновую музыку (town)
-                                    window.spaManager.switchTrack('town');
-    // console.log('🎵 Запускаем фоновую музыку в SPA');
-                                }
+                                window.spaManager.switchTrack(spaAudioTrackForPage(currentPage));
                             }
                         }
                     }

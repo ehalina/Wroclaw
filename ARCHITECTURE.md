@@ -91,6 +91,8 @@ Wroclaw/
 ├── tumski*.css             # Специфичные стили для каждой страницы
 ├── common_buttons.js       # Общие функции кнопок
 │
+├── spa_config.js           # Pure SPA registry/config: pages, selectors, audio policy
+├── spa_message_contract.js # Safe postMessage contract for SPA shell and iframes
 ├── spa_integration.js      # SPA интеграция для совместимости
 ├── common_tumski.js        # Общая логика tumski страниц (ES6 module)
 ├── tumski_cathedral_handler.js  # Универсальный обработчик геометок (ES6 module)
@@ -191,7 +193,23 @@ class SPAManager {
 - Listener-ы сначала вызывают `parseMessage(data)`, затем проверяют source/origin guard.
 - Для opaque/file origin сохраняется fallback target `'*'`; для нормального web/Capacitor origin используется `window.location.origin`.
 
-### 1.2. Маркеры посещённых страниц на карте
+### 1.2. SPA shell config
+
+**Decision:** Pure constants/config для SPA shell живут в `spa_config.js`, а `index.html` только читает их через `window.SpaConfig`.
+
+**Reasoning:**
+- ✅ Один источник для порядка страниц и стартовой страницы
+- ✅ Одна audio route policy для navigation и sound-control flows
+- ✅ Имена iframe/page selectors отделены от lifecycle-кода
+- ✅ Подготовка к выносу SPA lifecycle methods без смены маршрутов и audio behavior
+
+**Implementation:**
+- `SpaConfig.START_PAGE` задаёт стартовую страницу.
+- `SpaConfig.PAGE_ORDER` и `getPreviousPage()`/`getNextPage()` используются keyboard navigation.
+- `SpaConfig.SELECTORS` хранит selectors shell-а: SPA container, active page, active iframe, iframe.
+- `SpaConfig.getAudioTrackForPage(page)` возвращает один из текущих треков: `town`, `minsk`, `kostel`, `hang`, `birds`.
+
+### 1.3. Маркеры посещённых страниц на карте
 
 **Decision:** Сохраняем факт первого посещения страницы и показываем на карте кликабельную метку в координатах точки страницы. Клик по метке переносит пользователя на соответствующую страницу.
 

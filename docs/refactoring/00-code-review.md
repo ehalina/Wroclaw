@@ -210,6 +210,12 @@ Status 2026-06-26:
 - сначала зафиксировать контракт текущего поведения;
 - затем извлекать маленькими шагами: constants/page registry, message handling, audio state, iframe lifecycle, minimap.
 
+Статус 2026-06-26:
+
+- Stage 3 first pass: message contract вынесен в `spa_message_contract.js`;
+- Stage 3.2: page registry, стартовая страница, iframe selectors и audio route policy вынесены в `spa_config.js`;
+- остаются крупные inline-ответственности: SPA lifecycle, audio state details и `MiniMapManager`.
+
 ### CR-09 - MEDIUM - Дублирующий `id="bookSound"` на странице панорамы
 
 Файл: `katedra_panorama.html:617` и `katedra_panorama.html:625`
