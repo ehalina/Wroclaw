@@ -1,0 +1,129 @@
+# Верхнеуровневый план рефакторинга
+
+Дата: 2026-06-26  
+Язык плана: русский  
+Source of truth по продуктовым задачам: `BACKLOG.md`  
+Входной review: `docs/refactoring/00-code-review.md`  
+Методология: `safe-refactoring-playbook`, `agent-programming-planner`
+
+## Цель
+
+Провести крупный рефакторинг без потери текущего поведения приложения: SPA shell, iframe-навигация, карта, геометки, квесты, локализация, аудио и Capacitor build должны продолжать работать.
+
+Рефакторинг должен поддержать актуальные задачи из `BACKLOG.md`:
+
+- Development Phase 2: Content & Localization;
+- Content Completion;
+- Full Localization;
+- Performance Optimization;
+- Missing GeoMarkers;
+- Audio Unlock Improvement;
+- Error Handling;
+- Loading States;
+- Documentation.
+
+## Основной принцип
+
+Сначала фиксируем наблюдаемое поведение и закрываем runtime-дефекты. Потом двигаем код маленькими этапами.
+
+Запрещено начинать с большого перемещения файлов, пока нет:
+
+- минимального smoke baseline;
+- списка активных страниц/ассетов;
+- понятного route inventory;
+- зафиксированных критичных runtime fixes из code review.
+
+## Границы
+
+Входит:
+
+- safety net для refactoring sprint;
+- исправление выявленных runtime-багов;
+- декомпозиция SPA shell и iframe message boundary;
+- декомпозиция `map_modal.js`;
+- нормализация page templates, ассетов и i18n;
+- performance/package-size этап;
+- документация и governance.
+
+Не входит на первом проходе:
+
+- смена стека на React/Vue/Next;
+- переписывание на TypeScript;
+- изменение визуального дизайна без отдельной задачи;
+- изменение маршрутов/контента без сверки с `BACKLOG.md`;
+- массовая оптимизация изображений без визуальной проверки.
+
+## Порядок этапов
+
+| Этап | Документ | Цель | Можно начинать после |
+|---|---|---|---|
+| 1 | `stage-01-safety-net-and-inventory.md` | Создать проверочную сетку и inventory | Сейчас |
+| 2 | `stage-02-routing-assets-and-runtime-bugs.md` | Закрыть runtime-дефекты из review | Stage 1 baseline |
+| 3 | `stage-03-spa-and-message-boundaries.md` | Укрепить SPA shell и `postMessage` contract | Stage 2 |
+| 4 | `stage-04-map-quest-modularization.md` | Разделить карту/квесты без смены поведения | Stage 2, частично Stage 3 |
+| 5 | `stage-05-page-template-and-i18n-consolidation.md` | Нормализовать страницы и локализацию | Stage 2 |
+| 6 | `stage-06-performance-and-capacitor-package.md` | Уменьшить вес и стабилизировать WebView | Stage 1-5 частично |
+| 7 | `stage-07-cleanup-docs-and-governance.md` | Убрать мусор, обновить docs/backlog | После основных изменений |
+
+## Runbook каждого refactor-шагa
+
+1. Сверить задачу с `BACKLOG.md`.
+2. Сформулировать ожидаемое неизменное поведение.
+3. Добавить или обновить проверку, если поведение еще не покрыто.
+4. Сделать маленькое изменение.
+5. Запустить минимальную проверку для измененной области.
+6. Запустить общий baseline перед завершением этапа.
+7. Обновить stage-plan: что сделано, что отложено, какие риски остались.
+
+## Validation ladder
+
+Минимальный baseline после Stage 1:
+
+```bash
+make lint
+make typecheck
+make test
+make build
+make security
+```
+
+Дополнительно должны появиться постоянные проверки:
+
+- JS syntax check для runtime `.js`;
+- local asset/link checker;
+- route target checker;
+- duplicate-id checker;
+- translation key consistency checker;
+- smoke-сценарии для SPA, карты, языка и аудио.
+
+Когда появится браузерный baseline:
+
+- desktop viewport smoke;
+- mobile viewport smoke;
+- navigation through iframe;
+- map marker click;
+- language switch;
+- audio unlock flow;
+- representative Capacitor/web build load.
+
+## Риск-регистр
+
+| Риск | Вероятность | Влияние | Контроль |
+|---|---:|---:|---|
+| Сломать iframe SPA navigation | Высокая | Высокое | Stage 1 smoke + Stage 3 contract |
+| Потерять состояние аудио при навигации | Средняя | Высокое | Audio flow characterization |
+| Сломать геометки/квесты при декомпозиции `map_modal.js` | Высокая | Высокое | Idempotent init + marker smoke |
+| Удалить нужный ассет как "мусор" | Средняя | Среднее | Asset inventory до cleanup |
+| Оптимизировать изображения с визуальной деградацией | Средняя | Среднее | Before/after screenshots |
+| Развести `BACKLOG.md` и планы | Средняя | Высокое | BACKLOG остается source of truth |
+
+## Definition of Done всего рефакторинга
+
+- Все P1/P2 findings из `00-code-review.md` закрыты или явно перенесены в `BACKLOG.md`.
+- `make build` стабильно собирает `www`.
+- `make security` без уязвимостей.
+- `make test` перестал быть пустой заглушкой и включает smoke baseline.
+- SPA, карта, квесты, язык и аудио имеют хотя бы smoke-проверки.
+- Крупные файлы разбиты по ответственностям без смены поведения.
+- `BACKLOG.md`, `ARCHITECTURE.md`, `README.md` и `AGENTS.md` обновлены там, где изменения реально затронули процессы или архитектуру.
+
