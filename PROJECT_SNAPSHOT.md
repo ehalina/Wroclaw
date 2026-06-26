@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 77% (17/22 основных задач)
+**Общий прогресс:** 78% (18/23 основных задач)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -62,6 +62,7 @@ Wroclaw/
 ├── map_modal.css ✅                # Основные стили карты и квестовых overlays
 ├── map_marker_navigation.js ✅     # Переходы по visited markers
 ├── visited_markers.js ✅           # Storage/render visited markers
+├── quest_overlay.js ✅             # Opening/render flow квестовой книги
 ├── language_menu.js ✅              # Меню языков
 ├── arrow_handlers.js ✅            # Обработчики навигации
 ├── Makefile ✅                      # Стандартизированные команды
@@ -109,6 +110,7 @@ Wroclaw/
 13. ✅ Stage 4.3 MapModal CSS extraction
 14. ✅ Stage 4.4 Map marker navigation extraction
 15. ✅ Stage 4.5 Visited markers storage/render extraction
+16. ✅ Stage 4.6 Quest overlay extraction
 
 ---
 
@@ -191,6 +193,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 4.6 выполнен
+- quest/book overlay behavior вынесен из `map_modal.js` в `quest_overlay.js`
+- `map_modal.js` лениво подключает helper через stable `#quest-overlay-script`
+- сохранены `renderQuestIntro`, `showQuestConfirmDialog` и текущая структура `sessionStorage.questState`
+- smoke расширен до 30 тестов: opening/render contract квестовой книги и idempotent script injection
 
 ### 2026-06-27 - Refactoring Stage 4.5 выполнен
 - visited marker storage/rendering вынесены из `map_modal.js` в `visited_markers.js`

@@ -201,6 +201,7 @@ Status 2026-06-26:
 - Stage 4.3 выполнен: `map_modal_template.js` отложен из-за classic script load order, основной CSS вынесен в `map_modal.css`, `#map-modal-styles` теперь является stylesheet link.
 - Stage 4.4 выполнен: marker navigation вынесен в `map_marker_navigation.js`, `map_modal.js` лениво подключает helper через `#map-marker-navigation-script`, smoke проверяет SPA priority/fallback и реальный click по `.visited-marker`.
 - Stage 4.5 выполнен: visited-marker storage/rendering вынесены в `visited_markers.js`, `map_modal.js` лениво подключает helper через `#visited-markers-script`, smoke проверяет tolerant parsing, сохранение текущей страницы и render contract без изменения классов/координат маркеров.
+- Stage 4.6 выполнен: quest/book overlay behavior вынесен в `quest_overlay.js`, `map_modal.js` лениво подключает helper через `#quest-overlay-script`, compatibility globals `renderQuestIntro`/`showQuestConfirmDialog` сохранены, smoke проверяет открытие `.book-overlay` и render contract квестовой книги.
 
 ### CR-08 - MEDIUM - `index.html` содержит крупные inline-классы и бизнес-логику SPA
 

@@ -62,9 +62,9 @@
    - ✅ Добавить функции чтения/записи с tolerant parsing.
    - ✅ Проверить старые данные в localStorage.
 
-6. Изолировать quest overlay.
-   - Разделить открытие/закрытие, заполнение текста, картинки, звук.
-   - Не менять структуру данных квестов до отдельной задачи.
+6. ✅ Изолировать quest overlay.
+   - ✅ Разделить открытие/закрытие, заполнение текста, картинки, звук.
+   - ✅ Не менять структуру данных квестов до отдельной задачи.
 
 7. Убрать/загейтить debug logs.
    - Ввести `DEBUG_MAP`.
@@ -191,3 +191,22 @@ Stage 4.5 выполнен:
 - изолировать quest/book overlay behavior из `map_modal.js`;
 - разделить открытие/закрытие, заполнение текста, картинки и звук;
 - не менять структуру данных квестов до отдельной задачи.
+
+## Status Update - 2026-06-27 - Stage 4.6
+
+Stage 4.6 выполнен:
+
+- Добавлен `quest_overlay.js` как classic-script helper с global API `window.QuestOverlay`.
+- `map_modal.js` лениво подключает helper через `<script id="quest-overlay-script" src="quest_overlay.js">`, поэтому runtime HTML-файлы не менялись.
+- Большой inline handler кнопки `#open-quest` вынесен из `map_modal.js` в `QuestOverlay.open({ triggerButton })`.
+- В `quest_overlay.js` перенесены render flow квестовой книги, `renderQuestIntro()` и `showQuestConfirmDialog()`.
+- Сохранены global compatibility exports `window.renderQuestIntro` и `window.showQuestConfirmDialog`, чтобы `quest_marker_handler.js` продолжал работать без изменения структуры данных квестов.
+- `map_modal.js` оставляет только lazy-load wrapper и public compatibility proxies.
+- Playwright smoke добавлен для idempotent `#quest-overlay-script` и render contract: opening `.book-overlay`, 13 quest tasks, intro, title image, reset button и prepared-task buttons.
+- Проверка после изменения: `make smoke` - 30 тестов прошли на desktop/mobile.
+
+Следующий подэтап Stage 4.7:
+
+- убрать или загейтить debug logs карты/квестов;
+- ввести ручной флаг диагностики `DEBUG_MAP`/аналог;
+- сохранить возможность включить диагностику без шумного production console.

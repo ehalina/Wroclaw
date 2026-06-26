@@ -127,6 +127,7 @@ test.describe('Wroclaw static app smoke', () => {
         mapButtons: document.querySelectorAll('#open-map-modal').length,
         mapModals: document.querySelectorAll('#map-modal').length,
         missingTemplateSelectors: templateSelectors.filter(selector => document.querySelectorAll(selector).length !== 1),
+        questOverlayScripts: document.querySelectorAll('script#quest-overlay-script[src="quest_overlay.js"]').length,
         questButtons: document.querySelectorAll('#open-quest').length,
         tooltipStyles: document.querySelectorAll('#map-modal-mobile-tooltip-styles').length,
         visitedMarkerScripts: document.querySelectorAll('script#visited-markers-script[src="visited_markers.js"]').length,
@@ -147,6 +148,7 @@ test.describe('Wroclaw static app smoke', () => {
       mapButtons: 1,
       mapModals: 1,
       missingTemplateSelectors: [],
+      questOverlayScripts: 1,
       questButtons: 1,
       tooltipStyles: 1,
       visitedMarkerScripts: 1,
@@ -360,6 +362,70 @@ test.describe('Wroclaw static app smoke', () => {
       title: 'Smoke target'
     }));
     expect(result.markers.every(marker => marker.left && marker.top)).toBe(true);
+  });
+
+  test('QuestOverlay helper preserves book overlay render contract', async ({ page }) => {
+    await page.goto('/tumski.html');
+    await expect(page.locator('#open-quest')).toBeVisible();
+    await page.waitForFunction(() => window.QuestOverlay?.open);
+
+    const result = await page.evaluate(async () => {
+      window.isSoundEnabled = () => false;
+      window.__stage4QuestDisableMenuCount = 0;
+      const existingLanguageMenu = window.LanguageMenu || {};
+      window.LanguageMenu = {
+        ...existingLanguageMenu,
+        disableMenu() {
+          window.__stage4QuestDisableMenuCount += 1;
+        }
+      };
+      sessionStorage.setItem('questState', JSON.stringify({
+        __lastPreparedNumber: 2,
+        tasks: {
+          2: true,
+          3: {
+            prepared: true,
+            image: 'media/watercolor/3.jpg'
+          }
+        }
+      }));
+
+      document.getElementById('open-quest').click();
+      await new Promise(resolve => setTimeout(resolve, 250));
+
+      const overlay = document.querySelector('.book-overlay');
+      const questTasks = overlay.querySelector('.quest-tasks');
+
+      return {
+        disableMenuCalls: window.__stage4QuestDisableMenuCount,
+        display: getComputedStyle(overlay).display,
+        flipButtons: overlay.querySelectorAll('.quest-flip-button').length,
+        introBlocks: overlay.querySelectorAll('.quest-intro').length,
+        questOverlayAvailable: typeof window.QuestOverlay?.open === 'function',
+        resetButtons: overlay.querySelectorAll('.quest-reset-button').length,
+        scriptCount: document.querySelectorAll('script#quest-overlay-script[src="quest_overlay.js"]').length,
+        soundButtons: overlay.querySelectorAll('.quest-sound-button').length,
+        taskImages: questTasks.querySelectorAll(':scope > img.task-image').length,
+        taskItems: questTasks.querySelectorAll(':scope > li').length,
+        titleDisplay: overlay.querySelector('.book-title')?.style.display,
+        titleImages: overlay.querySelectorAll('img[src="media/watercolor/tumski.jpeg"]').length
+      };
+    });
+
+    expect(result).toMatchObject({
+      disableMenuCalls: 2,
+      display: 'flex',
+      flipButtons: 2,
+      introBlocks: 1,
+      questOverlayAvailable: true,
+      resetButtons: 1,
+      scriptCount: 1,
+      soundButtons: 2,
+      taskImages: 11,
+      taskItems: 13,
+      titleDisplay: 'block',
+      titleImages: 1
+    });
   });
 
   test('SPA config exposes page registry, selectors and audio policy', async ({ page }) => {

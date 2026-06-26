@@ -270,6 +270,11 @@
   - Files: `visited_markers.js`, `map_modal.js`, `tests/smoke.spec.mjs`
   - Benefit: `map_modal.js` keeps modal/preview/navigation wiring while visited-page parsing, saving and marker layer rendering are isolated behind a focused helper
 
+- [x] **Refactor: Quest overlay extraction** - Moved quest/book overlay rendering out of `map_modal.js`
+  - Completed: 2026-06-27
+  - Files: `quest_overlay.js`, `map_modal.js`, `tests/smoke.spec.mjs`
+  - Benefit: `map_modal.js` keeps modal lifecycle wiring while quest book opening, intro rendering, reset confirmation and prepared-task controls live behind a focused helper
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

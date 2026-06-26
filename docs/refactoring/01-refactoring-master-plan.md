@@ -190,3 +190,8 @@ make smoke
   - `map_modal.js` лениво подключает helper через stable `#visited-markers-script`;
   - сохранены `visitedPages`, классы маркеров, координаты, double offsets и mobile/desktop positioning;
   - Playwright smoke проверяет tolerant parsing, save contract, render contract и idempotent script injection.
+- Stage 4.6 выполнен:
+  - quest/book overlay behavior вынесен в `quest_overlay.js`;
+  - `map_modal.js` лениво подключает helper через stable `#quest-overlay-script`;
+  - сохранены `window.renderQuestIntro`, `window.showQuestConfirmDialog` и текущая структура `sessionStorage.questState`;
+  - Playwright smoke проверяет открытие `.book-overlay` и render contract квестовой книги.

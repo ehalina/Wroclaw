@@ -280,6 +280,12 @@ class SPAManager {
 - DOM template хранится в `getMapModalTemplate()` и вставляется через `ensureMapModalDom()` только если `#map-modal` ещё отсутствует.
 - Event listeners привязываются один раз через guard `MapModal._initialized`.
 - `saveVisitedPageIfNeeded()` остаётся на каждом вызове init, чтобы повторная синхронизация посещения страницы не терялась.
+- Квестовая книга открывается через lazy helper `quest_overlay.js`; `map_modal.js` подключает его через `<script id="quest-overlay-script">` и оставляет только wrapper на `#open-quest`.
+- Compatibility globals `window.renderQuestIntro` и `window.showQuestConfirmDialog` сохранены для `quest_marker_handler.js`.
+
+**Locations:**
+- `map_modal.js` — lifecycle карты/квестовой кнопки, lazy-load wrappers и compatibility proxies.
+- `quest_overlay.js` — opening/render flow `.book-overlay`, `sessionStorage.questState` чтение, intro/title image/reset button, prepared-task controls и confirm dialog.
 
 
 ### 2. ES6 Modules для модульной архитектуры
