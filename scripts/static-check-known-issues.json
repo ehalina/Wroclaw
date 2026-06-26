@@ -1,81 +1,6 @@
 {
   "missingAssets": [
     {
-      "file": "katedra_01.html",
-      "target": "media/tumski/katedra_panorama.jpg",
-      "reason": "CR-03: active cathedral background asset is missing; planned for Stage 2."
-    },
-    {
-      "file": "katedra_panorama.html",
-      "target": "media/tumski/katedra_panorama.jpg",
-      "reason": "CR-03: active cathedral panorama background asset is missing; planned for Stage 2."
-    },
-    {
-      "file": "katedra_01.html",
-      "target": "input_detection.js",
-      "reason": "CR-03: referenced script is missing; planned for Stage 2."
-    },
-    {
-      "file": "katedra_panorama.html",
-      "target": "input_detection.js",
-      "reason": "CR-03: referenced script is missing; planned for Stage 2."
-    },
-    {
-      "file": "katedra_01.html",
-      "target": "media/book.jpg",
-      "reason": "CR-03: book asset path needs canonical decision; planned for Stage 2."
-    },
-    {
-      "file": "katedra_01.html",
-      "target": "media/book02.jpg",
-      "reason": "CR-03: book asset path needs canonical decision; planned for Stage 2."
-    },
-    {
-      "file": "katedra_panorama.html",
-      "target": "media/book.jpg",
-      "reason": "CR-03: book asset path needs canonical decision; planned for Stage 2."
-    },
-    {
-      "file": "katedra_panorama.html",
-      "target": "media/book02.jpg",
-      "reason": "CR-03: book asset path needs canonical decision; planned for Stage 2."
-    },
-    {
-      "file": "katedra_01.html",
-      "target": "media/Roboto-ExtraLightItalic.ttf",
-      "reason": "CR-03: missing font; planned for Stage 2."
-    },
-    {
-      "file": "katedra_panorama.html",
-      "target": "media/Roboto-ExtraLightItalic.ttf",
-      "reason": "CR-03: missing font; planned for Stage 2."
-    },
-    {
-      "file": "styles.css",
-      "target": "media/Roboto-ExtraLightItalic.ttf",
-      "reason": "CR-03: missing font; planned for Stage 2."
-    },
-    {
-      "file": "map_modal.js",
-      "target": "media/book/quest_03.jpg",
-      "reason": "CR-03: missing quest side image; planned for Stage 2."
-    },
-    {
-      "file": "map_modal.js",
-      "target": "media/book/quest_04.jpg",
-      "reason": "CR-03: missing quest side image; planned for Stage 2."
-    },
-    {
-      "file": "common.js",
-      "target": "media/book/book.jpg",
-      "reason": "Stage 1 inventory: legacy book image path is missing; planned for Stage 2."
-    },
-    {
-      "file": "pk02.css",
-      "target": "media/tumski/pk_03.jpg",
-      "reason": "CR-03: missing page background asset; planned for Stage 2."
-    },
-    {
       "file": "debug_styles.html",
       "target": "input_compatibility.css",
       "reason": "Stage 1 inventory: debug page references missing compatibility stylesheet; cleanup planned for Stage 7."
@@ -98,21 +23,10 @@
   ],
   "missingRoutes": [
     {
-      "file": "katedra_01.html",
-      "target": "tumski_06.html",
-      "reason": "CR-02: likely typo for tumski06.html; planned for Stage 2."
-    },
-    {
       "file": "right_arrow_handler.js",
       "target": "tumski_02.html",
       "reason": "Legacy/unreferenced handler; cleanup decision planned for Stage 2/7."
     }
   ],
-  "duplicateIds": [
-    {
-      "file": "katedra_panorama.html",
-      "id": "bookSound",
-      "reason": "CR-09: duplicate audio id; planned for Stage 2."
-    }
-  ]
+  "duplicateIds": []
 }

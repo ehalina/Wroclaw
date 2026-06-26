@@ -5,7 +5,7 @@
 }
 
 .next-image-container {
-    background-image: url('media/tumski/pk_03.jpg');
+    background-image: none;
 }
 
 /* Стили для стрелки прямо влево */
@@ -37,5 +37,4 @@
 /* Мобильная версия */
 @media (max-width: 700px) {
 }
-
 

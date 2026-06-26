@@ -430,7 +430,7 @@ function openTumskiIslandBook(bookSound, bookOverlay, container, bookContent, to
         const bookImage = bookOverlay.querySelector('.book-image');
         // Устанавливаем изображение книги
         if (bookImage) {
-            bookImage.src = 'media/book/book.jpg';
+            bookImage.src = 'media/book/book_island.jpg';
         }
         // Устанавливаем заголовок и текст из переводов
         if (window.i18n && typeof window.i18n.t === 'function') {

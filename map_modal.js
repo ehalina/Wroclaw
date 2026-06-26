@@ -633,16 +633,10 @@ const mapStyles = `
         width: 100%;
         z-index: 2; /* Поверх фоновых картинок */
         /* Добавляем боковые фоновые изображения */
-        background-image: url('media/book/quest_03.jpg'), url('media/book/quest_04.jpg');
-        background-position: left top, right top; /* Позиционируем левое и правое изображение */
-        background-size: auto 100%;
-        background-repeat: no-repeat; /* Не повторяем изображения */
         background-color: #d2cdc4; /* Цвет фона */
         padding-left: 0px; /* Подберите значение по ширине боковой картинки */
         padding-right: 0px; /* Подберите значение по ширине боковой картинки */
        /*  box-sizing: border-box; Учитываем padding в общей ширине */
-       background-origin: content-box, content-box; /* Позиционируем относительно content-box */
-       background-clip: content-box, content-box; /* Обрезаем по content-box */
     }
 
     .book-title {
@@ -2615,6 +2609,13 @@ const MapModal = {
     },
 
     handleMarkerClick(page) {
+        const pages = (Array.isArray(page) ? page : [page]).filter(Boolean);
+        const firstPage = pages[0];
+
+        if (!firstPage) {
+            return;
+        }
+
         // Закрываем модалку карты и выполняем стандартную очистку
         try {
             const mapModalEl = document.getElementById('map-modal');
@@ -2634,8 +2635,6 @@ const MapModal = {
             sessionStorage.setItem('navigateViaMap', '1');
         } catch (_) {}
         
-        // Открываем страницу
-        const firstPage = page;
         try {
             if (window.SPAManager && typeof window.SPAManager.loadPage === 'function') {
                 window.SPAManager.loadPage(firstPage);

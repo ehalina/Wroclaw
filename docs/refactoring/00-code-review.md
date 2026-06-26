@@ -286,3 +286,37 @@ Common.setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, () => {
 - Не менялся `BACKLOG.md`.
 - Не запускался браузерный/Capacitor smoke, потому что сначала нужно оформить проверочные сценарии и понять целевые маршруты.
 
+## Status Update - 2026-06-26
+
+Закрыто в Stage 1 tooling:
+
+- CR-04: `make lint`, `make test`, `make test-e2e`, `make smoke`, `make audit` теперь являются реальными проверками.
+
+Закрыто в Stage 2 runtime fixes:
+
+- CR-01: `MapModal.handleMarkerClick(page)` больше не обращается к undefined `pages`.
+- CR-02: `katedra_01.html` ведет на существующий `tumski06.html`.
+- CR-03: active missing assets/scripts из review закрыты; в allowlist остались только debug/test и legacy cleanup исключения.
+- CR-09: duplicate `id="bookSound"` в `katedra_panorama.html` устранен.
+
+Остается на следующих этапах:
+
+- CR-05: `postMessage` boundary hardening - Stage 3.
+- CR-06: split safe text/rich HTML для i18n - Stage 5.
+- CR-07: идемпотентный `MapModal.init()` - Stage 4.
+- CR-08: декомпозиция inline SPA shell - Stage 3.
+- CR-10: cleanup временных/устаревших файлов - Stage 7.
+- CR-11: debug logger вместо production `console.log` - Stage 7.
+- CR-12: canonical localization files - Stage 5.
+
+Проверено после Stage 2 fixes:
+
+```bash
+make test
+make lint
+make test-e2e
+make build
+make security
+make smoke
+make audit
+```

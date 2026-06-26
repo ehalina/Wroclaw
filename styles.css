@@ -345,13 +345,6 @@ body, html {
     cursor: none;
 }
 
-@font-face {
-    font-family: 'Roboto';
-    src: url('media/Roboto-ExtraLightItalic.ttf') format('truetype');
-    font-weight: 200;
-    font-style: italic;
-}
-
 .hide-cursors {
     display: none !important;
     opacity: 0 !important;

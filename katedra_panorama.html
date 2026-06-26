@@ -60,7 +60,7 @@
             width: 100%;
             height: 100%;
             position: absolute;
-            background-image: url('media/tumski/katedra_panorama.jpg');
+            background-image: url('media/tumski/katedra_01.jpg');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -368,13 +368,6 @@
             cursor: none;
         }
 
-        @font-face {
-            font-family: 'Roboto';
-            src: url('media/Roboto-ExtraLightItalic.ttf') format('truetype');
-            font-weight: 200;
-            font-style: italic;
-        }
-
         .language-switcher {
             position: fixed;
             top: 20px;
@@ -596,7 +589,6 @@
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
-    <script src="input_detection.js"></script>
     <script src="i18n.js"></script>
     <script src="common.js"></script>
     <script src="arrow_handlers.js"></script>
@@ -608,13 +600,13 @@
     </div>
     <audio id="stepSound" src="media/step.wav"></audio>
     <audio id="backgroundSound" src="media/na-gorodskoy-allee-utro-rassvet-34067.mp3"></audio>
+    <audio id="bookSound" src="media/opening-a-book.wav"></audio>
     <div class="map-mark-area">
         <div class="map-mark" id="tumska_wyspa"></div>
         <div class="content-wrapper">
             <img src="media/papera1.png" alt="Papera" class="papera-image">
             <div id="tumski-text" class="tumski-text" data-i18n="tumski.title"></div>
         </div>
-        <audio id="bookSound" src="media/opening-a-book.wav"></audio>
     </div>
     <div class="map-mark-area" style="top: 30%; right: 15%; width: auto; height: auto;">
         <div class="map-mark" id="tumski_most"></div>
@@ -622,12 +614,11 @@
             <img src="media/papera1.png" alt="Papera" class="papera-image">
             <div class="tumski-text" id="tumski-most-text" data-i18n="tumski_most.title"></div>
         </div>
-        <audio id="bookSound" src="media/opening-a-book.wav"></audio>
     </div>
     <div class="book-overlay">
         <button class="close-button">×</button>
         <div class="book-container">
-            <img src="media/book.jpg" alt="Book" class="book-image">
+            <img src="media/book/book_island.jpg" alt="Book" class="book-image">
             <div class="book-content">
                 <h2 class="book-title"></h2>
                 <img src="media/watercolor/tumski.png" alt="Тумский остров" class="content-image">
@@ -640,7 +631,7 @@
     <div class="most-overlay">
         <button class="close-button">×</button>
         <div class="most-container">
-            <img src="media/book02.jpg" alt="Тумский мост" class="most-image">
+            <img src="media/book/book02.jpg" alt="Тумский мост" class="most-image">
             <div class="most-title"></div>
         </div>
     </div>
@@ -715,14 +706,14 @@
 
             
             // Настраиваем обработчики для книг
-            tumskiTxtX = document.querySelector('#tumski-text');
+            const tumskiTxtX = document.querySelector('#tumski-text');
             tumskiTxtX.addEventListener('click', () => {
                 if (!bookOverlay.style.display || bookOverlay.style.display === 'none') {
                     Common.openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator);
                 }
             });
 
-            tumskiTxt = document.querySelector('#tumski-most-text');
+            const tumskiTxt = document.querySelector('#tumski-most-text');
             tumskiTxt.addEventListener('click', () => {
                 if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
                     Common.openMost(bookSound, mostOverlay, container, mostTitle);

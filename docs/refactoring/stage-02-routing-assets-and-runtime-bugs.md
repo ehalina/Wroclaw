@@ -88,9 +88,41 @@ make security
 - Duplicate-id checker чист или имеет только документированные исключения.
 - Поведение SPA-навигации сохранено.
 
+## Status Update - 2026-06-26
+
+Выполнено:
+
+- `MapModal.handleMarkerClick(page)` нормализует вход в массив `pages` и сохраняет fallback на `location.href`.
+- `katedra_01.html` исправлен с `tumski_06.html` на `tumski06.html`.
+- Active missing assets из Stage 1 allowlist закрыты:
+  - cathedral background/preload переведен на существующий `media/tumski/katedra_01.jpg`;
+  - book images переведены на `media/book/book_island.jpg` и `media/book/book02.jpg`;
+  - отсутствующий local `Roboto-ExtraLightItalic.ttf` больше не запрашивается;
+  - отсутствующие quest side images убраны из CSS background;
+  - `pk02.css` больше не запрашивает отсутствующий `pk_03.jpg`.
+- Active `input_detection.js` удален из cathedral pages.
+- Duplicate `id="bookSound"` в `katedra_panorama.html` устранен.
+- `scripts/static-check-known-issues.json` сокращен до debug/test и legacy cleanup исключений.
+
+Осталось не в active runtime:
+
+- debug/test pages: `input_compatibility.css`, `input_detection.js` - Stage 7 cleanup;
+- `right_arrow_handler.js -> tumski_02.html` - legacy/unreferenced handler, Stage 7 cleanup.
+
+Проверено:
+
+```bash
+make test
+make lint
+make test-e2e
+make build
+make security
+make smoke
+make audit
+```
+
 ## Stop signals
 
 - Оказывается, `tumski_06.html` должен существовать как отдельная новая страница.
 - Missing assets невозможно восстановить без продуктового решения.
 - Исправление `MapModal` меняет карту/квесты за пределами navigation flow.
-
