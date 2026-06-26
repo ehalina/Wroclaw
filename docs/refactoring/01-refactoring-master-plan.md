@@ -59,6 +59,7 @@ Source of truth по продуктовым задачам: `BACKLOG.md`
 |---|---|---|---|
 | 1 | `stage-01-safety-net-and-inventory.md` | Создать проверочную сетку и inventory | Сейчас |
 | 2 | `stage-02-routing-assets-and-runtime-bugs.md` | Закрыть runtime-дефекты из review | Stage 1 baseline |
+| Gate | `02-technology-review-gate.md` | Решить, нужны ли Howler/Vite/templating через маленький POC | Stage 1-2 |
 | 3 | `stage-03-spa-and-message-boundaries.md` | Укрепить SPA shell и `postMessage` contract | Stage 2 |
 | 4 | `stage-04-map-quest-modularization.md` | Разделить карту/квесты без смены поведения | Stage 2, частично Stage 3 |
 | 5 | `stage-05-page-template-and-i18n-consolidation.md` | Нормализовать страницы и локализацию | Stage 2 |
@@ -96,6 +97,17 @@ make security
 - translation key consistency checker;
 - smoke-сценарии для SPA, карты, языка и аудио.
 
+Текущий baseline после внедрения tooling:
+
+```bash
+make lint
+make test
+make test-e2e
+make smoke
+```
+
+`make test` использует allowlist известных дефектов из `scripts/static-check-known-issues.json`, чтобы фиксировать новые регрессии, не смешивая Stage 1 tooling с Stage 2 runtime fixes.
+
 Когда появится браузерный baseline:
 
 - desktop viewport smoke;
@@ -126,4 +138,3 @@ make security
 - SPA, карта, квесты, язык и аудио имеют хотя бы smoke-проверки.
 - Крупные файлы разбиты по ответственностям без смены поведения.
 - `BACKLOG.md`, `ARCHITECTURE.md`, `README.md` и `AGENTS.md` обновлены там, где изменения реально затронули процессы или архитектуру.
-

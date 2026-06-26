@@ -4,6 +4,18 @@
 
 Создать минимальную проверочную сетку до архитектурных изменений. Этот этап не должен менять пользовательское поведение.
 
+## Статус внедрения
+
+Базовый tooling внедрен:
+
+- `make lint` запускает ESLint с мягким initial baseline;
+- `make test` запускает JS syntax check, static inventory check и translation parse check;
+- `make test-e2e` запускает Playwright smoke на desktop/mobile Chromium;
+- `make smoke` запускает static checks и Playwright smoke вместе;
+- known issues зафиксированы в `scripts/static-check-known-issues.json`.
+
+Оставшиеся известные defects из allowlist должны закрываться в Stage 2 и Stage 7, после чего allowlist надо сокращать.
+
 ## Почему первым
 
 Code review показал, что стандартные команды `make lint`, `make typecheck`, `make test` сейчас в основном заглушки. Без baseline дальнейший рефакторинг `index.html`, `map_modal.js`, маршрутов и локализации будет слишком рискованным.
@@ -77,6 +89,9 @@ Code review показал, что стандартные команды `make l
 - `Makefile`;
 - `scripts/` или существующая директория для project scripts;
 - `package.json`;
+- `eslint.config.mjs`;
+- `playwright.config.mjs`;
+- `tests/`;
 - `docs/refactoring/`.
 
 ## Проверки
@@ -108,4 +123,3 @@ make security
 - Checker показывает сотни нерелевантных false positives.
 - Для маршрутов нет понятного canonical source.
 - `make build` начинает менять неожиданные tracked files.
-

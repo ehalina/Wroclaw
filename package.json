@@ -5,6 +5,12 @@
   "description": "Interactive Tumski Island tour wrapped with Capacitor.",
   "scripts": {
     "build": "node scripts/build-capacitor-web.mjs",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "node scripts/check-js-syntax.mjs && node scripts/check-static-inventory.mjs && node scripts/check-translations.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "smoke": "npm run test && npm run test:e2e",
     "cap:sync": "npm run build && npx cap sync",
     "cap:copy": "npm run build && npx cap copy",
     "cap:add:android": "npx cap add android",
@@ -19,6 +25,10 @@
     "@capacitor/ios": "8.4.1"
   },
   "devDependencies": {
-    "@capacitor/cli": "8.4.1"
+    "@capacitor/cli": "8.4.1",
+    "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.61.1",
+    "eslint": "^10.6.0",
+    "globals": "^17.7.0"
   }
 }
