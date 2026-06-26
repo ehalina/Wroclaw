@@ -99,6 +99,44 @@ const languageMenuStyles = `
     }
 `;
 
+function getMessageType(name, fallback) {
+    return window.SpaMessages?.TYPES?.[name] || fallback;
+}
+
+function getMessageTargetOrigin() {
+    if (window.SpaMessages && typeof window.SpaMessages.getTargetOrigin === 'function') {
+        return window.SpaMessages.getTargetOrigin();
+    }
+
+    return window.location.origin && window.location.origin !== 'null' ? window.location.origin : '*';
+}
+
+function postMessageToParent(type, payload = {}) {
+    if (!window.parent || window.parent === window) {
+        return false;
+    }
+
+    if (window.SpaMessages && typeof window.SpaMessages.postToParent === 'function') {
+        return window.SpaMessages.postToParent(type, payload);
+    }
+
+    window.parent.postMessage({ ...payload, type }, getMessageTargetOrigin());
+    return true;
+}
+
+function postMessageToIframe(iframe, type, payload = {}) {
+    if (!iframe || !iframe.contentWindow) {
+        return false;
+    }
+
+    if (window.SpaMessages && typeof window.SpaMessages.postToFrame === 'function') {
+        return window.SpaMessages.postToFrame(iframe, type, payload);
+    }
+
+    iframe.contentWindow.postMessage({ ...payload, type }, getMessageTargetOrigin());
+    return true;
+}
+
 // Функции для работы с языковым меню
 const LanguageMenu = {
     musicInitialized: false,
@@ -317,11 +355,10 @@ const LanguageMenu = {
         // Отправляем сообщение в родительское окно SPA для управления музыкой
         if (window.parent && window.parent !== window) {
     // console.log('🎵 Отправляем сообщение в SPA для управления музыкой:', action);
-            window.parent.postMessage({
-                type: 'soundControl',
+            postMessageToParent(getMessageType('SOUND_CONTROL', 'soundControl'), {
                 action: action,
                 source: 'languageMenu'
-            }, '*');
+            });
         } else {
             // Если мы не в iframe, управляем музыкой напрямую
     // console.log('🎵 Управляем музыкой напрямую (не в iframe):', action);
@@ -682,20 +719,18 @@ const LanguageMenu = {
                 } else {
     // console.log('🌐 i18n не найден в iframe, отправляем сообщение');
                     // Отправляем сообщение через postMessage
-                    activeIframe.contentWindow.postMessage({
-                        type: 'LANGUAGE_CHANGE',
+                    postMessageToIframe(activeIframe, getMessageType('LANGUAGE_CHANGE', 'LANGUAGE_CHANGE'), {
                         lang: lang
-                    }, '*');
+                    });
                 }
             }
         } catch (error) {
     // console.log('🌐 Ошибка доступа к iframe:', error);
             // Fallback: отправляем сообщение через postMessage
             try {
-                activeIframe.contentWindow.postMessage({
-                    type: 'LANGUAGE_CHANGE',
+                postMessageToIframe(activeIframe, getMessageType('LANGUAGE_CHANGE', 'LANGUAGE_CHANGE'), {
                     lang: lang
-                }, '*');
+                });
             } catch (postError) {
     // console.log('🌐 Ошибка отправки сообщения в iframe:', postError);
             }
@@ -714,10 +749,9 @@ const LanguageMenu = {
         
         try {
             // Отправляем сообщение через postMessage
-            activeIframe.contentWindow.postMessage({
-                type: 'LANGUAGE_CHANGE',
+            postMessageToIframe(activeIframe, getMessageType('LANGUAGE_CHANGE', 'LANGUAGE_CHANGE'), {
                 lang: lang
-            }, '*');
+            });
     // console.log('🌐 Сообщение отправлено в iframe');
         } catch (error) {
     // console.log('🌐 Ошибка отправки сообщения в iframe:', error);
@@ -1162,10 +1196,9 @@ const LanguageMenu = {
                 const activeIframe = document.querySelector('iframe');
                 if (activeIframe) {
                     try {
-                        activeIframe.contentWindow.postMessage({
-                            type: 'AUDIO_UNLOCK_CLICKED',
+                        postMessageToIframe(activeIframe, getMessageType('AUDIO_UNLOCK_CLICKED', 'AUDIO_UNLOCK_CLICKED'), {
                             action: 'unmute'
-                        }, '*');
+                        });
     // console.log('🎵 Сообщение отправлено в iframe для активации звука');
                     } catch (error) {
     // console.log('🎵 Ошибка отправки сообщения в iframe:', error);
@@ -1238,4 +1271,4 @@ const LanguageMenu = {
 };
 
 // Экспортируем объект LanguageMenu
-window.LanguageMenu = LanguageMenu; 
+window.LanguageMenu = LanguageMenu;

@@ -223,7 +223,14 @@
 
 ## 🔧 Technical Debt
 
-[ЗАПОЛНИТЬ - code quality improvements needed]
+### Completed
+
+- [x] **Refactor: SPA message boundary first pass** - Added explicit same-origin `postMessage` contract and smoke coverage
+  - Completed: 2026-06-26
+  - Files: `spa_message_contract.js`, `index.html`, `tumski_page_common.js`, `tumski.html`, `language_menu.js`, `map_modal.js`, `tests/smoke.spec.mjs`
+  - Benefit: iframe navigation and language messages now have schema/source/origin checks before deeper SPA extraction
+
+### Planned
 
 - [ ] **[Refactoring Task]** - [Description]
   - Reason: [Why it's needed]

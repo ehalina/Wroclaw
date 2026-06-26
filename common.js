@@ -470,12 +470,19 @@ function openTumskiMostOverlay(bookSound, mostOverlay, container, mostTitle) {
 
 // Обработчик сообщений от iframe для синхронизации локализации
 window.addEventListener('message', (event) => {
-    if (event.data && event.data.type === 'LANGUAGE_CHANGE_FROM_IFRAME') {
+    const message = window.SpaMessages && typeof window.SpaMessages.parseMessage === 'function'
+        ? window.SpaMessages.parseMessage(event.data)
+        : event.data;
+
+    const isTrusted = !window.SpaMessages ||
+        window.SpaMessages.isTrustedActiveIframeMessage(event, () => window.spaManager?.getActiveIframe?.());
+
+    if (message && message.type === 'LANGUAGE_CHANGE_FROM_IFRAME' && isTrusted) {
         // console.log('🌐 Получено сообщение о смене языка из iframe:', event.data.lang);
         
         // Обновляем локализацию в основном окне SPA
         if (window.i18n && typeof window.i18n.changeLang === 'function') {
-            window.i18n.changeLang(event.data.lang);
+            window.i18n.changeLang(message.lang);
         }
         
         // Специально обновляем кнопку разблокировки аудио

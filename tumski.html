@@ -126,17 +126,40 @@
     <script type="module" src="tumski_init.js"></script>
     
     <script>
+        function parseTumskiSpaMessage(event) {
+            if (window.SpaMessages && typeof window.SpaMessages.parseMessage === 'function') {
+                return window.SpaMessages.parseMessage(event.data);
+            }
+
+            if (event.data && typeof event.data === 'object' && typeof event.data.type === 'string') {
+                return event.data;
+            }
+
+            return null;
+        }
+
+        function isTrustedTumskiParentMessage(event) {
+            return !window.SpaMessages ||
+                (typeof window.SpaMessages.isTrustedParentMessage === 'function' &&
+                    window.SpaMessages.isTrustedParentMessage(event));
+        }
+
         // Добавляем обработчик сообщений для смены языка из SPA
         window.addEventListener('message', (event) => {
-            if (event.data && event.data.type === 'LANGUAGE_CHANGE') {
+            const message = parseTumskiSpaMessage(event);
+            if (!message || !isTrustedTumskiParentMessage(event)) {
+                return;
+            }
+
+            if (message.type === 'LANGUAGE_CHANGE') {
                 // console.log('🌐 Получено сообщение о смене языка в tumski.html:', event.data.lang);
                 if (window.i18n && typeof window.i18n.changeLang === 'function') {
-                    window.i18n.changeLang(event.data.lang);
+                    window.i18n.changeLang(message.lang);
                 }
             }
             
             // Обработчик сообщения о разблокировке аудио
-            if (event.data && event.data.type === 'AUDIO_UNLOCKED' && event.data.source === 'spa') {
+            if (message.type === 'AUDIO_UNLOCKED' && message.source === 'spa') {
                 // console.log('🎵 Получено сообщение о разблокировке аудио в tumski.html');
                 handleAudioUnlocked();
             }
@@ -176,4 +199,4 @@
         }
     </script>
 </body>
-</html> 
+</html>

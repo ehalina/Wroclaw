@@ -148,3 +148,8 @@ make smoke
   - runtime framework не меняется;
   - templating/static generation принят как Stage 5 candidate через internal metadata generator POC;
   - Howler/Vite/i18next отложены до более сильных сигналов.
+- Stage 3 first pass выполнен:
+  - добавлен `spa_message_contract.js`;
+  - центральные `postMessage` listeners проверяют schema/source/origin;
+  - wildcard target заменен в центральных потоках на same-origin helper;
+  - добавлены Playwright smoke для iframe -> parent navigation и parent -> iframe language change.

@@ -353,6 +353,13 @@
     <script type="module" src="tumski_init.js"></script>
     
     <script>
+        function postTumski21MessageToParent(message) {
+            const targetOrigin = window.location.origin && window.location.origin !== 'null'
+                ? window.location.origin
+                : '*';
+            window.parent.postMessage(message, targetOrigin);
+        }
+
         // Кастомная логика для стрелки назад на tumski21
         document.addEventListener('DOMContentLoaded', function() {
             // Проверяем наличие модального окна квеста на странице
@@ -390,7 +397,7 @@
                                 action: 'navigate'
                             };
                             // console.log('🎵 Отправляем сообщение:', message);
-                            window.parent.postMessage(message, '*');
+                            postTumski21MessageToParent(message);
                         } else {
                             // console.log('🎵 Переход на tumski06.html обычным способом');
                             window.location.href = 'tumski06.html';
@@ -414,7 +421,7 @@
                                 action: 'navigate'
                             };
                             // console.log('🎵 Отправляем сообщение:', message);
-                            window.parent.postMessage(message, '*');
+                            postTumski21MessageToParent(message);
                         } else {
                             // console.log('🎵 Переход на tumski06.html обычным способом');
                             window.location.href = 'tumski06.html';
@@ -506,7 +513,7 @@
                                             action: 'navigate'
                                         };
                                         // console.log('🎵 Отправляем сообщение:', message);
-                                        window.parent.postMessage(message, '*');
+                                        postTumski21MessageToParent(message);
                                     } else {
                                         // console.log('🎵 Квест закрыт через checkQuestClosed - обычный переход');
                                         setTimeout(() => {
@@ -611,4 +618,4 @@
     </script>
     
 </body>
-</html> 
+</html>

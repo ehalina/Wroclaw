@@ -30,7 +30,7 @@
 
 ## Шаги
 
-1. Описать message types.
+1. ✅ Описать message types.
    - `AUDIO_UNLOCKED`;
    - `SPA_NAVIGATE`;
    - `LANGUAGE_CHANGE`;
@@ -38,34 +38,64 @@
    - `PAGE_HASH`;
    - другие types, найденные inventory.
 
-2. Создать маленький message utility.
+2. ✅ Создать маленький message utility.
    - `isAllowedOrigin(event)`;
    - `isActiveIframeSource(event)`;
    - `parseMessage(data)`;
    - `postToActiveIframe(type, payload)`;
    - `postToParent(type, payload)`.
 
-3. Ввести guards без смены payload.
+3. ✅ Ввести guards без смены payload.
    - Сначала добавить проверки и оставить старый payload.
    - Проверить язык, hash navigation, audio unlock.
 
-4. Подготовить constants.
+4. ⏳ Подготовить constants.
    - Page registry;
    - стартовая страница;
    - audio route policy;
    - iframe selectors.
 
-5. Начать вынос из `index.html`.
+5. 🚧 Начать вынос из `index.html`.
    - Первый безопасный вынос: pure constants/config.
-   - Второй: message helpers.
+   - ✅ Второй: message helpers.
    - Третий: SPA lifecycle methods.
    - Четвертый: MiniMapManager.
 
-6. Добавить smoke для SPA boundary.
-   - iframe -> parent navigation;
-   - parent -> iframe language change;
+6. 🚧 Добавить smoke для SPA boundary.
+   - ✅ iframe -> parent navigation;
+   - ✅ parent -> iframe language change;
    - audio unlock notification;
    - hash handoff.
+
+## Status Update - 2026-06-26
+
+Первый проход Stage 3 выполнен.
+
+Сделано:
+
+- добавлен `spa_message_contract.js` с known message types, origin/source guards и same-origin `postToFrame`/`postToParent`;
+- `index.html` подключает контракт до legacy-скриптов;
+- центральные listeners в `index.html`, `common.js`, `tumski.html`, `tumski_page_common.js`, `map_modal.js` валидируют schema/source/origin;
+- исходящие сообщения в `index.html`, `language_menu.js`, `map_modal.js`, `tumski_page_common.js`, `tumski21.html` больше не используют прямой wildcard target;
+- добавлен execution-plan: `docs/refactoring/stage-03-execution-plan.md`;
+- добавлены Playwright smoke-проверки для `SPA_NAVIGATE` и `LANGUAGE_CHANGE` boundary.
+
+Отложено:
+
+- вынос page registry/audio route policy/iframe selectors;
+- вынос SPA lifecycle methods и `MiniMapManager`;
+- отдельные smoke для `AUDIO_UNLOCKED`, `PAGE_HASH`, `OPEN_MINI_MAP`/`OPEN_FULLSCREEN_MAP`.
+
+Проверки:
+
+```bash
+make test
+make lint
+make smoke
+make audit
+```
+
+Результат: все проверки прошли. `make smoke` выполняет 8 Playwright тестов на desktop/mobile.
 
 ## Проверки
 
@@ -97,4 +127,3 @@ make security
 - WebView/Capacitor ведет себя иначе по `event.origin`.
 - Невозможно надежно определить active iframe source.
 - Smoke показывает отличие history behavior.
-

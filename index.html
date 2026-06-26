@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="tumski.css">
     <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@1,200&display=swap" rel="stylesheet">
+    <script src="spa_message_contract.js"></script>
     <script src="i18n.js"></script>
     <script src="common.js"></script>
     <script src="arrow_handlers.js"></script>
@@ -344,6 +345,49 @@
     
     
     <script type="module">
+        const SPA_MESSAGE_TYPES = window.SpaMessages?.TYPES || {};
+
+        function spaMessageType(name, fallback) {
+            return SPA_MESSAGE_TYPES[name] || fallback;
+        }
+
+        function parseSpaMessage(event) {
+            if (window.SpaMessages && typeof window.SpaMessages.parseMessage === 'function') {
+                return window.SpaMessages.parseMessage(event.data);
+            }
+
+            if (event.data && typeof event.data === 'object' && typeof event.data.type === 'string') {
+                return event.data;
+            }
+
+            return null;
+        }
+
+        function postSpaMessageToIframe(iframe, type, payload = {}) {
+            if (window.SpaMessages && typeof window.SpaMessages.postToFrame === 'function') {
+                return window.SpaMessages.postToFrame(iframe, type, payload);
+            }
+
+            if (!iframe || !iframe.contentWindow) {
+                return false;
+            }
+
+            const targetOrigin = window.location.origin && window.location.origin !== 'null'
+                ? window.location.origin
+                : '*';
+            iframe.contentWindow.postMessage({ ...payload, type }, targetOrigin);
+            return true;
+        }
+
+        function isTrustedActiveIframeMessage(event, getActiveIframe = () => window.spaManager?.getActiveIframe?.()) {
+            if (window.SpaMessages && typeof window.SpaMessages.isTrustedActiveIframeMessage === 'function') {
+                return window.SpaMessages.isTrustedActiveIframeMessage(event, getActiveIframe);
+            }
+
+            const activeIframe = getActiveIframe();
+            return Boolean(activeIframe && activeIframe.contentWindow && event.source === activeIframe.contentWindow);
+        }
+
         // Простая SPA система управления страницами с iframe
         class SPAManager {
             constructor() {
@@ -531,11 +575,9 @@
                 const activeIframe = this.getActiveIframe();
                 if (activeIframe) {
                     try {
-                        // Отправляем сообщение в iframe
-                        activeIframe.contentWindow.postMessage({
-                            type: 'AUDIO_UNLOCKED',
+                        postSpaMessageToIframe(activeIframe, spaMessageType('AUDIO_UNLOCKED', 'AUDIO_UNLOCKED'), {
                             source: 'spa'
-                        }, '*');
+                        });
     // console.log('🎵 Сообщение о разблокировке отправлено в tumski.html');
                     } catch (error) {
     // console.log('🎵 Ошибка отправки сообщения в iframe:', error);
@@ -889,10 +931,9 @@
                                 console.log('🟡 [SPA] Передаем hash в существующий iframe:', pageHash);
                                 setTimeout(() => {
                                     try {
-                                        iframe.contentWindow.postMessage({
-                                            type: 'PAGE_HASH',
+                                        postSpaMessageToIframe(iframe, spaMessageType('PAGE_HASH', 'PAGE_HASH'), {
                                             hash: pageHash
-                                        }, '*');
+                                        });
                                         console.log('✅ [SPA] postMessage отправлен в существующий iframe с hash:', pageHash);
                                     } catch (err) {
                                         console.error('❌ [SPA] Ошибка при отправке postMessage в существующий iframe:', err);
@@ -901,10 +942,9 @@
                                 // Дублируем отправку через большую задержку
                                 setTimeout(() => {
                                     try {
-                                        iframe.contentWindow.postMessage({
-                                            type: 'PAGE_HASH',
+                                        postSpaMessageToIframe(iframe, spaMessageType('PAGE_HASH', 'PAGE_HASH'), {
                                             hash: pageHash
-                                        }, '*');
+                                        });
                                         console.log('✅ [SPA] postMessage отправлен повторно в существующий iframe с hash:', pageHash);
                                     } catch (err) {
                                         console.error('❌ [SPA] Ошибка при повторной отправке postMessage в существующий iframe:', err);
@@ -960,10 +1000,9 @@
                             // Увеличиваем задержку для надежности
                             setTimeout(() => {
                                 try {
-                                    iframe.contentWindow.postMessage({
-                                        type: 'PAGE_HASH',
+                                    postSpaMessageToIframe(iframe, spaMessageType('PAGE_HASH', 'PAGE_HASH'), {
                                         hash: pageHash
-                                    }, '*');
+                                    });
                                     console.log('✅ [SPA] postMessage отправлен с hash:', pageHash);
                                 } catch (err) {
                                     console.error('❌ [SPA] Ошибка при отправке postMessage:', err);
@@ -972,10 +1011,9 @@
                             // Дублируем отправку через большую задержку на случай, если первая не сработала
                             setTimeout(() => {
                                 try {
-                                    iframe.contentWindow.postMessage({
-                                        type: 'PAGE_HASH',
+                                    postSpaMessageToIframe(iframe, spaMessageType('PAGE_HASH', 'PAGE_HASH'), {
                                         hash: pageHash
-                                    }, '*');
+                                    });
                                     console.log('✅ [SPA] postMessage отправлен повторно с hash:', pageHash);
                                 } catch (err) {
                                     console.error('❌ [SPA] Ошибка при повторной отправке postMessage:', err);
@@ -1127,10 +1165,9 @@
                     if (iframe && iframe.contentWindow) {
                         setTimeout(() => {
                             try {
-                                iframe.contentWindow.postMessage({
-                                    type: 'PAGE_SHOWN',
+                                postSpaMessageToIframe(iframe, spaMessageType('PAGE_SHOWN', 'PAGE_SHOWN'), {
                                     pageName: pageName
-                                }, '*');
+                                });
                             } catch (err) {
                                 console.error('❌ [SPA] Ошибка при отправке PAGE_SHOWN:', err);
                             }
@@ -1283,9 +1320,14 @@
                 // Обработчик сообщений от iframe для навигации
                 window.addEventListener('message', (event) => {
     // console.log('🎵 Получено сообщение от iframe:', event.data);
-                    
-                    if (event.data && event.data.type === 'SPA_NAVIGATE') {
-                        const targetPage = event.data.page;
+
+                    const message = parseSpaMessage(event);
+                    if (!message || !isTrustedActiveIframeMessage(event, () => this.getActiveIframe())) {
+                        return;
+                    }
+
+                    if (message.type === spaMessageType('SPA_NAVIGATE', 'SPA_NAVIGATE')) {
+                        const targetPage = message.page;
     // console.log('🎵 Выполняем навигацию на страницу:', targetPage);
                         
                         if (targetPage) {
@@ -1458,23 +1500,28 @@
             
                 // Обработчик сообщений от iframe для управления музыкой
                 window.addEventListener('message', function(event) {
-                    if (event.data && event.data.type === 'soundControl') {
+                    const message = parseSpaMessage(event);
+                    if (!message || !isTrustedActiveIframeMessage(event)) {
+                        return;
+                    }
+
+                    if (message.type === spaMessageType('SOUND_CONTROL', 'soundControl')) {
     // console.log('🎵 Получено сообщение от iframe для управления музыкой:', event.data.action, 'от', event.data.source);
                         
                         // Проверяем, не пришло ли сообщение от tumski.html после разблокировки аудио
-                        if (event.data.source === 'tumski' && event.data.action === 'unmute') {
+                        if (message.source === 'tumski' && message.action === 'unmute') {
     // console.log('🎵 Игнорируем сообщение unmute от tumski.html после разблокировки аудио');
                             return;
                         }
                         
-                        if (event.data.action === 'mute') {
+                        if (message.action === 'mute') {
                             // Останавливаем музыку в SPA
                             const audio = window.spaManager ? window.spaManager.getUnifiedAudioPlayer() : null;
                             if (audio) {
                                 audio.pause();
                             }
     // console.log('🎵 Музыка в SPA остановлена');
-                        } else if (event.data.action === 'unmute') {
+                        } else if (message.action === 'unmute') {
                             // Запускаем музыку в SPA
                             if (window.spaManager) {
                                 const currentPage = window.spaManager.currentPage;
@@ -1542,7 +1589,13 @@
                 
                 // Обновляем карту при смене страницы через сообщения
                 window.addEventListener('message', (event) => {
-                    if (event.data && event.data.type === 'SPA_NAVIGATE' && this.currentState === 'mini') {
+                    const message = parseSpaMessage(event);
+                    if (
+                        message &&
+                        message.type === spaMessageType('SPA_NAVIGATE', 'SPA_NAVIGATE') &&
+                        this.currentState === 'mini' &&
+                        isTrustedActiveIframeMessage(event)
+                    ) {
                         setTimeout(() => this.updateMap(), 500);
                     }
                 });
@@ -1684,10 +1737,9 @@
                 const activeIframe = window.spaManager?.getActiveIframe();
                 if (activeIframe) {
                     try {
-                        activeIframe.contentWindow.postMessage({
-                            type: 'OPEN_FULLSCREEN_MAP',
+                        postSpaMessageToIframe(activeIframe, spaMessageType('OPEN_FULLSCREEN_MAP', 'OPEN_FULLSCREEN_MAP'), {
                             source: 'parent'
-                        }, '*');
+                        });
                     } catch (e) {
                         // CORS может блокировать доступ
                     }
@@ -1867,7 +1919,12 @@
             
             // Обработчик сообщений от iframe для открытия мини-карты
             window.addEventListener('message', (event) => {
-                if (event.data && event.data.type === 'OPEN_MINI_MAP') {
+                const message = parseSpaMessage(event);
+                if (
+                    message &&
+                    message.type === spaMessageType('OPEN_MINI_MAP', 'OPEN_MINI_MAP') &&
+                    isTrustedActiveIframeMessage(event)
+                ) {
                     if (window.miniMapManager) {
                         window.miniMapManager.expand();
                     }

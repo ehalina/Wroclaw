@@ -174,7 +174,24 @@ class SPAManager {
 }
 ```
 
-### 1.1. Маркеры посещённых страниц на карте
+### 1.1. SPA message contract
+
+**Decision:** Все новые `postMessage`-потоки между `index.html` и iframe-страницами проходят через `spa_message_contract.js`.
+
+**Reasoning:**
+- ✅ Явный список допустимых message types
+- ✅ Проверка `event.origin` для same-origin iframe shell
+- ✅ Проверка `event.source`: parent принимает сообщения только от active iframe, iframe принимает команды только от parent
+- ✅ Совместимость с текущими payload без смены navigation/audio/language behavior
+
+**Implementation:**
+- `spa_message_contract.js` публикует `window.SpaMessages`.
+- Parent -> iframe использует `SpaMessages.postToFrame(iframe, type, payload)`.
+- Iframe -> parent использует `SpaMessages.postToParent(type, payload)`.
+- Listener-ы сначала вызывают `parseMessage(data)`, затем проверяют source/origin guard.
+- Для opaque/file origin сохраняется fallback target `'*'`; для нормального web/Capacitor origin используется `window.location.origin`.
+
+### 1.2. Маркеры посещённых страниц на карте
 
 **Decision:** Сохраняем факт первого посещения страницы и показываем на карте кликабельную метку в координатах точки страницы. Клик по метке переносит пользователя на соответствующую страницу.
 

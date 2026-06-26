@@ -1175,6 +1175,49 @@ const mapStyles = `
 
 `;
 
+function getMapMessageType(name, fallback) {
+    return window.SpaMessages?.TYPES?.[name] || fallback;
+}
+
+function getMapMessageTargetOrigin() {
+    if (window.SpaMessages && typeof window.SpaMessages.getTargetOrigin === 'function') {
+        return window.SpaMessages.getTargetOrigin();
+    }
+
+    return window.location.origin && window.location.origin !== 'null' ? window.location.origin : '*';
+}
+
+function parseMapMessage(event) {
+    if (window.SpaMessages && typeof window.SpaMessages.parseMessage === 'function') {
+        return window.SpaMessages.parseMessage(event.data);
+    }
+
+    if (event.data && typeof event.data === 'object' && typeof event.data.type === 'string') {
+        return event.data;
+    }
+
+    return null;
+}
+
+function isTrustedParentMapMessage(event) {
+    return !window.SpaMessages ||
+        (typeof window.SpaMessages.isTrustedParentMessage === 'function' &&
+            window.SpaMessages.isTrustedParentMessage(event));
+}
+
+function postMapMessageToParent(type, payload = {}) {
+    if (!window.parent || window.parent === window) {
+        return false;
+    }
+
+    if (window.SpaMessages && typeof window.SpaMessages.postToParent === 'function') {
+        return window.SpaMessages.postToParent(type, payload);
+    }
+
+    window.parent.postMessage({ ...payload, type }, getMapMessageTargetOrigin());
+    return true;
+}
+
 // Функция для получения координат текущей точки на карте
 async function getCurrentMapPoint() {
     const imageContainer = document.querySelector('.image-container');
@@ -1618,7 +1661,12 @@ const MapModal = {
         
         // Обработчик сообщений от родительского окна для открытия полноэкранной карты
         window.addEventListener('message', (event) => {
-            if (event.data && event.data.type === 'OPEN_FULLSCREEN_MAP') {
+            const message = parseMapMessage(event);
+            if (
+                message &&
+                message.type === getMapMessageType('OPEN_FULLSCREEN_MAP', 'OPEN_FULLSCREEN_MAP') &&
+                isTrustedParentMapMessage(event)
+            ) {
                 openFullscreenMap();
             }
         });
@@ -1629,10 +1677,9 @@ const MapModal = {
             // Мы в iframe - отправляем сообщение в родительское окно
             openMapBtn.addEventListener('click', async function(e) {
                 e.preventDefault();
-                window.parent.postMessage({
-                    type: 'OPEN_MINI_MAP',
+                postMapMessageToParent(getMapMessageType('OPEN_MINI_MAP', 'OPEN_MINI_MAP'), {
                     source: 'iframe'
-                }, '*');
+                });
             });
         } else {
             // Мы в главном окне - обрабатываем напрямую

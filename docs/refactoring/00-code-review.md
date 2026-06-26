@@ -146,6 +146,14 @@ Common.setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, () => {
 - заменить wildcard target на вычисленный same-origin target там, где это возможно;
 - в listener-ах проверять `event.source`, `event.origin` и структуру `event.data`.
 
+Status 2026-06-26:
+
+- first pass выполнен в Stage 3;
+- добавлен `spa_message_contract.js`;
+- `index.html`, `common.js`, `tumski.html`, `tumski_page_common.js`, `map_modal.js` проверяют входящие сообщения по schema/source/origin;
+- исходящие сообщения в центральных потоках переведены на same-origin helper;
+- добавлены Playwright smoke-тесты для валидного/невалидного `SPA_NAVIGATE` и `LANGUAGE_CHANGE`.
+
 ### CR-06 - MEDIUM - i18n пишет переводы через `innerHTML`
 
 Файл: `i18n.js:76-80`, `i18n.js:83-108` и далее по функции `updatePageContent`.

@@ -2,6 +2,26 @@
 // Выполняет загрузку переводов, инициализацию общих модулей,
 // навешивает обработчики на стрелки, квест-метки и настраивает позиционирование
 
+import './spa_message_contract.js';
+
+const SPA_MESSAGE_TYPES = window.SpaMessages?.TYPES || {};
+
+function pageMessageType(name, fallback) {
+    return SPA_MESSAGE_TYPES[name] || fallback;
+}
+
+function parseTrustedParentMessage(event) {
+    if (!window.SpaMessages) {
+        return event.data && typeof event.data === 'object' ? event.data : null;
+    }
+
+    if (!window.SpaMessages.isTrustedParentMessage(event)) {
+        return null;
+    }
+
+    return window.SpaMessages.parseMessage(event.data);
+}
+
 /**
  * Проверяет, включен ли звук
  * @returns {boolean} true если звук включен, false если выключен
@@ -34,16 +54,21 @@ export async function initPageCommon() {
 
         // Добавляем обработчик сообщений для смены языка из SPA
         window.addEventListener('message', (event) => {
-            if (event.data && event.data.type === 'LANGUAGE_CHANGE') {
+            const message = parseTrustedParentMessage(event);
+            if (!message) {
+                return;
+            }
+
+            if (message.type === pageMessageType('LANGUAGE_CHANGE', 'LANGUAGE_CHANGE')) {
                 // console.log('🌐 Получено сообщение о смене языка:', event.data.lang);
                 if (window.i18n && typeof window.i18n.changeLang === 'function') {
-                    window.i18n.changeLang(event.data.lang);
+                    window.i18n.changeLang(message.lang);
                 }
             }
             
             // Обработка hash, переданного из SPA
-            if (event.data && event.data.type === 'PAGE_HASH' && event.data.hash) {
-                const hash = event.data.hash;
+            if (message.type === pageMessageType('PAGE_HASH', 'PAGE_HASH') && message.hash) {
+                const hash = message.hash;
                 console.log('🟡 [tumski_page_common] Получен PAGE_HASH от SPA:', hash);
                 // Сохраняем hash для последующей обработки после инициализации гномов
                 window.__pendingGnomeHash = hash;
@@ -70,14 +95,14 @@ export async function initPageCommon() {
             }
             
             // Обработка сообщения о показе страницы - повторная инициализация стрелок
-            if (event.data && event.data.type === 'PAGE_SHOWN') {
-                console.log('🟡 [tumski_page_common] Получен PAGE_SHOWN, повторная инициализация стрелок для:', event.data.pageName);
+            if (message.type === pageMessageType('PAGE_SHOWN', 'PAGE_SHOWN')) {
+                console.log('🟡 [tumski_page_common] Получен PAGE_SHOWN, повторная инициализация стрелок для:', message.pageName);
                 // Повторно инициализируем стрелки через небольшую задержку
                 setTimeout(() => {
                     try {
                         // Проверяем, что мы на правильной странице
                         const currentPage = window.location.pathname.split('/').pop() || '';
-                        const expectedPage = event.data.pageName || '';
+                        const expectedPage = message.pageName || '';
                         console.log('🟡 [tumski_page_common] Текущая страница:', currentPage, 'Ожидаемая:', expectedPage);
                         
                         // Получаем stepSound если он есть
@@ -116,10 +141,9 @@ export async function initPageCommon() {
         window.sendLanguageChangeToSPA = function(lang) {
             // console.log('🌐 Отправляем сообщение о смене языка в SPA:', lang);
             if (window.parent && window.parent !== window) {
-                window.parent.postMessage({
-                    type: 'LANGUAGE_CHANGE_FROM_IFRAME',
+                window.SpaMessages.postToParent(pageMessageType('LANGUAGE_CHANGE_FROM_IFRAME', 'LANGUAGE_CHANGE_FROM_IFRAME'), {
                     lang: lang
-                }, '*');
+                });
             }
         };
 
