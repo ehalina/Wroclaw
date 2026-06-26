@@ -58,7 +58,7 @@ Wroclaw/
 ├── tumski_cathedral_handler.js ✅  # Обработчик геометок
 ├── quest_marker_handler.js ✅      # Обработчик квестов
 ├── i18n.js ✅                       # Система локализации
-├── map_modal.js ✅                 # Модальные окна, идемпотентный init
+├── map_modal.js ✅                 # Модальные окна, template helper, идемпотентный init
 ├── language_menu.js ✅              # Меню языков
 ├── arrow_handlers.js ✅            # Обработчики навигации
 ├── Makefile ✅                      # Стандартизированные команды
@@ -102,6 +102,7 @@ Wroclaw/
 9. ✅ Refactoring safety net: ESLint, static checks, Playwright smoke
 10. ✅ Stage 3 SPA shell helpers: message contract, config, lifecycle, MiniMapManager
 11. ✅ Stage 4.1 MapModal init idempotency
+12. ✅ Stage 4.2 MapModal template helper extraction
 
 ---
 
@@ -184,6 +185,11 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 4.2 выполнен
+- inline `modalHTML` вынесен из `MapModal.init()` в `getMapModalTemplate()`
+- DOM insertion вынесен в `ensureMapModalDom()`
+- Smoke contract закрепляет ключевые ids/classes шаблона карты, book/most overlays, audio и confirm dialog
 
 ### 2026-06-27 - Refactoring Stage 4.1 выполнен
 - `MapModal.init()` сделан идемпотентным перед декомпозицией `map_modal.js`

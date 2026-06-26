@@ -197,6 +197,7 @@ Status 2026-06-26:
 - style injection использует stable ids `map-modal-styles` и `map-modal-mobile-tooltip-styles`;
 - listeners привязываются один раз через `MapModal._initialized`;
 - добавлен Playwright smoke для повторного `MapModal.init()` на direct Tumski page.
+- Stage 4.2 выполнен: inline `modalHTML` вынесен в `getMapModalTemplate()`, DOM insertion - в `ensureMapModalDom()`, smoke закрепляет ключевые ids/classes template.
 
 ### CR-08 - MEDIUM - `index.html` содержит крупные inline-классы и бизнес-логику SPA
 

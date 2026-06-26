@@ -274,7 +274,7 @@ class SPAManager {
 **Implementation:**
 - Основной style injection использует `#map-modal-styles`.
 - Mobile tooltip styles используют `#map-modal-mobile-tooltip-styles`.
-- DOM template вставляется только если `#map-modal` ещё отсутствует.
+- DOM template хранится в `getMapModalTemplate()` и вставляется через `ensureMapModalDom()` только если `#map-modal` ещё отсутствует.
 - Event listeners привязываются один раз через guard `MapModal._initialized`.
 - `saveVisitedPageIfNeeded()` остаётся на каждом вызове init, чтобы повторная синхронизация посещения страницы не терялась.
 

@@ -171,3 +171,7 @@ make smoke
   - style injection получил stable ids;
   - DOM/listeners больше не дублируются при повторном init;
   - добавлен Playwright smoke для повторной инициализации direct Tumski page.
+- Stage 4.2 выполнен:
+  - inline `modalHTML` вынесен в `getMapModalTemplate()` внутри `map_modal.js`;
+  - DOM insertion вынесен в `ensureMapModalDom()`;
+  - Playwright smoke теперь закрепляет ключевые ids/classes modal template.

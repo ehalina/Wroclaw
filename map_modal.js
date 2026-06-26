@@ -1209,6 +1209,101 @@ function ensureMobileTooltipStyles() {
     ensureStyleElement(MAP_MODAL_MOBILE_TOOLTIP_STYLE_ID, mobileTooltipStyles);
 }
 
+function getMapModalTemplate() {
+    return `
+            <div class="map-and-quest-buttons">
+                <button class="quest-button" id="open-quest">
+                     <img src="media/quest_i.jpg" alt="Квесты">
+                </button>
+            </div>
+            <a href="" class="map-button" id="open-map-modal">
+                <img src="media/maps_i.jpg" alt="Карта">
+            </a>
+            <div id="map-modal">
+                <div>
+                    <img id="map-image" src="media/tumski/map.jpg" alt="Карта">
+                    <img id="map-marker" src="media/mapmark.png" alt="Маркер">
+                    <div class="visited-markers-layer" id="visited-markers-layer"></div>
+                    <div id="map-tooltip"></div>
+                    <button id="close-map-modal">×</button>
+                    <button id="toggle-tooltips" style="display: none;">👁️</button>
+                </div>
+            </div>
+            <!-- Book Overlay HTML (moved from tumski.html) -->
+            <div class="book-overlay">
+                <button class="close-button">×</button>
+                <div class="book-container">/book/
+                    <div class="book-image-content-wrapper">
+                        <img src="media/book/quest_01.jpg" alt="Квест верх" class="quest-top-image">
+                        <div class="book-content-area">
+                            <h2 class="book-title"></h2>
+                            <ul class="quest-tasks"></ul>
+
+                            <!-- Изображение льва теперь добавляется динамически в book-content-area -->
+                        </div>
+                        <img src="media/book/quest_02.jpg" alt="Квест низ" class="quest-bottom-image">
+                        <!-- Боковые изображения теперь фон book-content-area -->
+                    </div>
+                    <div class="book-content">
+                        <!-- Content will be added dynamically if needed -->
+                    </div>
+                    <div class="scroll-indicator"></div>
+                </div>
+            </div>
+             <!-- Most Overlay HTML (moved from tumski.html) -->
+            <div class="most-overlay">
+                <button class="close-button">×</button>
+                <div class="most-container">
+                    <div class="image-wrapper">
+                        <img src="" alt="Тумский мост" class="most-image" data-src="BOOK_IMAGE_02">
+                        <img src="" alt="Overlay Image" class="overlay-image" style="display: none;">
+                        <img src="" alt="Additional Image" class="additional-image" style="display: none;">
+                        <img src="" alt="Book 31" class="book-31-image" style="display: none;">
+                        <img src="" alt="Book 32" class="book-32-image" style="display: none;">
+                        <div class="most-text-block most-text-block-left">
+                            <div class="most-title"></div>
+                            <div class="most-description"></div>
+                        </div>
+                        <div class="most-text-block most-text-block-right">
+                            <div class="most-title"></div>
+                            <div class="most-description"></div>
+                        </div>
+                        <div class="book-zones right-zones">
+                            <div class="book-zone zone-1" data-zone="1"></div>
+                            <div class="book-zone zone-2" data-zone="2"></div>
+                            <div class="book-zone zone-3" data-zone="3"></div>
+                            <div class="book-zone zone-4" data-zone="4"></div>
+                        </div>
+                        <div class="book-zones left-zones">
+                            <div class="book-zone zone-1" data-zone="1"></div>
+                            <div class="book-zone zone-2" data-zone="2"></div>
+                            <div class="book-zone zone-3" data-zone="3"></div>
+                            <div class="book-zone zone-4" data-zone="4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <audio id="stepSound" src="media/step.wav"></audio>
+            <audio id="mapSound" src="media/zwyki/bb6f2b8ec908f28.mp3"></audio>
+            <audio id="bookSound" src="media/opening-a-book.wav"></audio>
+            <audio id="sceneSound"></audio>
+            <div class="quest-confirm-dialog-overlay"></div>
+            <div class="quest-confirm-dialog">
+                <div class="dialog-text"></div>
+                <div class="dialog-buttons">
+                    <button class="confirm-yes"></button>
+                    <button class="confirm-no"></button>
+                </div>
+            </div>
+        `;
+}
+
+function ensureMapModalDom() {
+    if (!document.getElementById('map-modal')) {
+        document.body.insertAdjacentHTML('afterbegin', getMapModalTemplate());
+    }
+}
+
 function getMapMessageType(name, fallback) {
     return window.SpaMessages?.TYPES?.[name] || fallback;
 }
@@ -1355,99 +1450,7 @@ async function saveVisitedPageIfNeeded() {
 const MapModal = {
     init() {
         ensureMapModalStyles();
-
-        // Создаем структуру модального окна и кнопок
-        const modalHTML = `
-            <div class="map-and-quest-buttons">
-                <button class="quest-button" id="open-quest">
-                     <img src="media/quest_i.jpg" alt="Квесты">
-                </button>
-            </div>
-            <a href="" class="map-button" id="open-map-modal">
-                <img src="media/maps_i.jpg" alt="Карта">
-            </a>
-            <div id="map-modal">
-                <div>
-                    <img id="map-image" src="media/tumski/map.jpg" alt="Карта">
-                    <img id="map-marker" src="media/mapmark.png" alt="Маркер">
-                    <div class="visited-markers-layer" id="visited-markers-layer"></div>
-                    <div id="map-tooltip"></div>
-                    <button id="close-map-modal">×</button>
-                    <button id="toggle-tooltips" style="display: none;">👁️</button>
-                </div>
-            </div>
-            <!-- Book Overlay HTML (moved from tumski.html) -->
-            <div class="book-overlay">
-                <button class="close-button">×</button>
-                <div class="book-container">/book/
-                    <div class="book-image-content-wrapper">
-                        <img src="media/book/quest_01.jpg" alt="Квест верх" class="quest-top-image">
-                        <div class="book-content-area">
-                            <h2 class="book-title"></h2>
-                            <ul class="quest-tasks"></ul>
-                            
-                            <!-- Изображение льва теперь добавляется динамически в book-content-area -->
-                        </div>
-                        <img src="media/book/quest_02.jpg" alt="Квест низ" class="quest-bottom-image">
-                        <!-- Боковые изображения теперь фон book-content-area -->
-                    </div>
-                    <div class="book-content">
-                        <!-- Content will be added dynamically if needed -->
-                    </div>
-                    <div class="scroll-indicator"></div>
-                </div>
-            </div>
-             <!-- Most Overlay HTML (moved from tumski.html) -->
-            <div class="most-overlay">
-                <button class="close-button">×</button>
-                <div class="most-container">
-                    <div class="image-wrapper">
-                        <img src="" alt="Тумский мост" class="most-image" data-src="BOOK_IMAGE_02">
-                        <img src="" alt="Overlay Image" class="overlay-image" style="display: none;">
-                        <img src="" alt="Additional Image" class="additional-image" style="display: none;">
-                        <img src="" alt="Book 31" class="book-31-image" style="display: none;">
-                        <img src="" alt="Book 32" class="book-32-image" style="display: none;">
-                        <div class="most-text-block most-text-block-left">
-                            <div class="most-title"></div>
-                            <div class="most-description"></div>
-                        </div>
-                        <div class="most-text-block most-text-block-right">
-                            <div class="most-title"></div>
-                            <div class="most-description"></div>
-                        </div>
-                        <div class="book-zones right-zones">
-                            <div class="book-zone zone-1" data-zone="1"></div>
-                            <div class="book-zone zone-2" data-zone="2"></div>
-                            <div class="book-zone zone-3" data-zone="3"></div>
-                            <div class="book-zone zone-4" data-zone="4"></div>
-                        </div>
-                        <div class="book-zones left-zones">
-                            <div class="book-zone zone-1" data-zone="1"></div>
-                            <div class="book-zone zone-2" data-zone="2"></div>
-                            <div class="book-zone zone-3" data-zone="3"></div>
-                            <div class="book-zone zone-4" data-zone="4"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <audio id="stepSound" src="media/step.wav"></audio>
-            <audio id="mapSound" src="media/zwyki/bb6f2b8ec908f28.mp3"></audio>
-            <audio id="bookSound" src="media/opening-a-book.wav"></audio>
-            <audio id="sceneSound"></audio>
-            <div class="quest-confirm-dialog-overlay"></div>
-            <div class="quest-confirm-dialog">
-                <div class="dialog-text"></div>
-                <div class="dialog-buttons">
-                    <button class="confirm-yes"></button>
-                    <button class="confirm-no"></button>
-                </div>
-            </div>
-        `;
-
-        // Добавляем модальное окно и кнопки на страницу
-        if (!document.getElementById('map-modal')) {
-            document.body.insertAdjacentHTML('afterbegin', modalHTML);
-        }
+        ensureMapModalDom();
 
         // Зафиксировать посещение текущей страницы
         saveVisitedPageIfNeeded().catch(() => {});

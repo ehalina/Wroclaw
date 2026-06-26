@@ -250,6 +250,11 @@
   - Files: `map_modal.js`, `tests/smoke.spec.mjs`
   - Benefit: map/quest DOM, style injection and listeners are no longer duplicated before template/style extraction
 
+- [x] **Refactor: MapModal template helper extraction** - Moved inline modal template out of `MapModal.init()`
+  - Completed: 2026-06-27
+  - Files: `map_modal.js`, `tests/smoke.spec.mjs`
+  - Benefit: modal DOM template and insertion are isolated before deciding whether to create `map_modal_template.js`
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

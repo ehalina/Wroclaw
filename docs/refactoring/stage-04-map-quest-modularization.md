@@ -42,10 +42,10 @@
    - ✅ Если style уже есть, не добавлять повторный `<style>`.
    - ✅ Если listeners уже привязаны, не дублировать.
 
-2. Вынести template без логики.
-   - Сначала как функция в том же файле.
-   - Потом отдельный файл, если smoke чистый.
-   - Сохранить exact DOM ids/classes.
+2. ✅ Вынести template без логики.
+   - ✅ Сначала как функция в том же файле.
+   - ⏳ Потом отдельный файл, если smoke чистый.
+   - ✅ Сохранить exact DOM ids/classes.
 
 3. Вынести style injection.
    - Добавить stable `id` для style element.
@@ -117,3 +117,19 @@ Stage 4.1 выполнен:
 - вынести `modalHTML` в pure template helper внутри `map_modal.js`;
 - сохранить exact ids/classes;
 - после smoke решить, нужен ли отдельный `map_modal_template.js`.
+
+## Status Update - 2026-06-27 - Stage 4.2
+
+Stage 4.2 выполнен:
+
+- inline `modalHTML` вынесен из `MapModal.init()` в pure helper `getMapModalTemplate()`.
+- DOM insertion вынесен в `ensureMapModalDom()`.
+- `MapModal.init()` сохранил порядок: `ensureMapModalStyles()`, `ensureMapModalDom()`, `saveVisitedPageIfNeeded()`, затем `_initialized` guard.
+- Exact ids/classes закреплены в Playwright smoke через DOM contract selectors для карты, book overlay, most overlay, audio nodes и quest confirm dialog.
+- Проверка после изменения: `make smoke` - 22 теста прошли на desktop/mobile.
+
+Следующий подэтап Stage 4.3:
+
+- решить, выносить ли template в отдельный `map_modal_template.js`;
+- если переносить, сохранить совместимость load order для direct pages и iframe pages;
+- после этого переходить к style extraction или marker navigation isolation.
