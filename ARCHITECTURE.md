@@ -92,6 +92,7 @@ Wroclaw/
 ├── common_buttons.js       # Общие функции кнопок
 │
 ├── spa_config.js           # Pure SPA registry/config: pages, selectors, audio policy
+├── spa_lifecycle.js        # Pure SPA page lifecycle helpers
 ├── spa_message_contract.js # Safe postMessage contract for SPA shell and iframes
 ├── spa_integration.js      # SPA интеграция для совместимости
 ├── common_tumski.js        # Общая логика tumski страниц (ES6 module)
@@ -209,7 +210,23 @@ class SPAManager {
 - `SpaConfig.SELECTORS` хранит selectors shell-а: SPA container, active page, active iframe, iframe.
 - `SpaConfig.getAudioTrackForPage(page)` возвращает один из текущих треков: `town`, `minsk`, `kostel`, `hang`, `birds`.
 
-### 1.3. Маркеры посещённых страниц на карте
+### 1.3. SPA lifecycle helpers
+
+**Decision:** Pure page lifecycle helpers для SPA shell живут в `spa_lifecycle.js`, а `SPAManager` остаётся владельцем state, history, audio и event listeners.
+
+**Reasoning:**
+- ✅ Разбор `page#hash` тестируется отдельно от загрузки iframe
+- ✅ Создание iframe/page container вынесено из inline HTML
+- ✅ DOM lookup active page/iframe использует один helper
+- ✅ Stateful extraction можно делать следующим шагом без смены URL/hash/audio behavior
+
+**Implementation:**
+- `SpaLifecycle.splitPageReference(page)` возвращает `{ pageName, hash, requestedPageName }`.
+- `SpaLifecycle.createPageIframe(pageName, timestamp)` создаёт iframe с текущими runtime styles и cache-busting query.
+- `SpaLifecycle.createPageContainer(pageName, iframe)` создаёт `.page-content` container с текущим id format.
+- `SpaLifecycle.getSpaContainer()`, `getIframeFromPage()`, `getActivePage()`, `getActiveIframe()` централизуют lookup selectors.
+
+### 1.4. Маркеры посещённых страниц на карте
 
 **Decision:** Сохраняем факт первого посещения страницы и показываем на карте кликабельную метку в координатах точки страницы. Клик по метке переносит пользователя на соответствующую страницу.
 

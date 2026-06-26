@@ -58,15 +58,15 @@
 5. 🚧 Начать вынос из `index.html`.
    - ✅ Первый безопасный вынос: pure constants/config.
    - ✅ Второй: message helpers.
-   - Третий: SPA lifecycle methods.
+   - ✅ Третий: первый вынос SPA lifecycle helpers.
    - Четвертый: MiniMapManager.
 
 6. 🚧 Добавить smoke для SPA boundary/config.
    - ✅ iframe -> parent navigation;
    - ✅ parent -> iframe language change;
    - ✅ page registry/audio route policy/selectors config;
-   - audio unlock notification;
-   - hash handoff.
+   - ✅ audio unlock notification;
+   - ✅ hash handoff.
 
 ## Status Update - 2026-06-26
 
@@ -93,11 +93,23 @@
 - дублированная audio-policy в `soundControl` unmute path заменена на тот же config helper;
 - добавлен Playwright smoke для `SpaConfig`: порядок страниц, selectors и audio route policy.
 
+## Status Update - 2026-06-27, Stage 3.3
+
+Третий проход Stage 3 выполнен.
+
+Сделано:
+
+- добавлен `spa_lifecycle.js` с pure helpers для `page#hash` parsing, создания iframe/page container и DOM lookup;
+- `index.html` подключает lifecycle helper до inline SPA module;
+- `SPAManager.loadPage()`, `showPage()`, `navigateToPage()` и `getActiveIframe()` используют helper-обертки вместо inline DOM construction/lookup;
+- повторяющаяся отправка `PAGE_HASH` с задержками 500/1000 мс собрана в один метод `sendPageHashToIframe()`;
+- добавлены Playwright smoke для `SpaLifecycle`, trusted `PAGE_HASH` handoff и trusted `AUDIO_UNLOCKED` handoff.
+
 Отложено:
 
-- вынос SPA lifecycle methods;
+- полный вынос stateful SPA lifecycle methods из `SPAManager`;
 - вынос `MiniMapManager`;
-- отдельные smoke для `AUDIO_UNLOCKED`, `PAGE_HASH`, `OPEN_MINI_MAP`/`OPEN_FULLSCREEN_MAP`.
+- отдельные smoke для `OPEN_MINI_MAP`/`OPEN_FULLSCREEN_MAP`.
 
 Проверки:
 
@@ -108,7 +120,7 @@ make smoke
 make audit
 ```
 
-Результат: все проверки прошли. `make smoke` выполняет 8 Playwright тестов на desktop/mobile.
+Результат: все проверки прошли. `make smoke` выполняет 16 Playwright тестов на desktop/mobile.
 
 ## Проверки
 

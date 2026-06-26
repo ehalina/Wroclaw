@@ -158,3 +158,7 @@ make smoke
   - из `index.html` вынесены page registry, стартовая страница, iframe selectors и audio route policy;
   - `SPAManager` использует config для prev/next navigation и выбора фонового трека;
   - добавлен Playwright smoke для SPA config.
+- Stage 3.3 выполнен:
+  - добавлен `spa_lifecycle.js`;
+  - из `index.html` вынесен первый слой pure lifecycle helpers: page/hash parsing, iframe/container creation, DOM lookup;
+  - добавлены Playwright smoke для lifecycle helpers, `PAGE_HASH` и `AUDIO_UNLOCKED` boundary.

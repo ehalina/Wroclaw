@@ -2,7 +2,7 @@
 
 **Project:** Wroclaw - Interactive Tumski Island Tour
 **Version:** 0.1.0
-**Last Updated:** 2026-06-26
+**Last Updated:** 2026-06-27
 
 > **📋 Authoritative Source:** This is the SINGLE SOURCE OF TRUTH for:
 > - ✅ **Detailed implementation plan** with checklists
@@ -234,6 +234,11 @@
   - Completed: 2026-06-26
   - Files: `spa_config.js`, `index.html`, `tests/smoke.spec.mjs`
   - Benefit: page order, start page, iframe selectors and audio route policy now have one source before lifecycle extraction
+
+- [x] **Refactor: SPA lifecycle helper extraction** - Moved first pure page lifecycle helpers out of `index.html`
+  - Completed: 2026-06-27
+  - Files: `spa_lifecycle.js`, `index.html`, `tests/smoke.spec.mjs`
+  - Benefit: page/hash parsing, iframe/container creation and active iframe lookup are isolated before stateful SPA lifecycle extraction
 
 ### Planned
 

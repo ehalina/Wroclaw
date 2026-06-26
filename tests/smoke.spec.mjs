@@ -62,6 +62,38 @@ test.describe('Wroclaw static app smoke', () => {
     });
   });
 
+  test('SPA lifecycle helpers parse routes and build page containers', async ({ page }) => {
+    await page.goto('/');
+
+    const lifecycle = await page.evaluate(() => {
+      const split = window.SpaLifecycle.splitPageReference('minsk01.html#patsa#vatsa');
+      const iframe = window.SpaLifecycle.createPageIframe('tumski05.html', 12345);
+      const container = window.SpaLifecycle.createPageContainer('tumski05.html', iframe);
+
+      return {
+        containerClass: container.className,
+        containerId: container.id,
+        containerIframeCount: container.querySelectorAll('iframe').length,
+        iframePosition: iframe.style.position,
+        iframeSrc: iframe.getAttribute('src'),
+        split
+      };
+    });
+
+    expect(lifecycle).toEqual({
+      containerClass: 'page-content',
+      containerId: 'page-tumski05',
+      containerIframeCount: 1,
+      iframePosition: 'absolute',
+      iframeSrc: 'tumski05.html?t=12345',
+      split: {
+        hash: 'patsa#vatsa',
+        pageName: 'minsk01.html',
+        requestedPageName: 'minsk01.html#patsa#vatsa'
+      }
+    });
+  });
+
   test('SPA navigation message is accepted only from the active iframe', async ({ page }) => {
     await page.goto('/');
     await page.waitForFunction(() => window.spaManager?.currentPage === 'tumski.html');
@@ -85,6 +117,62 @@ test.describe('Wroclaw static app smoke', () => {
     });
 
     await expect.poll(() => page.evaluate(() => window.spaManager?.currentPage)).toBe('tumski05.html');
+  });
+
+  test('PAGE_HASH handoff reaches only the active iframe from parent', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForFunction(() => window.spaManager?.currentPage === 'tumski.html');
+
+    const frame = await getActiveFrame(page);
+    await frame.waitForFunction(() => window.SpaMessages);
+    await frame.evaluate(() => {
+      window.__pendingGnomeHash = '';
+    });
+
+    await frame.evaluate(() => {
+      window.postMessage({ type: 'PAGE_HASH', hash: 'ignored_hash' }, window.location.origin);
+    });
+
+    await page.waitForTimeout(250);
+    expect(await frame.evaluate(() => window.__pendingGnomeHash)).toBe('');
+
+    await page.evaluate(() => {
+      const activeIframe = document.querySelector(window.SpaConfig.SELECTORS.activeIframe);
+      window.SpaMessages.postToFrame(activeIframe, window.SpaMessages.TYPES.PAGE_HASH, { hash: 'patsa_vatsa' });
+    });
+
+    await expect.poll(() => frame.evaluate(() => window.__pendingGnomeHash)).toBe('patsa_vatsa');
+  });
+
+  test('AUDIO_UNLOCKED handoff is accepted only from the parent window', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForFunction(() => window.spaManager?.currentPage === 'tumski.html');
+
+    const frame = await getActiveFrame(page);
+    await frame.waitForFunction(() => window.SpaMessages);
+    await expect(frame.locator('.sound-menu-button')).toBeAttached();
+
+    await frame.evaluate(() => {
+      const soundButton = document.querySelector('.sound-menu-button');
+      soundButton.classList.add('muted');
+      localStorage.setItem('soundMuted', 'true');
+    });
+
+    await frame.evaluate(() => {
+      window.postMessage({ type: 'AUDIO_UNLOCKED', source: 'spa' }, window.location.origin);
+    });
+
+    await page.waitForTimeout(250);
+    expect(await frame.evaluate(() => document.querySelector('.sound-menu-button').classList.contains('muted'))).toBe(true);
+    expect(await frame.evaluate(() => localStorage.getItem('soundMuted'))).toBe('true');
+
+    await page.evaluate(() => {
+      const activeIframe = document.querySelector(window.SpaConfig.SELECTORS.activeIframe);
+      window.SpaMessages.postToFrame(activeIframe, window.SpaMessages.TYPES.AUDIO_UNLOCKED, { source: 'spa' });
+    });
+
+    await expect.poll(() => frame.evaluate(() => document.querySelector('.sound-menu-button').classList.contains('muted'))).toBe(false);
+    await expect.poll(() => frame.evaluate(() => localStorage.getItem('soundMuted'))).toBe('false');
   });
 
   test('iframe language message is accepted only from the parent window', async ({ page }) => {
