@@ -255,6 +255,11 @@
   - Files: `map_modal.js`, `tests/smoke.spec.mjs`
   - Benefit: modal DOM template and insertion are isolated before deciding whether to create `map_modal_template.js`
 
+- [x] **Refactor: MapModal CSS extraction** - Moved main map modal styles into a standalone stylesheet
+  - Completed: 2026-06-27
+  - Files: `map_modal.css`, `map_modal.js`, `tests/smoke.spec.mjs`
+  - Benefit: the largest static style block is out of `map_modal.js` without editing 54 HTML script includes
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

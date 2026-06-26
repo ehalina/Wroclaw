@@ -59,6 +59,7 @@ Wroclaw/
 ├── quest_marker_handler.js ✅      # Обработчик квестов
 ├── i18n.js ✅                       # Система локализации
 ├── map_modal.js ✅                 # Модальные окна, template helper, идемпотентный init
+├── map_modal.css ✅                # Основные стили карты и квестовых overlays
 ├── language_menu.js ✅              # Меню языков
 ├── arrow_handlers.js ✅            # Обработчики навигации
 ├── Makefile ✅                      # Стандартизированные команды
@@ -103,6 +104,7 @@ Wroclaw/
 10. ✅ Stage 3 SPA shell helpers: message contract, config, lifecycle, MiniMapManager
 11. ✅ Stage 4.1 MapModal init idempotency
 12. ✅ Stage 4.2 MapModal template helper extraction
+13. ✅ Stage 4.3 MapModal CSS extraction
 
 ---
 
@@ -185,6 +187,11 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 4.3 выполнен
+- `map_modal_template.js` отложен, чтобы не менять load order в 54 HTML-файлах
+- основной `mapStyles` вынесен из `map_modal.js` в `map_modal.css`
+- `map_modal.js` подключает CSS через stable `#map-modal-styles` link
 
 ### 2026-06-27 - Refactoring Stage 4.2 выполнен
 - inline `modalHTML` вынесен из `MapModal.init()` в `getMapModalTemplate()`

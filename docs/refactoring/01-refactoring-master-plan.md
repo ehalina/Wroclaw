@@ -175,3 +175,8 @@ make smoke
   - inline `modalHTML` вынесен в `getMapModalTemplate()` внутри `map_modal.js`;
   - DOM insertion вынесен в `ensureMapModalDom()`;
   - Playwright smoke теперь закрепляет ключевые ids/classes modal template.
+- Stage 4.3 выполнен:
+  - отдельный `map_modal_template.js` отложен из-за classic script load order в 54 HTML-файлах;
+  - основной `mapStyles` вынесен в `map_modal.css`;
+  - `map_modal.js` подключает CSS через `<link id="map-modal-styles" rel="stylesheet">`;
+  - Playwright smoke проверяет внешний stylesheet вместо legacy inline style.

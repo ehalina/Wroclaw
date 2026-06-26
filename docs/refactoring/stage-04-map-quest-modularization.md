@@ -44,12 +44,14 @@
 
 2. ✅ Вынести template без логики.
    - ✅ Сначала как функция в том же файле.
-   - ⏳ Потом отдельный файл, если smoke чистый.
+   - Deferred: отдельный файл отложен, потому что `map_modal.js` подключается как classic script в 54 HTML-файлах.
    - ✅ Сохранить exact DOM ids/classes.
 
-3. Вынести style injection.
-   - Добавить stable `id` для style element.
-   - Проверить, что CSS порядок не ломается.
+3. ✅ Вынести основной style injection.
+   - ✅ Основной CSS вынесен в `map_modal.css`.
+   - ✅ `map_modal.js` сам подключает stylesheet через `<link id="map-modal-styles">`.
+   - ✅ Проверить, что CSS порядок не ломается.
+   - ⏳ Малый `.mobile-tooltip` style пока остаётся inline.
 
 4. Изолировать marker navigation.
    - Использовать fix из Stage 2 как baseline.
@@ -133,3 +135,20 @@ Stage 4.2 выполнен:
 - решить, выносить ли template в отдельный `map_modal_template.js`;
 - если переносить, сохранить совместимость load order для direct pages и iframe pages;
 - после этого переходить к style extraction или marker navigation isolation.
+
+## Status Update - 2026-06-27 - Stage 4.3
+
+Stage 4.3 выполнен:
+
+- Decision gate: отдельный `map_modal_template.js` отложен, потому что `map_modal.js` подключается напрямую как classic script в 54 HTML-файлах.
+- Вместо отдельного template-файла выполнен более полезный следующий шаг: большой `mapStyles` вынесен из `map_modal.js` в `map_modal.css`.
+- `ensureMapModalStyles()` теперь создаёт/обновляет `<link id="map-modal-styles" rel="stylesheet" href="map_modal.css">`.
+- `mobileTooltipStyles` оставлен inline как маленький scoped style с отдельным id `map-modal-mobile-tooltip-styles`.
+- Playwright smoke обновлён: проверяет, что основной CSS подключён как `link`, а legacy inline `style#map-modal-styles` отсутствует.
+- Проверка после изменения: `make smoke` - 22 теста прошли на desktop/mobile.
+
+Следующий подэтап Stage 4.4:
+
+- изолировать marker navigation из `map_modal.js`;
+- сохранить текущий route behavior и fallback на `location.href`;
+- использовать существующие smoke checks как baseline, при необходимости добавить marker click smoke.

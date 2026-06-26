@@ -272,8 +272,9 @@ class SPAManager {
 - ✅ Это обязательный safety step перед выносом template/styles/quest logic из `map_modal.js`
 
 **Implementation:**
-- Основной style injection использует `#map-modal-styles`.
-- Mobile tooltip styles используют `#map-modal-mobile-tooltip-styles`.
+- Основные стили карты/квестов живут в `map_modal.css`.
+- `map_modal.js` подключает основной CSS через `<link id="map-modal-styles" rel="stylesheet" href="map_modal.css">`, чтобы не менять 54 HTML script includes.
+- Mobile tooltip styles остаются маленьким inline style и используют `#map-modal-mobile-tooltip-styles`.
 - DOM template хранится в `getMapModalTemplate()` и вставляется через `ensureMapModalDom()` только если `#map-modal` ещё отсутствует.
 - Event listeners привязываются один раз через guard `MapModal._initialized`.
 - `saveVisitedPageIfNeeded()` остаётся на каждом вызове init, чтобы повторная синхронизация посещения страницы не терялась.
