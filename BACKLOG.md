@@ -2,7 +2,7 @@
 
 **Project:** Wroclaw - Interactive Tumski Island Tour
 **Version:** 0.1.0
-**Last Updated:** 2025-01-11
+**Last Updated:** 2026-06-26
 
 > **📋 Authoritative Source:** This is the SINGLE SOURCE OF TRUTH for:
 > - ✅ **Detailed implementation plan** with checklists
@@ -32,7 +32,7 @@
 **Completion:** 75% of MVP features
 
 ### Quick Stats
-- ✅ **Completed:** 7 core features
+- ✅ **Completed:** 8 core features
 - 🚧 **In Progress:** 3 features (Content, Localization, Optimization)
 - 📋 **Planned:** 5 features
 - 🔴 **Blocked:** 0 features
@@ -79,6 +79,11 @@
   - Implemented: 2024-12
   - Files: `arrow_handlers.js`, CSS cursor styles
   - Notes: Custom PNG cursors for navigation
+
+- [x] **Capacitor Native Wrapper** - Android/iOS shell for the static tour
+  - Implemented: 2026-06-26
+  - Files: `package.json`, `capacitor.config.json`, `scripts/build-capacitor-web.mjs`, `android/`, `ios/`, `Makefile`
+  - Notes: `make cap-sync` builds `www/` and syncs native projects; Android debug build passes with JDK 21
 
 **Template:**
 ```markdown

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Wroclaw Tumski Tour</string>
+    <string name="title_activity_main">Wroclaw Tumski Tour</string>
+    <string name="package_name">com.wroclaw.tumski</string>
+    <string name="custom_url_scheme">com.wroclaw.tumski</string>
+</resources>

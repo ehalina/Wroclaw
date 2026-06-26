@@ -1,0 +1,9 @@
+{
+  "appId": "com.wroclaw.tumski",
+  "appName": "Wroclaw Tumski Tour",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  }
+}

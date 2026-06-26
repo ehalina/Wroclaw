@@ -1,9 +1,9 @@
-# [PROJECT_NAME]
+# Wroclaw - Interactive Tumski Island Tour
 
-**Version:** [0.1.0]
-**Last Updated:** [DATE]
+**Version:** 0.1.0
+**Last Updated:** 2026-06-26
 
-[Краткое описание проекта в 1-2 предложениях]
+Static interactive tour of Tumski Island in Wroclaw. The project runs as a vanilla JavaScript web app and is wrapped for Android/iOS with Capacitor.
 
 ---
 
@@ -21,9 +21,10 @@
 
 ### Configuration Files
 - **[Makefile](Makefile)** - Standard commands (`make dev`, `make build`, etc)
-- **[.env.example](.env.example)** - Environment variables template
-- **[.claude/settings.json](.claude/settings.json)** - Claude Code permissions
-- **[.claude/commands/](.claude/commands/)** - Custom slash commands (`/commit`, `/pr`, `/migrate`)
+- **[package.json](package.json)** - Capacitor dependencies and npm scripts
+- **[capacitor.config.json](capacitor.config.json)** - Capacitor app ID, app name, and `webDir`
+- **[scripts/build-capacitor-web.mjs](scripts/build-capacitor-web.mjs)** - Static asset copy step for native builds
+- **[.github/workflows/deploy.yml](.github/workflows/deploy.yml)** - GitHub Pages deployment
 
 ### Quick Start for AI Agents
 1. Read [CLAUDE.md](CLAUDE.md) - **Auto-loaded context** for Claude Code
@@ -38,11 +39,11 @@
 
 ## ✨ Features
 
-[ЗАПОЛНИТЬ: Основные возможности проекта]
-
-- [✅/🚧/📋] **Feature 1** - Description
-- [✅/🚧/📋] **Feature 2** - Description
-- [✅/🚧/📋] **Feature 3** - Description
+- ✅ **SPA navigation** - iframe-based navigation between tour locations
+- ✅ **Interactive map markers** - modal content and visited-page markers
+- ✅ **Localization** - JSON translations for 7 languages
+- ✅ **Audio system** - location-aware background audio and effects
+- ✅ **Capacitor wrapper** - Android and iOS native projects generated from static web assets
 
 **Legend:**
 - ✅ Completed
@@ -54,15 +55,15 @@
 ## 🛠️ Technology Stack
 
 ### Frontend
-- **Framework:** [React/Vue/Angular/etc]
-- **Language:** [TypeScript/JavaScript]
-- **Styling:** [Tailwind CSS/etc]
-- **Build:** [Vite/Webpack/etc]
+- **Framework:** Vanilla JavaScript, no frontend framework
+- **Language:** JavaScript ES6+
+- **Styling:** Plain CSS
+- **Build:** Static files copied to `www/` for Capacitor
 
 ### Backend & Infrastructure
-- **Database:** [PostgreSQL/MongoDB/etc]
-- **Auth:** [Supabase/Auth0/etc]
-- **Hosting:** [Vercel/AWS/etc]
+- **Database:** None
+- **Auth:** Firebase client SDK is present for optional user/admin features
+- **Hosting:** GitHub Pages/static hosting for web, Capacitor for Android/iOS
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed technical stack.
 
@@ -71,31 +72,26 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed technical stack.
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ ([download](https://nodejs.org/))
-- npm or pnpm
-- [Other prerequisites]
+- Node.js 20+ and npm
+- JDK 21 for Android command-line builds
+- Android Studio / Android SDK for Android builds
+- Xcode for iOS builds
+
+`make android-debug` uses `CAPACITOR_JAVA_HOME` and defaults to Homebrew OpenJDK 21 on Apple Silicon. Override it if your JDK 21 is installed elsewhere.
+
+`make dev` defaults to port `5173`; use `make dev PORT=5176` if that port is already busy.
 
 ### Installation
 
 ```bash
-# 1. Clone repository
-git clone [repository-url]
-cd [project-name]
-
-# 2. Install dependencies
-npm install
-
-# 3. Setup environment
-cp .env.example .env.local
-# Edit .env.local with your credentials
-
-# 4. Start development server
-npm run dev
+make install
+make dev
 ```
 
 ### First Run
-1. Open http://localhost:[PORT]
-2. [Next steps for first time setup]
+1. Open http://localhost:5173 for the web version.
+2. Run `make cap-sync` after web asset changes.
+3. Run `make android-debug` to build a debug APK.
 
 ---
 
@@ -105,49 +101,40 @@ npm run dev
 
 ### Development
 ```bash
-make dev          # Start development server
-make build        # Build for production
-make start        # Start production server
+make dev          # Start static dev server on http://localhost:5173
+make build        # Copy runtime web assets into www/
+make start        # Same static server as make dev
+make cap-sync     # Build www/ and sync Android/iOS projects
 ```
 
 ### Quality & Testing
 ```bash
-make lint         # Run linter
-make fix-lint     # Auto-fix linting issues
-make typecheck    # Check TypeScript types
-make test         # Run tests
-make test-watch   # Run tests in watch mode
+make lint         # Placeholder: no linter configured yet
+make typecheck    # Placeholder: no TypeScript configured
+make test         # Placeholder: no automated tests configured yet
 ```
 
 ### Security & Dependencies
 ```bash
 make security     # Run npm audit
 make security-fix # Auto-fix vulnerabilities
-make audit        # Full check (lint + typecheck + test + security)
+make audit        # Build web assets and run npm audit
 ```
 
-### Database (when applicable)
+### Capacitor
 ```bash
-make db-migrate   # Run database migrations
-make db-reset     # Reset database
-make db-seed      # Seed with test data
+make cap-open-android # Open Android project
+make cap-open-ios     # Open iOS project
+make android-debug    # Build Android debug APK
 ```
 
 ### Utility
 ```bash
 make install      # Install dependencies
-make clean        # Clean build artifacts
+make clean        # Remove generated www/
 make reinstall    # Reinstall all dependencies
 make doctor       # Diagnose environment
 make help         # Show all available commands
-```
-
-### Alternative: Direct npm commands
-Если предпочитаешь npm напрямую:
-```bash
-npm run dev       # Same as make dev
-npm run build     # Same as make build
-# ... и так далее
 ```
 
 **Рекомендация:** Используй `make` команды - они проще и стандартизированы.
@@ -156,32 +143,25 @@ npm run build     # Same as make build
 
 ## 🔑 Environment Variables
 
-Create `.env.local` file in project root:
-
-```env
-# [Required variables]
-VAR_NAME=your_value_here
-VAR_NAME_2=your_value_here
-
-# [Optional variables]
-OPTIONAL_VAR=value
-```
-
-See `.env.example` for all available variables.
+No `.env` file is required for the current static tour. Firebase web configuration lives in `firebase_config.js`; treat Firebase security rules as the real access-control boundary.
 
 ---
 
 ## 📂 Project Structure
 
 ```
-[project-name]/
-├── src/                  # Source code
-│   ├── components/       # React components
-│   ├── lib/             # Utilities and services
-│   ├── hooks/           # Custom hooks
-│   └── [...]
-├── public/              # Static files
-├── [config-files]       # Configuration files
+Wroclaw/
+├── index.html            # SPA shell
+├── tumski*.html/css      # Tour location pages
+├── dwor*.html/css        # Courtyard pages
+├── ogrod*.html/css       # Garden pages
+├── media/                # Images, audio, icons, fonts
+├── locales/              # Translation JSON files
+├── scripts/              # Build scripts
+├── android/              # Capacitor Android project
+├── ios/                  # Capacitor iOS project
+├── capacitor.config.json # Capacitor app config
+├── package.json          # Capacitor dependencies and scripts
 ├── AGENTS.md            # AI instructions
 ├── ARCHITECTURE.md      # Architecture docs
 ├── BACKLOG.md          # Project status
@@ -195,12 +175,11 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed structure.
 
 ## 🔐 Security
 
-[ЗАПОЛНИТЬ: Информация о безопасности]
-
 ### Best Practices
 - Never commit `.env` files
-- Use environment variables for secrets
-- [Project-specific security notes]
+- Do not put server secrets into frontend JavaScript
+- Firebase web API keys are public identifiers; enforce access with Firebase rules
+- Run `make security` after dependency changes
 
 See [ARCHITECTURE.md](ARCHITECTURE.md#security-architecture) for security architecture.
 
@@ -241,8 +220,9 @@ See [WORKFLOW.md](WORKFLOW.md) for detailed workflow.
 See [BACKLOG.md](BACKLOG.md) for detailed roadmap and priorities.
 
 ### Next Milestones
-- [ ] [Milestone 1] - [ETA]
-- [ ] [Milestone 2] - [ETA]
+- [ ] Complete remaining tour content
+- [ ] Complete remaining translations
+- [ ] Optimize media weight for mobile packages
 
 ---
 
@@ -251,7 +231,7 @@ See [BACKLOG.md](BACKLOG.md) for detailed roadmap and priorities.
 ### [0.1.0] - [DATE]
 - Initial project setup
 - Documentation structure
-- [Initial features]
+- Capacitor Android/iOS wrapper
 
 See [BACKLOG.md](BACKLOG.md#change-log) for full change history.
 

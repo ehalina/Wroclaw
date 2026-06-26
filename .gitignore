@@ -21,7 +21,19 @@
 *.log
 npm-debug.log*
 
+# Node / Capacitor
+node_modules/
+www/
+
 # Build
 dist/
 build/
 *.map
+
+# Native build artifacts
+android/.gradle/
+android/local.properties
+android/app/build/
+ios/App/Pods/
+ios/App/build/
+DerivedData/

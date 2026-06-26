@@ -28,7 +28,7 @@
 ```
 - Framework: Vanilla JavaScript (ES6+ modules) - без фреймворков
 - Language: JavaScript (ES6+)
-- Build Tool: Нет (статический сайт, direct HTML/CSS/JS)
+- Build Tool: Нет для web runtime; Node script копирует runtime-файлы в `www/` для Capacitor
 - State Management: localStorage для настроек пользователя (язык, звук)
 - UI/CSS: Plain CSS с модульной структурой
 - Icons: Custom PNG иконки (media/)
@@ -45,10 +45,11 @@
 ### Backend & Infrastructure
 ```
 - Database: Нет (данные в JSON файлах локализации)
-- Authentication: Нет (публичный проект)
+- Authentication: Firebase client SDK присутствует для optional user/admin features; собственного backend auth нет
 - API Type: Нет API (статический контент)
 - File Storage: Локальная файловая система (media/)
 - Hosting: Static hosting (Netlify / GitHub Pages / Vercel)
+- Native wrapper: Capacitor 8 для Android/iOS
 ```
 
 **Почему статический сайт:**
@@ -61,7 +62,10 @@
 ### Key Dependencies
 ```json
 {
-  "Нет внешних зависимостей": "Проект использует только нативные веб-технологии"
+  "@capacitor/core": "Native runtime bridge",
+  "@capacitor/android": "Android platform",
+  "@capacitor/ios": "iOS platform",
+  "@capacitor/cli": "Capacitor project sync and native tooling"
 }
 ```
 
@@ -98,6 +102,12 @@ Wroclaw/
 ├── book_paths.js           # Обработчики книжных зон
 ├── map_points.js           # Инициализация точек на карте
 ├── visibility_audio_manager.js  # Управление видимостью аудио
+├── scripts/build-capacitor-web.mjs  # Копирование runtime-файлов в www/
+├── capacitor.config.json    # Конфигурация Capacitor
+├── package.json             # Capacitor зависимости и npm scripts
+├── Makefile                 # Стандартизированные команды проекта
+├── android/                 # Capacitor Android project
+├── ios/                     # Capacitor iOS project
 │
 ├── locales/                # Локализация (7 языков)
 │   ├── ru/
@@ -120,6 +130,23 @@ Wroclaw/
 ---
 
 ## 🏗️ Core Architecture Decisions
+
+### 0. Native wrapper через Capacitor
+
+**Decision:** Использовать Capacitor 8 как тонкую нативную оболочку вокруг существующего статического SPA.
+
+**Reasoning:**
+- ✅ Сохраняет текущую vanilla JS архитектуру без миграции на Vite/React
+- ✅ Позволяет собирать Android/iOS из тех же HTML/CSS/JS assets
+- ✅ Нативные проекты остаются стандартными Android Studio / Xcode проектами
+- ✅ `www/` генерируется отдельно, чтобы не копировать документацию и служебные файлы в app bundle
+
+**Implementation:**
+- Source of truth для web runtime остаётся в корне проекта.
+- `scripts/build-capacitor-web.mjs` копирует HTML/CSS/JS, `media/`, `locales/`, `thumbs/` и runtime assets в `www/`.
+- `capacitor.config.json` использует `webDir: "www"`.
+- `make cap-sync` пересобирает `www/` и синхронизирует `android/` и `ios/`.
+- Android command-line build требует JDK 21; `make android-debug` задаёт `CAPACITOR_JAVA_HOME`.
 
 ### 1. SPA Architecture через iframe
 
