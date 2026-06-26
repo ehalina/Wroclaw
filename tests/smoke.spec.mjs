@@ -34,6 +34,70 @@ test.describe('Wroclaw static app smoke', () => {
     await expect(page.locator('#open-quest')).toBeVisible();
   });
 
+  test('MapModal.init is idempotent on direct Tumski page', async ({ page }) => {
+    await page.goto('/tumski.html');
+    await expect(page.locator('#open-map-modal')).toBeVisible();
+
+    const counts = await page.evaluate(() => {
+      window.__stage4MapExpandCount = 0;
+      window.miniMapManager = {
+        expand() {
+          window.__stage4MapExpandCount += 1;
+        }
+      };
+
+      let windowListenersAdded = 0;
+      let documentListenersAdded = 0;
+      const originalWindowAddEventListener = window.addEventListener;
+      const originalDocumentAddEventListener = document.addEventListener;
+
+      window.addEventListener = function addEventListenerSpy(type, listener, options) {
+        windowListenersAdded += 1;
+        return originalWindowAddEventListener.call(this, type, listener, options);
+      };
+      document.addEventListener = function addEventListenerSpy(type, listener, options) {
+        documentListenersAdded += 1;
+        return originalDocumentAddEventListener.call(this, type, listener, options);
+      };
+
+      try {
+        window.MapModal.init();
+        window.MapModal.init();
+      } finally {
+        window.addEventListener = originalWindowAddEventListener;
+        document.addEventListener = originalDocumentAddEventListener;
+      }
+
+      document.getElementById('open-map-modal').click();
+
+      return {
+        bookOverlays: document.querySelectorAll('.book-overlay').length,
+        confirmDialogs: document.querySelectorAll('.quest-confirm-dialog').length,
+        documentListenersAdded,
+        expandCalls: window.__stage4MapExpandCount,
+        mainStyles: document.querySelectorAll('#map-modal-styles').length,
+        mapButtons: document.querySelectorAll('#open-map-modal').length,
+        mapModals: document.querySelectorAll('#map-modal').length,
+        questButtons: document.querySelectorAll('#open-quest').length,
+        tooltipStyles: document.querySelectorAll('#map-modal-mobile-tooltip-styles').length,
+        windowListenersAdded
+      };
+    });
+
+    expect(counts).toEqual({
+      bookOverlays: 1,
+      confirmDialogs: 1,
+      documentListenersAdded: 0,
+      expandCalls: 1,
+      mainStyles: 1,
+      mapButtons: 1,
+      mapModals: 1,
+      questButtons: 1,
+      tooltipStyles: 1,
+      windowListenersAdded: 0
+    });
+  });
+
   test('SPA config exposes page registry, selectors and audio policy', async ({ page }) => {
     await page.goto('/');
 

@@ -1,4 +1,7 @@
 // Стили для кнопки карты и модального окна
+const MAP_MODAL_STYLE_ID = 'map-modal-styles';
+const MAP_MODAL_MOBILE_TOOLTIP_STYLE_ID = 'map-modal-mobile-tooltip-styles';
+
 const mapStyles = `
     .quest-confirm-dialog {
         position: fixed;
@@ -1175,6 +1178,37 @@ const mapStyles = `
 
 `;
 
+const mobileTooltipStyles = `
+    .mobile-tooltip {
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
+        border: 1px solid rgba(255,255,255,0.2) !important;
+        backdrop-filter: blur(2px) !important;
+    }
+`;
+
+function ensureStyleElement(id, cssText) {
+    let styleElement = document.getElementById(id);
+    if (!styleElement) {
+        styleElement = document.createElement('style');
+        styleElement.id = id;
+        document.head.appendChild(styleElement);
+    }
+
+    if (styleElement.textContent !== cssText) {
+        styleElement.textContent = cssText;
+    }
+
+    return styleElement;
+}
+
+function ensureMapModalStyles() {
+    ensureStyleElement(MAP_MODAL_STYLE_ID, mapStyles);
+}
+
+function ensureMobileTooltipStyles() {
+    ensureStyleElement(MAP_MODAL_MOBILE_TOOLTIP_STYLE_ID, mobileTooltipStyles);
+}
+
 function getMapMessageType(name, fallback) {
     return window.SpaMessages?.TYPES?.[name] || fallback;
 }
@@ -1320,10 +1354,7 @@ async function saveVisitedPageIfNeeded() {
 // Функционал модального окна карты
 const MapModal = {
     init() {
-        // Добавляем стили на страницу
-        const styleSheet = document.createElement("style");
-        styleSheet.textContent = mapStyles;
-        document.head.appendChild(styleSheet);
+        ensureMapModalStyles();
 
         // Создаем структуру модального окна и кнопок
         const modalHTML = `
@@ -1414,10 +1445,16 @@ const MapModal = {
         `;
 
         // Добавляем модальное окно и кнопки на страницу
-        document.body.insertAdjacentHTML('afterbegin', modalHTML);
+        if (!document.getElementById('map-modal')) {
+            document.body.insertAdjacentHTML('afterbegin', modalHTML);
+        }
 
         // Зафиксировать посещение текущей страницы
         saveVisitedPageIfNeeded().catch(() => {});
+
+        if (this._initialized) {
+            return;
+        }
 
         // Удалены принудительные скрытия most-overlay, чтобы клики по геометкам могли открывать модалку
 
@@ -1508,6 +1545,8 @@ const MapModal = {
         if (!openMapBtn || !openQuestBtn || !mapModal || !closeMapBtn || !toggleTooltipsBtn || !mapImage || !mapMarker || !mapTooltip) {
             return; // Прекращаем выполнение, если элементы не найдены
         }
+
+        this._initialized = true;
 
         // Функция для открытия полноэкранной модалки карты
         const openFullscreenMap = async function() {
@@ -3061,16 +3100,7 @@ const MapModal = {
 // Экспортируем функции для использования в других модулях
 window.MapModal = MapModal;
 
-// Добавляем CSS стили для мобильных подсказок
-const style = document.createElement('style');
-style.textContent = `
-    .mobile-tooltip {
-        box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important;
-        border: 1px solid rgba(255,255,255,0.2) !important;
-        backdrop-filter: blur(2px) !important;
-    }
-`;
-document.head.appendChild(style);
+ensureMobileTooltipStyles();
 
 function renderQuestIntro(bookContentArea, questTasksList) {
     // Удалить старый intro, если есть

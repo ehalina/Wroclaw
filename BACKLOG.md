@@ -245,6 +245,11 @@
   - Files: `spa_minimap_manager.js`, `index.html`, `tests/smoke.spec.mjs`
   - Benefit: mini-map DOM/state/message handoff logic is isolated before `map_modal.js` and quest modularization
 
+- [x] **Refactor: MapModal init idempotency** - Made `MapModal.init()` safe to call repeatedly
+  - Completed: 2026-06-27
+  - Files: `map_modal.js`, `tests/smoke.spec.mjs`
+  - Benefit: map/quest DOM, style injection and listeners are no longer duplicated before template/style extraction
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

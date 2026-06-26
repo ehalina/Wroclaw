@@ -58,7 +58,7 @@ Wroclaw/
 ├── tumski_cathedral_handler.js ✅  # Обработчик геометок
 ├── quest_marker_handler.js ✅      # Обработчик квестов
 ├── i18n.js ✅                       # Система локализации
-├── map_modal.js ✅                 # Модальные окна
+├── map_modal.js ✅                 # Модальные окна, идемпотентный init
 ├── language_menu.js ✅              # Меню языков
 ├── arrow_handlers.js ✅            # Обработчики навигации
 ├── Makefile ✅                      # Стандартизированные команды
@@ -101,6 +101,7 @@ Wroclaw/
 8. ✅ Capacitor Android/iOS wrapper
 9. ✅ Refactoring safety net: ESLint, static checks, Playwright smoke
 10. ✅ Stage 3 SPA shell helpers: message contract, config, lifecycle, MiniMapManager
+11. ✅ Stage 4.1 MapModal init idempotency
 
 ---
 
@@ -184,6 +185,11 @@ make audit
 
 ## 🔄 История обновлений
 
+### 2026-06-27 - Refactoring Stage 4.1 выполнен
+- `MapModal.init()` сделан идемпотентным перед декомпозицией `map_modal.js`
+- Style injection получил stable ids для основной карты и mobile tooltips
+- Добавлен smoke check на повторный init без дублирования DOM/listeners
+
 ### 2026-06-27 - Refactoring Stage 3.4 выполнен
 - `MiniMapManager` вынесен из `index.html` в `spa_minimap_manager.js`
 - Добавлены smoke checks для `OPEN_MINI_MAP` и `OPEN_FULLSCREEN_MAP`
@@ -213,7 +219,7 @@ make audit
 | Quest Marker System | ✅ Готов | GeoMarker | ✅ Passed |
 | i18n System | ✅ Готов | Нет | ✅ Passed |
 | Music System | ✅ Готов | SPAManager | ✅ Passed |
-| Modal System | ✅ Готов | Нет | ✅ Passed |
+| Modal System | ✅ Готов | Нет | ✅ Smoke |
 | Navigation System | ✅ Готов | SPAManager | ✅ Passed |
 | SPA Message Contract | ✅ Готов | SPAManager | ✅ Smoke |
 | SPA Config/Lifecycle Helpers | ✅ Готов | SPAManager | ✅ Smoke |

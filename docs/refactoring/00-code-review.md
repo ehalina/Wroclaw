@@ -190,6 +190,14 @@ Status 2026-06-26:
 - разделить `ensureStyles()`, `ensureDom()`, `bindEventsOnce()`, `syncVisitedMarkers()`;
 - добавить smoke-проверку повторной инициализации.
 
+Статус 2026-06-27:
+
+- Stage 4.1 выполнен;
+- `MapModal.init()` больше не вставляет повторный `#map-modal`, `#open-map-modal`, `.book-overlay` и связанные DOM-узлы;
+- style injection использует stable ids `map-modal-styles` и `map-modal-mobile-tooltip-styles`;
+- listeners привязываются один раз через `MapModal._initialized`;
+- добавлен Playwright smoke для повторного `MapModal.init()` на direct Tumski page.
+
 ### CR-08 - MEDIUM - `index.html` содержит крупные inline-классы и бизнес-логику SPA
 
 Файлы:

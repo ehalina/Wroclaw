@@ -262,6 +262,22 @@ class SPAManager {
 - `map_modal.js` — сохранение посещения, рендер и позиционирование маркеров, переход по клику.
 - `map_points.js` — источник координат точек.
 
+### 1.6. Map modal lifecycle
+
+**Decision:** `MapModal.init()` является идемпотентным публичным entry point для карты и квестового overlay.
+
+**Reasoning:**
+- ✅ Direct pages и iframe pages могут вызывать `MapModal.init()` из разных initialization paths
+- ✅ Повторный init не должен дублировать DOM, audio elements, style tags или event listeners
+- ✅ Это обязательный safety step перед выносом template/styles/quest logic из `map_modal.js`
+
+**Implementation:**
+- Основной style injection использует `#map-modal-styles`.
+- Mobile tooltip styles используют `#map-modal-mobile-tooltip-styles`.
+- DOM template вставляется только если `#map-modal` ещё отсутствует.
+- Event listeners привязываются один раз через guard `MapModal._initialized`.
+- `saveVisitedPageIfNeeded()` остаётся на каждом вызове init, чтобы повторная синхронизация посещения страницы не терялась.
+
 
 ### 2. ES6 Modules для модульной архитектуры
 

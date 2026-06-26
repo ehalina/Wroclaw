@@ -166,3 +166,8 @@ make smoke
   - добавлен `spa_minimap_manager.js`;
   - `MiniMapManager` вынесен из inline `index.html` в отдельный модуль с явными shell dependencies;
   - добавлены Playwright smoke для `OPEN_MINI_MAP` и `OPEN_FULLSCREEN_MAP` boundary.
+- Stage 4.1 выполнен:
+  - `MapModal.init()` сделан идемпотентным перед декомпозицией `map_modal.js`;
+  - style injection получил stable ids;
+  - DOM/listeners больше не дублируются при повторном init;
+  - добавлен Playwright smoke для повторной инициализации direct Tumski page.

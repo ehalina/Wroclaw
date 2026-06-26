@@ -37,10 +37,10 @@
 
 ## Шаги
 
-1. Сделать `MapModal.init()` идемпотентным.
-   - Если DOM уже есть, не вставлять повторно.
-   - Если style уже есть, не добавлять повторный `<style>`.
-   - Если listeners уже привязаны, не дублировать.
+1. ✅ Сделать `MapModal.init()` идемпотентным.
+   - ✅ Если DOM уже есть, не вставлять повторно.
+   - ✅ Если style уже есть, не добавлять повторный `<style>`.
+   - ✅ Если listeners уже привязаны, не дублировать.
 
 2. Вынести template без логики.
    - Сначала как функция в том же файле.
@@ -79,6 +79,7 @@ make security
 Ручной smoke:
 
 - `MapModal.init()` два раза подряд не дублирует DOM;
+- `MapModal.init()` два раза подряд не дублирует style/listeners;
 - карта открывается/закрывается;
 - tooltip работает;
 - visited markers отображаются;
@@ -99,3 +100,20 @@ make security
 - После выноса template ломается CSS specificity.
 - Quest overlay использует скрытую зависимость от порядка DOM.
 
+## Status Update - 2026-06-27
+
+Stage 4.1 выполнен:
+
+- `MapModal.init()` больше не дублирует основной DOM карты/квеста при повторном вызове.
+- Основной style injection получил stable id `map-modal-styles`.
+- Style injection для `.mobile-tooltip` получил stable id `map-modal-mobile-tooltip-styles`.
+- Event listeners привязываются один раз через guard `MapModal._initialized`.
+- `saveVisitedPageIfNeeded()` оставлен на каждом init-вызове, чтобы повторная синхронизация посещённой страницы не терялась.
+- Добавлен Playwright smoke `MapModal.init is idempotent on direct Tumski page`.
+- Проверка после изменения: `make smoke` — 22 теста прошли на desktop/mobile.
+
+Следующий подэтап Stage 4.2:
+
+- вынести `modalHTML` в pure template helper внутри `map_modal.js`;
+- сохранить exact ids/classes;
+- после smoke решить, нужен ли отдельный `map_modal_template.js`.
