@@ -282,6 +282,21 @@ node --check tools/stage-06-18/scene-jpg-characterization.spec.mjs
 make stage-06-18-scene-jpg-screenshots
 ```
 
+## Stage 6.19 result
+
+Completed on 2026-06-27:
+
+- Created `docs/refactoring/stage-06-19-tumski11-webp-poc.md`.
+- Added `make stage-06-19-tumski11-webp-poc`.
+- Generated WebP candidates for `media/tumski/tumski_11.jpg` in artifacts only.
+- Rejected WebP runtime switch:
+  - q75 saves size but direct similarity is only `65.11`;
+  - q85/q85-ICC direct similarity is `74.31`;
+  - q90 is larger than the source and still only scores `82.24`;
+  - screenshot q85-ICC comparison scored `61.10` desktop and `34.35` mobile.
+- No runtime asset paths changed.
+- No package size change: current build baseline remains `331 files, 84.5 MB -> www/`.
+
 ## Stage 6.3 result
 
 Completed on 2026-06-27:

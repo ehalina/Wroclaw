@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 98% (50 завершённых задач текущего плана)
+**Общий прогресс:** 99% (51 завершённая задача текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -147,6 +147,7 @@ Wroclaw/
 48. ✅ Stage 6.16 Quest audio owner consolidation
 49. ✅ Stage 6.17 Sunset WebP runtime derivatives
 50. ✅ Stage 6.18 Scene JPG characterization
+51. ✅ Stage 6.19 Tumski11 WebP candidate POC
 
 ---
 
@@ -201,6 +202,7 @@ make smoke
 make build
 make stage-06-08-screenshots
 make stage-06-18-scene-jpg-screenshots
+make stage-06-19-tumski11-webp-poc
 make security
 make audit
 ```
@@ -237,6 +239,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.19 выполнен
+- создан WebP POC для `tumski_11.jpg` без runtime switch
+- q75/q85/q85-ICC/q90 candidates сохранены только в artifacts
+- screenshot gate q85-ICC зафиксировал FAIL: desktop 61.10, mobile 34.35
+- принято решение не переводить `tumski_11.jpg` на WebP
 
 ### 2026-06-27 - Refactoring Stage 6.18 выполнен
 - добавлены `playwright.stage-06-18.config.mjs`, `tools/stage-06-18/scene-jpg-characterization.spec.mjs` и `make stage-06-18-scene-jpg-screenshots`

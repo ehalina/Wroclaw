@@ -1,0 +1,43 @@
+{
+  "candidateAsset": "docs/refactoring/artifacts/stage-06-19-tumski11-webp/tumski_11-q85-icc.webp",
+  "consoleMessages": [
+    {
+      "text": "Не все элементы найдены для кнопки play",
+      "type": "error"
+    }
+  ],
+  "measurements": {
+    "body": {
+      "overflowX": "hidden",
+      "overflowY": "hidden"
+    },
+    "image": {
+      "backgroundImage": "url(\"docs/refactoring/artifacts/stage-06-19-tumski11-webp/tumski_11-q85-icc.webp\")",
+      "backgroundPosition": "50% 50%",
+      "backgroundRepeat": "no-repeat",
+      "backgroundSize": "contain",
+      "image": {
+        "height": 1920,
+        "status": "loaded",
+        "url": "docs/refactoring/artifacts/stage-06-19-tumski11-webp/tumski_11-q85-icc.webp",
+        "width": 2528
+      },
+      "rect": {
+        "height": 801,
+        "width": 1282,
+        "x": -1,
+        "y": 0
+      },
+      "selector": ".image"
+    },
+    "title": "Тумский остров - Вроцлав",
+    "viewport": {
+      "height": 800,
+      "width": 1280
+    }
+  },
+  "page": "tumski11.html",
+  "pageErrors": [],
+  "project": "desktop",
+  "screenshot": "docs/refactoring/artifacts/stage-06-19-tumski11-webp/desktop-tumski11.png"
+}

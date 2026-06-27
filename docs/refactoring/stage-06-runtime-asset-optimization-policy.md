@@ -75,6 +75,8 @@ Stage 6.17 result: `sunset1.png` and `sunset2.png` were replaced in runtime by l
 
 Stage 6.18 result: desktop/mobile baselines were captured for the largest remaining runtime scene JPGs (`tumski_11.jpg`, `dwor_01.jpg`, `tumski_14.jpg`) before any derivative optimization.
 
+Stage 6.19 result: WebP candidates for `tumski_11.jpg` failed the visual gate or were larger than the source. Do not switch this scene JPG to WebP.
+
 4. Video review:
    - inspect `katedra_panorama.html` playback;
    - decide whether a smaller derivative video or poster/loading strategy is needed.
@@ -97,4 +99,4 @@ Additional checks:
 
 ## Next safe implementation step
 
-Create a derivative for one scene JPG first, likely `media/tumski/tumski_11.jpg`, and compare against the Stage 6.18 desktop/mobile baseline before expanding to the next scene asset.
+Move to video review for `media/Wroclaw_Saver.mp4`, or try a different image-specific strategy only if it uses the same strict visual gate and does not overwrite originals.

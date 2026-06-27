@@ -365,3 +365,8 @@ make smoke
   - сняты desktop/mobile screenshots и JSON measurements для `tumski11.html`, `dwor01.html`, `tumski14.html`;
   - подтверждено, что `.image` backgrounds загружают `tumski_11.jpg`, `dwor_01.jpg`, `tumski_14.jpg`;
   - runtime assets и package baseline не менялись.
+- Stage 6.19 выполнен:
+  - создан WebP POC для `tumski_11.jpg` без runtime switch;
+  - q75/q85/q85-ICC/q90 candidates сохранены только в artifacts;
+  - screenshot gate для q85-ICC зафиксировал FAIL: desktop 61.10, mobile 34.35 при threshold 90;
+  - принято решение не переводить `tumski_11.jpg` на WebP.

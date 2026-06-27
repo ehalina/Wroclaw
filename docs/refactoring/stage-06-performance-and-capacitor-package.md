@@ -504,3 +504,31 @@ make stage-06-18-scene-jpg-screenshots
 Следующий подэтап:
 
 - Stage 6.19: сделать derivative для одного scene JPG и сравнить с Stage 6.18 baseline на desktop/mobile, прежде чем менять остальные scene JPG.
+
+## Status Update - 2026-06-27 - Stage 6.19
+
+Stage 6.19 выполнен:
+
+- Создан `docs/refactoring/stage-06-19-tumski11-webp-poc.md`.
+- Добавлен `playwright.stage-06-19.config.mjs`.
+- Добавлен `tools/stage-06-19/tumski11-webp-candidate.spec.mjs`.
+- Добавлен `tools/stage-06-19/compare-tumski11-screenshots.mjs`.
+- Добавлен Makefile target `make stage-06-19-tumski11-webp-poc`.
+- Сгенерированы WebP candidates для `tumski_11.jpg` только в artifacts:
+  - q75: 908K, direct score 65.11;
+  - q85: 1.3M, direct score 74.31;
+  - q85-ICC: 1.3M, direct score 74.31;
+  - q90: 1.6M, direct score 82.24.
+- Screenshot gate q85-ICC против Stage 6.18 baseline не прошёл:
+  - desktop: 61.10;
+  - mobile Pixel 5: 34.35.
+- Runtime references не менялись; package baseline остаётся `331 files, 84.5 MB -> www/`.
+
+Decision:
+
+- Не переводить `media/tumski/tumski_11.jpg` на WebP.
+- Не продолжать scene JPG WebP conversion как blind batch.
+
+Следующий подэтап:
+
+- Stage 6.20: перейти к video review для `media/Wroclaw_Saver.mp4` или пробовать другой image-specific strategy только через такой же visual gate.

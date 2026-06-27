@@ -1,0 +1,21 @@
+{
+  "allowFailures": true,
+  "generatedAt": "2026-06-27T11:12:57.592Z",
+  "minimumScore": 90,
+  "results": [
+    {
+      "baseline": "docs/refactoring/artifacts/stage-06-18-scene-jpg/desktop-tumski11.png",
+      "candidate": "docs/refactoring/artifacts/stage-06-19-tumski11-webp/desktop-tumski11.png",
+      "fileName": "desktop-tumski11.png",
+      "pass": false,
+      "score": 61.09878881
+    },
+    {
+      "baseline": "docs/refactoring/artifacts/stage-06-18-scene-jpg/mobile-pixel5-tumski11.png",
+      "candidate": "docs/refactoring/artifacts/stage-06-19-tumski11-webp/mobile-pixel5-tumski11.png",
+      "fileName": "mobile-pixel5-tumski11.png",
+      "pass": false,
+      "score": 34.35273512
+    }
+  ]
+}

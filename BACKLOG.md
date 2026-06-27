@@ -445,6 +445,11 @@
   - Files: `playwright.stage-06-18.config.mjs`, `tools/stage-06-18/scene-jpg-characterization.spec.mjs`, `Makefile`, `docs/refactoring/stage-06-18-scene-jpg-characterization.md`, `docs/refactoring/artifacts/stage-06-18-scene-jpg/`
   - Benefit: `tumski_11.jpg`, `dwor_01.jpg` and `tumski_14.jpg` now have desktop/mobile screenshot and measurement baselines before derivative optimization
 
+- [x] **Performance: tumski11 WebP candidate POC** - Tested WebP derivatives without switching runtime assets
+  - Completed: 2026-06-27
+  - Files: `playwright.stage-06-19.config.mjs`, `tools/stage-06-19/tumski11-webp-candidate.spec.mjs`, `tools/stage-06-19/compare-tumski11-screenshots.mjs`, `Makefile`, `docs/refactoring/stage-06-19-tumski11-webp-poc.md`, `docs/refactoring/artifacts/stage-06-19-tumski11-webp/`
+  - Benefit: WebP conversion for `tumski_11.jpg` was rejected by visual gate before any runtime/package change; original JPG remains packaged
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]
