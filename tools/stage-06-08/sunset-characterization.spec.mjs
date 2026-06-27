@@ -4,7 +4,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const outputDir = path.join(rootDir, 'docs/refactoring/artifacts/stage-06-08-sunset');
+const outputDir = path.join(
+  rootDir,
+  process.env.STAGE_06_SUNSET_ARTIFACT_DIR || 'docs/refactoring/artifacts/stage-06-08-sunset'
+);
 
 function projectSlug(projectName) {
   return projectName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -223,8 +226,8 @@ test('capture tumski21 sunset baseline screenshots', async ({ page }, testInfo) 
       pageErrors,
       project: testInfo.project.name,
       screenshots: {
-        afterDelay: `docs/refactoring/artifacts/stage-06-08-sunset/${afterDelayScreenshot}`,
-        initial: `docs/refactoring/artifacts/stage-06-08-sunset/${initialScreenshot}`
+        afterDelay: `${path.relative(rootDir, outputDir).split(path.sep).join('/')}/${afterDelayScreenshot}`,
+        initial: `${path.relative(rootDir, outputDir).split(path.sep).join('/')}/${initialScreenshot}`
       }
     }, null, 2)}\n`,
     'utf8'

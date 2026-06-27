@@ -71,6 +71,8 @@ Stage 6.11 result: duplicate effect WAV copies under `media/zwyki/` are excluded
 
 Stage 6.12 result: audio lifecycle refactor must start with source policy extraction and network characterization before reducing eager MP3 preload.
 
+Stage 6.17 result: `sunset1.png` and `sunset2.png` were replaced in runtime by lossless WebP derivatives after screenshot similarity passed; PNG originals remain in source and are excluded from the Capacitor package.
+
 4. Video review:
    - inspect `katedra_panorama.html` playback;
    - decide whether a smaller derivative video or poster/loading strategy is needed.

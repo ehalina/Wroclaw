@@ -83,8 +83,8 @@ class SunsetParallax {
 
     preloadImages() {
         const imageUrls = [
-            'media/tumski/sunset/sunset1.png',
-            'media/tumski/sunset/sunset2.png',
+            'media/tumski/sunset/sunset1.webp',
+            'media/tumski/sunset/sunset2.webp',
             'media/tumski/sunset/sunset3.jpg'
         ];
 

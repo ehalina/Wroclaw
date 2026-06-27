@@ -145,6 +145,7 @@ Wroclaw/
 46. ✅ Stage 6.14 Audio lifecycle characterization
 47. ✅ Stage 6.15 Lazy background audio preload
 48. ✅ Stage 6.16 Quest audio owner consolidation
+49. ✅ Stage 6.17 Sunset WebP runtime derivatives
 
 ---
 
@@ -204,7 +205,7 @@ make audit
 
 ### Текущий Capacitor package baseline:
 - Initial Stage 6 build: `350 files, 138.2 MB -> www/`
-- Current build: `331 files, 86.8 MB -> www/`
+- Current build: `331 files, 84.5 MB -> www/`
 - Package budget guard: `120 MB`
 - Runtime asset optimization policy: `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`
 
@@ -234,6 +235,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.17 выполнен
+- `sunset1.png` и `sunset2.png` заменены в runtime на lossless WebP derivatives
+- PNG originals оставлены в source и исключены из Capacitor package
+- добавлен `make stage-06-17-sunset-webp` и similarity report через `ssimulacra2`
+- build baseline улучшен до `331 files, 84.5 MB -> www/`
 
 ### 2026-06-27 - Refactoring Stage 6.16 выполнен
 - добавлен `window.QuestAudio` helper для shared `questMusic`

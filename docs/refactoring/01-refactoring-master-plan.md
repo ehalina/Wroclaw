@@ -354,3 +354,9 @@ make smoke
   - `language_menu.js`, SPA iframe initialization и `quest_marker_handler.js` используют общий owner;
   - smoke test закрепляет один parent `audio#questMusic` и shared iframe reference;
   - `quest_overlay.js` local overlay sound оставлен как deferred decision.
+- Stage 6.17 выполнен:
+  - созданы lossless WebP derivatives для `sunset1.png` и `sunset2.png`;
+  - `tumski21` и standalone sunset demo переключены на `sunset1.webp` / `sunset2.webp`;
+  - PNG originals исключены из Capacitor package, source originals оставлены в repo;
+  - `make stage-06-17-sunset-webp` подтвердил similarity scores 92.32-93.82;
+  - package baseline улучшен до `331 files, 84.5 MB -> www/`.

@@ -7,7 +7,7 @@
 ## Контекст
 
 Стартовый Stage 6 baseline: `make build` собирал `www/` размером `350 files, 138.2 MB -> www/`.
-После Stage 6.16 текущий baseline: `331 files, 86.8 MB -> www/`.
+После Stage 6.17 текущий baseline: `331 files, 84.5 MB -> www/`.
 В `BACKLOG.md` Performance Optimization уже находится в активных задачах Phase 2.
 
 ## Scope
@@ -441,7 +441,7 @@ Stage 6.16 выполнен:
 - `quest_marker_handler.js` получает shared audio через `window.QuestAudio` или `window.parent.QuestAudio`.
 - `tests/smoke.spec.mjs` проверяет single owner: один parent `audio#questMusic`, ноль iframe-local `#questMusic`, iframe reference указывает на тот же объект.
 - `quest_overlay.js` local overlay sound оставлен как deferred decision.
-- Package baseline не менялся: `331 files, 86.9 MB -> www/`.
+- Package baseline после build: `331 files, 86.8 MB -> www/`.
 
 Validation:
 
@@ -451,4 +451,26 @@ node --check quest_marker_handler.js
 node --check tests/smoke.spec.mjs
 make smoke
 make audit
+```
+
+## Status Update - 2026-06-27 - Stage 6.17
+
+Stage 6.17 выполнен:
+
+- Создан `docs/refactoring/stage-06-17-sunset-webp-runtime.md`.
+- Созданы lossless WebP derivatives:
+  - `media/tumski/sunset/sunset1.webp` (`4.0M` PNG -> `2.6M` WebP);
+  - `media/tumski/sunset/sunset2.webp` (`3.2M` PNG -> `2.2M` WebP).
+- `tumski21.html`, `tumski21.css`, `sunset_parallax.html` и `sunset_parallax.js` переключены на WebP runtime layers.
+- `scripts/build-capacitor-web.mjs` исключает `sunset1.png` и `sunset2.png` из Capacitor package; source originals остаются в repo.
+- Добавлен `make stage-06-17-sunset-webp`.
+- Добавлен `tools/stage-06-17/compare-sunset-screenshots.mjs` с `ssimulacra2` threshold 90.
+- Screenshot similarity against Stage 6.8 baseline: `92.32`-`93.82`.
+- Package baseline улучшен: `331 files, 86.8 MB -> www/` -> `331 files, 84.5 MB -> www/`.
+
+Validation:
+
+```bash
+make stage-06-17-sunset-webp
+make build
 ```

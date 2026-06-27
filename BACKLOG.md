@@ -435,6 +435,11 @@
   - Files: `language_menu.js`, `index.html`, `quest_marker_handler.js`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-06-16-quest-audio-owner.md`
   - Benefit: shared quest loop ownership now has one `QuestAudio` helper; `quest_overlay.js` local overlay sound remains a separate deferred decision
 
+- [x] **Performance: sunset WebP runtime derivatives** - Replaced packaged visible sunset PNG runtime layers with lossless WebP derivatives
+  - Completed: 2026-06-27
+  - Files: `media/tumski/sunset/sunset1.webp`, `media/tumski/sunset/sunset2.webp`, `tumski21.html`, `tumski21.css`, `sunset_parallax.html`, `sunset_parallax.js`, `scripts/build-capacitor-web.mjs`, `Makefile`, `tools/stage-06-17/compare-sunset-screenshots.mjs`, `docs/refactoring/stage-06-17-sunset-webp-runtime.md`, `docs/refactoring/artifacts/stage-06-17-sunset-webp/`
+  - Benefit: package build summary dropped from `331 files, 86.8 MB` to `331 files, 84.5 MB`; screenshot similarity passed on desktop/mobile
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

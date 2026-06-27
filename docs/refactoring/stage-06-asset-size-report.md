@@ -234,6 +234,33 @@ Completed on 2026-06-27:
 - Captured desktop/mobile artifacts showing no route-specific construct/load calls for `birds`, `kostel`, `hang`, `quest`.
 - Package baseline remains `331 files, 86.9 MB -> www/`.
 
+## Stage 6.17 result
+
+Completed on 2026-06-27:
+
+- Created lossless WebP runtime derivatives for visible sunset parallax alpha layers:
+  - `media/tumski/sunset/sunset1.webp`;
+  - `media/tumski/sunset/sunset2.webp`.
+- Switched `tumski21` and standalone sunset demo runtime references to WebP.
+- Excluded source PNG originals from Capacitor `www`:
+  - `media/tumski/sunset/sunset1.png`;
+  - `media/tumski/sunset/sunset2.png`.
+- Stage 6.17 screenshot similarity against Stage 6.8 baseline passed with scores `92.32`-`93.82`.
+
+Build comparison:
+
+| Metric | Before Stage 6.17 | After Stage 6.17 |
+|---|---:|---:|
+| Build summary files | 331 | 331 |
+| Build summary size | 86.8 MB | 84.5 MB |
+
+Validation:
+
+```bash
+make stage-06-17-sunset-webp
+make build
+```
+
 ## Stage 6.3 result
 
 Completed on 2026-06-27:

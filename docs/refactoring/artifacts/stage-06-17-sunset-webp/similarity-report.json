@@ -1,0 +1,34 @@
+{
+  "generatedAt": "2026-06-27T10:50:45.976Z",
+  "minimumScore": 90,
+  "results": [
+    {
+      "candidate": "docs/refactoring/artifacts/stage-06-17-sunset-webp/desktop-initial.png",
+      "baseline": "docs/refactoring/artifacts/stage-06-08-sunset/desktop-initial.png",
+      "fileName": "desktop-initial.png",
+      "pass": true,
+      "score": 93.78768454
+    },
+    {
+      "candidate": "docs/refactoring/artifacts/stage-06-17-sunset-webp/desktop-after-1500ms.png",
+      "baseline": "docs/refactoring/artifacts/stage-06-08-sunset/desktop-after-1500ms.png",
+      "fileName": "desktop-after-1500ms.png",
+      "pass": true,
+      "score": 93.82158186
+    },
+    {
+      "candidate": "docs/refactoring/artifacts/stage-06-17-sunset-webp/mobile-pixel5-initial.png",
+      "baseline": "docs/refactoring/artifacts/stage-06-08-sunset/mobile-pixel5-initial.png",
+      "fileName": "mobile-pixel5-initial.png",
+      "pass": true,
+      "score": 92.31918614
+    },
+    {
+      "candidate": "docs/refactoring/artifacts/stage-06-17-sunset-webp/mobile-pixel5-after-1500ms.png",
+      "baseline": "docs/refactoring/artifacts/stage-06-08-sunset/mobile-pixel5-after-1500ms.png",
+      "fileName": "mobile-pixel5-after-1500ms.png",
+      "pass": true,
+      "score": 92.45766435
+    }
+  ]
+}

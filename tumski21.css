@@ -105,12 +105,12 @@ body {
 }
 
 .layer-horizon {
-    background-image: url('media/tumski/sunset/sunset2.png');
+    background-image: url('media/tumski/sunset/sunset2.webp');
     z-index: 2;
 }
 
 .layer-buildings {
-    background-image: url('media/tumski/sunset/sunset1.png');
+    background-image: url('media/tumski/sunset/sunset1.webp');
     z-index: 3;
 }
 
@@ -253,4 +253,3 @@ body {
 .parallax-layer.zoom-out {
     transform: scale(1);
 }
-
