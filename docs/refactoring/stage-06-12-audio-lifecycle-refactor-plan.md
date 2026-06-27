@@ -85,6 +85,8 @@ Why:
 - changing audio preload can be user-visible on slow networks;
 - a network-request oracle is more useful than visual screenshots here.
 
+Status: completed on 2026-06-27 with method-level lifecycle artifacts in `docs/refactoring/artifacts/stage-06-14-audio/`.
+
 ### Stage 6.15 - Reduce eager preload
 
 Only after characterization:

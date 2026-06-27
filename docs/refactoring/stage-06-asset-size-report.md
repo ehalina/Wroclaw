@@ -214,6 +214,16 @@ Completed on 2026-06-27:
 - No package files changed.
 - Package baseline remains `331 files, 86.9 MB -> www/`.
 
+## Stage 6.14 result
+
+Completed on 2026-06-27:
+
+- Created `docs/refactoring/stage-06-14-audio-lifecycle-characterization.md`.
+- Added `make stage-06-14-audio`.
+- Captured desktop/mobile JSON artifacts for current `preloadBackgroundMusic()` behavior.
+- Confirmed current eager method behavior constructs/loads `birds`, `kostel`, `hang`, and `quest`.
+- Package baseline remains `331 files, 86.9 MB -> www/`.
+
 ## Stage 6.3 result
 
 Completed on 2026-06-27:

@@ -1,0 +1,219 @@
+{
+  "autoStartState": {
+    "audioUnlocked": false,
+    "currentTrack": "town"
+  },
+  "constructSources": [
+    "media/zwyki/birds.mp3",
+    "media/zwyki/hang.mp3",
+    "media/zwyki/kostel.mp3",
+    "media/zwyki/quest.mp3"
+  ],
+  "eagerSources": [
+    "media/zwyki/birds.mp3",
+    "media/zwyki/hang.mp3",
+    "media/zwyki/kostel.mp3",
+    "media/zwyki/quest.mp3"
+  ],
+  "expectedEagerPreloadSources": [
+    "media/zwyki/birds.mp3",
+    "media/zwyki/kostel.mp3",
+    "media/zwyki/hang.mp3",
+    "media/zwyki/quest.mp3"
+  ],
+  "lifecycleEvents": [
+    {
+      "currentSrc": "",
+      "id": "",
+      "kind": "construct",
+      "preload": "auto",
+      "src": "http://127.0.0.1:6173/media/zwyki/birds.mp3",
+      "time": 1626.3000000715256
+    },
+    {
+      "currentSrc": "",
+      "id": "",
+      "kind": "load",
+      "preload": "auto",
+      "src": "http://127.0.0.1:6173/media/zwyki/birds.mp3",
+      "time": 1626.3000000715256
+    },
+    {
+      "currentSrc": "",
+      "id": "",
+      "kind": "construct",
+      "preload": "auto",
+      "src": "http://127.0.0.1:6173/media/zwyki/kostel.mp3",
+      "time": 1626.3000000715256
+    },
+    {
+      "currentSrc": "",
+      "id": "",
+      "kind": "load",
+      "preload": "auto",
+      "src": "http://127.0.0.1:6173/media/zwyki/kostel.mp3",
+      "time": 1626.4000000953674
+    },
+    {
+      "currentSrc": "",
+      "id": "",
+      "kind": "construct",
+      "preload": "auto",
+      "src": "http://127.0.0.1:6173/media/zwyki/hang.mp3",
+      "time": 1626.4000000953674
+    },
+    {
+      "currentSrc": "",
+      "id": "",
+      "kind": "load",
+      "preload": "auto",
+      "src": "http://127.0.0.1:6173/media/zwyki/hang.mp3",
+      "time": 1626.4000000953674
+    },
+    {
+      "currentSrc": "",
+      "id": "",
+      "kind": "construct",
+      "preload": "auto",
+      "src": "http://127.0.0.1:6173/media/zwyki/quest.mp3",
+      "time": 1626.4000000953674
+    },
+    {
+      "currentSrc": "",
+      "id": "",
+      "kind": "load",
+      "preload": "auto",
+      "src": "http://127.0.0.1:6173/media/zwyki/quest.mp3",
+      "time": 1626.4000000953674
+    }
+  ],
+  "loadSources": [
+    "media/zwyki/birds.mp3",
+    "media/zwyki/hang.mp3",
+    "media/zwyki/kostel.mp3",
+    "media/zwyki/quest.mp3"
+  ],
+  "playSources": [],
+  "requestedSources": [
+    "media/opening-a-book.wav",
+    "media/step.wav",
+    "media/zwyki/bb6f2b8ec908f28.mp3",
+    "media/zwyki/birds.mp3",
+    "media/zwyki/hang.mp3",
+    "media/zwyki/kostel.mp3",
+    "media/zwyki/quest.mp3",
+    "media/zwyki/town.mp3"
+  ],
+  "requests": [
+    {
+      "assetPath": "media/zwyki/town.mp3",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555346551
+    },
+    {
+      "assetPath": "media/step.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555346577
+    },
+    {
+      "assetPath": "media/opening-a-book.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555346635
+    },
+    {
+      "assetPath": "media/opening-a-book.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555346635
+    },
+    {
+      "assetPath": "media/opening-a-book.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555346635
+    },
+    {
+      "assetPath": "media/opening-a-book.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555346635
+    },
+    {
+      "assetPath": "media/opening-a-book.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555346636
+    },
+    {
+      "assetPath": "media/step.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555346698
+    },
+    {
+      "assetPath": "media/zwyki/bb6f2b8ec908f28.mp3",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555346698
+    },
+    {
+      "assetPath": "media/step.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555346699
+    },
+    {
+      "assetPath": "media/zwyki/quest.mp3",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555346878
+    },
+    {
+      "assetPath": "media/zwyki/birds.mp3",
+      "method": "GET",
+      "phase": "direct-preload-method",
+      "resourceType": "media",
+      "time": 1782555347969
+    },
+    {
+      "assetPath": "media/zwyki/kostel.mp3",
+      "method": "GET",
+      "phase": "direct-preload-method",
+      "resourceType": "media",
+      "time": 1782555347969
+    },
+    {
+      "assetPath": "media/zwyki/hang.mp3",
+      "method": "GET",
+      "phase": "direct-preload-method",
+      "resourceType": "media",
+      "time": 1782555347969
+    },
+    {
+      "assetPath": "media/zwyki/quest.mp3",
+      "method": "GET",
+      "phase": "direct-preload-method",
+      "resourceType": "media",
+      "time": 1782555347969
+    }
+  ],
+  "url": "http://127.0.0.1:6173/#tumski.html",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  }
+}

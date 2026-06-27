@@ -340,3 +340,7 @@ make smoke
   - `index.html` больше не держит локальный `trackUrls` в `switchTrack()`;
   - `preloadBackgroundMusic()` использует тот же source policy helper;
   - smoke test закрепляет `hang` и `quest` source paths.
+- Stage 6.14 выполнен:
+  - создан `docs/refactoring/stage-06-14-audio-lifecycle-characterization.md`;
+  - добавлен `make stage-06-14-audio`;
+  - зафиксирован desktop/mobile baseline: `preloadBackgroundMusic()` constructs/loads `birds`, `kostel`, `hang`, `quest`.

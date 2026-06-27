@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 95% (45 завершённых задач текущего плана)
+**Общий прогресс:** 96% (46 завершённых задач текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -142,6 +142,7 @@ Wroclaw/
 43. ✅ Stage 6.11 Duplicate WAV package cleanup
 44. ✅ Stage 6.12 Audio lifecycle refactor plan
 45. ✅ Stage 6.13 Audio source policy extraction
+46. ✅ Stage 6.14 Audio lifecycle characterization
 
 ---
 
@@ -231,6 +232,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.14 выполнен
+- добавлены `playwright.stage-06-14.config.mjs`, `tools/stage-06-14/audio-lifecycle-characterization.spec.mjs` и `make stage-06-14-audio`
+- создан `docs/refactoring/stage-06-14-audio-lifecycle-characterization.md`
+- зафиксирован desktop/mobile baseline: `preloadBackgroundMusic()` constructs/loads `birds`, `kostel`, `hang`, `quest`
+- package baseline не менялся
 
 ### 2026-06-27 - Refactoring Stage 6.13 выполнен
 - `spa_config.js` получил `AUDIO_SOURCES` и `getAudioSourceForTrack()`

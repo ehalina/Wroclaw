@@ -420,6 +420,11 @@
   - Files: `spa_config.js`, `index.html`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
   - Benefit: route policy and track URL policy now share the SPA config boundary; source paths and playback behavior are unchanged
 
+- [x] **Test: audio lifecycle characterization** - Added Playwright baseline for `preloadBackgroundMusic()`
+  - Completed: 2026-06-27
+  - Files: `playwright.stage-06-14.config.mjs`, `tools/stage-06-14/audio-lifecycle-characterization.spec.mjs`, `docs/refactoring/stage-06-14-audio-lifecycle-characterization.md`, `docs/refactoring/artifacts/stage-06-14-audio/`
+  - Benefit: Stage 6.15 lazy-preload refactor now has a desktop/mobile method-level oracle for current eager MP3 loading
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

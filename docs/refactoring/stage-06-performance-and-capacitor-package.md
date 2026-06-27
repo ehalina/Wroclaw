@@ -372,3 +372,31 @@ make smoke
 Следующий подэтап:
 
 - Stage 6.14: добавить browser/network characterization для текущего eager MP3 loading перед изменением `preloadBackgroundMusic()`.
+
+## Status Update - 2026-06-27 - Stage 6.14
+
+Stage 6.14 выполнен:
+
+- Создан `docs/refactoring/stage-06-14-audio-lifecycle-characterization.md`.
+- Добавлен Playwright config `playwright.stage-06-14.config.mjs`.
+- Добавлен characterization spec `tools/stage-06-14/audio-lifecycle-characterization.spec.mjs`.
+- Добавлен Makefile target `make stage-06-14-audio`.
+- Созданы artifacts:
+  - `docs/refactoring/artifacts/stage-06-14-audio/desktop-audio-lifecycle.json`;
+  - `docs/refactoring/artifacts/stage-06-14-audio/mobile-pixel5-audio-lifecycle.json`.
+- Зафиксировано, что текущий `preloadBackgroundMusic()` constructs/loads:
+  - `media/zwyki/birds.mp3`;
+  - `media/zwyki/kostel.mp3`;
+  - `media/zwyki/hang.mp3`;
+  - `media/zwyki/quest.mp3`.
+- Runtime behavior и package baseline не менялись: `331 files, 86.9 MB -> www/`.
+
+Validation:
+
+```bash
+make stage-06-14-audio
+```
+
+Следующий подэтап:
+
+- Stage 6.15: изменить `preloadBackgroundMusic()` на lazy bookkeeping без eager `new Audio(...).load()` для route-specific MP3, сохранив `switchTrack()` behavior.
