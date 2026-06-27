@@ -545,10 +545,10 @@
   - Files: `spa_minimap_manager.js`, `firebase_config.js`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
   - Benefit: routine minimap disabled and Firebase success diagnostics are quiet by default while errors stay visible
 
-- [ ] **Cleanup: legacy audio diagnostics module review** - Confirm and remove or gate `background_music111.js`
-  - Reason: repo scan shows many diagnostics in a likely legacy audio module with no runtime script references
-  - Benefit: reduces source noise or documents retained legacy behavior explicitly
-  - Effort: Medium
+- [x] **Cleanup: legacy audio diagnostics module review** - Removed unreferenced `background_music111.js`
+  - Completed: 2026-06-27
+  - Files: `background_music111.js`, `AUDIO_VISIBILITY_README.md`, `docs/refactoring/stage-07-14-legacy-audio-module-review.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
+  - Benefit: legacy audio diagnostics module is no longer part of the source tree after reference review confirmed no runtime consumers
 
 - [ ] **Refactor: standalone/debug page diagnostics policy** - Gate or document remaining standalone page logs
   - Reason: `katedra_panorama.html` and `audio_visibility_test.html` still contain active diagnostics

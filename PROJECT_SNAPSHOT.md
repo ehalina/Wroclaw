@@ -168,6 +168,7 @@ Wroclaw/
 68. ✅ Stage 7.11 SPA shell diagnostics debug gate
 69. ✅ Stage 7.12 Audio promise rejection diagnostics gate
 70. ✅ Stage 7.13 One-line runtime init diagnostics gate
+71. ✅ Stage 7.14 Legacy audio diagnostics module cleanup
 
 ---
 
@@ -265,6 +266,11 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 7.14 выполнен
+- `background_music111.js` удалён после проверки отсутствия active runtime references
+- создан `docs/refactoring/stage-07-14-legacy-audio-module-review.md`
+- `AUDIO_VISIBILITY_README.md` обновлён под текущую модель MutationObserver/manual audio registration
 
 ### 2026-06-27 - Refactoring Stage 7.13 выполнен
 - `spa_minimap_manager.js` tumski21 disabled diagnostic gated through `DEBUG_MINIMAP`

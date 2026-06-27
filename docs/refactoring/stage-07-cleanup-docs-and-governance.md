@@ -291,6 +291,20 @@ Stage 7.13 выполнен:
 
 - Stage 7.14: review `background_music111.js` runtime references and remove or gate retained legacy diagnostics.
 
+## Status Update - 2026-06-27 - Stage 7.14
+
+Stage 7.14 выполнен:
+
+- Reviewed runtime references for `background_music111.js` with focused `rg` scans.
+- Confirmed no active runtime HTML/script references outside the module itself and generated/stale docs context.
+- Deleted unreferenced `background_music111.js` instead of adding debug gates to dead code.
+- Added review artifact: `docs/refactoring/stage-07-14-legacy-audio-module-review.md`.
+- Updated `AUDIO_VISIBILITY_README.md` to remove the stale direct integration claim and describe current dynamic/manual audio registration.
+
+Следующий подэтап:
+
+- Stage 7.15: define standalone/debug page diagnostics policy for `katedra_panorama.html` and `audio_visibility_test.html`.
+
 ## Documentation updates
 
 `BACKLOG.md`:

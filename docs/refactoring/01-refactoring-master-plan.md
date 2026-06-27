@@ -452,3 +452,7 @@ make smoke
   - `spa_minimap_manager.js` tumski21 disabled diagnostic gated via `DEBUG_MINIMAP` / legacy-style `__minimap_debug`;
   - `firebase_config.js` success diagnostic gated via `DEBUG_FIREBASE` / legacy-style `__firebase_debug`;
   - smoke covers mini-map quiet default and debug-enable paths; loading-state smoke now waits for initial overlay hide before helper contract checks.
+- Stage 7.14 выполнен:
+  - `background_music111.js` runtime references reviewed and found absent;
+  - unreferenced legacy module removed instead of gating unused diagnostics;
+  - `AUDIO_VISIBILITY_README.md` updated to describe current MutationObserver/manual registration model.

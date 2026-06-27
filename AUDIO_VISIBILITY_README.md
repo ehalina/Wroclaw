@@ -20,7 +20,8 @@
 - При разворачивании: восстанавливает время и возобновляет воспроизведение
 
 ### Интеграция
-- Интегрирован с `background_music111.js` для автоматической регистрации создаваемых аудио элементов
+- Больше не зависит от legacy `background_music111.js`; этот файл удалён после проверки отсутствия runtime references
+- Динамически создаваемые аудио элементы регистрируются через MutationObserver или вручную через `registerAudio`
 - Подключен к основным HTML файлам (`index.html`, `tumski.html`)
 
 ## Использование
@@ -56,4 +57,4 @@ window.visibilityAudioManager.unregisterAudio(audioElement);
 - Совместим с существующей системой управления аудио
 
 ## Логирование
-Все действия логируются в консоль браузера с префиксом 🎵 для удобной отладки.
+Runtime audio diagnostics are gated by the current debug flags documented in `ARCHITECTURE.md`; routine production console should stay quiet.
