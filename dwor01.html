@@ -65,41 +65,41 @@
                     <script type="module">
                         import { PageShellHelpers } from './page_shell_helpers.js';
 
-                        const image = document.querySelector('.image-container[data-map-point="40"] .image');
-                        const prostoCursor = PageShellHelpers.createRouteCursor({
-                            type: 'prosto',
-                            page: 'dwor02.html',
-                            coordinates: {
-                                xDesktop: 1000,
-                                yDesktop: 1200,
-                                xMobile: 1300,
-                                yMobile: 1200
-                            }
-                        });
-                        const backCursor = PageShellHelpers.createRouteCursor({
-                            type: 'back',
-                            page: 'pk02.html',
-                            coordinates: {
-                                xDesktop: 100,
-                                yDesktop: 1500,
-                                xMobile: 1400,
-                                yMobile: 1600
-                            },
-                            areaCoordinates: {
-                                xDesktop: 100,
-                                yDesktop: 1400,
-                                xMobile: 1400,
-                                yMobile: 1600
-                            }
-                        });
-
-                        [...prostoCursor.elements, ...backCursor.elements].forEach((element) => {
-                            image.appendChild(element);
-                        });
+                        PageShellHelpers.renderRouteCursors(
+                            '.image-container[data-map-point="40"] .image',
+                            [
+                                {
+                                    type: 'prosto',
+                                    page: 'dwor02.html',
+                                    coordinates: {
+                                        xDesktop: 1000,
+                                        yDesktop: 1200,
+                                        xMobile: 1300,
+                                        yMobile: 1200
+                                    }
+                                },
+                                {
+                                    type: 'back',
+                                    page: 'pk02.html',
+                                    coordinates: {
+                                        xDesktop: 100,
+                                        yDesktop: 1500,
+                                        xMobile: 1400,
+                                        yMobile: 1600
+                                    },
+                                    areaCoordinates: {
+                                        xDesktop: 100,
+                                        yDesktop: 1400,
+                                        xMobile: 1400,
+                                        yMobile: 1600
+                                    }
+                                }
+                            ]
+                        );
                     </script>
+                </div>
             </div>
         </div>
-    </div>
        <div class="next-image-container"></div>
     </div>
     <script type="module" src="tumski_init.js"></script>

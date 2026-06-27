@@ -113,6 +113,27 @@ function createRouteCursor(options = {}) {
     };
 }
 
+function resolveParent(target) {
+    if (typeof target === 'string') {
+        return document.querySelector(target);
+    }
+
+    return target || null;
+}
+
+function renderRouteCursors(target, cursors = []) {
+    const parent = resolveParent(target);
+    if (!parent) {
+        return [];
+    }
+
+    return cursors.flatMap((cursorOptions) => {
+        const routeCursor = createRouteCursor(cursorOptions);
+        routeCursor.elements.forEach((element) => parent.appendChild(element));
+        return routeCursor.elements;
+    });
+}
+
 function createMarker(options = {}) {
     const root = createElement('div', { className: 'map-mark-area' });
     const marker = createElement('div', {
@@ -177,10 +198,36 @@ function createMarker(options = {}) {
     };
 }
 
+function resolveBefore(parent, before) {
+    const marker = resolveParent(before);
+    if (marker && marker.parentElement === parent) {
+        return marker;
+    }
+
+    return null;
+}
+
+function renderMarkers(target, markers = [], options = {}) {
+    const parent = resolveParent(target);
+    if (!parent) {
+        return [];
+    }
+
+    const before = resolveBefore(parent, options.before);
+
+    return markers.map((markerOptions) => {
+        const marker = createMarker(markerOptions);
+        parent.insertBefore(marker.root, before);
+        return marker;
+    });
+}
+
 export const PageShellHelpers = {
     createMarker,
     createRouteCursor,
     createSceneShell,
+    renderMarkers,
+    renderRouteCursors,
     setCoordinateData
 };
 

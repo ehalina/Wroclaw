@@ -320,6 +320,16 @@
   - Files: `page_shell_helpers.js`, `tests/smoke.spec.mjs`
   - Benefit: scene, cursor and marker fragments now have a tested helper contract before any production HTML page is migrated
 
+- [x] **Refactor: dwor01 cursor helper migration** - Migrated one low-risk page cursor pair to the shared page shell helper
+  - Completed: 2026-06-27
+  - Files: `dwor01.html`, `page_shell_helpers.js`, `tests/smoke.spec.mjs`
+  - Benefit: first production content page now uses the shared helper for route cursors under a dedicated DOM contract smoke test
+
+- [x] **Refactor: route cursor render helper** - Added descriptor-based route cursor rendering for page shell migrations
+  - Completed: 2026-06-27
+  - Files: `page_shell_helpers.js`, `dwor01.html`, `tests/smoke.spec.mjs`
+  - Benefit: production pages can pass cursor config as data while helper owns DOM creation and exact route cursor class/attribute output
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

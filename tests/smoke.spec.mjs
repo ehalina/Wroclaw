@@ -644,22 +644,24 @@ test.describe('Wroclaw static app smoke', () => {
     const result = await page.evaluate(async () => {
       const { PageShellHelpers } = await import('./page_shell_helpers.js');
       const shell = PageShellHelpers.createSceneShell({ mapPoint: 40 });
-      const route = PageShellHelpers.createRouteCursor({
-        type: 'prosto',
-        page: 'dwor02.html',
-        coordinates: {
-          xDesktop: 1000,
-          yDesktop: 1200,
-          xMobile: 1300,
-          yMobile: 1200
-        },
-        areaCoordinates: {
-          xDesktop: 900,
-          yDesktop: 1100,
-          xMobile: 1200,
-          yMobile: 1100
+      const routeElements = PageShellHelpers.renderRouteCursors(shell.image, [
+        {
+          type: 'prosto',
+          page: 'dwor02.html',
+          coordinates: {
+            xDesktop: 1000,
+            yDesktop: 1200,
+            xMobile: 1300,
+            yMobile: 1200
+          },
+          areaCoordinates: {
+            xDesktop: 900,
+            yDesktop: 1100,
+            xMobile: 1200,
+            yMobile: 1100
+          }
         }
-      });
+      ]);
       const marker = PageShellHelpers.createMarker({
         id: 'black_klotska_quest',
         titleKey: 'quest.task9',
@@ -676,7 +678,6 @@ test.describe('Wroclaw static app smoke', () => {
         questImage: 'media/tumski/dwor_08.jpg'
       });
 
-      route.elements.forEach((element) => shell.image.appendChild(element));
       shell.scene.appendChild(marker.root);
 
       const host = document.createElement('section');
@@ -685,9 +686,9 @@ test.describe('Wroclaw static app smoke', () => {
 
       return {
         audioSrc: marker.audio.getAttribute('src'),
-        cursorClass: route.cursor.className,
-        cursorTarget: route.cursor.getAttribute('data-next-page'),
-        cursorX: route.cursor.getAttribute('data-x-desktop'),
+        cursorClass: routeElements[0].className,
+        cursorTarget: routeElements[0].getAttribute('data-next-page'),
+        cursorX: routeElements[0].getAttribute('data-x-desktop'),
         imageContainerClass: shell.imageContainer.className,
         imageCount: host.querySelectorAll('.image').length,
         mapPoint: shell.imageContainer.getAttribute('data-map-point'),
@@ -696,8 +697,9 @@ test.describe('Wroclaw static app smoke', () => {
         markerQuestNumber: marker.marker.getAttribute('data-quest-number'),
         markerXMobile: marker.marker.getAttribute('data-x-mobile'),
         nextImageContainers: host.querySelectorAll('.next-image-container').length,
-        routeAreaClass: route.area.className,
-        routeAreaY: route.area.getAttribute('data-y-desktop'),
+        routeAreaClass: routeElements[1].className,
+        routeAreaY: routeElements[1].getAttribute('data-y-desktop'),
+        routeElementCount: routeElements.length,
         sceneClass: shell.scene.className,
         textKey: marker.text.getAttribute('data-i18n')
       };
@@ -718,6 +720,7 @@ test.describe('Wroclaw static app smoke', () => {
       nextImageContainers: 1,
       routeAreaClass: 'custom-cursor-prostoarea',
       routeAreaY: '1100',
+      routeElementCount: 2,
       sceneClass: 'scene',
       textKey: 'quest.task9'
     });

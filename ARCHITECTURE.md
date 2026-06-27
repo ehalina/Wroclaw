@@ -326,7 +326,10 @@ class SPAManager {
 - Первый кандидат для миграции: `dwor01.html`.
 - `page_shell_helpers.js` создан как additive helper без подключения к production HTML.
 - Helper создаёт standard scene shell, route cursor pair и marker block, сохраняя текущие selectors/classes/data attrs.
-- Playwright smoke проверяет helper на synthetic fragment; миграция реальной страницы остаётся отдельным gated step.
+- Playwright smoke проверяет helper на synthetic fragment.
+- Первый production rollout выполнен в `dwor01.html` только для route cursor pairs; markers/scene/head/page init пока остаются статическими.
+- Для route cursor rollout используется descriptor-based `PageShellHelpers.renderRouteCursors(target, cursors)`, чтобы страницы не копировали ручной DOM append.
+- Для inline module page migrations нельзя полагаться на `document.currentScript`; используйте явный stable selector или отдельный page config module.
 
 ### 2. ES6 Modules для модульной архитектуры
 

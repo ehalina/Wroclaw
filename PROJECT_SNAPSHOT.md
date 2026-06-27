@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 84% (27/32 основных задач)
+**Общий прогресс:** 85% (29/34 основных задач)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -122,6 +122,8 @@ Wroclaw/
 23. ✅ Stage 5.6 i18n updatePageContent simplification
 24. ✅ Stage 5.7 Page block inventory before shared helper rollout
 25. ✅ Stage 5.8 Additive page shell helper with synthetic smoke coverage
+26. ✅ Stage 5.9 dwor01 route cursor helper migration
+27. ✅ Stage 5.10 Descriptor-based route cursor render helper
 
 ---
 

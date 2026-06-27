@@ -241,3 +241,17 @@ Stage 5.9 выполнен:
 Следующий подэтап:
 
 - Stage 5.10: решить, мигрировать ли marker blocks в `dwor01.html` через helper или сначала вынести page-specific cursor config из inline module в отдельный data/helper слой.
+
+## Status Update - 2026-06-27 - Stage 5.10
+
+Stage 5.10 выполнен:
+
+- В `page_shell_helpers.js` добавлен `renderRouteCursors(target, cursors)`.
+- `dwor01.html` теперь передаёт cursor descriptors одним массивом вместо ручного создания и append каждого cursor pair.
+- Synthetic helper smoke переведён на `renderRouteCursors()`, чтобы новый helper method был покрыт напрямую.
+- DOM contract smoke для `dwor01.html` остался без изменений и подтверждает сохранение routes/classes/data attrs.
+- Проверки после изменения: `make test` и `make smoke` прошли; smoke остаётся 42 теста на desktop/mobile.
+
+Следующий подэтап:
+
+- Stage 5.11: мигрировать один marker block в `dwor01.html` через `createMarker()` под существующим DOM contract или остановиться на cursor-only rollout, если marker migration даёт слишком шумный HTML diff.

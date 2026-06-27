@@ -247,3 +247,8 @@ make smoke
   - markers/scene/head/page init пока оставлены статическими;
   - smoke подтвердил сохранение classes/data attrs/routes после исправления inline module currentScript issue;
   - `make smoke` расширен до 42 тестов.
+- Stage 5.10 выполнен:
+  - `page_shell_helpers.js` получил `renderRouteCursors(target, cursors)`;
+  - `dwor01.html` теперь задаёт cursor descriptors одним массивом вместо ручного append;
+  - synthetic helper smoke покрывает `renderRouteCursors()`;
+  - DOM contract smoke для `dwor01.html` остался стабильным.
