@@ -29,6 +29,7 @@
     ]);
 
     const START_PAGE = PAGE_ORDER[0];
+    const IFRAME_LOAD_TIMEOUT_MS = 15_000;
 
     const SELECTORS = Object.freeze({
         spaContainer: '#spa-container',
@@ -130,6 +131,7 @@
         AUDIO_ROUTE_POLICY,
         AUDIO_SOURCES,
         AUDIO_TRACKS,
+        IFRAME_LOAD_TIMEOUT_MS,
         PAGE_ORDER,
         SELECTORS,
         START_PAGE,

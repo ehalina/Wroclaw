@@ -87,6 +87,8 @@ Stage 6.23 result: SPA loading overlay behavior is now characterized under a del
 
 Stage 6.24 result: loading overlay control is extracted into `spa_loading_state.js`; `SPAManager.showLoading()` / `hideLoading()` keep the same `hidden` class contract and the Stage 6.23 oracle still passes.
 
+Stage 6.25 result: iframe navigation now has a bounded timeout/error state; hung pending pages are removed and the previous active page remains visible while `SpaLoadingState.showError()` displays a recoverable message.
+
 4. Video review:
    - inspect `katedra_panorama.html` playback;
    - decide whether a smaller derivative video or poster/loading strategy is needed.
@@ -109,4 +111,4 @@ Additional checks:
 
 ## Next safe implementation step
 
-Move to a bounded iframe loading timeout/error state behind `SpaLoadingState`, or another runtime-heavy group with a clear oracle. Defer video poster/transcode unless manual product review asks for it.
+Move to loading error UX polish only with a visual oracle, or another BACKLOG item with clear verification. Defer video poster/transcode unless manual product review asks for it.

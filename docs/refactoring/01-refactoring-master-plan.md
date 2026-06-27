@@ -395,3 +395,8 @@ make smoke
   - `SPAManager.showLoading()` / `hideLoading()` делегируют в `SpaLoadingState`;
   - добавлен focused smoke для helper contract;
   - `make stage-06-24-loading-helper` подтверждает Stage 6.23 slow-navigation behavior после extraction.
+- Stage 6.25 выполнен:
+  - добавлен `IFRAME_LOAD_TIMEOUT_MS = 15000`;
+  - `SpaLoadingState` получил loading/error message helpers;
+  - `SPAManager.loadPage()` теперь очищает зависший pending iframe по timeout/error и оставляет текущую страницу активной;
+  - `make stage-06-25-loading-timeout` подтверждает error overlay и cleanup pending page на desktop/mobile.

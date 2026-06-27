@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 99% (56 завершённых задач текущего плана)
+**Общий прогресс:** 99% (57 завершённых задач текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -154,6 +154,7 @@ Wroclaw/
 54. ✅ Stage 6.22 Panorama video lazy source
 55. ✅ Stage 6.23 SPA loading state characterization
 56. ✅ Stage 6.24 SPA loading helper extraction
+57. ✅ Stage 6.25 SPA loading timeout state
 
 ---
 
@@ -214,6 +215,7 @@ make stage-06-21-video-metadata
 make stage-06-22-video-lazy-source
 make stage-06-23-loading-state
 make stage-06-24-loading-helper
+make stage-06-25-loading-timeout
 make security
 make audit
 ```
@@ -250,6 +252,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.25 выполнен
+- добавлен `IFRAME_LOAD_TIMEOUT_MS = 15000`
+- `SpaLoadingState` получил loading/error message helpers
+- `SPAManager.loadPage()` теперь очищает зависший pending iframe по timeout/error, оставляя текущую страницу активной
+- `make stage-06-25-loading-timeout` подтвердил error overlay и cleanup pending state на desktop/mobile
 
 ### 2026-06-27 - Refactoring Stage 6.24 выполнен
 - добавлен `spa_loading_state.js` с `SpaLoadingState` helper

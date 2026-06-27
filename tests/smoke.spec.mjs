@@ -923,10 +923,15 @@ test.describe('Wroclaw static app smoke', () => {
       const initiallyHidden = overlay.classList.contains('hidden');
       const showResult = helper.show(document);
       const visibleAfterShow = helper.isVisible(document);
+      const textAfterShow = overlay.textContent.trim();
       const hiddenAfterShow = overlay.classList.contains('hidden');
+      const showErrorResult = helper.showError(document);
+      const textAfterError = overlay.textContent.trim();
       const hideResult = helper.hide(document);
 
       return {
+        defaultErrorMessage: helper.DEFAULT_ERROR_MESSAGE,
+        defaultLoadingMessage: helper.DEFAULT_LOADING_MESSAGE,
         helperAvailable: Boolean(helper),
         hiddenAfterHide: overlay.classList.contains('hidden'),
         hiddenAfterShow,
@@ -934,13 +939,19 @@ test.describe('Wroclaw static app smoke', () => {
         initiallyHidden,
         overlayMatches: helper.getOverlay(document) === overlay,
         selector: helper.LOADING_OVERLAY_SELECTOR,
+        showErrorResult,
         showResult,
+        textAfterError,
+        textAfterHide: overlay.textContent.trim(),
+        textAfterShow,
         visibleAfterHide: helper.isVisible(document),
         visibleAfterShow
       };
     });
 
     expect(loadingState).toEqual({
+      defaultErrorMessage: 'Loading failed. Please try again.',
+      defaultLoadingMessage: 'Loading...',
       helperAvailable: true,
       hiddenAfterHide: true,
       hiddenAfterShow: false,
@@ -948,7 +959,11 @@ test.describe('Wroclaw static app smoke', () => {
       initiallyHidden: true,
       overlayMatches: true,
       selector: '#loadingOverlay',
+      showErrorResult: true,
       showResult: true,
+      textAfterError: 'Loading failed. Please try again.',
+      textAfterHide: 'Loading...',
+      textAfterShow: 'Loading...',
       visibleAfterHide: false,
       visibleAfterShow: true
     });

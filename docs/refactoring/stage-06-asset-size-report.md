@@ -304,7 +304,7 @@ Completed on 2026-06-27:
   - play button remains visible after metadata;
   - after click, video plays and unmutes on desktop/mobile.
 - No media files changed.
-- Package gained one new JS helper file; current build baseline is `332 files, 84.5 MB -> www/`.
+- No package size change: current build baseline remains `331 files, 84.5 MB -> www/`.
 
 ## Stage 6.22 result
 
@@ -348,7 +348,25 @@ Completed on 2026-06-27:
   - after load, active iframe is `tumski02.html`;
   - `pageErrors=[]`.
 - No media files changed.
-- No package size change: current build baseline remains `331 files, 84.5 MB -> www/`.
+- Package gained one new JS helper file; current build baseline is `332 files, 84.5 MB -> www/`.
+
+## Stage 6.25 result
+
+Completed on 2026-06-27:
+
+- Created `docs/refactoring/stage-06-25-loading-timeout.md`.
+- Added `IFRAME_LOAD_TIMEOUT_MS = 15000` to `spa_config.js`.
+- Added loading/error message helpers to `spa_loading_state.js`.
+- Added a bounded iframe loading timeout in `SPAManager.loadPage()`.
+- Added `make stage-06-25-loading-timeout`.
+- Browser result:
+  - hung `tumski02.html` route times out through a deterministic 250ms test override;
+  - active iframe/current page remain `tumski.html`;
+  - pending target page is removed from DOM and `spaManager.pages`;
+  - loading overlay remains visible with `Loading failed. Please try again.`;
+  - `pageErrors=[]`.
+- No media files changed.
+- No package size change expected; current runtime build baseline remains `332 files, 84.5 MB -> www/`.
 
 Validation:
 

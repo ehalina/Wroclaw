@@ -475,6 +475,11 @@
   - Files: `spa_loading_state.js`, `index.html`, `tests/smoke.spec.mjs`, `Makefile`, `docs/refactoring/stage-06-24-loading-helper.md`, `docs/refactoring/artifacts/stage-06-24-loading-helper/`
   - Benefit: `SPAManager` keeps the same `showLoading()` / `hideLoading()` surface while timeout/error loading UX can now build on `SpaLoadingState`
 
+- [x] **UX: SPA loading timeout state** - Added a bounded error state for hung iframe navigation
+  - Completed: 2026-06-27
+  - Files: `spa_config.js`, `spa_loading_state.js`, `index.html`, `tests/smoke.spec.mjs`, `playwright.stage-06-25.config.mjs`, `tools/stage-06-25/loading-timeout.spec.mjs`, `Makefile`, `docs/refactoring/stage-06-25-loading-timeout.md`, `docs/refactoring/artifacts/stage-06-25-loading-timeout/`
+  - Benefit: a stuck iframe request no longer leaves an endless loading overlay; the app keeps the previous page active, cleans pending DOM/state and shows a recoverable error message
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

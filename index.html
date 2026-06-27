@@ -365,6 +365,18 @@
             return SPA_CONFIG.START_PAGE || 'tumski.html';
         }
 
+        function spaIframeLoadTimeoutMs() {
+            const debugOverride = Number(window.__SPA_IFRAME_LOAD_TIMEOUT_MS);
+            if (Number.isFinite(debugOverride) && debugOverride >= 0) {
+                return debugOverride;
+            }
+
+            const configuredTimeout = Number(SPA_CONFIG.IFRAME_LOAD_TIMEOUT_MS);
+            return Number.isFinite(configuredTimeout) && configuredTimeout >= 0
+                ? configuredTimeout
+                : 15000;
+        }
+
         function spaPreviousPage(pageName) {
             return typeof SPA_CONFIG.getPreviousPage === 'function'
                 ? SPA_CONFIG.getPreviousPage(pageName)
@@ -1055,9 +1067,51 @@
                     
                     // Сохраняем страницу
                     this.pages.set(actualPageName, pageContainer);
+
+                    let iframeLoadSettled = false;
+                    let iframeLoadTimeoutId = null;
+
+                    const clearIframeLoadTimeout = () => {
+                        if (iframeLoadTimeoutId !== null) {
+                            window.clearTimeout(iframeLoadTimeoutId);
+                            iframeLoadTimeoutId = null;
+                        }
+                    };
+
+                    const settleIframeLoad = () => {
+                        if (iframeLoadSettled) {
+                            return false;
+                        }
+
+                        iframeLoadSettled = true;
+                        clearIframeLoadTimeout();
+                        return true;
+                    };
+
+                    const failIframeLoad = (reason) => {
+                        if (!settleIframeLoad()) {
+                            return;
+                        }
+
+                        console.error('❌ Ошибка загрузки iframe:', actualPageName, reason);
+                        pageContainer.remove();
+                        this.pages.delete(actualPageName);
+                        this.showLoadingError(actualPageName);
+                    };
+
+                    const iframeLoadTimeoutMs = spaIframeLoadTimeoutMs();
+                    if (iframeLoadTimeoutMs > 0) {
+                        iframeLoadTimeoutId = window.setTimeout(() => {
+                            failIframeLoad('timeout');
+                        }, iframeLoadTimeoutMs);
+                    }
                     
                     // Ждем загрузки iframe
                     iframe.onload = () => {
+                        if (!settleIframeLoad()) {
+                            return;
+                        }
+
     // console.log('✅ iframe загружен:', actualPageName);
     // console.log('🎵 iframe src:', iframe.src);
     // console.log('🎵 iframe contentWindow location:', iframe.contentWindow.location.href);
@@ -1081,8 +1135,7 @@
                     };
                     
                     iframe.onerror = () => {
-                        console.error('❌ Ошибка загрузки iframe:', pageName);
-                        this.hideLoading();
+                        failIframeLoad('error');
                     };
                     
                 } catch (error) {
@@ -1337,6 +1390,20 @@
                 }
 
                 document.getElementById('loadingOverlay')?.classList.remove('hidden');
+            }
+
+            showLoadingError() {
+                if (window.SpaLoadingState && typeof window.SpaLoadingState.showError === 'function') {
+                    window.SpaLoadingState.showError(document);
+                    return;
+                }
+
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                if (loadingOverlay) {
+                    const messageNode = loadingOverlay.firstElementChild || loadingOverlay;
+                    messageNode.textContent = 'Loading failed. Please try again.';
+                    loadingOverlay.classList.remove('hidden');
+                }
             }
             
             hideLoading() {

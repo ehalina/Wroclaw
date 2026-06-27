@@ -1,0 +1,70 @@
+{
+  "afterTimeout": {
+    "activeIframeSrc": "tumski.html?t=1782561330020",
+    "activePageId": "page-tumski",
+    "currentPage": "tumski.html",
+    "label": "after-timeout",
+    "overlayClassName": "loading-overlay",
+    "overlayText": "Loading failed. Please try again.",
+    "overlayVisible": true,
+    "pageCount": 1,
+    "pagesHasTarget": false,
+    "targetPageNodes": 0,
+    "timeoutOverride": 250
+  },
+  "beforeTimeout": {
+    "activeIframeSrc": "tumski.html?t=1782561330020",
+    "activePageId": "page-tumski",
+    "currentPage": "tumski.html",
+    "label": "before-timeout-navigation",
+    "overlayClassName": "loading-overlay hidden",
+    "overlayText": "Loading...",
+    "overlayVisible": false,
+    "pageCount": 1,
+    "pagesHasTarget": false,
+    "targetPageNodes": 0,
+    "timeoutOverride": 250
+  },
+  "consoleMessages": [
+    {
+      "text": "✅ Firebase инициализирован",
+      "type": "log"
+    },
+    {
+      "text": "✅ Firebase Firestore инициализирован",
+      "type": "log"
+    },
+    {
+      "text": "🔵 setupRightArrowHandler: isMobile = false isDesktopDevice() = true",
+      "type": "log"
+    },
+    {
+      "text": "🟢 setupForwardArrowHandler: isMobile = false",
+      "type": "log"
+    },
+    {
+      "text": "Не все элементы найдены для кнопки play",
+      "type": "error"
+    },
+    {
+      "text": "🔵 setupRightArrowHandler: isMobile = false isDesktopDevice() = true",
+      "type": "log"
+    },
+    {
+      "text": "🟢 setupForwardArrowHandler: isMobile = false",
+      "type": "log"
+    },
+    {
+      "text": "✅ Анонимный пользователь создан: pLcZoBOLefd5jiqGHhF4ZeDSMhs2",
+      "type": "log"
+    },
+    {
+      "text": "❌ Ошибка загрузки iframe: tumski02.html timeout",
+      "type": "error"
+    }
+  ],
+  "interceptedUrl": "http://127.0.0.1:6173/tumski02.html?t=1782561330634",
+  "pageErrors": [],
+  "targetPage": "tumski02.html",
+  "timeoutMs": 250
+}

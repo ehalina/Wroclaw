@@ -664,3 +664,38 @@ Stage 6.24 выполнен:
 Следующий подэтап:
 
 - Stage 6.25: добавить bounded iframe loading timeout/error state за `SpaLoadingState`, не смешивая с дальнейшей визуальной полировкой.
+
+## Status Update - 2026-06-27 - Stage 6.25
+
+Stage 6.25 выполнен:
+
+- Создан `docs/refactoring/stage-06-25-loading-timeout.md`.
+- В `spa_config.js` добавлен `IFRAME_LOAD_TIMEOUT_MS = 15000`.
+- `spa_loading_state.js` получил:
+  - `DEFAULT_LOADING_MESSAGE`;
+  - `DEFAULT_ERROR_MESSAGE`;
+  - `setMessage(message, root)`;
+  - `showError(root)`.
+- `SPAManager.loadPage()` теперь ставит bounded timeout на новый iframe load.
+- При timeout/error pending page container удаляется из DOM и `this.pages`, current active page остаётся прежней, overlay показывает `Loading failed. Please try again.`.
+- Поздний `iframe.onload` после timeout игнорируется через settled guard.
+- Добавлен debug override `window.__SPA_IFRAME_LOAD_TIMEOUT_MS` для deterministic tests.
+- Добавлен `playwright.stage-06-25.config.mjs`.
+- Добавлен `tools/stage-06-25/loading-timeout.spec.mjs`.
+- Добавлен Makefile target `make stage-06-25-loading-timeout`.
+- Созданы artifacts:
+  - `docs/refactoring/artifacts/stage-06-25-loading-timeout/desktop-timeout-error.png`;
+  - `docs/refactoring/artifacts/stage-06-25-loading-timeout/desktop-loading-timeout.json`;
+  - `docs/refactoring/artifacts/stage-06-25-loading-timeout/mobile-pixel5-timeout-error.png`;
+  - `docs/refactoring/artifacts/stage-06-25-loading-timeout/mobile-pixel5-loading-timeout.json`.
+- Timeout characterization:
+  - route `tumski02.html` подвешен, timeout override `250ms`;
+  - после timeout active iframe/current page остаются `tumski.html`;
+  - target page удалён из DOM и `spaManager.pages`;
+  - overlay видим с error message;
+  - `pageErrors=[]` на desktop/mobile.
+- Media files не менялись; package runtime files остаются `332 files, 84.5 MB -> www/`.
+
+Следующий подэтап:
+
+- Stage 6.26: либо визуально проверить/полировать loading error UX с oracle, либо перейти к следующей BACKLOG-задаче вне Stage 6 performance.

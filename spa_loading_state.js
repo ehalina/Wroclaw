@@ -1,6 +1,8 @@
 (function initSpaLoadingState(global) {
     'use strict';
 
+    const DEFAULT_ERROR_MESSAGE = 'Loading failed. Please try again.';
+    const DEFAULT_LOADING_MESSAGE = 'Loading...';
     const LOADING_OVERLAY_SELECTOR = '#loadingOverlay';
 
     function getDocument(root) {
@@ -20,6 +22,21 @@
         return doc?.querySelector?.(LOADING_OVERLAY_SELECTOR) || null;
     }
 
+    function getMessageNode(root) {
+        const overlay = getOverlay(root);
+        return overlay?.firstElementChild || overlay;
+    }
+
+    function setMessage(message, root) {
+        const messageNode = getMessageNode(root);
+        if (!messageNode) {
+            return false;
+        }
+
+        messageNode.textContent = message;
+        return true;
+    }
+
     function setHidden(hidden, root) {
         const overlay = getOverlay(root);
         if (!overlay) {
@@ -30,12 +47,19 @@
         return true;
     }
 
-    function show(root) {
+    function show(root, message = DEFAULT_LOADING_MESSAGE) {
+        setMessage(message, root);
         return setHidden(false, root);
     }
 
     function hide(root) {
+        setMessage(DEFAULT_LOADING_MESSAGE, root);
         return setHidden(true, root);
+    }
+
+    function showError(root, message = DEFAULT_ERROR_MESSAGE) {
+        setMessage(message, root);
+        return setHidden(false, root);
     }
 
     function isVisible(root) {
@@ -50,10 +74,14 @@
     }
 
     global.SpaLoadingState = {
+        DEFAULT_ERROR_MESSAGE,
+        DEFAULT_LOADING_MESSAGE,
         LOADING_OVERLAY_SELECTOR,
         getOverlay,
         hide,
         isVisible,
-        show
+        setMessage,
+        show,
+        showError
     };
 })(window);
