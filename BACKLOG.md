@@ -480,6 +480,11 @@
   - Files: `spa_config.js`, `spa_loading_state.js`, `index.html`, `tests/smoke.spec.mjs`, `playwright.stage-06-25.config.mjs`, `tools/stage-06-25/loading-timeout.spec.mjs`, `Makefile`, `docs/refactoring/stage-06-25-loading-timeout.md`, `docs/refactoring/artifacts/stage-06-25-loading-timeout/`
   - Benefit: a stuck iframe request no longer leaves an endless loading overlay; the app keeps the previous page active, cleans pending DOM/state and shows a recoverable error message
 
+- [x] **Cleanup: root temporary JS files** - Removed obsolete backup/new/copy JavaScript files from the project root
+  - Completed: 2026-06-27
+  - Files: `arrow_handlers.js.backup`, `quest_marker_handler.js.new`, `sunset_parallax copy.js`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
+  - Benefit: Stage 7 cleanup has started with a no-runtime-behavior deletion; temporary JS files no longer remain in the source tree
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

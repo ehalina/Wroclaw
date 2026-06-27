@@ -155,6 +155,7 @@ Wroclaw/
 55. ✅ Stage 6.23 SPA loading state characterization
 56. ✅ Stage 6.24 SPA loading helper extraction
 57. ✅ Stage 6.25 SPA loading timeout state
+58. ✅ Stage 7.1 Root temporary JS cleanup
 
 ---
 
@@ -252,6 +253,11 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 7.1 выполнен
+- удалены root-level временные JS-файлы: `arrow_handlers.js.backup`, `quest_marker_handler.js.new`, `sunset_parallax copy.js`
+- перед удалением проверено отсутствие runtime references
+- runtime behavior и package logic не менялись
 
 ### 2026-06-27 - Refactoring Stage 6.25 выполнен
 - добавлен `IFRAME_LOAD_TIMEOUT_MS = 15000`

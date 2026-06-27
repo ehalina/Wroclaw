@@ -400,3 +400,7 @@ make smoke
   - `SpaLoadingState` получил loading/error message helpers;
   - `SPAManager.loadPage()` теперь очищает зависший pending iframe по timeout/error и оставляет текущую страницу активной;
   - `make stage-06-25-loading-timeout` подтверждает error overlay и cleanup pending page на desktop/mobile.
+- Stage 7.1 выполнен:
+  - удалены root-level temporary JS files `arrow_handlers.js.backup`, `quest_marker_handler.js.new`, `sunset_parallax copy.js`;
+  - перед удалением проверено отсутствие runtime references;
+  - runtime behavior не менялся.

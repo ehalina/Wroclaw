@@ -376,3 +376,19 @@ make security
 make smoke
 make audit
 ```
+
+## Status Update - 2026-06-27
+
+Закрыто последующими refactoring stages:
+
+- CR-05: `postMessage` boundary hardening - Stage 3.
+- CR-06: split safe text/rich HTML для i18n - Stage 5.
+- CR-07: идемпотентный `MapModal.init()` - Stage 4.
+- CR-08: декомпозиция inline SPA shell - Stage 3.
+- CR-10: cleanup временных/устаревших root JS files - Stage 7.1.
+- CR-12: canonical runtime localization source и strict key consistency - Stage 5.
+
+Остается:
+
+- CR-03 residual allowlist entries: debug/test missing assets and legacy route cleanup - Stage 7.2.
+- CR-11: remaining production console/debug cleanup - Stage 7.

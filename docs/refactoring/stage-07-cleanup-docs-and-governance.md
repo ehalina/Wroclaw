@@ -24,9 +24,9 @@
 
 ## Кандидаты на cleanup
 
-- `arrow_handlers.js.backup`;
-- `quest_marker_handler.js.new`;
-- `sunset_parallax copy.js`;
+- ✅ `arrow_handlers.js.backup` - removed in Stage 7.1;
+- ✅ `quest_marker_handler.js.new` - removed in Stage 7.1;
+- ✅ `sunset_parallax copy.js` - removed in Stage 7.1;
 - устаревшие localization duplicates после Stage 5;
 - unreferenced assets после Stage 6.
 
@@ -36,6 +36,25 @@
 - проверить git history при необходимости;
 - убедиться, что файл не нужен для восстановления контента;
 - сделать удаление отдельным маленьким изменением.
+
+## Status Update - 2026-06-27 - Stage 7.1
+
+Stage 7.1 выполнен:
+
+- Удалены root-level temporary JS files:
+  - `arrow_handlers.js.backup`;
+  - `quest_marker_handler.js.new`;
+  - `sunset_parallax copy.js`.
+- Перед удалением проверено:
+  - runtime references отсутствуют по `rg`;
+  - `scripts/check-js-syntax.mjs` уже пропускал `.backup`, `.new` и ` copy.` файлы;
+  - `scripts/build-capacitor-web.mjs` уже исключал `.backup`, `.new` и ` copy.` файлы из package build.
+- Runtime behavior не менялся.
+- Validation: `make audit` passed; build summary remains `332 files, 84.5 MB -> www/`.
+
+Следующий подэтап:
+
+- Stage 7.2: cleanup known static inventory allowlist entries for debug/test pages or legacy route entry, one category at a time.
 
 ## Documentation updates
 
@@ -104,4 +123,3 @@ make security
 - Есть незавершенные runtime fixes из Stage 2.
 - Документация требует продуктовых решений.
 - Cleanup затрагивает файлы, назначение которых не удалось доказать.
-
