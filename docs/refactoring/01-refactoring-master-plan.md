@@ -408,3 +408,7 @@ make smoke
   - `debug_styles.html` и `quick_test.html` больше не ссылаются на отсутствующие `input_compatibility.css` / `input_detection.js`;
   - debug/test pages получили inline input-mode detector;
   - static inventory allowlist очищен от `missingAssets`.
+- Stage 7.3 выполнен:
+  - удалён unreferenced legacy handler `right_arrow_handler.js`;
+  - static inventory allowlist очищен от `missingRoutes`;
+  - активная стрелочная навигация не менялась.

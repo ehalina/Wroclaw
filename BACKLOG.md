@@ -490,6 +490,11 @@
   - Files: `debug_styles.html`, `quick_test.html`, `scripts/static-check-known-issues.json`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
   - Benefit: static inventory no longer needs `missingAssets` allowlist entries for `input_compatibility.css` / `input_detection.js`; debug pages remain usable through an inline input-mode detector
 
+- [x] **Cleanup: legacy right arrow handler** - Removed unreferenced handler that pointed at missing `tumski_02.html`
+  - Completed: 2026-06-27
+  - Files: `right_arrow_handler.js`, `scripts/static-check-known-issues.json`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
+  - Benefit: static inventory no longer needs `missingRoutes` allowlist entries; the source tree no longer contains a legacy handler for a non-canonical route name, and build output dropped to `331 files, 84.5 MB`
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

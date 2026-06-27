@@ -75,6 +75,22 @@ Stage 7.2 выполнен:
 
 - Stage 7.3: cleanup оставшийся legacy route allowlist entry `right_arrow_handler.js -> tumski_02.html`.
 
+## Status Update - 2026-06-27 - Stage 7.3
+
+Stage 7.3 выполнен:
+
+- Удалён unreferenced legacy handler `right_arrow_handler.js`.
+- Перед удалением проверено:
+  - ни одна runtime HTML page не подключает `right_arrow_handler.js`;
+  - активная стрелочная навигация использует `arrow_handlers.js` / `common.js`;
+  - canonical page существует как `tumski02.html`, а `tumski_02.html` отсутствует.
+- `scripts/static-check-known-issues.json` больше не содержит `missingRoutes` allowlist entries.
+- Validation: `make audit` passed; static inventory reports no known missing assets/routes, JS syntax check covers `62 files`, build summary is `331 files, 84.5 MB -> www/`.
+
+Следующий подэтап:
+
+- Stage 7.4: cleanup remaining governance/docs warnings, starting with legacy locale duplicate policy.
+
 ## Documentation updates
 
 `BACKLOG.md`:

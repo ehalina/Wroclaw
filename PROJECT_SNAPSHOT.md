@@ -157,6 +157,7 @@ Wroclaw/
 57. ✅ Stage 6.25 SPA loading timeout state
 58. ✅ Stage 7.1 Root temporary JS cleanup
 59. ✅ Stage 7.2 Debug/test missing input asset cleanup
+60. ✅ Stage 7.3 Legacy right arrow handler cleanup
 
 ---
 
@@ -224,7 +225,7 @@ make audit
 
 ### Текущий Capacitor package baseline:
 - Initial Stage 6 build: `350 files, 138.2 MB -> www/`
-- Current build: `332 files, 84.5 MB -> www/`
+- Current build: `331 files, 84.5 MB -> www/`
 - Package budget guard: `120 MB`
 - Runtime asset optimization policy: `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`
 
@@ -254,6 +255,13 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 7.3 выполнен
+- удалён unreferenced `right_arrow_handler.js`, который указывал на отсутствующий `tumski_02.html`
+- `scripts/static-check-known-issues.json` очищен от `missingRoutes` allowlist entries
+- static inventory теперь проходит без known missing assets/routes
+- build summary после cleanup: `331 files, 84.5 MB -> www/`
+- активные handlers `arrow_handlers.js` / `common.js` не менялись
 
 ### 2026-06-27 - Refactoring Stage 7.2 выполнен
 - `debug_styles.html` и `quick_test.html` больше не ссылаются на отсутствующие `input_compatibility.css` / `input_detection.js`

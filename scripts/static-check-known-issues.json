@@ -1,11 +1,5 @@
 {
   "missingAssets": [],
-  "missingRoutes": [
-    {
-      "file": "right_arrow_handler.js",
-      "target": "tumski_02.html",
-      "reason": "Legacy/unreferenced handler; cleanup decision planned for Stage 2/7."
-    }
-  ],
+  "missingRoutes": [],
   "duplicateIds": []
 }

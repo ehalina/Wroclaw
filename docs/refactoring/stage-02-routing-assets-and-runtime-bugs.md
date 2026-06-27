@@ -107,7 +107,7 @@ make security
 Осталось не в active runtime:
 
 - debug/test pages: `input_compatibility.css`, `input_detection.js` - Stage 7 cleanup;
-- `right_arrow_handler.js -> tumski_02.html` - legacy/unreferenced handler, Stage 7 cleanup.
+- `right_arrow_handler.js -> tumski_02.html` - resolved in Stage 7.3 by removing the unreferenced legacy handler.
 
 Проверено:
 
