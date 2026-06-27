@@ -144,6 +144,7 @@ Wroclaw/
 45. ✅ Stage 6.13 Audio source policy extraction
 46. ✅ Stage 6.14 Audio lifecycle characterization
 47. ✅ Stage 6.15 Lazy background audio preload
+48. ✅ Stage 6.16 Quest audio owner consolidation
 
 ---
 
@@ -203,7 +204,7 @@ make audit
 
 ### Текущий Capacitor package baseline:
 - Initial Stage 6 build: `350 files, 138.2 MB -> www/`
-- Current build: `331 files, 86.9 MB -> www/`
+- Current build: `331 files, 86.8 MB -> www/`
 - Package budget guard: `120 MB`
 - Runtime asset optimization policy: `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`
 
@@ -233,6 +234,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.16 выполнен
+- добавлен `window.QuestAudio` helper для shared `questMusic`
+- `language_menu.js`, SPA iframe initialization и `quest_marker_handler.js` используют общий owner
+- smoke test закрепляет single parent owner и shared iframe reference
+- `quest_overlay.js` local overlay sound оставлен как deferred decision
 
 ### 2026-06-27 - Refactoring Stage 6.15 выполнен
 - `preloadBackgroundMusic()` больше не создает и не загружает route-specific MP3

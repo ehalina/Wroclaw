@@ -137,6 +137,100 @@ function postMessageToIframe(iframe, type, payload = {}) {
     return true;
 }
 
+const QuestAudio = (() => {
+    const ELEMENT_ID = 'questMusic';
+    const TRACK_NAME = 'quest';
+    const DEFAULT_SOURCE = 'media/zwyki/quest.mp3';
+    const DEFAULT_VOLUME = 0.7;
+
+    function getQuestSource(contextWindow = window) {
+        const config = contextWindow.SpaConfig || window.SpaConfig;
+        if (config && typeof config.getAudioSourceForTrack === 'function') {
+            return config.getAudioSourceForTrack(TRACK_NAME) || DEFAULT_SOURCE;
+        }
+
+        return DEFAULT_SOURCE;
+    }
+
+    function registerWithVisibilityManager(audio, contextWindow = window) {
+        const manager = contextWindow.visibilityAudioManager || window.visibilityAudioManager;
+        if (manager && typeof manager.registerAudio === 'function') {
+            manager.registerAudio(audio);
+        }
+    }
+
+    function getOrCreateSharedQuestMusic(options = {}) {
+        const contextWindow = options.contextWindow || window;
+        const contextDocument = options.contextDocument || contextWindow.document || document;
+        let questMusic = contextWindow.questMusic || contextDocument.getElementById(ELEMENT_ID);
+
+        if (!questMusic) {
+            questMusic = contextDocument.createElement('audio');
+            questMusic.id = ELEMENT_ID;
+            questMusic.src = getQuestSource(contextWindow);
+            (contextDocument.body || contextDocument.documentElement).appendChild(questMusic);
+        } else if (!questMusic.getAttribute('src')) {
+            questMusic.src = getQuestSource(contextWindow);
+        }
+
+        questMusic.loop = true;
+        questMusic.preload = 'auto';
+        questMusic.volume = typeof options.volume === 'number' ? options.volume : DEFAULT_VOLUME;
+        contextWindow.questMusic = questMusic;
+        registerWithVisibilityManager(questMusic, contextWindow);
+
+        return questMusic;
+    }
+
+    function primeSharedQuestMusic(options = {}) {
+        const questMusic = getOrCreateSharedQuestMusic(options);
+
+        try {
+            questMusic.muted = false;
+            questMusic.volume = typeof options.volume === 'number' ? options.volume : DEFAULT_VOLUME;
+            questMusic.load();
+            questMusic.currentTime = 0;
+            questMusic.play().then(() => {
+                questMusic.pause();
+                questMusic.currentTime = 0;
+            }).catch(/* console.log */);
+        } catch (error) {
+            // Browser autoplay policies can reject priming; playback remains user-gesture driven.
+        }
+
+        return questMusic;
+    }
+
+    function attachSharedQuestMusicToFrame(frameOrDocument, options = {}) {
+        const questMusic = options.prime
+            ? primeSharedQuestMusic(options)
+            : getOrCreateSharedQuestMusic(options);
+        const frameWindow = frameOrDocument?.contentWindow || frameOrDocument?.defaultView || null;
+
+        if (frameWindow) {
+            frameWindow.questMusic = questMusic;
+        }
+
+        return questMusic;
+    }
+
+    function pauseSharedQuestMusic() {
+        const questMusic = window.questMusic || document.getElementById(ELEMENT_ID);
+        if (questMusic) {
+            questMusic.pause();
+        }
+    }
+
+    return {
+        attachSharedQuestMusicToFrame,
+        getOrCreateSharedQuestMusic,
+        pauseSharedQuestMusic,
+        primeSharedQuestMusic
+    };
+})();
+
+window.QuestAudio = window.QuestAudio || QuestAudio;
+
 // Функции для работы с языковым меню
 const LanguageMenu = {
     musicInitialized: false,
@@ -396,10 +490,7 @@ const LanguageMenu = {
         }
         
         // Останавливаем quest музыку SPA
-        const questMusic = document.querySelector('#questMusic');
-        if (questMusic) {
-            questMusic.pause();
-        }
+        window.QuestAudio.pauseSharedQuestMusic();
     },
 
     unmuteSPAMusic() {
@@ -937,51 +1028,7 @@ const LanguageMenu = {
 
     initializeQuestMusic() {
     // console.log('🎵 Инициализируем музыку quest...');
-        
-        // Создаем глобальный аудио элемент для quest музыки, если его еще нет
-        let questMusic = window.questMusic || document.getElementById('questMusic');
-        if (!questMusic) {
-            questMusic = document.createElement('audio');
-            questMusic.id = 'questMusic';
-            questMusic.src = 'media/zwyki/quest.mp3';
-            questMusic.loop = true;
-            questMusic.preload = 'auto';
-            questMusic.volume = 0.7;
-            document.body.appendChild(questMusic);
-            
-            // Сохраняем глобально
-            window.questMusic = questMusic;
-            
-            // Регистрируем quest музыку в менеджере видимости
-            if (window.visibilityAudioManager) {
-                window.visibilityAudioManager.registerAudio(questMusic);
-    // console.log('🎵 Quest музыка зарегистрирована в менеджере видимости');
-            }
-            
-    // console.log('🎵 Создан глобальный аудио элемент для quest музыки');
-        }
-        
-        // Принудительно инициализируем quest музыку
-        try {
-            questMusic.muted = false;
-            questMusic.volume = 0.7;
-            questMusic.load();
-            
-            // Принудительно воспроизводим короткий звук для инициализации
-            questMusic.currentTime = 0;
-            questMusic.play().then(() => {
-                questMusic.pause();
-                questMusic.currentTime = 0;
-    // console.log('🎵 Quest музыка принудительно инициализирована');
-            }).catch(error => {
-    // console.log('🎵 Ошибка принудительной инициализации quest музыки:', error);
-            });
-        } catch (error) {
-    // console.log('🎵 Ошибка инициализации quest музыки:', error);
-        }
-        
-        // Делаем quest музыку доступной глобально для quest_marker_handler.js
-        window.questMusic = questMusic;
+        window.QuestAudio.primeSharedQuestMusic();
     },
 
     getActiveIframe() {
@@ -1056,51 +1103,7 @@ const LanguageMenu = {
     // console.log(`🎵 Инициализируем quest музыку в iframe ${iframeIndex}...`);
         
         try {
-            // Используем глобальную quest музыку из основного контекста
-            let questMusic = window.questMusic;
-            if (!questMusic) {
-                // Создаем quest музыку в основном контексте, если её нет
-                questMusic = document.getElementById('questMusic');
-                if (!questMusic) {
-                    questMusic = document.createElement('audio');
-                    questMusic.id = 'questMusic';
-                    questMusic.src = 'media/zwyki/quest.mp3';
-                    questMusic.loop = true;
-                    questMusic.preload = 'auto';
-                    questMusic.volume = 0.7;
-                    document.body.appendChild(questMusic);
-                    
-                    // Регистрируем quest музыку в менеджере видимости
-                    if (window.visibilityAudioManager) {
-                        window.visibilityAudioManager.registerAudio(questMusic);
-    // console.log('🎵 Quest музыка зарегистрирована в менеджере видимости');
-                    }
-                    
-    // console.log('🎵 Создан глобальный аудио элемент quest музыки');
-                }
-                window.questMusic = questMusic;
-            }
-            
-            // Принудительно инициализируем quest музыку
-            questMusic.muted = false;
-            questMusic.volume = 0.7;
-            questMusic.load();
-            
-            // Принудительно воспроизводим короткий звук для инициализации
-            questMusic.currentTime = 0;
-            questMusic.play().then(() => {
-                questMusic.pause();
-                questMusic.currentTime = 0;
-    // console.log(`🎵 Quest музыка принудительно инициализирована`);
-            }).catch(error => {
-    // console.log(`🎵 Ошибка принудительной инициализации quest музыки:`, error);
-            });
-            
-            // Делаем quest музыку доступной в iframe
-            if (iframeDoc.defaultView) {
-                iframeDoc.defaultView.questMusic = questMusic;
-            }
-            
+            window.QuestAudio.attachSharedQuestMusicToFrame(iframeDoc, { prime: true });
     // console.log(`🎵 Quest музыка передана в iframe ${iframeIndex}`);
         } catch (error) {
     // console.log(`🎵 Ошибка инициализации quest музыки в iframe ${iframeIndex}:`, error);

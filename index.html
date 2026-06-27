@@ -1460,41 +1460,9 @@
             
             initializeIframeQuestMusic(iframe) {
                 try {
-                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                    
     // console.log('🎵 Инициализируем quest музыку в iframe...');
-                    
-                    // Создаем quest музыку в iframe, если ее еще нет
-                    let questMusic = iframeDoc.getElementById('questMusic');
-                    if (!questMusic) {
-                        questMusic = iframeDoc.createElement('audio');
-                        questMusic.id = 'questMusic';
-                        questMusic.src = 'media/zwyki/quest.mp3';
-                        questMusic.loop = true;
-                        questMusic.preload = 'auto';
-                        questMusic.volume = 0.7;
-                        iframeDoc.body.appendChild(questMusic);
-    // console.log('🎵 Создан аудио элемент quest музыки в iframe');
-                    }
-                    
-                    // Принудительно инициализируем quest музыку в iframe
-                    questMusic.muted = false;
-                    questMusic.volume = 0.7;
-                    questMusic.load();
-                    
-                    // Принудительно воспроизводим короткий звук для инициализации
-                    questMusic.currentTime = 0;
-                    questMusic.play().then(() => {
-                        questMusic.pause();
-                        questMusic.currentTime = 0;
-    // console.log('🎵 Quest музыка в iframe принудительно инициализирована');
-                    }).catch(error => {
-    // console.log('🎵 Ошибка принудительной инициализации quest музыки в iframe:', error);
-                    });
-                    
-                    // Делаем quest музыку доступной в iframe
-                    if (iframe.contentWindow) {
-                        iframe.contentWindow.questMusic = questMusic;
+                    if (window.QuestAudio && typeof window.QuestAudio.attachSharedQuestMusicToFrame === 'function') {
+                        window.QuestAudio.attachSharedQuestMusicToFrame(iframe, { prime: true });
                     }
                 } catch (error) {
     // console.log('🎵 Ошибка инициализации quest музыки в iframe:', error);

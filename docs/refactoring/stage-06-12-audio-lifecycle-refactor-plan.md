@@ -114,6 +114,8 @@ Separate refactor:
 
 Do not mix this with Stage 6.15.
 
+Status: completed on 2026-06-27. Shared quest-loop ownership moved behind `window.QuestAudio`; `quest_overlay.js` local overlay sound is intentionally deferred.
+
 ## Stop signals
 
 - Any route-specific music fails to start after user gesture.

@@ -27,6 +27,43 @@ test.describe('Wroclaw static app smoke', () => {
     await expect(page.locator('#audioUnlockButton')).toHaveCount(1);
   });
 
+  test('shared quest audio helper owns quest music in SPA shell', async ({ page }) => {
+    await page.goto('/');
+
+    const activeIframe = page.locator('.page-content.active iframe').first();
+    await expect(activeIframe).toBeAttached();
+
+    const result = await page.evaluate(() => {
+      const iframe = document.querySelector('.page-content.active iframe');
+      const firstQuestMusic = window.QuestAudio.getOrCreateSharedQuestMusic();
+      const attachedQuestMusic = window.QuestAudio.attachSharedQuestMusicToFrame(iframe);
+
+      return {
+        helperAvailable: !!window.QuestAudio,
+        iframeAudioCount: iframe.contentWindow.document.querySelectorAll('#questMusic').length,
+        iframeReferenceShared: iframe.contentWindow.questMusic === firstQuestMusic,
+        loop: firstQuestMusic.loop,
+        parentAudioCount: document.querySelectorAll('#questMusic').length,
+        preload: firstQuestMusic.preload,
+        sameAudio: firstQuestMusic === attachedQuestMusic,
+        source: firstQuestMusic.getAttribute('src'),
+        volume: firstQuestMusic.volume
+      };
+    });
+
+    expect(result).toEqual({
+      helperAvailable: true,
+      iframeAudioCount: 0,
+      iframeReferenceShared: true,
+      loop: true,
+      parentAudioCount: 1,
+      preload: 'auto',
+      sameAudio: true,
+      source: 'media/zwyki/quest.mp3',
+      volume: 0.7
+    });
+  });
+
   test('direct Tumski page exposes map and quest controls after init', async ({ page }) => {
     await page.goto('/tumski.html');
 

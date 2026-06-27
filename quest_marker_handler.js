@@ -1,5 +1,35 @@
 import { MapDebug } from './map_debug.js';
 
+function getQuestAudioApi() {
+    if (window.QuestAudio) {
+        return window.QuestAudio;
+    }
+
+    try {
+        if (window.parent && window.parent !== window && window.parent.QuestAudio) {
+            return window.parent.QuestAudio;
+        }
+    } catch (_) {}
+
+    return null;
+}
+
+function getSharedQuestMusic() {
+    const questAudio = getQuestAudioApi();
+    const questMusic = questAudio && typeof questAudio.getOrCreateSharedQuestMusic === 'function'
+        ? questAudio.getOrCreateSharedQuestMusic()
+        : (window.questMusic || document.getElementById('questMusic'));
+
+    if (questMusic) {
+        window.questMusic = questMusic;
+        if (window.visibilityAudioManager && typeof window.visibilityAudioManager.registerAudio === 'function') {
+            window.visibilityAudioManager.registerAudio(questMusic);
+        }
+    }
+
+    return questMusic;
+}
+
 // Универсальный обработчик для геометок с квестами
 export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
     const marker = document.getElementById(markerId);
@@ -1019,28 +1049,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         const mainSoundButton = document.querySelector('.sound-menu-button');
         const isSoundMuted = mainSoundButton ? mainSoundButton.classList.contains('muted') : false;
 
-        // Используем глобальную quest музыку или создаем новую, если глобальной нет
-        let questSound = window.questMusic;
-        if (!questSound) {
-            // Сначала проверяем, есть ли quest музыка в DOM
-            questSound = document.getElementById('questMusic');
-            if (!questSound) {
-                questSound = new Audio('media/zwyki/quest.mp3');
-                questSound.loop = true; // Зацикливаем воспроизведение
-                questSound.volume = 0.7;
-                // Добавляем в DOM для лучшего управления
-                questSound.id = 'questMusic';
-                document.body.appendChild(questSound);
-            }
-            // Сохраняем ссылку глобально для повторного использования
-            window.questMusic = questSound;
-            
-            // Регистрируем quest музыку в менеджере видимости
-            if (window.visibilityAudioManager) {
-                window.visibilityAudioManager.registerAudio(questSound);
-                // console.log('🎵 Quest музыка зарегистрирована в менеджере видимости');
-            }
-        }
+        const questSound = getSharedQuestMusic();
 
         // Открываем модальное окно
         bookOverlay.style.display = 'flex';

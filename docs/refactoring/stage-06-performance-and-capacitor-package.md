@@ -7,7 +7,7 @@
 ## Контекст
 
 Стартовый Stage 6 baseline: `make build` собирал `www/` размером `350 files, 138.2 MB -> www/`.
-После cleanup-only package exclusions текущий baseline: `331 files, 86.9 MB -> www/`.
+После Stage 6.16 текущий baseline: `331 files, 86.8 MB -> www/`.
 В `BACKLOG.md` Performance Optimization уже находится в активных задачах Phase 2.
 
 ## Scope
@@ -418,7 +418,7 @@ Stage 6.15 выполнен:
 - Созданы artifacts:
   - `docs/refactoring/artifacts/stage-06-15-audio/desktop-audio-lifecycle.json`;
   - `docs/refactoring/artifacts/stage-06-15-audio/mobile-pixel5-audio-lifecycle.json`.
-- Package baseline не менялся: `331 files, 86.9 MB -> www/`.
+- Package baseline после build: `331 files, 86.8 MB -> www/`.
 
 Validation:
 
@@ -429,3 +429,26 @@ make stage-06-15-audio
 Следующий подэтап:
 
 - Stage 6.16: consolidate quest audio owner, не смешивая с route-track lazy preload.
+
+## Status Update - 2026-06-27 - Stage 6.16
+
+Stage 6.16 выполнен:
+
+- Создан `docs/refactoring/stage-06-16-quest-audio-owner.md`.
+- Добавлен `window.QuestAudio` helper в `language_menu.js`.
+- `LanguageMenu.initializeQuestMusic()` и `LanguageMenu.initializeQuestMusicInIframe()` используют общий helper.
+- SPA `initializeIframeQuestMusic()` теперь attaches shared parent `questMusic` to iframe вместо создания iframe-local `audio#questMusic`.
+- `quest_marker_handler.js` получает shared audio через `window.QuestAudio` или `window.parent.QuestAudio`.
+- `tests/smoke.spec.mjs` проверяет single owner: один parent `audio#questMusic`, ноль iframe-local `#questMusic`, iframe reference указывает на тот же объект.
+- `quest_overlay.js` local overlay sound оставлен как deferred decision.
+- Package baseline не менялся: `331 files, 86.9 MB -> www/`.
+
+Validation:
+
+```bash
+node --check language_menu.js
+node --check quest_marker_handler.js
+node --check tests/smoke.spec.mjs
+make smoke
+make audit
+```

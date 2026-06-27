@@ -430,6 +430,11 @@
   - Files: `index.html`, `tools/stage-06-14/audio-lifecycle-characterization.spec.mjs`, `docs/refactoring/stage-06-15-lazy-audio-preload.md`, `docs/refactoring/artifacts/stage-06-15-audio/`
   - Benefit: `birds`, `kostel`, `hang`, and `quest` are no longer constructed/loaded by preload bookkeeping; actual playback still loads through `switchTrack()`
 
+- [x] **Refactor: quest audio owner consolidation** - Consolidated shared `questMusic` creation and iframe attachment behind one helper
+  - Completed: 2026-06-27
+  - Files: `language_menu.js`, `index.html`, `quest_marker_handler.js`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-06-16-quest-audio-owner.md`
+  - Benefit: shared quest loop ownership now has one `QuestAudio` helper; `quest_overlay.js` local overlay sound remains a separate deferred decision
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

@@ -349,3 +349,8 @@ make smoke
   - метод сохраняет только `trackTimes` bookkeeping;
   - добавлен `make stage-06-15-audio`;
   - desktop/mobile artifacts подтверждают lazy behavior.
+- Stage 6.16 выполнен:
+  - добавлен `window.QuestAudio` helper для shared `questMusic`;
+  - `language_menu.js`, SPA iframe initialization и `quest_marker_handler.js` используют общий owner;
+  - smoke test закрепляет один parent `audio#questMusic` и shared iframe reference;
+  - `quest_overlay.js` local overlay sound оставлен как deferred decision.
