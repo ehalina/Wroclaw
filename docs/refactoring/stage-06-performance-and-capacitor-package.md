@@ -7,7 +7,7 @@
 ## Контекст
 
 Стартовый Stage 6 baseline: `make build` собирал `www/` размером `350 files, 138.2 MB -> www/`.
-После cleanup-only package exclusions текущий baseline: `334 files, 89.0 MB -> www/`.
+После cleanup-only package exclusions текущий baseline: `333 files, 87.0 MB -> www/`.
 В `BACKLOG.md` Performance Optimization уже находится в активных задачах Phase 2.
 
 ## Scope
@@ -252,3 +252,30 @@ Stage 6.8 выполнен:
 Следующий подэтап:
 
 - Stage 6.9: решить и проверить маленькую правку по `sunset3.png` preload dependency: выровнять preload с `sunset3.jpg` или явно оставить PNG как runtime dependency.
+
+## Status Update - 2026-06-27 - Stage 6.9
+
+Stage 6.9 выполнен:
+
+- Принято решение выровнять sunset preload с реально видимым sky layer:
+  - `sunset_parallax.js` теперь preloads `media/tumski/sunset/sunset3.jpg`;
+  - `sunset_parallax.html` standalone demo тоже использует `sunset3.jpg` для sky layer.
+- `media/tumski/sunset/sunset3.png` добавлен в `excludedRuntimePaths` для Capacitor package.
+- Source original `media/tumski/sunset/sunset3.png` не удалялся.
+- Build exclusion reference guard уточнен: он больше не сканирует root reference files, которые сами исключаются из package, например `* copy.*` backups.
+- Build baseline улучшен:
+  - было после Stage 6.8: `334 files, 89.0 MB -> www/`;
+  - стало: `333 files, 87.0 MB -> www/`;
+  - `du -sh www`: 99M.
+
+Validation:
+
+```bash
+node --check sunset_parallax.js
+node --check scripts/build-capacitor-web.mjs
+make build
+```
+
+Следующий подэтап:
+
+- Stage 6.10: продолжить Stage 6 по remaining runtime-heavy assets: либо review `sunset1.png` / `sunset2.png` через screenshot-safe derivative plan, либо перейти к audio lifecycle route/use review для heavy MP3.

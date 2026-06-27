@@ -395,6 +395,11 @@
   - Files: `docs/refactoring/stage-06-08-sunset-characterization.md`, `playwright.stage-06-08.config.mjs`, `tools/stage-06-08/sunset-characterization.spec.mjs`, `docs/refactoring/artifacts/stage-06-08-sunset/`
   - Benefit: `tumski21` sunset optimization now has screenshots and measurements; `sunset3.png` was identified as preload-only on this page while visible sky uses `sunset3.jpg`
 
+- [x] **Build: sunset3 preload/package cleanup** - Aligned sunset preload/demo sky asset with visible `tumski21` sky layer
+  - Completed: 2026-06-27
+  - Files: `sunset_parallax.js`, `sunset_parallax.html`, `scripts/build-capacitor-web.mjs`, `docs/refactoring/stage-06-asset-size-report.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
+  - Benefit: `sunset3.png` is no longer packaged for Capacitor runtime; build output dropped from 334 files / 89.0 MB to 333 files / 87.0 MB while keeping the source original
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

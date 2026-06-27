@@ -85,7 +85,7 @@ class SunsetParallax {
         const imageUrls = [
             'media/tumski/sunset/sunset1.png',
             'media/tumski/sunset/sunset2.png',
-            'media/tumski/sunset/sunset3.png'
+            'media/tumski/sunset/sunset3.jpg'
         ];
 
         let loadedCount = 0;

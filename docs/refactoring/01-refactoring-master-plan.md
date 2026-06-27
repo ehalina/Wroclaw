@@ -316,3 +316,8 @@ make smoke
   - добавлен отдельный `make stage-06-08-screenshots` для desktop/mobile screenshots `tumski21.html`;
   - зафиксировано, что видимые `tumski21` слои используют `sunset3.jpg`, `sunset2.png`, `sunset1.png`;
   - `sunset3.png` выявлен как preload-only runtime dependency в `sunset_parallax.js`.
+- Stage 6.9 выполнен:
+  - preload в `sunset_parallax.js` и standalone demo `sunset_parallax.html` выровнены на видимый `sunset3.jpg`;
+  - `media/tumski/sunset/sunset3.png` исключен из Capacitor `www` как source-only original, без удаления из репозитория;
+  - build reference guard уточнен: он проверяет только файлы, реально попадающие в package;
+  - baseline улучшен до `333 files, 87.0 MB -> www/`.

@@ -9,10 +9,10 @@
 
 ## Текущий package baseline
 
-После Stage 6.6:
+После Stage 6.9:
 
-- build summary: `334 files, 89.0 MB -> www/`;
-- disk usage: `www` 101M;
+- build summary: `333 files, 87.0 MB -> www/`;
+- disk usage: `www` 99M;
 - package budget guard: 120 MB.
 
 ## Оставшиеся top runtime assets
@@ -33,10 +33,11 @@
 |---:|---|---|---|
 | 4160 | `media/tumski/sunset/sunset1.png` | `tumski21` / sunset parallax | visual before/after required |
 | 4160 | `media/tumski/sunset/sunset2.png` | `tumski21` / sunset parallax | visual before/after required |
-| 2112 | `media/tumski/sunset/sunset3.png` | sunset parallax preload | visual before/after required |
 | 2112 | `media/tumski/tumski_14.jpg` | scene image | batch screenshot review required |
 | 2112 | `media/tumski/tumski_11.jpg` | scene image | batch screenshot review required |
 | 2112 | `media/tumski/dwor_01.jpg` | scene image | batch screenshot review required |
+
+Note after Stage 6.9: `media/tumski/sunset/sunset3.png` remains in source but is no longer packaged; runtime preload/demo references now use the visible `sunset3.jpg`.
 
 ## Rules
 
@@ -52,8 +53,7 @@
 
 1. Runtime PNG review:
    - `media/tumski/sunset/sunset1.png`;
-   - `media/tumski/sunset/sunset2.png`;
-   - `media/tumski/sunset/sunset3.png`.
+   - `media/tumski/sunset/sunset2.png`.
 
 2. Scene JPG review:
    - start with 2-3 largest scene images only;

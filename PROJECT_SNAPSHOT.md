@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 90% (40 завершённых задач текущего плана)
+**Общий прогресс:** 91% (41 завершённая задача текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -137,6 +137,7 @@ Wroclaw/
 38. ✅ Stage 6.6 Package gnome source-only exclusions
 39. ✅ Stage 6.7 Runtime asset optimization policy
 40. ✅ Stage 6.8 Tumski21 sunset screenshot characterization
+41. ✅ Stage 6.9 Sunset3 preload/package cleanup
 
 ---
 
@@ -196,7 +197,7 @@ make audit
 
 ### Текущий Capacitor package baseline:
 - Initial Stage 6 build: `350 files, 138.2 MB -> www/`
-- Current build: `334 files, 89.0 MB -> www/`
+- Current build: `333 files, 87.0 MB -> www/`
 - Package budget guard: `120 MB`
 - Runtime asset optimization policy: `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`
 
@@ -226,6 +227,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.9 выполнен
+- `sunset_parallax.js` и `sunset_parallax.html` выровнены на `media/tumski/sunset/sunset3.jpg`
+- `media/tumski/sunset/sunset3.png` исключен из Capacitor `www`, но оставлен в source
+- build reference guard теперь сканирует только package-included reference files
+- build baseline улучшен с `334 files, 89.0 MB` до `333 files, 87.0 MB`
 
 ### 2026-06-27 - Refactoring Stage 6.8 выполнен
 - создан `docs/refactoring/stage-06-08-sunset-characterization.md`

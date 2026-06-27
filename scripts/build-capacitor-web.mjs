@@ -50,6 +50,7 @@ const excludedRuntimePaths = new Set([
   'media/krasnolud/Снимок экрана 2026-01-25 в 18.04.04.png',
   'media/krasnolud/u7173139994_Bronze_gnome_figurine_same_perspective_do_not_chang_42cebd36-ece2-491f-91b2-67f0cc47d8aa.png',
   'media/krasnolud/u7173139994_Bronze_gnome_figurine_same_perspective_do_not_chang_f574f9f5-15cb-4d89-857e-e46a0ac1ac3d.png',
+  'media/tumski/sunset/sunset3.png',
   'media/watercolor/22.png',
   'music.mp3'
 ]);
@@ -98,7 +99,11 @@ async function collectReferenceScanFiles() {
         return;
       }
 
-      if (entry.isFile() && referenceScanExtensions.has(path.extname(entry.name))) {
+      if (
+        entry.isFile() &&
+        !shouldSkipFile(current) &&
+        referenceScanExtensions.has(path.extname(entry.name))
+      ) {
         files.push(current);
       }
     }));
@@ -116,7 +121,11 @@ async function collectReferenceScanFiles() {
       return;
     }
 
-    if (entry.isFile() && referenceScanExtensions.has(path.extname(entry.name))) {
+    if (
+      entry.isFile() &&
+      !shouldSkipFile(current) &&
+      referenceScanExtensions.has(path.extname(entry.name))
+    ) {
       files.push(current);
     }
   }));

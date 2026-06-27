@@ -100,6 +100,8 @@ They are visible layered runtime assets and need before/after screenshot compari
 - either align preload with the visible `sunset3.jpg`;
 - or keep `sunset3.png` if animation behavior depends on preloading the PNG.
 
+Stage 6.9 resolution: preload and standalone demo were aligned with `sunset3.jpg`, and `sunset3.png` was excluded from the Capacitor package without deleting the source original.
+
 ## Validation
 
 Completed:

@@ -298,3 +298,33 @@ make stage-06-08-screenshots
 ```
 
 Result: 2 Playwright characterization tests passed (desktop and mobile).
+
+## Stage 6.9 result
+
+Completed on 2026-06-27:
+
+- Aligned `sunset_parallax.js` preload list with the visible `tumski21.html` sky asset:
+  - before: `media/tumski/sunset/sunset3.png`;
+  - after: `media/tumski/sunset/sunset3.jpg`.
+- Aligned standalone `sunset_parallax.html` demo sky layer and info text with `sunset3.jpg`.
+- Added `media/tumski/sunset/sunset3.png` to `excludedRuntimePaths`.
+- Kept source original `media/tumski/sunset/sunset3.png` in the repository.
+- Refined the package reference guard so it scans only reference files that are packaged into `www`.
+
+Build comparison:
+
+| Metric | Before Stage 6.9 | After Stage 6.9 |
+|---|---:|---:|
+| Build summary files | 334 | 333 |
+| Build summary size | 89.0 MB | 87.0 MB |
+| `du -sh www` | 101M | 99M |
+
+Validation:
+
+```bash
+node --check sunset_parallax.js
+node --check scripts/build-capacitor-web.mjs
+make build
+```
+
+All passed.
