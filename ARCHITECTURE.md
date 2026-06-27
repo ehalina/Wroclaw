@@ -136,7 +136,11 @@ Wroclaw/
 - Build exclusions are guarded: `make build` scans `www` HTML/CSS/JS/JSON and fails if a forbidden non-runtime path becomes referenced again.
 - Package size is guarded: `make build` fails when tracked `www` exceeds the documented `120 MB` logical budget.
 - Runtime asset optimization policy lives in `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`: use derivative files plus screenshot/audio review; do not overwrite original visual/audio sources blindly.
-- Android command-line build требует JDK 21; `make android-debug` задаёт `CAPACITOR_JAVA_HOME`.
+- Android command-line build требует JDK 21; `make android-debug` / `make android-release` задают `CAPACITOR_JAVA_HOME`.
+- Android APK artifact names are fixed by Gradle:
+  - `android/app/build/outputs/apk/debug/wroclaw_debug.apk`;
+  - `android/app/build/outputs/apk/release/wroclaw_release.apk`.
+- iOS target product names are fixed per configuration for future packaging: `wroclaw_debug` for Debug and `wroclaw_release` for Release.
 
 ### 1. SPA Architecture через iframe
 

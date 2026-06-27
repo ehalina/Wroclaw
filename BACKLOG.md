@@ -570,6 +570,11 @@
   - Files: `www/tumski_init.js`, `www/arrow_handlers.js`, `www/index.html`, `www/favicon.ico`, `tests/smoke.spec.mjs`, `BACKLOG.md`, `PROJECT_SNAPSHOT.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`, `docs/refactoring/01-refactoring-master-plan.md`
   - Benefit: expected optional play controls and autoplay rejections no longer produce noisy console errors, `unload` policy warning is removed, `/favicon.ico` is served, and iframe load handlers/timers no longer produce false or stale timeout errors
 
+- [x] **Build: native artifact naming** - Standardized Android/iOS debug and release product names
+  - Completed: 2026-06-27
+  - Files: `android/app/build.gradle`, `ios/App/App.xcodeproj/project.pbxproj`, `Makefile`, `README.md`, `AGENTS.md`, `ARCHITECTURE.md`, `PROJECT_SNAPSHOT.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`, `docs/refactoring/01-refactoring-master-plan.md`
+  - Benefit: Android builds produce `wroclaw_debug.apk` and `wroclaw_release.apk`; future iOS Debug/Release products use `wroclaw_debug` and `wroclaw_release` instead of the generic `App`
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

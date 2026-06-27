@@ -83,6 +83,7 @@ make security-fix # Автоматически исправить уязвимо
 make audit        # Полная проверка (lint+typecheck+test+build+security)
 make cap-sync     # Validate www/ and sync native projects
 make android-debug # Build Android debug APK with JDK 21
+make android-release # Build Android release APK with JDK 21
 
 # Utility
 make install      # Установить зависимости

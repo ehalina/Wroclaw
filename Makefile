@@ -2,7 +2,7 @@ CAPACITOR_JAVA_HOME ?= /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents
 PORT ?= 5173
 E2E_PORT ?= 6173
 
-.PHONY: help install dev build start lint fix-lint typecheck test test-watch test-e2e smoke security security-fix audit clean reinstall doctor poc-template stage-06-08-screenshots stage-06-14-audio stage-06-15-audio stage-06-17-sunset-webp stage-06-18-scene-jpg-screenshots stage-06-19-tumski11-webp-poc stage-06-20-video-review stage-06-21-video-metadata stage-06-22-video-lazy-source stage-06-23-loading-state stage-06-24-loading-helper stage-06-25-loading-timeout cap-sync cap-copy cap-add-android cap-add-ios cap-open-android cap-open-ios android-debug
+.PHONY: help install dev build start lint fix-lint typecheck test test-watch test-e2e smoke security security-fix audit clean reinstall doctor poc-template stage-06-08-screenshots stage-06-14-audio stage-06-15-audio stage-06-17-sunset-webp stage-06-18-scene-jpg-screenshots stage-06-19-tumski11-webp-poc stage-06-20-video-review stage-06-21-video-metadata stage-06-22-video-lazy-source stage-06-23-loading-state stage-06-24-loading-helper stage-06-25-loading-timeout cap-sync cap-copy cap-add-android cap-add-ios cap-open-android cap-open-ios android-debug android-release
 
 help:
 	@printf "Available commands:\n"
@@ -28,6 +28,7 @@ help:
 	@printf "  make stage-06-25-loading-timeout Verify Stage 6.25 iframe loading timeout state\n"
 	@printf "  make cap-sync         Build and sync Android/iOS projects\n"
 	@printf "  make android-debug    Build Android debug APK with JDK 21\n"
+	@printf "  make android-release  Build Android release APK with JDK 21\n"
 	@printf "  make cap-open-android Open Android project\n"
 	@printf "  make cap-open-ios     Open iOS project\n"
 	@printf "  make security         Run npm audit\n"
@@ -150,3 +151,6 @@ cap-open-ios:
 
 android-debug:
 	cd android && JAVA_HOME="$(CAPACITOR_JAVA_HOME)" ./gradlew assembleDebug
+
+android-release:
+	cd android && JAVA_HOME="$(CAPACITOR_JAVA_HOME)" ./gradlew assembleRelease

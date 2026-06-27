@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 99% (65 завершённые задачи текущего плана)
+**Общий прогресс:** 99% (66 завершённых задач текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -149,6 +149,7 @@ Wroclaw/
 73. ✅ Stage 7.16 `www/` source of truth
 74. ✅ Stage 7.17 Stale generated AI context cleanup
 75. ✅ Stage 7.18 Runtime console noise cleanup
+76. ✅ Stage 7.19 Native artifact naming
 
 ---
 
@@ -246,6 +247,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 7.19 выполнен
+- Android debug APK now builds as `android/app/build/outputs/apk/debug/wroclaw_debug.apk`
+- Android release APK now builds as `android/app/build/outputs/apk/release/wroclaw_release.apk`
+- `make android-release` добавлен рядом с `make android-debug`
+- iOS Debug/Release product names зафиксированы как `wroclaw_debug` / `wroclaw_release`
 
 ### 2026-06-27 - Refactoring Stage 7.18 выполнен
 - `tumski_init.js` больше не пишет error для отсутствующего optional play/video блока

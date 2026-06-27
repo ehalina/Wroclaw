@@ -474,3 +474,8 @@ make smoke
   - replaced `unload` cleanup with `pagehide` in `arrow_handlers.js`;
   - attached iframe load handlers before DOM insertion and added pending iframe load cleanup tracking to prevent false/stale timeout errors;
   - added `www/favicon.ico` and smoke coverage for the reported console regressions.
+- Stage 7.19 выполнен:
+  - Android APK output names standardized to `wroclaw_debug.apk` and `wroclaw_release.apk`;
+  - `make android-release` added next to existing `make android-debug`;
+  - iOS Debug/Release `PRODUCT_NAME` values set to `wroclaw_debug` / `wroclaw_release` for future packaging;
+  - validated both Android debug and release APK builds.

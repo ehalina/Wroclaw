@@ -365,7 +365,27 @@ Stage 7.18 выполнен:
 
 Следующий подэтап:
 
-- Stage 8 decision gate: define whether the next track is content completion, localization, or image optimization.
+- Stage 7.19: standardize native build artifact names before release/iOS packaging work.
+
+## Status Update - 2026-06-27 - Stage 7.19
+
+Stage 7.19 выполнен:
+
+- Android Gradle APK output names are deterministic:
+  - Debug: `android/app/build/outputs/apk/debug/wroclaw_debug.apk`;
+  - Release: `android/app/build/outputs/apk/release/wroclaw_release.apk`.
+- Added `make android-release` next to existing `make android-debug`.
+- iOS target product names are explicit per configuration:
+  - Debug: `wroclaw_debug`;
+  - Release: `wroclaw_release`.
+- App display name and bundle/package identifiers were not changed.
+- Validation:
+  - `make android-debug` passed and produced `wroclaw_debug.apk`;
+  - `make android-release` passed and produced `wroclaw_release.apk`.
+
+Следующий подэтап:
+
+- Stage 8 decision gate: define whether the next track is content completion, localization, image optimization, or release packaging/signing.
 
 ## Documentation updates
 

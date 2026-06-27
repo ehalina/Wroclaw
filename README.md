@@ -82,7 +82,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed technical stack.
 - Android Studio / Android SDK for Android builds
 - Xcode for iOS builds
 
-`make android-debug` uses `CAPACITOR_JAVA_HOME` and defaults to Homebrew OpenJDK 21 on Apple Silicon. Override it if your JDK 21 is installed elsewhere.
+`make android-debug` and `make android-release` use `CAPACITOR_JAVA_HOME` and default to Homebrew OpenJDK 21 on Apple Silicon. Override it if your JDK 21 is installed elsewhere.
 
 `make dev` defaults to port `5173`; use `make dev PORT=5176` if that port is already busy.
 
@@ -96,7 +96,8 @@ make dev
 ### First Run
 1. Open http://localhost:5173 for the web version.
 2. Run `make cap-sync` after web asset changes.
-3. Run `make android-debug` to build a debug APK.
+3. Run `make android-debug` to build `android/app/build/outputs/apk/debug/wroclaw_debug.apk`.
+4. Run `make android-release` to build `android/app/build/outputs/apk/release/wroclaw_release.apk`.
 
 ---
 
@@ -133,6 +134,7 @@ make audit        # lint + typecheck + test + build + security
 make cap-open-android # Open Android project
 make cap-open-ios     # Open iOS project
 make android-debug    # Build Android debug APK
+make android-release  # Build Android release APK
 ```
 
 ### Utility
