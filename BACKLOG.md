@@ -465,6 +465,11 @@
   - Files: `katedra_panorama.html`, `tools/stage-06-20/video-characterization.spec.mjs`, `Makefile`, `docs/refactoring/stage-06-22-video-lazy-source.md`, `docs/refactoring/artifacts/stage-06-22-video-lazy-source/`
   - Benefit: `katedra_panorama.html` no longer assigns video `src` before user intent; click-to-play still passes on desktop/mobile
 
+- [x] **Performance: SPA loading state characterization** - Captured slow iframe navigation loading behavior
+  - Completed: 2026-06-27
+  - Files: `playwright.stage-06-23.config.mjs`, `tools/stage-06-23/loading-state-characterization.spec.mjs`, `Makefile`, `docs/refactoring/stage-06-23-loading-state-characterization.md`, `docs/refactoring/artifacts/stage-06-23-loading-state/`
+  - Benefit: planned loading-state UX work now has a desktop/mobile oracle for overlay visibility, non-blank current page behavior and post-load activation
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

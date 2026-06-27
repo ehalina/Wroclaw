@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 99% (54 завершённые задачи текущего плана)
+**Общий прогресс:** 99% (55 завершённых задач текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -151,6 +151,7 @@ Wroclaw/
 52. ✅ Stage 6.20 Panorama video review
 53. ✅ Stage 6.21 Panorama video metadata preload
 54. ✅ Stage 6.22 Panorama video lazy source
+55. ✅ Stage 6.23 SPA loading state characterization
 
 ---
 
@@ -209,6 +210,7 @@ make stage-06-19-tumski11-webp-poc
 make stage-06-20-video-review
 make stage-06-21-video-metadata
 make stage-06-22-video-lazy-source
+make stage-06-23-loading-state
 make security
 make audit
 ```
@@ -245,6 +247,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.23 выполнен
+- добавлен `make stage-06-23-loading-state`
+- slow iframe navigation oracle задерживает `tumski02.html` и проверяет loading overlay на desktop/mobile
+- baseline подтверждает: во время задержки overlay видим, active iframe остаётся `tumski.html`, после load активируется `tumski02.html`
+- runtime behavior и package size не менялись
 
 ### 2026-06-27 - Refactoring Stage 6.22 выполнен
 - `Wroclaw_Saver.mp4` source перенесён из `src` в `data-src`

@@ -606,3 +606,30 @@ Stage 6.22 выполнен:
 Следующий подэтап:
 
 - Stage 6 может перейти к другой runtime-heavy группе; video transcode/poster стоит делать только после manual product review.
+
+## Status Update - 2026-06-27 - Stage 6.23
+
+Stage 6.23 выполнен:
+
+- Создан `docs/refactoring/stage-06-23-loading-state-characterization.md`.
+- Добавлен `playwright.stage-06-23.config.mjs`.
+- Добавлен `tools/stage-06-23/loading-state-characterization.spec.mjs`.
+- Добавлен Makefile target `make stage-06-23-loading-state`.
+- Playwright oracle искусственно задерживает `tumski02.html` iframe route и проверяет loading overlay на desktop/mobile.
+- Созданы artifacts:
+  - `docs/refactoring/artifacts/stage-06-23-loading-state/desktop-loading-overlay.png`;
+  - `docs/refactoring/artifacts/stage-06-23-loading-state/desktop-after-navigation.png`;
+  - `docs/refactoring/artifacts/stage-06-23-loading-state/desktop-loading-state.json`;
+  - `docs/refactoring/artifacts/stage-06-23-loading-state/mobile-pixel5-loading-overlay.png`;
+  - `docs/refactoring/artifacts/stage-06-23-loading-state/mobile-pixel5-after-navigation.png`;
+  - `docs/refactoring/artifacts/stage-06-23-loading-state/mobile-pixel5-loading-state.json`.
+- Browser characterization:
+  - до navigation: overlay скрыт, active iframe `tumski.html`;
+  - во время slow iframe load: overlay видим, active iframe остаётся `tumski.html`, DOM уже содержит 2 page containers;
+  - после load: overlay скрыт, active iframe `tumski02.html`;
+  - `pageErrors=[]` на desktop/mobile.
+- Runtime behavior, media files и package baseline не менялись: `331 files, 84.5 MB -> www/`.
+
+Следующий подэтап:
+
+- Stage 6.24 может менять loading implementation за этим oracle: extract loading helpers, timeout/error state или localization/visual polish для loading overlay.

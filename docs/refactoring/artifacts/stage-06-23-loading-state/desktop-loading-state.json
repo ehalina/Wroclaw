@@ -1,0 +1,133 @@
+{
+  "afterNavigation": {
+    "activeIframeSrc": "tumski02.html?t=1782559937587",
+    "activePageId": "page-tumski02",
+    "label": "after-navigation",
+    "overlayClassName": "loading-overlay hidden",
+    "overlayDisplay": "none",
+    "overlayText": "Loading...",
+    "overlayVisibility": "visible",
+    "overlayVisible": false,
+    "pageCount": 2,
+    "pages": [
+      {
+        "className": "page-content",
+        "id": "page-tumski",
+        "iframeSrc": "tumski.html?t=1782559936845",
+        "opacity": "0.107616",
+        "visibility": "visible"
+      },
+      {
+        "className": "page-content active",
+        "id": "page-tumski02",
+        "iframeSrc": "tumski02.html?t=1782559937587",
+        "opacity": "0.892384",
+        "visibility": "visible"
+      }
+    ]
+  },
+  "beforeNavigation": {
+    "activeIframeSrc": "tumski.html?t=1782559936845",
+    "activePageId": "page-tumski",
+    "label": "before-navigation",
+    "overlayClassName": "loading-overlay hidden",
+    "overlayDisplay": "none",
+    "overlayText": "Loading...",
+    "overlayVisibility": "visible",
+    "overlayVisible": false,
+    "pageCount": 1,
+    "pages": [
+      {
+        "className": "page-content active",
+        "id": "page-tumski",
+        "iframeSrc": "tumski.html?t=1782559936845",
+        "opacity": "0.950555",
+        "visibility": "visible"
+      }
+    ]
+  },
+  "consoleMessages": [
+    {
+      "text": "✅ Firebase инициализирован",
+      "type": "log"
+    },
+    {
+      "text": "✅ Firebase Firestore инициализирован",
+      "type": "log"
+    },
+    {
+      "text": "🔵 setupRightArrowHandler: isMobile = false isDesktopDevice() = true",
+      "type": "log"
+    },
+    {
+      "text": "🟢 setupForwardArrowHandler: isMobile = false",
+      "type": "log"
+    },
+    {
+      "text": "Не все элементы найдены для кнопки play",
+      "type": "error"
+    },
+    {
+      "text": "✅ Анонимный пользователь создан: qJriLG2JRlajihMFe8VKIwZOV842",
+      "type": "log"
+    },
+    {
+      "text": "🔵 setupRightArrowHandler: isMobile = false isDesktopDevice() = true",
+      "type": "log"
+    },
+    {
+      "text": "🟢 setupForwardArrowHandler: isMobile = false",
+      "type": "log"
+    },
+    {
+      "text": "✅ Firebase Firestore инициализирован",
+      "type": "log"
+    },
+    {
+      "text": "✅ Firebase инициализирован",
+      "type": "log"
+    },
+    {
+      "text": "Не все элементы найдены для кнопки play",
+      "type": "error"
+    },
+    {
+      "text": "✅ Пользователь сохранен в Firestore: qJriLG2JRlajihMFe8VKIwZOV842",
+      "type": "log"
+    },
+    {
+      "text": "✅ Пользователь сохранен в Firestore: qJriLG2JRlajihMFe8VKIwZOV842",
+      "type": "log"
+    }
+  ],
+  "duringNavigation": {
+    "activeIframeSrc": "tumski.html?t=1782559936845",
+    "activePageId": "page-tumski",
+    "label": "during-slow-navigation",
+    "overlayClassName": "loading-overlay",
+    "overlayDisplay": "flex",
+    "overlayText": "Loading...",
+    "overlayVisibility": "visible",
+    "overlayVisible": true,
+    "pageCount": 2,
+    "pages": [
+      {
+        "className": "page-content active",
+        "id": "page-tumski",
+        "iframeSrc": "tumski.html?t=1782559936845",
+        "opacity": "0.983683",
+        "visibility": "visible"
+      },
+      {
+        "className": "page-content",
+        "id": "page-tumski02",
+        "iframeSrc": "tumski02.html?t=1782559937587",
+        "opacity": "0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  "interceptedUrl": "http://127.0.0.1:6173/tumski02.html?t=1782559937587",
+  "pageErrors": [],
+  "targetPage": "tumski02.html"
+}

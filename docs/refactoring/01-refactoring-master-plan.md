@@ -385,3 +385,8 @@ make smoke
   - video preload переведён на `none`;
   - source назначается только после click по play button;
   - lazy-source characterization: до click `readyState=0`, после click video playing/unmuted на desktop/mobile.
+- Stage 6.23 выполнен:
+  - создан `docs/refactoring/stage-06-23-loading-state-characterization.md`;
+  - добавлен `make stage-06-23-loading-state`;
+  - slow iframe navigation oracle подтверждает: overlay видим во время задержки, активный iframe остаётся `tumski.html`, после load активируется `tumski02.html`;
+  - runtime behavior и package baseline не менялись.

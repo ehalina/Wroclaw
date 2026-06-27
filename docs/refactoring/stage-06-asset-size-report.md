@@ -319,6 +319,21 @@ Completed on 2026-06-27:
 - No media files changed.
 - No package size change: current build baseline remains `331 files, 84.5 MB -> www/`.
 
+## Stage 6.23 result
+
+Completed on 2026-06-27:
+
+- Created `docs/refactoring/stage-06-23-loading-state-characterization.md`.
+- Added `make stage-06-23-loading-state`.
+- Characterized slow SPA iframe navigation from `tumski.html` to `tumski02.html` on desktop/mobile.
+- Browser result:
+  - before navigation: loading overlay hidden;
+  - during delayed iframe request: loading overlay visible, active iframe remains `tumski.html`, DOM has 2 page containers;
+  - after navigation: loading overlay hidden, active iframe is `tumski02.html`;
+  - `pageErrors=[]`.
+- No media files changed.
+- No package size change: current build baseline remains `331 files, 84.5 MB -> www/`.
+
 Validation:
 
 ```bash

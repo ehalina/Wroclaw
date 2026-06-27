@@ -1,0 +1,141 @@
+{
+  "afterNavigation": {
+    "activeIframeSrc": "tumski02.html?t=1782559937580",
+    "activePageId": "page-tumski02",
+    "label": "after-navigation",
+    "overlayClassName": "loading-overlay hidden",
+    "overlayDisplay": "none",
+    "overlayText": "Loading...",
+    "overlayVisibility": "visible",
+    "overlayVisible": false,
+    "pageCount": 2,
+    "pages": [
+      {
+        "className": "page-content",
+        "id": "page-tumski",
+        "iframeSrc": "tumski.html?t=1782559936850",
+        "opacity": "0",
+        "visibility": "hidden"
+      },
+      {
+        "className": "page-content active",
+        "id": "page-tumski02",
+        "iframeSrc": "tumski02.html?t=1782559937580",
+        "opacity": "1",
+        "visibility": "visible"
+      }
+    ]
+  },
+  "beforeNavigation": {
+    "activeIframeSrc": "tumski.html?t=1782559936850",
+    "activePageId": "page-tumski",
+    "label": "before-navigation",
+    "overlayClassName": "loading-overlay hidden",
+    "overlayDisplay": "none",
+    "overlayText": "Loading...",
+    "overlayVisibility": "visible",
+    "overlayVisible": false,
+    "pageCount": 1,
+    "pages": [
+      {
+        "className": "page-content active",
+        "id": "page-tumski",
+        "iframeSrc": "tumski.html?t=1782559936850",
+        "opacity": "0.950423",
+        "visibility": "visible"
+      }
+    ]
+  },
+  "consoleMessages": [
+    {
+      "text": "✅ Firebase инициализирован",
+      "type": "log"
+    },
+    {
+      "text": "✅ Firebase Firestore инициализирован",
+      "type": "log"
+    },
+    {
+      "text": "🔵 setupRightArrowHandler: isMobile = true isDesktopDevice() = false",
+      "type": "log"
+    },
+    {
+      "text": "🟢 setupForwardArrowHandler: isMobile = true",
+      "type": "log"
+    },
+    {
+      "text": "Не все элементы найдены для кнопки play",
+      "type": "error"
+    },
+    {
+      "text": "Info: The current domain is not authorized for OAuth operations. This will prevent signInWithPopup, signInWithRedirect, linkWithPopup and linkWithRedirect from working. Add your domain (127.0.0.1) to the OAuth redirect domains list in the Firebase console -> Authentication -> Settings -> Authorized domains tab.",
+      "type": "warning"
+    },
+    {
+      "text": "🔵 setupRightArrowHandler: isMobile = true isDesktopDevice() = false",
+      "type": "log"
+    },
+    {
+      "text": "🟢 setupForwardArrowHandler: isMobile = true",
+      "type": "log"
+    },
+    {
+      "text": "✅ Анонимный пользователь создан: 3nkH2RTGnmRYYd5MMHzLI7ZgymZ2",
+      "type": "log"
+    },
+    {
+      "text": "✅ Firebase Firestore инициализирован",
+      "type": "log"
+    },
+    {
+      "text": "✅ Firebase инициализирован",
+      "type": "log"
+    },
+    {
+      "text": "Не все элементы найдены для кнопки play",
+      "type": "error"
+    },
+    {
+      "text": "✅ Пользователь сохранен в Firestore: 3nkH2RTGnmRYYd5MMHzLI7ZgymZ2",
+      "type": "log"
+    },
+    {
+      "text": "✅ Пользователь сохранен в Firestore: 3nkH2RTGnmRYYd5MMHzLI7ZgymZ2",
+      "type": "log"
+    },
+    {
+      "text": "Info: The current domain is not authorized for OAuth operations. This will prevent signInWithPopup, signInWithRedirect, linkWithPopup and linkWithRedirect from working. Add your domain (127.0.0.1) to the OAuth redirect domains list in the Firebase console -> Authentication -> Settings -> Authorized domains tab.",
+      "type": "warning"
+    }
+  ],
+  "duringNavigation": {
+    "activeIframeSrc": "tumski.html?t=1782559936850",
+    "activePageId": "page-tumski",
+    "label": "during-slow-navigation",
+    "overlayClassName": "loading-overlay",
+    "overlayDisplay": "flex",
+    "overlayText": "Loading...",
+    "overlayVisibility": "visible",
+    "overlayVisible": true,
+    "pageCount": 2,
+    "pages": [
+      {
+        "className": "page-content active",
+        "id": "page-tumski",
+        "iframeSrc": "tumski.html?t=1782559936850",
+        "opacity": "0.983636",
+        "visibility": "visible"
+      },
+      {
+        "className": "page-content",
+        "id": "page-tumski02",
+        "iframeSrc": "tumski02.html?t=1782559937580",
+        "opacity": "0",
+        "visibility": "hidden"
+      }
+    ]
+  },
+  "interceptedUrl": "http://127.0.0.1:6173/tumski02.html?t=1782559937580",
+  "pageErrors": [],
+  "targetPage": "tumski02.html"
+}

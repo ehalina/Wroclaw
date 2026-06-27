@@ -83,6 +83,8 @@ Stage 6.21 result: `katedra_panorama.html` now uses `preload=metadata` and `load
 
 Stage 6.22 result: `katedra_panorama.html` now lazy-loads `Wroclaw_Saver.mp4` by keeping the path in `data-src` until the play click; desktop/mobile click-to-play remains covered.
 
+Stage 6.23 result: SPA loading overlay behavior is now characterized under a deliberately delayed `tumski02.html` iframe navigation; no runtime behavior or asset packaging changed.
+
 4. Video review:
    - inspect `katedra_panorama.html` playback;
    - decide whether a smaller derivative video or poster/loading strategy is needed.
@@ -105,4 +107,4 @@ Additional checks:
 
 ## Next safe implementation step
 
-Move to another runtime-heavy group or UX issue with a clear oracle. Defer video poster/transcode unless manual product review asks for it.
+Move to a loading-state implementation change behind the Stage 6.23 oracle, or another runtime-heavy group with a clear oracle. Defer video poster/transcode unless manual product review asks for it.
