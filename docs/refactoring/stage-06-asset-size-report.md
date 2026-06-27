@@ -274,6 +274,24 @@ Completed on 2026-06-27:
 - No runtime asset paths changed.
 - No package size change: current build baseline remains `331 files, 84.5 MB -> www/`.
 
+## Stage 6.20 result
+
+Completed on 2026-06-27:
+
+- Created `docs/refactoring/stage-06-20-video-review.md`.
+- Added `make stage-06-20-video-review`.
+- Confirmed `media/Wroclaw_Saver.mp4` is a runtime video on `katedra_panorama.html`.
+- `ffprobe` baseline:
+  - source size `9325968` bytes;
+  - duration `21.153333` seconds;
+  - video H.264 High `1800x1080`, 30 fps, ~3.4 Mbps;
+  - audio AAC stereo, 44.1 kHz, 128 kbps.
+- Browser baseline:
+  - video loads with `preload=auto`;
+  - after user click, video plays and unmutes;
+  - mobile has existing autoplay page error before user gesture.
+- No package size change: current build baseline remains `331 files, 84.5 MB -> www/`.
+
 Validation:
 
 ```bash

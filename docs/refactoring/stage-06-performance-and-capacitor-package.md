@@ -532,3 +532,26 @@ Decision:
 Следующий подэтап:
 
 - Stage 6.20: перейти к video review для `media/Wroclaw_Saver.mp4` или пробовать другой image-specific strategy только через такой же visual gate.
+
+## Status Update - 2026-06-27 - Stage 6.20
+
+Stage 6.20 выполнен:
+
+- Создан `docs/refactoring/stage-06-20-video-review.md`.
+- Добавлен `playwright.stage-06-20.config.mjs`.
+- Добавлен `tools/stage-06-20/video-characterization.spec.mjs`.
+- Добавлен Makefile target `make stage-06-20-video-review`.
+- `ffprobe` inventory для `media/Wroclaw_Saver.mp4`:
+  - MP4, 21.153s, 8.9M source;
+  - H.264 High, 1800x1080, 30 fps, ~3.4 Mbps video;
+  - AAC stereo, 44.1 kHz, 128 kbps audio.
+- Browser characterization:
+  - `preload="auto"`, `loop`, `playsinline`, initial `muted=true`;
+  - `readyState=4` на desktop/mobile;
+  - after play click: `paused=false`, `muted=false`, `currentTime≈0.8s`.
+- Mobile Pixel 5 baseline содержит existing page error от autoplay до user gesture.
+- Runtime assets и package baseline не менялись: `331 files, 84.5 MB -> www/`.
+
+Следующий подэтап:
+
+- Stage 6.21: решать video lifecycle (`preload=metadata` / poster / lazy load) до compression/transcode.

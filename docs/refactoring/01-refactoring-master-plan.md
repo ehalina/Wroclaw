@@ -370,3 +370,8 @@ make smoke
   - q75/q85/q85-ICC/q90 candidates сохранены только в artifacts;
   - screenshot gate для q85-ICC зафиксировал FAIL: desktop 61.10, mobile 34.35 при threshold 90;
   - принято решение не переводить `tumski_11.jpg` на WebP.
+- Stage 6.20 выполнен:
+  - создан `make stage-06-20-video-review`;
+  - зафиксирован `Wroclaw_Saver.mp4`: H.264 1800x1080, 21.153s, AAC audio, 8.9M source;
+  - browser characterization подтвердил `preload=auto`, loaded `readyState=4`, after-play video playing/unmuted;
+  - mobile baseline содержит existing autoplay pageError до user gesture.

@@ -77,6 +77,8 @@ Stage 6.18 result: desktop/mobile baselines were captured for the largest remain
 
 Stage 6.19 result: WebP candidates for `tumski_11.jpg` failed the visual gate or were larger than the source. Do not switch this scene JPG to WebP.
 
+Stage 6.20 result: `Wroclaw_Saver.mp4` is confirmed as a runtime video/audio asset with eager `preload=auto`; do not transcode before separating preload/poster/lazy-load behavior from compression.
+
 4. Video review:
    - inspect `katedra_panorama.html` playback;
    - decide whether a smaller derivative video or poster/loading strategy is needed.
@@ -99,4 +101,4 @@ Additional checks:
 
 ## Next safe implementation step
 
-Move to video review for `media/Wroclaw_Saver.mp4`, or try a different image-specific strategy only if it uses the same strict visual gate and does not overwrite originals.
+Decide the `katedra_panorama.html` video lifecycle first (`preload=metadata`, poster, or lazy-load), then characterize before and after. Defer video transcode until playback behavior is stable.

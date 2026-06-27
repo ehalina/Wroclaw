@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 99% (51 завершённая задача текущего плана)
+**Общий прогресс:** 99% (52 завершённые задачи текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -148,6 +148,7 @@ Wroclaw/
 49. ✅ Stage 6.17 Sunset WebP runtime derivatives
 50. ✅ Stage 6.18 Scene JPG characterization
 51. ✅ Stage 6.19 Tumski11 WebP candidate POC
+52. ✅ Stage 6.20 Panorama video review
 
 ---
 
@@ -203,6 +204,7 @@ make build
 make stage-06-08-screenshots
 make stage-06-18-scene-jpg-screenshots
 make stage-06-19-tumski11-webp-poc
+make stage-06-20-video-review
 make security
 make audit
 ```
@@ -239,6 +241,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.20 выполнен
+- добавлен `make stage-06-20-video-review`
+- зафиксирован `Wroclaw_Saver.mp4`: H.264 1800x1080, 21.153s, AAC audio, 8.9M source
+- browser characterization подтвердил `preload=auto`, after-play playback и unmuted state
+- mobile baseline содержит existing autoplay pageError до user gesture
 
 ### 2026-06-27 - Refactoring Stage 6.19 выполнен
 - создан WebP POC для `tumski_11.jpg` без runtime switch

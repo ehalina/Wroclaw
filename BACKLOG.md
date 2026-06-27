@@ -450,6 +450,11 @@
   - Files: `playwright.stage-06-19.config.mjs`, `tools/stage-06-19/tumski11-webp-candidate.spec.mjs`, `tools/stage-06-19/compare-tumski11-screenshots.mjs`, `Makefile`, `docs/refactoring/stage-06-19-tumski11-webp-poc.md`, `docs/refactoring/artifacts/stage-06-19-tumski11-webp/`
   - Benefit: WebP conversion for `tumski_11.jpg` was rejected by visual gate before any runtime/package change; original JPG remains packaged
 
+- [x] **Performance: panorama video review** - Characterized `Wroclaw_Saver.mp4` route/use and browser video lifecycle
+  - Completed: 2026-06-27
+  - Files: `playwright.stage-06-20.config.mjs`, `tools/stage-06-20/video-characterization.spec.mjs`, `Makefile`, `docs/refactoring/stage-06-20-video-review.md`, `docs/refactoring/artifacts/stage-06-20-video-review/`
+  - Benefit: `katedra_panorama.html` video preload/play behavior and mobile autoplay baseline are documented before any video compression or preload changes
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]
