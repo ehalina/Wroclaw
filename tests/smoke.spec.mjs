@@ -633,6 +633,101 @@ test.describe('Wroclaw static app smoke', () => {
     expect(result.messages).toContain('🔵 setupRightArrowHandler: isMobile =');
   });
 
+  test('account diagnostics are quiet by default and gated by DEBUG_ACCOUNT', async ({ page }) => {
+    await page.goto('/tumski.html');
+
+    const result = await page.evaluate(async () => {
+      if (!window.UserAccountManager) {
+        await new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = './user_account.js';
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+      }
+
+      const manager = Object.create(window.UserAccountManager.prototype);
+      const logs = [];
+      const warns = [];
+      const originalLog = console.log;
+      const originalWarn = console.warn;
+
+      console.log = (...args) => {
+        logs.push(args);
+      };
+      console.warn = (...args) => {
+        warns.push(args);
+      };
+
+      try {
+        delete window.DEBUG_ACCOUNT;
+        localStorage.removeItem('DEBUG_ACCOUNT');
+        localStorage.removeItem('__account_debug');
+        manager._alog('hidden-log');
+        manager._awarn('hidden-warn');
+        const disabled = { logs: logs.length, warns: warns.length };
+
+        window.DEBUG_ACCOUNT = true;
+        manager._alog('global-log');
+        manager._awarn('global-warn');
+        const globalEnabled = { logs: logs.length - disabled.logs, warns: warns.length - disabled.warns };
+
+        window.DEBUG_ACCOUNT = false;
+        localStorage.setItem('DEBUG_ACCOUNT', '1');
+        manager._alog('storage-log');
+        manager._awarn('storage-warn');
+        const storageEnabled = {
+          logs: logs.length - disabled.logs - globalEnabled.logs,
+          warns: warns.length - disabled.warns - globalEnabled.warns
+        };
+
+        localStorage.removeItem('DEBUG_ACCOUNT');
+        localStorage.setItem('__account_debug', '1');
+        manager._alog('legacy-log');
+        manager._awarn('legacy-warn');
+        const legacyEnabled = {
+          logs: logs.length - disabled.logs - globalEnabled.logs - storageEnabled.logs,
+          warns: warns.length - disabled.warns - globalEnabled.warns - storageEnabled.warns
+        };
+
+        return {
+          disabled,
+          globalEnabled,
+          storageEnabled,
+          legacyEnabled,
+          logs,
+          warns
+        };
+      } finally {
+        console.log = originalLog;
+        console.warn = originalWarn;
+        delete window.DEBUG_ACCOUNT;
+        localStorage.removeItem('DEBUG_ACCOUNT');
+        localStorage.removeItem('__account_debug');
+        if (window.__questAutoSaveInterval) {
+          clearInterval(window.__questAutoSaveInterval);
+          window.__questAutoSaveInterval = null;
+        }
+      }
+    });
+
+    expect(result.disabled).toEqual({ logs: 0, warns: 0 });
+    expect(result.globalEnabled).toEqual({ logs: 1, warns: 1 });
+    expect(result.storageEnabled).toEqual({ logs: 1, warns: 1 });
+    expect(result.legacyEnabled).toEqual({ logs: 1, warns: 1 });
+    expect(result.logs).toEqual([
+      ['[account]', 'global-log'],
+      ['[account]', 'storage-log'],
+      ['[account]', 'legacy-log']
+    ]);
+    expect(result.warns).toEqual([
+      ['[account]', 'global-warn'],
+      ['[account]', 'storage-warn'],
+      ['[account]', 'legacy-warn']
+    ]);
+  });
+
   test('i18n writes text by default and allows only vetted rich HTML keys', async ({ page }) => {
     await page.goto('/tumski.html');
     await page.waitForFunction(() => window.i18n?.setTranslatedContent);

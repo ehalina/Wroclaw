@@ -424,3 +424,7 @@ make smoke
   - `arrow_handlers.js` active diagnostics переведены на `debugLog/debugWarn`;
   - arrow diagnostics включаются явно через `DEBUG_ARROWS`;
   - smoke фиксирует quiet default и debug-enable paths.
+- Stage 7.7 выполнен:
+  - `user_account.js` auth/rating diagnostics переведены на `_alog/_awarn`;
+  - account diagnostics включаются явно через `DEBUG_ACCOUNT` или legacy `__account_debug`;
+  - smoke фиксирует quiet default, global/storage/legacy debug-enable paths.

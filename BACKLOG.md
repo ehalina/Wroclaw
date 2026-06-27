@@ -510,11 +510,16 @@
   - Files: `arrow_handlers.js`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
   - Benefit: route arrow setup/click/touch diagnostics no longer write to production console by default while remaining available through `DEBUG_ARROWS`
 
-- [ ] **Refactor: user account diagnostics gate** - Decide how to gate or retain verbose auth/rating diagnostics
-  - Reason: CR-11 still has active `console.log` diagnostics in `user_account.js`
-  - Benefit: WebView/devtools console will stay focused on real runtime errors
+- [x] **Refactor: user account diagnostics gate** - Moved verbose auth/rating diagnostics behind explicit account debug flags
+  - Completed: 2026-06-27
+  - Files: `user_account.js`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
+  - Benefit: `user_account.js` no longer writes verbose auth/rating `console.log` / `console.warn` diagnostics by default; diagnostics remain available through `DEBUG_ACCOUNT` and legacy `__account_debug`
+
+- [ ] **Refactor: user database diagnostics gate** - Gate remaining verbose Firebase/auth/leaderboard diagnostics in `user_database.js`
+  - Reason: CR-11 still has active `console.log` diagnostics in `user_database.js`
+  - Benefit: WebView/devtools console will stay focused on real runtime errors across the full account/database boundary
   - Effort: Medium
-  - Notes: Keep separate from arrow/map/quest cleanup because it touches auth/rating observability
+  - Notes: Keep as its own step because it touches Firebase auth and leaderboard sync observability
 
 ### Planned
 

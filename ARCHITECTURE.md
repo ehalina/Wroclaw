@@ -294,6 +294,7 @@ class SPAManager {
 - `map_debug.js` — gated diagnostics helper `MapDebug` для карты/квестов; активируется только через `window.DEBUG_MAP`, `localStorage.DEBUG_MAP = "1"` или legacy `localStorage.__quest_debug = "1"`.
 - `quest_marker_handler.js`, `tumski_cathedral_handler.js`, `tumski_page_common.js` — используют `MapDebug` вместо прямых active debug logs в production console.
 - `arrow_handlers.js` — route-arrow diagnostics gated locally through `DEBUG_ARROWS` / `localStorage.DEBUG_ARROWS`; default production console remains quiet except for `console.error`.
+- `user_account.js` — auth/rating diagnostics gated locally through `DEBUG_ACCOUNT` / `localStorage.DEBUG_ACCOUNT`; legacy `localStorage.__account_debug` remains supported, while `console.error` stays visible for real account/database failures.
 
 
 ### 1.7. i18n text/rich HTML boundary

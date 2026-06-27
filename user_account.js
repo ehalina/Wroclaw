@@ -13,12 +13,31 @@ class UserAccountManager {
     }
 
     _isAccountDebug() {
-        try { return localStorage.getItem('__account_debug') === '1'; } catch (_) { return false; }
+        try {
+            const globalFlag = window.DEBUG_ACCOUNT;
+            if (globalFlag === true || globalFlag === '1' || globalFlag === 'true') {
+                return true;
+            }
+        } catch (_) {}
+
+        try {
+            return ['DEBUG_ACCOUNT', '__account_debug'].some((key) => {
+                const value = localStorage.getItem(key);
+                return value === '1' || value === 'true';
+            });
+        } catch (_) {
+            return false;
+        }
     }
 
     _alog(...args) {
         if (!this._isAccountDebug()) return;
         try { console.log('[account]', ...args); } catch (_) {}
+    }
+
+    _awarn(...args) {
+        if (!this._isAccountDebug()) return;
+        try { console.warn('[account]', ...args); } catch (_) {}
     }
 
     _isOauthRedirectInProgress() {
@@ -129,7 +148,7 @@ class UserAccountManager {
         const foundGnomes = Object.keys(this._getFoundGnomes()).length;
         const questState = this._safeJsonParse(sessionStorage.getItem('questState') || '{}', {});
         const completedTasks = Object.values(questState?.tasks || {}).filter(Boolean).length;
-        
+
         return {
             openedLocations,
             openedBooks,
@@ -296,16 +315,16 @@ class UserAccountManager {
                         }
                     } else {
                         // Проверяем, вернулись ли мы с OAuth redirect
-                        const oauthInProgress = 
+                        const oauthInProgress =
                             sessionStorage.getItem('__oauth_in_progress') === '1' ||
                             localStorage.getItem('__oauth_in_progress') === '1';
-                        
+
                         // Если OAuth был в процессе и теперь пользователь не анонимный - показываем диалог выбора прогресса
                         if (oauthInProgress && !firebaseUser.isAnonymous && this.currentUser.isAnonymous) {
                             // Очищаем флаг
                             try { sessionStorage.removeItem('__oauth_in_progress'); } catch (_) {}
                             try { localStorage.removeItem('__oauth_in_progress'); } catch (_) {}
-                            
+
                             // Показываем диалог выбора прогресса после небольшой задержки
                             setTimeout(async () => {
                                 try {
@@ -314,11 +333,11 @@ class UserAccountManager {
                                         await this.showProgressChoiceDialog(accountUser);
                                     }
                                 } catch (error) {
-                                    console.warn('Ошибка показа диалога выбора прогресса после OAuth (не критично):', error);
+                                    this._awarn('Ошибка показа диалога выбора прогресса после OAuth (не критично):', error);
                                 }
                             }, 500);
                         }
-                        
+
                         // КРИТИЧНО: Если Auth пользователь НЕ гость, но Firestore еще показывает гостя - принудительно обновляем
                         // Это важно для случая, когда пользователь входит через Google и аккаунт уже существует
                         if (!firebaseUser.isAnonymous && this.currentUser.isAnonymous) {
@@ -334,20 +353,20 @@ class UserAccountManager {
                                 };
                                 // КРИТИЧНО: НЕ перезаписываем username из Firestore на displayName из Google Auth
                                 // Если username уже существует и не равен "Гость", сохраняем его
-                                const hasValidUsername = this.currentUser.username && 
-                                    this.currentUser.username.trim() !== '' && 
-                                    this.currentUser.username !== 'Гость' && 
+                                const hasValidUsername = this.currentUser.username &&
+                                    this.currentUser.username.trim() !== '' &&
+                                    this.currentUser.username !== 'Гость' &&
                                     this.currentUser.username.toLowerCase() !== 'гость';
-                                
+
                                 if (!hasValidUsername && firebaseUser.displayName) {
                                     // Обновляем только если username действительно пустой или "Гость"
                                     updateData.username = firebaseUser.displayName;
-                                    this._alog('force sync: updating username from displayName', { 
-                                        oldUsername: this.currentUser.username, 
-                                        newUsername: firebaseUser.displayName 
+                                    this._alog('force sync: updating username from displayName', {
+                                        oldUsername: this.currentUser.username,
+                                        newUsername: firebaseUser.displayName
                                     });
                                 } else {
-                                    this._alog('force sync: preserving existing username', { 
+                                    this._alog('force sync: preserving existing username', {
                                         username: this.currentUser.username,
                                         hasValidUsername: hasValidUsername,
                                         displayName: firebaseUser.displayName
@@ -394,26 +413,26 @@ class UserAccountManager {
                                 // КРИТИЧНО: НЕ перезаписываем username из Firestore на displayName из Google Auth
                                 // Если username уже существует и не равен "Гость", сохраняем его
                                 // Обновляем только если username пустой, равен "Гость" или отсутствует
-                                const hasValidUsername = this.currentUser.username && 
-                                    this.currentUser.username.trim() !== '' && 
-                                    this.currentUser.username !== 'Гость' && 
+                                const hasValidUsername = this.currentUser.username &&
+                                    this.currentUser.username.trim() !== '' &&
+                                    this.currentUser.username !== 'Гость' &&
                                     this.currentUser.username.toLowerCase() !== 'гость';
-                                
+
                                 if (!hasValidUsername && firebaseUser.displayName) {
                                     // Обновляем только если username действительно пустой или "Гость"
                                     updateData.username = firebaseUser.displayName;
-                                    this._alog('needsSync: updating username from displayName', { 
-                                        oldUsername: this.currentUser.username, 
-                                        newUsername: firebaseUser.displayName 
+                                    this._alog('needsSync: updating username from displayName', {
+                                        oldUsername: this.currentUser.username,
+                                        newUsername: firebaseUser.displayName
                                     });
                                 } else {
-                                    this._alog('needsSync: preserving existing username', { 
+                                    this._alog('needsSync: preserving existing username', {
                                         username: this.currentUser.username,
                                         hasValidUsername: hasValidUsername,
                                         displayName: firebaseUser.displayName
                                     });
                                 }
-                                
+
                                 await window.userDatabase.updateUserMetadata(updateData);
                                 // Перезагружаем пользователя из Firestore после обновления
                                 this.currentUser = await window.userDatabase.getUser(firebaseUser.uid);
@@ -517,7 +536,7 @@ class UserAccountManager {
         try {
             const currentUser = await this.getCurrentUser();
             if (!currentUser) {
-                console.warn('Пользователь не авторизован');
+                this._awarn('Пользователь не авторизован');
                 return false;
             }
 
@@ -715,7 +734,7 @@ class UserAccountManager {
                 console.error('renderUser: currentUser is undefined');
                 return;
             }
-            
+
             this._alog('renderUser', {
                 auth: authUser ? {
                     uid: authUser.uid,
@@ -769,7 +788,7 @@ class UserAccountManager {
                         background: rgba(255, 255, 255, 0.9);
                         outline: none;
                     `;
-                    
+
                     const saveUsername = async () => {
                         const newName = input.value.trim();
                         if (!newName) {
@@ -777,13 +796,13 @@ class UserAccountManager {
                             input.focus();
                             return;
                         }
-                        
+
                         if (newName === currentText) {
                             // Имя не изменилось, просто возвращаем обратно
                             headerRow.replaceChild(headerName, input);
                             return;
                         }
-                        
+
                         try {
                             await window.userDatabase.updateUserMetadata({ username: newName });
                             // Обновляем локальные данные
@@ -791,7 +810,7 @@ class UserAccountManager {
                                 currentUser.username = newName;
                             }
                             this.currentUser = { ...(this.currentUser || {}), username: newName };
-                            
+
                             // Синхронизируем в leaderboard немедленно (если есть id)
                             const userId = currentUser?.id || currentUser?.uid;
                             if (userId && window.userDatabase?._syncToLeaderboard) {
@@ -805,7 +824,7 @@ class UserAccountManager {
                                     console.error('[rating] Error syncing username to leaderboard:', err);
                                 });
                             }
-                            
+
                             // Обновляем отображение без перерисовки всей страницы
                             headerName.textContent = newName;
                             headerRow.replaceChild(headerName, input);
@@ -815,7 +834,7 @@ class UserAccountManager {
                             input.focus();
                         }
                     };
-                    
+
                     input.addEventListener('blur', saveUsername);
                     input.addEventListener('keydown', (e) => {
                         if (e.key === 'Enter') {
@@ -825,7 +844,7 @@ class UserAccountManager {
                             headerRow.replaceChild(headerName, input);
                         }
                     });
-                    
+
                     headerRow.replaceChild(input, headerName);
                     input.focus();
                     input.select();
@@ -856,7 +875,7 @@ class UserAccountManager {
             const openedBooks = progress.openedBooks;
             const completedTasks = progress.completedTasks;
             const foundGnomes = progress.foundGnomes || 0;
-            
+
             const totalLocations = UserAccountManager.LOCATION_PAGES.length;
             const totalTasks = UserAccountManager.TOTAL_QUEST_TASKS;
             const totalBooks = UserAccountManager.TOTAL_BOOKS;
@@ -911,7 +930,7 @@ class UserAccountManager {
             // Блок рейтинга
             const ratingRow = document.createElement('div');
             ratingRow.style.cssText = 'display:flex; justify-content:space-between; align-items:center; gap:12px; padding:4px 0; margin-top: 8px; border-top: 1px solid rgba(139,69,19,0.25);';
-            
+
             const ratingLabel = document.createElement('div');
             ratingLabel.textContent = this._t('account.stats.rating', 'Общий рейтинг');
             ratingLabel.style.cssText = `
@@ -920,11 +939,11 @@ class UserAccountManager {
             `;
             ratingLabel.onclick = () => this.showRatingList();
             ratingLabel.title = this._t('account.rating_list.show_full', 'Показать полный рейтинг');
-            
+
             const ratingValue = document.createElement('div');
             ratingValue.textContent = '...';
             ratingValue.style.cssText = 'font-weight: bold;';
-            
+
             const ratingButton = document.createElement('button');
             ratingButton.title = this._t('account.rating_list.show_full', 'Показать полный рейтинг');
             ratingButton.style.cssText = `
@@ -937,7 +956,7 @@ class UserAccountManager {
                 align-items: center;
                 justify-content: center;
             `;
-            
+
             const ratingIcon = document.createElement('img');
             ratingIcon.src = 'media/r.jpg';
             ratingIcon.alt = this._t('account.rating_list.show_full', 'Показать полный рейтинг');
@@ -948,7 +967,7 @@ class UserAccountManager {
             `;
             ratingButton.appendChild(ratingIcon);
             ratingButton.onclick = () => this.showRatingList();
-            
+
             ratingRow.appendChild(ratingLabel);
             ratingRow.appendChild(ratingValue);
             ratingRow.appendChild(ratingButton);
@@ -992,7 +1011,7 @@ class UserAccountManager {
                         width: auto;
                         height: auto;
                     `;
-                    
+
                     if (icon) {
                         const iconImg = document.createElement('img');
                         iconImg.src = icon;
@@ -1004,7 +1023,7 @@ class UserAccountManager {
                         `;
                         b.appendChild(iconImg);
                     }
-                    
+
                     return b;
                 };
 
@@ -1027,7 +1046,7 @@ class UserAccountManager {
                         font-size: ${isMobile ? '13px' : fontSizeTitle};
                         box-sizing: border-box;
                     `;
-                    
+
                     // Создаем кнопку "Сохранить"
                     const saveBtn = document.createElement('button');
                     saveBtn.textContent = this._t('account.guest_rating.save', 'Сохранить');
@@ -1042,7 +1061,7 @@ class UserAccountManager {
                         margin-left: ${isMobile ? '4px' : '8px'};
                         white-space: nowrap;
                     `;
-                    
+
                     const saveGuestData = async () => {
                         const username = input.value.trim();
                         if (!username) {
@@ -1050,34 +1069,34 @@ class UserAccountManager {
                             input.focus();
                             return;
                         }
-                        
+
                         saveBtn.disabled = true;
                         saveBtn.textContent = this._t('account.guest_rating.saving', 'Сохранение...');
-                        
+
                         try {
                             // Получаем текущего пользователя
                             const user = this.currentUser || await this.getCurrentUser();
                             if (!user) {
                                 throw new Error('Пользователь не найден');
                             }
-                            
+
                             // Получаем текущий прогресс через единую функцию
                             const progress = this._calculateProgressFromLocalStorage();
                             const openedLocations = progress.openedLocations;
                             const openedBooks = progress.openedBooks;
                             const completedTasks = progress.completedTasks;
-                            
+
                             // Обновляем username в Firestore
                             await window.userDatabase.updateUserMetadata({ username });
-                            
+
                             // Принудительно обновляем this.currentUser
                             if (this.currentUser) {
                                 this.currentUser.username = username;
                             }
-                            
+
                             // Ждем немного, чтобы Firestore обновился
                             await new Promise(resolve => setTimeout(resolve, 500));
-                            
+
                             // Перезагружаем данные пользователя из Firestore
                             const updatedUser = await this.getCurrentUser();
                             if (updatedUser) {
@@ -1086,15 +1105,15 @@ class UserAccountManager {
                                     this.currentUser.username = username;
                                 }
                             }
-                            
+
                             // Используем обновленного пользователя для синхронизации
                             const userForSync = updatedUser || this.currentUser || user;
                             const userId = userForSync?.id || userForSync?.uid;
-                            
+
                             if (!userId) {
                                 throw new Error('ID пользователя не найден');
                             }
-                            
+
                             if (userId && window.userDatabase?._syncToLeaderboard) {
                                 await window.userDatabase._syncToLeaderboard(userId, {
                                     username: username,
@@ -1106,21 +1125,21 @@ class UserAccountManager {
                                     console.error('[rating] Error syncing guest to leaderboard:', err);
                                 });
                             } else if (!userId) {
-                                console.warn('[rating] Cannot sync guest: no userId found', { 
-                                    updatedUser: !!updatedUser, 
+                                this._awarn('[rating] Cannot sync guest: no userId found', {
+                                    updatedUser: !!updatedUser,
                                     currentUser: !!this.currentUser,
-                                    currentUserParam: !!currentUser 
+                                    currentUserParam: !!currentUser
                                 });
                             }
-                            
+
                             // Обновляем отображение
                             headerName.textContent = username;
                             headerRow.replaceChild(headerName, input);
                             headerRow.removeChild(saveBtn);
-                            
+
                             // Показываем сообщение в стиле книги
                             this.showInfoDialog(this._t('account.guest_rating.info_message', 'Прогресс может не сохраниться на вашем устройстве при очистке данных браузера. Для надежного сохранения используйте e-mail или аккаунт Google.'));
-                            
+
                             // Перерисовываем страницу для обновления данных с обновленным пользователем
                             const finalUser = updatedUser || this.currentUser || user;
                             if (finalUser) {
@@ -1138,7 +1157,7 @@ class UserAccountManager {
                             input.focus();
                         }
                     };
-                    
+
                     input.addEventListener('keydown', (e) => {
                         if (e.key === 'Enter') {
                             e.preventDefault();
@@ -1150,9 +1169,9 @@ class UserAccountManager {
                             }
                         }
                     });
-                    
+
                     saveBtn.onclick = saveGuestData;
-                    
+
                     headerRow.replaceChild(input, headerName);
                     headerRow.appendChild(saveBtn);
                     input.focus();
@@ -1170,18 +1189,18 @@ class UserAccountManager {
                     try {
                         if (window.userDatabase && typeof window.userDatabase.linkAccountWithGoogle === 'function') {
                             const result = await window.userDatabase.linkAccountWithGoogle();
-                            
+
                             // Если result === null, значит произошел redirect, страница перезагрузится
                             // Не нужно закрывать overlay или переоткрывать меню
                             if (result === null) {
                                 return; // Redirect произойдет, страница перезагрузится
                             }
-                            
+
                             overlay.remove();
-                            
+
                             // Ждем немного для синхронизации данных
                             await new Promise(resolve => setTimeout(resolve, 1000));
-                            
+
                             // Получаем данные пользователя после входа
                             const authUser = window.userDatabase?.getCurrentAuthUser?.();
                             if (authUser && !authUser.isAnonymous) {
@@ -1191,11 +1210,11 @@ class UserAccountManager {
                                         await this.showProgressChoiceDialog(accountUser);
                                     }
                                 } catch (error) {
-                                    console.warn('Ошибка получения данных пользователя после OAuth (не критично):', error);
+                                    this._awarn('Ошибка получения данных пользователя после OAuth (не критично):', error);
                                     // Продолжаем работу даже если не удалось получить данные
                                 }
                             }
-                            
+
                             // Переоткрываем меню, чтобы подтянуть обновлённый профиль (isAnonymous=false)
                             this.showAccountMenu();
                         } else {
@@ -1233,7 +1252,7 @@ class UserAccountManager {
                                 const openedLocations = progress.openedLocations;
                                 const openedBooks = progress.openedBooks;
                                 const completedTasks = progress.completedTasks;
-                                
+
                                 // Синхронизируем в leaderboard перед выходом
                                 await window.userDatabase._syncToLeaderboard(userId, {
                                     username: currentUser?.username || null,
@@ -1251,7 +1270,7 @@ class UserAccountManager {
                                 console.error('[rating] Error preparing sync before signOut:', syncError);
                             }
                         }
-                        
+
                         await window.userDatabase?.signOut?.();
                     } catch (_) {}
                     overlay.remove();
@@ -1261,7 +1280,7 @@ class UserAccountManager {
 
             body.appendChild(headerRow);
             body.appendChild(statsBox);
-            
+
             // Заголовок "Сохранить результат" (только для гостей) - после блока рейтинга
             if (isGuest) {
                 const saveTitle = document.createElement('div');
@@ -1276,7 +1295,7 @@ class UserAccountManager {
                 `;
                 body.appendChild(saveTitle);
             }
-            
+
             body.appendChild(buttonsContainer);
         };
 
@@ -1406,7 +1425,7 @@ class UserAccountManager {
             text-align: center;
             overflow: hidden;
         `;
-        
+
         // Контейнер для содержимого с ограничением ширины
         const contentContainer = document.createElement('div');
         contentContainer.style.cssText = `
@@ -1555,13 +1574,13 @@ class UserAccountManager {
                     if (updatedUser.username !== username) {
                         this.currentUser.username = username;
                         // Если Firestore еще не обновился, обновляем вручную
-                        console.log('[saveGuest] username mismatch, forcing update', { 
-                            firestoreUsername: updatedUser.username, 
-                            enteredUsername: username 
+                        this._alog('[saveGuest] username mismatch, forcing update', {
+                            firestoreUsername: updatedUser.username,
+                            enteredUsername: username
                         });
                     }
                 }
-                
+
                 // Затем синхронизируем в leaderboard с обновленными данными
                 // Используем username из this.currentUser (который мы обновили) или введенное имя
                 const finalUsername = this.currentUser?.username || username;
@@ -1626,7 +1645,7 @@ class UserAccountManager {
         contentContainer.appendChild(usernameInput);
         contentContainer.appendChild(errorMsg);
         contentContainer.appendChild(buttonsContainer);
-        
+
         dialog.appendChild(closeBtn);
         dialog.appendChild(contentContainer);
         overlay.appendChild(dialog);
@@ -1808,7 +1827,7 @@ class UserAccountManager {
                 // Обновляем локальные данные
                 currentUser.username = newName;
                 this.currentUser = { ...(this.currentUser || {}), username: newName };
-                
+
                 // Синхронизируем в leaderboard немедленно
                 await window.userDatabase._syncToLeaderboard(currentUser.id, {
                     username: newName,
@@ -1861,7 +1880,7 @@ class UserAccountManager {
         contentContainer.appendChild(usernameInput);
         contentContainer.appendChild(errorMsg);
         contentContainer.appendChild(buttonsContainer);
-        
+
         dialog.appendChild(closeBtn);
         dialog.appendChild(contentContainer);
         overlay.appendChild(dialog);
@@ -2021,10 +2040,10 @@ class UserAccountManager {
             try {
                 await window.userDatabase.signInWithEmail(email, password);
                 overlay.remove();
-                
+
                 // Ждем немного для синхронизации данных
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                
+
                 // Получаем данные пользователя после входа
                 const authUser = window.userDatabase?.getCurrentAuthUser?.();
                 if (authUser && !authUser.isAnonymous) {
@@ -2034,11 +2053,11 @@ class UserAccountManager {
                             await this.showProgressChoiceDialog(accountUser);
                         }
                     } catch (error) {
-                        console.warn('Ошибка получения данных пользователя после входа (не критично):', error);
+                        this._awarn('Ошибка получения данных пользователя после входа (не критично):', error);
                         // Продолжаем работу даже если не удалось получить данные
                     }
                 }
-                
+
                 await this.updateAccountButton();
             } catch (e) {
                 errorMsg.textContent = e?.message || String(e);
@@ -2086,40 +2105,40 @@ class UserAccountManager {
                 userId = currentUser?.id || currentUser?.uid || null;
             }
             if (!userId) return null;
-            
+
             // Синхронизируем текущего пользователя в leaderboard (используем данные из параметров)
             try {
-                console.log('[rating] calculateUserRating: syncing to leaderboard', { userId, usernameParam: username });
-                
+                this._alog('[rating] calculateUserRating: syncing to leaderboard', { userId, usernameParam: username });
+
                 // Получаем username из параметра или из текущего пользователя
                 let finalUsername = username;
                 if (!finalUsername || finalUsername === 'Гость') {
                     const currentUser = await this.getCurrentUser();
                     const authUser = window.userDatabase?.getCurrentAuthUser?.();
-                    
-                    console.log('[rating] calculateUserRating: determining username', {
+
+                    this._alog('[rating] calculateUserRating: determining username', {
                         usernameParam: username,
                         currentUserUsername: currentUser?.username,
                         authUser: authUser ? { uid: authUser.uid, displayName: authUser.displayName, email: authUser.email } : null
                     });
-                    
+
                     // Приоритет: currentUser.username -> auth.displayName -> auth.email -> 'Гость'
                     finalUsername = currentUser?.username;
                     if (!finalUsername || finalUsername === 'Гость') {
                         if (authUser) {
                             finalUsername = authUser.displayName || authUser.email?.split('@')[0] || 'Гость';
-                            console.log('[rating] calculateUserRating: using auth username', { finalUsername });
+                            this._alog('[rating] calculateUserRating: using auth username', { finalUsername });
                         } else {
                             finalUsername = 'Гость';
-                            console.log('[rating] calculateUserRating: no auth user, using Гость');
+                            this._alog('[rating] calculateUserRating: no auth user, using Гость');
                         }
                     } else {
-                        console.log('[rating] calculateUserRating: using currentUser username', { finalUsername });
+                        this._alog('[rating] calculateUserRating: using currentUser username', { finalUsername });
                     }
                 } else {
-                    console.log('[rating] calculateUserRating: using param username', { finalUsername });
+                    this._alog('[rating] calculateUserRating: using param username', { finalUsername });
                 }
-                
+
                 const currentUserData = {
                     username: finalUsername,
                     progress: {
@@ -2165,7 +2184,7 @@ class UserAccountManager {
                             }
                         };
                     });
-                    console.log('[rating] calculateUserRating leaderboard result:', Object.keys(allUsers).length, 'users');
+                    this._alog('[rating] calculateUserRating leaderboard result:', Object.keys(allUsers).length, 'users');
                 }
             } catch (leaderboardError) {
                 console.error('[rating] calculateUserRating ошибка leaderboard:', leaderboardError?.message || leaderboardError);
@@ -2173,7 +2192,7 @@ class UserAccountManager {
 
             // Рассчитываем прогресс всех пользователей
             const userProgress = [];
-            
+
             // Добавляем текущего пользователя в список (только если прогресс > 0)
             if (currentTotal > 0 || openedLocations > 0 || completedTasks > 0 || openedBooks > 0) {
                 userProgress.push({
@@ -2190,21 +2209,21 @@ class UserAccountManager {
             for (const [uid, user] of Object.entries(allUsers)) {
                 // Пропускаем текущего пользователя, если он уже есть в Firestore
                 if (uid === userId) continue;
-                
+
                 const userLocations = user.progress?.openedLocations || 0;
                 const userTasks = Object.values(user.questState?.tasks || {}).filter(Boolean).length;
                 const userBooks = user.progress?.openedBooks || 0;
-                
+
                 // Пропускаем пользователей с нулевым прогрессом
                 if (userLocations === 0 && userTasks === 0 && userBooks === 0) continue;
-                
+
                 const progress = {
                     locations: (userLocations / totalLocations) * 100,
                     quests: (userTasks / totalTasks) * 100,
                     books: (userBooks / totalBooks) * 100
                 };
                 const total = (progress.locations + progress.quests + progress.books) / 3;
-                
+
                 userProgress.push({
                     uid,
                     username: user.username || 'Гость',
@@ -2348,9 +2367,9 @@ class UserAccountManager {
         const titleHeight = isMobile ? 60 : isTablet ? 70 : 80;
         const listMaxHeight = `calc(100% - ${titleHeight}px - 40px)`;
         listContainer.style.cssText = `
-            text-align: left; 
-            color: #654321; 
-            width: 80%; 
+            text-align: left;
+            color: #654321;
+            width: 80%;
             margin: 0 auto;
             max-height: ${listMaxHeight};
             overflow-y: auto;
@@ -2378,50 +2397,50 @@ class UserAccountManager {
             loadingMsg.textContent = this._t('account.rating_list.loading', 'Загрузка рейтинга...');
             listContainer.innerHTML = '';
             listContainer.appendChild(loadingMsg);
-            
+
             try {
             const totalLocations = UserAccountManager.LOCATION_PAGES.length;
             const totalTasks = UserAccountManager.TOTAL_QUEST_TASKS;
             const totalBooks = UserAccountManager.TOTAL_BOOKS;
             const currentUser = await this.getCurrentUser();
             const currentUserId = currentUser?.id;
-            
+
             // Получаем данные текущего пользователя (вычисляем ДО использования)
             const visitedPages = this._getVisitedPages();
             const visitedPageKeys = Object.keys(visitedPages);
             const currentOpenedLocations = visitedPageKeys.filter((p) => UserAccountManager.LOCATION_PAGES.includes(p)).length;
             const currentTasks = Object.values(currentUser?.questState?.tasks || {}).filter(Boolean).length;
             const currentOpenedBooks = Object.keys(this._getOpenedGeoMarkers()).length;
-            
+
             // Синхронизируем текущего пользователя в leaderboard (используем данные из localStorage)
             if (currentUserId) {
                 try {
-                    console.log('[rating] showRatingList: syncing current user', { 
-                        currentUserId, 
+                    this._alog('[rating] showRatingList: syncing current user', {
+                        currentUserId,
                         currentUserUsername: currentUser?.username,
                         currentUser: currentUser
                     });
-                    
+
                     // Определяем username: приоритет у currentUser, затем auth
                     let username = currentUser?.username;
                     const authUser = window.userDatabase?.getCurrentAuthUser?.();
-                    console.log('[rating] showRatingList: username determination', {
+                    this._alog('[rating] showRatingList: username determination', {
                         currentUserUsername: currentUser?.username,
                         authUser: authUser ? { uid: authUser.uid, displayName: authUser.displayName, email: authUser.email } : null
                     });
-                    
+
                     if (!username || username === 'Гость') {
                         if (authUser) {
                             username = authUser.displayName || authUser.email?.split('@')[0] || 'Гость';
-                            console.log('[rating] showRatingList: using auth username', { username });
+                            this._alog('[rating] showRatingList: using auth username', { username });
                         } else {
                             username = 'Гость';
-                            console.log('[rating] showRatingList: no auth user, using Гость');
+                            this._alog('[rating] showRatingList: no auth user, using Гость');
                         }
                     } else {
-                        console.log('[rating] showRatingList: using currentUser username', { username });
+                        this._alog('[rating] showRatingList: using currentUser username', { username });
                     }
-                    
+
                     const currentUserData = {
                         username: username,
                         email: currentUser?.email || null,
@@ -2434,14 +2453,14 @@ class UserAccountManager {
                             tasks: currentUser?.questState?.tasks || {}
                         }
                     };
-                    console.log('[rating] showRatingList: calling _syncToLeaderboard', { currentUserId, currentUserData });
+                    this._alog('[rating] showRatingList: calling _syncToLeaderboard', { currentUserId, currentUserData });
                     // Немедленная синхронизация для обновления рейтинга
                     await window.userDatabase._syncToLeaderboard(currentUserId, currentUserData, true);
                 } catch (error) {
                     console.error('[rating] showRatingList: error syncing current user', { error: error?.message || String(error) });
                 }
             }
-            
+
             // Не синхронизируем всех пользователей здесь - это вызывает ошибки прав доступа
             // Данные уже синхронизируются при обновлении прогресса каждого пользователя
 
@@ -2452,56 +2471,56 @@ class UserAccountManager {
                     const leaderboardSnapshot = await window.userDatabase.db.collection('leaderboard').get();
                     // Собираем все userId с username='Гость' для обновления
                     const usersToUpdate = [];
-                    
+
                     leaderboardSnapshot.forEach(doc => {
                         const data = doc.data();
                         let username = data.username || 'Гость';
-                        
-                        console.log('[rating] showRatingList: reading from leaderboard', { 
-                            userId: data.userId, 
+
+                        this._alog('[rating] showRatingList: reading from leaderboard', {
+                            userId: data.userId,
                             usernameFromLeaderboard: username,
                             email: data.email,
                             createdAt: data.createdAt,
                             isCurrentUser: data.userId === currentUserId,
                             fullData: data
                         });
-                        
+
                         // Пропускаем записи без userId
                         if (!data.userId || data.userId === 'undefined' || data.userId === undefined) {
-                            console.log('[rating] showRatingList: skipping entry without userId', { data });
+                            this._alog('[rating] showRatingList: skipping entry without userId', { data });
                             return;
                         }
-                        
+
                         // Если username='Гость' и userId валидный, добавляем в список для обновления
                         if (username === 'Гость' && data.userId) {
                             usersToUpdate.push({ userId: data.userId, data: data });
                         }
-                        
+
                         // Если это текущий пользователь, всегда обновляем username из auth/Firestore
                         if (data.userId === currentUserId) {
                             const authUser = window.userDatabase?.getCurrentAuthUser?.();
                             const authUsername = authUser?.displayName || authUser?.email?.split('@')[0];
-                            
-                            console.log('[rating] showRatingList: updating current user username', {
+
+                            this._alog('[rating] showRatingList: updating current user username', {
                                 currentUserId,
                                 usernameFromLeaderboard: username,
                                 currentUserUsername: currentUser?.username,
                                 authUsername: authUsername
                             });
-                            
+
                             if (currentUser?.username && currentUser.username !== 'Гость') {
                                 username = currentUser.username;
-                                console.log('[rating] showRatingList: using currentUser.username', { username });
+                                this._alog('[rating] showRatingList: using currentUser.username', { username });
                             } else if (authUsername) {
                                 username = authUsername;
-                                console.log('[rating] showRatingList: using authUsername', { username });
+                                this._alog('[rating] showRatingList: using authUsername', { username });
                             }
-                            
+
                             // Всегда обновляем в leaderboard для текущего пользователя
                             if (username !== 'Гость' && username !== data.username) {
-                                console.log('[rating] showRatingList: updating leaderboard for current user', { 
-                                    oldUsername: data.username, 
-                                    newUsername: username 
+                                this._alog('[rating] showRatingList: updating leaderboard for current user', {
+                                    oldUsername: data.username,
+                                    newUsername: username
                                 });
                                 // Немедленная синхронизация для обновления username
                                 window.userDatabase._syncToLeaderboard(currentUserId, {
@@ -2519,14 +2538,14 @@ class UserAccountManager {
                                     console.error('[rating] showRatingList: error updating leaderboard', { error: error?.message || String(error) });
                                 });
                             } else {
-                                console.log('[rating] showRatingList: no need to update leaderboard', { 
-                                    username, 
+                                this._alog('[rating] showRatingList: no need to update leaderboard', {
+                                    username,
                                     dataUsername: data.username,
                                     reason: username === 'Гость' ? 'username is Гость' : 'username unchanged'
                                 });
                             }
                         }
-                        
+
                         allUsers[data.userId] = {
                             id: data.userId,
                             username: username,
@@ -2540,32 +2559,32 @@ class UserAccountManager {
                                 tasks: data.tasks || {}
                             }
                         };
-                        console.log('[rating] showRatingList: added user to allUsers', { 
-                            userId: data.userId, 
-                            username, 
-                            email: data.email, 
+                        this._alog('[rating] showRatingList: added user to allUsers', {
+                            userId: data.userId,
+                            username,
+                            email: data.email,
                             createdAt: data.createdAt,
                             data: data
                         });
                     });
-                    
+
                     // Пытаемся обновить username для пользователей с 'Гость' из Firestore
                     if (usersToUpdate.length > 0) {
-                        console.log('[rating] showRatingList: trying to update usernames from Firestore', { usersToUpdate: usersToUpdate.length });
+                        this._alog('[rating] showRatingList: trying to update usernames from Firestore', { usersToUpdate: usersToUpdate.length });
                         for (const { userId, data } of usersToUpdate) {
                             // Пропускаем записи без валидного userId
                             if (!userId || userId === 'undefined') {
-                                console.log('[rating] showRatingList: skipping update for invalid userId', { userId });
+                                this._alog('[rating] showRatingList: skipping update for invalid userId', { userId });
                                 continue;
                             }
-                            
+
                             try {
                                 const userDoc = await window.userDatabase.db.collection('users').doc(userId).get();
                                 if (userDoc.exists) {
                                     const userData = userDoc.data();
                                     const firestoreUsername = userData.username;
                                     if (firestoreUsername && firestoreUsername !== 'Гость') {
-                                        console.log('[rating] showRatingList: updating username from Firestore', { userId, firestoreUsername });
+                                        this._alog('[rating] showRatingList: updating username from Firestore', { userId, firestoreUsername });
                                         // Обновляем в leaderboard
                                         // Немедленная синхронизация для обновления username из Firestore
                                         await window.userDatabase._syncToLeaderboard(userId, {
@@ -2588,12 +2607,12 @@ class UserAccountManager {
                                 }
                             } catch (error) {
                                 // Игнорируем ошибки прав доступа - это нормально для других пользователей
-                                console.log('[rating] showRatingList: cannot update username from Firestore', { userId, error: error?.message });
+                                this._alog('[rating] showRatingList: cannot update username from Firestore', { userId, error: error?.message });
                             }
                         }
                     }
-                    
-                    console.log('[rating] leaderboard result:', Object.keys(allUsers).length, 'users');
+
+                    this._alog('[rating] leaderboard result:', Object.keys(allUsers).length, 'users');
                 }
             } catch (leaderboardError) {
                 console.error('[rating] Ошибка получения leaderboard:', leaderboardError?.message || leaderboardError);
@@ -2601,7 +2620,7 @@ class UserAccountManager {
 
             // Рассчитываем прогресс всех пользователей
             const userProgress = [];
-            
+
             // Добавляем текущего пользователя в список (только если прогресс > 0 и не "Гость")
             const currentUsername = currentUser?.username || 'Гость';
             const currentProgress = {
@@ -2610,9 +2629,9 @@ class UserAccountManager {
                 books: (currentOpenedBooks / totalBooks) * 100
             };
             const currentTotal = (currentProgress.locations + currentProgress.quests + currentProgress.books) / 3;
-            
+
             // Пропускаем гостей
-            if (currentUsername !== 'Гость' && currentUsername.toLowerCase() !== 'гость' && 
+            if (currentUsername !== 'Гость' && currentUsername.toLowerCase() !== 'гость' &&
                 (currentTotal > 0 || currentOpenedLocations > 0 || currentTasks > 0 || currentOpenedBooks > 0)) {
                 userProgress.push({
                     uid: currentUserId,
@@ -2630,24 +2649,24 @@ class UserAccountManager {
             for (const [uid, user] of Object.entries(allUsers)) {
                 // Пропускаем текущего пользователя, если он уже есть в Firestore
                 if (uid === currentUserId) continue;
-                
+
                 const userLocations = user.progress?.openedLocations || 0;
                 const userTasks = Object.values(user.questState?.tasks || {}).filter(Boolean).length;
                 const userBooks = user.progress?.openedBooks || 0;
-                
+
                 const progress = {
                     locations: (userLocations / totalLocations) * 100,
                     quests: (userTasks / totalTasks) * 100,
                     books: (userBooks / totalBooks) * 100
                 };
                 const total = (progress.locations + progress.quests + progress.books) / 3;
-                
+
                 // Пропускаем всех гостей (независимо от рейтинга)
                 const username = user.username || 'Гость';
                 if (username === 'Гость' || username.toLowerCase() === 'гость') {
                     continue;
                 }
-                
+
                 userProgress.push({
                     uid,
                     username: username,
@@ -2896,7 +2915,7 @@ class UserAccountManager {
 
             try {
                 await window.userDatabase.linkAccountWithEmail(email, password);
-                
+
                 // Обновляем username (обязательное поле)
                     await window.userDatabase.updateUserMetadata({ username });
 
@@ -3087,8 +3106,8 @@ class UserAccountManager {
         const guestOpenedLocations = guestProgress.openedLocations;
         const guestOpenedBooks = guestProgress.openedBooks;
         const guestCompletedTasks = guestProgress.completedTasks;
-        
-        console.log('[progressChoice] Guest progress from localStorage:', {
+
+        this._alog('[progressChoice] Guest progress from localStorage:', {
             locations: guestOpenedLocations,
             books: guestOpenedBooks,
             tasks: guestCompletedTasks,
@@ -3096,7 +3115,7 @@ class UserAccountManager {
             openedGeoMarkers: Object.keys(this._getOpenedGeoMarkers()).length,
             questState: this._safeJsonParse(sessionStorage.getItem('questState') || '{}', {})
         });
-        
+
         // Получаем данные аккаунта ИЗ БАЗЫ (leaderboard/Firestore), а не из localStorage
         // Для гостя данные уже получены из localStorage выше
         const userId = accountUser?.id || accountUser?.uid;
@@ -3104,7 +3123,7 @@ class UserAccountManager {
         let accountOpenedBooks = 0;
         let accountCompletedTasks = 0;
         let gotDataFromDatabase = false;
-        
+
         if (userId) {
             try {
                 // Сначала пытаемся получить данные из leaderboard (публичная коллекция)
@@ -3118,18 +3137,18 @@ class UserAccountManager {
                             const tasks = data.tasks || {};
                             accountCompletedTasks = Object.values(tasks).filter(Boolean).length;
                             gotDataFromDatabase = true;
-                            console.log('[progressChoice] Got account data from leaderboard', { 
-                                userId, 
-                                locations: accountOpenedLocations, 
-                                books: accountOpenedBooks, 
-                                tasks: accountCompletedTasks 
+                            this._alog('[progressChoice] Got account data from leaderboard', {
+                                userId,
+                                locations: accountOpenedLocations,
+                                books: accountOpenedBooks,
+                                tasks: accountCompletedTasks
                             });
                         }
                     } catch (leaderboardError) {
-                        console.warn('[progressChoice] Cannot read from leaderboard:', leaderboardError?.message);
+                        this._awarn('[progressChoice] Cannot read from leaderboard:', leaderboardError?.message);
                     }
                 }
-                
+
                 // Если не получили из leaderboard, пытаемся из Firestore users
                 if (!gotDataFromDatabase) {
                     try {
@@ -3140,29 +3159,29 @@ class UserAccountManager {
                             const tasks = freshUser?.questState?.tasks || {};
                             accountCompletedTasks = Object.values(tasks).filter(Boolean).length;
                             gotDataFromDatabase = true;
-                            console.log('[progressChoice] Got account data from Firestore users', { 
-                                userId, 
-                                locations: accountOpenedLocations, 
-                                books: accountOpenedBooks, 
-                                tasks: accountCompletedTasks 
+                            this._alog('[progressChoice] Got account data from Firestore users', {
+                                userId,
+                                locations: accountOpenedLocations,
+                                books: accountOpenedBooks,
+                                tasks: accountCompletedTasks
                             });
                         }
                     } catch (firestoreError) {
-                        console.warn('[progressChoice] Cannot read from Firestore users:', firestoreError?.message);
+                        this._awarn('[progressChoice] Cannot read from Firestore users:', firestoreError?.message);
                     }
                 }
-                
+
                 // Если не получили данные из базы, используем accountUser как fallback
                 if (!gotDataFromDatabase) {
                     accountOpenedLocations = accountUser?.progress?.openedLocations || 0;
                     accountOpenedBooks = accountUser?.progress?.openedBooks || 0;
                     const tasks = accountUser?.questState?.tasks || {};
                     accountCompletedTasks = Object.values(tasks).filter(Boolean).length;
-                    console.log('[progressChoice] Using accountUser param as fallback', { 
-                        userId, 
-                        locations: accountOpenedLocations, 
-                        books: accountOpenedBooks, 
-                        tasks: accountCompletedTasks 
+                    this._alog('[progressChoice] Using accountUser param as fallback', {
+                        userId,
+                        locations: accountOpenedLocations,
+                        books: accountOpenedBooks,
+                        tasks: accountCompletedTasks
                     });
                 }
             } catch (error) {
@@ -3173,15 +3192,15 @@ class UserAccountManager {
                 accountCompletedTasks = Object.values(accountUser?.questState?.tasks || {}).filter(Boolean).length;
             }
         }
-        
+
         // Проверяем, есть ли прогресс гостя
         const hasGuestProgress = guestOpenedLocations > 0 || guestOpenedBooks > 0 || guestCompletedTasks > 0;
-        
+
         // Если нет прогресса гостя, не показываем попап
         if (!hasGuestProgress) {
             return;
         }
-        
+
         const screenSize = this._getScreenSize();
         const isMobile = screenSize === 'mobile';
         const isTablet = screenSize === 'tablet';
@@ -3335,7 +3354,7 @@ class UserAccountManager {
                         questState: guestQuestState || {}
                     });
                 }
-                
+
                 // Обновляем метаданные
                 await window.userDatabase.updateUserMetadata({
                     progress: {
@@ -3344,7 +3363,7 @@ class UserAccountManager {
                     },
                     questState: guestQuestState
                 });
-                
+
             overlay.remove();
                 await this.updateAccountButton();
             } catch (error) {
@@ -3385,9 +3404,9 @@ class UserAccountManager {
             text-align: left;
             line-height: 1.3;
         `;
-        
+
         // Логируем для отладки
-        console.log('[progressChoice] Displaying account stats:', {
+        this._alog('[progressChoice] Displaying account stats:', {
             userId,
             locations: accountOpenedLocations,
             books: accountOpenedBooks,
@@ -3395,7 +3414,7 @@ class UserAccountManager {
             gotDataFromDatabase,
             accountUserProgress: accountUser?.progress
         });
-        
+
         accountStats.innerHTML = `
             ${this._t('account.progress_choice.account_locations', 'Открыто локаций:')} ${accountOpenedLocations}<br>
             ${this._t('account.progress_choice.account_quests', 'Пройдено квестов:')} ${accountCompletedTasks}<br>
@@ -3420,7 +3439,7 @@ class UserAccountManager {
                 // Загружаем полные данные аккаунта из базы
                 let accountQuestState = {};
                 let accountUserData = null;
-                
+
                 // Получаем questState из leaderboard или Firestore
                 if (window.userDatabase?.db && userId) {
                     try {
@@ -3431,9 +3450,9 @@ class UserAccountManager {
                             accountQuestState = { tasks: data.tasks || {} };
                         }
                     } catch (e) {
-                        console.warn('[progressChoice] Cannot get questState from leaderboard:', e);
+                        this._awarn('[progressChoice] Cannot get questState from leaderboard:', e);
                     }
-                    
+
                     // Если не получили, пытаемся из Firestore users
                     if (!accountQuestState.tasks || Object.keys(accountQuestState.tasks).length === 0) {
                         try {
@@ -3442,54 +3461,54 @@ class UserAccountManager {
                                 accountQuestState = accountUserData.questState;
                             }
                         } catch (e) {
-                            console.warn('[progressChoice] Cannot get questState from Firestore:', e);
+                            this._awarn('[progressChoice] Cannot get questState from Firestore:', e);
                         }
                     }
                 }
-                
+
                 // Очищаем данные гостя из localStorage, чтобы использовался прогресс аккаунта
                 // visitedPages и openedGeoMarkers хранятся только в localStorage,
                 // поэтому при выборе прогресса аккаунта нужно очистить данные гостя
                 try {
                     // Очищаем visitedPages (локации гостя)
                     localStorage.removeItem('visitedPages');
-                    console.log('[progressChoice] Cleared guest visitedPages');
-                    
+                    this._alog('[progressChoice] Cleared guest visitedPages');
+
                     // Очищаем openedGeoMarkers (книги гостя)
                     localStorage.removeItem('openedGeoMarkers');
-                    console.log('[progressChoice] Cleared guest openedGeoMarkers');
+                    this._alog('[progressChoice] Cleared guest openedGeoMarkers');
 
                     // Очищаем найденных гномов гостя
                     localStorage.removeItem('foundGnomes');
-                    console.log('[progressChoice] Cleared guest foundGnomes');
-                    
+                    this._alog('[progressChoice] Cleared guest foundGnomes');
+
                     // Сохраняем questState аккаунта (или очищаем, если пустой)
                     if (accountQuestState && Object.keys(accountQuestState.tasks || {}).length > 0) {
                         sessionStorage.setItem('questState', JSON.stringify(accountQuestState));
-                        console.log('[progressChoice] Saved account questState to sessionStorage', accountQuestState);
+                        this._alog('[progressChoice] Saved account questState to sessionStorage', accountQuestState);
                     } else {
                         // Если у аккаунта нет прогресса, очищаем questState гостя
                         sessionStorage.removeItem('questState');
-                        console.log('[progressChoice] Cleared guest questState (account has no progress)');
+                        this._alog('[progressChoice] Cleared guest questState (account has no progress)');
                     }
-                    
+
                     // Синхронизируем прогресс аккаунта в leaderboard (обновим счетчики)
                     const currentUser = await this.getCurrentUser();
                     if (currentUser && window.userDatabase?._syncToLeaderboard) {
                         try {
                             await window.userDatabase._syncToLeaderboard(currentUser.id, currentUser);
-                            console.log('[progressChoice] Synced account progress to leaderboard');
+                            this._alog('[progressChoice] Synced account progress to leaderboard');
                         } catch (syncError) {
-                            console.warn('[progressChoice] Cannot sync to leaderboard:', syncError);
+                            this._awarn('[progressChoice] Cannot sync to leaderboard:', syncError);
                         }
                     }
                 } catch (clearError) {
                     console.error('[progressChoice] Error saving account data:', clearError);
                 }
-                
+
                 overlay.remove();
                 await this.updateAccountButton();
-                
+
                 // Обновляем рейтинг, чтобы отобразились актуальные данные аккаунта
                 try {
                     const currentUser = await this.getCurrentUser();
@@ -3497,7 +3516,7 @@ class UserAccountManager {
                         await this.calculateUserRating(currentUser);
                     }
                 } catch (ratingError) {
-                    console.warn('[progressChoice] Cannot update rating:', ratingError);
+                    this._awarn('[progressChoice] Cannot update rating:', ratingError);
                 }
             } catch (error) {
                 console.error('Ошибка сохранения прогресса аккаунта:', error);

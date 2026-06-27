@@ -154,6 +154,26 @@ Stage 7.6 выполнен:
 
 - Stage 7.7: decide whether to gate `user_account.js` diagnostics or document them as post-MVP auth/rating observability debt.
 
+## Status Update - 2026-06-27 - Stage 7.7
+
+Stage 7.7 выполнен:
+
+- `user_account.js` active auth/rating `console.log` / `console.warn` diagnostics переведены на existing local account debug helpers:
+  - `_alog(...)`;
+  - `_awarn(...)`.
+- Account diagnostics выключены по умолчанию и включаются явно через:
+  - `window.DEBUG_ACCOUNT = true`;
+  - `localStorage.DEBUG_ACCOUNT = "1"`;
+  - legacy `localStorage.__account_debug = "1"`.
+- `console.error` в account manager оставлен для реальных runtime/database errors.
+- Добавлен Playwright smoke на quiet default, global flag, storage flag и legacy flag.
+- CR-11 закрыт для `user_account.js`; remaining Firebase/auth/leaderboard diagnostics in `user_database.js` remain separate debt.
+- Validation: `make smoke` passed with 52 Playwright tests.
+
+Следующий подэтап:
+
+- Stage 7.8: gate `user_database.js` diagnostics through the same account debug policy, preserving current error reporting.
+
 ## Documentation updates
 
 `BACKLOG.md`:

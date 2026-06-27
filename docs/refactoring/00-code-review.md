@@ -307,7 +307,8 @@ Status 2026-06-26:
 
 - map/quest diagnostics закрыты в Stage 4.7 через `MapDebug`;
 - arrow diagnostics закрыты в Stage 7.6 через `DEBUG_ARROWS`;
-- remaining verbose auth/rating diagnostics in `user_account.js` вынесены в отдельный backlog item.
+- user account diagnostics закрыты в Stage 7.7 через `DEBUG_ACCOUNT`;
+- remaining verbose Firebase/auth/leaderboard diagnostics in `user_database.js` вынесены в отдельный backlog item.
 
 ### CR-12 - LOW/MEDIUM - Локализация имеет потенциально два source-of-truth файла на язык
 
@@ -396,4 +397,4 @@ make audit
 
 Остается:
 
-- CR-11: auth/rating diagnostics in `user_account.js` - tracked as a separate backlog item.
+- CR-11: Firebase/auth/leaderboard diagnostics in `user_database.js` - tracked as a separate backlog item.
