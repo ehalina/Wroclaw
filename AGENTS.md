@@ -1,9 +1,9 @@
 # AI Agent Instructions
 
-**Project:** [PROJECT_NAME]
+**Project:** Wroclaw - Interactive Tumski Island Tour
 **Purpose:** Meta-instructions for effective AI-assisted development
-**Created:** [DATE]
-**Last Updated:** [DATE]
+**Created:** 2026-06-26
+**Last Updated:** 2026-06-27
 
 > **Note:** This file is optimized for AI assistants (Claude Code, Cursor, Copilot, etc.) working with this codebase.
 
@@ -34,18 +34,29 @@ README.md                      # User-facing documentation
 CLAUDE.md                      # Auto-loaded context for Claude Code
 
 # Core Application
-[ЗАПОЛНИТЬ: основные файлы проекта]
-# Например:
-# src/store/useStore.ts        # State management
-# src/lib/api.ts               # API service
-# src/components/Main.tsx      # Main component
+index.html                     # SPA shell and SPAManager
+spa_config.js                  # SPA page/audio/loading policy
+spa_message_contract.js        # Same-origin iframe message contract
+spa_lifecycle.js               # SPA page/iframe lifecycle helpers
+spa_loading_state.js           # Loading overlay helper
+spa_minimap_manager.js         # Mini-map UI/state manager
+map_modal.js                   # Map modal lifecycle/wiring
+map_modal.css                  # Main map modal styles
+map_marker_navigation.js       # Visited-marker navigation decisions
+visited_markers.js             # Visited marker storage/rendering
+quest_overlay.js               # Quest/book overlay rendering
+page_shell_helpers.js          # Shared page shell/cursor/marker helpers
+i18n.js                        # Runtime localization boundary
+locales/*/translations.json    # Canonical translation files
 
 # Configuration
 Makefile                       # Standard commands (make dev, make build, etc)
-.env.example                   # Environment variables template
-.claude/commands/              # Custom slash commands for Claude Code
-.claude/settings.json          # Claude Code permissions
-.claudeignore                  # Files to ignore in AI context
+scripts/build-capacitor-web.mjs # Capacitor web asset build and budget guard
+scripts/check-static-inventory.mjs # Static asset/route/id inventory
+scripts/check-translations.mjs # Translation parse/key/rich HTML checks
+scripts/static-check-known-issues.json # Static inventory allowlist
+docs/refactoring/              # Code review, master plan, stage docs, artifacts
+PROJECT_SNAPSHOT.md            # Current technical snapshot
 ```
 
 ### 📦 Standard Commands (Makefile):
@@ -60,19 +71,18 @@ make start        # Запустить production сервер
 # Quality Checks
 make lint         # Проверить код линтером
 make fix-lint     # Автоматически исправить линтер
-make typecheck    # Проверить TypeScript типы
-make test         # Запустить тесты
+make typecheck    # No-op: TypeScript не настроен в этом JavaScript project
+make test         # JS syntax + static inventory + translation checks
 make test-watch   # Тесты в watch режиме
+make test-e2e     # Playwright browser smoke checks
+make smoke        # Static checks + Playwright smoke checks
 
 # Security & Dependencies
 make security     # npm audit проверка
 make security-fix # Автоматически исправить уязвимости
-make audit        # Полная проверка (lint+typecheck+test+security)
-
-# Database (когда будет использоваться)
-make db-migrate   # Применить миграции БД
-make db-reset     # Сбросить БД
-make db-seed      # Заполнить тестовыми данными
+make audit        # Полная проверка (lint+typecheck+test+build+security)
+make cap-sync     # Build www/ and sync native projects
+make android-debug # Build Android debug APK with JDK 21
 
 # Utility
 make install      # Установить зависимости
@@ -80,10 +90,6 @@ make clean        # Очистить build артефакты
 make reinstall    # Переустановить зависимости
 make doctor       # Диагностика окружения
 make help         # Показать все команды
-
-# Pre-commit/push checks
-make pre-commit   # lint + typecheck
-make pre-push     # audit + build
 ```
 
 **ВАЖНО:** Всегда используй `make <command>` вместо прямого `npm run <command>`
@@ -96,22 +102,20 @@ make pre-push     # audit + build
 ## 📚 Technology Stack
 
 ### Frontend
-[ЗАПОЛНИТЬ: Frontend технологии]
 ```
-- Framework: [React/Vue/Angular/Next.js/etc]
-- Language: [TypeScript/JavaScript]
-- State Management: [Redux/Zustand/Context/etc]
-- Styling: [Tailwind/CSS Modules/Styled Components/etc]
-- Build Tool: [Vite/Webpack/Next.js/etc]
+- Framework: Vanilla JavaScript SPA shell with iframe content pages
+- Language: JavaScript ES modules + classic browser scripts
+- State Management: DOM state, localStorage/sessionStorage, small global helpers
+- Styling: Plain CSS
+- Build Tool: Custom Node script copying static runtime assets to www/
 ```
 
 ### Backend & Infrastructure
-[ЗАПОЛНИТЬ: Backend технологии]
 ```
-- Database: [PostgreSQL/MySQL/MongoDB/etc]
-- Authentication: [Supabase Auth/Auth0/Firebase/etc]
-- API: [REST/GraphQL/tRPC/etc]
-- Hosting: [Vercel/AWS/etc]
+- Database: None for the static tour
+- Authentication: Firebase client SDK is present for optional user/admin features
+- API: Static files only
+- Hosting: GitHub Pages/static hosting, Capacitor Android/iOS native wrapper
 ```
 
 ### Key Dependencies
@@ -126,7 +130,10 @@ make pre-push     # audit + build
 ## 🚫 NEVER DO
 
 ### Code & Architecture
-- ❌ **[ЗАПОЛНИТЬ: специфичные для проекта правила]**
+- ❌ **Edit generated `www/` by hand**; update source files and run `make build`
+- ❌ **Reintroduce `locales/*/translation.json`**; canonical localization files are `locales/*/translations.json`
+- ❌ **Delete or overwrite source media assets blindly**; package exclusions and derivative assets require inventory/visual/audio review
+- ❌ **Change route/page filenames without updating `spa_config.js`, smoke checks, and docs**
 - ❌ **Update database structure** without migration script
 - ❌ **Use `any` type** without explicit justification (TypeScript projects)
 - ❌ **Create multiple components in one file** (если используется компонентный подход)

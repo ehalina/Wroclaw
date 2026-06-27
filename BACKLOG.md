@@ -500,6 +500,11 @@
   - Files: `locales/*/translation.json`, `ARCHITECTURE.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
   - Benefit: localization now has one file format in the source tree, `locales/*/translations.json`; translation checks no longer print legacy duplicate warnings, and build output dropped to `324 files, 84.5 MB`
 
+- [x] **Docs: README/AGENTS governance refresh** - Updated agent-facing and developer-facing docs for current commands and project boundaries
+  - Completed: 2026-06-27
+  - Files: `README.md`, `AGENTS.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
+  - Benefit: docs now point to current refactoring artifacts, canonical localization files, actual Makefile checks and project-specific safety constraints
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

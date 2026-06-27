@@ -416,3 +416,7 @@ make smoke
   - удалены obsolete `locales/*/translation.json`;
   - canonical localization source теперь единственный: `locales/*/translations.json`;
   - translation checker больше не печатает legacy duplicate warning.
+- Stage 7.5 выполнен:
+  - `README.md` обновлён под текущие Makefile checks, refactoring docs и package baseline;
+  - `AGENTS.md` заполнен project-specific core files, stack, commands and constraints;
+  - governance docs теперь указывают на canonical localization path и Stage 7 cleanup state.

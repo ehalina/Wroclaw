@@ -159,6 +159,7 @@ Wroclaw/
 59. ✅ Stage 7.2 Debug/test missing input asset cleanup
 60. ✅ Stage 7.3 Legacy right arrow handler cleanup
 61. ✅ Stage 7.4 Legacy locale duplicate cleanup
+62. ✅ Stage 7.5 README/AGENTS governance refresh
 
 ---
 
@@ -256,6 +257,11 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 7.5 выполнен
+- `README.md` обновлён под текущие Makefile checks, refactoring docs и package baseline
+- `AGENTS.md` заполнен project-specific core files, stack, commands and constraints
+- canonical localization path documented as `locales/<lang>/translations.json`
 
 ### 2026-06-27 - Refactoring Stage 7.4 выполнен
 - удалены obsolete `locales/*/translation.json`; canonical runtime source остаётся `locales/*/translations.json`

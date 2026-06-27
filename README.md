@@ -1,7 +1,7 @@
 # Wroclaw - Interactive Tumski Island Tour
 
 **Version:** 0.1.0
-**Last Updated:** 2026-06-26
+**Last Updated:** 2026-06-27
 
 Static interactive tour of Tumski Island in Wroclaw. The project runs as a vanilla JavaScript web app and is wrapped for Android/iOS with Capacitor.
 
@@ -18,12 +18,15 @@ Static interactive tour of Tumski Island in Wroclaw. The project runs as a vanil
 - **[ARCHITECTURE.md](ARCHITECTURE.md)** - System architecture and technical decisions
 - **[BACKLOG.md](BACKLOG.md)** - Implementation status and roadmap (**SINGLE SOURCE OF TRUTH**)
 - **[WORKFLOW.md](WORKFLOW.md)** - Development workflows and sprint processes
+- **[PROJECT_SNAPSHOT.md](PROJECT_SNAPSHOT.md)** - Current technical snapshot and recent refactoring history
+- **[docs/refactoring/](docs/refactoring/)** - Refactoring review, master plan, stage notes, and verification artifacts
 
 ### Configuration Files
 - **[Makefile](Makefile)** - Standard commands (`make dev`, `make build`, etc)
 - **[package.json](package.json)** - Capacitor dependencies and npm scripts
 - **[capacitor.config.json](capacitor.config.json)** - Capacitor app ID, app name, and `webDir`
 - **[scripts/build-capacitor-web.mjs](scripts/build-capacitor-web.mjs)** - Static asset copy step for native builds
+- **[scripts/static-check-known-issues.json](scripts/static-check-known-issues.json)** - Static inventory allowlist, currently empty for missing assets/routes
 - **[.github/workflows/deploy.yml](.github/workflows/deploy.yml)** - GitHub Pages deployment
 
 ### Quick Start for AI Agents
@@ -43,6 +46,8 @@ Static interactive tour of Tumski Island in Wroclaw. The project runs as a vanil
 - ✅ **Interactive map markers** - modal content and visited-page markers
 - ✅ **Localization** - JSON translations for 7 languages
 - ✅ **Audio system** - location-aware background audio and effects
+- ✅ **Safety checks** - ESLint, JS syntax checks, static inventory, translation consistency, and Playwright smoke
+- ✅ **Package budget** - Capacitor web build guarded below 120 MB; current build is `324 files, 84.5 MB -> www/`
 - ✅ **Capacitor wrapper** - Android and iOS native projects generated from static web assets
 
 **Legend:**
@@ -109,16 +114,18 @@ make cap-sync     # Build www/ and sync Android/iOS projects
 
 ### Quality & Testing
 ```bash
-make lint         # Placeholder: no linter configured yet
+make lint         # Run ESLint
 make typecheck    # Placeholder: no TypeScript configured
-make test         # Placeholder: no automated tests configured yet
+make test         # JS syntax + static inventory + translation checks
+make test-e2e     # Playwright browser smoke checks
+make smoke        # Static checks + Playwright smoke checks
 ```
 
 ### Security & Dependencies
 ```bash
 make security     # Run npm audit
 make security-fix # Auto-fix vulnerabilities
-make audit        # Build web assets and run npm audit
+make audit        # lint + typecheck + test + build + security
 ```
 
 ### Capacitor
@@ -156,8 +163,9 @@ Wroclaw/
 ├── dwor*.html/css        # Courtyard pages
 ├── ogrod*.html/css       # Garden pages
 ├── media/                # Images, audio, icons, fonts
-├── locales/              # Translation JSON files
+├── locales/              # Canonical translations: locales/<lang>/translations.json
 ├── scripts/              # Build scripts
+├── docs/refactoring/     # Refactoring plans, stage docs, verification artifacts
 ├── android/              # Capacitor Android project
 ├── ios/                  # Capacitor iOS project
 ├── capacitor.config.json # Capacitor app config
@@ -196,8 +204,9 @@ See [BACKLOG.md](BACKLOG.md#known-issues) for current bugs and issues.
 1. Check [BACKLOG.md](BACKLOG.md) for tasks
 2. Create feature branch: `git checkout -b feature/your-feature`
 3. Follow patterns in [AGENTS.md](AGENTS.md)
-4. Complete sprint checklist in [WORKFLOW.md](WORKFLOW.md)
-5. Create PR with documentation updates
+4. Run the relevant `make` checks, normally `make audit` and `make smoke` for behavior-affecting changes
+5. Update [BACKLOG.md](BACKLOG.md), [PROJECT_SNAPSHOT.md](PROJECT_SNAPSHOT.md), and stage docs when work status changes
+6. Create PR with documentation updates
 
 See [WORKFLOW.md](WORKFLOW.md) for detailed workflow.
 

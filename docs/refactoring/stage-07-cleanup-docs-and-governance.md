@@ -114,6 +114,26 @@ Stage 7.4 выполнен:
 
 - Stage 7.5: update README/AGENTS governance notes for current Makefile checks and refactoring docs.
 
+## Status Update - 2026-06-27 - Stage 7.5
+
+Stage 7.5 выполнен:
+
+- `README.md` обновлён под текущий project state:
+  - actual quality commands (`make test`, `make test-e2e`, `make smoke`, `make audit`);
+  - current package baseline `324 files, 84.5 MB -> www/`;
+  - canonical localization path `locales/<lang>/translations.json`;
+  - `PROJECT_SNAPSHOT.md` и `docs/refactoring/` как важные docs entry points.
+- `AGENTS.md` обновлён под фактический проект:
+  - заполнены project name/date, core application files, configuration/check scripts;
+  - зафиксирован vanilla JS/Capacitor stack;
+  - command block приведён к реальному Makefile;
+  - добавлены project-specific constraints for `www/`, localization, media assets and route filenames.
+- Validation: `make audit` passed; build summary remains `324 files, 84.5 MB -> www/`.
+
+Следующий подэтап:
+
+- Stage 7.6: final cleanup review for remaining CR-11/debug logging and stale placeholders.
+
 ## Documentation updates
 
 `BACKLOG.md`:
