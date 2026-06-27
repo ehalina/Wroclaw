@@ -229,3 +229,26 @@ Stage 6.7 выполнен:
 Следующий подэтап:
 
 - Stage 6.8: screenshot-only characterization для `tumski21.html` sunset assets перед любой заменой или сжатием PNG.
+
+## Status Update - 2026-06-27 - Stage 6.8
+
+Stage 6.8 выполнен:
+
+- Создан `docs/refactoring/stage-06-08-sunset-characterization.md`.
+- Добавлен отдельный Playwright config `playwright.stage-06-08.config.mjs`.
+- Добавлен characterization spec `tools/stage-06-08/sunset-characterization.spec.mjs`.
+- Добавлен Makefile target `make stage-06-08-screenshots`.
+- Сняты baseline screenshots desktop/mobile для `tumski21.html`:
+  - `docs/refactoring/artifacts/stage-06-08-sunset/desktop-initial.png`;
+  - `docs/refactoring/artifacts/stage-06-08-sunset/desktop-after-1500ms.png`;
+  - `docs/refactoring/artifacts/stage-06-08-sunset/mobile-pixel5-initial.png`;
+  - `docs/refactoring/artifacts/stage-06-08-sunset/mobile-pixel5-after-1500ms.png`.
+- Зафиксировано, что видимые слои `tumski21.html` используют:
+  - `sunset3.jpg` для sky;
+  - `sunset2.png` для horizon;
+  - `sunset1.png` для buildings.
+- Зафиксировано, что `sunset3.png` сейчас является preload dependency в `sunset_parallax.js`, но не видимым background layer на `tumski21.html`.
+
+Следующий подэтап:
+
+- Stage 6.9: решить и проверить маленькую правку по `sunset3.png` preload dependency: выровнять preload с `sunset3.jpg` или явно оставить PNG как runtime dependency.

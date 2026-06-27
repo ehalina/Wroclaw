@@ -2,7 +2,7 @@ CAPACITOR_JAVA_HOME ?= /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents
 PORT ?= 5173
 E2E_PORT ?= 6173
 
-.PHONY: help install dev build start lint fix-lint typecheck test test-watch test-e2e smoke security security-fix audit clean reinstall doctor poc-template cap-sync cap-copy cap-add-android cap-add-ios cap-open-android cap-open-ios android-debug
+.PHONY: help install dev build start lint fix-lint typecheck test test-watch test-e2e smoke security security-fix audit clean reinstall doctor poc-template stage-06-08-screenshots cap-sync cap-copy cap-add-android cap-add-ios cap-open-android cap-open-ios android-debug
 
 help:
 	@printf "Available commands:\n"
@@ -14,6 +14,7 @@ help:
 	@printf "  make test-e2e         Run Playwright browser smoke checks\n"
 	@printf "  make smoke            Run static + browser smoke checks\n"
 	@printf "  make poc-template     Generate page-template technology POC\n"
+	@printf "  make stage-06-08-screenshots Capture Stage 6.8 sunset baseline screenshots\n"
 	@printf "  make cap-sync         Build and sync Android/iOS projects\n"
 	@printf "  make android-debug    Build Android debug APK with JDK 21\n"
 	@printf "  make cap-open-android Open Android project\n"
@@ -79,6 +80,9 @@ doctor:
 
 poc-template:
 	node tools/template-poc/generate.mjs
+
+stage-06-08-screenshots:
+	E2E_PORT=$(E2E_PORT) npx playwright test --config=playwright.stage-06-08.config.mjs
 
 cap-sync:
 	npm run cap:sync

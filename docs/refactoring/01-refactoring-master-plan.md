@@ -311,3 +311,8 @@ make smoke
   - создан `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`;
   - оставшиеся heavy assets классифицированы как runtime audio/video/scene assets, не cleanup candidates;
   - дальнейшая оптимизация требует derivative files, screenshot comparison для images и route/audio review для audio/video.
+- Stage 6.8 выполнен:
+  - создан `docs/refactoring/stage-06-08-sunset-characterization.md`;
+  - добавлен отдельный `make stage-06-08-screenshots` для desktop/mobile screenshots `tumski21.html`;
+  - зафиксировано, что видимые `tumski21` слои используют `sunset3.jpg`, `sunset2.png`, `sunset1.png`;
+  - `sunset3.png` выявлен как preload-only runtime dependency в `sunset_parallax.js`.

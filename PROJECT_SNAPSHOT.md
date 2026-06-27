@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 89% (39 завершённых задач текущего плана)
+**Общий прогресс:** 90% (40 завершённых задач текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -136,6 +136,7 @@ Wroclaw/
 37. ✅ Stage 6.5 Package size budget guard
 38. ✅ Stage 6.6 Package gnome source-only exclusions
 39. ✅ Stage 6.7 Runtime asset optimization policy
+40. ✅ Stage 6.8 Tumski21 sunset screenshot characterization
 
 ---
 
@@ -188,6 +189,7 @@ make test
 make lint
 make smoke
 make build
+make stage-06-08-screenshots
 make security
 make audit
 ```
@@ -224,6 +226,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.8 выполнен
+- создан `docs/refactoring/stage-06-08-sunset-characterization.md`
+- добавлены `playwright.stage-06-08.config.mjs`, `tools/stage-06-08/sunset-characterization.spec.mjs` и `make stage-06-08-screenshots`
+- сняты desktop/mobile baseline screenshots для `tumski21.html`
+- зафиксировано: видимый sky layer использует `sunset3.jpg`, а `sunset3.png` сейчас является preload-only dependency в `sunset_parallax.js`
 
 ### 2026-06-27 - Refactoring Stage 6.7 выполнен
 - создан `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`

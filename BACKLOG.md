@@ -390,6 +390,11 @@
   - Files: `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`, `docs/refactoring/stage-06-asset-size-report.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
   - Benefit: future image/audio/video optimization now requires derivative assets, screenshot comparison and route/audio review instead of blind source overwrites
 
+- [x] **Docs: tumski21 sunset screenshot characterization** - Captured desktop/mobile baseline before changing sunset assets
+  - Completed: 2026-06-27
+  - Files: `docs/refactoring/stage-06-08-sunset-characterization.md`, `playwright.stage-06-08.config.mjs`, `tools/stage-06-08/sunset-characterization.spec.mjs`, `docs/refactoring/artifacts/stage-06-08-sunset/`
+  - Benefit: `tumski21` sunset optimization now has screenshots and measurements; `sunset3.png` was identified as preload-only on this page while visible sky uses `sunset3.jpg`
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

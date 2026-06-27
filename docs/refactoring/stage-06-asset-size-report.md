@@ -275,3 +275,26 @@ Completed on 2026-06-27:
   - `media/tumski/sunset/sunset2.png`;
   - `media/tumski/sunset/sunset3.png`.
 - Future optimization must use derivative assets plus screenshot/audio review; source originals must not be overwritten blindly.
+
+## Stage 6.8 result
+
+Completed on 2026-06-27:
+
+- Created `docs/refactoring/stage-06-08-sunset-characterization.md`.
+- Captured desktop/mobile screenshots for `tumski21.html` before changing sunset assets.
+- Artifact directory: `docs/refactoring/artifacts/stage-06-08-sunset/` (6.1M).
+- No runtime assets were changed in this stage.
+
+Key asset finding:
+
+- Visible `tumski21.html` sky layer uses `media/tumski/sunset/sunset3.jpg`.
+- `sunset_parallax.js` still preloads `media/tumski/sunset/sunset3.png`.
+- Therefore `sunset3.png` is a runtime preload dependency, but not the visible `tumski21` background layer.
+
+Validation:
+
+```bash
+make stage-06-08-screenshots
+```
+
+Result: 2 Playwright characterization tests passed (desktop and mobile).

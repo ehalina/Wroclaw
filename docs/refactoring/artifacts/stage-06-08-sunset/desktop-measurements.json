@@ -1,0 +1,223 @@
+{
+  "consoleMessages": [
+    {
+      "text": "Не все элементы найдены для кнопки play",
+      "type": "error"
+    }
+  ],
+  "measurements": {
+    "afterDelay": {
+      "body": {
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "devicePixelRatio": 1,
+      "gsapAvailable": true,
+      "gsapStubbed": true,
+      "layers": [
+        {
+          "backgroundImage": "url(\"media/tumski/sunset/sunset3.jpg\")",
+          "backgroundPosition": "50% 50%",
+          "backgroundSize": "cover",
+          "image": {
+            "height": 1856,
+            "status": "loaded",
+            "url": "media/tumski/sunset/sunset3.jpg",
+            "width": 2464
+          },
+          "name": "sky",
+          "rect": {
+            "height": 800,
+            "width": 1077,
+            "x": 102,
+            "y": 0
+          },
+          "selector": ".layer-sky",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "zIndex": "1"
+        },
+        {
+          "backgroundImage": "url(\"media/tumski/sunset/sunset2.png\")",
+          "backgroundPosition": "50% 50%",
+          "backgroundSize": "cover",
+          "image": {
+            "height": 1856,
+            "status": "loaded",
+            "url": "media/tumski/sunset/sunset2.png",
+            "width": 2464
+          },
+          "name": "horizon",
+          "rect": {
+            "height": 800,
+            "width": 1077,
+            "x": 102,
+            "y": 0
+          },
+          "selector": ".layer-horizon",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "zIndex": "2"
+        },
+        {
+          "backgroundImage": "url(\"media/tumski/sunset/sunset1.png\")",
+          "backgroundPosition": "50% 50%",
+          "backgroundSize": "cover",
+          "image": {
+            "height": 1856,
+            "status": "loaded",
+            "url": "media/tumski/sunset/sunset1.png",
+            "width": 2464
+          },
+          "name": "buildings",
+          "rect": {
+            "height": 800,
+            "width": 1077,
+            "x": 102,
+            "y": 0
+          },
+          "selector": ".layer-buildings",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "zIndex": "3"
+        }
+      ],
+      "pageContainer": {
+        "height": 800,
+        "width": 1077,
+        "x": 102,
+        "y": 0
+      },
+      "parallaxContainer": {
+        "rect": {
+          "height": 800,
+          "width": 1077,
+          "x": 102,
+          "y": 0
+        },
+        "scrollHeight": 800,
+        "scrollLeft": 0,
+        "scrollWidth": 1077
+      },
+      "sunsetParallax": {
+        "animationStarted": true,
+        "direction": 1,
+        "hasTimeline": true,
+        "isPaused": false,
+        "maxScale": 3
+      },
+      "title": "Тумский остров - Вроцлав",
+      "viewport": {
+        "height": 800,
+        "width": 1280
+      }
+    },
+    "initial": {
+      "body": {
+        "overflowX": "hidden",
+        "overflowY": "hidden"
+      },
+      "devicePixelRatio": 1,
+      "gsapAvailable": true,
+      "gsapStubbed": true,
+      "layers": [
+        {
+          "backgroundImage": "url(\"media/tumski/sunset/sunset3.jpg\")",
+          "backgroundPosition": "50% 50%",
+          "backgroundSize": "cover",
+          "image": {
+            "height": 1856,
+            "status": "loaded",
+            "url": "media/tumski/sunset/sunset3.jpg",
+            "width": 2464
+          },
+          "name": "sky",
+          "rect": {
+            "height": 800,
+            "width": 1077,
+            "x": 102,
+            "y": 0
+          },
+          "selector": ".layer-sky",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "zIndex": "1"
+        },
+        {
+          "backgroundImage": "url(\"media/tumski/sunset/sunset2.png\")",
+          "backgroundPosition": "50% 50%",
+          "backgroundSize": "cover",
+          "image": {
+            "height": 1856,
+            "status": "loaded",
+            "url": "media/tumski/sunset/sunset2.png",
+            "width": 2464
+          },
+          "name": "horizon",
+          "rect": {
+            "height": 800,
+            "width": 1077,
+            "x": 102,
+            "y": 0
+          },
+          "selector": ".layer-horizon",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "zIndex": "2"
+        },
+        {
+          "backgroundImage": "url(\"media/tumski/sunset/sunset1.png\")",
+          "backgroundPosition": "50% 50%",
+          "backgroundSize": "cover",
+          "image": {
+            "height": 1856,
+            "status": "loaded",
+            "url": "media/tumski/sunset/sunset1.png",
+            "width": 2464
+          },
+          "name": "buildings",
+          "rect": {
+            "height": 800,
+            "width": 1077,
+            "x": 102,
+            "y": 0
+          },
+          "selector": ".layer-buildings",
+          "transform": "matrix(1, 0, 0, 1, 0, 0)",
+          "zIndex": "3"
+        }
+      ],
+      "pageContainer": {
+        "height": 800,
+        "width": 1077,
+        "x": 102,
+        "y": 0
+      },
+      "parallaxContainer": {
+        "rect": {
+          "height": 800,
+          "width": 1077,
+          "x": 102,
+          "y": 0
+        },
+        "scrollHeight": 800,
+        "scrollLeft": 0,
+        "scrollWidth": 1077
+      },
+      "sunsetParallax": {
+        "animationStarted": true,
+        "direction": 1,
+        "hasTimeline": true,
+        "isPaused": false,
+        "maxScale": 3
+      },
+      "title": "Тумский остров - Вроцлав",
+      "viewport": {
+        "height": 800,
+        "width": 1280
+      }
+    }
+  },
+  "page": "tumski21.html",
+  "pageErrors": [],
+  "project": "desktop",
+  "screenshots": {
+    "afterDelay": "docs/refactoring/artifacts/stage-06-08-sunset/desktop-after-1500ms.png",
+    "initial": "docs/refactoring/artifacts/stage-06-08-sunset/desktop-initial.png"
+  }
+}
