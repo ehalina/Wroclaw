@@ -1451,55 +1451,12 @@
     // console.log('🎵 navigateToPage вызван для:', pageName);
     // console.log('🎵 Загруженные страницы:', Array.from(this.pages.keys()));
 
-                // Извлекаем actualPageName из pageName (без hash) для проверки
-                const actualPageName = splitSpaPageReference(pageName).pageName;
-
                 // Воспроизводим звук шага при навигации
                 this.playStepSound();
 
-                // Загружаем страницу, если она ещё не загружена
-                if (!this.pages.has(actualPageName)) {
-    // console.log('🎵 Страница не загружена, загружаем:', pageName);
-                    await this.loadPage(pageName);
-                } else {
-                    // Для minsk01.html перезагружаем страницу, но сохраняем состояние музыки
-                    if (actualPageName.includes('minsk01.html')) {
-    // console.log('🎵 Страница minsk01.html уже загружена, перезагружаем для правильного отображения');
-                        // Сохраняем состояние музыки перед перезагрузкой
-                        const targetPage = this.pages.get(actualPageName);
-                        let savedMusicTime = null;
-                        if (targetPage) {
-                            const iframe = getSpaPageIframe(targetPage);
-                            if (iframe && iframe.contentWindow) {
-                                try {
-                                    const audio = iframe.contentWindow.document.getElementById('minskMusic');
-                                    if (audio && !audio.paused) {
-                                        savedMusicTime = audio.currentTime;
-                                        // Сохраняем в localStorage родительского окна
-                                        if (window.parent && window.parent !== window) {
-                                            window.parent.localStorage.setItem('minskMusicState', 'playing');
-                                            window.parent.localStorage.setItem('minskMusicTime', savedMusicTime.toString());
-                                        } else {
-                                            localStorage.setItem('minskMusicState', 'playing');
-                                            localStorage.setItem('minskMusicTime', savedMusicTime.toString());
-                                        }
-                                    }
-                                } catch (e) {
-                                    // Игнорируем ошибки доступа к iframe
-                                }
-                            }
-                        }
-                        // Удаляем старую страницу и загружаем заново
-	                        this.removePage(actualPageName);
-	                        await this.loadPage(pageName);
-	                        return;
-	                    }
-    // console.log('🎵 Страница уже загружена, принудительно перезагружаем:', pageName);
-                    // Удаляем старую страницу и загружаем заново
-	                    this.removePage(actualPageName);
-	                    await this.loadPage(pageName);
-	                }
-	            }
+                // Загружаем/активируем страницу (если уже загружена — просто возвращаемся к ней без перезагрузки)
+                await this.loadPage(pageName);
+            }
 
             showLoading() {
                 if (window.SpaLoadingState && typeof window.SpaLoadingState.show === 'function') {
