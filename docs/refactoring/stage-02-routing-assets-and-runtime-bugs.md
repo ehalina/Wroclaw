@@ -102,11 +102,11 @@ make security
   - `pk02.css` больше не запрашивает отсутствующий `pk_03.jpg`.
 - Active `input_detection.js` удален из cathedral pages.
 - Duplicate `id="bookSound"` в `katedra_panorama.html` устранен.
-- `scripts/static-check-known-issues.json` сокращен до debug/test и legacy cleanup исключений.
+- `scripts/static-check-known-issues.json` был сокращен до debug/test и legacy cleanup исключений; Stage 7.2/7.3 затем очистили эти исключения.
 
 Осталось не в active runtime:
 
-- debug/test pages: `input_compatibility.css`, `input_detection.js` - Stage 7 cleanup;
+- debug/test pages: `input_compatibility.css`, `input_detection.js` - resolved in Stage 7.2 by removing stale references and adding inline debug-page input detection;
 - `right_arrow_handler.js -> tumski_02.html` - resolved in Stage 7.3 by removing the unreferenced legacy handler.
 
 Проверено:

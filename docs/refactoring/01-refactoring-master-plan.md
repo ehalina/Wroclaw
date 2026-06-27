@@ -412,3 +412,7 @@ make smoke
   - удалён unreferenced legacy handler `right_arrow_handler.js`;
   - static inventory allowlist очищен от `missingRoutes`;
   - активная стрелочная навигация не менялась.
+- Stage 7.4 выполнен:
+  - удалены obsolete `locales/*/translation.json`;
+  - canonical localization source теперь единственный: `locales/*/translations.json`;
+  - translation checker больше не печатает legacy duplicate warning.

@@ -107,7 +107,7 @@ make security
 
 Stage 5.1 выполнен:
 
-- `translations.json` закреплён как runtime canonical source; legacy `translation.json` пока остаются предупреждением checker-а, чтобы не ломать возможный внешний workflow.
+- `translations.json` закреплён как runtime canonical source; legacy `translation.json` оставались предупреждением checker-а до Stage 7.4 cleanup.
 - В `i18n.js` добавлен `setTranslatedContent()`: обычные `data-i18n` и service labels обновляются через `textContent`.
 - Rich HTML разрешён только для 7 явных описательных ключей: длинные book/gnome тексты, где текущий контент использует `<br>`.
 - `sanitizeRichTranslation()` экранирует весь HTML и возвращает только `<br>`/`<br />` как разметку.
@@ -335,3 +335,9 @@ Stage 5 как техническая основа page templates и i18n consol
 
 - продолжать controlled page rollout по `docs/refactoring/stage-05-content-workflow.md`;
 - или вернуться к верхнеуровневому refactoring plan и выбрать следующий stage из `BACKLOG.md`.
+
+## Stage 7.4 localization cleanup resolution
+
+- Obsolete `locales/*/translation.json` files удалены после проверки runtime references.
+- Canonical localization source остается `locales/*/translations.json`.
+- `scripts/check-translations.mjs` больше не печатает legacy duplicate warning при чистом дереве.

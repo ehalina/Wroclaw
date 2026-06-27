@@ -303,7 +303,7 @@ class SPAManager {
 - ✅ Большинство `data-i18n` ключей - короткие labels/titles и не должны вставлять HTML
 - ✅ Длинные book/gnome descriptions сохраняют существующее форматирование `<br>` без произвольного HTML
 - ✅ Переводы можно проверять статически до runtime
-- ✅ Legacy `translation.json` остаётся видимым warning, пока не будет отдельного cleanup шага
+- ✅ Legacy `translation.json` files removed in Stage 7.4 after confirming canonical runtime usage
 
 **Implementation:**
 - `i18n.js` публикует `setTranslatedContent(element, key)`, `isRichTranslationKey(key)` и `sanitizeRichTranslation(value)`.
@@ -311,7 +311,7 @@ class SPAManager {
 - Rich allowlist содержит 7 текущих описательных ключей с намеренным `<br>`.
 - `sanitizeRichTranslation()` экранирует весь HTML и возвращает только `<br>`/`<br />` как разметку.
 - `scripts/check-translations.mjs` падает на HTML вне allowlist, на любые теги кроме canonical `<br>` и на любые missing/extra keys между локалями.
-- Все 7 canonical `translations.json` сейчас имеют одинаковый key set; legacy `translation.json` пока остаются warning до отдельного cleanup шага.
+- Все 7 canonical `translations.json` сейчас имеют одинаковый key set; obsolete legacy `translation.json` files удалены в Stage 7.4.
 - `common.js` использует локальный `setI18nText()` wrapper для shared tooltip/book/audio labels и делегирует в `window.i18n.setTranslatedContent()` при наличии.
 - `gnome_marker_handler.js` использует sanitizer boundary для gnome descriptions: разрешён только `<br>`, остальной HTML экранируется.
 - `quest_overlay.js` строит quest intro paragraphs через DOM API и `textContent`; task lists очищаются через `replaceChildren()`.

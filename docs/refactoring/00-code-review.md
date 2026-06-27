@@ -322,7 +322,7 @@ Status 2026-06-26:
 Статус 2026-06-27:
 
 - `translations.json` закреплён как runtime canonical source;
-- `scripts/check-translations.mjs` читает canonical file и явно предупреждает о legacy `translation.json`;
+- obsolete legacy `translation.json` files удалены в Stage 7.4 после проверки, что runtime их не использует;
 - rich HTML checker стал strict;
 - Stage 5.2 синхронизировал `be` keys и сделал key consistency strict failure для всех локалей.
 

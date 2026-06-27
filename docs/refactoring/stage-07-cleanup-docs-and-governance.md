@@ -91,6 +91,29 @@ Stage 7.3 выполнен:
 
 - Stage 7.4: cleanup remaining governance/docs warnings, starting with legacy locale duplicate policy.
 
+## Status Update - 2026-06-27 - Stage 7.4
+
+Stage 7.4 выполнен:
+
+- Удалены obsolete legacy locale files:
+  - `locales/be/translation.json`;
+  - `locales/cs/translation.json`;
+  - `locales/de/translation.json`;
+  - `locales/en/translation.json`;
+  - `locales/pl/translation.json`;
+  - `locales/ru/translation.json`;
+  - `locales/uk/translation.json`.
+- Перед удалением проверено:
+  - runtime `i18n.js` загружает только `locales/<lang>/translations.json`;
+  - legacy files содержали только 2 old keys против 393 canonical keys;
+  - `scripts/check-translations.mjs` проверяет canonical `translations.json`.
+- Canonical localization source теперь единственный в `locales/*/translations.json`.
+- Validation: `make audit` passed; translation checker no longer prints legacy duplicate warnings, build summary is `324 files, 84.5 MB -> www/`.
+
+Следующий подэтап:
+
+- Stage 7.5: update README/AGENTS governance notes for current Makefile checks and refactoring docs.
+
 ## Documentation updates
 
 `BACKLOG.md`:

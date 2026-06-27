@@ -158,6 +158,7 @@ Wroclaw/
 58. ✅ Stage 7.1 Root temporary JS cleanup
 59. ✅ Stage 7.2 Debug/test missing input asset cleanup
 60. ✅ Stage 7.3 Legacy right arrow handler cleanup
+61. ✅ Stage 7.4 Legacy locale duplicate cleanup
 
 ---
 
@@ -225,7 +226,7 @@ make audit
 
 ### Текущий Capacitor package baseline:
 - Initial Stage 6 build: `350 files, 138.2 MB -> www/`
-- Current build: `331 files, 84.5 MB -> www/`
+- Current build: `324 files, 84.5 MB -> www/`
 - Package budget guard: `120 MB`
 - Runtime asset optimization policy: `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`
 
@@ -255,6 +256,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 7.4 выполнен
+- удалены obsolete `locales/*/translation.json`; canonical runtime source остаётся `locales/*/translations.json`
+- перед удалением подтверждено: legacy files содержали только 2 old keys против 393 canonical keys
+- translation checker продолжает проверять canonical files и больше не печатает legacy duplicate warning
+- build summary после cleanup: `324 files, 84.5 MB -> www/`
 
 ### 2026-06-27 - Refactoring Stage 7.3 выполнен
 - удалён unreferenced `right_arrow_handler.js`, который указывал на отсутствующий `tumski_02.html`

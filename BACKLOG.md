@@ -495,6 +495,11 @@
   - Files: `right_arrow_handler.js`, `scripts/static-check-known-issues.json`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
   - Benefit: static inventory no longer needs `missingRoutes` allowlist entries; the source tree no longer contains a legacy handler for a non-canonical route name, and build output dropped to `331 files, 84.5 MB`
 
+- [x] **Cleanup: legacy locale duplicates** - Removed obsolete `translation.json` files after confirming canonical runtime source
+  - Completed: 2026-06-27
+  - Files: `locales/*/translation.json`, `ARCHITECTURE.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
+  - Benefit: localization now has one file format in the source tree, `locales/*/translations.json`; translation checks no longer print legacy duplicate warnings, and build output dropped to `324 files, 84.5 MB`
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

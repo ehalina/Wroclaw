@@ -55,7 +55,7 @@ Why:
 
 4. Inventory:
    - удалить закрытые entries из `static-check-known-issues.json`;
-   - оставить debug/test и legacy handler entries до Stage 7 cleanup.
+   - debug/test и legacy handler entries были оставлены до Stage 7 cleanup и закрыты в Stage 7.2/7.3.
 
 5. Validation:
    - `make test`;
@@ -69,7 +69,7 @@ Why:
 
 - `tumski06.html` является правильным route target, потому что он используется в других страницах, `map_points.js`, `index.html` и `user_account.js`.
 - Отдельный `media/tumski/katedra_panorama.jpg` отсутствует в репозитории; временный fallback лучше runtime 404, но отдельный ассет можно восстановить позже как content task.
-- Debug/test страницы не являются active production tour runtime, поэтому их missing compatibility assets остаются известным Stage 7 cleanup.
+- Debug/test страницы не являются active production tour runtime; их missing compatibility assets закрыты в Stage 7.2.
 
 ## Progress
 
@@ -85,7 +85,7 @@ Why:
 - `MapModal.handleMarkerClick(page)` теперь принимает и строку, и массив страниц без `ReferenceError`.
 - `katedra_01.html` возвращает на существующий `tumski06.html`.
 - Active 404 по cathedral/book/font/quest/pk assets закрыты без добавления новых runtime dependencies.
-- `input_detection.js` удален из active cathedral pages; debug/test references оставлены до Stage 7 cleanup.
+- `input_detection.js` удален из active cathedral pages; debug/test references были оставлены до Stage 7 cleanup и закрыты в Stage 7.2.
 - `katedra_panorama.html` больше не содержит duplicate `id="bookSound"`.
 - Неявные globals `tumskiTxtX` и `tumskiTxt` заменены на локальные `const` в cathedral pages.
 - `make test`, `make lint`, `make test-e2e`, `make build`, `make security`, `make smoke`, `make audit` прошли.
