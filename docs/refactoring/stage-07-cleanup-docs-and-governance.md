@@ -174,6 +174,28 @@ Stage 7.7 выполнен:
 
 - Stage 7.8: gate `user_database.js` diagnostics through the same account debug policy, preserving current error reporting.
 
+## Status Update - 2026-06-27 - Stage 7.8
+
+Stage 7.8 выполнен:
+
+- `user_database.js` active Firebase/auth/leaderboard `console.log` diagnostics переведены на existing local database debug helper:
+  - `_dlog(...)`.
+- Database diagnostics используют ту же account debug policy, что и Stage 7.7:
+  - `window.DEBUG_ACCOUNT = true`;
+  - `localStorage.DEBUG_ACCOUNT = "1"`;
+  - legacy `localStorage.__account_debug = "1"`.
+- `console.error` в database layer оставлен для реальных Firebase/Firestore failures.
+- Добавлен Playwright smoke на quiet default, global flag, storage flag и legacy flag.
+- Repo-wide logging scan показал, что CR-11 ещё открыт для отдельных runtime/debug clusters:
+  - `gnome_marker_handler.js`;
+  - SPA shell / standalone diagnostics;
+  - legacy/debug audio utilities.
+- Validation: `make smoke` passed with 54 Playwright tests.
+
+Следующий подэтап:
+
+- Stage 7.9: gate `gnome_marker_handler.js` diagnostics, preserving gnome popup/navigation behavior.
+
 ## Documentation updates
 
 `BACKLOG.md`:

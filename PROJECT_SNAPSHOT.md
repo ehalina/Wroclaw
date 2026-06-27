@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 99% (58 завершённых задач текущего плана)
+**Общий прогресс:** 99% (59 завершённых задач текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -162,6 +162,7 @@ Wroclaw/
 62. ✅ Stage 7.5 README/AGENTS governance refresh
 63. ✅ Stage 7.6 Arrow diagnostics debug gate
 64. ✅ Stage 7.7 User account diagnostics debug gate
+65. ✅ Stage 7.8 User database diagnostics debug gate
 
 ---
 
@@ -260,11 +261,17 @@ make audit
 
 ## 🔄 История обновлений
 
+### 2026-06-27 - Refactoring Stage 7.8 выполнен
+- `user_database.js` Firebase/auth/leaderboard diagnostic `console.log` переведены на `_dlog`
+- database diagnostics используют `DEBUG_ACCOUNT` / `localStorage.DEBUG_ACCOUNT` / legacy `__account_debug`
+- smoke проверяет quiet default и global/storage/legacy debug-enable paths
+- CR-11 остаётся открытым для `gnome_marker_handler.js` и remaining runtime/debug diagnostics
+
 ### 2026-06-27 - Refactoring Stage 7.7 выполнен
 - `user_account.js` auth/rating diagnostic `console.log/warn` переведены на `_alog/_awarn`
 - account diagnostics выключены по умолчанию и включаются через `DEBUG_ACCOUNT` / `localStorage.DEBUG_ACCOUNT` / legacy `__account_debug`
 - smoke проверяет quiet default и global/storage/legacy debug-enable paths
-- CR-11 остаётся открытым только для Firebase/auth/leaderboard diagnostics (`user_database.js`)
+- CR-11 оставался открытым для Firebase/auth/leaderboard diagnostics (`user_database.js`)
 
 ### 2026-06-27 - Refactoring Stage 7.6 выполнен
 - `arrow_handlers.js` diagnostic `console.log/warn` переведены на `debugLog/debugWarn`

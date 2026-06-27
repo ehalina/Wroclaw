@@ -515,11 +515,22 @@
   - Files: `user_account.js`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
   - Benefit: `user_account.js` no longer writes verbose auth/rating `console.log` / `console.warn` diagnostics by default; diagnostics remain available through `DEBUG_ACCOUNT` and legacy `__account_debug`
 
-- [ ] **Refactor: user database diagnostics gate** - Gate remaining verbose Firebase/auth/leaderboard diagnostics in `user_database.js`
-  - Reason: CR-11 still has active `console.log` diagnostics in `user_database.js`
-  - Benefit: WebView/devtools console will stay focused on real runtime errors across the full account/database boundary
+- [x] **Refactor: user database diagnostics gate** - Moved verbose Firebase/auth/leaderboard diagnostics behind account debug flags
+  - Completed: 2026-06-27
+  - Files: `user_database.js`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
+  - Benefit: `user_database.js` no longer writes verbose Firebase/auth/leaderboard `console.log` diagnostics by default; diagnostics share `DEBUG_ACCOUNT` and legacy `__account_debug` with `user_account.js`
+
+- [ ] **Refactor: gnome diagnostics debug gate** - Gate remaining runtime gnome popup/navigation diagnostics in `gnome_marker_handler.js`
+  - Reason: CR-11 still has active `console.log` diagnostics in gnome marker navigation and direct popup opening
+  - Benefit: Gnome marker flows stay debuggable without writing to production console by default
   - Effort: Medium
-  - Notes: Keep as its own step because it touches Firebase auth and leaderboard sync observability
+  - Notes: Keep separate from account/database because it touches marker navigation and direct popup opening
+
+- [ ] **Refactor: remaining runtime diagnostics inventory** - Classify and gate/defer remaining active runtime `console.log` / `console.warn`
+  - Reason: Repo-wide scan still finds diagnostics in SPA shell, minimap/Firebase init, standalone panorama/test pages and legacy audio module
+  - Benefit: CR-11 can be closed with explicit debug policy or documented debug-page exceptions
+  - Effort: Medium
+  - Notes: Do after the gnome handler so the largest active marker cluster is already isolated
 
 ### Planned
 

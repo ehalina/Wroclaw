@@ -18,7 +18,21 @@ class UserDatabase {
     }
 
     _isAccountDebug() {
-        try { return localStorage.getItem('__account_debug') === '1'; } catch (_) { return false; }
+        try {
+            const globalFlag = window.DEBUG_ACCOUNT;
+            if (globalFlag === true || globalFlag === '1' || globalFlag === 'true') {
+                return true;
+            }
+        } catch (_) {}
+
+        try {
+            return ['DEBUG_ACCOUNT', '__account_debug'].some((key) => {
+                const value = localStorage.getItem(key);
+                return value === '1' || value === 'true';
+            });
+        } catch (_) {
+            return false;
+        }
     }
 
     _dlog(...args) {
@@ -115,7 +129,7 @@ class UserDatabase {
             this._firebaseRealm = globals.realm || window;
             this.initialized = true;
 
-            console.log('✅ Firebase Firestore инициализирован');
+            this._dlog('✅ Firebase Firestore инициализирован');
 
             // Если вернулись с OAuth redirect/linkWithRedirect — обработаем результат
             try {
@@ -188,44 +202,44 @@ class UserDatabase {
                         // Игнорируем ошибки получения - возможно, документ еще не создан
                         this._dlog('finalize: cannot get existing user', { uid: u.uid, error: getError?.message });
                     }
-                    
+
                     // Определяем, нужно ли обновлять username
                     // НЕ перезаписываем, если уже есть валидный username (не пустой и не "Гость")
-                    const hasValidUsername = existingUsername && 
-                        existingUsername.trim() !== '' && 
-                        existingUsername !== 'Гость' && 
+                    const hasValidUsername = existingUsername &&
+                        existingUsername.trim() !== '' &&
+                        existingUsername !== 'Гость' &&
                         existingUsername.toLowerCase() !== 'гость';
-                    
+
                     const updateData = {
                         email,
                         isAnonymous: false,
                         linkedAt: new Date().toISOString()
                     };
-                    
+
                     // Обновляем username только если его нет или он равен "Гость"
                     if (!hasValidUsername) {
                         const newUsername = (u.displayName || (email ? email.split('@')[0] : '') || 'Пользователь');
                         updateData.username = newUsername;
-                        this._dlog('finalize: updating username', { 
-                            oldUsername: existingUsername, 
+                        this._dlog('finalize: updating username', {
+                            oldUsername: existingUsername,
                             newUsername: newUsername,
-                            uid: u.uid 
+                            uid: u.uid
                         });
                     } else {
-                        this._dlog('finalize: preserving existing username', { 
+                        this._dlog('finalize: preserving existing username', {
                             username: existingUsername,
                             displayName: u.displayName,
-                            uid: u.uid 
+                            uid: u.uid
                         });
                     }
-                    
+
                     await this.updateUserMetadata(updateData);
                     await this._wait(200);
-                    this._dlog('finalize: metadata updated', { 
-                        email, 
-                        username: updateData.username || existingUsername, 
-                        isAnonymous: false, 
-                        uid: u.uid 
+                    this._dlog('finalize: metadata updated', {
+                        email,
+                        username: updateData.username || existingUsername,
+                        isAnonymous: false,
+                        uid: u.uid
                     });
                 } catch (e) {
                     console.error('[oauth] finalize updateUserMetadata failed', e?.message || String(e));
@@ -291,7 +305,7 @@ class UserDatabase {
                         // если за 20с так и остались в госте — снимаем блокировку анонимного логина
                         sessionStorage.removeItem('__oauth_in_progress');
                         localStorage.removeItem('__oauth_in_progress');
-                        console.log('[oauth] cleared __oauth_in_progress by timeout');
+                        this._dlog('[oauth] cleared __oauth_in_progress by timeout');
                     } catch (_) {}
                 }, 20000);
             }
@@ -486,10 +500,10 @@ class UserDatabase {
             console.error('❌ Firebase не готов (проверьте `firebase_config.js`):', e);
             return null;
         }
-        
+
         try {
             const userCredential = await this.auth.signInAnonymously();
-            console.log('✅ Анонимный пользователь создан:', userCredential.user.uid);
+            this._dlog('✅ Анонимный пользователь создан:', userCredential.user.uid);
             return userCredential.user;
         } catch (error) {
             console.error('❌ Ошибка создания анонимного пользователя:', error);
@@ -500,7 +514,7 @@ class UserDatabase {
     // Привязка email к анонимному аккаунту (Link Account)
     async linkAccountWithEmail(email, password) {
         await this.init();
-        
+
         const currentUser = this.auth.currentUser;
         if (!currentUser || !currentUser.isAnonymous) {
             throw new Error('Текущий пользователь не является анонимным');
@@ -510,10 +524,10 @@ class UserDatabase {
             const fb = this._requireFirebaseCompat();
             // Создаем credential для email/password
             const emailCredential = fb.auth.EmailAuthProvider.credential(email, password);
-            
+
             // Привязываем email к анонимному аккаунту
             await currentUser.linkWithCredential(emailCredential);
-            
+
             // Обновляем данные пользователя в Firestore
             await this.updateUserMetadata({
                 email: email,
@@ -523,7 +537,7 @@ class UserDatabase {
                 linkedAt: new Date().toISOString()
             });
 
-            console.log('✅ Email успешно привязан к аккаунту');
+            this._dlog('✅ Email успешно привязан к аккаунту');
             return this.auth.currentUser;
         } catch (error) {
             console.error('❌ Ошибка привязки email:', error);
@@ -534,10 +548,10 @@ class UserDatabase {
     // Регистрация нового пользователя с email/password
     async registerWithEmail(email, password, username) {
         await this.init();
-        
+
         try {
             const userCredential = await this.auth.createUserWithEmailAndPassword(email, password);
-            
+
             // Сохраняем username в Firestore
             await this.saveUser({
                 id: userCredential.user.uid,
@@ -551,7 +565,7 @@ class UserDatabase {
                 }
             });
 
-            console.log('✅ Пользователь зарегистрирован:', userCredential.user.uid);
+            this._dlog('✅ Пользователь зарегистрирован:', userCredential.user.uid);
             return userCredential.user;
         } catch (error) {
             console.error('❌ Ошибка регистрации:', error);
@@ -562,10 +576,10 @@ class UserDatabase {
     // Вход с email/password
     async signInWithEmail(email, password) {
         await this.init();
-        
+
         try {
             const userCredential = await this.auth.signInWithEmailAndPassword(email, password);
-            console.log('✅ Пользователь вошел:', userCredential.user.uid);
+            this._dlog('✅ Пользователь вошел:', userCredential.user.uid);
             return userCredential.user;
         } catch (error) {
             console.error('❌ Ошибка входа:', error);
@@ -576,10 +590,10 @@ class UserDatabase {
     // Выход
     async signOut() {
         await this.init();
-        
+
         try {
             await this.auth.signOut();
-            console.log('✅ Пользователь вышел');
+            this._dlog('✅ Пользователь вышел');
         } catch (error) {
             console.error('❌ Ошибка выхода:', error);
             throw error;
@@ -597,12 +611,12 @@ class UserDatabase {
         const provider = new fb.auth.GoogleAuthProvider();
 
         // Проверяем, мобильное ли устройство
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
                          (window.innerWidth <= 768);
 
         // На мобильных сразу используем redirect, popup часто не работает
         if (isMobile) {
-            console.log('[oauth] google: mobile detected, using redirect flow');
+            this._dlog('[oauth] google: mobile detected, using redirect flow');
             try { sessionStorage.removeItem('__oauth_redirect_handled'); } catch (_) {}
             if (user.isAnonymous) {
                 try { sessionStorage.setItem('__oauth_guest_uid', user.uid); } catch (_) {}
@@ -617,7 +631,7 @@ class UserDatabase {
 
         // На desktop сначала пробуем popup (стабильнее). При явных проблемах popup — fallback на redirect.
         try {
-            console.log('[oauth] google: try popup flow');
+            this._dlog('[oauth] google: try popup flow');
             const res = await this.auth.signInWithPopup(provider);
             const u = res?.user || this.getCurrentAuthUser();
             if (u) {
@@ -629,7 +643,7 @@ class UserDatabase {
                 // Обновляем метаданные, чтобы снять гостевой режим
                 if (!u.isAnonymous) {
                     const email = u.email || null;
-                    
+
                     // Проверяем существующий username в Firestore перед перезаписью
                     let existingUsername = null;
                     try {
@@ -641,34 +655,34 @@ class UserDatabase {
                     } catch (getError) {
                         this._dlog('popup: cannot get existing user', { uid: u.uid, error: getError?.message });
                     }
-                    
+
                     // НЕ перезаписываем, если уже есть валидный username
-                    const hasValidUsername = existingUsername && 
-                        existingUsername.trim() !== '' && 
-                        existingUsername !== 'Гость' && 
+                    const hasValidUsername = existingUsername &&
+                        existingUsername.trim() !== '' &&
+                        existingUsername !== 'Гость' &&
                         existingUsername.toLowerCase() !== 'гость';
-                    
+
                     const updateData = {
                         email,
                         isAnonymous: false,
                         linkedAt: new Date().toISOString()
                     };
-                    
+
                     // Обновляем username только если его нет или он равен "Гость"
                     if (!hasValidUsername) {
                         const newUsername = u.displayName || (email ? email.split('@')[0] : '') || 'Пользователь';
                         updateData.username = newUsername;
-                        this._dlog('popup: updating username', { 
-                            oldUsername: existingUsername, 
-                            newUsername: newUsername 
+                        this._dlog('popup: updating username', {
+                            oldUsername: existingUsername,
+                            newUsername: newUsername
                         });
                     } else {
-                        this._dlog('popup: preserving existing username', { 
+                        this._dlog('popup: preserving existing username', {
                             username: existingUsername,
                             displayName: u.displayName
                         });
                     }
-                    
+
                     await this.updateUserMetadata(updateData);
                     await this._wait(150);
                 }
@@ -709,12 +723,12 @@ class UserDatabase {
         const provider = new fb.auth.FacebookAuthProvider();
 
         // Проверяем, мобильное ли устройство
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
                          (window.innerWidth <= 768);
 
         // На мобильных сразу используем redirect, popup часто не работает
         if (isMobile) {
-            console.log('[oauth] facebook: mobile detected, using redirect flow');
+            this._dlog('[oauth] facebook: mobile detected, using redirect flow');
             try { sessionStorage.removeItem('__oauth_redirect_handled'); } catch (_) {}
             if (user.isAnonymous) {
                 try { sessionStorage.setItem('__oauth_guest_uid', user.uid); } catch (_) {}
@@ -729,7 +743,7 @@ class UserDatabase {
 
         // На desktop сначала пробуем popup (стабильнее). При явных проблемах popup — fallback на redirect.
         try {
-            console.log('[oauth] facebook: try popup flow');
+            this._dlog('[oauth] facebook: try popup flow');
             const res = await this.auth.signInWithPopup(provider);
             const u = res?.user || this.getCurrentAuthUser();
             if (u) {
@@ -741,7 +755,7 @@ class UserDatabase {
                 // Обновляем метаданные, чтобы снять гостевой режим
                 if (!u.isAnonymous) {
                     const email = u.email || null;
-                    
+
                     // Проверяем существующий username в Firestore перед перезаписью
                     let existingUsername = null;
                     try {
@@ -753,34 +767,34 @@ class UserDatabase {
                     } catch (getError) {
                         this._dlog('popup: cannot get existing user', { uid: u.uid, error: getError?.message });
                     }
-                    
+
                     // НЕ перезаписываем, если уже есть валидный username
-                    const hasValidUsername = existingUsername && 
-                        existingUsername.trim() !== '' && 
-                        existingUsername !== 'Гость' && 
+                    const hasValidUsername = existingUsername &&
+                        existingUsername.trim() !== '' &&
+                        existingUsername !== 'Гость' &&
                         existingUsername.toLowerCase() !== 'гость';
-                    
+
                     const updateData = {
                         email,
                         isAnonymous: false,
                         linkedAt: new Date().toISOString()
                     };
-                    
+
                     // Обновляем username только если его нет или он равен "Гость"
                     if (!hasValidUsername) {
                         const newUsername = u.displayName || (email ? email.split('@')[0] : '') || 'Пользователь';
                         updateData.username = newUsername;
-                        this._dlog('popup: updating username', { 
-                            oldUsername: existingUsername, 
-                            newUsername: newUsername 
+                        this._dlog('popup: updating username', {
+                            oldUsername: existingUsername,
+                            newUsername: newUsername
                         });
                     } else {
-                        this._dlog('popup: preserving existing username', { 
+                        this._dlog('popup: preserving existing username', {
                             username: existingUsername,
                             displayName: u.displayName
                         });
                     }
-                    
+
                     await this.updateUserMetadata(updateData);
                     await this._wait(150);
                 }
@@ -829,7 +843,7 @@ class UserDatabase {
     // Сохранение пользователя в Firestore
     async saveUser(userData) {
         await this.init();
-        
+
         // Валидация данных
         const validatedData = this.validateUserData({ ...userData });
 
@@ -871,7 +885,7 @@ class UserDatabase {
 
         try {
             await this.db.collection('users').doc(validatedData.id).set(firestoreDoc, { merge: true });
-            console.log('✅ Пользователь сохранен в Firestore:', validatedData.id);
+            this._dlog('✅ Пользователь сохранен в Firestore:', validatedData.id);
             return validatedData.id;
         } catch (error) {
             if (String(error?.message || '').toLowerCase().includes('insufficient permissions')) {
@@ -897,7 +911,7 @@ class UserDatabase {
         for (const [k, v] of Object.entries(firestoreMeta)) {
             if (v !== undefined) safeFirestoreMeta[k] = v;
         }
-        
+
         const currentUser = this.getCurrentAuthUser();
         if (!currentUser) {
             throw new Error('Пользователь не авторизован');
@@ -919,18 +933,18 @@ class UserDatabase {
                     updatePayload = JSON.parse(JSON.stringify(updatePayload));
                 } catch (_) {}
             }
-            console.log('[userDatabase] updateUserMetadata: writing to Firestore', {
+            this._dlog('[userDatabase] updateUserMetadata: writing to Firestore', {
                 uid: currentUser.uid,
                 payload: updatePayload
             });
             await this.db.collection('users').doc(currentUser.uid).set(updatePayload, { merge: true });
-            
+
             // Синхронизируем в leaderboard для публичного доступа
             // Пытаемся получить данные пользователя для синхронизации
             try {
                 // Если username передан явно в metadata, используем его (приоритет над Firestore)
                 const explicitUsername = safeFirestoreMeta.username;
-                
+
                 const userDoc = await this.db.collection('users').doc(currentUser.uid).get();
                 if (userDoc.exists) {
                     const userData = userDoc.data();
@@ -977,7 +991,7 @@ class UserDatabase {
                 console.error('[leaderboard] _syncToLeaderboard: userId is undefined!', { userId, hasUserData: !!userData, userDataUsername: userData?.username });
                 return;
             }
-            
+
             // Debounce для частых вызовов (например, при сохранении состояния квеста)
             // immediate = true для важных обновлений (username, email)
             if (!immediate) {
@@ -985,10 +999,10 @@ class UserDatabase {
                 if (this._leaderboardSyncTimeout) {
                     clearTimeout(this._leaderboardSyncTimeout);
                 }
-                
+
                 // Сохраняем данные для отложенной синхронизации
                 this._lastLeaderboardSync[userId] = userData;
-                
+
                 // Устанавливаем таймаут на 2 секунды
                 this._leaderboardSyncTimeout = setTimeout(async () => {
                     const cachedData = this._lastLeaderboardSync[userId];
@@ -997,10 +1011,10 @@ class UserDatabase {
                         await this._syncToLeaderboardInternal(userId, cachedData);
                     }
                 }, 2000);
-                
+
                 return; // Выходим, синхронизация произойдет через 2 секунды
             }
-            
+
             // Немедленная синхронизация для важных обновлений
             await this._syncToLeaderboardInternal(userId, userData);
         } catch (error) {
@@ -1009,20 +1023,20 @@ class UserDatabase {
             this._dlog('_syncToLeaderboard failed', error?.message || String(error));
         }
     }
-    
+
     // Внутренняя функция синхронизации
     async _syncToLeaderboardInternal(userId, userData = null) {
         try {
-            console.log('[leaderboard] _syncToLeaderboard START', { userId, hasUserData: !!userData, userDataUsername: userData?.username });
-            
+            this._dlog('[leaderboard] _syncToLeaderboard START', { userId, hasUserData: !!userData, userDataUsername: userData?.username });
+
             // Если данные не переданы, пытаемся получить из Firestore
             let user = userData;
             if (!user) {
                 try {
                     user = await this.getUser(userId);
-                    console.log('[leaderboard] _syncToLeaderboard: got user from Firestore', { userId, username: user?.username });
+                    this._dlog('[leaderboard] _syncToLeaderboard: got user from Firestore', { userId, username: user?.username });
                 } catch (error) {
-                    console.log('[leaderboard] _syncToLeaderboard: cannot get from Firestore, using auth', { userId, error: error?.message });
+                    this._dlog('[leaderboard] _syncToLeaderboard: cannot get from Firestore, using auth', { userId, error: error?.message });
                     // Если не можем прочитать, используем данные из auth
                     const authUser = this.getCurrentAuthUser();
                     if (authUser && authUser.uid === userId) {
@@ -1031,15 +1045,15 @@ class UserDatabase {
                             progress: { openedLocations: 0, openedBooks: 0 },
                             questState: { tasks: {} }
                         };
-                        console.log('[leaderboard] _syncToLeaderboard: created user from auth', { userId, username: user.username });
+                        this._dlog('[leaderboard] _syncToLeaderboard: created user from auth', { userId, username: user.username });
                     } else {
-                        console.log('[leaderboard] _syncToLeaderboard: no auth user, cannot sync', { userId });
+                        this._dlog('[leaderboard] _syncToLeaderboard: no auth user, cannot sync', { userId });
                         return; // Не можем синхронизировать без данных
                     }
                 }
             }
             if (!user) {
-                console.log('[leaderboard] _syncToLeaderboard: no user data, returning', { userId });
+                this._dlog('[leaderboard] _syncToLeaderboard: no user data, returning', { userId });
                 return;
             }
 
@@ -1047,49 +1061,49 @@ class UserDatabase {
             let finalUsername = null;
             const authUser = this.getCurrentAuthUser();
             const wasUserDataPassed = !!userData; // Запоминаем, были ли данные переданы явно
-            
-            console.log('[leaderboard] _syncToLeaderboard: determining username', { 
-                userId, 
+
+            this._dlog('[leaderboard] _syncToLeaderboard: determining username', {
+                userId,
                 userDataUsername: userData?.username,
-                userUsername: user.username, 
+                userUsername: user.username,
                 wasUserDataPassed,
                 authUserId: authUser?.uid,
                 authDisplayName: authUser?.displayName,
                 authEmail: authUser?.email
             });
-            
+
             // Приоритет 1: Если данные переданы явно (userData), используем их username
             if (wasUserDataPassed && userData.username && userData.username !== 'Гость') {
                 finalUsername = userData.username;
-                console.log('[leaderboard] _syncToLeaderboard: using passed userData.username', { userId, finalUsername });
+                this._dlog('[leaderboard] _syncToLeaderboard: using passed userData.username', { userId, finalUsername });
             }
             // Приоритет 2: username из Firestore (если не пустой и не 'Гость')
             else if (user.username && user.username !== 'Гость') {
                 finalUsername = user.username;
-                console.log('[leaderboard] _syncToLeaderboard: using Firestore username', { userId, finalUsername });
+                this._dlog('[leaderboard] _syncToLeaderboard: using Firestore username', { userId, finalUsername });
             }
             // Приоритет 3: Если username пустой или 'Гость', пытаемся взять из auth (только для текущего пользователя)
             else if (authUser && authUser.uid === userId) {
                 const authUsername = authUser.displayName || authUser.email?.split('@')[0];
                 if (authUsername) {
                     finalUsername = authUsername;
-                    console.log('[leaderboard] _syncToLeaderboard: using auth username', { userId, finalUsername });
+                    this._dlog('[leaderboard] _syncToLeaderboard: using auth username', { userId, finalUsername });
                 } else {
                     finalUsername = 'Гость';
-                    console.log('[leaderboard] _syncToLeaderboard: no auth username, using Гость', { userId });
+                    this._dlog('[leaderboard] _syncToLeaderboard: no auth username, using Гость', { userId });
                 }
             }
             // Приоритет 4: Если передан userData с username (даже если 'Гость'), используем его
             else if (wasUserDataPassed && userData.username) {
                 finalUsername = userData.username;
-                console.log('[leaderboard] _syncToLeaderboard: using passed userData.username (even if Гость)', { userId, finalUsername });
+                this._dlog('[leaderboard] _syncToLeaderboard: using passed userData.username (even if Гость)', { userId, finalUsername });
             }
             // Fallback: 'Гость'
             else {
                 finalUsername = 'Гость';
-                console.log('[leaderboard] _syncToLeaderboard: fallback to Гость', { userId });
+                this._dlog('[leaderboard] _syncToLeaderboard: fallback to Гость', { userId });
             }
-            
+
             const leaderboardData = {
                 userId: userId,
                 username: finalUsername,
@@ -1101,12 +1115,12 @@ class UserDatabase {
                 updatedAt: new Date().toISOString()
             };
 
-            console.log('[leaderboard] _syncToLeaderboard: writing to leaderboard', { userId, username: finalUsername, leaderboardData });
+            this._dlog('[leaderboard] _syncToLeaderboard: writing to leaderboard', { userId, username: finalUsername, leaderboardData });
             const realm = this._firebaseRealm || window;
             const safeData = realm.JSON.parse(JSON.stringify(leaderboardData));
 
             await this.db.collection('leaderboard').doc(userId).set(safeData, { merge: true });
-            console.log('[leaderboard] _syncToLeaderboard: SUCCESS', { userId, username: finalUsername });
+            this._dlog('[leaderboard] _syncToLeaderboard: SUCCESS', { userId, username: finalUsername });
         } catch (error) {
             // Не критично, просто логируем
             console.error('[leaderboard] _syncToLeaderboard: ERROR', { userId, error: error?.message || String(error) });
@@ -1117,11 +1131,11 @@ class UserDatabase {
     // Синхронизация всех пользователей из users в leaderboard (если есть права)
     async syncAllUsersToLeaderboard() {
         try {
-            console.log('[leaderboard] syncAllUsersToLeaderboard: starting...');
+            this._dlog('[leaderboard] syncAllUsersToLeaderboard: starting...');
             const allUsers = await this.getAllUsers();
-            console.log('[leaderboard] getAllUsers result:', Object.keys(allUsers || {}).length, 'users');
+            this._dlog('[leaderboard] getAllUsers result:', Object.keys(allUsers || {}).length, 'users');
             if (!allUsers || Object.keys(allUsers).length === 0) {
-                console.log('[leaderboard] no users to sync');
+                this._dlog('[leaderboard] no users to sync');
                 return;
             }
 
@@ -1142,13 +1156,13 @@ class UserDatabase {
 
                     await this.db.collection('leaderboard').doc(userId).set(safeData, { merge: true });
                     synced++;
-                    console.log(`[leaderboard] synced user ${userId}: ${user.username || 'Гость'}`);
+                    this._dlog(`[leaderboard] synced user ${userId}: ${user.username || 'Гость'}`);
                 } catch (error) {
                     console.error(`[leaderboard] sync failed for ${userId}:`, error?.message || String(error));
                     this._dlog(`syncAllUsersToLeaderboard failed for ${userId}`, error?.message || String(error));
                 }
             }
-            console.log(`[leaderboard] syncAllUsersToLeaderboard: synced ${synced} users`);
+            this._dlog(`[leaderboard] syncAllUsersToLeaderboard: synced ${synced} users`);
         } catch (error) {
             console.error('[leaderboard] syncAllUsersToLeaderboard error:', error?.message || String(error));
             // Если нет прав на getAllUsers, просто игнорируем
@@ -1159,10 +1173,10 @@ class UserDatabase {
     // Получение пользователя по ID
     async getUser(userId) {
         await this.init();
-        
+
         try {
             const doc = await this.db.collection('users').doc(userId).get();
-            
+
             if (!doc.exists) {
                 return null;
             }
@@ -1189,7 +1203,7 @@ class UserDatabase {
     // Получение текущего пользователя
     async getCurrentUser() {
         await this.init();
-        
+
         const currentUser = this.getCurrentAuthUser();
         if (!currentUser) {
             return null;
@@ -1201,11 +1215,11 @@ class UserDatabase {
     // Получение всех пользователей (только для админа)
     async getAllUsers() {
         await this.init();
-        
+
         try {
             const snapshot = await this.db.collection('users').get();
             const users = {};
-            
+
             snapshot.forEach(doc => {
                 const data = doc.data();
                 users[doc.id] = {
@@ -1230,10 +1244,10 @@ class UserDatabase {
     // Удаление пользователя
     async deleteUser(userId) {
         await this.init();
-        
+
         try {
             await this.db.collection('users').doc(userId).delete();
-            console.log('✅ Пользователь удален:', userId);
+            this._dlog('✅ Пользователь удален:', userId);
         } catch (error) {
             console.error('❌ Ошибка удаления пользователя:', error);
             throw error;
@@ -1243,7 +1257,7 @@ class UserDatabase {
     // Сохранение состояния квеста
     async saveQuestState(questState) {
         await this.init();
-        
+
         const currentUser = this.getCurrentAuthUser();
         if (!currentUser) {
             throw new Error('Пользователь не авторизован');
@@ -1258,8 +1272,8 @@ class UserDatabase {
             };
             const firestorePayload = this._toFirestoreData(payload) || payload;
             await this.db.collection('users').doc(currentUser.uid).set(firestorePayload, { merge: true });
-            console.log('✅ Состояние квеста сохранено');
-            
+            this._dlog('✅ Состояние квеста сохранено');
+
             // Синхронизируем в leaderboard
             // Пытаемся получить данные пользователя для синхронизации
             try {
@@ -1298,7 +1312,7 @@ class UserDatabase {
     // Загрузка состояния квеста
     async loadQuestState() {
         await this.init();
-        
+
         const currentUser = this.getCurrentAuthUser();
         if (!currentUser) {
             return { tasks: {}, completedQuests: [] };

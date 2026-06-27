@@ -308,7 +308,8 @@ Status 2026-06-26:
 - map/quest diagnostics закрыты в Stage 4.7 через `MapDebug`;
 - arrow diagnostics закрыты в Stage 7.6 через `DEBUG_ARROWS`;
 - user account diagnostics закрыты в Stage 7.7 через `DEBUG_ACCOUNT`;
-- remaining verbose Firebase/auth/leaderboard diagnostics in `user_database.js` вынесены в отдельный backlog item.
+- user database diagnostics закрыты в Stage 7.8 через `DEBUG_ACCOUNT`;
+- remaining runtime diagnostics in `gnome_marker_handler.js`, SPA shell / standalone pages and legacy/debug audio utilities вынесены в follow-up backlog items.
 
 ### CR-12 - LOW/MEDIUM - Локализация имеет потенциально два source-of-truth файла на язык
 
@@ -397,4 +398,4 @@ make audit
 
 Остается:
 
-- CR-11: Firebase/auth/leaderboard diagnostics in `user_database.js` - tracked as a separate backlog item.
+- CR-11: gnome marker and remaining runtime/debug diagnostics - tracked as follow-up backlog items.

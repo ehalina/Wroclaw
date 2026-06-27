@@ -295,6 +295,7 @@ class SPAManager {
 - `quest_marker_handler.js`, `tumski_cathedral_handler.js`, `tumski_page_common.js` — используют `MapDebug` вместо прямых active debug logs в production console.
 - `arrow_handlers.js` — route-arrow diagnostics gated locally through `DEBUG_ARROWS` / `localStorage.DEBUG_ARROWS`; default production console remains quiet except for `console.error`.
 - `user_account.js` — auth/rating diagnostics gated locally through `DEBUG_ACCOUNT` / `localStorage.DEBUG_ACCOUNT`; legacy `localStorage.__account_debug` remains supported, while `console.error` stays visible for real account/database failures.
+- `user_database.js` — Firebase/auth/leaderboard diagnostics use the same `DEBUG_ACCOUNT` / legacy `__account_debug` policy as `user_account.js`.
 
 
 ### 1.7. i18n text/rich HTML boundary

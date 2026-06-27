@@ -428,3 +428,7 @@ make smoke
   - `user_account.js` auth/rating diagnostics переведены на `_alog/_awarn`;
   - account diagnostics включаются явно через `DEBUG_ACCOUNT` или legacy `__account_debug`;
   - smoke фиксирует quiet default, global/storage/legacy debug-enable paths.
+- Stage 7.8 выполнен:
+  - `user_database.js` Firebase/auth/leaderboard diagnostics переведены на `_dlog`;
+  - database diagnostics используют ту же `DEBUG_ACCOUNT` / legacy `__account_debug` policy;
+  - smoke фиксирует quiet default, global/storage/legacy debug-enable paths.

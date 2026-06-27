@@ -728,6 +728,74 @@ test.describe('Wroclaw static app smoke', () => {
     ]);
   });
 
+  test('user database diagnostics are quiet by default and gated by DEBUG_ACCOUNT', async ({ page }) => {
+    await page.goto('/tumski.html');
+
+    const result = await page.evaluate(async () => {
+      if (!window.userDatabase) {
+        await new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.src = './user_database.js';
+          script.onload = resolve;
+          script.onerror = reject;
+          document.head.appendChild(script);
+        });
+      }
+
+      const calls = [];
+      const originalLog = console.log;
+
+      console.log = (...args) => {
+        calls.push(args);
+      };
+
+      try {
+        delete window.DEBUG_ACCOUNT;
+        localStorage.removeItem('DEBUG_ACCOUNT');
+        localStorage.removeItem('__account_debug');
+        window.userDatabase._dlog('hidden-log');
+        const disabledCount = calls.length;
+
+        window.DEBUG_ACCOUNT = true;
+        window.userDatabase._dlog('global-log');
+        const globalEnabledCount = calls.length - disabledCount;
+
+        window.DEBUG_ACCOUNT = false;
+        localStorage.setItem('DEBUG_ACCOUNT', '1');
+        window.userDatabase._dlog('storage-log');
+        const storageEnabledCount = calls.length - disabledCount - globalEnabledCount;
+
+        localStorage.removeItem('DEBUG_ACCOUNT');
+        localStorage.setItem('__account_debug', '1');
+        window.userDatabase._dlog('legacy-log');
+        const legacyEnabledCount = calls.length - disabledCount - globalEnabledCount - storageEnabledCount;
+
+        return {
+          disabledCount,
+          globalEnabledCount,
+          storageEnabledCount,
+          legacyEnabledCount,
+          calls
+        };
+      } finally {
+        console.log = originalLog;
+        delete window.DEBUG_ACCOUNT;
+        localStorage.removeItem('DEBUG_ACCOUNT');
+        localStorage.removeItem('__account_debug');
+      }
+    });
+
+    expect(result.disabledCount).toBe(0);
+    expect(result.globalEnabledCount).toBe(1);
+    expect(result.storageEnabledCount).toBe(1);
+    expect(result.legacyEnabledCount).toBe(1);
+    expect(result.calls).toEqual([
+      ['[userDatabase]', 'global-log'],
+      ['[userDatabase]', 'storage-log'],
+      ['[userDatabase]', 'legacy-log']
+    ]);
+  });
+
   test('i18n writes text by default and allows only vetted rich HTML keys', async ({ page }) => {
     await page.goto('/tumski.html');
     await page.waitForFunction(() => window.i18n?.setTranslatedContent);
