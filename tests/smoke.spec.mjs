@@ -569,6 +569,70 @@ test.describe('Wroclaw static app smoke', () => {
     });
   });
 
+  test('arrow diagnostics are quiet by default and gated by DEBUG_ARROWS', async ({ page }) => {
+    await page.goto('/tumski.html');
+
+    const result = await page.evaluate(() => {
+      const calls = [];
+      const created = [];
+      const originalLog = console.log;
+
+      function createArrowPair(id) {
+        const cursor = document.createElement('div');
+        const area = document.createElement('div');
+        cursor.id = `${id}-cursor`;
+        area.id = `${id}-area`;
+        area.appendChild(cursor);
+        document.body.appendChild(area);
+        created.push(area);
+        return { area, cursor };
+      }
+
+      console.log = (...args) => {
+        calls.push(args);
+      };
+
+      try {
+        delete window.DEBUG_ARROWS;
+        localStorage.removeItem('DEBUG_ARROWS');
+        localStorage.removeItem('__arrow_debug');
+
+        const defaultPair = createArrowPair('arrow-debug-default');
+        window.setupRightArrowHandler(defaultPair.cursor, defaultPair.area, null, () => {});
+        const disabledCount = calls.length;
+
+        window.DEBUG_ARROWS = true;
+        const globalPair = createArrowPair('arrow-debug-global');
+        window.setupRightArrowHandler(globalPair.cursor, globalPair.area, null, () => {});
+        const globalEnabledCount = calls.length - disabledCount;
+
+        window.DEBUG_ARROWS = false;
+        localStorage.setItem('DEBUG_ARROWS', '1');
+        const storagePair = createArrowPair('arrow-debug-storage');
+        window.setupRightArrowHandler(storagePair.cursor, storagePair.area, null, () => {});
+        const storageEnabledCount = calls.length - disabledCount - globalEnabledCount;
+
+        return {
+          disabledCount,
+          globalEnabledCount,
+          storageEnabledCount,
+          messages: calls.map((args) => args[0])
+        };
+      } finally {
+        console.log = originalLog;
+        delete window.DEBUG_ARROWS;
+        localStorage.removeItem('DEBUG_ARROWS');
+        localStorage.removeItem('__arrow_debug');
+        created.forEach((node) => node.remove());
+      }
+    });
+
+    expect(result.disabledCount).toBe(0);
+    expect(result.globalEnabledCount).toBeGreaterThan(0);
+    expect(result.storageEnabledCount).toBeGreaterThan(0);
+    expect(result.messages).toContain('🔵 setupRightArrowHandler: isMobile =');
+  });
+
   test('i18n writes text by default and allows only vetted rich HTML keys', async ({ page }) => {
     await page.goto('/tumski.html');
     await page.waitForFunction(() => window.i18n?.setTranslatedContent);

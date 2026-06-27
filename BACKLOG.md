@@ -505,6 +505,17 @@
   - Files: `README.md`, `AGENTS.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
   - Benefit: docs now point to current refactoring artifacts, canonical localization files, actual Makefile checks and project-specific safety constraints
 
+- [x] **Refactor: arrow diagnostics debug gate** - Moved arrow handler diagnostic logs behind explicit debug flags
+  - Completed: 2026-06-27
+  - Files: `arrow_handlers.js`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
+  - Benefit: route arrow setup/click/touch diagnostics no longer write to production console by default while remaining available through `DEBUG_ARROWS`
+
+- [ ] **Refactor: user account diagnostics gate** - Decide how to gate or retain verbose auth/rating diagnostics
+  - Reason: CR-11 still has active `console.log` diagnostics in `user_account.js`
+  - Benefit: WebView/devtools console will stay focused on real runtime errors
+  - Effort: Medium
+  - Notes: Keep separate from arrow/map/quest cleanup because it touches auth/rating observability
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

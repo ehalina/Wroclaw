@@ -303,6 +303,12 @@ Status 2026-06-26:
 - ввести маленький debug logger с флагом;
 - не удалять все логи массово до стабилизации, чтобы не потерять диагностическую ценность.
 
+Статус 2026-06-27:
+
+- map/quest diagnostics закрыты в Stage 4.7 через `MapDebug`;
+- arrow diagnostics закрыты в Stage 7.6 через `DEBUG_ARROWS`;
+- remaining verbose auth/rating diagnostics in `user_account.js` вынесены в отдельный backlog item.
+
 ### CR-12 - LOW/MEDIUM - Локализация имеет потенциально два source-of-truth файла на язык
 
 Наблюдение: в locale directories встречаются `translation.json` и `translations.json`. Runtime в `i18n.js` загружает `translations.json`.
@@ -390,4 +396,4 @@ make audit
 
 Остается:
 
-- CR-11: remaining production console/debug cleanup - Stage 7.
+- CR-11: auth/rating diagnostics in `user_account.js` - tracked as a separate backlog item.

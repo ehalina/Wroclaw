@@ -293,6 +293,7 @@ class SPAManager {
 - `quest_overlay.js` — opening/render flow `.book-overlay`, `sessionStorage.questState` чтение, intro/title image/reset button, prepared-task controls и confirm dialog.
 - `map_debug.js` — gated diagnostics helper `MapDebug` для карты/квестов; активируется только через `window.DEBUG_MAP`, `localStorage.DEBUG_MAP = "1"` или legacy `localStorage.__quest_debug = "1"`.
 - `quest_marker_handler.js`, `tumski_cathedral_handler.js`, `tumski_page_common.js` — используют `MapDebug` вместо прямых active debug logs в production console.
+- `arrow_handlers.js` — route-arrow diagnostics gated locally through `DEBUG_ARROWS` / `localStorage.DEBUG_ARROWS`; default production console remains quiet except for `console.error`.
 
 
 ### 1.7. i18n text/rich HTML boundary

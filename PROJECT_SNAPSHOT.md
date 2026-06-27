@@ -160,6 +160,7 @@ Wroclaw/
 60. ✅ Stage 7.3 Legacy right arrow handler cleanup
 61. ✅ Stage 7.4 Legacy locale duplicate cleanup
 62. ✅ Stage 7.5 README/AGENTS governance refresh
+63. ✅ Stage 7.6 Arrow diagnostics debug gate
 
 ---
 
@@ -257,6 +258,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 7.6 выполнен
+- `arrow_handlers.js` diagnostic `console.log/warn` переведены на `debugLog/debugWarn`
+- arrow diagnostics выключены по умолчанию и включаются через `DEBUG_ARROWS` / `localStorage.DEBUG_ARROWS`
+- smoke проверяет quiet default и debug-enable paths
+- CR-11 остаётся открытым только для auth/rating diagnostics (`user_account.js`)
 
 ### 2026-06-27 - Refactoring Stage 7.5 выполнен
 - `README.md` обновлён под текущие Makefile checks, refactoring docs и package baseline

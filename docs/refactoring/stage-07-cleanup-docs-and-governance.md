@@ -134,6 +134,26 @@ Stage 7.5 выполнен:
 
 - Stage 7.6: final cleanup review for remaining CR-11/debug logging and stale placeholders.
 
+## Status Update - 2026-06-27 - Stage 7.6
+
+Stage 7.6 выполнен:
+
+- `arrow_handlers.js` active `console.log` / `console.warn` diagnostics переведены на local gated helpers:
+  - `debugLog(...)`;
+  - `debugWarn(...)`.
+- Диагностика стрелок выключена по умолчанию и включается явно через:
+  - `window.DEBUG_ARROWS = true`;
+  - `localStorage.DEBUG_ARROWS = "1"`;
+  - legacy `localStorage.__arrow_debug = "1"`.
+- `console.error` в arrow handlers оставлен для реальных ошибок.
+- Добавлен Playwright smoke на quiet default и оба debug-enable paths.
+- CR-11 частично закрыт для `arrow_handlers.js`; auth/rating diagnostics in `user_account.js` remain separate debt.
+- Validation: `make smoke` passed with 50 Playwright tests; `make audit` passed with build summary `324 files, 84.5 MB -> www/`.
+
+Следующий подэтап:
+
+- Stage 7.7: decide whether to gate `user_account.js` diagnostics or document them as post-MVP auth/rating observability debt.
+
 ## Documentation updates
 
 `BACKLOG.md`:

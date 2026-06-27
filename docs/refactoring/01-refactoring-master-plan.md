@@ -420,3 +420,7 @@ make smoke
   - `README.md` обновлён под текущие Makefile checks, refactoring docs и package baseline;
   - `AGENTS.md` заполнен project-specific core files, stack, commands and constraints;
   - governance docs теперь указывают на canonical localization path и Stage 7 cleanup state.
+- Stage 7.6 выполнен:
+  - `arrow_handlers.js` active diagnostics переведены на `debugLog/debugWarn`;
+  - arrow diagnostics включаются явно через `DEBUG_ARROWS`;
+  - smoke фиксирует quiet default и debug-enable paths.
