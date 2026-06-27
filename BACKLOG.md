@@ -535,10 +535,10 @@
   - Files: `index.html`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
   - Benefit: SPA shell route/hash diagnostics are quiet by default and remain available through `DEBUG_SPA` and legacy `__spa_debug`
 
-- [ ] **Refactor: audio promise rejection diagnostics** - Replace remaining audio `.catch(console.log)` handlers with quiet debug-aware handling
-  - Reason: `language_menu.js` and `index.html` still route playback rejections to production console
-  - Benefit: expected autoplay/playback rejections will not create devtools noise
-  - Effort: Medium
+- [x] **Refactor: audio promise rejection diagnostics** - Replaced remaining audio `.catch(console.log)` handlers with quiet debug-aware handling
+  - Completed: 2026-06-27
+  - Files: `index.html`, `language_menu.js`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
+  - Benefit: expected autoplay/playback rejections stay quiet by default and remain available through `DEBUG_AUDIO` and legacy `__audio_debug`
 
 - [ ] **Refactor: one-line runtime init diagnostics** - Gate/remove low-value success logs in minimap/Firebase init
   - Reason: `spa_minimap_manager.js` and `firebase_config.js` still write success/disabled diagnostics unconditionally

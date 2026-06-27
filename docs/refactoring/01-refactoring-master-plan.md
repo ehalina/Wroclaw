@@ -444,3 +444,7 @@ make smoke
   - active SPA route/hash diagnostics in `index.html` moved behind `spaDebugLog`;
   - SPA diagnostics enabled only via `DEBUG_SPA` / legacy `__spa_debug`;
   - audio promise rejection handlers intentionally left for Stage 7.12.
+- Stage 7.12 выполнен:
+  - remaining `audio.play().catch(console.log)` handlers removed from `index.html` and `language_menu.js`;
+  - audio play rejection diagnostics enabled only via `DEBUG_AUDIO` / legacy `__audio_debug`;
+  - smoke covers quiet default and debug-enable paths through real SPA/language-menu audio call sites.

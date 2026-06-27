@@ -90,6 +90,102 @@ test.describe('Wroclaw static app smoke', () => {
     expect(result.messages).toContain('✅ [SPA] postMessage отправлен повторно с hash:');
   });
 
+  test('audio play rejection diagnostics are quiet by default and gated by DEBUG_AUDIO', async ({ page }) => {
+    await page.goto('/');
+
+    const result = await page.evaluate(async () => {
+      const calls = [];
+      const originalWarn = console.warn;
+      const spaAudio = window.spaManager.getUnifiedAudioPlayer();
+      let backgroundMusic = document.querySelector('#backgroundMusic');
+      const createdBackgroundMusic = !backgroundMusic;
+
+      if (!backgroundMusic) {
+        backgroundMusic = document.createElement('audio');
+        backgroundMusic.id = 'backgroundMusic';
+        document.body.appendChild(backgroundMusic);
+      }
+
+      const originalSpaPlay = spaAudio.play;
+      const originalBackgroundPlay = backgroundMusic.play;
+      const originalAudioUnlocked = window.spaManager.audioUnlocked;
+      const originalMusicInitialized = window.LanguageMenu.musicInitialized;
+      const originalSoundMuted = localStorage.getItem('soundMuted');
+      let currentLabel = 'default';
+
+      console.warn = (...args) => {
+        calls.push(args);
+      };
+
+      spaAudio.play = () => Promise.reject(new Error(`spa ${currentLabel}`));
+      backgroundMusic.play = () => Promise.reject(new Error(`menu ${currentLabel}`));
+
+      const emitHandlers = async (label) => {
+        currentLabel = label;
+        spaAudio.dispatchEvent(new Event('ended'));
+        window.LanguageMenu.startTownMusic();
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      };
+
+      try {
+        window.spaManager.audioUnlocked = true;
+        window.LanguageMenu.musicInitialized = true;
+        delete window.DEBUG_AUDIO;
+        localStorage.setItem('soundMuted', 'false');
+        localStorage.removeItem('DEBUG_AUDIO');
+        localStorage.removeItem('__audio_debug');
+        await emitHandlers('default');
+        const disabledCount = calls.length;
+
+        window.DEBUG_AUDIO = true;
+        await emitHandlers('global');
+        const globalEnabledCount = calls.length - disabledCount;
+
+        window.DEBUG_AUDIO = false;
+        localStorage.setItem('DEBUG_AUDIO', '1');
+        await emitHandlers('storage');
+        const storageEnabledCount = calls.length - disabledCount - globalEnabledCount;
+
+        localStorage.removeItem('DEBUG_AUDIO');
+        localStorage.setItem('__audio_debug', '1');
+        await emitHandlers('legacy');
+        const legacyEnabledCount = calls.length - disabledCount - globalEnabledCount - storageEnabledCount;
+
+        return {
+          disabledCount,
+          globalEnabledCount,
+          legacyEnabledCount,
+          storageEnabledCount,
+          messages: calls.map((args) => args[0])
+        };
+      } finally {
+        console.warn = originalWarn;
+        spaAudio.play = originalSpaPlay;
+        backgroundMusic.play = originalBackgroundPlay;
+        if (createdBackgroundMusic) {
+          backgroundMusic.remove();
+        }
+        window.spaManager.audioUnlocked = originalAudioUnlocked;
+        window.LanguageMenu.musicInitialized = originalMusicInitialized;
+        delete window.DEBUG_AUDIO;
+        if (originalSoundMuted === null) {
+          localStorage.removeItem('soundMuted');
+        } else {
+          localStorage.setItem('soundMuted', originalSoundMuted);
+        }
+        localStorage.removeItem('DEBUG_AUDIO');
+        localStorage.removeItem('__audio_debug');
+      }
+    });
+
+    expect(result.disabledCount).toBe(0);
+    expect(result.globalEnabledCount).toBe(2);
+    expect(result.storageEnabledCount).toBe(2);
+    expect(result.legacyEnabledCount).toBe(2);
+    expect(result.messages).toContain('🎵 [SPA audio] play() rejected: loop restart');
+    expect(result.messages).toContain('🎵 [language audio] play() rejected: town start');
+  });
+
   test('shared quest audio helper owns quest music in SPA shell', async ({ page }) => {
     await page.goto('/');
 

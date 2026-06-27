@@ -137,6 +137,29 @@ function postMessageToIframe(iframe, type, payload = {}) {
     return true;
 }
 
+const LANGUAGE_AUDIO_DEBUG_STORAGE_KEYS = ['DEBUG_AUDIO', '__audio_debug'];
+
+function isLanguageAudioDebugEnabled() {
+    try {
+        if (window.DEBUG_AUDIO === true || window.DEBUG_AUDIO === '1' || window.DEBUG_AUDIO === 'true') {
+            return true;
+        }
+
+        return LANGUAGE_AUDIO_DEBUG_STORAGE_KEYS.some((key) => {
+            const value = localStorage.getItem(key);
+            return value === '1' || value === 'true';
+        });
+    } catch (_) {
+        return false;
+    }
+}
+
+function handleLanguageMenuAudioPlayRejection(context, error) {
+    if (isLanguageAudioDebugEnabled()) {
+        console.warn(`🎵 [language audio] play() rejected: ${context}`, error);
+    }
+}
+
 const QuestAudio = (() => {
     const ELEMENT_ID = 'questMusic';
     const TRACK_NAME = 'quest';
@@ -526,14 +549,14 @@ const LanguageMenu = {
                     const isMuted = localStorage.getItem('soundMuted') === 'true';
                     if (!isMuted) {
                         backgroundMusic.currentTime = 0;
-                        backgroundMusic.play().catch(console.log);
+                        backgroundMusic.play().catch((error) => handleLanguageMenuAudioPlayRejection('town loop', error));
                     }
                 });
                 backgroundMusic.setAttribute('data-loop-handler-added', 'true');
             }
             
             backgroundMusic.currentTime = 0;
-            backgroundMusic.play().catch(console.log);
+            backgroundMusic.play().catch((error) => handleLanguageMenuAudioPlayRejection('town start', error));
     // console.log('🎵 Запускаем фоновую музыку');
             
             // После успешного запуска town музыки инициализируем kostel в фоне
@@ -556,7 +579,7 @@ const LanguageMenu = {
                     const isMuted = localStorage.getItem('soundMuted') === 'true';
                     if (!isMuted) {
                         kostelMusic.currentTime = 0;
-                        kostelMusic.play().catch(console.log);
+                        kostelMusic.play().catch((error) => handleLanguageMenuAudioPlayRejection('kostel loop', error));
                     }
                 });
                 kostelMusic.setAttribute('data-loop-handler-added', 'true');
@@ -586,7 +609,7 @@ const LanguageMenu = {
                     const isMuted = localStorage.getItem('soundMuted') === 'true';
                     if (!isMuted) {
                         birdsMusic.currentTime = 0;
-                        birdsMusic.play().catch(console.log);
+                        birdsMusic.play().catch((error) => handleLanguageMenuAudioPlayRejection('birds loop', error));
                     }
                 });
                 birdsMusic.setAttribute('data-loop-handler-added', 'true');
@@ -616,7 +639,7 @@ const LanguageMenu = {
                     const isMuted = localStorage.getItem('soundMuted') === 'true';
                     if (!isMuted) {
                         hangMusic.currentTime = 0;
-                        hangMusic.play().catch(console.log);
+                        hangMusic.play().catch((error) => handleLanguageMenuAudioPlayRejection('hang loop', error));
                     }
                 });
                 hangMusic.setAttribute('data-loop-handler-added', 'true');
@@ -689,13 +712,13 @@ const LanguageMenu = {
                         const isMuted = localStorage.getItem('soundMuted') === 'true';
                         if (!isMuted) {
                             kostelMusic.currentTime = 0;
-                            kostelMusic.play().catch(console.log);
+                            kostelMusic.play().catch((error) => handleLanguageMenuAudioPlayRejection('kostel loop', error));
                         }
                     });
                     kostelMusic.setAttribute('data-loop-handler-added', 'true');
                 }
                 
-                kostelMusic.play().catch(console.log);
+                kostelMusic.play().catch((error) => handleLanguageMenuAudioPlayRejection('kostel unmute', error));
             }
         } else if (currentPage && currentPage.includes('tumski21.html')) {
             // Запускаем hang.mp3 для tumski21
@@ -707,13 +730,13 @@ const LanguageMenu = {
                         const isMuted = localStorage.getItem('soundMuted') === 'true';
                         if (!isMuted) {
                             hangMusic.currentTime = 0;
-                            hangMusic.play().catch(console.log);
+                            hangMusic.play().catch((error) => handleLanguageMenuAudioPlayRejection('hang loop', error));
                         }
                     });
                     hangMusic.setAttribute('data-loop-handler-added', 'true');
                 }
                 
-                hangMusic.play().catch(console.log);
+                hangMusic.play().catch((error) => handleLanguageMenuAudioPlayRejection('hang unmute', error));
             }
         } else {
             // Запускаем town.mp3 для остальных страниц
@@ -725,13 +748,13 @@ const LanguageMenu = {
                         const isMuted = localStorage.getItem('soundMuted') === 'true';
                         if (!isMuted) {
                             backgroundMusic.currentTime = 0;
-                            backgroundMusic.play().catch(console.log);
+                            backgroundMusic.play().catch((error) => handleLanguageMenuAudioPlayRejection('town loop', error));
                         }
                     });
                     backgroundMusic.setAttribute('data-loop-handler-added', 'true');
                 }
                 
-                backgroundMusic.play().catch(console.log);
+                backgroundMusic.play().catch((error) => handleLanguageMenuAudioPlayRejection('town unmute', error));
             }
         }
     },

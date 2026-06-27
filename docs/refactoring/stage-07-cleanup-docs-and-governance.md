@@ -250,6 +250,24 @@ Stage 7.11 выполнен:
 
 - Stage 7.12: replace remaining audio `.catch(console.log)` handlers with quiet debug-aware handling.
 
+## Status Update - 2026-06-27 - Stage 7.12
+
+Stage 7.12 выполнен:
+
+- `index.html` remaining `audio.play().catch(console.log)` handlers replaced with `handleSpaAudioPlayRejection`.
+- `language_menu.js` remaining `audio.play().catch(console.log)` handlers replaced with `handleLanguageMenuAudioPlayRejection`.
+- Audio rejection diagnostics включаются явно через:
+  - `window.DEBUG_AUDIO = true`;
+  - `localStorage.DEBUG_AUDIO = "1"`;
+  - legacy `localStorage.__audio_debug = "1"`.
+- Default behavior stays quiet for expected autoplay/playback promise rejections.
+- Added Playwright smoke through real SPA `ended` and `LanguageMenu.startTownMusic()` call sites.
+- Validation: `make smoke` passed with 60 Playwright tests.
+
+Следующий подэтап:
+
+- Stage 7.13: gate/remove low-value one-line runtime init diagnostics in `spa_minimap_manager.js` and `firebase_config.js`.
+
 ## Documentation updates
 
 `BACKLOG.md`:

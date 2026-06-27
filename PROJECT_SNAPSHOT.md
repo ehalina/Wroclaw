@@ -166,6 +166,7 @@ Wroclaw/
 66. ✅ Stage 7.9 Gnome diagnostics debug gate
 67. ✅ Stage 7.10 Runtime diagnostics inventory
 68. ✅ Stage 7.11 SPA shell diagnostics debug gate
+69. ✅ Stage 7.12 Audio promise rejection diagnostics gate
 
 ---
 
@@ -263,6 +264,11 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 7.12 выполнен
+- `index.html` и `language_menu.js` больше не используют active `audio.play().catch(console.log)`
+- audio rejection diagnostics включаются через `DEBUG_AUDIO` / `localStorage.DEBUG_AUDIO` / legacy `__audio_debug`
+- smoke проверяет quiet default и debug-enable paths через реальные SPA/language-menu audio call sites
 
 ### 2026-06-27 - Refactoring Stage 7.11 выполнен
 - `index.html` SPA route/hash diagnostics переведены на `spaDebugLog`

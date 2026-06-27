@@ -298,6 +298,7 @@ class SPAManager {
 - `user_account.js` — auth/rating diagnostics gated locally through `DEBUG_ACCOUNT` / `localStorage.DEBUG_ACCOUNT`; legacy `localStorage.__account_debug` remains supported, while `console.error` stays visible for real account/database failures.
 - `user_database.js` — Firebase/auth/leaderboard diagnostics use the same `DEBUG_ACCOUNT` / legacy `__account_debug` policy as `user_account.js`.
 - `index.html` — SPA route/hash diagnostics gated locally through `DEBUG_SPA` / `localStorage.DEBUG_SPA`; legacy `localStorage.__spa_debug` remains supported, while `console.error` stays visible.
+- `index.html`, `language_menu.js` — expected audio `play()` promise rejection diagnostics gated locally through `DEBUG_AUDIO` / `localStorage.DEBUG_AUDIO`; legacy `localStorage.__audio_debug` remains supported.
 
 
 ### 1.7. i18n text/rich HTML boundary

@@ -542,6 +542,29 @@
             }
         }
 
+        const SPA_AUDIO_DEBUG_STORAGE_KEYS = ['DEBUG_AUDIO', '__audio_debug'];
+
+        function isSpaAudioDebugEnabled() {
+            try {
+                if (window.DEBUG_AUDIO === true || window.DEBUG_AUDIO === '1' || window.DEBUG_AUDIO === 'true') {
+                    return true;
+                }
+
+                return SPA_AUDIO_DEBUG_STORAGE_KEYS.some((key) => {
+                    const value = localStorage.getItem(key);
+                    return value === '1' || value === 'true';
+                });
+            } catch (_) {
+                return false;
+            }
+        }
+
+        function handleSpaAudioPlayRejection(context, error) {
+            if (isSpaAudioDebugEnabled()) {
+                console.warn(`🎵 [SPA audio] play() rejected: ${context}`, error);
+            }
+        }
+
         class SPAManager {
             constructor() {
                 this.currentPage = null;
@@ -977,7 +1000,7 @@
                     // Автоматическое зацикливание
                     if (this.isSoundEnabled() && this.audioUnlocked) {
                         audio.currentTime = 0;
-                                    audio.play().catch(console.log);
+                                    audio.play().catch((error) => handleSpaAudioPlayRejection('loop restart', error));
                                 }
                             });
                 
@@ -1495,7 +1518,7 @@
                     if (!document.hidden && this.audioUnlocked && this.isSoundEnabled()) {
                         const audio = this.getUnifiedAudioPlayer();
                         if (audio && audio.paused) {
-                            audio.play().catch(console.log);
+                            audio.play().catch((error) => handleSpaAudioPlayRejection('visibility resume', error));
                         }
                     }
                 });
