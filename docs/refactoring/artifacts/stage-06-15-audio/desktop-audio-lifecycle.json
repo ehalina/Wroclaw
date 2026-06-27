@@ -1,0 +1,116 @@
+{
+  "autoStartState": {
+    "audioUnlocked": false,
+    "currentTrack": "town"
+  },
+  "constructSources": [],
+  "eagerSources": [],
+  "expectedEagerPreloadSources": [
+    "media/zwyki/birds.mp3",
+    "media/zwyki/kostel.mp3",
+    "media/zwyki/hang.mp3",
+    "media/zwyki/quest.mp3"
+  ],
+  "expectedMode": "lazy",
+  "lifecycleEvents": [],
+  "loadSources": [],
+  "playSources": [],
+  "requestedSources": [
+    "media/opening-a-book.wav",
+    "media/step.wav",
+    "media/zwyki/bb6f2b8ec908f28.mp3",
+    "media/zwyki/quest.mp3",
+    "media/zwyki/town.mp3"
+  ],
+  "requests": [
+    {
+      "assetPath": "media/zwyki/town.mp3",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555681038
+    },
+    {
+      "assetPath": "media/step.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555681094
+    },
+    {
+      "assetPath": "media/opening-a-book.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555681120
+    },
+    {
+      "assetPath": "media/opening-a-book.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555681120
+    },
+    {
+      "assetPath": "media/opening-a-book.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555681120
+    },
+    {
+      "assetPath": "media/opening-a-book.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555681120
+    },
+    {
+      "assetPath": "media/opening-a-book.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555681120
+    },
+    {
+      "assetPath": "media/step.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555681202
+    },
+    {
+      "assetPath": "media/zwyki/bb6f2b8ec908f28.mp3",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555681203
+    },
+    {
+      "assetPath": "media/opening-a-book.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555681203
+    },
+    {
+      "assetPath": "media/step.wav",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555681212
+    },
+    {
+      "assetPath": "media/zwyki/quest.mp3",
+      "method": "GET",
+      "phase": "initial-load",
+      "resourceType": "media",
+      "time": 1782555681472
+    }
+  ],
+  "url": "http://127.0.0.1:6173/#tumski.html",
+  "viewport": {
+    "width": 1280,
+    "height": 800
+  }
+}

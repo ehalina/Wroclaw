@@ -425,6 +425,11 @@
   - Files: `playwright.stage-06-14.config.mjs`, `tools/stage-06-14/audio-lifecycle-characterization.spec.mjs`, `docs/refactoring/stage-06-14-audio-lifecycle-characterization.md`, `docs/refactoring/artifacts/stage-06-14-audio/`
   - Benefit: Stage 6.15 lazy-preload refactor now has a desktop/mobile method-level oracle for current eager MP3 loading
 
+- [x] **Refactor: lazy background audio preload** - Removed eager route-specific MP3 loading from `preloadBackgroundMusic()`
+  - Completed: 2026-06-27
+  - Files: `index.html`, `tools/stage-06-14/audio-lifecycle-characterization.spec.mjs`, `docs/refactoring/stage-06-15-lazy-audio-preload.md`, `docs/refactoring/artifacts/stage-06-15-audio/`
+  - Benefit: `birds`, `kostel`, `hang`, and `quest` are no longer constructed/loaded by preload bookkeeping; actual playback still loads through `switchTrack()`
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

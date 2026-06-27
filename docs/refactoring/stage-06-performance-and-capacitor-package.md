@@ -400,3 +400,32 @@ make stage-06-14-audio
 Следующий подэтап:
 
 - Stage 6.15: изменить `preloadBackgroundMusic()` на lazy bookkeeping без eager `new Audio(...).load()` для route-specific MP3, сохранив `switchTrack()` behavior.
+
+## Status Update - 2026-06-27 - Stage 6.15
+
+Stage 6.15 выполнен:
+
+- Создан `docs/refactoring/stage-06-15-lazy-audio-preload.md`.
+- `preloadBackgroundMusic()` больше не создает `Audio` elements и не вызывает `load()` для:
+  - `birds`;
+  - `kostel`;
+  - `hang`;
+  - `quest`.
+- Метод теперь только инициализирует `trackTimes` bookkeeping.
+- `switchTrack(trackName)` продолжает lazy-load actual MP3 через `spaAudioSourceForTrack()`.
+- Добавлен Makefile target `make stage-06-15-audio`.
+- Stage 6.14 characterization runner получил режимы `record` / `lazy`.
+- Созданы artifacts:
+  - `docs/refactoring/artifacts/stage-06-15-audio/desktop-audio-lifecycle.json`;
+  - `docs/refactoring/artifacts/stage-06-15-audio/mobile-pixel5-audio-lifecycle.json`.
+- Package baseline не менялся: `331 files, 86.9 MB -> www/`.
+
+Validation:
+
+```bash
+make stage-06-15-audio
+```
+
+Следующий подэтап:
+
+- Stage 6.16: consolidate quest audio owner, не смешивая с route-track lazy preload.

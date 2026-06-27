@@ -4,7 +4,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const artifactDir = path.join(rootDir, 'docs/refactoring/artifacts/stage-06-14-audio');
+const artifactDir = path.join(
+  rootDir,
+  process.env.STAGE_06_AUDIO_ARTIFACT_DIR || 'docs/refactoring/artifacts/stage-06-14-audio'
+);
+const expectedMode = process.env.STAGE_06_AUDIO_EXPECTED || 'record';
 
 const expectedEagerPreloadSources = [
   'media/zwyki/birds.mp3',
@@ -138,6 +142,7 @@ test.describe('Stage 6.14 audio lifecycle characterization', () => {
       constructSources,
       eagerSources,
       expectedEagerPreloadSources,
+      expectedMode,
       lifecycleEvents,
       loadSources,
       playSources,
@@ -154,8 +159,16 @@ test.describe('Stage 6.14 audio lifecycle characterization', () => {
       'utf8'
     );
 
-    expectedEagerPreloadSources.forEach((source) => {
-      expect(eagerSources).toContain(source);
-    });
+    if (expectedMode === 'eager') {
+      expectedEagerPreloadSources.forEach((source) => {
+        expect(eagerSources).toContain(source);
+      });
+    }
+
+    if (expectedMode === 'lazy') {
+      expectedEagerPreloadSources.forEach((source) => {
+        expect(eagerSources).not.toContain(source);
+      });
+    }
   });
 });

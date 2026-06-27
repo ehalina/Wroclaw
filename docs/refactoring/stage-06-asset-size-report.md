@@ -224,6 +224,16 @@ Completed on 2026-06-27:
 - Confirmed current eager method behavior constructs/loads `birds`, `kostel`, `hang`, and `quest`.
 - Package baseline remains `331 files, 86.9 MB -> www/`.
 
+## Stage 6.15 result
+
+Completed on 2026-06-27:
+
+- Created `docs/refactoring/stage-06-15-lazy-audio-preload.md`.
+- Changed `preloadBackgroundMusic()` from eager `Audio(...).load()` calls to lazy bookkeeping.
+- Added `make stage-06-15-audio`.
+- Captured desktop/mobile artifacts showing no route-specific construct/load calls for `birds`, `kostel`, `hang`, `quest`.
+- Package baseline remains `331 files, 86.9 MB -> www/`.
+
 ## Stage 6.3 result
 
 Completed on 2026-06-27:

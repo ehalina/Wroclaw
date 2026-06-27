@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 96% (46 завершённых задач текущего плана)
+**Общий прогресс:** 97% (47 завершённых задач текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -143,6 +143,7 @@ Wroclaw/
 44. ✅ Stage 6.12 Audio lifecycle refactor plan
 45. ✅ Stage 6.13 Audio source policy extraction
 46. ✅ Stage 6.14 Audio lifecycle characterization
+47. ✅ Stage 6.15 Lazy background audio preload
 
 ---
 
@@ -232,6 +233,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.15 выполнен
+- `preloadBackgroundMusic()` больше не создает и не загружает route-specific MP3
+- метод оставляет только `trackTimes` bookkeeping
+- добавлен `make stage-06-15-audio`
+- desktop/mobile artifacts подтверждают lazy behavior
 
 ### 2026-06-27 - Refactoring Stage 6.14 выполнен
 - добавлены `playwright.stage-06-14.config.mjs`, `tools/stage-06-14/audio-lifecycle-characterization.spec.mjs` и `make stage-06-14-audio`

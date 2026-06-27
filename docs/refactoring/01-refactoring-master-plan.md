@@ -344,3 +344,8 @@ make smoke
   - создан `docs/refactoring/stage-06-14-audio-lifecycle-characterization.md`;
   - добавлен `make stage-06-14-audio`;
   - зафиксирован desktop/mobile baseline: `preloadBackgroundMusic()` constructs/loads `birds`, `kostel`, `hang`, `quest`.
+- Stage 6.15 выполнен:
+  - `preloadBackgroundMusic()` больше не создает `Audio` и не вызывает `load()` для route-specific MP3;
+  - метод сохраняет только `trackTimes` bookkeeping;
+  - добавлен `make stage-06-15-audio`;
+  - desktop/mobile artifacts подтверждают lazy behavior.

@@ -621,34 +621,22 @@
             }
             
             /**
-             * Предзагружает фоновую музыку и ставит на паузу
+             * Готовит учет времени фоновой музыки без eager загрузки треков
              */
             async preloadBackgroundMusic() {
-                const musicTracks = ['birds', 'kostel', 'hang', 'quest']
-                    .map((name) => ({ name, src: spaAudioSourceForTrack(name) }))
-                    .filter((track) => track.src);
-                
-    // console.log('🎵 Предзагружаем фоновую музыку...');
-                
-                for (const track of musicTracks) {
-                    try {
-                        const audio = new Audio(track.src);
-                        audio.preload = 'auto';
-                        audio.volume = 0.7;
-                        audio.loop = true;
-                        
-                        // Загружаем и сразу ставим на паузу
-                        await audio.load();
-                        audio.pause();
-                        
-                        // Сохраняем ссылку для дальнейшего использования
-                        this.trackTimes.set(track.name, 0);
-                        
-    // console.log(`🎵 ${track.name} загружен и поставлен на паузу`);
-                    } catch (error) {
-    // console.log(`🎵 Ошибка загрузки ${track.name}:`, error);
+                const musicTrackNames = ['birds', 'kostel', 'hang', 'quest'];
+
+    // console.log('🎵 Готовим фоновую музыку к ленивой загрузке...');
+
+                musicTrackNames.forEach((trackName) => {
+                    if (!spaAudioSourceForTrack(trackName)) {
+                        return;
                     }
-                }
+
+                    if (!this.trackTimes.has(trackName)) {
+                        this.trackTimes.set(trackName, 0);
+                    }
+                });
             }
             
             /**

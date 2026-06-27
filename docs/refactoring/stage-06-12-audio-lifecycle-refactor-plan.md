@@ -102,6 +102,8 @@ Potential implementation:
 - lazy-load route tracks through `switchTrack(trackName)`;
 - leave sound effects preload unchanged because they are small and widely used.
 
+Status: completed on 2026-06-27.
+
 ### Stage 6.16 - Quest audio owner consolidation
 
 Separate refactor:
