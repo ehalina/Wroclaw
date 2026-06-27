@@ -126,6 +126,12 @@ Wroclaw/
 27. ✅ Stage 5.10 Descriptor-based route cursor render helper
 28. ✅ Stage 5.11 Descriptor-based marker render helper
 29. ✅ Stage 5.12 dwor01 page descriptor module
+30. ✅ Stage 5.13 dwor02 page descriptor module
+31. ✅ Stage 5.14 Configured page renderer helper
+32. ✅ Stage 5.15 Content page workflow documented
+33. ✅ Stage 6.1 Asset size report and package baseline
+34. ✅ Stage 6.2 Package root asset exclusions
+35. ✅ Stage 6.3 Package exclusion reference guard
 
 ---
 

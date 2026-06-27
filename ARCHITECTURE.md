@@ -150,6 +150,9 @@ Wroclaw/
 - `scripts/build-capacitor-web.mjs` копирует HTML/CSS/JS, `media/`, `locales/`, `thumbs/` и runtime assets в `www/`.
 - `capacitor.config.json` использует `webDir: "www"`.
 - `make cap-sync` пересобирает `www/` и синхронизирует `android/` и `ios/`.
+- Stage 6 package baseline documented in `docs/refactoring/stage-06-asset-size-report.md`: current logical build size is `138.2 MB`, with cleanup-only candidates identified before image optimization.
+- Stage 6.2 cleanup-only package exclusions reduced the logical web build to `132.3 MB` by excluding root-level unreferenced assets from `www`; source assets remain untouched.
+- Build exclusions are guarded: `make build` scans runtime HTML/CSS/JS/JSON and fails if a path listed in `excludedRuntimePaths` becomes referenced again.
 - Android command-line build требует JDK 21; `make android-debug` задаёт `CAPACITOR_JAVA_HOME`.
 
 ### 1. SPA Architecture через iframe
@@ -331,6 +334,9 @@ class SPAManager {
 - Для route cursor rollout используется descriptor-based `PageShellHelpers.renderRouteCursors(target, cursors)`, чтобы страницы не копировали ручной DOM append.
 - Для marker rollout используется descriptor-based `PageShellHelpers.renderMarkers(target, markers, options)`, чтобы страницы не копировали `map-mark-area` markup и сохраняли существующие ids/data attrs/audio/i18n contract.
 - Page-specific descriptors для первого rollout вынесены в `dwor01_page.js`; HTML подключает этот module перед `tumski_init.js`, чтобы generated markers/routes существовали до page init.
+- Второй rollout выполнен в `dwor02.html` через `dwor02_page.js`, чтобы проверить повторяемость pattern до введения более общего renderer abstraction.
+- Общий `PageShellHelpers.renderConfiguredPage(config)` теперь является preferred entry point для page modules: descriptors остаются в page-specific module, DOM creation остаётся в shared helper.
+- Будущие page migrations должны следовать `docs/refactoring/stage-05-content-workflow.md`: сначала smoke contract, затем HTML shell + page module descriptors, затем `make test`/`make smoke`.
 - Для inline module page migrations нельзя полагаться на `document.currentScript`; используйте явный stable selector или отдельный page config module.
 
 ### 2. ES6 Modules для модульной архитектуры

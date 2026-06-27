@@ -340,6 +340,36 @@
   - Files: `dwor01.html`, `dwor01_page.js`, `tests/smoke.spec.mjs`
   - Benefit: `dwor01` now has a reusable page-specific data/render module pattern while the HTML shell stays simple and the helper-generated DOM remains smoke-covered
 
+- [x] **Refactor: dwor02 page descriptor module** - Validated the page module pattern on a second low-risk content page
+  - Completed: 2026-06-27
+  - Files: `dwor02.html`, `dwor02_page.js`, `tests/smoke.spec.mjs`
+  - Benefit: shared page helper rollout is now proven on two adjacent production pages before adding any broader renderer abstraction
+
+- [x] **Refactor: configured page renderer** - Centralized page module rendering for marker and route descriptors
+  - Completed: 2026-06-27
+  - Files: `page_shell_helpers.js`, `dwor01_page.js`, `dwor02_page.js`, `tests/smoke.spec.mjs`
+  - Benefit: page modules now keep descriptor data separate from shared DOM rendering calls, reducing copy/paste before additional page migrations
+
+- [x] **Docs: content page workflow** - Documented the controlled Stage 5 page migration workflow
+  - Completed: 2026-06-27
+  - Files: `docs/refactoring/stage-05-content-workflow.md`, `docs/refactoring/stage-05-page-template-and-i18n-consolidation.md`
+  - Benefit: future content pages can follow a documented shell/module/descriptor pattern with required smoke contracts and rollout rules
+
+- [x] **Docs: asset size report** - Created the Stage 6 package and media size baseline
+  - Completed: 2026-06-27
+  - Files: `docs/refactoring/stage-06-asset-size-report.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
+  - Benefit: performance work now has a measured `www` baseline, top-heavy asset list and cleanup candidates before any source deletion or image optimization
+
+- [x] **Build: package root asset exclusions** - Excluded unreferenced root assets from Capacitor `www`
+  - Completed: 2026-06-27
+  - Files: `scripts/build-capacitor-web.mjs`, `docs/refactoring/stage-06-asset-size-report.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
+  - Benefit: build output dropped from 350 files / 138.2 MB to 348 files / 132.3 MB without deleting source assets or touching runtime media
+
+- [x] **Build: package exclusion reference guard** - Added a build-time guard for explicitly excluded runtime paths
+  - Completed: 2026-06-27
+  - Files: `scripts/build-capacitor-web.mjs`, `docs/refactoring/stage-06-asset-size-report.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
+  - Benefit: `make build` now fails if a path excluded from `www` becomes referenced again in runtime HTML/CSS/JS/JSON
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

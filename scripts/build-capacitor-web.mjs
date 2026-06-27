@@ -1,4 +1,4 @@
-import { cp, mkdir, readdir, rm, stat } from 'node:fs/promises';
+import { cp, mkdir, readFile, readdir, rm, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -6,6 +6,7 @@ const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const outDir = path.join(rootDir, 'www');
 
 const runtimeDirectories = new Set(['locales', 'media', 'thumbs']);
+const referenceScanDirectories = new Set(['locales']);
 const rootRuntimeExtensions = new Set([
   '.css',
   '.gif',
@@ -23,6 +24,7 @@ const rootRuntimeExtensions = new Set([
   '.woff',
   '.woff2'
 ]);
+const referenceScanExtensions = new Set(['.css', '.html', '.js', '.json']);
 
 const excludedNames = new Set([
   '.DS_Store',
@@ -30,6 +32,16 @@ const excludedNames = new Set([
   'capacitor.config.json',
   'package-lock.json',
   'package.json'
+]);
+
+const excludedRuntimePaths = new Set([
+  'Gemini_Generated_Image_5x2pd05x2pd05x2p.png',
+  'media/Wroclaw_Saver.png',
+  'media/book/Gemini_Generated_Image_5x2pd05x2pd05x2p.png',
+  'media/krasnolud/u7173139994_Bronze_gnome_figurine_same_perspective_do_not_chang_42cebd36-ece2-491f-91b2-67f0cc47d8aa.png',
+  'media/krasnolud/u7173139994_Bronze_gnome_figurine_same_perspective_do_not_chang_f574f9f5-15cb-4d89-857e-e46a0ac1ac3d.png',
+  'media/watercolor/22.png',
+  'music.mp3'
 ]);
 
 const excludedExtensions = new Set([
@@ -44,17 +56,84 @@ const excludedExtensions = new Set([
   '.zip'
 ]);
 
+function toRuntimePath(filePath) {
+  return path.relative(rootDir, filePath).split(path.sep).join('/');
+}
+
 function shouldSkipFile(filePath) {
   const baseName = path.basename(filePath);
   const ext = path.extname(filePath);
 
   return (
     excludedNames.has(baseName) ||
+    excludedRuntimePaths.has(toRuntimePath(filePath)) ||
     excludedExtensions.has(ext) ||
     baseName.startsWith('._') ||
     baseName.startsWith('~$') ||
     baseName.includes(' copy.')
   );
+}
+
+async function collectReferenceScanFiles() {
+  const files = [];
+
+  async function walk(dir) {
+    const entries = await readdir(dir, { withFileTypes: true });
+
+    await Promise.all(entries.map(async (entry) => {
+      const current = path.join(dir, entry.name);
+
+      if (entry.isDirectory()) {
+        await walk(current);
+        return;
+      }
+
+      if (entry.isFile() && referenceScanExtensions.has(path.extname(entry.name))) {
+        files.push(current);
+      }
+    }));
+  }
+
+  const entries = await readdir(rootDir, { withFileTypes: true });
+
+  await Promise.all(entries.map(async (entry) => {
+    const current = path.join(rootDir, entry.name);
+
+    if (entry.isDirectory()) {
+      if (referenceScanDirectories.has(entry.name)) {
+        await walk(current);
+      }
+      return;
+    }
+
+    if (entry.isFile() && referenceScanExtensions.has(path.extname(entry.name))) {
+      files.push(current);
+    }
+  }));
+
+  return files;
+}
+
+async function assertExcludedRuntimePathsUnreferenced() {
+  const files = await collectReferenceScanFiles();
+  const references = [];
+
+  await Promise.all(files.map(async (file) => {
+    const content = await readFile(file, 'utf8');
+
+    excludedRuntimePaths.forEach((excludedPath) => {
+      if (content.includes(excludedPath)) {
+        references.push(`${toRuntimePath(file)} -> ${excludedPath}`);
+      }
+    });
+  }));
+
+  if (references.length > 0) {
+    throw new Error([
+      'Build exclusion reference check failed:',
+      ...references.map((reference) => `  - ${reference}`)
+    ].join('\n'));
+  }
 }
 
 async function copyDirectory(src, dest) {
@@ -117,6 +196,7 @@ async function summarizeBuild() {
   console.log(`Built Capacitor web assets: ${fileCount} files, ${totalMegabytes} MB -> www/`);
 }
 
+await assertExcludedRuntimePathsUnreferenced();
 await rm(outDir, { recursive: true, force: true });
 await mkdir(outDir, { recursive: true });
 await copyRootRuntimeFiles();

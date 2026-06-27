@@ -2,26 +2,12 @@ import { PageShellHelpers } from './page_shell_helpers.js';
 
 const MARKERS = [
     {
-        id: 'black_klotska_quest',
-        coordinates: {
-            xDesktop: 1220,
-            yDesktop: 650,
-            xMobile: 1350,
-            yMobile: 700
-        },
-        paperaSrc: 'media/papera1.png',
-        titleKey: 'quest.task9',
-        audioId: 'bookSoundBlackKlotska',
-        questNumber: 9,
-        questImage: 'media/tumski/dwor_08.jpg'
-    },
-    {
         id: 'kleck_gate',
         coordinates: {
-            xDesktop: 1500,
-            yDesktop: 950,
+            xDesktop: 1200,
+            yDesktop: 100,
             xMobile: 1500,
-            yMobile: 900
+            yMobile: 200
         },
         titleKey: 'kleck_gate.title',
         textId: 'kleck-gate-text',
@@ -32,27 +18,27 @@ const MARKERS = [
 const ROUTE_CURSORS = [
     {
         type: 'prosto',
-        page: 'dwor02.html',
+        page: 'dwor03.html',
         coordinates: {
             xDesktop: 1000,
             yDesktop: 1200,
-            xMobile: 1300,
-            yMobile: 1200
+            xMobile: 1900,
+            yMobile: 1000
         }
     },
     {
         type: 'back',
-        page: 'pk02.html',
+        page: 'dwor01.html',
         coordinates: {
             xDesktop: 100,
             yDesktop: 1500,
-            xMobile: 1400,
+            xMobile: 1900,
             yMobile: 1600
         },
         areaCoordinates: {
             xDesktop: 100,
             yDesktop: 1400,
-            xMobile: 1400,
+            xMobile: 1900,
             yMobile: 1600
         }
     }

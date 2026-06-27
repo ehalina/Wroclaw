@@ -262,3 +262,34 @@ make smoke
   - inline module setup удалён из `dwor01.html`;
   - `dwor01.html` подключает `dwor01_page.js` перед `tumski_init.js`, сохраняя порядок создания markers/routes;
   - DOM contract smoke для `dwor01.html` остался стабильным.
+- Stage 5.13 выполнен:
+  - вторым rollout candidate выбран `dwor02.html`;
+  - создан `dwor02_page.js` с marker/cursor descriptors;
+  - `dwor02.html` переведён на HTML shell + page module pattern;
+  - добавлен отдельный DOM contract smoke для `dwor02.html`;
+  - `make smoke` расширен до 44 тестов.
+- Stage 5.14 выполнен:
+  - `page_shell_helpers.js` получил `renderConfiguredPage(config)`;
+  - `dwor01_page.js` и `dwor02_page.js` теперь содержат descriptors и один renderer call;
+  - synthetic helper smoke покрывает общий renderer;
+  - DOM contract smoke для обеих rollout pages остался стабильным.
+- Stage 5.15 выполнен:
+  - создан `docs/refactoring/stage-05-content-workflow.md`;
+  - зафиксирован preferred pattern для HTML shell + `<page>_page.js` descriptors + `renderConfiguredPage(...)`;
+  - описан минимальный smoke contract для page migrations;
+  - Stage 5 закрыт как техническая основа для page templates и i18n consolidation.
+- Stage 6.1 выполнен:
+  - создан `docs/refactoring/stage-06-asset-size-report.md`;
+  - зафиксирован build baseline `350 files, 138.2 MB -> www/`;
+  - отделены runtime-heavy assets от cleanup/package-exclusion candidates;
+  - следующий Stage 6 шаг должен быть cleanup-only package exclusion без source deletion.
+- Stage 6.2 выполнен:
+  - build script получил path-specific `excludedRuntimePaths`;
+  - из `www/` исключены root-level unreferenced `music.mp3` и `Gemini_Generated_Image_5x2pd05x2pd05x2p.png`;
+  - source files не удалялись, `media/**` не трогался;
+  - build baseline улучшен до `348 files, 132.3 MB -> www/`;
+  - `make smoke` остаётся зелёным на 44 тестах.
+- Stage 6.3 выполнен:
+  - build script получил guard для `excludedRuntimePaths`;
+  - `make build` теперь падает, если явно исключённый runtime path снова появился как ссылка в HTML/CSS/JS/JSON;
+  - baseline `348 files, 132.3 MB -> www/` сохранён.

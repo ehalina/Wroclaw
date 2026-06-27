@@ -222,10 +222,28 @@ function renderMarkers(target, markers = [], options = {}) {
     });
 }
 
+function renderConfiguredPage(config = {}) {
+    const markers = renderMarkers(
+        config.markerTarget || document.body,
+        config.markers || [],
+        {
+            before: config.markerBefore || '.scene',
+            ...(config.markerOptions || {})
+        }
+    );
+    const routeElements = renderRouteCursors(config.routeTarget, config.routeCursors || []);
+
+    return {
+        markers,
+        routeElements
+    };
+}
+
 export const PageShellHelpers = {
     createMarker,
     createRouteCursor,
     createSceneShell,
+    renderConfiguredPage,
     renderMarkers,
     renderRouteCursors,
     setCoordinateData

@@ -286,3 +286,52 @@ Stage 5.12 выполнен:
 Следующий подэтап:
 
 - Stage 5.13: решить, делать ли общий page renderer для marker/cursor descriptor modules или мигрировать второй низкорисковый page candidate по текущему pattern, чтобы проверить повторяемость.
+
+## Status Update - 2026-06-27 - Stage 5.13
+
+Stage 5.13 выполнен:
+
+- Вторым низкорисковым кандидатом выбран `dwor02.html`: тот же stable shell, один marker block, две route arrows, без inline special cases.
+- Создан `dwor02_page.js` с marker/cursor descriptors.
+- `dwor02.html` переведён на тот же pattern: HTML shell + page module перед `tumski_init.js`.
+- Добавлен отдельный DOM contract smoke для `dwor02.html`.
+- Контракт фиксирует scene shell, marker id, marker i18n/audio, route targets/classes и наличие page module script.
+- Проверки после изменения: `make test` и `make smoke` прошли; smoke расширен до 44 тестов на desktop/mobile.
+
+Следующий подэтап:
+
+- Stage 5.14: вынести общий `renderConfiguredPage()` для page modules, чтобы `dwor01_page.js` и `dwor02_page.js` оставались только descriptor data без повторения helper calls/selectors.
+
+## Status Update - 2026-06-27 - Stage 5.14
+
+Stage 5.14 выполнен:
+
+- В `page_shell_helpers.js` добавлен `renderConfiguredPage(config)`.
+- Renderer централизует стандартный порядок для page modules:
+  - render markers в `document.body` перед `.scene`;
+  - render route cursors в explicit `routeTarget`;
+  - возвращает созданные markers и route elements для тестируемости.
+- `dwor01_page.js` и `dwor02_page.js` больше не вызывают `renderMarkers()`/`renderRouteCursors()` напрямую.
+- Оба page modules теперь содержат descriptors и один вызов `PageShellHelpers.renderConfiguredPage(...)`.
+- Synthetic helper smoke покрывает `renderConfiguredPage()` напрямую.
+- DOM contract smoke для `dwor01.html` и `dwor02.html` остался стабильным.
+- Проверки после изменения: `make test` и `make smoke` прошли; smoke остаётся 44 теста на desktop/mobile.
+
+Следующий подэтап:
+
+- Stage 5.15: зафиксировать future content workflow: как добавлять/мигрировать страницу через page module descriptors, какие smoke contracts нужны, и когда можно переходить к следующему page candidate.
+
+## Status Update - 2026-06-27 - Stage 5.15
+
+Stage 5.15 выполнен:
+
+- Создан `docs/refactoring/stage-05-content-workflow.md`.
+- Зафиксирован preferred pattern для content pages: HTML shell + `<page>_page.js` descriptors + `PageShellHelpers.renderConfiguredPage(...)`.
+- Описаны descriptor rules для coordinates, marker ids/classes/data attrs, audio nodes, route cursor types и special cases.
+- Описан минимальный smoke contract для каждой page migration.
+- Зафиксировано rollout rule: мигрировать по одной странице/маленькому семейству, не начинать с exception pages, обновлять `BACKLOG.md` и Stage 5 notes после rollout.
+
+Stage 5 как техническая основа page templates и i18n consolidation закрыт. Дальше можно идти двумя путями:
+
+- продолжать controlled page rollout по `docs/refactoring/stage-05-content-workflow.md`;
+- или вернуться к верхнеуровневому refactoring plan и выбрать следующий stage из `BACKLOG.md`.
