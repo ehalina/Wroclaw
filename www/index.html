@@ -1073,8 +1073,31 @@
             async loadPage(pageName) {
     // console.log('📄 Загрузка страницы:', pageName);
 
-                // Показываем индикатор загрузки
-                this.showLoading();
+                let loadingTimerId = null;
+                let loadingWasShown = false;
+                const loadingDelayMs = 140;
+
+                const showLoadingWithDelay = () => {
+                    loadingTimerId = window.setTimeout(() => {
+                        loadingWasShown = true;
+                        this.showLoading();
+                        loadingTimerId = null;
+                    }, loadingDelayMs);
+                };
+
+                const hideLoadingWithDelay = () => {
+                    if (loadingTimerId !== null) {
+                        window.clearTimeout(loadingTimerId);
+                        loadingTimerId = null;
+                    }
+
+                    if (loadingWasShown) {
+                        this.hideLoading();
+                        loadingWasShown = false;
+                    }
+                };
+
+                showLoadingWithDelay();
 
                 try {
                     // Извлекаем hash из pageName (если есть)
@@ -1095,7 +1118,7 @@
                                 this.sendPageHashToIframe(iframe, pageHash, { existing: true });
                             }
                         }
-                        this.hideLoading();
+                        hideLoadingWithDelay();
                         return;
                     }
 
@@ -1190,7 +1213,7 @@
 
     // console.log('🎵 Вызываем showPage для:', actualPageName);
                         this.showPage(actualPageName);
-                        this.hideLoading();
+                        hideLoadingWithDelay();
                     };
 
                     iframe.onerror = () => {
@@ -1202,7 +1225,7 @@
 
                 } catch (error) {
                     console.error('❌ Ошибка загрузки страницы:', error);
-                    this.hideLoading();
+                    hideLoadingWithDelay();
                 }
             }
 
