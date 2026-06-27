@@ -540,10 +540,10 @@
   - Files: `index.html`, `language_menu.js`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
   - Benefit: expected autoplay/playback rejections stay quiet by default and remain available through `DEBUG_AUDIO` and legacy `__audio_debug`
 
-- [ ] **Refactor: one-line runtime init diagnostics** - Gate/remove low-value success logs in minimap/Firebase init
-  - Reason: `spa_minimap_manager.js` and `firebase_config.js` still write success/disabled diagnostics unconditionally
-  - Benefit: routine initialization remains quiet while errors stay visible
-  - Effort: Small
+- [x] **Refactor: one-line runtime init diagnostics** - Gated low-value minimap/Firebase init logs
+  - Completed: 2026-06-27
+  - Files: `spa_minimap_manager.js`, `firebase_config.js`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
+  - Benefit: routine minimap disabled and Firebase success diagnostics are quiet by default while errors stay visible
 
 - [ ] **Cleanup: legacy audio diagnostics module review** - Confirm and remove or gate `background_music111.js`
   - Reason: repo scan shows many diagnostics in a likely legacy audio module with no runtime script references

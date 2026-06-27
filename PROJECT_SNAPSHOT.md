@@ -167,6 +167,7 @@ Wroclaw/
 67. ✅ Stage 7.10 Runtime diagnostics inventory
 68. ✅ Stage 7.11 SPA shell diagnostics debug gate
 69. ✅ Stage 7.12 Audio promise rejection diagnostics gate
+70. ✅ Stage 7.13 One-line runtime init diagnostics gate
 
 ---
 
@@ -264,6 +265,11 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 7.13 выполнен
+- `spa_minimap_manager.js` tumski21 disabled diagnostic gated through `DEBUG_MINIMAP`
+- `firebase_config.js` success diagnostic gated through `DEBUG_FIREBASE`; `console.error` failure paths preserved
+- smoke проверяет mini-map quiet default/debug-enable paths and waits for initial loading overlay hide in loading-state contract test
 
 ### 2026-06-27 - Refactoring Stage 7.12 выполнен
 - `index.html` и `language_menu.js` больше не используют active `audio.play().catch(console.log)`

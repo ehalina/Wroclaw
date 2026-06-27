@@ -448,3 +448,7 @@ make smoke
   - remaining `audio.play().catch(console.log)` handlers removed from `index.html` and `language_menu.js`;
   - audio play rejection diagnostics enabled only via `DEBUG_AUDIO` / legacy `__audio_debug`;
   - smoke covers quiet default and debug-enable paths through real SPA/language-menu audio call sites.
+- Stage 7.13 выполнен:
+  - `spa_minimap_manager.js` tumski21 disabled diagnostic gated via `DEBUG_MINIMAP` / legacy-style `__minimap_debug`;
+  - `firebase_config.js` success diagnostic gated via `DEBUG_FIREBASE` / legacy-style `__firebase_debug`;
+  - smoke covers mini-map quiet default and debug-enable paths; loading-state smoke now waits for initial overlay hide before helper contract checks.

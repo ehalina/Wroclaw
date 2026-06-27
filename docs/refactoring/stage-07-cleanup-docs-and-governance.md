@@ -268,6 +268,29 @@ Stage 7.12 выполнен:
 
 - Stage 7.13: gate/remove low-value one-line runtime init diagnostics in `spa_minimap_manager.js` and `firebase_config.js`.
 
+## Status Update - 2026-06-27 - Stage 7.13
+
+Stage 7.13 выполнен:
+
+- `spa_minimap_manager.js` low-value tumski21 disabled diagnostic moved behind local mini-map debug gate.
+- Mini-map diagnostics включаются явно через:
+  - `window.DEBUG_MINIMAP = true`;
+  - `localStorage.DEBUG_MINIMAP = "1"`;
+  - legacy-style `localStorage.__minimap_debug = "1"`.
+- `firebase_config.js` Firebase success diagnostic moved behind local Firebase debug gate.
+- Firebase success diagnostics включаются явно через:
+  - `window.DEBUG_FIREBASE = true`;
+  - `localStorage.DEBUG_FIREBASE = "1"`;
+  - legacy-style `localStorage.__firebase_debug = "1"`.
+- `console.error` Firebase placeholder/init failure paths stay visible.
+- Added Playwright smoke for mini-map quiet default and global/storage/legacy-style debug-enable paths.
+- Stabilized loading-state smoke to wait for initial overlay hide before helper contract assertions.
+- Validation: `make smoke` passed with 62 Playwright tests.
+
+Следующий подэтап:
+
+- Stage 7.14: review `background_music111.js` runtime references and remove or gate retained legacy diagnostics.
+
 ## Documentation updates
 
 `BACKLOG.md`:

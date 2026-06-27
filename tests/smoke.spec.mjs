@@ -186,6 +186,84 @@ test.describe('Wroclaw static app smoke', () => {
     expect(result.messages).toContain('🎵 [language audio] play() rejected: town start');
   });
 
+  test('mini-map init diagnostics are quiet by default and gated by DEBUG_MINIMAP', async ({ page }) => {
+    await page.goto('/');
+
+    const result = await page.evaluate(() => {
+      const calls = [];
+      const originalLog = console.log;
+      const root = {
+        get DEBUG_MINIMAP() {
+          return window.DEBUG_MINIMAP;
+        },
+        set DEBUG_MINIMAP(value) {
+          window.DEBUG_MINIMAP = value;
+        },
+        addEventListener: () => {},
+        console,
+        localStorage,
+        setInterval: () => 0,
+        setTimeout: (callback) => {
+          callback();
+          return 0;
+        }
+      };
+      const iframe = {
+        src: `${window.location.origin}/tumski21.html`
+      };
+      const createManager = () => new window.SpaMiniMap.MiniMapManager({
+        document,
+        getActiveIframe: () => iframe,
+        root
+      });
+
+      console.log = (...args) => {
+        calls.push(args);
+      };
+
+      try {
+        delete window.DEBUG_MINIMAP;
+        localStorage.removeItem('DEBUG_MINIMAP');
+        localStorage.removeItem('__minimap_debug');
+        createManager().expand();
+        const disabledCount = calls.length;
+
+        window.DEBUG_MINIMAP = true;
+        createManager().expand();
+        const globalEnabledCount = calls.length - disabledCount;
+
+        window.DEBUG_MINIMAP = false;
+        localStorage.setItem('DEBUG_MINIMAP', '1');
+        createManager().expand();
+        const storageEnabledCount = calls.length - disabledCount - globalEnabledCount;
+
+        localStorage.removeItem('DEBUG_MINIMAP');
+        localStorage.setItem('__minimap_debug', '1');
+        createManager().expand();
+        const legacyEnabledCount = calls.length - disabledCount - globalEnabledCount - storageEnabledCount;
+
+        return {
+          disabledCount,
+          globalEnabledCount,
+          legacyEnabledCount,
+          storageEnabledCount,
+          messages: calls.map((args) => args[0])
+        };
+      } finally {
+        console.log = originalLog;
+        delete window.DEBUG_MINIMAP;
+        localStorage.removeItem('DEBUG_MINIMAP');
+        localStorage.removeItem('__minimap_debug');
+      }
+    });
+
+    expect(result.disabledCount).toBe(0);
+    expect(result.globalEnabledCount).toBe(1);
+    expect(result.storageEnabledCount).toBe(1);
+    expect(result.legacyEnabledCount).toBe(1);
+    expect(result.messages).toContain('🗺️ Мини-карта отключена на странице tumski21 для экономии памяти');
+  });
+
   test('shared quest audio helper owns quest music in SPA shell', async ({ page }) => {
     await page.goto('/');
 
@@ -1384,6 +1462,7 @@ test.describe('Wroclaw static app smoke', () => {
 
   test('SPA loading state helper preserves overlay class contract', async ({ page }) => {
     await page.goto('/');
+    await expect(page.locator('#loadingOverlay')).toHaveClass(/hidden/);
 
     const loadingState = await page.evaluate(() => {
       const overlay = document.getElementById('loadingOverlay');

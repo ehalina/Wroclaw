@@ -25,6 +25,33 @@ const firebaseConfig = {
 // Инициализация Firebase
 // Используем compat версию для совместимости
 (function() {
+    const FIREBASE_DEBUG_STORAGE_KEYS = ['DEBUG_FIREBASE', '__firebase_debug'];
+
+    function isFirebaseDebugEnabled() {
+        try {
+            if (
+                window.DEBUG_FIREBASE === true ||
+                window.DEBUG_FIREBASE === '1' ||
+                window.DEBUG_FIREBASE === 'true'
+            ) {
+                return true;
+            }
+
+            return FIREBASE_DEBUG_STORAGE_KEYS.some((key) => {
+                const value = localStorage.getItem(key);
+                return value === '1' || value === 'true';
+            });
+        } catch (_) {
+            return false;
+        }
+    }
+
+    function firebaseDebugLog(...args) {
+        if (isFirebaseDebugEnabled()) {
+            console.log(...args);
+        }
+    }
+
     function hasPlaceholders(cfg) {
         if (!cfg || typeof cfg !== 'object') return true;
         return Object.values(cfg).some((v) => typeof v === 'string' && v.includes('YOUR_'));
@@ -59,7 +86,7 @@ const firebaseConfig = {
                 window.firebaseAuth = firebase.auth();
                 window.firebaseFirestore = firebase.firestore();
                 
-                console.log('✅ Firebase инициализирован');
+                firebaseDebugLog('✅ Firebase инициализирован');
             } catch (error) {
                 window.firebaseInitError = String(error?.message || error);
                 console.error('❌ Ошибка инициализации Firebase:', error);
@@ -77,4 +104,3 @@ const firebaseConfig = {
         initFirebase();
     }
 })();
-

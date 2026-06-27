@@ -21,7 +21,7 @@ rg -n "^[^/]*(console\.log|console\.warn)" --glob "*.js" --glob "*.html" --glob 
 | Already gated helper internals | `arrow_handlers.js`, `map_debug.js`, `user_account.js`, `user_database.js` | No action; these are logger implementations or fallback method lookup. | none |
 | SPA shell diagnostics | `index.html` active SPA route/hash `console.log` | Done in Stage 7.11 via `spaDebugLog`; audio rejection handling split out below. | none |
 | Audio promise rejection handlers | `language_menu.js`, `index.html` | Done in Stage 7.12 via `DEBUG_AUDIO` gated handlers; default expected promise rejections stay quiet. | none |
-| One-line runtime init diagnostics | `spa_minimap_manager.js`, `firebase_config.js` | Gate or remove low-value success logs; preserve visible `console.error`. | Stage 7.13 |
+| One-line runtime init diagnostics | `spa_minimap_manager.js`, `firebase_config.js` | Done in Stage 7.13 via `DEBUG_MINIMAP` / `DEBUG_FIREBASE`; visible `console.error` paths preserved. | none |
 | Legacy audio module | `background_music111.js` | Confirm runtime references. If unreferenced, remove as cleanup; if retained, gate diagnostics behind explicit audio debug flag. | Stage 7.14 |
 | Standalone/debug pages | `katedra_panorama.html`, `audio_visibility_test.html` | Treat separately from core tour shell; either gate standalone diagnostics or document debug-page exception. | Stage 7.15 |
 
@@ -32,6 +32,7 @@ rg -n "^[^/]*(console\.log|console\.warn)" --glob "*.js" --glob "*.html" --glob 
 - Keep each follow-up stage small enough to validate with `make smoke` or a narrower oracle plus `make audit`.
 - Stage 7.11 closed only SPA route/hash diagnostics; audio promise rejections remain separate to avoid mixing navigation diagnostics with media policy.
 - Stage 7.12 closed active audio `.catch(console.log)` handlers in core shell/menu files; legacy audio module remains separate Stage 7.14.
+- Stage 7.13 closed low-value minimap/Firebase init diagnostics; remaining CR-11 work is legacy audio module and standalone/debug page policy.
 
 ## Validation
 

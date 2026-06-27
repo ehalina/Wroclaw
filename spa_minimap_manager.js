@@ -6,6 +6,33 @@
         SPA_NAVIGATE: 'SPA_NAVIGATE'
     });
 
+    const MINI_MAP_DEBUG_STORAGE_KEYS = ['DEBUG_MINIMAP', '__minimap_debug'];
+
+    function isMiniMapDebugEnabled(root = global) {
+        try {
+            if (
+                root.DEBUG_MINIMAP === true ||
+                root.DEBUG_MINIMAP === '1' ||
+                root.DEBUG_MINIMAP === 'true'
+            ) {
+                return true;
+            }
+
+            return MINI_MAP_DEBUG_STORAGE_KEYS.some((key) => {
+                const value = root.localStorage?.getItem?.(key);
+                return value === '1' || value === 'true';
+            });
+        } catch (_) {
+            return false;
+        }
+    }
+
+    function miniMapDebugLog(root, ...args) {
+        if (isMiniMapDebugEnabled(root)) {
+            root.console?.log?.(...args);
+        }
+    }
+
     function createDefaultMiniMapDependencies(root = global) {
         const getActiveIframe = () => root.spaManager?.getActiveIframe?.() || null;
 
@@ -178,7 +205,10 @@
                 try {
                     const iframeSrc = activeIframe.src || '';
                     if (iframeSrc.includes('tumski21.html')) {
-                        console.log('🗺️ Мини-карта отключена на странице tumski21 для экономии памяти');
+                        miniMapDebugLog(
+                            this.root,
+                            '🗺️ Мини-карта отключена на странице tumski21 для экономии памяти'
+                        );
                         return;
                     }
                 } catch (error) {
