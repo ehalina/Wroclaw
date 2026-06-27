@@ -429,6 +429,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
 
     // Используем CSS-медиа-запросы для определения типа устройства
     const isMobile = !isDesktopDevice();
+    const hasSpaNavigation = () => window.parent && window.parent !== window && window.parent.spaManager;
     debugLog('🟢 setupForwardArrowHandler: isMobile =', isMobile);
 
     if (!isMobile) {
@@ -525,6 +526,13 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
     // console.log('🟡 Воспроизводим звук шага');
                 stepSound.currentTime = 0;
                 playAudioQuietly(stepSound);
+            }
+
+            if (hasSpaNavigation()) {
+                if (typeof onForwardClick === 'function') {
+                    window.requestAnimationFrame(onForwardClick);
+                }
+                return;
             }
 
             // Получаем элементы для анимации
@@ -720,6 +728,13 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
                 if (stepSound && isSoundEnabled()) {
                     stepSound.currentTime = 0;
                     playAudioQuietly(stepSound);
+                }
+
+                if (hasSpaNavigation()) {
+                    if (typeof onForwardClick === 'function') {
+                        window.requestAnimationFrame(onForwardClick);
+                    }
+                    return;
                 }
 
                 // Получаем элементы для анимации
@@ -1292,6 +1307,7 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
 
     // Используем CSS-медиа-запросы для определения типа устройства
     const isMobile = !isDesktopDevice();
+    const hasSpaNavigation = () => window.parent && window.parent !== window && window.parent.spaManager;
     debugLog('🟡 setupForwardLeftArrowHandler: isMobile =', isMobile);
 
     if (!isMobile) {
@@ -1387,6 +1403,13 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
     // console.log('🟡 Воспроизводим звук шага');
                 stepSound.currentTime = 0;
                 playAudioQuietly(stepSound);
+            }
+
+            if (hasSpaNavigation()) {
+                if (typeof onForwardLeftClick === 'function') {
+                    window.requestAnimationFrame(onForwardLeftClick);
+                }
+                return;
             }
 
             // Получаем элементы для анимации
@@ -1547,6 +1570,13 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
                 if (stepSound && isSoundEnabled()) {
                     stepSound.currentTime = 0;
                     playAudioQuietly(stepSound);
+                }
+
+                if (hasSpaNavigation()) {
+                    if (typeof onForwardLeftClick === 'function') {
+                        window.requestAnimationFrame(onForwardLeftClick);
+                    }
+                    return;
                 }
 
                 // Получаем элементы для анимации
