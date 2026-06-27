@@ -662,7 +662,7 @@ test.describe('Wroclaw static app smoke', () => {
           }
         }
       ]);
-      const marker = PageShellHelpers.createMarker({
+      const markers = PageShellHelpers.renderMarkers(shell.scene, [{
         id: 'black_klotska_quest',
         titleKey: 'quest.task9',
         textId: 'black-klotska-text',
@@ -676,9 +676,8 @@ test.describe('Wroclaw static app smoke', () => {
         audioId: 'bookSoundBlackKlotska',
         questNumber: 9,
         questImage: 'media/tumski/dwor_08.jpg'
-      });
-
-      shell.scene.appendChild(marker.root);
+      }]);
+      const marker = markers[0];
 
       const host = document.createElement('section');
       host.appendChild(shell.scene);
@@ -700,6 +699,7 @@ test.describe('Wroclaw static app smoke', () => {
         routeAreaClass: routeElements[1].className,
         routeAreaY: routeElements[1].getAttribute('data-y-desktop'),
         routeElementCount: routeElements.length,
+        renderedMarkerCount: markers.length,
         sceneClass: shell.scene.className,
         textKey: marker.text.getAttribute('data-i18n')
       };
@@ -721,24 +721,28 @@ test.describe('Wroclaw static app smoke', () => {
       routeAreaClass: 'custom-cursor-prostoarea',
       routeAreaY: '1100',
       routeElementCount: 2,
+      renderedMarkerCount: 1,
       sceneClass: 'scene',
       textKey: 'quest.task9'
     });
   });
 
-  test('dwor01 keeps stable page shell contract after helper cursor migration', async ({ page }) => {
+  test('dwor01 keeps stable page shell contract after helper marker and cursor migration', async ({ page }) => {
     await page.goto('/dwor01.html');
 
     const contract = await page.evaluate(() => ({
       backAreaClass: document.querySelector('.custom-cursor-backarea')?.className,
       backTarget: document.querySelector('.custom-cursor-back')?.getAttribute('data-prev-page'),
+      blackKlotskaTextKey: document.getElementById('black_klotska_quest')?.parentElement?.querySelector('.tumski-text')?.getAttribute('data-i18n'),
       blackKlotskaAudioSrc: document.getElementById('bookSoundBlackKlotska')?.getAttribute('src'),
       blackKlotskaQuestImage: document.getElementById('black_klotska_quest')?.getAttribute('data-quest-image'),
       blackKlotskaQuestNumber: document.getElementById('black_klotska_quest')?.getAttribute('data-quest-number'),
       imageContainerMapPoint: document.querySelector('.image-container')?.getAttribute('data-map-point'),
       imageCount: document.querySelectorAll('.scene .image-scroll-wrapper > .image').length,
+      kleckGateAudioSrc: document.getElementById('bookSoundKleckGate')?.getAttribute('src'),
       kleckGateTextKey: document.getElementById('kleck-gate-text')?.getAttribute('data-i18n'),
       markerCount: document.querySelectorAll('.map-mark-area').length,
+      markerIds: Array.from(document.querySelectorAll('.map-mark-area .map-mark')).map((marker) => marker.id),
       nextImageContainers: document.querySelectorAll('.scene + .next-image-container, .scene .next-image-container').length,
       prostoAreaClass: document.querySelector('.custom-cursor-prostoarea')?.className,
       prostoTarget: document.querySelector('.custom-cursor-prosto')?.getAttribute('data-next-page'),
@@ -748,13 +752,16 @@ test.describe('Wroclaw static app smoke', () => {
     expect(contract).toEqual({
       backAreaClass: 'custom-cursor-backarea',
       backTarget: 'pk02.html',
+      blackKlotskaTextKey: 'quest.task9',
       blackKlotskaAudioSrc: 'media/opening-a-book.wav',
       blackKlotskaQuestImage: 'media/tumski/dwor_08.jpg',
       blackKlotskaQuestNumber: '9',
       imageContainerMapPoint: '40',
       imageCount: 1,
+      kleckGateAudioSrc: 'media/opening-a-book.wav',
       kleckGateTextKey: 'kleck_gate.title',
       markerCount: 2,
+      markerIds: ['black_klotska_quest', 'kleck_gate'],
       nextImageContainers: 1,
       prostoAreaClass: 'custom-cursor-prostoarea',
       prostoTarget: 'dwor02.html',

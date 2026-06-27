@@ -255,3 +255,34 @@ Stage 5.10 выполнен:
 Следующий подэтап:
 
 - Stage 5.11: мигрировать один marker block в `dwor01.html` через `createMarker()` под существующим DOM contract или остановиться на cursor-only rollout, если marker migration даёт слишком шумный HTML diff.
+
+## Status Update - 2026-06-27 - Stage 5.11
+
+Stage 5.11 выполнен:
+
+- В `page_shell_helpers.js` добавлен `renderMarkers(target, markers, options)`.
+- `renderMarkers()` принимает marker descriptors, создаёт стандартные `map-mark-area` blocks через `createMarker()` и умеет вставлять их перед stable anchor (`options.before`).
+- В `dwor01.html` оба marker blocks (`black_klotska_quest`, `kleck_gate`) мигрированы на descriptor-based helper rendering.
+- Route cursors остаются на `renderRouteCursors()`, scene shell/head/scripts/page init пока оставлены статическими.
+- Synthetic helper smoke покрывает `renderMarkers()` напрямую.
+- DOM contract smoke для `dwor01.html` теперь фиксирует marker ids/order, quest attrs, audio src и i18n keys после helper rendering.
+- Проверки после изменения: `make test` и `make smoke` прошли; smoke остаётся 42 теста на desktop/mobile.
+
+Следующий подэтап:
+
+- Stage 5.12: убрать дубли inline module setup в `dwor01.html`, вынести page-specific cursor/marker descriptors в отдельный маленький page config/render module или общий page renderer, не мигрируя массово остальные страницы.
+
+## Status Update - 2026-06-27 - Stage 5.12
+
+Stage 5.12 выполнен:
+
+- Создан `dwor01_page.js` как маленький page-specific module.
+- Cursor и marker descriptors вынесены из inline module-скриптов `dwor01.html`.
+- `dwor01.html` теперь держит статический page shell и подключает `dwor01_page.js` перед `tumski_init.js`.
+- Порядок module scripts сохраняет прежнее требование: helper-generated markers/routes создаются до запуска `tumski_init.js`.
+- DOM contract smoke для `dwor01.html` остался стабильным после выноса page descriptors.
+- Проверки после изменения: `make test` и `make smoke` прошли; smoke остаётся 42 теста на desktop/mobile.
+
+Следующий подэтап:
+
+- Stage 5.13: решить, делать ли общий page renderer для marker/cursor descriptor modules или мигрировать второй низкорисковый page candidate по текущему pattern, чтобы проверить повторяемость.

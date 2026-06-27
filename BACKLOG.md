@@ -330,6 +330,16 @@
   - Files: `page_shell_helpers.js`, `dwor01.html`, `tests/smoke.spec.mjs`
   - Benefit: production pages can pass cursor config as data while helper owns DOM creation and exact route cursor class/attribute output
 
+- [x] **Refactor: marker render helper** - Migrated `dwor01` marker blocks to descriptor-based shared helper rendering
+  - Completed: 2026-06-27
+  - Files: `page_shell_helpers.js`, `dwor01.html`, `tests/smoke.spec.mjs`
+  - Benefit: production pages can render marker blocks from data while preserving existing marker ids, quest attrs, audio nodes and i18n keys under smoke coverage
+
+- [x] **Refactor: dwor01 page descriptor module** - Moved `dwor01` helper setup out of inline HTML modules
+  - Completed: 2026-06-27
+  - Files: `dwor01.html`, `dwor01_page.js`, `tests/smoke.spec.mjs`
+  - Benefit: `dwor01` now has a reusable page-specific data/render module pattern while the HTML shell stays simple and the helper-generated DOM remains smoke-covered
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

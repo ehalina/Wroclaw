@@ -252,3 +252,13 @@ make smoke
   - `dwor01.html` теперь задаёт cursor descriptors одним массивом вместо ручного append;
   - synthetic helper smoke покрывает `renderRouteCursors()`;
   - DOM contract smoke для `dwor01.html` остался стабильным.
+- Stage 5.11 выполнен:
+  - `page_shell_helpers.js` получил `renderMarkers(target, markers, options)`;
+  - оба marker blocks в `dwor01.html` мигрированы на descriptor-based helper rendering;
+  - DOM contract smoke для `dwor01.html` теперь фиксирует marker ids/order, quest attrs, audio src и i18n keys;
+  - scene shell/head/scripts/page init пока оставлены статическими.
+- Stage 5.12 выполнен:
+  - создан `dwor01_page.js` как page-specific descriptor/render module;
+  - inline module setup удалён из `dwor01.html`;
+  - `dwor01.html` подключает `dwor01_page.js` перед `tumski_init.js`, сохраняя порядок создания markers/routes;
+  - DOM contract smoke для `dwor01.html` остался стабильным.

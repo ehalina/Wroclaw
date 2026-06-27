@@ -31,77 +31,17 @@
     <!-- Подсказка для возврата анимации -->
     <div id="animationHint" class="animation-hint" data-i18n="animation.hint"></div>
 
-
-
-
-
-                <!-- Геометка: Черная клёцка Квест -->
-                <div class="map-mark-area">
-                    <div class="map-mark" id="black_klotska_quest" data-x-desktop="1220" data-y-desktop="650" data-x-mobile="1350" data-y-mobile="700" data-quest-number="9" data-quest-image="media/tumski/dwor_08.jpg"></div>
-                    <div class="content-wrapper">
-                        <img class="papera-image" src="media/papera1.png" alt="Papera">
-                        <div class="tumski-text" data-i18n="quest.task9"></div>
-                    </div>
-                    <audio id="bookSoundBlackKlotska" src="media/opening-a-book.wav"></audio>
-                </div>
-
-                <!-- Геометка: Клецкие ворота -->
-                <div class="map-mark-area">
-                    <div class="map-mark" id="kleck_gate" data-x-desktop="1500" data-y-desktop="950" data-x-mobile="1500" data-y-mobile="900"></div>
-                    <div class="content-wrapper">
-                        <img class="papera-image" alt="Papera">
-                        <div class="tumski-text" id="kleck-gate-text" data-i18n="kleck_gate.title"></div>
-                    </div>
-                    <audio id="bookSoundKleckGate" src="media/opening-a-book.wav"></audio>
-                </div>
-
-
     <!-- Главная сцена с фоновым изображением и анимацией -->
     <div class="scene">
         <div class="image-container" data-map-point="40">
             <div class="image-scroll-wrapper">
                 <div class="image">
-
-                    <script type="module">
-                        import { PageShellHelpers } from './page_shell_helpers.js';
-
-                        PageShellHelpers.renderRouteCursors(
-                            '.image-container[data-map-point="40"] .image',
-                            [
-                                {
-                                    type: 'prosto',
-                                    page: 'dwor02.html',
-                                    coordinates: {
-                                        xDesktop: 1000,
-                                        yDesktop: 1200,
-                                        xMobile: 1300,
-                                        yMobile: 1200
-                                    }
-                                },
-                                {
-                                    type: 'back',
-                                    page: 'pk02.html',
-                                    coordinates: {
-                                        xDesktop: 100,
-                                        yDesktop: 1500,
-                                        xMobile: 1400,
-                                        yMobile: 1600
-                                    },
-                                    areaCoordinates: {
-                                        xDesktop: 100,
-                                        yDesktop: 1400,
-                                        xMobile: 1400,
-                                        yMobile: 1600
-                                    }
-                                }
-                            ]
-                        );
-                    </script>
                 </div>
             </div>
         </div>
        <div class="next-image-container"></div>
     </div>
+    <script type="module" src="dwor01_page.js"></script>
     <script type="module" src="tumski_init.js"></script>
 </body>
 </html> 

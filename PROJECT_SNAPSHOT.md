@@ -124,6 +124,8 @@ Wroclaw/
 25. ✅ Stage 5.8 Additive page shell helper with synthetic smoke coverage
 26. ✅ Stage 5.9 dwor01 route cursor helper migration
 27. ✅ Stage 5.10 Descriptor-based route cursor render helper
+28. ✅ Stage 5.11 Descriptor-based marker render helper
+29. ✅ Stage 5.12 dwor01 page descriptor module
 
 ---
 
