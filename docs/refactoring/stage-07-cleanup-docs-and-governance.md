@@ -214,6 +214,24 @@ Stage 7.9 выполнен:
 
 - Stage 7.10: remaining runtime diagnostics inventory and small gates/defer decisions for SPA shell, standalone pages and legacy/debug audio utilities.
 
+## Status Update - 2026-06-27 - Stage 7.10
+
+Stage 7.10 выполнен:
+
+- Проведен focused repo-wide scan remaining active `console.log` / `console.warn` outside tests/scripts/tools/docs/build output.
+- Создан inventory: `docs/refactoring/stage-07-runtime-diagnostics-inventory.md`.
+- Оставшиеся diagnostics split на follow-up stages:
+  - Stage 7.11: SPA shell diagnostics gate;
+  - Stage 7.12: audio promise rejection diagnostics;
+  - Stage 7.13: one-line runtime init diagnostics;
+  - Stage 7.14: legacy audio diagnostics module review;
+  - Stage 7.15: standalone/debug page diagnostics policy.
+- Already gated helper internals (`arrow_handlers.js`, `map_debug.js`, `user_account.js`, `user_database.js`) explicitly excluded from further action.
+
+Следующий подэтап:
+
+- Stage 7.11: gate remaining active SPA route/hash diagnostics in `index.html`, preserving current navigation behavior.
+
 ## Documentation updates
 
 `BACKLOG.md`:

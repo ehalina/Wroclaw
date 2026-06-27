@@ -436,3 +436,7 @@ make smoke
   - `gnome_marker_handler.js` popup/navigation diagnostics переведены на `MapDebug.log`;
   - gnome diagnostics используют existing `DEBUG_MAP` / legacy `__quest_debug` policy;
   - smoke фиксирует quiet default и debug-enable path для Patsa Vatsa route branch.
+- Stage 7.10 выполнен:
+  - remaining runtime diagnostics inventory вынесен в `docs/refactoring/stage-07-runtime-diagnostics-inventory.md`;
+  - CR-11 leftovers split into Stage 7.11-7.15 follow-up items;
+  - Stage 7.11 selected as next step for `index.html` SPA shell diagnostics.

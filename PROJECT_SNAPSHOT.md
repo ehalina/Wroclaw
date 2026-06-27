@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 99% (60 завершённых задач текущего плана)
+**Общий прогресс:** 99% (61 завершённая задача текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -164,6 +164,7 @@ Wroclaw/
 64. ✅ Stage 7.7 User account diagnostics debug gate
 65. ✅ Stage 7.8 User database diagnostics debug gate
 66. ✅ Stage 7.9 Gnome diagnostics debug gate
+67. ✅ Stage 7.10 Runtime diagnostics inventory
 
 ---
 
@@ -261,6 +262,11 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 7.10 выполнен
+- создан `docs/refactoring/stage-07-runtime-diagnostics-inventory.md`
+- remaining active runtime diagnostics classified into Stage 7.11-7.15 follow-up items
+- already gated helper internals excluded from future logging cleanup
 
 ### 2026-06-27 - Refactoring Stage 7.9 выполнен
 - `gnome_marker_handler.js` popup/navigation diagnostic `console.log` переведены на `MapDebug.log`

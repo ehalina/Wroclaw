@@ -525,11 +525,35 @@
   - Files: `gnome_marker_handler.js`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
   - Benefit: Gnome marker flows stay debuggable through `DEBUG_MAP` without writing to production console by default
 
-- [ ] **Refactor: remaining runtime diagnostics inventory** - Classify and gate/defer remaining active runtime `console.log` / `console.warn`
-  - Reason: Repo-wide scan still finds diagnostics in SPA shell, minimap/Firebase init, standalone panorama/test pages and legacy audio module
-  - Benefit: CR-11 can be closed with explicit debug policy or documented debug-page exceptions
+- [x] **Refactor: remaining runtime diagnostics inventory** - Classified remaining active runtime `console.log` / `console.warn`
+  - Completed: 2026-06-27
+  - Files: `docs/refactoring/stage-07-runtime-diagnostics-inventory.md`, `BACKLOG.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
+  - Benefit: CR-11 leftovers are split into small follow-up stages instead of one broad logging cleanup
+
+- [ ] **Refactor: SPA shell diagnostics gate** - Gate remaining active SPA route/hash diagnostics in `index.html`
+  - Reason: `index.html` still has active route/hash `console.log` plus audio promise `.catch(console.log)` handlers
+  - Benefit: SPA shell stays quiet by default while route debugging remains available
   - Effort: Medium
-  - Notes: Do after the gnome handler so the largest active marker cluster is already isolated
+
+- [ ] **Refactor: audio promise rejection diagnostics** - Replace remaining audio `.catch(console.log)` handlers with quiet debug-aware handling
+  - Reason: `language_menu.js` and `index.html` still route playback rejections to production console
+  - Benefit: expected autoplay/playback rejections will not create devtools noise
+  - Effort: Medium
+
+- [ ] **Refactor: one-line runtime init diagnostics** - Gate/remove low-value success logs in minimap/Firebase init
+  - Reason: `spa_minimap_manager.js` and `firebase_config.js` still write success/disabled diagnostics unconditionally
+  - Benefit: routine initialization remains quiet while errors stay visible
+  - Effort: Small
+
+- [ ] **Cleanup: legacy audio diagnostics module review** - Confirm and remove or gate `background_music111.js`
+  - Reason: repo scan shows many diagnostics in a likely legacy audio module with no runtime script references
+  - Benefit: reduces source noise or documents retained legacy behavior explicitly
+  - Effort: Medium
+
+- [ ] **Refactor: standalone/debug page diagnostics policy** - Gate or document remaining standalone page logs
+  - Reason: `katedra_panorama.html` and `audio_visibility_test.html` still contain active diagnostics
+  - Benefit: standalone/debug exceptions become explicit and CR-11 can be closed cleanly
+  - Effort: Small
 
 ### Planned
 
