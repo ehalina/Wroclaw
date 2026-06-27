@@ -1,26 +1,5 @@
 {
-  "missingAssets": [
-    {
-      "file": "debug_styles.html",
-      "target": "input_compatibility.css",
-      "reason": "Stage 1 inventory: debug page references missing compatibility stylesheet; cleanup planned for Stage 7."
-    },
-    {
-      "file": "debug_styles.html",
-      "target": "input_detection.js",
-      "reason": "Stage 1 inventory: debug page references missing input script; cleanup planned for Stage 7."
-    },
-    {
-      "file": "quick_test.html",
-      "target": "input_compatibility.css",
-      "reason": "Stage 1 inventory: debug/test page references missing compatibility stylesheet; cleanup planned for Stage 7."
-    },
-    {
-      "file": "quick_test.html",
-      "target": "input_detection.js",
-      "reason": "Stage 1 inventory: debug/test page references missing input script; cleanup planned for Stage 7."
-    }
-  ],
+  "missingAssets": [],
   "missingRoutes": [
     {
       "file": "right_arrow_handler.js",

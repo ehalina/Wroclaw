@@ -404,3 +404,7 @@ make smoke
   - удалены root-level temporary JS files `arrow_handlers.js.backup`, `quest_marker_handler.js.new`, `sunset_parallax copy.js`;
   - перед удалением проверено отсутствие runtime references;
   - runtime behavior не менялся.
+- Stage 7.2 выполнен:
+  - `debug_styles.html` и `quick_test.html` больше не ссылаются на отсутствующие `input_compatibility.css` / `input_detection.js`;
+  - debug/test pages получили inline input-mode detector;
+  - static inventory allowlist очищен от `missingAssets`.

@@ -390,5 +390,5 @@ make audit
 
 Остается:
 
-- CR-03 residual allowlist entries: debug/test missing assets and legacy route cleanup - Stage 7.2.
+- CR-03 residual allowlist entry: legacy route cleanup `right_arrow_handler.js -> tumski_02.html` - Stage 7.3.
 - CR-11: remaining production console/debug cleanup - Stage 7.

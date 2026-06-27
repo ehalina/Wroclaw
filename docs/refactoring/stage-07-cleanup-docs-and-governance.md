@@ -56,6 +56,25 @@ Stage 7.1 выполнен:
 
 - Stage 7.2: cleanup known static inventory allowlist entries for debug/test pages or legacy route entry, one category at a time.
 
+## Status Update - 2026-06-27 - Stage 7.2
+
+Stage 7.2 выполнен:
+
+- `debug_styles.html` и `quick_test.html` больше не ссылаются на отсутствующие:
+  - `input_compatibility.css`;
+  - `input_detection.js`.
+- Для этих debug/test страниц добавлен маленький inline input-mode detector, который:
+  - уважает `localStorage.input-type-override`;
+  - выставляет `html[data-input-type]` через pointer/touch detection;
+  - сохраняет существующие кнопки `Desktop режим` / `Touch режим`.
+- `scripts/static-check-known-issues.json` больше не содержит `missingAssets` allowlist entries.
+- Runtime tour pages не менялись.
+- Validation: `make audit` passed; static inventory now reports only the remaining known route entry.
+
+Следующий подэтап:
+
+- Stage 7.3: cleanup оставшийся legacy route allowlist entry `right_arrow_handler.js -> tumski_02.html`.
+
 ## Documentation updates
 
 `BACKLOG.md`:

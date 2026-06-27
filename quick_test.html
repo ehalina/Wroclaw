@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Быстрый тест</title>
     <link rel="stylesheet" href="common_tumski.css">
-    <link rel="stylesheet" href="input_compatibility.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -113,7 +112,6 @@
         .desktop { background: #d4edda; color: #155724; }
         .touch { background: #f8d7da; color: #721c24; }
     </style>
-    <script src="input_detection.js"></script>
 </head>
 <body>
     <div class="test-container">
@@ -145,6 +143,16 @@
     </div>
 
     <script>
+        function detectInputMode() {
+            const override = localStorage.getItem('input-type-override');
+            const hasOverride = override === 'desktop' || override === 'touch';
+            const hasCoarsePointer = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+            const hasTouchPoints = navigator.maxTouchPoints > 0;
+            const inputType = hasOverride ? override : (hasCoarsePointer || hasTouchPoints ? 'touch' : 'desktop');
+            document.documentElement.setAttribute('data-input-type', inputType);
+            return inputType;
+        }
+
         function updateStatus() {
             const inputType = document.documentElement.getAttribute('data-input-type');
             const statusEl = document.getElementById('status');
@@ -193,6 +201,7 @@
         
         // Обновляем статус при загрузке
         window.addEventListener('load', () => {
+            detectInputMode();
             updateStatus();
             setTimeout(updateStatus, 500);
         });

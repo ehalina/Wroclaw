@@ -156,6 +156,7 @@ Wroclaw/
 56. ✅ Stage 6.24 SPA loading helper extraction
 57. ✅ Stage 6.25 SPA loading timeout state
 58. ✅ Stage 7.1 Root temporary JS cleanup
+59. ✅ Stage 7.2 Debug/test missing input asset cleanup
 
 ---
 
@@ -253,6 +254,11 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 7.2 выполнен
+- `debug_styles.html` и `quick_test.html` больше не ссылаются на отсутствующие `input_compatibility.css` / `input_detection.js`
+- debug/test pages получили inline input-mode detector для `html[data-input-type]`
+- `scripts/static-check-known-issues.json` очищен от `missingAssets` allowlist entries
 
 ### 2026-06-27 - Refactoring Stage 7.1 выполнен
 - удалены root-level временные JS-файлы: `arrow_handlers.js.backup`, `quest_marker_handler.js.new`, `sunset_parallax copy.js`

@@ -485,6 +485,11 @@
   - Files: `arrow_handlers.js.backup`, `quest_marker_handler.js.new`, `sunset_parallax copy.js`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
   - Benefit: Stage 7 cleanup has started with a no-runtime-behavior deletion; temporary JS files no longer remain in the source tree
 
+- [x] **Cleanup: debug/test missing input assets** - Removed stale debug-page references to missing input compatibility files
+  - Completed: 2026-06-27
+  - Files: `debug_styles.html`, `quick_test.html`, `scripts/static-check-known-issues.json`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
+  - Benefit: static inventory no longer needs `missingAssets` allowlist entries for `input_compatibility.css` / `input_detection.js`; debug pages remain usable through an inline input-mode detector
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]
