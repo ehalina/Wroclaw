@@ -193,6 +193,18 @@ make build
 
 Both passed.
 
+## Stage 6.12 result
+
+Completed on 2026-06-27:
+
+- Created `docs/refactoring/stage-06-12-audio-lifecycle-refactor-plan.md`.
+- No runtime/package behavior changed.
+- Package baseline remains `331 files, 86.9 MB -> www/`.
+
+Next code stage:
+
+- extract audio source URL policy to `spa_config.js` before changing eager preload behavior.
+
 ## Stage 6.3 result
 
 Completed on 2026-06-27:

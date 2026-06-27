@@ -69,6 +69,8 @@ Stage 6.10 result: heavy MP3 files are confirmed runtime assets. Do not exclude 
 
 Stage 6.11 result: duplicate effect WAV copies under `media/zwyki/` are excluded from the package. Root runtime effects remain packaged.
 
+Stage 6.12 result: audio lifecycle refactor must start with source policy extraction and network characterization before reducing eager MP3 preload.
+
 4. Video review:
    - inspect `katedra_panorama.html` playback;
    - decide whether a smaller derivative video or poster/loading strategy is needed.

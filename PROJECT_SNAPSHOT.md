@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 93% (43 завершённые задачи текущего плана)
+**Общий прогресс:** 94% (44 завершённые задачи текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -140,6 +140,7 @@ Wroclaw/
 41. ✅ Stage 6.9 Sunset3 preload/package cleanup
 42. ✅ Stage 6.10 Heavy audio route/use review
 43. ✅ Stage 6.11 Duplicate WAV package cleanup
+44. ✅ Stage 6.12 Audio lifecycle refactor plan
 
 ---
 
@@ -229,6 +230,11 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.12 выполнен
+- создан `docs/refactoring/stage-06-12-audio-lifecycle-refactor-plan.md`
+- выбран порядок audio lifecycle refactor: source policy extraction -> network characterization -> lazy preload -> quest owner consolidation
+- playback behavior и package baseline не менялись
 
 ### 2026-06-27 - Refactoring Stage 6.11 выполнен
 - duplicate `media/zwyki/opening-a-book.wav` и `media/zwyki/step.wav` исключены из Capacitor `www`

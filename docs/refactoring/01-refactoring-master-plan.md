@@ -331,3 +331,7 @@ make smoke
   - source files не удалялись;
   - root runtime files `media/opening-a-book.wav` и `media/step.wav` остаются packaged;
   - baseline улучшен до `331 files, 86.9 MB -> www/`.
+- Stage 6.12 выполнен:
+  - создан `docs/refactoring/stage-06-12-audio-lifecycle-refactor-plan.md`;
+  - зафиксирован порядок audio lifecycle refactor: source policy extraction -> network characterization -> lazy preload -> quest owner consolidation;
+  - playback behavior не менялся.

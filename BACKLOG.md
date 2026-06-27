@@ -410,6 +410,11 @@
   - Files: `scripts/build-capacitor-web.mjs`, `docs/refactoring/stage-06-asset-size-report.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
   - Benefit: build output dropped from 333 files / 87.0 MB to 331 files / 86.9 MB while root runtime WAV files remain packaged
 
+- [x] **Docs: audio lifecycle refactor plan** - Planned safe stages for audio source policy and eager preload changes
+  - Completed: 2026-06-27
+  - Files: `docs/refactoring/stage-06-12-audio-lifecycle-refactor-plan.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
+  - Benefit: next audio refactors are staged behind source-policy extraction and network characterization instead of changing playback and ownership together
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

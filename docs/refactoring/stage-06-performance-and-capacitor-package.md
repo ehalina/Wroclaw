@@ -325,3 +325,24 @@ make build
 Следующий подэтап:
 
 - Stage 6.12: перейти к audio lifecycle refactor plan for `preloadBackgroundMusic()` / `quest.mp3` duplication, без изменения аудио файлов.
+
+## Status Update - 2026-06-27 - Stage 6.12
+
+Stage 6.12 выполнен:
+
+- Создан `docs/refactoring/stage-06-12-audio-lifecycle-refactor-plan.md`.
+- Зафиксирован текущий audio lifecycle риск:
+  - route policy уже централизована в `spa_config.js`;
+  - source URL policy всё ещё локальна в `index.html`;
+  - `preloadBackgroundMusic()` eager-loads route tracks after unlock;
+  - `quest.mp3` имеет нескольких владельцев (`index.html`, `language_menu.js`, `quest_marker_handler.js`, `quest_overlay.js`).
+- Выбран безопасный порядок следующих шагов:
+  1. Stage 6.13: extract audio source policy into `spa_config.js`;
+  2. Stage 6.14: add browser/network characterization for eager MP3 loading;
+  3. Stage 6.15: reduce eager preload;
+  4. Stage 6.16: consolidate quest audio owner.
+- Playback behavior и package baseline в Stage 6.12 не менялись: `331 files, 86.9 MB -> www/`.
+
+Следующий подэтап:
+
+- Stage 6.13: вынести audio source URL policy из `index.html` в `spa_config.js`, сохранив exact source paths и route behavior.
