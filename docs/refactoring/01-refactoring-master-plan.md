@@ -465,3 +465,7 @@ make smoke
   - dev server, Playwright, static checks and translation checks now use `www/` as runtime root;
   - `make build` validates tracked `www/` and package budget instead of copying/deleting web source;
   - source-only excluded assets moved to `non_runtime_assets/`.
+- Stage 7.17 выполнен:
+  - stale generated `project-context.md` removed from tracked source after the `www/` migration;
+  - generated AI context dump patterns added to `.gitignore`;
+  - maintained docs remain the source of truth for future agent context.

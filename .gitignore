@@ -23,6 +23,11 @@ __BestPractice/
 *.log
 npm-debug.log*
 
+# Generated AI context dumps
+project-context.md
+context-*.md
+.llm/context-*.md
+
 # Test artifacts
 test-results/
 playwright-report/

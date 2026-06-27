@@ -560,6 +560,11 @@
   - Files: `www/`, `non_runtime_assets/`, `Makefile`, `playwright*.config.mjs`, `scripts/build-capacitor-web.mjs`, `scripts/check-js-syntax.mjs`, `scripts/check-static-inventory.mjs`, `scripts/check-translations.mjs`, `.gitignore`, `.github/workflows/deploy.yml`, `eslint.config.mjs`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `PROJECT_RULES.md`, `QUICK_RULES.md`, `ARCHITECTURE.md`, `PROJECT_SNAPSHOT.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`, `docs/refactoring/01-refactoring-master-plan.md`
   - Benefit: there is no duplicated root web source; `www/` is now the editable source tree and Capacitor `webDir`, while source-only excluded assets are archived outside the package in `non_runtime_assets/`
 
+- [x] **Cleanup: stale generated AI context dump** - Removed obsolete `project-context.md` from tracked source
+  - Completed: 2026-06-27
+  - Files: `project-context.md`, `.gitignore`, `BACKLOG.md`, `PROJECT_SNAPSHOT.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`, `docs/refactoring/01-refactoring-master-plan.md`
+  - Benefit: old pre-`www/` generated context can no longer mislead agents or reviews; future generated context dumps stay untracked
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

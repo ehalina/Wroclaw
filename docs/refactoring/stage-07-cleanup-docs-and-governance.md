@@ -335,6 +335,21 @@ Stage 7.16 выполнен:
 
 Следующий подэтап:
 
+- Stage 7.17: remove stale tracked generated AI context dump after `www/` became the source of truth.
+
+## Status Update - 2026-06-27 - Stage 7.17
+
+Stage 7.17 выполнен:
+
+- Removed tracked `project-context.md`, which was a stale generated full-context dump from the pre-`www/` source layout.
+- Added git ignore rules for generated AI context dumps:
+  - `project-context.md`;
+  - `context-*.md`;
+  - `.llm/context-*.md`.
+- Canonical project context remains in maintained docs: `BACKLOG.md`, `ARCHITECTURE.md`, `CLAUDE.md` and `PROJECT_SNAPSHOT.md`.
+
+Следующий подэтап:
+
 - Stage 8 decision gate: define whether the next track is content completion, localization, or image optimization.
 
 ## Documentation updates

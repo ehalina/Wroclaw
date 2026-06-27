@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 99% (63 завершённые задачи текущего плана)
+**Общий прогресс:** 99% (64 завершённые задачи текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -147,6 +147,7 @@ Wroclaw/
 71. ✅ Stage 7.14 Legacy audio diagnostics module cleanup
 72. ✅ Stage 7.15 Standalone/debug page diagnostics policy
 73. ✅ Stage 7.16 `www/` source of truth
+74. ✅ Stage 7.17 Stale generated AI context cleanup
 
 ---
 
@@ -244,6 +245,11 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 7.17 выполнен
+- удалён tracked `project-context.md`, устаревший generated context dump со старой root runtime layout
+- `.gitignore` теперь исключает `project-context.md`, `context-*.md` и `.llm/context-*.md`
+- source of truth для agent context остаётся в maintained docs: `BACKLOG.md`, `ARCHITECTURE.md`, `CLAUDE.md`, `PROJECT_SNAPSHOT.md`
 
 ### 2026-06-27 - Refactoring Stage 7.16 выполнен
 - `www/` стал tracked web source of truth и Capacitor `webDir`
