@@ -302,11 +302,31 @@ class SPAManager {
 
 **Implementation:**
 - `i18n.js` публикует `setTranslatedContent(element, key)`, `isRichTranslationKey(key)` и `sanitizeRichTranslation(value)`.
+- `i18n.js` также публикует `updateDataI18nElements(root)`, чтобы общий page init мог переиспользовать один text/rich boundary без дублирующих специальных проходов.
 - Rich allowlist содержит 7 текущих описательных ключей с намеренным `<br>`.
 - `sanitizeRichTranslation()` экранирует весь HTML и возвращает только `<br>`/`<br />` как разметку.
 - `scripts/check-translations.mjs` падает на HTML вне allowlist, на любые теги кроме canonical `<br>` и на любые missing/extra keys между локалями.
 - Все 7 canonical `translations.json` сейчас имеют одинаковый key set; legacy `translation.json` пока остаются warning до отдельного cleanup шага.
 - `common.js` использует локальный `setI18nText()` wrapper для shared tooltip/book/audio labels и делегирует в `window.i18n.setTranslatedContent()` при наличии.
+- `gnome_marker_handler.js` использует sanitizer boundary для gnome descriptions: разрешён только `<br>`, остальной HTML экранируется.
+- `quest_overlay.js` строит quest intro paragraphs через DOM API и `textContent`; task lists очищаются через `replaceChildren()`.
+- `updatePageContent()` обновляет `[data-i18n]` один раз через общий helper; legacy audio-unlock fallback применяется только для старой кнопки без `data-i18n`.
+
+### 1.8. Page shell consolidation boundary
+
+**Decision:** Shared page helper вводится только после inventory повторяющихся HTML-блоков; первый rollout должен быть additive и начинаться с одной низкорисковой content page.
+
+**Reasoning:**
+- ✅ 51 content page использует стабильный `data-map-point` + `tumski_init.js` shell
+- ✅ Head/script includes, scene shell, cursor pairs и marker blocks повторяются достаточно часто для helper-а
+- ✅ `index.html`, `tumski.html`, `tumski02.html`, `katedra_*` и standalone/debug pages имеют special cases и не входят в первый rollout
+
+**Implementation:**
+- Inventory зафиксирован в `docs/refactoring/stage-05-page-block-inventory.md`.
+- Первый кандидат для миграции: `dwor01.html`.
+- `page_shell_helpers.js` создан как additive helper без подключения к production HTML.
+- Helper создаёт standard scene shell, route cursor pair и marker block, сохраняя текущие selectors/classes/data attrs.
+- Playwright smoke проверяет helper на synthetic fragment; миграция реальной страницы остаётся отдельным gated step.
 
 ### 2. ES6 Modules для модульной архитектуры
 

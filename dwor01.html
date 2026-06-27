@@ -62,16 +62,41 @@
             <div class="image-scroll-wrapper">
                 <div class="image">
 
+                    <script type="module">
+                        import { PageShellHelpers } from './page_shell_helpers.js';
 
-                    <!-- Область иконки "стрелка прямо" в правом нижнем углу -->
-                    <div class="custom-cursor-prosto" data-x-desktop="1000" data-y-desktop="1200" data-x-mobile="1300" data-y-mobile="1200" data-next-page="dwor02.html"></div>
-                    <div class="custom-cursor-prostoarea" data-x-desktop="1000" data-y-desktop="1200" data-x-mobile="1300" data-y-mobile="1200">
-                    </div>
-                
-                <!-- Стрелка назад -->
-                <div class="custom-cursor-back" data-x-desktop="100" data-y-desktop="1500" data-x-mobile="1400" data-y-mobile="1600" data-prev-page="pk02.html"></div>
-                <div class="custom-cursor-backarea" data-x-desktop="100" data-y-desktop="1400" data-x-mobile="1400" data-y-mobile="1600">
-                </div>
+                        const image = document.querySelector('.image-container[data-map-point="40"] .image');
+                        const prostoCursor = PageShellHelpers.createRouteCursor({
+                            type: 'prosto',
+                            page: 'dwor02.html',
+                            coordinates: {
+                                xDesktop: 1000,
+                                yDesktop: 1200,
+                                xMobile: 1300,
+                                yMobile: 1200
+                            }
+                        });
+                        const backCursor = PageShellHelpers.createRouteCursor({
+                            type: 'back',
+                            page: 'pk02.html',
+                            coordinates: {
+                                xDesktop: 100,
+                                yDesktop: 1500,
+                                xMobile: 1400,
+                                yMobile: 1600
+                            },
+                            areaCoordinates: {
+                                xDesktop: 100,
+                                yDesktop: 1400,
+                                xMobile: 1400,
+                                yMobile: 1600
+                            }
+                        });
+
+                        [...prostoCursor.elements, ...backCursor.elements].forEach((element) => {
+                            image.appendChild(element);
+                        });
+                    </script>
             </div>
         </div>
     </div>

@@ -638,6 +638,127 @@ test.describe('Wroclaw static app smoke', () => {
     });
   });
 
+  test('PageShellHelpers creates standard scene, cursor and marker fragments', async ({ page }) => {
+    await page.goto('/tumski.html');
+
+    const result = await page.evaluate(async () => {
+      const { PageShellHelpers } = await import('./page_shell_helpers.js');
+      const shell = PageShellHelpers.createSceneShell({ mapPoint: 40 });
+      const route = PageShellHelpers.createRouteCursor({
+        type: 'prosto',
+        page: 'dwor02.html',
+        coordinates: {
+          xDesktop: 1000,
+          yDesktop: 1200,
+          xMobile: 1300,
+          yMobile: 1200
+        },
+        areaCoordinates: {
+          xDesktop: 900,
+          yDesktop: 1100,
+          xMobile: 1200,
+          yMobile: 1100
+        }
+      });
+      const marker = PageShellHelpers.createMarker({
+        id: 'black_klotska_quest',
+        titleKey: 'quest.task9',
+        textId: 'black-klotska-text',
+        coordinates: {
+          xDesktop: 1220,
+          yDesktop: 650,
+          xMobile: 1350,
+          yMobile: 700
+        },
+        paperaSrc: 'media/papera1.png',
+        audioId: 'bookSoundBlackKlotska',
+        questNumber: 9,
+        questImage: 'media/tumski/dwor_08.jpg'
+      });
+
+      route.elements.forEach((element) => shell.image.appendChild(element));
+      shell.scene.appendChild(marker.root);
+
+      const host = document.createElement('section');
+      host.appendChild(shell.scene);
+      document.body.appendChild(host);
+
+      return {
+        audioSrc: marker.audio.getAttribute('src'),
+        cursorClass: route.cursor.className,
+        cursorTarget: route.cursor.getAttribute('data-next-page'),
+        cursorX: route.cursor.getAttribute('data-x-desktop'),
+        imageContainerClass: shell.imageContainer.className,
+        imageCount: host.querySelectorAll('.image').length,
+        mapPoint: shell.imageContainer.getAttribute('data-map-point'),
+        markerId: marker.marker.id,
+        markerQuestImage: marker.marker.getAttribute('data-quest-image'),
+        markerQuestNumber: marker.marker.getAttribute('data-quest-number'),
+        markerXMobile: marker.marker.getAttribute('data-x-mobile'),
+        nextImageContainers: host.querySelectorAll('.next-image-container').length,
+        routeAreaClass: route.area.className,
+        routeAreaY: route.area.getAttribute('data-y-desktop'),
+        sceneClass: shell.scene.className,
+        textKey: marker.text.getAttribute('data-i18n')
+      };
+    });
+
+    expect(result).toEqual({
+      audioSrc: 'media/opening-a-book.wav',
+      cursorClass: 'custom-cursor-prosto',
+      cursorTarget: 'dwor02.html',
+      cursorX: '1000',
+      imageContainerClass: 'image-container',
+      imageCount: 1,
+      mapPoint: '40',
+      markerId: 'black_klotska_quest',
+      markerQuestImage: 'media/tumski/dwor_08.jpg',
+      markerQuestNumber: '9',
+      markerXMobile: '1350',
+      nextImageContainers: 1,
+      routeAreaClass: 'custom-cursor-prostoarea',
+      routeAreaY: '1100',
+      sceneClass: 'scene',
+      textKey: 'quest.task9'
+    });
+  });
+
+  test('dwor01 keeps stable page shell contract after helper cursor migration', async ({ page }) => {
+    await page.goto('/dwor01.html');
+
+    const contract = await page.evaluate(() => ({
+      backAreaClass: document.querySelector('.custom-cursor-backarea')?.className,
+      backTarget: document.querySelector('.custom-cursor-back')?.getAttribute('data-prev-page'),
+      blackKlotskaAudioSrc: document.getElementById('bookSoundBlackKlotska')?.getAttribute('src'),
+      blackKlotskaQuestImage: document.getElementById('black_klotska_quest')?.getAttribute('data-quest-image'),
+      blackKlotskaQuestNumber: document.getElementById('black_klotska_quest')?.getAttribute('data-quest-number'),
+      imageContainerMapPoint: document.querySelector('.image-container')?.getAttribute('data-map-point'),
+      imageCount: document.querySelectorAll('.scene .image-scroll-wrapper > .image').length,
+      kleckGateTextKey: document.getElementById('kleck-gate-text')?.getAttribute('data-i18n'),
+      markerCount: document.querySelectorAll('.map-mark-area').length,
+      nextImageContainers: document.querySelectorAll('.scene + .next-image-container, .scene .next-image-container').length,
+      prostoAreaClass: document.querySelector('.custom-cursor-prostoarea')?.className,
+      prostoTarget: document.querySelector('.custom-cursor-prosto')?.getAttribute('data-next-page'),
+      sceneCount: document.querySelectorAll('.scene').length
+    }));
+
+    expect(contract).toEqual({
+      backAreaClass: 'custom-cursor-backarea',
+      backTarget: 'pk02.html',
+      blackKlotskaAudioSrc: 'media/opening-a-book.wav',
+      blackKlotskaQuestImage: 'media/tumski/dwor_08.jpg',
+      blackKlotskaQuestNumber: '9',
+      imageContainerMapPoint: '40',
+      imageCount: 1,
+      kleckGateTextKey: 'kleck_gate.title',
+      markerCount: 2,
+      nextImageContainers: 1,
+      prostoAreaClass: 'custom-cursor-prostoarea',
+      prostoTarget: 'dwor02.html',
+      sceneCount: 1
+    });
+  });
+
   test('SPA config exposes page registry, selectors and audio policy', async ({ page }) => {
     await page.goto('/');
 

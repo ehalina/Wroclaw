@@ -56,13 +56,13 @@ Stage 5 должен использовать это как кандидат, н
    - ✅ Убрать повторные специальные проходы, если общий механизм покрывает `.audio-unlock-text`.
    - ✅ Сохранить compatibility для текущих страниц.
 
-5. Найти повторяющиеся page blocks.
-   - head/meta/scripts;
-   - audio nodes;
-   - стрелки;
-   - language menu;
-   - map/quest buttons;
-   - common page init.
+5. ✅ Найти повторяющиеся page blocks.
+   - ✅ head/meta/scripts;
+   - ✅ audio nodes;
+   - ✅ стрелки;
+   - ✅ language menu;
+   - ✅ map/quest buttons;
+   - ✅ common page init.
 
 6. Ввести shared page helper.
    - Маленькими шагами, начиная с новых/наименее рискованных страниц.
@@ -192,3 +192,52 @@ Stage 5.6 выполнен:
 Следующий подэтап:
 
 - Stage 5.7: inventory повторяющихся page blocks перед shared page helper, без массовой миграции HTML-страниц.
+
+## Status Update - 2026-06-27 - Stage 5.7
+
+Stage 5.7 выполнен:
+
+- Создан `docs/refactoring/stage-05-page-block-inventory.md`.
+- Проверены 59 top-level HTML страниц.
+- Зафиксировано стабильное семейство из 51 content page с `data-map-point` + `tumski_init.js`.
+- Зафиксированы повторяющиеся blocks: head/script set, scene shell, route cursor pairs, `map-mark-area`, marker text/audio/quest attrs.
+- Зафиксированы исключения, которые нельзя мигрировать первым проходом: `index.html`, `tumski.html`, `tumski02.html`, `katedra_*`, standalone/debug pages.
+- Первым кандидатом для helper rollout выбран `dwor01.html`, потому что он входит в стабильное семейство и не содержит Firebase/inline parent-message special cases.
+
+Следующий подэтап:
+
+- Stage 5.8: создать additive shared page helper и smoke для synthetic fragment, затем решать миграцию одной страницы.
+
+## Status Update - 2026-06-27 - Stage 5.8
+
+Stage 5.8 выполнен:
+
+- Создан additive helper `page_shell_helpers.js`.
+- Helper не подключается к production HTML и не меняет runtime behavior существующих страниц.
+- Добавлены pure DOM helpers для стандартных fragments:
+  - `createSceneShell()`;
+  - `createRouteCursor()`;
+  - `createMarker()`;
+  - `setCoordinateData()`.
+- Helper экспортируется как ES module и как `window.PageShellHelpers` для будущей compatibility-миграции.
+- Добавлен Playwright smoke для synthetic scene/cursor/marker fragment с проверкой классов, ids, data attrs, audio src и route target.
+- Проверки после изменения: `make test` и `make smoke` прошли; smoke расширен до 40 тестов на desktop/mobile.
+
+Следующий подэтап:
+
+- Stage 5.9: зафиксировать DOM contract для `dwor01.html`, затем мигрировать одну повторяющуюся часть через helper или отложить миграцию, если diff получается слишком широким.
+
+## Status Update - 2026-06-27 - Stage 5.9
+
+Stage 5.9 выполнен:
+
+- Добавлен Playwright smoke contract для `dwor01.html`.
+- Контракт фиксирует scene shell, route cursor pairs, marker count, quest marker attrs, `kleck_gate` i18n key и marker audio src.
+- В `dwor01.html` мигрированы только route cursor pairs (`custom-cursor-prosto`/area и `custom-cursor-back`/area) на `PageShellHelpers.createRouteCursor()`.
+- Markers, scene shell, head/scripts и page init оставлены статическими.
+- Smoke поймал несовместимость `document.currentScript` в inline module; реализация исправлена на явный selector `.image-container[data-map-point="40"] .image`.
+- Проверки после изменения: `make test` и `make smoke` прошли; smoke остаётся 42 теста на desktop/mobile.
+
+Следующий подэтап:
+
+- Stage 5.10: решить, мигрировать ли marker blocks в `dwor01.html` через helper или сначала вынести page-specific cursor config из inline module в отдельный data/helper слой.

@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 82% (22/27 основных задач)
+**Общий прогресс:** 84% (27/32 основных задач)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -57,13 +57,14 @@ Wroclaw/
 ├── common_tumski.js ✅             # Общая логика tumski страниц
 ├── tumski_cathedral_handler.js ✅  # Обработчик геометок
 ├── quest_marker_handler.js ✅      # Обработчик квестов
-├── i18n.js ✅                       # Система локализации, text/rich safety boundary
+├── i18n.js ✅                       # Система локализации, text/rich safety boundary, shared data-i18n helper
 ├── map_modal.js ✅                 # Модальные окна, template helper, идемпотентный init
 ├── map_modal.css ✅                # Основные стили карты и квестовых overlays
 ├── map_marker_navigation.js ✅     # Переходы по visited markers
 ├── visited_markers.js ✅           # Storage/render visited markers
-├── quest_overlay.js ✅             # Opening/render flow квестовой книги
+├── quest_overlay.js ✅             # Opening/render flow квестовой книги, DOM-safe intro/list rendering
 ├── map_debug.js ✅                 # Gated map/quest diagnostics
+├── page_shell_helpers.js ✅        # Additive helper для будущих shared content page fragments
 ├── language_menu.js ✅              # Меню языков
 ├── arrow_handlers.js ✅            # Обработчики навигации
 ├── Makefile ✅                      # Стандартизированные команды
@@ -116,6 +117,11 @@ Wroclaw/
 18. ✅ Stage 5.1 i18n rich HTML safety gate
 19. ✅ Stage 5.2 Strict translation key consistency
 20. ✅ Stage 5.3 common.js text-only i18n sink cleanup
+21. ✅ Stage 5.4 Gnome description sanitizer
+22. ✅ Stage 5.5 Quest intro/list DOM rendering
+23. ✅ Stage 5.6 i18n updatePageContent simplification
+24. ✅ Stage 5.7 Page block inventory before shared helper rollout
+25. ✅ Stage 5.8 Additive page shell helper with synthetic smoke coverage
 
 ---
 
@@ -175,7 +181,7 @@ make audit
 ### Безопасность:
 - Нет обработки чувствительных данных
 - Статический контент без серверной логики
-- Локализация через JSON (валидация структуры)
+- Локализация через JSON: strict key consistency, rich HTML allowlist и textContent-by-default rendering
 
 ---
 

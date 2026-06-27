@@ -229,3 +229,21 @@ make smoke
   - дублирующие audio-unlock проходы удалены, legacy fallback сохранён только для кнопки без `data-i18n`;
   - `window.i18n.updateDataI18nElements()` подготовлен как малый helper для будущего shared page init;
   - `make test` и `make smoke` подтверждают текущий baseline.
+- Stage 5.7 выполнен:
+  - создан `docs/refactoring/stage-05-page-block-inventory.md`;
+  - проверены 59 top-level HTML страниц и выделено стабильное семейство из 51 content page;
+  - inventory зафиксировал повторяющиеся head/script, scene, cursor, marker и common init blocks;
+  - исключены из первого rollout `index.html`, `tumski.html`, `tumski02.html`, `katedra_*` и standalone/debug pages;
+  - первым кандидатом для shared helper rollout выбран `dwor01.html`.
+- Stage 5.8 выполнен:
+  - создан additive `page_shell_helpers.js` без подключения к production HTML;
+  - helper создаёт standard scene shell, route cursor pair и marker block с текущими classes/data attrs;
+  - helper доступен как ES module и `window.PageShellHelpers` для будущей compatibility-миграции;
+  - Playwright smoke проверяет synthetic fragment contract;
+  - `make smoke` расширен до 40 тестов.
+- Stage 5.9 выполнен:
+  - добавлен smoke contract для `dwor01.html`;
+  - `dwor01.html` мигрировал только route cursor pairs на `PageShellHelpers.createRouteCursor()`;
+  - markers/scene/head/page init пока оставлены статическими;
+  - smoke подтвердил сохранение classes/data attrs/routes после исправления inline module currentScript issue;
+  - `make smoke` расширен до 42 тестов.

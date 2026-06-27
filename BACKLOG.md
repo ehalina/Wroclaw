@@ -295,6 +295,31 @@
   - Files: `common.js`
   - Benefit: shared tooltip, legacy book labels and audio-unlock sync now use text-safe i18n updates before deeper overlay cleanup
 
+- [x] **Refactor: gnome description sanitizer** - Restricted gnome rich text rendering to escaped HTML plus `<br>`
+  - Completed: 2026-06-27
+  - Files: `gnome_marker_handler.js`, `tests/smoke.spec.mjs`
+  - Benefit: gnome descriptions keep current line-break formatting without allowing arbitrary translation/content HTML into the DOM
+
+- [x] **Refactor: quest intro/list DOM rendering** - Replaced quest intro/list HTML string writes with DOM API rendering
+  - Completed: 2026-06-27
+  - Files: `quest_overlay.js`, `quest_marker_handler.js`, `tests/smoke.spec.mjs`
+  - Benefit: quest intro paragraphs and task list cleanup no longer depend on raw `innerHTML`, reducing XSS-shaped risk before page template work
+
+- [x] **Refactor: i18n updatePageContent simplification** - Removed duplicate audio-unlock localization passes from central page updates
+  - Completed: 2026-06-27
+  - Files: `i18n.js`, `tests/smoke.spec.mjs`
+  - Benefit: `[data-i18n]` is now the single normal localization path while legacy audio-unlock fallback remains compatible for older markup
+
+- [x] **Refactor: page block inventory** - Documented repeated HTML page blocks before shared helper rollout
+  - Completed: 2026-06-27
+  - Files: `docs/refactoring/stage-05-page-block-inventory.md`
+  - Benefit: shared page helper work now has a concrete stable page family, known exceptions and a first low-risk migration candidate
+
+- [x] **Refactor: additive page shell helper** - Added pure DOM helpers for future shared content page fragments
+  - Completed: 2026-06-27
+  - Files: `page_shell_helpers.js`, `tests/smoke.spec.mjs`
+  - Benefit: scene, cursor and marker fragments now have a tested helper contract before any production HTML page is migrated
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]
