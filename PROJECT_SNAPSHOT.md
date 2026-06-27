@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 99% (52 завершённые задачи текущего плана)
+**Общий прогресс:** 99% (53 завершённые задачи текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -149,6 +149,7 @@ Wroclaw/
 50. ✅ Stage 6.18 Scene JPG characterization
 51. ✅ Stage 6.19 Tumski11 WebP candidate POC
 52. ✅ Stage 6.20 Panorama video review
+53. ✅ Stage 6.21 Panorama video metadata preload
 
 ---
 
@@ -205,6 +206,7 @@ make stage-06-08-screenshots
 make stage-06-18-scene-jpg-screenshots
 make stage-06-19-tumski11-webp-poc
 make stage-06-20-video-review
+make stage-06-21-video-metadata
 make security
 make audit
 ```
@@ -241,6 +243,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.21 выполнен
+- `katedra_panorama.html` video preload переведён с `auto` на `metadata`
+- play button readiness перенесён с `loadeddata` на `loadedmetadata`
+- metadata-mode characterization подтвердил loaded `readyState=1` и рабочий after-play на desktop/mobile
+- media files и package size не менялись
 
 ### 2026-06-27 - Refactoring Stage 6.20 выполнен
 - добавлен `make stage-06-20-video-review`

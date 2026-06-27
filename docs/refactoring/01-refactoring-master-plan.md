@@ -375,3 +375,8 @@ make smoke
   - зафиксирован `Wroclaw_Saver.mp4`: H.264 1800x1080, 21.153s, AAC audio, 8.9M source;
   - browser characterization подтвердил `preload=auto`, loaded `readyState=4`, after-play video playing/unmuted;
   - mobile baseline содержит existing autoplay pageError до user gesture.
+- Stage 6.21 выполнен:
+  - `katedra_panorama.html` video preload переведён с `auto` на `metadata`;
+  - play button readiness перенесён с `loadeddata` на `loadedmetadata`;
+  - metadata-mode characterization: loaded `readyState=1`, after-play video playing/unmuted на desktop/mobile;
+  - media files и package size не менялись.

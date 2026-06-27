@@ -292,6 +292,20 @@ Completed on 2026-06-27:
   - mobile has existing autoplay page error before user gesture.
 - No package size change: current build baseline remains `331 files, 84.5 MB -> www/`.
 
+## Stage 6.21 result
+
+Completed on 2026-06-27:
+
+- Changed `katedra_panorama.html` video preload policy from `auto` to `metadata`.
+- Changed play-button readiness event from `loadeddata` to `loadedmetadata`.
+- Reused the Stage 6.20 video characterization with metadata expectations.
+- Browser result:
+  - loaded readyState changed from `4` to `1`;
+  - play button remains visible after metadata;
+  - after click, video plays and unmutes on desktop/mobile.
+- No media files changed.
+- No package size change: current build baseline remains `331 files, 84.5 MB -> www/`.
+
 Validation:
 
 ```bash

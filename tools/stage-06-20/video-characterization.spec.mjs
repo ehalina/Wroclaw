@@ -8,6 +8,12 @@ const outputDir = path.join(
   rootDir,
   process.env.STAGE_06_VIDEO_ARTIFACT_DIR || 'docs/refactoring/artifacts/stage-06-20-video-review'
 );
+const haveMetadataReadyState = 1;
+const haveCurrentDataReadyState = 2;
+const expectedPreload = process.env.STAGE_06_VIDEO_EXPECTED_PRELOAD || 'auto';
+const expectedLoadedReadyState = expectedPreload === 'metadata'
+  ? haveMetadataReadyState
+  : haveCurrentDataReadyState;
 
 function projectSlug(projectName) {
   return projectName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -129,16 +135,21 @@ test('capture katedra panorama video baseline', async ({ page }, testInfo) => {
   await expect(page.locator('.video-background')).toBeAttached();
   await expect(page.locator('.play-button')).toBeAttached();
 
-  await page.waitForFunction(() => {
+  await page.waitForFunction((minimumReadyState) => {
     const video = document.querySelector('.video-background');
-    return video && video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA;
-  }, null, { timeout: 15_000 });
+    return video && video.readyState >= minimumReadyState;
+  }, expectedLoadedReadyState, { timeout: 15_000 });
 
   const loadedState = await collectVideoState(page);
   expect(loadedState.video.source).toBe('media/Wroclaw_Saver.mp4');
-  expect(loadedState.video.readyState).toBeGreaterThanOrEqual(2);
+  expect(loadedState.video.preload).toBe(expectedPreload);
+  expect(loadedState.video.readyState).toBeGreaterThanOrEqual(expectedLoadedReadyState);
 
   await page.locator('.play-button').click();
+  await page.waitForFunction(() => {
+    const video = document.querySelector('.video-background');
+    return video && !video.paused && video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA;
+  }, null, { timeout: 15_000 });
   await page.waitForTimeout(800);
   const afterPlayState = await collectVideoState(page);
 
@@ -152,6 +163,7 @@ test('capture katedra panorama video baseline', async ({ page }, testInfo) => {
     path.join(outputDir, `${slug}-video-state.json`),
     `${JSON.stringify({
       consoleMessages,
+      expectedPreload,
       measurements: {
         afterPlay: afterPlayState,
         loaded: loadedState

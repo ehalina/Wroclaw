@@ -555,3 +555,28 @@ Stage 6.20 выполнен:
 Следующий подэтап:
 
 - Stage 6.21: решать video lifecycle (`preload=metadata` / poster / lazy load) до compression/transcode.
+
+## Status Update - 2026-06-27 - Stage 6.21
+
+Stage 6.21 выполнен:
+
+- Создан `docs/refactoring/stage-06-21-video-metadata-preload.md`.
+- `katedra_panorama.html`:
+  - `preload="auto"` заменён на `preload="metadata"`;
+  - `loadeddata` handler заменён на `loadedmetadata`.
+- `tools/stage-06-20/video-characterization.spec.mjs` параметризован для `auto`/`metadata` режима.
+- Добавлен Makefile target `make stage-06-21-video-metadata`.
+- Созданы artifacts:
+  - `docs/refactoring/artifacts/stage-06-21-video-metadata/desktop-after-play.png`;
+  - `docs/refactoring/artifacts/stage-06-21-video-metadata/desktop-video-state.json`;
+  - `docs/refactoring/artifacts/stage-06-21-video-metadata/mobile-pixel5-after-play.png`;
+  - `docs/refactoring/artifacts/stage-06-21-video-metadata/mobile-pixel5-video-state.json`.
+- Browser characterization:
+  - loaded `preload=metadata`;
+  - loaded `readyState=1` на desktop/mobile;
+  - after play click: `paused=false`, `muted=false`, `currentTime≈0.86s`.
+- Media files и package baseline не менялись: `331 files, 84.5 MB -> www/`.
+
+Следующий подэтап:
+
+- Stage 6.22: poster/lazy video source decision gate или переход к следующей runtime-heavy группе.

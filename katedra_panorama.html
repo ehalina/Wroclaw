@@ -641,7 +641,7 @@
             <div class="image"></div>
         </div>
         <div class="video-container">
-            <video class="video-background" preload="auto" loop playsinline muted>
+            <video class="video-background" preload="metadata" loop playsinline muted>
                 <source src="media/Wroclaw_Saver.mp4" type="video/mp4">
             </video>
         </div>
@@ -769,8 +769,8 @@
             backgroundSound.volume = 0.5;
             backgroundSound.play();
 
-            // Обработчик загрузки видео
-            videoBackground.addEventListener('loadeddata', function() {
+            // Обработчик загрузки метаданных видео
+            videoBackground.addEventListener('loadedmetadata', function() {
                 console.log('Видео загружено');
                 // Показываем кнопку воспроизведения
                 playButton.classList.add('visible');

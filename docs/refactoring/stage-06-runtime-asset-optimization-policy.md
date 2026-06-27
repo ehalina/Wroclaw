@@ -79,6 +79,8 @@ Stage 6.19 result: WebP candidates for `tumski_11.jpg` failed the visual gate or
 
 Stage 6.20 result: `Wroclaw_Saver.mp4` is confirmed as a runtime video/audio asset with eager `preload=auto`; do not transcode before separating preload/poster/lazy-load behavior from compression.
 
+Stage 6.21 result: `katedra_panorama.html` now uses `preload=metadata` and `loadedmetadata` readiness for `Wroclaw_Saver.mp4`; playback after user click remains covered on desktop/mobile.
+
 4. Video review:
    - inspect `katedra_panorama.html` playback;
    - decide whether a smaller derivative video or poster/loading strategy is needed.
@@ -101,4 +103,4 @@ Additional checks:
 
 ## Next safe implementation step
 
-Decide the `katedra_panorama.html` video lifecycle first (`preload=metadata`, poster, or lazy-load), then characterize before and after. Defer video transcode until playback behavior is stable.
+Consider a poster/lazy video source decision gate, or move to another runtime-heavy group. Defer video transcode until there is a stronger need than package size alone.

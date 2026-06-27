@@ -455,6 +455,11 @@
   - Files: `playwright.stage-06-20.config.mjs`, `tools/stage-06-20/video-characterization.spec.mjs`, `Makefile`, `docs/refactoring/stage-06-20-video-review.md`, `docs/refactoring/artifacts/stage-06-20-video-review/`
   - Benefit: `katedra_panorama.html` video preload/play behavior and mobile autoplay baseline are documented before any video compression or preload changes
 
+- [x] **Performance: panorama video metadata preload** - Reduced eager video preload while preserving click-to-play behavior
+  - Completed: 2026-06-27
+  - Files: `katedra_panorama.html`, `tools/stage-06-20/video-characterization.spec.mjs`, `Makefile`, `docs/refactoring/stage-06-21-video-metadata-preload.md`, `docs/refactoring/artifacts/stage-06-21-video-metadata/`
+  - Benefit: `Wroclaw_Saver.mp4` now uses `preload="metadata"` with `loadedmetadata` play-button readiness; desktop/mobile after-play behavior remains covered
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]
