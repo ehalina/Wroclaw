@@ -393,15 +393,24 @@ function hideAllCursors() {
     });
 }
 
+function setI18nText(element, key, fallback = '') {
+    if (!element) return;
+
+    if (window.i18n && typeof window.i18n.setTranslatedContent === 'function') {
+        window.i18n.setTranslatedContent(element, key);
+        return;
+    }
+
+    element.textContent = window.i18n && typeof window.i18n.t === 'function'
+        ? window.i18n.t(key)
+        : fallback;
+}
+
 // Глобальная функция для обновления текста подсказки на карте
 window.updateMapTooltipText = function() {
     const mapTooltip = document.getElementById('map-tooltip');
     if (mapTooltip && mapTooltip.style.display === 'block') {
-        let tooltipText = 'Тумский мост';
-        if (window.i18n && typeof window.i18n.t === 'function') {
-            tooltipText = window.i18n.t('map.tumski_bridge');
-        }
-        mapTooltip.innerHTML = tooltipText;
+        setI18nText(mapTooltip, 'map.tumski_bridge', 'Тумский мост');
     }
 };
 
@@ -434,10 +443,8 @@ function openTumskiIslandBook(bookSound, bookOverlay, container, bookContent, to
         }
         // Устанавливаем заголовок и текст из переводов
         if (window.i18n && typeof window.i18n.t === 'function') {
-            const titleText = window.i18n.t('tumski.title');
-            const descriptionText = window.i18n.t('tumski.description');
-                    if (bookTitle) bookTitle.innerHTML = titleText;
-        if (bookText) bookText.innerHTML = descriptionText;
+            setI18nText(bookTitle, 'tumski.title');
+            setI18nText(bookText, 'tumski.description');
         }
         Common.openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator);
     }
@@ -461,8 +468,7 @@ function openTumskiMostOverlay(bookSound, mostOverlay, container, mostTitle) {
     if (!mostOverlay.style.display || mostOverlay.style.display === 'none') {
         // Устанавливаем заголовок из переводов
         if (window.i18n && typeof window.i18n.t === 'function') {
-            const titleText = window.i18n.t('tumski_most.title');
-            if (mostTitle) mostTitle.innerHTML = titleText;
+            setI18nText(mostTitle, 'tumski_most.title');
         }
         Common.openMost(bookSound, mostOverlay, container, mostTitle);
     }
@@ -488,8 +494,7 @@ window.addEventListener('message', (event) => {
         // Специально обновляем кнопку разблокировки аудио
         const audioUnlockText = document.querySelector('.audio-unlock-text[data-i18n]');
         if (audioUnlockText && window.i18n && typeof window.i18n.t === 'function') {
-            const newText = window.i18n.t('music.audio_unlock_text');
-            audioUnlockText.innerHTML = newText;
+            setI18nText(audioUnlockText, 'music.audio_unlock_text');
             // console.log('🌐 Обновлен текст кнопки разблокировки аудио из iframe:', newText);
         }
     }

@@ -4,6 +4,60 @@ let currentLang = 'pl';
 // Кэш для переводов
 let translations = {};
 
+const RICH_HTML_TRANSLATION_KEYS = new Set([
+    'gnomes.blue_goat.description',
+    'jan_nepomuk.book02.zone4-2.text',
+    'tumski.book02.zone1.text',
+    'tumski_cathedral.book02.zone4.text',
+    'tumski_most.book02.zone1.text',
+    'tumski_most.book02.zone3.text',
+    'tumski_most.book02.zone4.text'
+]);
+
+function isRichTranslationKey(key) {
+    return RICH_HTML_TRANSLATION_KEYS.has(key);
+}
+
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function sanitizeRichTranslation(value) {
+    return escapeHtml(value).replace(/&lt;br\s*\/?&gt;/gi, '<br>');
+}
+
+function setTranslatedContent(element, key, options = {}) {
+    if (!element) return;
+
+    const newText = t(key);
+    if (options.rich || isRichTranslationKey(key)) {
+        element.innerHTML = sanitizeRichTranslation(newText);
+        return;
+    }
+
+    element.textContent = newText;
+}
+
+function updateDataI18nElements(root = document) {
+    root.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        setTranslatedContent(element, key);
+    });
+}
+
+function updateLegacyAudioUnlockText() {
+    const audioUnlockButton = document.getElementById('audioUnlockButton');
+    const textElement = audioUnlockButton?.querySelector('.audio-unlock-text:not([data-i18n])');
+    if (textElement) {
+        setTranslatedContent(textElement, 'music.audio_unlock_text');
+    }
+}
+
 // Функция для загрузки переводов
 async function loadTranslations(lang = 'pl') {
     try {
@@ -68,46 +122,9 @@ async function changeLang(lang) {
 // Функция для обновления контента на странице
 function updatePageContent() {
     // console.log('🌐 Начинаем обновление контента страницы...');
-    
-    // Обновляем все элементы с атрибутом data-i18n
-    const elementsWithI18n = document.querySelectorAll('[data-i18n]');
-    // console.log('🌐 Найдено элементов с data-i18n:', elementsWithI18n.length);
-    
-    elementsWithI18n.forEach(element => {
-        const key = element.getAttribute('data-i18n');
-        const newText = t(key);
-        element.innerHTML = newText;
-        // console.log('🌐 Обновлен элемент:', key, '->', newText);
-    });
 
-    // Специально обновляем кнопку разблокировки аудио
-    const audioUnlockText = document.querySelector('.audio-unlock-text[data-i18n]');
-    if (audioUnlockText) {
-        const newText = t('music.audio_unlock_text');
-        audioUnlockText.innerHTML = newText;
-        // console.log('🌐 Обновлен текст кнопки разблокировки аудио:', newText);
-    } else {
-        // Дополнительная проверка: ищем кнопку по ID
-        const audioUnlockButton = document.getElementById('audioUnlockButton');
-        if (audioUnlockButton) {
-            const textElement = audioUnlockButton.querySelector('.audio-unlock-text');
-            if (textElement) {
-                const newText = t('music.audio_unlock_text');
-                textElement.innerHTML = newText;
-                // console.log('🌐 Обновлен текст кнопки разблокировки аудио (по ID):', newText);
-            }
-        } else {
-            // console.log('🌐 Кнопка разблокировки аудио не найдена на странице');
-        }
-    }
-    
-    // Дополнительная проверка для всех элементов с data-i18n="music.audio_unlock_text"
-    const allAudioUnlockElements = document.querySelectorAll('[data-i18n="music.audio_unlock_text"]');
-    allAudioUnlockElements.forEach((element, index) => {
-        const newText = t('music.audio_unlock_text');
-        element.innerHTML = newText;
-        // console.log(`🌐 Обновлен элемент ${index + 1} с music.audio_unlock_text:`, newText);
-    });
+    updateDataI18nElements();
+    updateLegacyAudioUnlockText();
 
     // Обновляем заголовки маркеров
     const mapMarkWyspa = document.getElementById('tumska_wyspa');
@@ -135,7 +152,7 @@ function updatePageContent() {
         const contentWrapper = mapMarkOgrodPapieski.parentElement.querySelector('.content-wrapper');
         const textElem = contentWrapper?.querySelector('.tumski-text');
         if (textElem) {
-            textElem.innerHTML = title;
+            textElem.textContent = title;
         }
     }
 
@@ -157,8 +174,8 @@ function updatePageContent() {
             descriptionKey = 'tumski.description';
         }
         
-        bookTitle.innerHTML = t(titleKey);
-        bookText.innerHTML = t(descriptionKey);
+        setTranslatedContent(bookTitle, titleKey);
+        setTranslatedContent(bookText, descriptionKey);
     }
 
     // Обновляем активный класс у кнопок переключения языка
@@ -181,6 +198,11 @@ window.i18n = {
     t,
     changeLang,
     updatePageContent,
+    isRichTranslationKey,
+    sanitizeRichTranslation,
+    setTranslatedContent,
+    updateDataI18nElements,
+    getRichHtmlKeys: () => Array.from(RICH_HTML_TRANSLATION_KEYS),
     getCurrentLang: () => currentLang,
     translations: translations
 };
@@ -191,4 +213,4 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadTranslations('pl'); // Загружаем польские переводы по умолчанию
     // console.log('🌐 Переводы загружены, обновляем контент...');
     updatePageContent();
-}); 
+});

@@ -286,7 +286,27 @@ class SPAManager {
 **Locations:**
 - `map_modal.js` — lifecycle карты/квестовой кнопки, lazy-load wrappers и compatibility proxies.
 - `quest_overlay.js` — opening/render flow `.book-overlay`, `sessionStorage.questState` чтение, intro/title image/reset button, prepared-task controls и confirm dialog.
+- `map_debug.js` — gated diagnostics helper `MapDebug` для карты/квестов; активируется только через `window.DEBUG_MAP`, `localStorage.DEBUG_MAP = "1"` или legacy `localStorage.__quest_debug = "1"`.
+- `quest_marker_handler.js`, `tumski_cathedral_handler.js`, `tumski_page_common.js` — используют `MapDebug` вместо прямых active debug logs в production console.
 
+
+### 1.7. i18n text/rich HTML boundary
+
+**Decision:** Runtime source of truth для локализации - `locales/*/translations.json`; центральный `i18n.js` пишет текст через `textContent` по умолчанию и разрешает rich HTML только по allowlist.
+
+**Reasoning:**
+- ✅ Большинство `data-i18n` ключей - короткие labels/titles и не должны вставлять HTML
+- ✅ Длинные book/gnome descriptions сохраняют существующее форматирование `<br>` без произвольного HTML
+- ✅ Переводы можно проверять статически до runtime
+- ✅ Legacy `translation.json` остаётся видимым warning, пока не будет отдельного cleanup шага
+
+**Implementation:**
+- `i18n.js` публикует `setTranslatedContent(element, key)`, `isRichTranslationKey(key)` и `sanitizeRichTranslation(value)`.
+- Rich allowlist содержит 7 текущих описательных ключей с намеренным `<br>`.
+- `sanitizeRichTranslation()` экранирует весь HTML и возвращает только `<br>`/`<br />` как разметку.
+- `scripts/check-translations.mjs` падает на HTML вне allowlist, на любые теги кроме canonical `<br>` и на любые missing/extra keys между локалями.
+- Все 7 canonical `translations.json` сейчас имеют одинаковый key set; legacy `translation.json` пока остаются warning до отдельного cleanup шага.
+- `common.js` использует локальный `setI18nText()` wrapper для shared tooltip/book/audio labels и делегирует в `window.i18n.setTranslatedContent()` при наличии.
 
 ### 2. ES6 Modules для модульной архитектуры
 

@@ -170,6 +170,25 @@ Status 2026-06-26:
 - сделать явный allowlist для rich HTML keys;
 - добавить проверку переводов на неожиданные теги и синхронность ключей по языкам.
 
+Статус 2026-06-27:
+
+- Stage 5.1 выполнен для центрального `i18n.js`;
+- `updatePageContent()` и `setTranslatedContent()` используют `textContent` по умолчанию;
+- rich HTML разрешён только для 7 описательных ключей через allowlist;
+- sanitizer сохраняет только `<br>`, остальной HTML экранируется;
+- `scripts/check-translations.mjs` теперь падает на HTML вне allowlist или на теги кроме `<br>`;
+- Stage 5.2 сделал missing/extra locale keys hard failure;
+- Stage 5.3 убрал text-only `innerHTML` из `common.js`;
+- Stage 5.4 добавил sanitizer для gnome descriptions;
+- Stage 5.5 перевёл quest intro/list rendering на DOM API и `textContent`/`replaceChildren()`;
+- Stage 5.6 упростил `updatePageContent()` и убрал дублирующие audio-unlock проходы;
+- smoke проверяет plain text escaping, known rich key, audio-unlock fallback, gnome descriptions и quest intro без реального `<script>` в DOM.
+
+Остаточный риск:
+
+- активные HTML sinks в Stage 5 scope сведены к controlled sanitizer paths (`i18n.js`, `gnome_marker_handler.js`) и static template insertion в `map_modal.js`;
+- template insertion остаётся отдельным архитектурным решением, не переводческим sink.
+
 ### CR-07 - MEDIUM - `MapModal.init()` не выглядит идемпотентным
 
 Файлы:
@@ -202,6 +221,7 @@ Status 2026-06-26:
 - Stage 4.4 выполнен: marker navigation вынесен в `map_marker_navigation.js`, `map_modal.js` лениво подключает helper через `#map-marker-navigation-script`, smoke проверяет SPA priority/fallback и реальный click по `.visited-marker`.
 - Stage 4.5 выполнен: visited-marker storage/rendering вынесены в `visited_markers.js`, `map_modal.js` лениво подключает helper через `#visited-markers-script`, smoke проверяет tolerant parsing, сохранение текущей страницы и render contract без изменения классов/координат маркеров.
 - Stage 4.6 выполнен: quest/book overlay behavior вынесен в `quest_overlay.js`, `map_modal.js` лениво подключает helper через `#quest-overlay-script`, compatibility globals `renderQuestIntro`/`showQuestConfirmDialog` сохранены, smoke проверяет открытие `.book-overlay` и render contract квестовой книги.
+- Stage 4.7 выполнен: map/quest debug logging загейчен через `map_debug.js`/`MapDebug`, ручное включение доступно через `DEBUG_MAP` и legacy `__quest_debug`, smoke проверяет quiet default и debug flags.
 
 ### CR-08 - MEDIUM - `index.html` содержит крупные inline-классы и бизнес-логику SPA
 
@@ -298,6 +318,13 @@ Status 2026-06-26:
 - выбрать один формат как canonical;
 - добавить checker равенства ключей между языками;
 - удалить/архивировать дубликаты только после проверки, что они не используются.
+
+Статус 2026-06-27:
+
+- `translations.json` закреплён как runtime canonical source;
+- `scripts/check-translations.mjs` читает canonical file и явно предупреждает о legacy `translation.json`;
+- rich HTML checker стал strict;
+- Stage 5.2 синхронизировал `be` keys и сделал key consistency strict failure для всех локалей.
 
 ## Приоритет исправления
 

@@ -3,6 +3,7 @@
 // навешивает обработчики на стрелки, квест-метки и настраивает позиционирование
 
 import './spa_message_contract.js';
+import { MapDebug } from './map_debug.js';
 
 const SPA_MESSAGE_TYPES = window.SpaMessages?.TYPES || {};
 
@@ -69,7 +70,7 @@ export async function initPageCommon() {
             // Обработка hash, переданного из SPA
             if (message.type === pageMessageType('PAGE_HASH', 'PAGE_HASH') && message.hash) {
                 const hash = message.hash;
-                console.log('🟡 [tumski_page_common] Получен PAGE_HASH от SPA:', hash);
+                MapDebug.log('[tumski_page_common] Получен PAGE_HASH от SPA:', hash);
                 // Сохраняем hash для последующей обработки после инициализации гномов
                 window.__pendingGnomeHash = hash;
                 
@@ -78,10 +79,10 @@ export async function initPageCommon() {
                     try {
                         const gnomeMarks = Array.from(document.querySelectorAll('.map-mark[data-gnome-id]'));
                         if (gnomeMarks.length > 0) {
-                            console.log('🟡 [tumski_page_common] Гномы уже инициализированы, обрабатываем hash сразу');
+                                MapDebug.log('[tumski_page_common] Гномы уже инициализированы, обрабатываем hash сразу');
                             const gnomeMod = await import('./gnome_marker_handler.js');
                             if (hash === 'patsa_vatsa' && gnomeMod && typeof gnomeMod.openGnomePopupDirectly === 'function') {
-                                console.log('✅ [tumski_page_common] Открываем попап Паца-Ваца через postMessage');
+                                MapDebug.log('[tumski_page_common] Открываем попап Паца-Ваца через postMessage');
                                 gnomeMod.openGnomePopupDirectly({
                                     gnomeId: 'patsa_vatsa',
                                     imageSrc: 'media/krasnolud/krasnal_tumski14.jpg'
@@ -89,21 +90,21 @@ export async function initPageCommon() {
                             }
                         }
                     } catch (err) {
-                        console.error('❌ [tumski_page_common] Ошибка при обработке hash через postMessage:', err);
+                        MapDebug.error('[tumski_page_common] Ошибка при обработке hash через postMessage:', err);
                     }
                 }, 500);
             }
             
             // Обработка сообщения о показе страницы - повторная инициализация стрелок
             if (message.type === pageMessageType('PAGE_SHOWN', 'PAGE_SHOWN')) {
-                console.log('🟡 [tumski_page_common] Получен PAGE_SHOWN, повторная инициализация стрелок для:', message.pageName);
+                MapDebug.log('[tumski_page_common] Получен PAGE_SHOWN, повторная инициализация стрелок для:', message.pageName);
                 // Повторно инициализируем стрелки через небольшую задержку
                 setTimeout(() => {
                     try {
                         // Проверяем, что мы на правильной странице
                         const currentPage = window.location.pathname.split('/').pop() || '';
                         const expectedPage = message.pageName || '';
-                        console.log('🟡 [tumski_page_common] Текущая страница:', currentPage, 'Ожидаемая:', expectedPage);
+                        MapDebug.log('[tumski_page_common] Текущая страница:', currentPage, 'Ожидаемая:', expectedPage);
                         
                         // Получаем stepSound если он есть
                         let stepSound = null;
@@ -116,21 +117,21 @@ export async function initPageCommon() {
                         
                         // Проверяем наличие стрелок на странице
                         const arrows = document.querySelectorAll('[data-next-page], [data-prev-page]');
-                        console.log('🟡 [tumski_page_common] Найдено стрелок на странице:', arrows.length);
+                        MapDebug.log('[tumski_page_common] Найдено стрелок на странице:', arrows.length);
                         
                         // Проверяем наличие гномов на странице
                         const gnomes = document.querySelectorAll('.map-mark[data-gnome-id]');
-                        console.log('🟡 [tumski_page_common] Найдено гномов на странице:', gnomes.length);
+                        MapDebug.log('[tumski_page_common] Найдено гномов на странице:', gnomes.length);
                         gnomes.forEach(gnome => {
                             const gnomeId = gnome.getAttribute('data-gnome-id');
-                            console.log('🟡 [tumski_page_common] Гном на странице:', gnomeId, 'ID:', gnome.id);
+                            MapDebug.log('[tumski_page_common] Гном на странице:', gnomeId, 'ID:', gnome.id);
                         });
                         
                         // Настраиваем стрелки заново (функция уже доступна в этом модуле)
                         setupAllArrows(stepSound);
-                        console.log('✅ [tumski_page_common] Стрелки повторно инициализированы');
+                        MapDebug.log('[tumski_page_common] Стрелки повторно инициализированы');
                     } catch (err) {
-                        console.error('❌ [tumski_page_common] Ошибка при повторной инициализации стрелок:', err);
+                        MapDebug.error('[tumski_page_common] Ошибка при повторной инициализации стрелок:', err);
                     }
                 }, 200);
             }
@@ -244,7 +245,7 @@ export async function initPageCommon() {
                 window.__questDelegatedInitHooked = true;
                 let inProgress = false;
                 const delegatedQuestHandler = async (e) => {
-                    const debugQuest = (() => { try { return localStorage.getItem('__quest_debug') === '1'; } catch (_) { return false; } })();
+                    const debugQuest = MapDebug.isEnabled();
                     if (inProgress) return;
                     const target = e && e.target && e.target.closest
                         ? e.target.closest('.map-mark[data-quest-number], .map-mark-area')
@@ -259,7 +260,7 @@ export async function initPageCommon() {
 
                     if (debugQuest) {
                         try {
-                            console.log('🧩 delegatedQuestHandler hit', {
+                            MapDebug.log('delegatedQuestHandler hit', {
                                 event: e?.type,
                                 target: e?.target?.className || e?.target?.tagName,
                                 markId: mark.id,
@@ -285,7 +286,7 @@ export async function initPageCommon() {
                         try { e.stopPropagation(); } catch (_) {}
                         const questMod = await import('./quest_marker_handler.js');
                         if (debugQuest) {
-                            console.log('🧩 delegatedQuestHandler imported quest_marker_handler.js', {
+                            MapDebug.log('delegatedQuestHandler imported quest_marker_handler.js', {
                                 hasSetup: !!questMod && typeof questMod.setupQuestGeoMarker === 'function'
                             });
                         }
@@ -296,7 +297,7 @@ export async function initPageCommon() {
                             try { mark.dataset.questHandlerInitialized = '1'; } catch (_) {}
 
                             if (debugQuest) {
-                                console.log('🧩 delegatedQuestHandler after setupQuestGeoMarker', {
+                                MapDebug.log('delegatedQuestHandler after setupQuestGeoMarker', {
                                     markId: mark.id,
                                     hasOpenQuest: typeof mark.__openQuest === 'function'
                                 });
@@ -312,14 +313,14 @@ export async function initPageCommon() {
                                         mark.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
                                     }
                                 } catch (err) {
-                                    if (debugQuest) console.error('🧩 delegatedQuestHandler open attempt failed', err);
+                                    if (debugQuest) MapDebug.error('delegatedQuestHandler open attempt failed', err);
                                 }
                             }, 0);
                         } else if (debugQuest) {
-                            console.warn('🧩 delegatedQuestHandler: setupQuestGeoMarker not found', questMod);
+                            MapDebug.warn('delegatedQuestHandler: setupQuestGeoMarker not found', questMod);
                         }
                     } catch (err) {
-                        if (debugQuest) console.error('🧩 delegatedQuestHandler failed', err);
+                        if (debugQuest) MapDebug.error('delegatedQuestHandler failed', err);
                     } finally {
                         setTimeout(() => { inProgress = false; }, 0);
                     }
@@ -363,23 +364,23 @@ export async function initPageCommon() {
                             hash = window.__pendingGnomeHash;
                             delete window.__pendingGnomeHash;
                         }
-                        console.log('🟡 [tumski_page_common] Проверка hash:', hash);
+                        MapDebug.log('[tumski_page_common] Проверка hash:', hash);
                         if (hash) {
                             // Специальная обработка для гнома Паца-Ваца на странице minsk01.html
                             if (hash === 'patsa_vatsa') {
-                                console.log('🟡 [tumski_page_common] Найден hash patsa_vatsa, открываем попап');
+                                MapDebug.log('[tumski_page_common] Найден hash patsa_vatsa, открываем попап');
                                 // Открываем попап Паца-Ваца напрямую (hash уже указывает, что мы на нужной странице)
                                 setTimeout(() => {
                                     try {
-                                        console.log('🟡 [tumski_page_common] Вызываем openGnomePopupDirectly, gnomeMod:', !!gnomeMod);
+                                        MapDebug.log('[tumski_page_common] Вызываем openGnomePopupDirectly, gnomeMod:', !!gnomeMod);
                                         if (gnomeMod && typeof gnomeMod.openGnomePopupDirectly === 'function') {
-                                            console.log('✅ [tumski_page_common] openGnomePopupDirectly найден, вызываем');
+                                            MapDebug.log('[tumski_page_common] openGnomePopupDirectly найден, вызываем');
                                             gnomeMod.openGnomePopupDirectly({
                                                 gnomeId: 'patsa_vatsa',
                                                 imageSrc: 'media/krasnolud/krasnal_tumski14.jpg'
                                             });
                                         } else {
-                                            console.log('⚠️ [tumski_page_common] openGnomePopupDirectly не найден, используем fallback');
+                                            MapDebug.warn('[tumski_page_common] openGnomePopupDirectly не найден, используем fallback');
                                             // Fallback: создаем временный маркер
                                             const tempMarker = document.createElement('div');
                                             tempMarker.id = 'gnome_patsa_vatsa_temp';
@@ -401,7 +402,7 @@ export async function initPageCommon() {
                                             }, 200);
                                         }
                                     } catch (err) {
-                                        console.error('Ошибка при открытии попапа Паца-Ваца:', err);
+                                        MapDebug.error('Ошибка при открытии попапа Паца-Ваца:', err);
                                     }
                                 }, 800);
                                 return; // Выходим, чтобы не проверять другие гномы
@@ -427,7 +428,7 @@ export async function initPageCommon() {
                                             }
                                         }
                                     } catch (err) {
-                                        console.error('Ошибка при автоматическом открытии попапа гнома:', err);
+                                        MapDebug.error('Ошибка при автоматическом открытии попапа гнома:', err);
                                     }
                                 }, 300);
                             }

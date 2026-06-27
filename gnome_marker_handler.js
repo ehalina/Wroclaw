@@ -13,6 +13,23 @@ function safeJsonParse(str, fallback) {
     }
 }
 
+function escapeHtml(value) {
+    return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+function sanitizeGnomeDescription(value) {
+    if (window.i18n && typeof window.i18n.sanitizeRichTranslation === 'function') {
+        return window.i18n.sanitizeRichTranslation(value);
+    }
+
+    return escapeHtml(value).replace(/&lt;br\s*\/?&gt;/gi, '<br>');
+}
+
 function trackGnomeLocally(gnomeId) {
     if (!gnomeId) return;
     try {
@@ -253,8 +270,7 @@ export function setupGnomeGeoMarker({ markerId, gnomeId, imageSrc, title, descri
             padding: 12px 14px;
         `;
         if (resolvedDescription) {
-            // Позволяем разработчику использовать простой HTML в описании при необходимости
-            textBlock.innerHTML = resolvedDescription;
+            textBlock.innerHTML = sanitizeGnomeDescription(resolvedDescription);
         } else {
             textBlock.textContent = '';
         }
@@ -482,4 +498,3 @@ export function openGnomePopupDirectly({ gnomeId, imageSrc, title, description }
         }
     }, 100);
 }
-

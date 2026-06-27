@@ -66,9 +66,9 @@
    - ✅ Разделить открытие/закрытие, заполнение текста, картинки, звук.
    - ✅ Не менять структуру данных квестов до отдельной задачи.
 
-7. Убрать/загейтить debug logs.
-   - Ввести `DEBUG_MAP`.
-   - Сохранить возможность включить диагностику вручную.
+7. ✅ Убрать/загейтить debug logs.
+   - ✅ Ввести `DEBUG_MAP`.
+   - ✅ Сохранить возможность включить диагностику вручную.
 
 ## Проверки
 
@@ -210,3 +210,19 @@ Stage 4.6 выполнен:
 - убрать или загейтить debug logs карты/квестов;
 - ввести ручной флаг диагностики `DEBUG_MAP`/аналог;
 - сохранить возможность включить диагностику без шумного production console.
+
+## Status Update - 2026-06-27 - Stage 4.7
+
+Stage 4.7 выполнен:
+
+- Добавлен `map_debug.js` как small helper с ES export и compatibility global `window.MapDebug`.
+- Диагностика карты/квестов теперь включается явно через `window.DEBUG_MAP`, `localStorage.DEBUG_MAP = "1"` или legacy `localStorage.__quest_debug = "1"`.
+- `quest_marker_handler.js`, `tumski_cathedral_handler.js` и `tumski_page_common.js` больше не пишут активные map/quest debug logs напрямую в production console.
+- Сохранена возможность ручной диагностики без изменения runtime behavior карты, квестов, геометок и delegated quest buttons.
+- Playwright smoke добавлен для disabled/default mode, `window.DEBUG_MAP`, `localStorage.DEBUG_MAP` и legacy `__quest_debug`.
+- Проверка после изменения: `make smoke` - 32 теста прошли на desktop/mobile.
+
+Stage 4 закрыт. Следующий этап:
+
+- Stage 5.1: page template/i18n consolidation;
+- начать с i18n rich HTML/text safety gate по CR-06, без массовой миграции страниц.

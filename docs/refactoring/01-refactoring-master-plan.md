@@ -195,3 +195,37 @@ make smoke
   - `map_modal.js` лениво подключает helper через stable `#quest-overlay-script`;
   - сохранены `window.renderQuestIntro`, `window.showQuestConfirmDialog` и текущая структура `sessionStorage.questState`;
   - Playwright smoke проверяет открытие `.book-overlay` и render contract квестовой книги.
+- Stage 4.7 выполнен:
+  - map/quest debug logging загейчен через `map_debug.js` и `window.MapDebug`;
+  - диагностика включается явно через `window.DEBUG_MAP`, `localStorage.DEBUG_MAP = "1"` или legacy `localStorage.__quest_debug = "1"`;
+  - `quest_marker_handler.js`, `tumski_cathedral_handler.js` и `tumski_page_common.js` больше не шумят в production console;
+  - Playwright smoke проверяет disabled/default mode и все поддержанные debug flags.
+- Stage 5.1 выполнен:
+  - `i18n.js` перешёл на `textContent` по умолчанию для центрального `data-i18n` flow;
+  - rich HTML разрешён только через allowlist из 7 ключей и sanitizer, который сохраняет только `<br>`;
+  - `scripts/check-translations.mjs` теперь строго проверяет HTML в переводах по allowlist;
+  - Playwright smoke проверяет plain text escaping, known rich key и блокировку чужого `<script>`.
+- Stage 5.2 выполнен:
+  - `locales/be/translations.json` синхронизирован с canonical key set;
+  - удалён неиспользуемый корневой дубль `blue_goat.*`, runtime key остаётся `gnomes.blue_goat.*`;
+  - translation key consistency в `scripts/check-translations.mjs` стал strict failure;
+  - `make test` подтверждает одинаковый набор ключей для 7 локалей.
+- Stage 5.3 выполнен:
+  - text-only `innerHTML` sinks в `common.js` заменены на `setI18nText()`/`textContent`;
+  - wrapper использует центральный `window.i18n.setTranslatedContent()` при наличии;
+  - tooltip, legacy Tumski book title/text, Most title и audio-unlock sync больше не вставляют HTML напрямую;
+  - `make smoke` подтверждает текущий SPA/map/language baseline.
+- Stage 5.4 выполнен:
+  - `gnome_marker_handler.js` сохраняет только `<br>` в gnome descriptions через `sanitizeGnomeDescription()`;
+  - весь прочий HTML в gnome descriptions экранируется;
+  - Playwright smoke проверяет сохранение `<br>` и отсутствие реального `<script>` DOM-узла.
+- Stage 5.5 выполнен:
+  - `quest_overlay.js` строит intro paragraphs через DOM API и `textContent`;
+  - `quest_overlay.js` и legacy `quest_marker_handler.js` очищают task list через `replaceChildren()`;
+  - перевод `quest.intro` больше не интерполируется как HTML;
+  - Playwright smoke проверяет escaped HTML в intro paragraphs.
+- Stage 5.6 выполнен:
+  - `updatePageContent()` делегирует общий `[data-i18n]` проход в `updateDataI18nElements()`;
+  - дублирующие audio-unlock проходы удалены, legacy fallback сохранён только для кнопки без `data-i18n`;
+  - `window.i18n.updateDataI18nElements()` подготовлен как малый helper для будущего shared page init;
+  - `make test` и `make smoke` подтверждают текущий baseline.

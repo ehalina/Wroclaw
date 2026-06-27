@@ -1,3 +1,5 @@
+import { MapDebug } from './map_debug.js';
+
 // Универсальный обработчик для геометок с квестами
 export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
     const marker = document.getElementById(markerId);
@@ -68,18 +70,14 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
 
     // Функция обработчик для открытия квеста
     async function openQuest(e) {
-        const debugQuest = (() => {
-            try { return localStorage.getItem('__quest_debug') === '1'; } catch (_) { return false; }
-        })();
+        const debugQuest = MapDebug.isEnabled();
 
         if (debugQuest) {
-            try {
-                console.log('🧩 Quest openQuest() triggered', {
-                    markerId,
-                    questNumber,
-                    target: e?.target?.className || e?.target?.id || e?.target?.tagName
-                });
-            } catch (_) {}
+            MapDebug.log('Quest openQuest() triggered', {
+                markerId,
+                questNumber,
+                target: e?.target?.className || e?.target?.id || e?.target?.tagName
+            });
         }
 
         // Определяем, открыто ли через клик по map-mark с эффектом свечения (quest-marker-glow)
@@ -143,7 +141,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
 
             if (!bookOverlay || !retryBookContainer || !retryBookTitle || !retryQuestTasksList || !retryBookImageContentWrapper || !retryBookContentArea) {
                 if (debugQuest) {
-                    console.warn('🧩 Quest openQuest() early return: missing overlay parts', {
+                    MapDebug.warn('Quest openQuest() early return: missing overlay parts', {
                         markerId,
                         hasBookOverlay: !!bookOverlay,
                         hasBookContainer: !!retryBookContainer,
@@ -253,7 +251,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
                 border-radius: 10px;
             `;
             // Отладочная информация для проверки локализации
-            console.log('🌐 Проверка локализации:', {
+            MapDebug.log('Quest completion localization check', {
                 i18n: !!window.i18n,
                 translations: !!window.i18n?.translations,
                 questCompletion: window.i18n?.translations?.quest?.completion,
@@ -261,7 +259,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
             });
             
             const completionTextContent = window.i18n ? window.i18n.t('quest.completion.title') : 'Поздравляю, странник: твой квест благополучно завершён, и мир стал чуточку светлее от того, что ты сумел пройти его до конца. Забавно ведь — каждый финал на деле оказывается началом, и радость победы лишь предвестие новых чудес. Так что не прячь меч обратно в ножны слишком надолго — новые квесты уже топчутся у порога и ждут знакомства с тобой.';
-            console.log('🌐 Текст завершения квеста:', completionTextContent);
+            MapDebug.log('Quest completion text', completionTextContent);
             completionText.textContent = completionTextContent;
 
             const botImage = document.createElement('img');
@@ -350,7 +348,7 @@ export function setupQuestGeoMarker({ markerId, questNumber, questImage }) {
         }
 
         // Очищаем список перед заполнением
-        questTasksList.innerHTML = '';
+        questTasksList.replaceChildren();
 
         // Единая длительность плавного проявления (в мс)
         const revealDurationMs = 2500;

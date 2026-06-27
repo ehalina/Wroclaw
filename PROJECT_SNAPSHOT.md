@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 78% (18/23 основных задач)
+**Общий прогресс:** 82% (22/27 основных задач)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -57,12 +57,13 @@ Wroclaw/
 ├── common_tumski.js ✅             # Общая логика tumski страниц
 ├── tumski_cathedral_handler.js ✅  # Обработчик геометок
 ├── quest_marker_handler.js ✅      # Обработчик квестов
-├── i18n.js ✅                       # Система локализации
+├── i18n.js ✅                       # Система локализации, text/rich safety boundary
 ├── map_modal.js ✅                 # Модальные окна, template helper, идемпотентный init
 ├── map_modal.css ✅                # Основные стили карты и квестовых overlays
 ├── map_marker_navigation.js ✅     # Переходы по visited markers
 ├── visited_markers.js ✅           # Storage/render visited markers
 ├── quest_overlay.js ✅             # Opening/render flow квестовой книги
+├── map_debug.js ✅                 # Gated map/quest diagnostics
 ├── language_menu.js ✅              # Меню языков
 ├── arrow_handlers.js ✅            # Обработчики навигации
 ├── Makefile ✅                      # Стандартизированные команды
@@ -111,6 +112,10 @@ Wroclaw/
 14. ✅ Stage 4.4 Map marker navigation extraction
 15. ✅ Stage 4.5 Visited markers storage/render extraction
 16. ✅ Stage 4.6 Quest overlay extraction
+17. ✅ Stage 4.7 Map/quest debug logging gate
+18. ✅ Stage 5.1 i18n rich HTML safety gate
+19. ✅ Stage 5.2 Strict translation key consistency
+20. ✅ Stage 5.3 common.js text-only i18n sink cleanup
 
 ---
 
@@ -193,6 +198,31 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 5.3 выполнен
+- text-only `innerHTML` sinks в `common.js` заменены на `setI18nText()`/`textContent`
+- shared tooltip, legacy Tumski book title/text, Most title и audio-unlock sync больше не вставляют HTML напрямую
+- `common.js` делегирует в `window.i18n.setTranslatedContent()` при наличии
+- `make smoke` подтверждает текущий SPA/map/language baseline: 34 теста
+
+### 2026-06-27 - Refactoring Stage 5.2 выполнен
+- `locales/be/translations.json` синхронизирован с canonical key set
+- удалён неиспользуемый корневой дубль `blue_goat.*`; runtime key остаётся `gnomes.blue_goat.*`
+- translation key consistency теперь strict failure в `scripts/check-translations.mjs`
+- `make test` подтверждает одинаковые ключи для 7 локалей
+
+### 2026-06-27 - Refactoring Stage 5.1 выполнен
+- центральный `i18n.js` теперь пишет `data-i18n` через `textContent` по умолчанию
+- rich HTML разрешён только для 7 allowlisted описательных ключей
+- sanitizer сохраняет только `<br>`, остальной HTML экранируется
+- `scripts/check-translations.mjs` строго проверяет HTML в переводах
+- smoke расширен до 34 тестов: plain text escaping, rich key `<br>` и блокировка чужого `<script>`
+
+### 2026-06-27 - Refactoring Stage 4.7 выполнен
+- map/quest diagnostics загейчены через `map_debug.js` и `window.MapDebug`
+- ручное включение диагностики доступно через `window.DEBUG_MAP`, `localStorage.DEBUG_MAP` и legacy `localStorage.__quest_debug`
+- `quest_marker_handler.js`, `tumski_cathedral_handler.js` и `tumski_page_common.js` больше не пишут active debug logs в production console по умолчанию
+- smoke расширен до 32 тестов: quiet default mode и debug flag variants
 
 ### 2026-06-27 - Refactoring Stage 4.6 выполнен
 - quest/book overlay behavior вынесен из `map_modal.js` в `quest_overlay.js`

@@ -275,6 +275,26 @@
   - Files: `quest_overlay.js`, `map_modal.js`, `tests/smoke.spec.mjs`
   - Benefit: `map_modal.js` keeps modal lifecycle wiring while quest book opening, intro rendering, reset confirmation and prepared-task controls live behind a focused helper
 
+- [x] **Refactor: Map/quest debug logging gate** - Moved map and quest diagnostics behind explicit debug flags
+  - Completed: 2026-06-27
+  - Files: `map_debug.js`, `quest_marker_handler.js`, `tumski_cathedral_handler.js`, `tumski_page_common.js`, `tests/smoke.spec.mjs`
+  - Benefit: production console stays quiet while map/quest diagnostics remain available through `DEBUG_MAP` and legacy `__quest_debug`
+
+- [x] **Refactor: i18n rich HTML safety gate** - Moved central i18n updates to text-by-default with explicit rich HTML allowlist
+  - Completed: 2026-06-27
+  - Files: `i18n.js`, `scripts/check-translations.mjs`, `tests/smoke.spec.mjs`
+  - Benefit: `data-i18n` no longer inserts arbitrary HTML by default while vetted long-form text keeps `<br>` formatting through a strict sanitizer
+
+- [x] **Refactor: strict translation key consistency** - Made locale key mismatches fail in `make test`
+  - Completed: 2026-06-27
+  - Files: `locales/be/translations.json`, `i18n.js`, `scripts/check-translations.mjs`
+  - Benefit: all 7 canonical `translations.json` files now share the same key set and future localization drift fails fast
+
+- [x] **Refactor: common.js text-only i18n sinks** - Removed low-risk direct `innerHTML` writes from shared common UI text updates
+  - Completed: 2026-06-27
+  - Files: `common.js`
+  - Benefit: shared tooltip, legacy book labels and audio-unlock sync now use text-safe i18n updates before deeper overlay cleanup
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

@@ -1,3 +1,5 @@
+import { MapDebug } from './map_debug.js';
+
 // Константы для медиафайлов
 const MEDIA_PATHS = {
     PAPERA_IMAGE: 'media/papera1.png',
@@ -201,15 +203,13 @@ function createExtendedHoverArea() {
                 // Клик по расширенной области должен срабатывать так же, как клик по самой метке.
                 // Для квест-меток (data-quest-number) дополнительно гарантируем инициализацию обработчиков.
                 const handleExtendedClick = async (e) => {
-                    const debugQuest = (() => { try { return localStorage.getItem('__quest_debug') === '1'; } catch (_) { return false; } })();
+                    const debugQuest = MapDebug.isEnabled();
                     if (debugQuest) {
-                        try {
-                            console.log('🧩 extended-hover-area click', {
-                                id: mapMark?.id,
-                                questNumber: mapMark?.getAttribute?.('data-quest-number') || null,
-                                target: e?.target?.className || e?.target?.tagName
-                            });
-                        } catch (_) {}
+                        MapDebug.log('extended-hover-area click', {
+                            id: mapMark?.id,
+                            questNumber: mapMark?.getAttribute?.('data-quest-number') || null,
+                            target: e?.target?.className || e?.target?.tagName
+                        });
                     }
                     try {
                         e && e.preventDefault && e.preventDefault();
@@ -231,7 +231,7 @@ function createExtendedHoverArea() {
                                         mapMark.dataset.questHandlerInitialized = '1';
                                     }
                                 } catch (err) {
-                                    if (debugQuest) console.error('🧩 import/setupQuestGeoMarker failed', err);
+                                    if (debugQuest) MapDebug.error('import/setupQuestGeoMarker failed', err);
                                     // не оставляем "залипший" initialized
                                     try { delete mapMark.dataset.questHandlerInitialized; } catch (_) {}
                                 } finally {
@@ -245,7 +245,7 @@ function createExtendedHoverArea() {
                             mapMark.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
                         }
                     } catch (err) {
-                        if (debugQuest) console.error('🧩 handleExtendedClick failed', err);
+                        if (debugQuest) MapDebug.error('handleExtendedClick failed', err);
                     }
                 };
 
@@ -688,7 +688,7 @@ export function positionMarkersOnBg() {
                 positionMarkersOnBg();
             }, 100);
         } else {
-            console.warn('⚠️ Превышено максимальное количество попыток позиционирования геометок');
+            MapDebug.warn('Marker positioning retry limit exceeded');
             positionMarkersRetryCount = 0; // Сбрасываем счетчик
             isPositioning = false; // Сбрасываем флаг
         }

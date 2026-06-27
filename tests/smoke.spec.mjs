@@ -428,6 +428,216 @@ test.describe('Wroclaw static app smoke', () => {
     });
   });
 
+  test('QuestOverlay intro renders translated paragraphs as text', async ({ page }) => {
+    await page.goto('/tumski.html');
+    await page.waitForFunction(() => window.renderQuestIntro);
+
+    const result = await page.evaluate(() => {
+      const originalI18n = window.i18n;
+      const bookContentArea = document.createElement('div');
+      const questTasksList = document.createElement('ul');
+      bookContentArea.appendChild(questTasksList);
+
+      window.i18n = {
+        ...originalI18n,
+        t(key) {
+          if (key === 'quest.intro') {
+            return 'First <strong>paragraph</strong>\n\nSecond <script>bad()</script>';
+          }
+
+          return originalI18n?.t?.(key) || key;
+        }
+      };
+
+      try {
+        window.renderQuestIntro(bookContentArea, questTasksList);
+        const intro = bookContentArea.querySelector('.quest-intro');
+        return {
+          innerHTML: intro.innerHTML,
+          paragraphCount: intro.querySelectorAll('p').length,
+          scriptCount: intro.querySelectorAll('script').length,
+          text: intro.textContent
+        };
+      } finally {
+        window.i18n = originalI18n;
+      }
+    });
+
+    expect(result).toEqual({
+      innerHTML: '<p>First &lt;strong&gt;paragraph&lt;/strong&gt;</p><p>Second &lt;script&gt;bad()&lt;/script&gt;</p>',
+      paragraphCount: 2,
+      scriptCount: 0,
+      text: 'First <strong>paragraph</strong>Second <script>bad()</script>'
+    });
+  });
+
+  test('MapDebug gates map and quest diagnostics behind explicit flags', async ({ page }) => {
+    await page.goto('/tumski.html');
+
+    const result = await page.evaluate(async () => {
+      await import('./map_debug.js');
+      const calls = [];
+      const originalLog = console.log;
+
+      console.log = (...args) => {
+        calls.push(args);
+      };
+
+      try {
+        delete window.DEBUG_MAP;
+        localStorage.removeItem('DEBUG_MAP');
+        localStorage.removeItem('__quest_debug');
+        window.MapDebug.log('hidden');
+        const disabled = window.MapDebug.isEnabled();
+
+        window.DEBUG_MAP = true;
+        window.MapDebug.log('global-enabled');
+        const globalEnabled = window.MapDebug.isEnabled();
+
+        window.DEBUG_MAP = false;
+        localStorage.setItem('DEBUG_MAP', '1');
+        window.MapDebug.log('storage-enabled');
+        const storageEnabled = window.MapDebug.isEnabled();
+
+        localStorage.removeItem('DEBUG_MAP');
+        localStorage.setItem('__quest_debug', '1');
+        window.MapDebug.log('legacy-enabled');
+        const legacyEnabled = window.MapDebug.isEnabled();
+
+        return {
+          disabled,
+          globalEnabled,
+          legacyEnabled,
+          storageEnabled,
+          messages: calls.map(args => args.slice(0, 2))
+        };
+      } finally {
+        console.log = originalLog;
+        delete window.DEBUG_MAP;
+        localStorage.removeItem('DEBUG_MAP');
+        localStorage.removeItem('__quest_debug');
+      }
+    });
+
+    expect(result).toEqual({
+      disabled: false,
+      globalEnabled: true,
+      legacyEnabled: true,
+      storageEnabled: true,
+      messages: [
+        ['[map]', 'global-enabled'],
+        ['[map]', 'storage-enabled'],
+        ['[map]', 'legacy-enabled']
+      ]
+    });
+  });
+
+  test('i18n writes text by default and allows only vetted rich HTML keys', async ({ page }) => {
+    await page.goto('/tumski.html');
+    await page.waitForFunction(() => window.i18n?.setTranslatedContent);
+
+    const result = await page.evaluate(() => {
+      window.i18n.translations = {
+        music: {
+          audio_unlock_text: 'Enable <em>audio</em>'
+        },
+        smoke: {
+          plain: 'Plain <strong>HTML</strong>'
+        },
+        tumski: {
+          book02: {
+            zone1: {
+              text: 'Line 1<br><script>bad()</script><br />Line 2'
+            }
+          }
+        }
+      };
+
+      const plainElement = document.createElement('div');
+      plainElement.setAttribute('data-i18n', 'smoke.plain');
+      document.body.appendChild(plainElement);
+
+      const audioElement = document.createElement('div');
+      audioElement.className = 'audio-unlock-text';
+      audioElement.setAttribute('data-i18n', 'music.audio_unlock_text');
+      document.body.appendChild(audioElement);
+
+      document.getElementById('audioUnlockButton')?.remove();
+      const legacyAudioButton = document.createElement('div');
+      legacyAudioButton.id = 'audioUnlockButton';
+      const legacyAudioText = document.createElement('div');
+      legacyAudioText.className = 'audio-unlock-text';
+      legacyAudioButton.appendChild(legacyAudioText);
+      document.body.appendChild(legacyAudioButton);
+
+      const richElement = document.createElement('div');
+      window.i18n.updatePageContent();
+      window.i18n.setTranslatedContent(richElement, 'tumski.book02.zone1.text');
+
+      return {
+        audioInnerHTML: audioElement.innerHTML,
+        audioText: audioElement.textContent,
+        legacyAudioInnerHTML: legacyAudioText.innerHTML,
+        legacyAudioText: legacyAudioText.textContent,
+        plainInnerHTML: plainElement.innerHTML,
+        plainText: plainElement.textContent,
+        richAllowsKnownKey: window.i18n.isRichTranslationKey('tumski.book02.zone1.text'),
+        richBlocksUnknownKey: window.i18n.isRichTranslationKey('smoke.plain'),
+        richInnerHTML: richElement.innerHTML,
+        richScriptCount: richElement.querySelectorAll('script').length,
+        richText: richElement.textContent
+      };
+    });
+
+    expect(result).toEqual({
+      audioInnerHTML: 'Enable &lt;em&gt;audio&lt;/em&gt;',
+      audioText: 'Enable <em>audio</em>',
+      legacyAudioInnerHTML: 'Enable &lt;em&gt;audio&lt;/em&gt;',
+      legacyAudioText: 'Enable <em>audio</em>',
+      plainInnerHTML: 'Plain &lt;strong&gt;HTML&lt;/strong&gt;',
+      plainText: 'Plain <strong>HTML</strong>',
+      richAllowsKnownKey: true,
+      richBlocksUnknownKey: false,
+      richInnerHTML: 'Line 1<br>&lt;script&gt;bad()&lt;/script&gt;<br>Line 2',
+      richScriptCount: 0,
+      richText: 'Line 1<script>bad()</script>Line 2'
+    });
+  });
+
+  test('gnome descriptions keep br formatting while escaping other HTML', async ({ page }) => {
+    await page.goto('/tumski.html');
+
+    const result = await page.evaluate(async () => {
+      const gnomeMod = await import('./gnome_marker_handler.js');
+      const marker = document.createElement('button');
+      marker.id = 'smoke-gnome-marker';
+      document.body.appendChild(marker);
+
+      gnomeMod.setupGnomeGeoMarker({
+        markerId: marker.id,
+        gnomeId: 'blue_goat',
+        imageSrc: 'media/krasnolud/koza.jpg',
+        title: 'Smoke gnome',
+        description: 'Line 1<br><script>bad()</script>'
+      });
+
+      marker.click();
+
+      const description = document.querySelector('.gnome-description');
+      return {
+        innerHTML: description?.innerHTML,
+        scriptCount: description?.querySelectorAll('script').length,
+        text: description?.textContent
+      };
+    });
+
+    expect(result).toEqual({
+      innerHTML: 'Line 1<br>&lt;script&gt;bad()&lt;/script&gt;',
+      scriptCount: 0,
+      text: 'Line 1<script>bad()</script>'
+    });
+  });
+
   test('SPA config exposes page registry, selectors and audio policy', async ({ page }) => {
     await page.goto('/');
 

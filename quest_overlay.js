@@ -17,7 +17,7 @@
         }
 
         // Очищаем список перед заполнением
-        questTasksList.innerHTML = '';
+        questTasksList.replaceChildren();
 
         // Определяем номер и изображение активного квеста на странице (если есть)
         const activeQuestMark = document.querySelector('.map-mark[data-quest-number]');
@@ -680,7 +680,12 @@
         introText.style.textAlign = "justify";
         introText.style.fontStyle = "italic";
         const introRaw = window.i18n ? window.i18n.t('quest.intro') : "";
-        introText.innerHTML = introRaw.split(/\n\n/).map(par => `<p>${par}</p>`).join('');
+        const paragraphs = introRaw.split(/\n\n/).map((paragraphText) => {
+            const paragraph = document.createElement('p');
+            paragraph.textContent = paragraphText;
+            return paragraph;
+        });
+        introText.replaceChildren(...paragraphs);
         bookContentArea.insertBefore(introText, questTasksList);
     }
 
