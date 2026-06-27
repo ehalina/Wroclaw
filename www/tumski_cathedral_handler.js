@@ -713,8 +713,8 @@ export function positionMarkersOnBg() {
     //     screenHeight: window.innerHeight
     // });
 
-    // Геометки и стрелки должны иметь data-x-desktop/data-y-desktop или data-x-mobile/data-y-mobile
-    const markers = document.querySelectorAll('[data-x-desktop][data-y-desktop], [data-x-mobile][data-y-mobile]');
+            // Геометки и стрелки должны иметь data-x-desktop/data-y-desktop или data-x-mobile/data-y-mobile
+            const markers = document.querySelectorAll('[data-x-desktop][data-y-desktop], [data-x-mobile][data-y-mobile]');
     
     markers.forEach((marker, index) => {
         try {
@@ -730,13 +730,34 @@ export function positionMarkersOnBg() {
                 const scale = blockHeight / imgNaturalHeight;
                 const bgWidth = imgNaturalWidth * scale;
                 const bgLeft = 0;
-                
-                x = parseFloat(marker.dataset.xMobile);
-                y = parseFloat(marker.dataset.yMobile);
-                
-                const left = bgLeft + (x * scale) - (marker.clientWidth / 2);
-                const top = (y * scale) - (marker.clientHeight / 2);
-                
+
+                const hasMobileCoords = Number.isFinite(parseFloat(marker.dataset.xMobile)) && Number.isFinite(parseFloat(marker.dataset.yMobile));
+                x = hasMobileCoords ? parseFloat(marker.dataset.xMobile) : parseFloat(marker.dataset.xDesktop);
+                y = hasMobileCoords ? parseFloat(marker.dataset.yMobile) : parseFloat(marker.dataset.yDesktop);
+
+                if (!Number.isFinite(x) || !Number.isFinite(y)) {
+                    return;
+                }
+
+                let left;
+                let top;
+
+                if (hasMobileCoords) {
+                    left = bgLeft + (x * scale) - (marker.clientWidth / 2);
+                    top = (y * scale) - (marker.clientHeight / 2);
+                } else {
+                    const originalWidth = 2624;
+                    const originalHeight = 1824;
+                    const scaledX = x * scale;
+                    const scaledY = y * scale;
+                    const realImageWidth = originalWidth * scale;
+                    const realImageHeight = originalHeight * scale;
+                    const imageLeftOffset = (blockWidth - realImageWidth) / 2;
+                    const imageTopOffset = (blockHeight - realImageHeight) / 2;
+                    left = imageLeftOffset + scaledX;
+                    top = imageTopOffset + scaledY;
+                }
+
                 // Применяем стили с !important через setProperty
                 marker.style.setProperty('left', left + 'px', 'important');
                 marker.style.setProperty('top', top + 'px', 'important');

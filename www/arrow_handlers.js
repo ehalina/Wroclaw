@@ -205,36 +205,20 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
 
     // Добавляем обработчик касания для мобильных устройств (двойной клик)
     if (isMobile) {
-        let touchCount = 0;
-        let touchTimer = null;
-
-        // Общая функция обработки двойного клика
-        const handleDoubleTouch = (e) => {
+        const handleSingleTouch = (e) => {
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
             lastTouchTime = Date.now();
 
-            touchCount++;
-            debugLog('🔵 RIGHT TOUCHEND: touchCount =', touchCount, 'lastTouchTime =', lastTouchTime);
-
-            if (touchCount === 1) {
-                debugLog('🔵 RIGHT TOUCHEND: Первое касание, ждем второго');
-                touchTimer = setTimeout(() => {
-                    touchCount = 0;
-                    debugLog('🔵 RIGHT TOUCHEND: Таймаут, сбрасываем счетчик');
-                }, 400);
-                return;
-            } else if (touchCount === 2) {
-                debugLog('🔵 RIGHT TOUCHEND: Двойной клик! Устанавливаем touchHandled=true');
-                clearTimeout(touchTimer);
-                touchCount = 0;
-                touchHandled = true; // Устанавливаем флаг для блокировки click
-            } else {
-                debugLog('🔵 RIGHT TOUCHEND: touchCount > 2, сбрасываем');
-                touchCount = 0;
+            if (touchHandled) {
                 return;
             }
+
+            touchHandled = true;
+            setTimeout(() => {
+                touchHandled = false;
+            }, 500);
 
             try {
                 debugLog('🔵 RIGHT TOUCHEND: Выполняем действие');
@@ -277,7 +261,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
             debugLog('🔵 RIGHT AREA TOUCHSTART: lastTouchTime =', lastTouchTime);
         });
 
-        cursorArea.addEventListener('touchend', handleDoubleTouch);
+        cursorArea.addEventListener('touchend', handleSingleTouch);
 
         // Обработчики для самого элемента курсора
         cursor.addEventListener('touchstart', function(e) {
@@ -287,7 +271,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
             debugLog('🔵 RIGHT CURSOR TOUCHSTART: lastTouchTime =', lastTouchTime);
         });
 
-        cursor.addEventListener('touchend', handleDoubleTouch);
+        cursor.addEventListener('touchend', handleSingleTouch);
     }
 }
 
@@ -712,38 +696,22 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
         }
     });
 
-    // Добавляем обработчик касания для мобильных устройств (двойной клик)
+    // Добавляем обработчик касания для мобильных устройств (одинарный тап)
     if (isMobile) {
-        let touchCount = 0;
-        let touchTimer = null;
-
-        // Общая функция обработки двойного клика
-        const handleDoubleTouch = (e) => {
+        const handleSingleTouch = (e) => {
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
             lastTouchTime = Date.now();
 
-            touchCount++;
-            debugLog('🟢 FORWARD TOUCHEND: touchCount =', touchCount, 'lastTouchTime =', lastTouchTime);
-
-            if (touchCount === 1) {
-                debugLog('🟢 FORWARD TOUCHEND: Первое касание, ждем второго');
-                touchTimer = setTimeout(() => {
-                    touchCount = 0;
-                    debugLog('🟢 FORWARD TOUCHEND: Таймаут, сбрасываем счетчик');
-                }, 400);
-                return;
-            } else if (touchCount === 2) {
-                debugLog('🟢 FORWARD TOUCHEND: Двойной клик! Устанавливаем touchHandled=true');
-                clearTimeout(touchTimer);
-                touchCount = 0;
-                touchHandled = true; // Устанавливаем флаг для блокировки click
-            } else {
-                debugLog('🟢 FORWARD TOUCHEND: touchCount > 2, сбрасываем');
-                touchCount = 0;
+            if (touchHandled) {
                 return;
             }
+
+            touchHandled = true;
+            setTimeout(() => {
+                touchHandled = false;
+            }, 500);
 
             try {
                 debugLog('🟢 FORWARD TOUCHEND: Выполняем действие');
@@ -909,7 +877,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
             debugLog('🟢 FORWARD AREA TOUCHSTART: lastTouchTime =', lastTouchTime);
         });
 
-        cursorProstoArea.addEventListener('touchend', handleDoubleTouch);
+        cursorProstoArea.addEventListener('touchend', handleSingleTouch);
 
         // Обработчики для самого элемента курсора
         cursorProsto.addEventListener('touchstart', function(e) {
@@ -919,7 +887,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
             debugLog('🟢 FORWARD CURSOR TOUCHSTART: lastTouchTime =', lastTouchTime);
         });
 
-        cursorProsto.addEventListener('touchend', handleDoubleTouch);
+        cursorProsto.addEventListener('touchend', handleSingleTouch);
     }
 }
 
@@ -1060,38 +1028,22 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
         }, 300);
     });
 
-    // Добавляем обработчик касания для мобильных устройств (двойной клик)
+    // Добавляем обработчик касания для мобильных устройств (одинарный тап)
     if (isMobile) {
-        let touchCount = 0;
-        let touchTimer = null;
-
-        // Общая функция обработки двойного клика
-        const handleDoubleTouch = (e) => {
+        const handleSingleTouch = (e) => {
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
             lastTouchTime = Date.now();
 
-            touchCount++;
-            debugLog('🟠 LEFT TOUCHEND: touchCount =', touchCount, 'lastTouchTime =', lastTouchTime);
-
-            if (touchCount === 1) {
-                debugLog('🟠 LEFT TOUCHEND: Первое касание, ждем второго');
-                touchTimer = setTimeout(() => {
-                    touchCount = 0;
-                    debugLog('🟠 LEFT TOUCHEND: Таймаут, сбрасываем счетчик');
-                }, 400);
-                return;
-            } else if (touchCount === 2) {
-                debugLog('🟠 LEFT TOUCHEND: Двойной клик! Устанавливаем touchHandled=true');
-                clearTimeout(touchTimer);
-                touchCount = 0;
-                touchHandled = true; // Устанавливаем флаг для блокировки click
-            } else {
-                debugLog('🟠 LEFT TOUCHEND: touchCount > 2, сбрасываем');
-                touchCount = 0;
+            if (touchHandled) {
                 return;
             }
+
+            touchHandled = true;
+            setTimeout(() => {
+                touchHandled = false;
+            }, 500);
 
             try {
                 debugLog('🟠 LEFT TOUCHEND: Выполняем действие');
@@ -1134,7 +1086,7 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
             debugLog('🟠 LEFT AREA TOUCHSTART: lastTouchTime =', lastTouchTime);
         });
 
-        cursorLeftArea.addEventListener('touchend', handleDoubleTouch);
+        cursorLeftArea.addEventListener('touchend', handleSingleTouch);
 
         // Обработчики для самого элемента курсора
         cursorLeft.addEventListener('touchstart', function(e) {
@@ -1144,7 +1096,7 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
             debugLog('🟠 LEFT CURSOR TOUCHSTART: lastTouchTime =', lastTouchTime);
         });
 
-        cursorLeft.addEventListener('touchend', handleDoubleTouch);
+        cursorLeft.addEventListener('touchend', handleSingleTouch);
     }
 }
 
@@ -1244,13 +1196,8 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
         }, 300);
     });
 
-    // Обработчик touch по стрелке назад (мобильные устройства, двойной клик)
+    // Обработчик touch по стрелке назад (мобильные устройства, одинарный тап)
     if (isMobile) {
-        let touchCountArea = 0;
-        let touchTimerArea = null;
-        let touchCountCursor = 0;
-        let touchTimerCursor = null;
-
         cursorBackArea.addEventListener('touchstart', function(e) {
             e.preventDefault();
             lastTouchTime = Date.now();
@@ -1263,28 +1210,23 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
             debugLog('🔴 BACK CURSOR TOUCHSTART: lastTouchTime =', lastTouchTime);
         });
 
-        cursorBackArea.addEventListener('touchend', function(e) {
+        const handleSingleAreaTouch = (e) => {
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
             lastTouchTime = Date.now();
 
-            touchCountArea++;
-            debugLog('🔴 BACK AREA TOUCHEND: touchCountArea =', touchCountArea, 'lastTouchTime =', lastTouchTime);
-
-            if (touchCountArea === 1) {
-                debugLog('🔴 BACK AREA TOUCHEND: Первое касание, ждем второго');
-                touchTimerArea = setTimeout(() => {
-                    touchCountArea = 0;
-                    debugLog('🔴 BACK AREA TOUCHEND: Таймаут, сбрасываем счетчик');
-                }, 400);
+            if (touchHandled) {
                 return;
-            } else if (touchCountArea === 2) {
-                debugLog('🔴 BACK AREA TOUCHEND: Двойной клик! Устанавливаем touchHandled=true');
-                clearTimeout(touchTimerArea);
-                touchCountArea = 0;
-                touchHandled = true; // Устанавливаем флаг для блокировки click
+            }
 
+            touchHandled = true;
+            setTimeout(() => {
+                touchHandled = false;
+            }, 500);
+
+            debugLog('🔴 BACK AREA TOUCHEND: Выполняем действие после одиночного касания');
+            try {
                 hideAllCursors();
                 if (stepSound && isSoundEnabled()) {
                     stepSound.currentTime = 0;
@@ -1294,33 +1236,28 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
                 setTimeout(() => {
                     onBackClick();
                 }, 300);
-            } else {
-                return;
+            } catch (error) {
+                console.error('❌ Ошибка при обработке касания по стрелке назад (area):', error);
             }
-        });
+        };
 
-        cursorBack.addEventListener('touchend', function(e) {
+        const handleSingleCursorTouch = (e) => {
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
             lastTouchTime = Date.now();
 
-            touchCountCursor++;
-            debugLog('🔴 BACK CURSOR TOUCHEND: touchCountCursor =', touchCountCursor, 'lastTouchTime =', lastTouchTime);
-
-            if (touchCountCursor === 1) {
-                debugLog('🔴 BACK CURSOR TOUCHEND: Первое касание, ждем второго');
-                touchTimerCursor = setTimeout(() => {
-                    touchCountCursor = 0;
-                    debugLog('🔴 BACK CURSOR TOUCHEND: Таймаут, сбрасываем счетчик');
-                }, 400);
+            if (touchHandled) {
                 return;
-            } else if (touchCountCursor === 2) {
-                debugLog('🔴 BACK CURSOR TOUCHEND: Двойной клик! Устанавливаем touchHandled=true');
-                clearTimeout(touchTimerCursor);
-                touchCountCursor = 0;
-                touchHandled = true; // Устанавливаем флаг для блокировки click
+            }
 
+            touchHandled = true;
+            setTimeout(() => {
+                touchHandled = false;
+            }, 500);
+
+            debugLog('🔴 BACK CURSOR TOUCHEND: Выполняем действие после одиночного касания');
+            try {
                 hideAllCursors();
                 if (stepSound && isSoundEnabled()) {
                     stepSound.currentTime = 0;
@@ -1330,10 +1267,13 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
                 setTimeout(() => {
                     onBackClick();
                 }, 300);
-            } else {
-                return;
+            } catch (error) {
+                console.error('❌ Ошибка при обработке касания по стрелке назад (cursor):', error);
             }
-        });
+        };
+
+        cursorBackArea.addEventListener('touchend', handleSingleAreaTouch);
+        cursorBack.addEventListener('touchend', handleSingleCursorTouch);
     }
 }
 
@@ -1572,11 +1512,8 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
         }
     });
 
-    // Добавляем обработчик касания для мобильных устройств (двойной клик)
+    // Добавляем обработчик касания для мобильных устройств (одинарный тап)
     if (isMobile) {
-        let touchCount = 0;
-        let touchTimer = null;
-
         // Функция предзагрузки изображения
         const preloadImage = () => {
             try {
@@ -1589,42 +1526,22 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
                         nextImageContainer.style.backgroundPosition = 'left top';
                         nextImageContainer.style.backgroundSize = 'auto 100%';
                         nextImageContainer.style.display = 'block';
-    // console.log('🖼️ Предзагрузка (touchstart) dwor_01.jpg для стрелки прямо влево на pk02.html');
                     }
                 }
             } catch (_) {}
         };
 
-        // Общая функция обработки двойного клика
-        const handleDoubleTouch = (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation();
-            lastTouchTime = Date.now();
-
-            touchCount++;
-            debugLog('🟡 FORWARD-LEFT TOUCHEND: touchCount =', touchCount, 'lastTouchTime =', lastTouchTime);
-
-            if (touchCount === 1) {
-                debugLog('🟡 FORWARD-LEFT TOUCHEND: Первое касание, ждем второго');
-                touchTimer = setTimeout(() => {
-                    touchCount = 0;
-                    debugLog('🟡 FORWARD-LEFT TOUCHEND: Таймаут, сбрасываем счетчик');
-                }, 400);
-                return;
-            } else if (touchCount === 2) {
-                debugLog('🟡 FORWARD-LEFT TOUCHEND: Двойной клик! Устанавливаем touchHandled=true');
-                clearTimeout(touchTimer);
-                touchCount = 0;
-                touchHandled = true; // Устанавливаем флаг для блокировки click
-            } else {
-                debugLog('🟡 FORWARD-LEFT TOUCHEND: touchCount > 2, сбрасываем');
-                touchCount = 0;
+        const executeForwardLeftTouchNavigation = () => {
+            if (touchHandled) {
                 return;
             }
 
+            touchHandled = true;
+            setTimeout(() => {
+                touchHandled = false;
+            }, 500);
+
             try {
-    // console.log('🟡 Касание по стрелке прямо влево - обработчик из arrow_handlers.js запущен');
                 hideAllCursors();
 
                 if (stepSound && isSoundEnabled()) {
@@ -1642,100 +1559,45 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
                     return;
                 }
 
-    // console.log('🟡 Запускаем анимацию перехода (zoom-transition)');
                 // Сначала запускаем анимацию перехода
                 imageContainer.style.animationPlayState = 'paused';
                 imageContainer.classList.add('zoom-transition');
 
                 // Определяем следующую страницу и загружаем соответствующее изображение
                 const nextPage = cursorProstoLeft.getAttribute('data-next-page');
-    // console.log('🟡 Следующая страница (touchend):', nextPage);
 
                 if (nextPage === 'pk01.html') {
                     // Для pk01.html загружаем соответствующее изображение
-                    if (isMobile) {
-                        // В мобильной версии загружаем изображение, вписанное по высоте
-                        nextImageContainer.style.backgroundImage = 'url("media/tumski/pk_01.jpg")';
-                        nextImageContainer.style.backgroundPosition = 'left top';
-                        nextImageContainer.style.backgroundSize = 'auto 100%';
-    // console.log('🟡 Мобильная версия (touchend): загружено изображение pk_01.jpg, вписанное по высоте');
-                    } else {
-                        // В десктопной версии загружаем полное изображение
-                        nextImageContainer.style.backgroundImage = 'url("media/tumski/pk_01.jpg")';
-                        nextImageContainer.style.backgroundPosition = 'center center';
-                        nextImageContainer.style.backgroundSize = 'contain';
-    // console.log('🟡 Десктопная версия (touchend): загружено полное изображение pk_01.jpg');
-                    }
+                    nextImageContainer.style.backgroundImage = 'url("media/tumski/pk_01.jpg")';
+                    nextImageContainer.style.backgroundPosition = isMobile ? 'left top' : 'center center';
+                    nextImageContainer.style.backgroundSize = isMobile ? 'auto 100%' : 'contain';
                 } else if (nextPage === 'ogrod08.html') {
                     // Для ogrod08.html загружаем соответствующее изображение
-                    if (isMobile) {
-                        // В мобильной версии загружаем изображение, вписанное по высоте
-                        nextImageContainer.style.backgroundImage = 'url("media/tumski/ogrud_08.jpg")';
-                        nextImageContainer.style.backgroundPosition = 'left top';
-                        nextImageContainer.style.backgroundSize = 'auto 100%';
-    // console.log('🟡 Мобильная версия (touchend): загружено изображение ogrud_08.jpg, вписанное по высоте');
-                    } else {
-                        // В десктопной версии загружаем полное изображение
-                        nextImageContainer.style.backgroundImage = 'url("media/tumski/ogrud_08.jpg")';
-                        nextImageContainer.style.backgroundPosition = 'center center';
-                        nextImageContainer.style.backgroundSize = 'contain';
-    // console.log('🟡 Десктопная версия (touchend): загружено полное изображение ogrud_08.jpg');
-                    }
+                    nextImageContainer.style.backgroundImage = 'url("media/tumski/ogrud_08.jpg")';
+                    nextImageContainer.style.backgroundPosition = isMobile ? 'left top' : 'center center';
+                    nextImageContainer.style.backgroundSize = isMobile ? 'auto 100%' : 'contain';
                 } else if (nextPage === 'tumski15.html') {
                     // Для tumski15.html загружаем соответствующее изображение
-                    if (isMobile) {
-                        // В мобильной версии загружаем изображение, вписанное по высоте
-                        nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_15.jpg")';
-                        nextImageContainer.style.backgroundPosition = 'left top';
-                        nextImageContainer.style.backgroundSize = 'auto 100%';
-    // console.log('🟡 Мобильная версия (touchend): загружено изображение tumski_15.jpg, вписанное по высоте');
-                    } else {
-                        // В десктопной версии загружаем полное изображение
-                        nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_15.jpg")';
-                        nextImageContainer.style.backgroundPosition = 'center center';
-                        nextImageContainer.style.backgroundSize = 'contain';
-    // console.log('🟡 Десктопная версия (touchend): загружено полное изображение tumski_15.jpg');
-                    }
+                    nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_15.jpg")';
+                    nextImageContainer.style.backgroundPosition = isMobile ? 'left top' : 'center center';
+                    nextImageContainer.style.backgroundSize = isMobile ? 'auto 100%' : 'contain';
                 } else if (nextPage === 'dwor01.html') {
                     // Для dwor01.html (переход с pk02.html) загружаем dwor_01.jpg
-                    if (isMobile) {
-                        // В мобильной версии загружаем изображение, вписанное по высоте
-                        nextImageContainer.style.backgroundImage = 'url("media/tumski/dwor_01.jpg")';
-                        nextImageContainer.style.backgroundPosition = 'left top';
-                        nextImageContainer.style.backgroundSize = 'auto 100%';
-    // console.log('🟡 Мобильная версия (touchend): загружено изображение dwor_01.jpg, вписанное по высоте');
-                    } else {
-                        // В десктопной версии загружаем полное изображение
-                        nextImageContainer.style.backgroundImage = 'url("media/tumski/dwor_01.jpg")';
-                        nextImageContainer.style.backgroundPosition = 'center center';
-                        nextImageContainer.style.backgroundSize = 'contain';
-    // console.log('🟡 Десктопная версия (touchend): загружено полное изображение dwor_01.jpg');
-                    }
+                    nextImageContainer.style.backgroundImage = 'url("media/tumski/dwor_01.jpg")';
+                    nextImageContainer.style.backgroundPosition = isMobile ? 'left top' : 'center center';
+                    nextImageContainer.style.backgroundSize = isMobile ? 'auto 100%' : 'contain';
                 } else if (nextPage === 'tumski09.html') {
                     // Для tumski09.html (переход с tumski08.html) загружаем tumski_09.jpg
-                    if (isMobile) {
-                        // В мобильной версии загружаем изображение, вписанное по высоте
-                        nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_09.jpg")';
-                        nextImageContainer.style.backgroundPosition = 'left top';
-                        nextImageContainer.style.backgroundSize = 'auto 100%';
-    // console.log('🟡 Мобильная версия (touchend): загружено изображение tumski_09.jpg, вписанное по высоте');
-                    } else {
-                        // В десктопной версии загружаем полное изображение
-                        nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_09.jpg")';
-                        nextImageContainer.style.backgroundPosition = 'center center';
-                        nextImageContainer.style.backgroundSize = 'contain';
-    // console.log('🟡 Десктопная версия (touchend): загружено полное изображение tumski_09.jpg');
-                    }
+                    nextImageContainer.style.backgroundImage = 'url("media/tumski/tumski_09.jpg")';
+                    nextImageContainer.style.backgroundPosition = isMobile ? 'left top' : 'center center';
+                    nextImageContainer.style.backgroundSize = isMobile ? 'auto 100%' : 'contain';
                 }
 
-    // console.log('🟡 Сразу начинаем плавно показывать next-image-container');
                 // Сразу начинаем плавно показывать следующее изображение
                 nextImageContainer.style.opacity = '1';
 
-    // console.log('🟡 Запускаем таймер для перехода на следующую страницу через 1500мс');
                 // Через 1500мс (время анимации) переходим на следующую страницу
                 setTimeout(() => {
-    // console.log('🟡 Таймер сработал, вызываем onForwardLeftClick callback');
                     if (typeof onForwardLeftClick === 'function') {
                         onForwardLeftClick();
                     } else {
@@ -1748,6 +1610,15 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
             }
         };
 
+        const handleSingleTouch = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            lastTouchTime = Date.now();
+            preloadImage();
+            executeForwardLeftTouchNavigation();
+        };
+
         // Обработчики для области курсора
         cursorProstoLeftArea.addEventListener('touchstart', function(e) {
             e.preventDefault();
@@ -1757,7 +1628,7 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
             preloadImage();
         });
 
-        cursorProstoLeftArea.addEventListener('touchend', handleDoubleTouch);
+        cursorProstoLeftArea.addEventListener('touchend', handleSingleTouch);
 
         // Обработчики для самого элемента курсора
         cursorProstoLeft.addEventListener('touchstart', function(e) {
@@ -1768,7 +1639,7 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
             preloadImage();
         });
 
-        cursorProstoLeft.addEventListener('touchend', handleDoubleTouch);
+        cursorProstoLeft.addEventListener('touchend', handleSingleTouch);
     }
 }
 
@@ -1842,46 +1713,46 @@ function setupUpArrowHandler(cursor, cursorArea, stepSound) {
         }
     });
 
-    // Добавляем обработчик касания для мобильных устройств (двойной клик)
+    // Добавляем обработчик касания для мобильных устройств (одинарный тап)
     if (isMobile) {
-        let touchCount = 0;
-        let touchTimer = null;
+        let touchHandled = false;
+        let lastTouchTime = 0;
+
+        const handleSingleTouch = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            lastTouchTime = Date.now();
+
+            if (touchHandled) {
+                return;
+            }
+
+            touchHandled = true;
+            setTimeout(() => {
+                touchHandled = false;
+            }, 500);
+
+            hideAllCursors();
+            if (stepSound && isSoundEnabled()) {
+                stepSound.currentTime = 0;
+                playAudioQuietly(stepSound);
+            }
+
+            const nextPage = cursor.getAttribute('data-next-page');
+            if (nextPage) {
+                setTimeout(() => {
+                    window.location.href = nextPage;
+                }, 300);
+            }
+        };
 
         cursorArea.addEventListener('touchstart', function(e) {
             e.preventDefault();
             cursor.style.opacity = '1';
         });
 
-        cursorArea.addEventListener('touchend', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            touchCount++;
-
-            if (touchCount === 1) {
-                touchTimer = setTimeout(() => {
-                    touchCount = 0;
-                }, 400);
-                return;
-            } else if (touchCount === 2) {
-                clearTimeout(touchTimer);
-                touchCount = 0;
-
-                hideAllCursors();
-                if (stepSound && isSoundEnabled()) {
-                    stepSound.currentTime = 0;
-                    playAudioQuietly(stepSound);
-                }
-
-                const nextPage = cursor.getAttribute('data-next-page');
-                if (nextPage) {
-                    setTimeout(() => {
-                        window.location.href = nextPage;
-                    }, 300);
-                }
-            } else {
-                return;
-            }
-        });
+        cursorArea.addEventListener('touchend', handleSingleTouch);
     }
 }
 
