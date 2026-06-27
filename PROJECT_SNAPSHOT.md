@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 99% (55 завершённых задач текущего плана)
+**Общий прогресс:** 99% (56 завершённых задач текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -52,6 +52,7 @@ Wroclaw/
 ├── spa_message_contract.js ✅       # Safe postMessage contract
 ├── spa_config.js ✅                 # SPA registry/config
 ├── spa_lifecycle.js ✅              # SPA lifecycle helpers
+├── spa_loading_state.js ✅          # SPA loading overlay helper
 ├── spa_minimap_manager.js ✅        # MiniMapManager
 ├── spa_integration.js ✅            # Интеграция SPA
 ├── common_tumski.js ✅             # Общая логика tumski страниц
@@ -152,6 +153,7 @@ Wroclaw/
 53. ✅ Stage 6.21 Panorama video metadata preload
 54. ✅ Stage 6.22 Panorama video lazy source
 55. ✅ Stage 6.23 SPA loading state characterization
+56. ✅ Stage 6.24 SPA loading helper extraction
 
 ---
 
@@ -211,13 +213,14 @@ make stage-06-20-video-review
 make stage-06-21-video-metadata
 make stage-06-22-video-lazy-source
 make stage-06-23-loading-state
+make stage-06-24-loading-helper
 make security
 make audit
 ```
 
 ### Текущий Capacitor package baseline:
 - Initial Stage 6 build: `350 files, 138.2 MB -> www/`
-- Current build: `331 files, 84.5 MB -> www/`
+- Current build: `332 files, 84.5 MB -> www/`
 - Package budget guard: `120 MB`
 - Runtime asset optimization policy: `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`
 
@@ -247,6 +250,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.24 выполнен
+- добавлен `spa_loading_state.js` с `SpaLoadingState` helper
+- `SPAManager.showLoading()` / `hideLoading()` делегируют управление `#loadingOverlay` helper-у
+- добавлен focused smoke на helper contract и `make stage-06-24-loading-helper`
+- slow-navigation oracle подтвердил сохранение loading behavior на desktop/mobile
 
 ### 2026-06-27 - Refactoring Stage 6.23 выполнен
 - добавлен `make stage-06-23-loading-state`

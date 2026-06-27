@@ -914,6 +914,46 @@ test.describe('Wroclaw static app smoke', () => {
     });
   });
 
+  test('SPA loading state helper preserves overlay class contract', async ({ page }) => {
+    await page.goto('/');
+
+    const loadingState = await page.evaluate(() => {
+      const overlay = document.getElementById('loadingOverlay');
+      const helper = window.SpaLoadingState;
+      const initiallyHidden = overlay.classList.contains('hidden');
+      const showResult = helper.show(document);
+      const visibleAfterShow = helper.isVisible(document);
+      const hiddenAfterShow = overlay.classList.contains('hidden');
+      const hideResult = helper.hide(document);
+
+      return {
+        helperAvailable: Boolean(helper),
+        hiddenAfterHide: overlay.classList.contains('hidden'),
+        hiddenAfterShow,
+        hideResult,
+        initiallyHidden,
+        overlayMatches: helper.getOverlay(document) === overlay,
+        selector: helper.LOADING_OVERLAY_SELECTOR,
+        showResult,
+        visibleAfterHide: helper.isVisible(document),
+        visibleAfterShow
+      };
+    });
+
+    expect(loadingState).toEqual({
+      helperAvailable: true,
+      hiddenAfterHide: true,
+      hiddenAfterShow: false,
+      hideResult: true,
+      initiallyHidden: true,
+      overlayMatches: true,
+      selector: '#loadingOverlay',
+      showResult: true,
+      visibleAfterHide: false,
+      visibleAfterShow: true
+    });
+  });
+
   test('SPA navigation message is accepted only from the active iframe', async ({ page }) => {
     await page.goto('/');
     await page.waitForFunction(() => window.spaManager?.currentPage === 'tumski.html');

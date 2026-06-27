@@ -7,7 +7,7 @@
 ## Контекст
 
 Стартовый Stage 6 baseline: `make build` собирал `www/` размером `350 files, 138.2 MB -> www/`.
-После Stage 6.17 текущий baseline: `331 files, 84.5 MB -> www/`.
+После Stage 6.24 текущий baseline: `332 files, 84.5 MB -> www/`.
 В `BACKLOG.md` Performance Optimization уже находится в активных задачах Phase 2.
 
 ## Scope
@@ -633,3 +633,34 @@ Stage 6.23 выполнен:
 Следующий подэтап:
 
 - Stage 6.24 может менять loading implementation за этим oracle: extract loading helpers, timeout/error state или localization/visual polish для loading overlay.
+
+## Status Update - 2026-06-27 - Stage 6.24
+
+Stage 6.24 выполнен:
+
+- Создан `docs/refactoring/stage-06-24-loading-helper.md`.
+- Добавлен `spa_loading_state.js` с маленьким `SpaLoadingState` helper:
+  - `getOverlay(root)`;
+  - `show(root)`;
+  - `hide(root)`;
+  - `isVisible(root)`.
+- `index.html` подключает helper перед SPA module.
+- `SPAManager.showLoading()` / `SPAManager.hideLoading()` делегируют в helper, сохраняя class contract `hidden`.
+- `tests/smoke.spec.mjs` получил focused smoke для helper contract.
+- Добавлен Makefile target `make stage-06-24-loading-helper`, который переиспользует Stage 6.23 oracle с отдельной artifact-директорией.
+- Созданы artifacts:
+  - `docs/refactoring/artifacts/stage-06-24-loading-helper/desktop-loading-overlay.png`;
+  - `docs/refactoring/artifacts/stage-06-24-loading-helper/desktop-after-navigation.png`;
+  - `docs/refactoring/artifacts/stage-06-24-loading-helper/desktop-loading-state.json`;
+  - `docs/refactoring/artifacts/stage-06-24-loading-helper/mobile-pixel5-loading-overlay.png`;
+  - `docs/refactoring/artifacts/stage-06-24-loading-helper/mobile-pixel5-after-navigation.png`;
+  - `docs/refactoring/artifacts/stage-06-24-loading-helper/mobile-pixel5-loading-state.json`.
+- Browser characterization после extraction:
+  - во время slow iframe load overlay видим, active iframe остаётся `tumski.html`, DOM содержит 2 page containers;
+  - после load overlay скрыт, active iframe `tumski02.html`;
+  - `pageErrors=[]` на desktop/mobile.
+- UX и media files не менялись; package получил один новый JS helper: `332 files, 84.5 MB -> www/`.
+
+Следующий подэтап:
+
+- Stage 6.25: добавить bounded iframe loading timeout/error state за `SpaLoadingState`, не смешивая с дальнейшей визуальной полировкой.

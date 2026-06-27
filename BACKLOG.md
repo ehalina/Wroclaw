@@ -470,6 +470,11 @@
   - Files: `playwright.stage-06-23.config.mjs`, `tools/stage-06-23/loading-state-characterization.spec.mjs`, `Makefile`, `docs/refactoring/stage-06-23-loading-state-characterization.md`, `docs/refactoring/artifacts/stage-06-23-loading-state/`
   - Benefit: planned loading-state UX work now has a desktop/mobile oracle for overlay visibility, non-blank current page behavior and post-load activation
 
+- [x] **Refactor: SPA loading state helper** - Moved loading overlay control behind a small helper
+  - Completed: 2026-06-27
+  - Files: `spa_loading_state.js`, `index.html`, `tests/smoke.spec.mjs`, `Makefile`, `docs/refactoring/stage-06-24-loading-helper.md`, `docs/refactoring/artifacts/stage-06-24-loading-helper/`
+  - Benefit: `SPAManager` keeps the same `showLoading()` / `hideLoading()` surface while timeout/error loading UX can now build on `SpaLoadingState`
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

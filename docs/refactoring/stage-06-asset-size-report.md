@@ -304,7 +304,7 @@ Completed on 2026-06-27:
   - play button remains visible after metadata;
   - after click, video plays and unmutes on desktop/mobile.
 - No media files changed.
-- No package size change: current build baseline remains `331 files, 84.5 MB -> www/`.
+- Package gained one new JS helper file; current build baseline is `332 files, 84.5 MB -> www/`.
 
 ## Stage 6.22 result
 
@@ -330,6 +330,22 @@ Completed on 2026-06-27:
   - before navigation: loading overlay hidden;
   - during delayed iframe request: loading overlay visible, active iframe remains `tumski.html`, DOM has 2 page containers;
   - after navigation: loading overlay hidden, active iframe is `tumski02.html`;
+  - `pageErrors=[]`.
+- No media files changed.
+- No package size change: current build baseline remains `331 files, 84.5 MB -> www/`.
+
+## Stage 6.24 result
+
+Completed on 2026-06-27:
+
+- Created `docs/refactoring/stage-06-24-loading-helper.md`.
+- Added `spa_loading_state.js`.
+- Updated `SPAManager.showLoading()` / `hideLoading()` to delegate overlay class changes through `SpaLoadingState`.
+- Added `make stage-06-24-loading-helper`.
+- Browser result after extraction:
+  - delayed `tumski02.html` iframe route still shows the loading overlay;
+  - active iframe remains `tumski.html` until the new iframe finishes loading;
+  - after load, active iframe is `tumski02.html`;
   - `pageErrors=[]`.
 - No media files changed.
 - No package size change: current build baseline remains `331 files, 84.5 MB -> www/`.

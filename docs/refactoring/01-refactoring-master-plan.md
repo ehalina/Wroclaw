@@ -390,3 +390,8 @@ make smoke
   - добавлен `make stage-06-23-loading-state`;
   - slow iframe navigation oracle подтверждает: overlay видим во время задержки, активный iframe остаётся `tumski.html`, после load активируется `tumski02.html`;
   - runtime behavior и package baseline не менялись.
+- Stage 6.24 выполнен:
+  - создан `spa_loading_state.js`;
+  - `SPAManager.showLoading()` / `hideLoading()` делегируют в `SpaLoadingState`;
+  - добавлен focused smoke для helper contract;
+  - `make stage-06-24-loading-helper` подтверждает Stage 6.23 slow-navigation behavior после extraction.

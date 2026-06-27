@@ -85,6 +85,8 @@ Stage 6.22 result: `katedra_panorama.html` now lazy-loads `Wroclaw_Saver.mp4` by
 
 Stage 6.23 result: SPA loading overlay behavior is now characterized under a deliberately delayed `tumski02.html` iframe navigation; no runtime behavior or asset packaging changed.
 
+Stage 6.24 result: loading overlay control is extracted into `spa_loading_state.js`; `SPAManager.showLoading()` / `hideLoading()` keep the same `hidden` class contract and the Stage 6.23 oracle still passes.
+
 4. Video review:
    - inspect `katedra_panorama.html` playback;
    - decide whether a smaller derivative video or poster/loading strategy is needed.
@@ -107,4 +109,4 @@ Additional checks:
 
 ## Next safe implementation step
 
-Move to a loading-state implementation change behind the Stage 6.23 oracle, or another runtime-heavy group with a clear oracle. Defer video poster/transcode unless manual product review asks for it.
+Move to a bounded iframe loading timeout/error state behind `SpaLoadingState`, or another runtime-heavy group with a clear oracle. Defer video poster/transcode unless manual product review asks for it.

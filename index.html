@@ -12,6 +12,7 @@
     <script src="spa_message_contract.js"></script>
     <script src="spa_config.js"></script>
     <script src="spa_lifecycle.js"></script>
+    <script src="spa_loading_state.js"></script>
     <script src="spa_minimap_manager.js"></script>
     <script src="i18n.js"></script>
     <script src="common.js"></script>
@@ -1330,11 +1331,21 @@
             }
             
             showLoading() {
-                document.getElementById('loadingOverlay').classList.remove('hidden');
+                if (window.SpaLoadingState && typeof window.SpaLoadingState.show === 'function') {
+                    window.SpaLoadingState.show(document);
+                    return;
+                }
+
+                document.getElementById('loadingOverlay')?.classList.remove('hidden');
             }
             
             hideLoading() {
-                document.getElementById('loadingOverlay').classList.add('hidden');
+                if (window.SpaLoadingState && typeof window.SpaLoadingState.hide === 'function') {
+                    window.SpaLoadingState.hide(document);
+                    return;
+                }
+
+                document.getElementById('loadingOverlay')?.classList.add('hidden');
             }
             
             setupEventListeners() {
