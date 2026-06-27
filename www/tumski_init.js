@@ -5,19 +5,42 @@ if (!document.querySelector('script[src="user_database.js"]')) {
     document.head.appendChild(dbScript);
 }
 
+const TUMSKI_INIT_DEBUG_STORAGE_KEYS = ['DEBUG_TUMSKI_INIT', '__tumski_init_debug'];
+
+function isTumskiInitDebugEnabled() {
+    try {
+        if (window.DEBUG_TUMSKI_INIT === true || window.DEBUG_TUMSKI_INIT === '1' || window.DEBUG_TUMSKI_INIT === 'true') {
+            return true;
+        }
+
+        return TUMSKI_INIT_DEBUG_STORAGE_KEYS.some((key) => {
+            const value = localStorage.getItem(key);
+            return value === '1' || value === 'true';
+        });
+    } catch (_) {
+        return false;
+    }
+}
+
+function debugWarn(...args) {
+    if (isTumskiInitDebugEnabled()) {
+        console.warn(...args);
+    }
+}
+
 // Инициализатор страницы tumski19: вызывает общий модуль и настраивает обработчики
 document.addEventListener('DOMContentLoaded', async () => {
     // Эффект разворота камеры при загрузке tumski08.html
     const imageContainer = document.querySelector('.image-container');
     if (imageContainer) {
         // console.log('🔄 Запускаем эффект разворота камеры при загрузке tumski08.html');
-        
+
         // Останавливаем стандартную анимацию
         imageContainer.style.animationPlayState = 'paused';
-        
+
         // Запускаем анимацию разворота
         imageContainer.classList.add('rotate-transition');
-        
+
         // После завершения разворота запускаем стандартную анимацию движения
         setTimeout(() => {
             imageContainer.classList.remove('rotate-transition');
@@ -39,36 +62,44 @@ document.addEventListener('DOMContentLoaded', async () => {
     const playButton = document.getElementById('play-button');
     const video = document.getElementById('background-video');
     const image = document.querySelector('.image');
-    
-    // console.log('Инициализация кнопки play:', { playButton: !!playButton, video: !!video, image: !!image });
-    
-    if (playButton && video && image) {
-        playButton.addEventListener('click', () => {
-            // console.log('Клик по кнопке play зарегистрирован');
-            video.style.opacity = '1';
-            video.playbackRate = 0.2; // Установить скорость воспроизведения на 0.5
-            video.play().then(() => {
-                // console.log('Видео начало воспроизведение');
-            }).catch(err => {
-                console.error('Ошибка при воспроизведении видео:', err);
-            });
-            image.style.zIndex = '0';
-            video.style.zIndex = '1';
-            playButton.style.display = 'none';
-        });
-        
-        playButton.addEventListener('mousedown', () => {
-            // console.log('mousedown на кнопке play');
-        });
-        
-        playButton.addEventListener('mouseup', () => {
-            // console.log('mouseup на кнопке play');
-        });
-        
-        // console.log('Обработчик клика для кнопки play добавлен');
-    } else {
-        console.error('Не все элементы найдены для кнопки play');
-    }
-});
 
+    // console.log('Инициализация кнопки play:', { playButton: !!playButton, video: !!video, image: !!image });
+
+    if (!playButton && !video) {
+        return;
+    }
+
+    if (!playButton || !video || !image) {
+        debugWarn('Не все элементы найдены для кнопки play', {
+            image: Boolean(image),
+            playButton: Boolean(playButton),
+            video: Boolean(video)
+        });
+        return;
+    }
+
+    playButton.addEventListener('click', () => {
+        // console.log('Клик по кнопке play зарегистрирован');
+        video.style.opacity = '1';
+        video.playbackRate = 0.2; // Установить скорость воспроизведения на 0.5
+        video.play().then(() => {
+            // console.log('Видео начало воспроизведение');
+        }).catch(err => {
+            console.error('Ошибка при воспроизведении видео:', err);
+        });
+        image.style.zIndex = '0';
+        video.style.zIndex = '1';
+        playButton.style.display = 'none';
+    });
+
+    playButton.addEventListener('mousedown', () => {
+        // console.log('mousedown на кнопке play');
+    });
+
+    playButton.addEventListener('mouseup', () => {
+        // console.log('mouseup на кнопке play');
+    });
+
+    // console.log('Обработчик клика для кнопки play добавлен');
+});
 

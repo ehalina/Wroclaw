@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 99% (64 завершённые задачи текущего плана)
+**Общий прогресс:** 99% (65 завершённые задачи текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -148,6 +148,7 @@ Wroclaw/
 72. ✅ Stage 7.15 Standalone/debug page diagnostics policy
 73. ✅ Stage 7.16 `www/` source of truth
 74. ✅ Stage 7.17 Stale generated AI context cleanup
+75. ✅ Stage 7.18 Runtime console noise cleanup
 
 ---
 
@@ -245,6 +246,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 7.18 выполнен
+- `tumski_init.js` больше не пишет error для отсутствующего optional play/video блока
+- legacy `stepSound.play()` в `arrow_handlers.js` безопасно гасит autoplay promise rejection
+- `unload` cleanup заменён на `pagehide`, `/favicon.ico` добавлен в `www/`
+- iframe load handlers назначаются до DOM insertion; pending iframe timers отменяются при удалении/перезагрузке pending страницы
 
 ### 2026-06-27 - Refactoring Stage 7.17 выполнен
 - удалён tracked `project-context.md`, устаревший generated context dump со старой root runtime layout

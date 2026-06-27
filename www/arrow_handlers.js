@@ -35,6 +35,21 @@ function debugWarn(...args) {
     }
 }
 
+function playAudioQuietly(audio) {
+    if (!audio) {
+        return;
+    }
+
+    try {
+        const playResult = audio.play();
+        if (playResult && typeof playResult.catch === 'function') {
+            playResult.catch(() => {});
+        }
+    } catch (_) {
+        // Expected for some autoplay/user-gesture edge cases.
+    }
+}
+
 /**
  * Скрывает все курсоры на странице, добавляя класс hide-cursors
  */
@@ -161,7 +176,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
 
             if (stepSound && isSoundEnabled()) {
                 stepSound.currentTime = 0;
-                stepSound.play();
+                playAudioQuietly(stepSound);
             }
 
             setTimeout(() => {
@@ -227,7 +242,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
 
                 if (stepSound && isSoundEnabled()) {
                     stepSound.currentTime = 0;
-                    stepSound.play();
+                    playAudioQuietly(stepSound);
                 }
 
                 setTimeout(() => {
@@ -341,7 +356,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
 
             if (stepSound && isSoundEnabled()) {
                 stepSound.currentTime = 0;
-                stepSound.play();
+                playAudioQuietly(stepSound);
             }
 
             setTimeout(() => {
@@ -391,7 +406,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
                 hideAllCursors();
                 if (stepSound && isSoundEnabled()) {
                     stepSound.currentTime = 0;
-                    stepSound.play();
+                    playAudioQuietly(stepSound);
                 }
                 setTimeout(() => {
                     if (onRightClick && typeof onRightClick === 'function') {
@@ -525,7 +540,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
             if (stepSound && isSoundEnabled()) {
     // console.log('🟡 Воспроизводим звук шага');
                 stepSound.currentTime = 0;
-                stepSound.play();
+                playAudioQuietly(stepSound);
             }
 
             // Получаем элементы для анимации
@@ -736,7 +751,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
 
                 if (stepSound && isSoundEnabled()) {
                     stepSound.currentTime = 0;
-                    stepSound.play();
+                    playAudioQuietly(stepSound);
                 }
 
                 // Получаем элементы для анимации
@@ -966,9 +981,9 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
         });
 
         // Очистка обработчиков при уничтожении
-        window.addEventListener('unload', function() {
+        window.addEventListener('pagehide', function() {
             document.removeEventListener('mousemove', mouseMoveHandler);
-        });
+        }, { once: true });
     } else {
         // Для мобильных устройств показываем курсор всегда
         cursorLeft.style.opacity = '1';
@@ -1028,7 +1043,7 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
         hideAllCursors();
         if (stepSound && isSoundEnabled()) {
             stepSound.currentTime = 0;
-            stepSound.play();
+            playAudioQuietly(stepSound);
         }
         setTimeout(() => {
             if (onLeftClick && typeof onLeftClick === 'function') {
@@ -1084,7 +1099,7 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
 
                 if (stepSound && isSoundEnabled()) {
                     stepSound.currentTime = 0;
-                    stepSound.play();
+                    playAudioQuietly(stepSound);
                 }
 
                 setTimeout(() => {
@@ -1221,7 +1236,7 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
         hideAllCursors();
         if (stepSound && isSoundEnabled()) {
             stepSound.currentTime = 0;
-            stepSound.play();
+            playAudioQuietly(stepSound);
         }
 
         setTimeout(() => {
@@ -1273,7 +1288,7 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
                 hideAllCursors();
                 if (stepSound && isSoundEnabled()) {
                     stepSound.currentTime = 0;
-                    stepSound.play();
+                    playAudioQuietly(stepSound);
                 }
 
                 setTimeout(() => {
@@ -1309,7 +1324,7 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
                 hideAllCursors();
                 if (stepSound && isSoundEnabled()) {
                     stepSound.currentTime = 0;
-                    stepSound.play();
+                    playAudioQuietly(stepSound);
                 }
 
                 setTimeout(() => {
@@ -1431,7 +1446,7 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
             if (stepSound && isSoundEnabled()) {
     // console.log('🟡 Воспроизводим звук шага');
                 stepSound.currentTime = 0;
-                stepSound.play();
+                playAudioQuietly(stepSound);
             }
 
             // Получаем элементы для анимации
@@ -1614,7 +1629,7 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
 
                 if (stepSound && isSoundEnabled()) {
                     stepSound.currentTime = 0;
-                    stepSound.play();
+                    playAudioQuietly(stepSound);
                 }
 
                 // Получаем элементы для анимации
@@ -1816,7 +1831,7 @@ function setupUpArrowHandler(cursor, cursorArea, stepSound) {
         hideAllCursors();
         if (stepSound && isSoundEnabled()) {
             stepSound.currentTime = 0;
-            stepSound.play();
+            playAudioQuietly(stepSound);
         }
 
         const nextPage = cursor.getAttribute('data-next-page');
@@ -1854,7 +1869,7 @@ function setupUpArrowHandler(cursor, cursorArea, stepSound) {
                 hideAllCursors();
                 if (stepSound && isSoundEnabled()) {
                     stepSound.currentTime = 0;
-                    stepSound.play();
+                    playAudioQuietly(stepSound);
                 }
 
                 const nextPage = cursor.getAttribute('data-next-page');

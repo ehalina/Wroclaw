@@ -44,7 +44,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .page-content {
             width: 100%;
             height: 100%;
@@ -55,12 +55,12 @@
             visibility: hidden;
             transition: opacity 0.3s ease, visibility 0.3s ease;
         }
-        
+
         .page-content.active {
             opacity: 1;
             visibility: visible;
         }
-        
+
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -75,11 +75,11 @@
             color: white;
             font-size: 18px;
         }
-        
+
         .loading-overlay.hidden {
             display: none;
         }
-        
+
         /* Стили для кнопки разблокировки аудио */
         .audio-unlock-button {
             position: fixed;
@@ -97,28 +97,28 @@
             text-align: center;
             min-width: 250px;
         }
-        
+
         .audio-unlock-button:hover {
             background: rgba(255, 255, 255, 0.1);
             transform: translate(-50%, -50%) scale(1.05);
         }
-        
+
         .audio-unlock-content {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 10px;
         }
-        
+
         .audio-unlock-icon {
             font-size: 32px;
         }
-        
+
         .audio-unlock-text {
             font-size: 16px;
             font-weight: bold;
         }
-        
+
         /* Стили для мини-карты */
         .mini-map-container {
             position: fixed;
@@ -133,15 +133,15 @@
             transform: translateZ(0); /* Аппаратное ускорение */
             will-change: transform, opacity;
         }
-        
-        
+
+
         /* Состояние: свернута (только кнопка) */
         .mini-map-container.mini-map-collapsed {
             width: 60px;
             height: 60px;
             padding: 0;
         }
-        
+
         .mini-map-container.mini-map-collapsed .mini-map-header {
             width: 100%;
             height: 100%;
@@ -149,7 +149,7 @@
             justify-content: center;
             align-items: center;
         }
-        
+
         .mini-map-container.mini-map-collapsed .mini-map-toggle {
             width: 100%;
             height: 100%;
@@ -157,14 +157,14 @@
             font-size: 20px;
             display: flex;
         }
-        
+
         .mini-map-container.mini-map-collapsed .mini-map-close,
         .mini-map-container.mini-map-collapsed .mini-map-content,
         .mini-map-container.mini-map-collapsed .mini-map-expand {
             display: none;
         }
-        
-        
+
+
         /* Состояние: мини (1/8 экрана) */
         .mini-map-container.mini-map-mini {
             width: calc(100vw * 1.5 / 8);
@@ -174,7 +174,7 @@
             max-width: 450px;
             max-height: 337.5px;
         }
-        
+
         .mini-map-header {
             display: flex;
             justify-content: space-between;
@@ -183,7 +183,7 @@
             background: rgba(0, 0, 0, 0.5);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .mini-map-toggle,
         .mini-map-close,
         .mini-map-expand {
@@ -201,29 +201,29 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .mini-map-toggle:hover,
         .mini-map-close:hover,
         .mini-map-expand:hover {
             background: rgba(255, 255, 255, 0.2);
             transform: scale(1.05);
         }
-        
+
         .mini-map-content {
             position: relative;
             width: 100%;
             height: calc(100% - 40px);
             overflow: hidden;
         }
-        
-        
+
+
         #mini-map-image {
             width: 100%;
             height: 100%;
             object-fit: contain;
             display: block;
         }
-        
+
         #mini-map-marker {
             position: absolute;
             width: 20px;
@@ -232,14 +232,14 @@
             z-index: 10;
             transform: translate(-50%, -50%);
         }
-        
+
         .mini-map-visited-markers {
             position: absolute;
             inset: 0;
             pointer-events: none;
             z-index: 5;
         }
-        
+
         .mini-map-visited-marker {
             position: absolute;
             width: 10px;
@@ -252,28 +252,28 @@
             pointer-events: auto;
             transition: transform 0.1s ease;
         }
-        
+
         .mini-map-visited-marker:hover {
             transform: translate(-50%, -50%) scale(1.3);
         }
-        
+
         .mini-map-visited-marker.current-page {
             background: #5b4636;
             border-color: #3e2d23;
         }
-        
+
         /* Стили для двойных маркеров мини-карты:
            одна точка светлая, вторая тёмная */
         .mini-map-visited-marker-double-light {
             background: #c79c6a; /* светлая, как обычная */
             border-color: #5b4636;
         }
-        
+
         .mini-map-visited-marker-double-dark {
             background: #5b4636; /* тёмная, как current-page */
             border-color: #3e2d23;
         }
-        
+
         /* Адаптивные стили */
         @media (max-width: 768px) {
             .mini-map-container.mini-map-mini {
@@ -282,13 +282,13 @@
                 min-width: 225px;
                 min-height: 165px;
             }
-            
+
             .mini-map-container.mini-map-collapsed {
                 width: 50px;
                 height: 50px;
             }
         }
-        
+
         /* Стили для кнопки запуска музыки - закомментированы */
         /*
         .music-start-button {
@@ -306,12 +306,12 @@
             z-index: 10001;
             transition: all 0.3s ease;
         }
-        
+
         .music-start-button:hover {
             background: rgba(255, 255, 255, 0.1);
             transform: translate(-50%, -50%) scale(1.05);
         }
-        
+
         .music-start-button.hidden {
             display: none;
         }
@@ -323,17 +323,17 @@
     <!-- <div id="musicStartButton" class="music-start-button">
         🎵 Нажмите для запуска музыки
     </div> -->
-    
+
     <!-- Индикатор загрузки -->
     <div id="loadingOverlay" class="loading-overlay">
         <div>Loading...</div>
     </div>
-    
+
     <!-- Единый аудио элемент для всей музыки -->
     <audio id="unifiedMusicPlayer" loop preload="auto" playsinline>
         <source src="media/zwyki/town.mp3" type="audio/mpeg">
     </audio>
-    
+
     <!-- Кнопка разблокировки аудио (скрыта по умолчанию) -->
     <div id="audioUnlockButton" class="audio-unlock-button" style="display: none;">
         <div class="audio-unlock-content">
@@ -341,13 +341,13 @@
             <div class="audio-unlock-text" data-i18n="music.audio_unlock_text"></div>
         </div>
     </div>
-    
+
     <!-- SPA контейнер -->
     <div id="spa-container">
         <!-- Контент страниц будет загружаться сюда -->
     </div>
-    
-    
+
+
     <script type="module">
         const SPA_MESSAGE_TYPES = window.SpaMessages?.TYPES || {};
         const SPA_CONFIG = window.SpaConfig || {};
@@ -569,6 +569,7 @@
             constructor() {
                 this.currentPage = null;
                 this.pages = new Map();
+                this.pendingPageLoads = new Map();
                 this.stepSound = null;
                 this.audioUnlocked = false;
                 this.currentTrack = 'town';
@@ -576,33 +577,33 @@
                 this.isMobile = this.detectMobileDevice();
                 this.init();
             }
-            
+
             /**
              * Определяет, является ли устройство мобильным
              * @returns {boolean} true если мобильное устройство, false если десктоп
              */
             detectMobileDevice() {
                 // Проверка на поддержку тачскрина
-                const hasTouchScreen = ('ontouchstart' in window) || 
-                                     (navigator.maxTouchPoints > 0) || 
+                const hasTouchScreen = ('ontouchstart' in window) ||
+                                     (navigator.maxTouchPoints > 0) ||
                                      (navigator.msMaxTouchPoints > 0);
-                
+
                 // Проверка медиа-запроса pointer: coarse (для устройств с грубым указателем, например, пальцем)
                 const isCoarsePointer = window.matchMedia("(pointer: coarse)").matches;
-                
+
                 // Устройство считается мобильным, если есть тачскрин И грубый указатель
                 return hasTouchScreen && isCoarsePointer;
             }
-            
+
             /**
              * Проверяет, является ли устройство iOS
              * @returns {boolean} true если iOS, false если нет
              */
             isIOS() {
-                return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+                return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
                        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
             }
-            
+
             /**
              * Проверяет, включен ли звук
              * @returns {boolean} true если звук включен, false если выключен
@@ -612,7 +613,7 @@
                 // По умолчанию звук включен (если значение не установлено или 'false')
                 return soundMuted !== 'true';
             }
-            
+
             /**
              * Получает единый аудио плеер
              * @returns {HTMLAudioElement} единый аудио элемент
@@ -620,7 +621,7 @@
             getUnifiedAudioPlayer() {
                 return document.getElementById('unifiedMusicPlayer');
             }
-            
+
             /**
              * Показывает кнопку разблокировки аудио
              */
@@ -630,7 +631,7 @@
                     button.style.display = 'block';
                 }
             }
-            
+
             /**
              * Скрывает кнопку разблокировки аудио
              */
@@ -640,7 +641,7 @@
                     button.style.display = 'none';
                 }
             }
-            
+
             /**
              * Разблокирует аудио по первому клику
              */
@@ -650,35 +651,35 @@
     // console.log('🎵 Аудио уже разблокировано, пропускаем');
                     return;
                 }
-                
+
                 const audio = this.getUnifiedAudioPlayer();
                 if (!audio) return;
-                
+
                 try {
     // console.log('🎵 Начинаем разблокировку аудио...');
-                    
+
                     // 1. Запускаем звук town.mp3
                     await audio.play();
                     this.audioUnlocked = true;
                     this.hideAudioUnlockButton();
     // console.log('🎵 Town.mp3 запущен');
-                    
+
                     // 2. Загружаем и ставим на паузу фоновую музыку
                     await this.preloadBackgroundMusic();
-                    
+
                     // 3. Загружаем и ставим на паузу звуки
                     await this.preloadSounds();
-                    
+
                     // 4. Передаем информацию о разблокировке в tumski.html
                     this.notifyTumskiPageUnlock();
-                    
+
     // console.log('🎵 Аудио успешно разблокировано');
                 } catch (error) {
     // console.log('🎵 Ошибка разблокировки аудио:', error);
                     this.showAudioUnlockButton();
                 }
             }
-            
+
             /**
              * Готовит учет времени фоновой музыки без eager загрузки треков
              */
@@ -697,7 +698,7 @@
                     }
                 });
             }
-            
+
             /**
              * Предзагружает звуки и ставит на паузу
              */
@@ -706,32 +707,32 @@
                     { name: 'opening-a-book', src: 'media/opening-a-book.wav' },
                     { name: 'step', src: 'media/step.wav' }
                 ];
-                
+
     // console.log('🎵 Предзагружаем звуки...');
-                
+
                 for (const sound of sounds) {
                     try {
                         const audio = new Audio(sound.src);
                         audio.preload = 'auto';
                         audio.volume = 1.0;
-                        
+
                         // Загружаем и сразу ставим на паузу
                         await audio.load();
                         audio.pause();
-                        
+
     // console.log(`🎵 ${sound.name} загружен и поставлен на паузу`);
                     } catch (error) {
     // console.log(`🎵 Ошибка загрузки ${sound.name}:`, error);
                     }
                 }
             }
-            
+
             /**
              * Уведомляет страницу tumski.html о разблокировке аудио
              */
             notifyTumskiPageUnlock() {
     // console.log('🎵 Уведомляем tumski.html о разблокировке аудио...');
-                
+
                 // Находим активный iframe
                 const activeIframe = this.getActiveIframe();
                 if (activeIframe) {
@@ -745,7 +746,7 @@
                     }
                 }
             }
-            
+
             /**
              * Переключает трек без паузы (рекомендуемый подход)
              * @param {string} trackName - название трека (town, birds, kostel, hang, quest)
@@ -753,19 +754,19 @@
             async switchTrack(trackName) {
                 const audio = this.getUnifiedAudioPlayer();
                 if (!audio) return;
-                
+
                 // Проверяем, не отключен ли звук
                 if (!this.isSoundEnabled()) {
     // console.log('🎵 Звук отключен, не переключаем трек');
                     return;
                 }
-                
+
                 // Если трек уже играет, не переключаем
                 if (this.currentTrack === trackName && !audio.paused) {
     // console.log('🎵 Трек уже играет:', trackName);
                     return;
                 }
-                
+
                 // Если трек тот же, но на паузе - возобновляем воспроизведение
                 if (this.currentTrack === trackName && audio.paused) {
     // console.log('🎵 Трек на паузе, возобновляем:', trackName);
@@ -777,31 +778,31 @@
                         // Если не удалось возобновить, продолжаем переключение
                     }
                 }
-                
+
                 // Дополнительная защита: если аудио уже разблокировано и играет town, не переключаем на town
                 if (this.audioUnlocked && this.currentTrack === 'town' && trackName === 'town' && !audio.paused) {
     // console.log('🎵 Town уже играет и аудио разблокировано, не переключаем');
                     return;
                 }
-                
+
                 // Сохраняем время текущего трека
                 this.trackTimes.set(this.currentTrack, audio.currentTime);
-                
+
                 const newUrl = spaAudioSourceForTrack(trackName);
                 if (!newUrl) {
     // console.log('🎵 Неизвестный трек:', trackName);
                     return;
                 }
-                
+
                 try {
                     // Меняем источник и сразу играем (НЕ делаем pause!)
                     audio.src = newUrl;
                     audio.load();
-                    
+
                     // Восстанавливаем время для нового трека, если оно было сохранено
                     const savedTime = this.trackTimes.get(trackName) || 0;
                     audio.currentTime = savedTime;
-                    
+
                     await audio.play();
                     this.currentTrack = trackName;
     // console.log('🎵 Трек переключен на:', trackName);
@@ -814,7 +815,7 @@
                     }
                 }
             }
-            
+
             /**
              * Получает предзагруженный трек по имени
              * @param {string} trackName - название трека
@@ -825,7 +826,7 @@
                 const trackElement = document.querySelector(`audio[src*="${trackName}.mp3"]`);
                 return trackElement || null;
             }
-            
+
             /**
              * Инициализирует звук шага
              */
@@ -836,7 +837,7 @@
                     this.stepSound.preload = 'auto';
                 }
             }
-            
+
             /**
              * Воспроизводит звук шага
              */
@@ -852,30 +853,30 @@
                     }
                 }
             }
-            
+
             async init() {
     // console.log('🚀 Инициализация SPA...');
     // console.log('📱 Мобильное устройство:', this.isMobile);
-                
+
                 // Инициализируем кастомные курсоры для десктопа
                 this.initCustomCursors();
-                
+
                 // Инициализируем обработчики стрелок
                 this.initArrowHandlers();
-                
+
                 // Инициализируем звук шага
                 this.initStepSound();
-                
+
                 // Инициализируем единый аудио плеер
                 this.initUnifiedAudioPlayer();
-                
+
                 // Загружаем стартовую страницу
                 await this.loadPage(spaStartPage());
-                
+
                 // Инициализируем обработчики
                 this.setupEventListeners();
             }
-            
+
             /**
              * Инициализирует кастомные курсоры для десктопа
              */
@@ -884,9 +885,9 @@
     // console.log('📱 Мобильное устройство, кастомные курсоры отключены');
                         return;
                     }
-                    
+
     // console.log('🖱️ Инициализация кастомных курсоров для десктопа');
-                
+
                 // Добавляем CSS для кастомных курсоров
                 const style = document.createElement('style');
                 style.textContent = `
@@ -894,22 +895,22 @@
                     body {
                         cursor: url('media/strelka.png'), auto;
                     }
-                    
+
                     /* Курсор для кликабельных элементов */
                     a, button, [data-prev-page], [data-next-page], .clickable {
                         cursor: url('media/strelka_prosto.png'), pointer;
                     }
-                    
+
                     /* Курсор для наведения на стрелки */
                     .arrow-left, .arrow-right, .arrow-up, .arrow-down {
                         cursor: url('media/strelka_prosto.png'), pointer;
                     }
-                    
+
                     /* Курсор для модальных окон */
                     .modal, .modal-content {
                         cursor: url('media/strelka.png'), auto;
                     }
-                    
+
                     /* Курсор для кнопок в модальных окнах */
                     .modal button, .modal .close {
                         cursor: url('media/strelka_prosto.png'), pointer;
@@ -917,17 +918,17 @@
                 `;
                 document.head.appendChild(style);
             }
-            
+
             /**
              * Инициализирует обработчики стрелок для навигации
              */
             initArrowHandlers() {
     // console.log('⬅️➡️ Инициализация обработчиков стрелок');
-                
+
                 // Обработчики клавиатуры для навигации
                 document.addEventListener('keydown', (event) => {
                     if (this.isMobile) return; // На мобильных устройствах не обрабатываем клавиатуру
-                    
+
                     switch(event.key) {
                         case 'ArrowLeft':
                             event.preventDefault();
@@ -944,7 +945,7 @@
                     }
                 });
             }
-            
+
             /**
              * Переходит на предыдущую страницу
              */
@@ -954,7 +955,7 @@
                     this.navigateToPage(prevPage);
                 }
             }
-            
+
             /**
              * Переходит на следующую страницу
              */
@@ -964,7 +965,7 @@
                     this.navigateToPage(nextPage);
                 }
             }
-            
+
             /**
              * Закрывает все модальные окна
              */
@@ -985,16 +986,16 @@
                     }
                 }
             }
-            
+
             /**
              * Инициализирует единый аудио плеер
              */
             initUnifiedAudioPlayer() {
                 const audio = this.getUnifiedAudioPlayer();
                 if (!audio) return;
-                
+
     // console.log('🎵 Инициализация единого аудио плеера...');
-                
+
                 // Настраиваем обработчики событий
                             audio.addEventListener('ended', () => {
                     // Автоматическое зацикливание
@@ -1003,7 +1004,7 @@
                                     audio.play().catch((error) => handleSpaAudioPlayRejection('loop restart', error));
                                 }
                             });
-                
+
                 audio.addEventListener('error', (error) => {
     // console.log('🎵 Ошибка аудио плеера:', error);
                     // Показываем кнопку разблокировки только для town (первоначальный запуск)
@@ -1012,18 +1013,18 @@
                         this.showAudioUnlockButton();
                     }
                 });
-                
+
                 // Пытаемся запустить музыку сразу (может не сработать на iOS)
                 this.tryAutoStartMusic();
             }
-            
+
             /**
              * Пытается автоматически запустить музыку
              */
             async tryAutoStartMusic() {
                 const audio = this.getUnifiedAudioPlayer();
                 if (!audio) return;
-                
+
                 try {
                     await audio.play();
                     this.audioUnlocked = true;
@@ -1068,21 +1069,21 @@
                     }, delay);
                 });
             }
-            
+
             async loadPage(pageName) {
     // console.log('📄 Загрузка страницы:', pageName);
-                
+
                 // Показываем индикатор загрузки
                 this.showLoading();
-                
+
                 try {
                     // Извлекаем hash из pageName (если есть)
                     const pageReference = splitSpaPageReference(pageName);
                     const actualPageName = pageReference.pageName;
                     const pageHash = pageReference.hash;
-                    
+
                     // Если страница уже загружена, просто переключаемся на неё
-                    if (this.pages.has(actualPageName)) {
+                    if (this.pages.has(actualPageName) && !this.pendingPageLoads.has(actualPageName)) {
                         spaDebugLog('🟡 [SPA] Страница уже загружена:', actualPageName, 'hash:', pageHash);
                         this.showPage(actualPageName);
                         // Если есть hash, передаем его в iframe
@@ -1097,21 +1098,23 @@
                         this.hideLoading();
                         return;
                     }
-                    
+
+                    if (this.pendingPageLoads.has(actualPageName)) {
+                        this.removePage(actualPageName);
+                    }
+
                     // Создаем iframe для страницы
                     const iframe = createSpaPageIframe(actualPageName);
-                    
+
                     // Создаем контейнер для страницы
                     const pageContainer = createSpaPageContainer(actualPageName, iframe);
-                    
-                    // Добавляем в SPA контейнер
+
                     const spaContainer = getSpaContainer();
                     if (!spaContainer) {
                         throw new Error('SPA container not found');
                     }
-                    spaContainer.appendChild(pageContainer);
-                    
-                    // Сохраняем страницу
+
+                    // Сохраняем страницу до DOM insertion, чтобы iframe.onload мог вызвать showPage().
                     this.pages.set(actualPageName, pageContainer);
 
                     let iframeLoadSettled = false;
@@ -1131,7 +1134,15 @@
 
                         iframeLoadSettled = true;
                         clearIframeLoadTimeout();
+                        this.clearPendingPageLoad(actualPageName, cleanupPendingLoad);
                         return true;
+                    };
+
+                    const cleanupPendingLoad = () => {
+                        iframeLoadSettled = true;
+                        clearIframeLoadTimeout();
+                        iframe.onload = null;
+                        iframe.onerror = null;
                     };
 
                     const failIframeLoad = (reason) => {
@@ -1151,7 +1162,9 @@
                             failIframeLoad('timeout');
                         }, iframeLoadTimeoutMs);
                     }
-                    
+
+                    this.registerPendingPageLoad(actualPageName, cleanupPendingLoad);
+
                     // Ждем загрузки iframe
                     iframe.onload = () => {
                         if (!settleIframeLoad()) {
@@ -1162,42 +1175,85 @@
     // console.log('🎵 iframe src:', iframe.src);
     // console.log('🎵 iframe contentWindow location:', iframe.contentWindow.location.href);
                         this.setupIframeNavigation(iframe, actualPageName);
-                        
+
                         // Инициализируем звуки геометок в iframe
                         this.initializeIframeGeoMarkerSounds(iframe);
-                        
+
                         // Инициализируем quest музыку в iframe
                         this.initializeIframeQuestMusic(iframe);
-                        
+
                         // Если есть hash, передаем его в iframe через postMessage
                         if (pageHash) {
                             spaDebugLog('🟡 [SPA] Передаем hash в iframe:', pageHash, 'для страницы:', actualPageName);
                             this.sendPageHashToIframe(iframe, pageHash);
                         }
-                        
+
     // console.log('🎵 Вызываем showPage для:', actualPageName);
                         this.showPage(actualPageName);
                         this.hideLoading();
                     };
-                    
+
                     iframe.onerror = () => {
                         failIframeLoad('error');
                     };
-                    
+
+                    // Insert only after onload/onerror handlers are attached.
+                    spaContainer.appendChild(pageContainer);
+
                 } catch (error) {
                     console.error('❌ Ошибка загрузки страницы:', error);
                     this.hideLoading();
                 }
             }
-            
+
+            registerPendingPageLoad(pageName, cleanup) {
+                if (!pageName || typeof cleanup !== 'function') {
+                    return;
+                }
+
+                this.cancelPendingPageLoad(pageName);
+                this.pendingPageLoads.set(pageName, cleanup);
+            }
+
+            clearPendingPageLoad(pageName, cleanup) {
+                const currentCleanup = this.pendingPageLoads.get(pageName);
+                if (currentCleanup && (!cleanup || currentCleanup === cleanup)) {
+                    this.pendingPageLoads.delete(pageName);
+                }
+            }
+
+            cancelPendingPageLoad(pageName) {
+                const cleanup = this.pendingPageLoads.get(pageName);
+                if (!cleanup) {
+                    return false;
+                }
+
+                cleanup();
+                this.pendingPageLoads.delete(pageName);
+                return true;
+            }
+
+            removePage(pageName) {
+                this.cancelPendingPageLoad(pageName);
+
+                const page = this.pages.get(pageName);
+                if (!page) {
+                    return false;
+                }
+
+                page.remove();
+                this.pages.delete(pageName);
+                return true;
+            }
+
             setupIframeNavigation(iframe, pageName) {
                 // Настраиваем навигацию внутри iframe
                 try {
                     const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                    
+
                     // Инициализируем кастомные курсоры в iframe
                     this.initIframeCustomCursors(iframe);
-                    
+
                     // Обработчики для стрелок навигации
                     const arrowHandlers = iframeDoc.querySelectorAll('[data-prev-page], [data-next-page]');
                     arrowHandlers.forEach(handler => {
@@ -1209,7 +1265,7 @@
                             }
                         });
                     });
-                    
+
                     // Обработчики для всех ссылок
                     const links = iframeDoc.querySelectorAll('a[href$=".html"]');
                     links.forEach(link => {
@@ -1221,15 +1277,15 @@
                             }
                         });
                     });
-                    
+
                     // LanguageMenu теперь инициализируется в iframe страницы
                     // Обработчики для модальных окон также работают в iframe
-                    
+
                 } catch (error) {
     // console.log('⚠️ Не удалось настроить навигацию iframe (возможно, CORS):', error);
                 }
             }
-            
+
             /**
              * Инициализирует кастомные курсоры в iframe
              */
@@ -1238,12 +1294,12 @@
     // console.log('📱 Мобильное устройство, кастомные курсоры в iframe отключены');
                     return;
                 }
-                
+
                 try {
                     const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-                    
+
     // console.log('🖱️ Инициализация кастомных курсоров в iframe');
-                    
+
                     // Добавляем CSS для кастомных курсоров в iframe
                     const style = iframeDoc.createElement('style');
                     style.textContent = `
@@ -1251,68 +1307,68 @@
                         body {
                             cursor: url('media/strelka.png'), auto;
                         }
-                        
+
                         /* Курсор для кликабельных элементов */
                         a, button, [data-prev-page], [data-next-page], .clickable {
                             cursor: url('media/strelka_prosto.png'), pointer;
                         }
-                        
+
                         /* Курсор для наведения на стрелки */
                         .arrow-left, .arrow-right, .arrow-up, .arrow-down {
                             cursor: url('media/strelka_prosto.png'), pointer;
                         }
-                        
+
                         /* Курсор для модальных окон */
                         .modal, .modal-content {
                             cursor: url('media/strelka.png'), auto;
                         }
-                        
+
                         /* Курсор для кнопок в модальных окнах */
                         .modal button, .modal .close {
                             cursor: url('media/strelka_prosto.png'), pointer;
                         }
-                        
+
                         /* Курсор для геометок */
                         .geo-marker, .quest-marker {
                             cursor: url('media/strelka_prosto.png'), pointer;
                         }
                     `;
                     iframeDoc.head.appendChild(style);
-                    
+
                 } catch (error) {
     // console.log('⚠️ Не удалось инициализировать кастомные курсоры в iframe:', error);
                 }
             }
-            
+
             // Обработчики quest модального окна теперь работают в iframe страницы
-            
+
             // Обработчики модального окна карты теперь работают в iframe страницы
-            
+
             showPage(pageName) {
     // console.log('🎵 showPage вызван для:', pageName);
     // console.log('🎵 Текущая страница была:', this.currentPage);
     // console.log('🎵 Доступные страницы:', Array.from(this.pages.keys()));
-                
+
                 // Скрываем все страницы
                 this.pages.forEach((page, name) => {
                     page.classList.remove('active');
     // console.log('🎵 Скрываем страницу:', name);
                 });
-                
+
                 // Показываем нужную страницу
                 const targetPage = this.pages.get(pageName);
                 if (targetPage) {
                     targetPage.classList.add('active');
                     this.currentPage = pageName;
     // console.log('🎵 Показываем страницу:', pageName);
-                    
+
                     // Обновляем URL без перезагрузки страницы
                     history.pushState({ page: pageName }, '', `#${pageName}`);
     // console.log('🎵 URL обновлен на:', window.location.href);
-                    
+
                     // Переключаем музыку в зависимости от страницы
                     this.switchMusicForPage(pageName);
-                    
+
                     // Отправляем сообщение в iframe для повторной инициализации
                     const iframe = getSpaPageIframe(targetPage);
                     if (iframe && iframe.contentWindow) {
@@ -1330,20 +1386,20 @@
     // console.log('🎵 Страница не найдена:', pageName);
     // console.log('🎵 Доступные страницы:', Array.from(this.pages.keys()));
                 }
-                
+
                 this.hideLoading();
             }
-            
+
             switchMusicForPage(pageName) {
     // console.log('🎵 switchMusicForPage вызван для:', pageName);
-                
+
                 // Защита от рекурсии
                 if (this._switchingMusic) {
     // console.log('🎵 Переключение музыки уже в процессе, пропускаем');
                     return;
                 }
                 this._switchingMusic = true;
-                
+
                 // Проверяем, не отключен ли звук через кнопку
                 const isMuted = localStorage.getItem('soundMuted') === 'true';
                 if (isMuted) {
@@ -1351,33 +1407,33 @@
                     this._switchingMusic = false;
                     return;
                 }
-                
+
                 const targetTrack = spaAudioTrackForPage(pageName);
-                
+
                 // Переключаем трек через единый плеер
                 this.switchTrack(targetTrack);
-                
+
                 // Сбрасываем флаг через небольшую задержку
                 setTimeout(() => {
                     this._switchingMusic = false;
                 }, 100);
             }
-            
-            
-            
-            
-            
-            
+
+
+
+
+
+
             async navigateToPage(pageName) {
     // console.log('🎵 navigateToPage вызван для:', pageName);
     // console.log('🎵 Загруженные страницы:', Array.from(this.pages.keys()));
-                
+
                 // Извлекаем actualPageName из pageName (без hash) для проверки
                 const actualPageName = splitSpaPageReference(pageName).pageName;
-                
+
                 // Воспроизводим звук шага при навигации
                 this.playStepSound();
-                
+
                 // Загружаем страницу, если она ещё не загружена
                 if (!this.pages.has(actualPageName)) {
     // console.log('🎵 Страница не загружена, загружаем:', pageName);
@@ -1411,24 +1467,17 @@
                             }
                         }
                         // Удаляем старую страницу и загружаем заново
-                        if (targetPage) {
-                            targetPage.remove();
-                            this.pages.delete(actualPageName);
-                        }
-                        await this.loadPage(pageName);
-                        return;
-                    }
+	                        this.removePage(actualPageName);
+	                        await this.loadPage(pageName);
+	                        return;
+	                    }
     // console.log('🎵 Страница уже загружена, принудительно перезагружаем:', pageName);
                     // Удаляем старую страницу и загружаем заново
-                    const oldPage = this.pages.get(actualPageName);
-                    if (oldPage) {
-                        oldPage.remove();
-                        this.pages.delete(actualPageName);
-                    }
-                    await this.loadPage(pageName);
-                }
-            }
-            
+	                    this.removePage(actualPageName);
+	                    await this.loadPage(pageName);
+	                }
+	            }
+
             showLoading() {
                 if (window.SpaLoadingState && typeof window.SpaLoadingState.show === 'function') {
                     window.SpaLoadingState.show(document);
@@ -1451,7 +1500,7 @@
                     loadingOverlay.classList.remove('hidden');
                 }
             }
-            
+
             hideLoading() {
                 if (window.SpaLoadingState && typeof window.SpaLoadingState.hide === 'function') {
                     window.SpaLoadingState.hide(document);
@@ -1460,7 +1509,7 @@
 
                 document.getElementById('loadingOverlay')?.classList.add('hidden');
             }
-            
+
             setupEventListeners() {
                 // Обработчик для кнопки "Назад" в браузере
                 window.addEventListener('popstate', (event) => {
@@ -1468,7 +1517,7 @@
                         this.showPage(event.state.page);
                     }
                 });
-                
+
                 // Обработчик сообщений от iframe для навигации
                 window.addEventListener('message', (event) => {
     // console.log('🎵 Получено сообщение от iframe:', event.data);
@@ -1481,13 +1530,13 @@
                     if (message.type === spaMessageType('SPA_NAVIGATE', 'SPA_NAVIGATE')) {
                         const targetPage = message.page;
     // console.log('🎵 Выполняем навигацию на страницу:', targetPage);
-                        
+
                         if (targetPage) {
                             this.navigateToPage(targetPage);
                         }
                     }
                 });
-                
+
                 // Обработчик для кнопки разблокировки аудио
                 const unlockButton = document.getElementById('audioUnlockButton');
                 if (unlockButton) {
@@ -1495,13 +1544,13 @@
                         this.unlockAudio();
                     });
                 }
-                
+
                 // Обработчик для разблокировки аудио по первому клику в любом месте
                 const unlockOnFirstClick = (event) => {
                     // Проверяем, что клик не по интерактивным элементам
                     const target = event.target;
                     const isInteractive = target.closest('button, a, input, select, textarea, [data-prev-page], [data-next-page], .map-mark, .geo-marker, .quest-marker');
-                    
+
                     if (!this.audioUnlocked && !isInteractive) {
                         this.unlockAudio();
                         // Удаляем обработчик только после успешной разблокировки
@@ -1509,10 +1558,10 @@
                         document.removeEventListener('touchstart', unlockOnFirstClick);
                     }
                 };
-                
+
                 document.addEventListener('click', unlockOnFirstClick);
                 document.addEventListener('touchstart', unlockOnFirstClick);
-                
+
                 // Обработчик для возобновления аудио при возврате на страницу
                 document.addEventListener('visibilitychange', () => {
                     if (!document.hidden && this.audioUnlocked && this.isSoundEnabled()) {
@@ -1522,11 +1571,11 @@
                         }
                     }
                 });
-                
+
                 // Мониторинг iframe отключен из-за проблем с рекурсией
                 // this.startIframeMonitoring();
             }
-            
+
             startIframeMonitoring() {
                 // Мониторинг iframe отключен из-за проблем с рекурсией
                 // setInterval(() => {
@@ -1535,7 +1584,7 @@
                 //         if (activeIframe) {
                 //             try {
                 //                 const iframeSrc = activeIframe.src;
-                //                 
+                //
                 //                 // Проверяем, загружена ли tumski19.html
                 //                 if (iframeSrc.includes('tumski19.html')) {
                 //                     this.switchMusicForPage('tumski19.html');
@@ -1553,18 +1602,18 @@
                 //     }
                 // }, 2000);
             }
-            
+
             getActiveIframe() {
                 return getSpaActiveIframe();
             }
-            
+
             initializeIframeGeoMarkerSounds(iframe) {
                 try {
                     const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
                     const iframeSounds = iframeDoc.querySelectorAll('audio[src*="opening-a-book.wav"]');
-                    
+
     // console.log('🎵 Инициализируем звуки геометок в iframe:', iframeSounds.length);
-                    
+
                     iframeSounds.forEach((audio, index) => {
                         try {
                             if (!audio.src || !audio.src.includes('opening-a-book.wav')) {
@@ -1581,7 +1630,7 @@
     // console.log('🎵 Не удалось получить доступ к iframe для инициализации звуков:', error);
                 }
             }
-            
+
             initializeIframeQuestMusic(iframe) {
                 try {
     // console.log('🎵 Инициализируем quest музыку в iframe...');
@@ -1593,25 +1642,25 @@
                 }
             }
         }
-        
+
         // Инициализируем SPA при загрузке страницы
         document.addEventListener('DOMContentLoaded', async () => {
             // Проверяем, не конфликтует ли с расширениями браузера
             if (window.chrome && window.chrome.runtime && window.chrome.runtime.id) {
     // console.log('⚠️ Обнаружено расширение браузера, отключаем проблемные функции');
             }
-            
+
             // Инициализируем локализацию
             if (window.i18n && typeof window.i18n.loadTranslations === 'function') {
                 await window.i18n.loadTranslations('pl');
     // console.log('🔍 Локализация загружена, переводы:', window.i18n.translations);
             }
-            
+
             // LanguageMenu теперь инициализируется в iframe страницы
-            
+
             window.spaManager = new SPAManager();
             window.SPAManager = window.spaManager; // Делаем доступным для iframe страниц
-            
+
                 // Обработчик сообщений от iframe для управления музыкой
                 window.addEventListener('message', function(event) {
                     const message = parseSpaMessage(event);
@@ -1621,13 +1670,13 @@
 
                     if (message.type === spaMessageType('SOUND_CONTROL', 'soundControl')) {
     // console.log('🎵 Получено сообщение от iframe для управления музыкой:', event.data.action, 'от', event.data.source);
-                        
+
                         // Проверяем, не пришло ли сообщение от tumski.html после разблокировки аудио
                         if (message.source === 'tumski' && message.action === 'unmute') {
     // console.log('🎵 Игнорируем сообщение unmute от tumski.html после разблокировки аудио');
                             return;
                         }
-                        
+
                         if (message.action === 'mute') {
                             // Останавливаем музыку в SPA
                             const audio = window.spaManager ? window.spaManager.getUnifiedAudioPlayer() : null;
@@ -1639,17 +1688,17 @@
                             // Запускаем музыку в SPA
                             if (window.spaManager) {
                                 const currentPage = window.spaManager.currentPage;
-                                
+
                                 window.spaManager.switchTrack(spaAudioTrackForPage(currentPage));
                             }
                         }
                     }
                 });
         });
-        
+
         // Экспортируем для использования в других модулях
         window.SPAManager = SPAManager;
-        
+
         function createMiniMapDependencies() {
             return {
                 document,
@@ -1671,14 +1720,14 @@
                 root: window
             };
         }
-        
+
         // Инициализируем мини-карту после загрузки DOM
         document.addEventListener('DOMContentLoaded', () => {
             const MiniMapManager = window.SpaMiniMap?.MiniMapManager;
             if (typeof MiniMapManager === 'function') {
                 window.miniMapManager = new MiniMapManager(createMiniMapDependencies());
             }
-            
+
             // Обработчик сообщений от iframe для открытия мини-карты
             window.addEventListener('message', (event) => {
                 const message = parseSpaMessage(event);
@@ -1693,8 +1742,8 @@
                 }
             });
         });
-        
+
     </script>
-    
+
 </body>
 </html>

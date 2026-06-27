@@ -27,6 +27,28 @@ test.describe('Wroclaw static app smoke', () => {
     await expect(page.locator('#audioUnlockButton')).toHaveCount(1);
   });
 
+  test('favicon is served from the web source root', async ({ request }) => {
+    const response = await request.get('/favicon.ico');
+    expect(response.ok()).toBe(true);
+    expect(response.headers()['content-type']).toContain('image');
+  });
+
+  test('tumski init treats missing optional play controls as quiet default', async ({ page }) => {
+    const messages = [];
+
+    page.on('console', (message) => {
+      if (message.type() === 'error' || message.type() === 'warning') {
+        messages.push(message.text());
+      }
+    });
+
+    await page.goto('/tumski.html');
+    await page.waitForLoadState('domcontentloaded');
+    await page.waitForTimeout(250);
+
+    expect(messages.filter((message) => message.includes('Не все элементы найдены для кнопки play'))).toEqual([]);
+  });
+
   test('SPA shell diagnostics are quiet by default and gated by DEBUG_SPA', async ({ page }) => {
     await page.goto('/');
 
@@ -772,7 +794,7 @@ test.describe('Wroclaw static app smoke', () => {
 
   test('QuestOverlay intro renders translated paragraphs as text', async ({ page }) => {
     await page.goto('/tumski.html');
-    await page.waitForFunction(() => window.renderQuestIntro);
+    await page.waitForFunction(() => typeof window.QuestOverlay?.renderQuestIntro === 'function');
 
     const result = await page.evaluate(() => {
       const originalI18n = window.i18n;
@@ -792,7 +814,7 @@ test.describe('Wroclaw static app smoke', () => {
       };
 
       try {
-        window.renderQuestIntro(bookContentArea, questTasksList);
+        window.QuestOverlay.renderQuestIntro(bookContentArea, questTasksList);
         const intro = bookContentArea.querySelector('.quest-intro');
         return {
           innerHTML: intro.innerHTML,
@@ -1581,6 +1603,46 @@ test.describe('Wroclaw static app smoke', () => {
       textAfterShow: 'Loading...',
       visibleAfterHide: false,
       visibleAfterShow: true
+    });
+  });
+
+  test('SPA pending iframe cleanup cancels removed page load timers', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForFunction(() => window.spaManager?.currentPage === 'tumski.html');
+
+    const cleanupState = await page.evaluate(() => {
+      const manager = window.spaManager;
+      const pageName = '__pending_test.html';
+      const pageContainer = document.createElement('div');
+      let cleanupCount = 0;
+
+      pageContainer.id = 'page-__pending_test';
+      document.body.appendChild(pageContainer);
+      manager.pages.set(pageName, pageContainer);
+      manager.registerPendingPageLoad(pageName, () => {
+        cleanupCount += 1;
+      });
+
+      const pendingBeforeRemove = manager.pendingPageLoads.has(pageName);
+      const removed = manager.removePage(pageName);
+
+      return {
+        cleanupCount,
+        pageAttachedAfterRemove: document.body.contains(pageContainer),
+        pagesHasAfterRemove: manager.pages.has(pageName),
+        pendingAfterRemove: manager.pendingPageLoads.has(pageName),
+        pendingBeforeRemove,
+        removed
+      };
+    });
+
+    expect(cleanupState).toEqual({
+      cleanupCount: 1,
+      pageAttachedAfterRemove: false,
+      pagesHasAfterRemove: false,
+      pendingAfterRemove: false,
+      pendingBeforeRemove: true,
+      removed: true
     });
   });
 

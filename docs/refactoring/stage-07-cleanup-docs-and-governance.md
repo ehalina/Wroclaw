@@ -350,6 +350,21 @@ Stage 7.17 выполнен:
 
 Следующий подэтап:
 
+- Stage 7.18: quiet runtime console noise reported after the `www/` source migration.
+
+## Status Update - 2026-06-27 - Stage 7.18
+
+Stage 7.18 выполнен:
+
+- `tumski_init.js` now treats missing play-button/video controls as an optional page feature and logs only behind `DEBUG_TUMSKI_INIT` / `__tumski_init_debug`.
+- `arrow_handlers.js` wraps legacy step-sound `play()` calls so autoplay promise rejections stay quiet by default.
+- `arrow_handlers.js` uses `pagehide` instead of `unload`, avoiding the browser permissions-policy warning.
+- `SPAManager` now attaches iframe `onload` / `onerror` before DOM insertion and tracks pending iframe load cleanup callbacks; removing/reloading a pending page cancels its timer and detaches handlers before the old timeout can fire.
+- Added `www/favicon.ico` so browser favicon auto-requests no longer 404.
+- Smoke coverage added for quiet tumski init, favicon serving and pending iframe cleanup.
+
+Следующий подэтап:
+
 - Stage 8 decision gate: define whether the next track is content completion, localization, or image optimization.
 
 ## Documentation updates

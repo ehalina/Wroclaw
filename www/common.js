@@ -11,11 +11,26 @@ function isSoundEnabled() {
     if (soundButton) {
         return !soundButton.classList.contains('muted');
     }
-    
+
     // Если кнопка не найдена, проверяем localStorage
     const soundMuted = localStorage.getItem('soundMuted');
     // По умолчанию звук включен (если значение не установлено или 'false')
     return soundMuted !== 'true';
+}
+
+function playAudioQuietly(audio) {
+    if (!audio) {
+        return;
+    }
+
+    try {
+        const playResult = audio.play();
+        if (playResult && typeof playResult.catch === 'function') {
+            playResult.catch(() => {});
+        }
+    } catch (_) {
+        // Expected for some autoplay/user-gesture edge cases.
+    }
 }
 
 // Общие константы
@@ -44,26 +59,26 @@ const COMMON_ELEMENTS = {
 // Общие функции для работы с анимацией
 function setupResetAnimation(container) {
     let doubleClickTimeout;
-    
+
     // Добавляем обработчик двойного клика
     document.addEventListener('dblclick', function(e) {
         // Проверяем, что клик не по элементам управления
-        if (!e.target.closest('.back-link') && 
-            !e.target.closest('.language-switcher') && 
-            !e.target.closest('.book-overlay') && 
+        if (!e.target.closest('.back-link') &&
+            !e.target.closest('.language-switcher') &&
+            !e.target.closest('.book-overlay') &&
             !e.target.closest('.most-overlay')) {
-            
+
             // Предотвращаем множественные срабатывания
             clearTimeout(doubleClickTimeout);
-            
+
             // Добавляем класс для сброса анимации
             container.classList.add('reset-animation');
-            
+
             // Убираем класс через 100мс
             setTimeout(() => {
                 container.classList.remove('reset-animation');
             }, 100);
-            
+
             // Дополнительная защита: принудительно обновляем mapMarks после двойного тапа
             doubleClickTimeout = setTimeout(() => {
                 if (window.updateMapMarksVisibility) {
@@ -116,17 +131,17 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, nextPageCallback)
 
         try {
             hideAllCursors();
-            
+
             if (stepSound && isSoundEnabled()) {
                 stepSound.currentTime = 0;
-                stepSound.play();
+                playAudioQuietly(stepSound);
             }
-            
+
             // Получаем элементы для анимации
             const imageContainer = document.querySelector('.image-container');
             const currentImage = document.querySelector('.image');
             const nextImageContainer = document.querySelector('.next-image-container-Right');
-            
+
 
 
             if (!imageContainer || !currentImage || !nextImageContainer) {
@@ -135,18 +150,18 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, nextPageCallback)
 
             // Показываем следующее изображение
             nextImageContainer.style.opacity = '1';
-            
+
             // Запускаем анимацию перехода
             imageContainer.style.animationPlayState = 'paused';
             imageContainer.classList.add('zoom-transition-Right');
-            
+
             // После завершения анимации переходим на следующую страницу
             setTimeout(() => {
                 if (typeof nextPageCallback === 'function') {
                     nextPageCallback();
                 }
             }, 1500);
-            
+
         } catch (error) {
             // Ошибка при обработке клика
         }
@@ -188,9 +203,9 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, prevPageCa
         hideAllCursors();
         if (stepSound && isSoundEnabled()) {
             stepSound.currentTime = 0;
-            stepSound.play();
+            playAudioQuietly(stepSound);
         }
-        
+
         setTimeout(() => {
             if (typeof prevPageCallback === 'function') {
                 prevPageCallback();
@@ -202,25 +217,25 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, prevPageCa
 
 // Общие функции для работы с книгой
 function openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIndicator) {
-    
+
     if (window.playMapSound) window.playMapSound();
-    
+
     // Воспроизводим звук открытия книги только если звук включен
     if (bookSound && isSoundEnabled()) {
         bookSound.currentTime = 0;
         bookSound.play().catch(/* console.log */);
     }
-    
+
     bookOverlay.style.display = 'flex';
     container.style.animationPlayState = 'paused';
     bookContent.scrollTop = 0;
     setTimeout(toggleScrollIndicator, 100);
-    
+
     // Отключаем language-menu при открытии модалки
     if (window.LanguageMenu && typeof window.LanguageMenu.disableMenu === 'function') {
         window.LanguageMenu.disableMenu();
     }
-    
+
     // Добавляем смещение для мобильной версии
     if (window.innerWidth <= 768) {
         const bookContentArea = bookOverlay.querySelector('.book-content-area');
@@ -232,16 +247,16 @@ function openBook(bookSound, bookOverlay, container, bookContent, toggleScrollIn
 
 function openMost(bookSound, mostOverlay, container, mostTitle) {
     if (window.playMapSound) window.playMapSound();
-    
+
     // Воспроизводим звук открытия книги только если звук включен
     if (bookSound && isSoundEnabled()) {
         bookSound.currentTime = 0;
         bookSound.play().catch(/* console.log */);
     }
-    
+
     mostOverlay.style.display = 'flex';
     container.style.animationPlayState = 'paused';
-    
+
     // Отключаем language-menu при открытии модалки
     if (window.LanguageMenu && typeof window.LanguageMenu.disableMenu === 'function') {
         window.LanguageMenu.disableMenu();
@@ -252,19 +267,19 @@ function resumeAnimation(bookOverlay, mostOverlay, container) {
     bookOverlay.style.display = 'none';
     mostOverlay.style.display = 'none';
     container.style.animationPlayState = 'running';
-    
+
     // Включаем language-menu при закрытии модалки
     if (window.LanguageMenu && typeof window.LanguageMenu.enableMenu === 'function') {
         window.LanguageMenu.enableMenu();
     }
-    
+
     // Сбрасываем сдвиг для планшетов при закрытии модалки
     const isTablet = window.matchMedia('(hover: none) and (pointer: coarse) and (min-width: 768px)').matches;
     if (isTablet) {
         const closeButton = bookOverlay.querySelector('.close-button');
         const mapQuestButtons = document.querySelector('.map-and-quest-buttons');
         const languageMenu = document.querySelector('.language-menu');
-        
+
         if (closeButton) {
             closeButton.style.transform = '';
         }
@@ -485,12 +500,12 @@ window.addEventListener('message', (event) => {
 
     if (message && message.type === 'LANGUAGE_CHANGE_FROM_IFRAME' && isTrusted) {
         // console.log('🌐 Получено сообщение о смене языка из iframe:', event.data.lang);
-        
+
         // Обновляем локализацию в основном окне SPA
         if (window.i18n && typeof window.i18n.changeLang === 'function') {
             window.i18n.changeLang(message.lang);
         }
-        
+
         // Специально обновляем кнопку разблокировки аудио
         const audioUnlockText = document.querySelector('.audio-unlock-text[data-i18n]');
         if (audioUnlockText && window.i18n && typeof window.i18n.t === 'function') {
@@ -521,4 +536,4 @@ window.Common = {
 };
 
 // Делаем функцию isSoundEnabled доступной глобально
-window.isSoundEnabled = isSoundEnabled; 
+window.isSoundEnabled = isSoundEnabled;

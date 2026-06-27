@@ -1,9 +1,9 @@
 # Верхнеуровневый план рефакторинга
 
-Дата: 2026-06-26  
-Язык плана: русский  
-Source of truth по продуктовым задачам: `BACKLOG.md`  
-Входной review: `docs/refactoring/00-code-review.md`  
+Дата: 2026-06-26
+Язык плана: русский
+Source of truth по продуктовым задачам: `BACKLOG.md`
+Входной review: `docs/refactoring/00-code-review.md`
 Методология: `safe-refactoring-playbook`, `agent-programming-planner`
 
 ## Цель
@@ -469,3 +469,8 @@ make smoke
   - stale generated `project-context.md` removed from tracked source after the `www/` migration;
   - generated AI context dump patterns added to `.gitignore`;
   - maintained docs remain the source of truth for future agent context.
+- Stage 7.18 выполнен:
+  - quieted expected runtime console noise for optional `tumski_init.js` play controls and legacy step audio `play()` rejections;
+  - replaced `unload` cleanup with `pagehide` in `arrow_handlers.js`;
+  - attached iframe load handlers before DOM insertion and added pending iframe load cleanup tracking to prevent false/stale timeout errors;
+  - added `www/favicon.ico` and smoke coverage for the reported console regressions.
