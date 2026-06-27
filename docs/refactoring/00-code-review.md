@@ -309,7 +309,8 @@ Status 2026-06-26:
 - arrow diagnostics закрыты в Stage 7.6 через `DEBUG_ARROWS`;
 - user account diagnostics закрыты в Stage 7.7 через `DEBUG_ACCOUNT`;
 - user database diagnostics закрыты в Stage 7.8 через `DEBUG_ACCOUNT`;
-- remaining runtime diagnostics in `gnome_marker_handler.js`, SPA shell / standalone pages and legacy/debug audio utilities вынесены в follow-up backlog items.
+- gnome marker diagnostics закрыты в Stage 7.9 через `MapDebug`;
+- remaining runtime diagnostics in SPA shell / standalone pages and legacy/debug audio utilities вынесены в follow-up backlog item.
 
 ### CR-12 - LOW/MEDIUM - Локализация имеет потенциально два source-of-truth файла на язык
 
@@ -398,4 +399,4 @@ make audit
 
 Остается:
 
-- CR-11: gnome marker and remaining runtime/debug diagnostics - tracked as follow-up backlog items.
+- CR-11: remaining runtime/debug diagnostics inventory - tracked as a follow-up backlog item.

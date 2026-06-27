@@ -196,6 +196,24 @@ Stage 7.8 выполнен:
 
 - Stage 7.9: gate `gnome_marker_handler.js` diagnostics, preserving gnome popup/navigation behavior.
 
+## Status Update - 2026-06-27 - Stage 7.9
+
+Stage 7.9 выполнен:
+
+- `gnome_marker_handler.js` active gnome popup/navigation `console.log` diagnostics переведены на shared map diagnostics helper:
+  - `MapDebug.log(...)`.
+- Gnome diagnostics используют существующую map debug policy:
+  - `window.DEBUG_MAP = true`;
+  - `localStorage.DEBUG_MAP = "1"`;
+  - legacy `localStorage.__quest_debug = "1"`.
+- `console.error` в gnome handler оставлен для real popup/navigation failures.
+- Добавлен Playwright smoke на quiet default и `DEBUG_MAP` / storage-enable paths для Patsa Vatsa route branch.
+- Validation: `make smoke` passed with 56 Playwright tests.
+
+Следующий подэтап:
+
+- Stage 7.10: remaining runtime diagnostics inventory and small gates/defer decisions for SPA shell, standalone pages and legacy/debug audio utilities.
+
 ## Documentation updates
 
 `BACKLOG.md`:

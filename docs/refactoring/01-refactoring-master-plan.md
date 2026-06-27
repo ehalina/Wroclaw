@@ -432,3 +432,7 @@ make smoke
   - `user_database.js` Firebase/auth/leaderboard diagnostics переведены на `_dlog`;
   - database diagnostics используют ту же `DEBUG_ACCOUNT` / legacy `__account_debug` policy;
   - smoke фиксирует quiet default, global/storage/legacy debug-enable paths.
+- Stage 7.9 выполнен:
+  - `gnome_marker_handler.js` popup/navigation diagnostics переведены на `MapDebug.log`;
+  - gnome diagnostics используют existing `DEBUG_MAP` / legacy `__quest_debug` policy;
+  - smoke фиксирует quiet default и debug-enable path для Patsa Vatsa route branch.

@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 99% (59 завершённых задач текущего плана)
+**Общий прогресс:** 99% (60 завершённых задач текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -163,6 +163,7 @@ Wroclaw/
 63. ✅ Stage 7.6 Arrow diagnostics debug gate
 64. ✅ Stage 7.7 User account diagnostics debug gate
 65. ✅ Stage 7.8 User database diagnostics debug gate
+66. ✅ Stage 7.9 Gnome diagnostics debug gate
 
 ---
 
@@ -261,11 +262,17 @@ make audit
 
 ## 🔄 История обновлений
 
+### 2026-06-27 - Refactoring Stage 7.9 выполнен
+- `gnome_marker_handler.js` popup/navigation diagnostic `console.log` переведены на `MapDebug.log`
+- gnome diagnostics используют `DEBUG_MAP` / `localStorage.DEBUG_MAP` / legacy `__quest_debug`
+- smoke проверяет quiet default и debug-enable path для Patsa Vatsa route branch
+- CR-11 остаётся открытым для remaining runtime/debug diagnostics inventory
+
 ### 2026-06-27 - Refactoring Stage 7.8 выполнен
 - `user_database.js` Firebase/auth/leaderboard diagnostic `console.log` переведены на `_dlog`
 - database diagnostics используют `DEBUG_ACCOUNT` / `localStorage.DEBUG_ACCOUNT` / legacy `__account_debug`
 - smoke проверяет quiet default и global/storage/legacy debug-enable paths
-- CR-11 остаётся открытым для `gnome_marker_handler.js` и remaining runtime/debug diagnostics
+- CR-11 оставался открытым для `gnome_marker_handler.js` и remaining runtime/debug diagnostics
 
 ### 2026-06-27 - Refactoring Stage 7.7 выполнен
 - `user_account.js` auth/rating diagnostic `console.log/warn` переведены на `_alog/_awarn`

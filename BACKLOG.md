@@ -520,11 +520,10 @@
   - Files: `user_database.js`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
   - Benefit: `user_database.js` no longer writes verbose Firebase/auth/leaderboard `console.log` diagnostics by default; diagnostics share `DEBUG_ACCOUNT` and legacy `__account_debug` with `user_account.js`
 
-- [ ] **Refactor: gnome diagnostics debug gate** - Gate remaining runtime gnome popup/navigation diagnostics in `gnome_marker_handler.js`
-  - Reason: CR-11 still has active `console.log` diagnostics in gnome marker navigation and direct popup opening
-  - Benefit: Gnome marker flows stay debuggable without writing to production console by default
-  - Effort: Medium
-  - Notes: Keep separate from account/database because it touches marker navigation and direct popup opening
+- [x] **Refactor: gnome diagnostics debug gate** - Moved gnome popup/navigation diagnostics behind `MapDebug`
+  - Completed: 2026-06-27
+  - Files: `gnome_marker_handler.js`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
+  - Benefit: Gnome marker flows stay debuggable through `DEBUG_MAP` without writing to production console by default
 
 - [ ] **Refactor: remaining runtime diagnostics inventory** - Classify and gate/defer remaining active runtime `console.log` / `console.warn`
   - Reason: Repo-wide scan still finds diagnostics in SPA shell, minimap/Firebase init, standalone panorama/test pages and legacy audio module

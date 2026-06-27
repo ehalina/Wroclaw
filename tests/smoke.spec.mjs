@@ -902,6 +902,88 @@ test.describe('Wroclaw static app smoke', () => {
     });
   });
 
+  test('gnome diagnostics are quiet by default and gated by DEBUG_MAP', async ({ page }) => {
+    await page.goto('/tumski.html');
+
+    const result = await page.evaluate(async () => {
+      const gnomeMod = await import('./gnome_marker_handler.js');
+      const calls = [];
+      const originalLog = console.log;
+      const originalSpaManager = window.spaManager;
+      let routeCount = 0;
+
+      function clickPatsaMarker(id) {
+        const marker = document.createElement('button');
+        marker.id = id;
+        document.body.appendChild(marker);
+
+        gnomeMod.setupGnomeGeoMarker({
+          markerId: marker.id,
+          gnomeId: 'patsa_vatsa',
+          imageSrc: 'media/krasnolud/krasnal_patsa_vatsa.jpg',
+          title: 'Patsa Vatsa',
+          description: 'Smoke'
+        });
+
+        marker.click();
+        marker.remove();
+      }
+
+      console.log = (...args) => {
+        calls.push(args);
+      };
+
+      try {
+        window.spaManager = {
+          loadPage(pageName) {
+            if (pageName === 'minsk01.html#patsa_vatsa') {
+              routeCount++;
+            }
+          }
+        };
+
+        delete window.DEBUG_MAP;
+        localStorage.removeItem('DEBUG_MAP');
+        localStorage.removeItem('__quest_debug');
+        clickPatsaMarker('gnome-debug-default');
+        const disabledCount = calls.length;
+
+        window.DEBUG_MAP = true;
+        clickPatsaMarker('gnome-debug-global');
+        const globalEnabledCount = calls.length - disabledCount;
+
+        window.DEBUG_MAP = false;
+        localStorage.setItem('DEBUG_MAP', '1');
+        clickPatsaMarker('gnome-debug-storage');
+        const storageEnabledCount = calls.length - disabledCount - globalEnabledCount;
+
+        return {
+          disabledCount,
+          globalEnabledCount,
+          routeCount,
+          storageEnabledCount,
+          messages: calls.map((args) => args.slice(0, 2))
+        };
+      } finally {
+        console.log = originalLog;
+        delete window.DEBUG_MAP;
+        localStorage.removeItem('DEBUG_MAP');
+        localStorage.removeItem('__quest_debug');
+        if (originalSpaManager) {
+          window.spaManager = originalSpaManager;
+        } else {
+          delete window.spaManager;
+        }
+      }
+    });
+
+    expect(result.disabledCount).toBe(0);
+    expect(result.globalEnabledCount).toBeGreaterThan(0);
+    expect(result.storageEnabledCount).toBeGreaterThan(0);
+    expect(result.routeCount).toBe(3);
+    expect(result.messages).toContainEqual(['[map]', '🟡 [gnome_marker_handler] Переход на minsk01.html#patsa_vatsa']);
+  });
+
   test('PageShellHelpers creates standard scene, cursor and marker fragments', async ({ page }) => {
     await page.goto('/tumski.html');
 

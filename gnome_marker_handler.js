@@ -5,6 +5,8 @@
 // - data-gnome-description  — текст описания, опционально
 // - data-gnome-image        — путь к картинке гнома; по умолчанию media/krasnolud/krasnal_<page>.jpg
 
+import { MapDebug } from './map_debug.js';
+
 function safeJsonParse(str, fallback) {
     try {
         return JSON.parse(str);
@@ -162,21 +164,21 @@ export function setupGnomeGeoMarker({ markerId, gnomeId, imageSrc, title, descri
             
             if (isOnMinsk01) {
                 // Если уже на странице minsk01.html, открываем попап
-                console.log('🟡 [gnome_marker_handler] Уже на minsk01.html, открываем попап');
+                MapDebug.log('🟡 [gnome_marker_handler] Уже на minsk01.html, открываем попап');
                 // Продолжаем выполнение функции для создания попапа
             } else {
                 // Если не на странице minsk01.html, перенаправляем на неё с параметром для открытия попапа
-                console.log('🟡 [gnome_marker_handler] Переход на minsk01.html#patsa_vatsa');
+                MapDebug.log('🟡 [gnome_marker_handler] Переход на minsk01.html#patsa_vatsa');
                 try {
                     // Пытаемся открыть через SPA менеджер (если доступен)
                     if (window.parent && window.parent !== window && window.parent.spaManager) {
-                        console.log('✅ [gnome_marker_handler] Используем parent.spaManager');
+                        MapDebug.log('✅ [gnome_marker_handler] Используем parent.spaManager');
                         window.parent.spaManager.loadPage('minsk01.html#patsa_vatsa');
                     } else if (window.spaManager) {
-                        console.log('✅ [gnome_marker_handler] Используем window.spaManager');
+                        MapDebug.log('✅ [gnome_marker_handler] Используем window.spaManager');
                         window.spaManager.loadPage('minsk01.html#patsa_vatsa');
                     } else {
-                        console.log('⚠️ [gnome_marker_handler] Fallback: обычная навигация');
+                        MapDebug.log('⚠️ [gnome_marker_handler] Fallback: обычная навигация');
                         // Fallback: обычная навигация
                         window.location.href = 'minsk01.html#patsa_vatsa';
                     }
@@ -458,7 +460,7 @@ export function setupGnomeGeoMarker({ markerId, gnomeId, imageSrc, title, descri
 
 // Экспортируемая функция для прямого открытия попапа гнома без маркера
 export function openGnomePopupDirectly({ gnomeId, imageSrc, title, description }) {
-    console.log('🟡 [openGnomePopupDirectly] Вызвана с параметрами:', { gnomeId, imageSrc, title, description });
+    MapDebug.log('🟡 [openGnomePopupDirectly] Вызвана с параметрами:', { gnomeId, imageSrc, title, description });
     if (!gnomeId) {
         console.error('❌ [openGnomePopupDirectly] gnomeId не передан');
         return;
@@ -470,7 +472,7 @@ export function openGnomePopupDirectly({ gnomeId, imageSrc, title, description }
     tempMarker.setAttribute('data-gnome-id', gnomeId);
     tempMarker.style.display = 'none';
     document.body.appendChild(tempMarker);
-    console.log('🟡 [openGnomePopupDirectly] Создан временный маркер:', tempMarker.id);
+    MapDebug.log('🟡 [openGnomePopupDirectly] Создан временный маркер:', tempMarker.id);
     
     // Используем существующую функцию setupGnomeGeoMarker
     setupGnomeGeoMarker({
@@ -480,15 +482,15 @@ export function openGnomePopupDirectly({ gnomeId, imageSrc, title, description }
         title: title,
         description: description
     });
-    console.log('🟡 [openGnomePopupDirectly] setupGnomeGeoMarker вызван');
+    MapDebug.log('🟡 [openGnomePopupDirectly] setupGnomeGeoMarker вызван');
     
     // Открываем попап программно
     setTimeout(() => {
         try {
             const marker = document.getElementById(tempMarker.id);
-            console.log('🟡 [openGnomePopupDirectly] Ищем маркер:', tempMarker.id, 'найден:', !!marker);
+            MapDebug.log('🟡 [openGnomePopupDirectly] Ищем маркер:', tempMarker.id, 'найден:', !!marker);
             if (marker) {
-                console.log('✅ [openGnomePopupDirectly] Открываем попап через клик');
+                MapDebug.log('✅ [openGnomePopupDirectly] Открываем попап через клик');
                 marker.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
             } else {
                 console.error('❌ [openGnomePopupDirectly] Маркер не найден после создания');
