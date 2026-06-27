@@ -165,6 +165,7 @@ Wroclaw/
 65. ✅ Stage 7.8 User database diagnostics debug gate
 66. ✅ Stage 7.9 Gnome diagnostics debug gate
 67. ✅ Stage 7.10 Runtime diagnostics inventory
+68. ✅ Stage 7.11 SPA shell diagnostics debug gate
 
 ---
 
@@ -262,6 +263,11 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 7.11 выполнен
+- `index.html` SPA route/hash diagnostics переведены на `spaDebugLog`
+- SPA diagnostics включаются через `DEBUG_SPA` / `localStorage.DEBUG_SPA` / legacy `__spa_debug`
+- smoke проверяет quiet default и debug-enable paths; audio `.catch(console.log)` оставлен для Stage 7.12
 
 ### 2026-06-27 - Refactoring Stage 7.10 выполнен
 - создан `docs/refactoring/stage-07-runtime-diagnostics-inventory.md`

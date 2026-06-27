@@ -27,6 +27,69 @@ test.describe('Wroclaw static app smoke', () => {
     await expect(page.locator('#audioUnlockButton')).toHaveCount(1);
   });
 
+  test('SPA shell diagnostics are quiet by default and gated by DEBUG_SPA', async ({ page }) => {
+    await page.goto('/');
+
+    const result = await page.evaluate(() => {
+      const iframe = document.querySelector('.page-content.active iframe');
+      const calls = [];
+      const originalLog = console.log;
+      const originalSetTimeout = window.setTimeout;
+
+      console.log = (...args) => {
+        calls.push(args);
+      };
+
+      window.setTimeout = (callback) => {
+        callback();
+        return 0;
+      };
+
+      try {
+        delete window.DEBUG_SPA;
+        localStorage.removeItem('DEBUG_SPA');
+        localStorage.removeItem('__spa_debug');
+        window.spaManager.sendPageHashToIframe(iframe, 'default');
+        const disabledCount = calls.length;
+
+        window.DEBUG_SPA = true;
+        window.spaManager.sendPageHashToIframe(iframe, 'global');
+        const globalEnabledCount = calls.length - disabledCount;
+
+        window.DEBUG_SPA = false;
+        localStorage.setItem('DEBUG_SPA', '1');
+        window.spaManager.sendPageHashToIframe(iframe, 'storage');
+        const storageEnabledCount = calls.length - disabledCount - globalEnabledCount;
+
+        localStorage.removeItem('DEBUG_SPA');
+        localStorage.setItem('__spa_debug', '1');
+        window.spaManager.sendPageHashToIframe(iframe, 'legacy');
+        const legacyEnabledCount = calls.length - disabledCount - globalEnabledCount - storageEnabledCount;
+
+        return {
+          disabledCount,
+          globalEnabledCount,
+          legacyEnabledCount,
+          storageEnabledCount,
+          messages: calls.map((args) => args[0])
+        };
+      } finally {
+        console.log = originalLog;
+        window.setTimeout = originalSetTimeout;
+        delete window.DEBUG_SPA;
+        localStorage.removeItem('DEBUG_SPA');
+        localStorage.removeItem('__spa_debug');
+      }
+    });
+
+    expect(result.disabledCount).toBe(0);
+    expect(result.globalEnabledCount).toBe(2);
+    expect(result.storageEnabledCount).toBe(2);
+    expect(result.legacyEnabledCount).toBe(2);
+    expect(result.messages).toContain('✅ [SPA] postMessage отправлен с hash:');
+    expect(result.messages).toContain('✅ [SPA] postMessage отправлен повторно с hash:');
+  });
+
   test('shared quest audio helper owns quest music in SPA shell', async ({ page }) => {
     await page.goto('/');
 

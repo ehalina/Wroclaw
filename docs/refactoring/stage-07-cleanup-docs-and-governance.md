@@ -232,6 +232,24 @@ Stage 7.10 выполнен:
 
 - Stage 7.11: gate remaining active SPA route/hash diagnostics in `index.html`, preserving current navigation behavior.
 
+## Status Update - 2026-06-27 - Stage 7.11
+
+Stage 7.11 выполнен:
+
+- `index.html` active SPA route/hash diagnostics переведены на local `spaDebugLog`.
+- SPA diagnostics включаются явно через:
+  - `window.DEBUG_SPA = true`;
+  - `localStorage.DEBUG_SPA = "1"`;
+  - legacy `localStorage.__spa_debug = "1"`.
+- `console.error` failure paths остаются visible.
+- Audio `.catch(console.log)` handlers intentionally left unchanged for Stage 7.12.
+- Добавлен Playwright smoke на quiet default и global/storage/legacy debug-enable paths.
+- Validation: `make smoke` passed with 58 Playwright tests.
+
+Следующий подэтап:
+
+- Stage 7.12: replace remaining audio `.catch(console.log)` handlers with quiet debug-aware handling.
+
 ## Documentation updates
 
 `BACKLOG.md`:

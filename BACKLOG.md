@@ -530,10 +530,10 @@
   - Files: `docs/refactoring/stage-07-runtime-diagnostics-inventory.md`, `BACKLOG.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
   - Benefit: CR-11 leftovers are split into small follow-up stages instead of one broad logging cleanup
 
-- [ ] **Refactor: SPA shell diagnostics gate** - Gate remaining active SPA route/hash diagnostics in `index.html`
-  - Reason: `index.html` still has active route/hash `console.log` plus audio promise `.catch(console.log)` handlers
-  - Benefit: SPA shell stays quiet by default while route debugging remains available
-  - Effort: Medium
+- [x] **Refactor: SPA shell diagnostics gate** - Moved active SPA route/hash diagnostics behind explicit SPA debug flags
+  - Completed: 2026-06-27
+  - Files: `index.html`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
+  - Benefit: SPA shell route/hash diagnostics are quiet by default and remain available through `DEBUG_SPA` and legacy `__spa_debug`
 
 - [ ] **Refactor: audio promise rejection diagnostics** - Replace remaining audio `.catch(console.log)` handlers with quiet debug-aware handling
   - Reason: `language_menu.js` and `index.html` still route playback rejections to production console

@@ -311,6 +311,7 @@ Status 2026-06-26:
 - user database diagnostics закрыты в Stage 7.8 через `DEBUG_ACCOUNT`;
 - gnome marker diagnostics закрыты в Stage 7.9 через `MapDebug`;
 - remaining runtime diagnostics inventory создан в Stage 7.10 and split into Stage 7.11-7.15 follow-up backlog items.
+- SPA shell route/hash diagnostics закрыты в Stage 7.11 через `DEBUG_SPA`; audio promise diagnostics remain Stage 7.12.
 
 ### CR-12 - LOW/MEDIUM - Локализация имеет потенциально два source-of-truth файла на язык
 
@@ -399,4 +400,4 @@ make audit
 
 Остается:
 
-- CR-11: Stage 7.11-7.15 follow-up logging items - tracked in `BACKLOG.md`.
+- CR-11: Stage 7.12-7.15 follow-up logging items - tracked in `BACKLOG.md`.

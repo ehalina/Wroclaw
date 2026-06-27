@@ -440,3 +440,7 @@ make smoke
   - remaining runtime diagnostics inventory вынесен в `docs/refactoring/stage-07-runtime-diagnostics-inventory.md`;
   - CR-11 leftovers split into Stage 7.11-7.15 follow-up items;
   - Stage 7.11 selected as next step for `index.html` SPA shell diagnostics.
+- Stage 7.11 выполнен:
+  - active SPA route/hash diagnostics in `index.html` moved behind `spaDebugLog`;
+  - SPA diagnostics enabled only via `DEBUG_SPA` / legacy `__spa_debug`;
+  - audio promise rejection handlers intentionally left for Stage 7.12.

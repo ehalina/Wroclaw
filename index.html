@@ -519,6 +519,29 @@
         }
 
         // Простая SPA система управления страницами с iframe
+        const SPA_DEBUG_STORAGE_KEYS = ['DEBUG_SPA', '__spa_debug'];
+
+        function isSpaDebugEnabled() {
+            try {
+                if (window.DEBUG_SPA === true || window.DEBUG_SPA === '1' || window.DEBUG_SPA === 'true') {
+                    return true;
+                }
+
+                return SPA_DEBUG_STORAGE_KEYS.some((key) => {
+                    const value = localStorage.getItem(key);
+                    return value === '1' || value === 'true';
+                });
+            } catch (_) {
+                return false;
+            }
+        }
+
+        function spaDebugLog(...args) {
+            if (isSpaDebugEnabled()) {
+                console.log(...args);
+            }
+        }
+
         class SPAManager {
             constructor() {
                 this.currentPage = null;
@@ -1006,14 +1029,14 @@
                             });
 
                             if (existing) {
-                                console.log(
+                                spaDebugLog(
                                     `✅ [SPA] postMessage отправлен${repeated ? ' повторно' : ''} в существующий iframe с hash:`,
                                     pageHash
                                 );
                                 return;
                             }
 
-                            console.log(`✅ [SPA] postMessage отправлен${repeated ? ' повторно' : ''} с hash:`, pageHash);
+                            spaDebugLog(`✅ [SPA] postMessage отправлен${repeated ? ' повторно' : ''} с hash:`, pageHash);
                         } catch (err) {
                             const repeatText = repeated ? 'повторной ' : '';
                             const existingText = existing ? ' в существующий iframe' : '';
@@ -1037,14 +1060,14 @@
                     
                     // Если страница уже загружена, просто переключаемся на неё
                     if (this.pages.has(actualPageName)) {
-                        console.log('🟡 [SPA] Страница уже загружена:', actualPageName, 'hash:', pageHash);
+                        spaDebugLog('🟡 [SPA] Страница уже загружена:', actualPageName, 'hash:', pageHash);
                         this.showPage(actualPageName);
                         // Если есть hash, передаем его в iframe
                         if (pageHash) {
                             const pageContainer = this.pages.get(actualPageName);
                             const iframe = getSpaPageIframe(pageContainer);
                             if (iframe && iframe.contentWindow) {
-                                console.log('🟡 [SPA] Передаем hash в существующий iframe:', pageHash);
+                                spaDebugLog('🟡 [SPA] Передаем hash в существующий iframe:', pageHash);
                                 this.sendPageHashToIframe(iframe, pageHash, { existing: true });
                             }
                         }
@@ -1125,7 +1148,7 @@
                         
                         // Если есть hash, передаем его в iframe через postMessage
                         if (pageHash) {
-                            console.log('🟡 [SPA] Передаем hash в iframe:', pageHash, 'для страницы:', actualPageName);
+                            spaDebugLog('🟡 [SPA] Передаем hash в iframe:', pageHash, 'для страницы:', actualPageName);
                             this.sendPageHashToIframe(iframe, pageHash);
                         }
                         
