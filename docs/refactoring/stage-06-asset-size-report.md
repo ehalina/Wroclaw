@@ -144,6 +144,26 @@ make smoke
 
 All passed.
 
+## Stage 6.10 result
+
+Completed on 2026-06-27:
+
+- Created `docs/refactoring/stage-06-10-audio-route-use-review.md`.
+- Reviewed source/package audio sizes.
+- Mapped heavy MP3 files to route/use owners.
+- Confirmed that heavy MP3 files are runtime assets, not unused package cleanup candidates.
+- Identified duplicate packaged WAV candidates for a later cleanup-only guard step:
+  - `media/zwyki/opening-a-book.wav`;
+  - `media/zwyki/step.wav`.
+
+Package baseline remains `333 files, 87.0 MB -> www/`.
+
+Decision:
+
+- Do not compress audio blindly.
+- Do not exclude heavy MP3 files without a playback/lifecycle-specific change.
+- Prefer a small duplicate-WAV package cleanup before larger audio lifecycle refactors.
+
 ## Stage 6.3 result
 
 Completed on 2026-06-27:

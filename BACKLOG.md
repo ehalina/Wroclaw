@@ -400,6 +400,11 @@
   - Files: `sunset_parallax.js`, `sunset_parallax.html`, `scripts/build-capacitor-web.mjs`, `docs/refactoring/stage-06-asset-size-report.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
   - Benefit: `sunset3.png` is no longer packaged for Capacitor runtime; build output dropped from 334 files / 89.0 MB to 333 files / 87.0 MB while keeping the source original
 
+- [x] **Docs: heavy audio route/use review** - Mapped runtime audio files before compression or lifecycle changes
+  - Completed: 2026-06-27
+  - Files: `docs/refactoring/stage-06-10-audio-route-use-review.md`, `docs/refactoring/stage-06-asset-size-report.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
+  - Benefit: heavy MP3 files are confirmed as runtime assets; next safe work is lifecycle/package cleanup rather than blind compression
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

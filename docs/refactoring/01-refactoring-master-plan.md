@@ -321,3 +321,8 @@ make smoke
   - `media/tumski/sunset/sunset3.png` исключен из Capacitor `www` как source-only original, без удаления из репозитория;
   - build reference guard уточнен: он проверяет только файлы, реально попадающие в package;
   - baseline улучшен до `333 files, 87.0 MB -> www/`.
+- Stage 6.10 выполнен:
+  - создан `docs/refactoring/stage-06-10-audio-route-use-review.md`;
+  - зафиксированы route/use роли heavy audio assets;
+  - подтверждено, что heavy MP3 сейчас нельзя исключать из `www` как unused;
+  - следующий безопасный audio шаг: lifecycle/package cleanup, а не blind compression.

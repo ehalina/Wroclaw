@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 91% (41 завершённая задача текущего плана)
+**Общий прогресс:** 92% (42 завершённые задачи текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -138,6 +138,7 @@ Wroclaw/
 39. ✅ Stage 6.7 Runtime asset optimization policy
 40. ✅ Stage 6.8 Tumski21 sunset screenshot characterization
 41. ✅ Stage 6.9 Sunset3 preload/package cleanup
+42. ✅ Stage 6.10 Heavy audio route/use review
 
 ---
 
@@ -227,6 +228,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.10 выполнен
+- создан `docs/refactoring/stage-06-10-audio-route-use-review.md`
+- heavy MP3 assets сопоставлены с route/use policy
+- подтверждено: heavy MP3 нельзя исключать из `www` как unused
+- следующий safe candidate: duplicate WAV package cleanup под build guard
 
 ### 2026-06-27 - Refactoring Stage 6.9 выполнен
 - `sunset_parallax.js` и `sunset_parallax.html` выровнены на `media/tumski/sunset/sunset3.jpg`

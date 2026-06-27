@@ -65,6 +65,8 @@ Note after Stage 6.9: `media/tumski/sunset/sunset3.png` remains in source but is
    - check whether duplicate loading/playback exists before compression;
    - only then decide compression bitrate or format.
 
+Stage 6.10 result: heavy MP3 files are confirmed runtime assets. Do not exclude them as unused. The next safe package cleanup candidate is duplicate effect WAV copies under `media/zwyki/`, guarded by runtime reference checks.
+
 4. Video review:
    - inspect `katedra_panorama.html` playback;
    - decide whether a smaller derivative video or poster/loading strategy is needed.

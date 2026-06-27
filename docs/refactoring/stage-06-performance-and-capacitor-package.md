@@ -279,3 +279,23 @@ make build
 Следующий подэтап:
 
 - Stage 6.10: продолжить Stage 6 по remaining runtime-heavy assets: либо review `sunset1.png` / `sunset2.png` через screenshot-safe derivative plan, либо перейти к audio lifecycle route/use review для heavy MP3.
+
+## Status Update - 2026-06-27 - Stage 6.10
+
+Stage 6.10 выполнен:
+
+- Создан `docs/refactoring/stage-06-10-audio-route-use-review.md`.
+- Зафиксирован package/source audio inventory.
+- Зафиксирована canonical route policy из `spa_config.js`:
+  - `minsk` для `minsk01.html`, `minsk02.html`;
+  - `kostel` для `tumski19.html`;
+  - `hang` для `tumski21.html`;
+  - `birds` для garden routes;
+  - `town` как default fallback.
+- Подтверждено, что heavy MP3 assets являются runtime assets и не являются cleanup-only exclusion candidates.
+- Найден следующий low-risk package cleanup candidate: duplicate effect copies `media/zwyki/opening-a-book.wav` и `media/zwyki/step.wav`, если build reference guard подтвердит отсутствие runtime refs.
+- Baseline не менялся: `333 files, 87.0 MB -> www/`.
+
+Следующий подэтап:
+
+- Stage 6.11: проверить и, если guard разрешит, исключить duplicate `media/zwyki/*.wav` effect copies из Capacitor package без удаления source files.
