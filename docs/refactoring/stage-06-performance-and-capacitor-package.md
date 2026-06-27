@@ -474,3 +474,33 @@ Validation:
 make stage-06-17-sunset-webp
 make build
 ```
+
+## Status Update - 2026-06-27 - Stage 6.18
+
+Stage 6.18 выполнен:
+
+- Создан `docs/refactoring/stage-06-18-scene-jpg-characterization.md`.
+- Добавлен `playwright.stage-06-18.config.mjs`.
+- Добавлен `tools/stage-06-18/scene-jpg-characterization.spec.mjs`.
+- Добавлен Makefile target `make stage-06-18-scene-jpg-screenshots`.
+- Сняты desktop/mobile screenshots для крупнейших runtime scene JPG:
+  - `tumski11.html` / `media/tumski/tumski_11.jpg`;
+  - `dwor01.html` / `media/tumski/dwor_01.jpg`;
+  - `tumski14.html` / `media/tumski/tumski_14.jpg`.
+- Созданы artifacts:
+  - `docs/refactoring/artifacts/stage-06-18-scene-jpg/desktop-*.png`;
+  - `docs/refactoring/artifacts/stage-06-18-scene-jpg/mobile-pixel5-*.png`;
+  - `docs/refactoring/artifacts/stage-06-18-scene-jpg/*-measurements.json`.
+- Runtime assets и package baseline не менялись: `331 files, 84.5 MB -> www/`.
+
+Validation:
+
+```bash
+node --check playwright.stage-06-18.config.mjs
+node --check tools/stage-06-18/scene-jpg-characterization.spec.mjs
+make stage-06-18-scene-jpg-screenshots
+```
+
+Следующий подэтап:
+
+- Stage 6.19: сделать derivative для одного scene JPG и сравнить с Stage 6.18 baseline на desktop/mobile, прежде чем менять остальные scene JPG.

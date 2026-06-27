@@ -360,3 +360,8 @@ make smoke
   - PNG originals исключены из Capacitor package, source originals оставлены в repo;
   - `make stage-06-17-sunset-webp` подтвердил similarity scores 92.32-93.82;
   - package baseline улучшен до `331 files, 84.5 MB -> www/`.
+- Stage 6.18 выполнен:
+  - добавлен `make stage-06-18-scene-jpg-screenshots`;
+  - сняты desktop/mobile screenshots и JSON measurements для `tumski11.html`, `dwor01.html`, `tumski14.html`;
+  - подтверждено, что `.image` backgrounds загружают `tumski_11.jpg`, `dwor_01.jpg`, `tumski_14.jpg`;
+  - runtime assets и package baseline не менялись.

@@ -440,6 +440,11 @@
   - Files: `media/tumski/sunset/sunset1.webp`, `media/tumski/sunset/sunset2.webp`, `tumski21.html`, `tumski21.css`, `sunset_parallax.html`, `sunset_parallax.js`, `scripts/build-capacitor-web.mjs`, `Makefile`, `tools/stage-06-17/compare-sunset-screenshots.mjs`, `docs/refactoring/stage-06-17-sunset-webp-runtime.md`, `docs/refactoring/artifacts/stage-06-17-sunset-webp/`
   - Benefit: package build summary dropped from `331 files, 86.8 MB` to `331 files, 84.5 MB`; screenshot similarity passed on desktop/mobile
 
+- [x] **Performance: scene JPG characterization** - Captured desktop/mobile baseline for the largest runtime scene JPGs
+  - Completed: 2026-06-27
+  - Files: `playwright.stage-06-18.config.mjs`, `tools/stage-06-18/scene-jpg-characterization.spec.mjs`, `Makefile`, `docs/refactoring/stage-06-18-scene-jpg-characterization.md`, `docs/refactoring/artifacts/stage-06-18-scene-jpg/`
+  - Benefit: `tumski_11.jpg`, `dwor_01.jpg` and `tumski_14.jpg` now have desktop/mobile screenshot and measurement baselines before derivative optimization
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

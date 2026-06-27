@@ -261,6 +261,27 @@ make stage-06-17-sunset-webp
 make build
 ```
 
+## Stage 6.18 result
+
+Completed on 2026-06-27:
+
+- Created `docs/refactoring/stage-06-18-scene-jpg-characterization.md`.
+- Added `make stage-06-18-scene-jpg-screenshots`.
+- Captured desktop/mobile baseline screenshots and measurements for:
+  - `tumski11.html` / `media/tumski/tumski_11.jpg` (source size 1380 KB, natural size 2528x1920);
+  - `dwor01.html` / `media/tumski/dwor_01.jpg` (source size 1296 KB, natural size 2688x1792);
+  - `tumski14.html` / `media/tumski/tumski_14.jpg` (source size 1096 KB, natural size 3136x1536).
+- No runtime asset paths changed.
+- No package size change: current build baseline remains `331 files, 84.5 MB -> www/`.
+
+Validation:
+
+```bash
+node --check playwright.stage-06-18.config.mjs
+node --check tools/stage-06-18/scene-jpg-characterization.spec.mjs
+make stage-06-18-scene-jpg-screenshots
+```
+
 ## Stage 6.3 result
 
 Completed on 2026-06-27:

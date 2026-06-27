@@ -73,6 +73,8 @@ Stage 6.12 result: audio lifecycle refactor must start with source policy extrac
 
 Stage 6.17 result: `sunset1.png` and `sunset2.png` were replaced in runtime by lossless WebP derivatives after screenshot similarity passed; PNG originals remain in source and are excluded from the Capacitor package.
 
+Stage 6.18 result: desktop/mobile baselines were captured for the largest remaining runtime scene JPGs (`tumski_11.jpg`, `dwor_01.jpg`, `tumski_14.jpg`) before any derivative optimization.
+
 4. Video review:
    - inspect `katedra_panorama.html` playback;
    - decide whether a smaller derivative video or poster/loading strategy is needed.
@@ -95,4 +97,4 @@ Additional checks:
 
 ## Next safe implementation step
 
-Start with a screenshot-only characterization for `tumski21.html` sunset assets before changing any image bytes.
+Create a derivative for one scene JPG first, likely `media/tumski/tumski_11.jpg`, and compare against the Stage 6.18 desktop/mobile baseline before expanding to the next scene asset.

@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 97% (47 завершённых задач текущего плана)
+**Общий прогресс:** 98% (50 завершённых задач текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -146,6 +146,7 @@ Wroclaw/
 47. ✅ Stage 6.15 Lazy background audio preload
 48. ✅ Stage 6.16 Quest audio owner consolidation
 49. ✅ Stage 6.17 Sunset WebP runtime derivatives
+50. ✅ Stage 6.18 Scene JPG characterization
 
 ---
 
@@ -199,6 +200,7 @@ make lint
 make smoke
 make build
 make stage-06-08-screenshots
+make stage-06-18-scene-jpg-screenshots
 make security
 make audit
 ```
@@ -235,6 +237,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.18 выполнен
+- добавлены `playwright.stage-06-18.config.mjs`, `tools/stage-06-18/scene-jpg-characterization.spec.mjs` и `make stage-06-18-scene-jpg-screenshots`
+- сняты desktop/mobile screenshots для `tumski11.html`, `dwor01.html`, `tumski14.html`
+- подтверждены loaded backgrounds: `tumski_11.jpg`, `dwor_01.jpg`, `tumski_14.jpg`
+- runtime assets и package baseline не менялись
 
 ### 2026-06-27 - Refactoring Stage 6.17 выполнен
 - `sunset1.png` и `sunset2.png` заменены в runtime на lossless WebP derivatives

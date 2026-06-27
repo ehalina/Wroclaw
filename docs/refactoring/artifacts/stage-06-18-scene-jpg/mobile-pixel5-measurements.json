@@ -1,0 +1,227 @@
+{
+  "consoleMessages": [
+    {
+      "text": "Не все элементы найдены для кнопки play",
+      "type": "error"
+    },
+    {
+      "text": "Не все элементы найдены для кнопки play",
+      "type": "error"
+    },
+    {
+      "text": "Не все элементы найдены для кнопки play",
+      "type": "error"
+    }
+  ],
+  "pageErrors": [],
+  "pages": [
+    {
+      "asset": "media/tumski/tumski_11.jpg",
+      "page": "tumski11.html",
+      "slug": "tumski11",
+      "title": "Tumski 11",
+      "measurements": {
+        "body": {
+          "overflowX": "auto",
+          "overflowY": "hidden"
+        },
+        "expectedAsset": "media/tumski/tumski_11.jpg",
+        "image": {
+          "backgroundImage": "url(\"media/tumski/tumski_11.jpg\")",
+          "backgroundPosition": "0% 0%",
+          "backgroundRepeat": "no-repeat",
+          "backgroundSize": "auto 100%",
+          "image": {
+            "height": 1920,
+            "status": "loaded",
+            "url": "media/tumski/tumski_11.jpg",
+            "width": 2528
+          },
+          "rect": {
+            "height": 727,
+            "width": 1179,
+            "x": 0,
+            "y": 0
+          },
+          "selector": ".image"
+        },
+        "imageContainer": {
+          "height": 727,
+          "width": 393,
+          "x": 0,
+          "y": 0
+        },
+        "imageScrollWrapper": {
+          "height": 727,
+          "width": 393,
+          "x": 0,
+          "y": 0
+        },
+        "nextImage": {
+          "backgroundImage": "url(\"media/tumski/tumski_14.jpg\")",
+          "backgroundPosition": "0% 0%",
+          "backgroundRepeat": "no-repeat",
+          "backgroundSize": "auto 100%",
+          "image": {
+            "height": 1536,
+            "status": "loaded",
+            "url": "media/tumski/tumski_14.jpg",
+            "width": 3136
+          },
+          "rect": {
+            "height": 731,
+            "width": 395,
+            "x": -1,
+            "y": -2
+          },
+          "selector": ".next-image-container"
+        },
+        "title": "Тумский остров - Вроцлав",
+        "viewport": {
+          "height": 727,
+          "width": 393
+        }
+      },
+      "screenshot": "docs/refactoring/artifacts/stage-06-18-scene-jpg/mobile-pixel5-tumski11.png"
+    },
+    {
+      "asset": "media/tumski/dwor_01.jpg",
+      "page": "dwor01.html",
+      "slug": "dwor01",
+      "title": "Dwor 01",
+      "measurements": {
+        "body": {
+          "overflowX": "auto",
+          "overflowY": "hidden"
+        },
+        "expectedAsset": "media/tumski/dwor_01.jpg",
+        "image": {
+          "backgroundImage": "url(\"media/tumski/dwor_01.jpg\")",
+          "backgroundPosition": "0% 0%",
+          "backgroundRepeat": "no-repeat",
+          "backgroundSize": "auto 100%",
+          "image": {
+            "height": 1792,
+            "status": "loaded",
+            "url": "media/tumski/dwor_01.jpg",
+            "width": 2688
+          },
+          "rect": {
+            "height": 727,
+            "width": 1179,
+            "x": 0,
+            "y": 0
+          },
+          "selector": ".image"
+        },
+        "imageContainer": {
+          "height": 727,
+          "width": 393,
+          "x": 0,
+          "y": 0
+        },
+        "imageScrollWrapper": {
+          "height": 727,
+          "width": 393,
+          "x": 0,
+          "y": 0
+        },
+        "nextImage": {
+          "backgroundImage": "url(\"media/tumski/dwor_02.jpg\")",
+          "backgroundPosition": "0% 0%",
+          "backgroundRepeat": "no-repeat",
+          "backgroundSize": "auto 100%",
+          "image": {
+            "height": 1792,
+            "status": "loaded",
+            "url": "media/tumski/dwor_02.jpg",
+            "width": 2688
+          },
+          "rect": {
+            "height": 731,
+            "width": 395,
+            "x": -1,
+            "y": -2
+          },
+          "selector": ".next-image-container"
+        },
+        "title": "Тумский остров - Вроцлав",
+        "viewport": {
+          "height": 727,
+          "width": 393
+        }
+      },
+      "screenshot": "docs/refactoring/artifacts/stage-06-18-scene-jpg/mobile-pixel5-dwor01.png"
+    },
+    {
+      "asset": "media/tumski/tumski_14.jpg",
+      "page": "tumski14.html",
+      "slug": "tumski14",
+      "title": "Tumski 14",
+      "measurements": {
+        "body": {
+          "overflowX": "auto",
+          "overflowY": "hidden"
+        },
+        "expectedAsset": "media/tumski/tumski_14.jpg",
+        "image": {
+          "backgroundImage": "url(\"media/tumski/tumski_14.jpg\")",
+          "backgroundPosition": "0% 0%",
+          "backgroundRepeat": "no-repeat",
+          "backgroundSize": "auto 100%",
+          "image": {
+            "height": 1536,
+            "status": "loaded",
+            "url": "media/tumski/tumski_14.jpg",
+            "width": 3136
+          },
+          "rect": {
+            "height": 727,
+            "width": 1179,
+            "x": 0,
+            "y": 0
+          },
+          "selector": ".image"
+        },
+        "imageContainer": {
+          "height": 727,
+          "width": 393,
+          "x": 0,
+          "y": 0
+        },
+        "imageScrollWrapper": {
+          "height": 727,
+          "width": 393,
+          "x": 0,
+          "y": 0
+        },
+        "nextImage": {
+          "backgroundImage": "url(\"media/tumski/tumski_08.jpg\")",
+          "backgroundPosition": "0% 0%",
+          "backgroundRepeat": "no-repeat",
+          "backgroundSize": "auto 100%",
+          "image": {
+            "height": 1536,
+            "status": "loaded",
+            "url": "media/tumski/tumski_08.jpg",
+            "width": 3168
+          },
+          "rect": {
+            "height": 730,
+            "width": 395,
+            "x": -1,
+            "y": -2
+          },
+          "selector": ".next-image-container"
+        },
+        "title": "Тумский остров - Вроцлав",
+        "viewport": {
+          "height": 727,
+          "width": 393
+        }
+      },
+      "screenshot": "docs/refactoring/artifacts/stage-06-18-scene-jpg/mobile-pixel5-tumski14.png"
+    }
+  ],
+  "project": "mobile-pixel5"
+}
