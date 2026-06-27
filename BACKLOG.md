@@ -415,6 +415,11 @@
   - Files: `docs/refactoring/stage-06-12-audio-lifecycle-refactor-plan.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
   - Benefit: next audio refactors are staged behind source-policy extraction and network characterization instead of changing playback and ownership together
 
+- [x] **Refactor: audio source policy extraction** - Moved SPA track source URLs into `spa_config.js`
+  - Completed: 2026-06-27
+  - Files: `spa_config.js`, `index.html`, `tests/smoke.spec.mjs`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
+  - Benefit: route policy and track URL policy now share the SPA config boundary; source paths and playback behavior are unchanged
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

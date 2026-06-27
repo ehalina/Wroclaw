@@ -205,6 +205,15 @@ Next code stage:
 
 - extract audio source URL policy to `spa_config.js` before changing eager preload behavior.
 
+## Stage 6.13 result
+
+Completed on 2026-06-27:
+
+- Moved SPA track source URL policy into `spa_config.js`.
+- Updated `index.html` to use `getAudioSourceForTrack()` through a local compatibility wrapper.
+- No package files changed.
+- Package baseline remains `331 files, 86.9 MB -> www/`.
+
 ## Stage 6.3 result
 
 Completed on 2026-06-27:

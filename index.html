@@ -382,6 +382,23 @@
                 : 'town';
         }
 
+        function spaAudioSourceForTrack(trackName) {
+            if (typeof SPA_CONFIG.getAudioSourceForTrack === 'function') {
+                return SPA_CONFIG.getAudioSourceForTrack(trackName);
+            }
+
+            const fallbackAudioSources = {
+                town: 'media/zwyki/town.mp3',
+                birds: 'media/zwyki/birds.mp3',
+                kostel: 'media/zwyki/kostel.mp3',
+                hang: 'media/zwyki/hang.mp3',
+                quest: 'media/zwyki/quest.mp3',
+                minsk: 'media/zwyki/maksim-mrvica-croatian-rhapsody.mp3'
+            };
+
+            return fallbackAudioSources[trackName] || null;
+        }
+
         function splitSpaPageReference(pageName) {
             if (typeof SPA_LIFECYCLE.splitPageReference === 'function') {
                 return SPA_LIFECYCLE.splitPageReference(pageName);
@@ -607,12 +624,9 @@
              * Предзагружает фоновую музыку и ставит на паузу
              */
             async preloadBackgroundMusic() {
-                const musicTracks = [
-                    { name: 'birds', src: 'media/zwyki/birds.mp3' },
-                    { name: 'kostel', src: 'media/zwyki/kostel.mp3' },
-                    { name: 'hang', src: 'media/zwyki/hang.mp3' },
-                    { name: 'quest', src: 'media/zwyki/quest.mp3' }
-                ];
+                const musicTracks = ['birds', 'kostel', 'hang', 'quest']
+                    .map((name) => ({ name, src: spaAudioSourceForTrack(name) }))
+                    .filter((track) => track.src);
                 
     // console.log('🎵 Предзагружаем фоновую музыку...');
                 
@@ -726,17 +740,7 @@
                 // Сохраняем время текущего трека
                 this.trackTimes.set(this.currentTrack, audio.currentTime);
                 
-                // Определяем URL нового трека
-                const trackUrls = {
-                    'town': 'media/zwyki/town.mp3',
-                    'birds': 'media/zwyki/birds.mp3',
-                    'kostel': 'media/zwyki/kostel.mp3',
-                    'hang': 'media/zwyki/hang.mp3',
-                    'quest': 'media/zwyki/quest.mp3',
-                    'minsk': 'media/zwyki/maksim-mrvica-croatian-rhapsody.mp3'
-                };
-                
-                const newUrl = trackUrls[trackName];
+                const newUrl = spaAudioSourceForTrack(trackName);
                 if (!newUrl) {
     // console.log('🎵 Неизвестный трек:', trackName);
                     return;

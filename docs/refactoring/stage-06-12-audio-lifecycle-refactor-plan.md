@@ -70,6 +70,8 @@ Why first:
 - reduces duplicated source policy before preload changes;
 - gives future tests a stable API to assert.
 
+Status: completed on 2026-06-27.
+
 ### Stage 6.14 - Characterize eager audio loading
 
 Add a Playwright characterization or focused smoke assertion for the first audio unlock flow:

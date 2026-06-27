@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 94% (44 завершённые задачи текущего плана)
+**Общий прогресс:** 95% (45 завершённых задач текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -141,6 +141,7 @@ Wroclaw/
 42. ✅ Stage 6.10 Heavy audio route/use review
 43. ✅ Stage 6.11 Duplicate WAV package cleanup
 44. ✅ Stage 6.12 Audio lifecycle refactor plan
+45. ✅ Stage 6.13 Audio source policy extraction
 
 ---
 
@@ -230,6 +231,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.13 выполнен
+- `spa_config.js` получил `AUDIO_SOURCES` и `getAudioSourceForTrack()`
+- `index.html` больше не держит локальный `trackUrls` в `switchTrack()`
+- `preloadBackgroundMusic()` использует общий source policy helper
+- smoke test закрепляет `hang` и `quest` source paths
 
 ### 2026-06-27 - Refactoring Stage 6.12 выполнен
 - создан `docs/refactoring/stage-06-12-audio-lifecycle-refactor-plan.md`

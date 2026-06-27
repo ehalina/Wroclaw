@@ -42,7 +42,17 @@
         DEFAULT: 'town',
         HANG: 'hang',
         KOSTEL: 'kostel',
-        MINSK: 'minsk'
+        MINSK: 'minsk',
+        QUEST: 'quest'
+    });
+
+    const AUDIO_SOURCES = Object.freeze({
+        [AUDIO_TRACKS.BIRDS]: 'media/zwyki/birds.mp3',
+        [AUDIO_TRACKS.DEFAULT]: 'media/zwyki/town.mp3',
+        [AUDIO_TRACKS.HANG]: 'media/zwyki/hang.mp3',
+        [AUDIO_TRACKS.KOSTEL]: 'media/zwyki/kostel.mp3',
+        [AUDIO_TRACKS.MINSK]: 'media/zwyki/maksim-mrvica-croatian-rhapsody.mp3',
+        [AUDIO_TRACKS.QUEST]: 'media/zwyki/quest.mp3'
     });
 
     const AUDIO_ROUTE_POLICY = Object.freeze([
@@ -112,12 +122,18 @@
         return route ? route.track : AUDIO_TRACKS.DEFAULT;
     }
 
+    function getAudioSourceForTrack(trackName) {
+        return AUDIO_SOURCES[trackName] || null;
+    }
+
     global.SpaConfig = Object.freeze({
         AUDIO_ROUTE_POLICY,
+        AUDIO_SOURCES,
         AUDIO_TRACKS,
         PAGE_ORDER,
         SELECTORS,
         START_PAGE,
+        getAudioSourceForTrack,
         getAudioTrackForPage,
         getNextPage,
         getPageIndex,

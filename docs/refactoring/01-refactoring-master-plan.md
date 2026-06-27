@@ -335,3 +335,8 @@ make smoke
   - создан `docs/refactoring/stage-06-12-audio-lifecycle-refactor-plan.md`;
   - зафиксирован порядок audio lifecycle refactor: source policy extraction -> network characterization -> lazy preload -> quest owner consolidation;
   - playback behavior не менялся.
+- Stage 6.13 выполнен:
+  - `spa_config.js` получил `AUDIO_SOURCES` и `getAudioSourceForTrack()`;
+  - `index.html` больше не держит локальный `trackUrls` в `switchTrack()`;
+  - `preloadBackgroundMusic()` использует тот же source policy helper;
+  - smoke test закрепляет `hang` и `quest` source paths.

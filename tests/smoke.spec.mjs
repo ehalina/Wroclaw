@@ -819,8 +819,10 @@ test.describe('Wroclaw static app smoke', () => {
     const config = await page.evaluate(() => ({
       activeIframeSelector: window.SpaConfig.SELECTORS.activeIframe,
       defaultTrack: window.SpaConfig.getAudioTrackForPage('tumski02.html'),
+      hangSource: window.SpaConfig.getAudioSourceForTrack('hang'),
       firstPage: window.SpaConfig.PAGE_ORDER[0],
       minskTrack: window.SpaConfig.getAudioTrackForPage('minsk01.html#patsa_vatsa'),
+      questSource: window.SpaConfig.getAudioSourceForTrack('quest'),
       nextFromStart: window.SpaConfig.getNextPage('tumski.html'),
       ogrodTrack: window.SpaConfig.getAudioTrackForPage('ogrod13.html'),
       previousFromSecond: window.SpaConfig.getPreviousPage('tumski02.html'),
@@ -832,10 +834,12 @@ test.describe('Wroclaw static app smoke', () => {
       activeIframeSelector: '.page-content.active iframe',
       defaultTrack: 'town',
       firstPage: 'tumski.html',
+      hangSource: 'media/zwyki/hang.mp3',
       minskTrack: 'minsk',
       nextFromStart: 'tumski02.html',
       ogrodTrack: 'birds',
       previousFromSecond: 'tumski.html',
+      questSource: 'media/zwyki/quest.mp3',
       startPage: 'tumski.html',
       tumski19Track: 'kostel'
     });

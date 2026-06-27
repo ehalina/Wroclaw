@@ -346,3 +346,29 @@ Stage 6.12 выполнен:
 Следующий подэтап:
 
 - Stage 6.13: вынести audio source URL policy из `index.html` в `spa_config.js`, сохранив exact source paths и route behavior.
+
+## Status Update - 2026-06-27 - Stage 6.13
+
+Stage 6.13 выполнен:
+
+- В `spa_config.js` добавлены:
+  - `AUDIO_SOURCES`;
+  - `AUDIO_TRACKS.QUEST`;
+  - `getAudioSourceForTrack(trackName)`.
+- `index.html` использует `spaAudioSourceForTrack()` вместо локального `trackUrls`.
+- `preloadBackgroundMusic()` теперь получает source URLs через тот же helper.
+- Exact source paths не менялись.
+- Playback behavior и package baseline не менялись: `331 files, 86.9 MB -> www/`.
+- `tests/smoke.spec.mjs` проверяет `getAudioSourceForTrack('hang')` и `getAudioSourceForTrack('quest')`.
+
+Validation:
+
+```bash
+node --check spa_config.js
+node --check tests/smoke.spec.mjs
+make smoke
+```
+
+Следующий подэтап:
+
+- Stage 6.14: добавить browser/network characterization для текущего eager MP3 loading перед изменением `preloadBackgroundMusic()`.
