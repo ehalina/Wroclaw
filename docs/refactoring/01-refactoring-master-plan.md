@@ -293,3 +293,21 @@ make smoke
   - build script получил guard для `excludedRuntimePaths`;
   - `make build` теперь падает, если явно исключённый runtime path снова появился как ссылка в HTML/CSS/JS/JSON;
   - baseline `348 files, 132.3 MB -> www/` сохранён.
+- Stage 6.4 выполнен:
+  - decision gate для крупных unreferenced `media/**` candidates принят как package-only exclusion без source deletion;
+  - из `www/` исключены `media/Wroclaw_Saver.png`, `media/book/Gemini_Generated_Image_5x2pd05x2pd05x2p.png`, два больших `media/krasnolud/u717...png` и `media/watercolor/22.png`;
+  - runtime assets `media/Wroclaw_Saver.mp4`, `media/watercolor/22.jpg` и heavy route audio остаются в пакете;
+  - baseline улучшен до `343 files, 105.9 MB -> www/`.
+- Stage 6.5 выполнен:
+  - build script получил package budget guard на `120 MB`;
+  - `make build` теперь падает, если итоговый logical size `www` превышает budget;
+  - следующий Stage 6 шаг: visual-review-safe optimization policy или loading/audio lifecycle review.
+- Stage 6.6 выполнен:
+  - дополнительный cleanup-only audit исключил из `www` крупные source-only `media/krasnolud/Gemini_Generated_Image_*.png` и screenshot PNG;
+  - runtime gnome assets `krasnal_*.jpg` и `koza.jpg` остаются в package;
+  - source files не удалялись, reference guard продолжает защищать exclusion list;
+  - baseline улучшен до `334 files, 89.0 MB -> www/`.
+- Stage 6.7 выполнен:
+  - создан `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`;
+  - оставшиеся heavy assets классифицированы как runtime audio/video/scene assets, не cleanup candidates;
+  - дальнейшая оптимизация требует derivative files, screenshot comparison для images и route/audio review для audio/video.

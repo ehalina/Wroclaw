@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = path.join(rootDir, 'www');
+const packageSizeBudgetMegabytes = 120;
 
 const runtimeDirectories = new Set(['locales', 'media', 'thumbs']);
 const referenceScanDirectories = new Set(['locales']);
@@ -38,6 +39,15 @@ const excludedRuntimePaths = new Set([
   'Gemini_Generated_Image_5x2pd05x2pd05x2p.png',
   'media/Wroclaw_Saver.png',
   'media/book/Gemini_Generated_Image_5x2pd05x2pd05x2p.png',
+  'media/krasnolud/Gemini_Generated_Image_1q2txm1q2txm1q2t.png',
+  'media/krasnolud/Gemini_Generated_Image_1v0m2q1v0m2q1v0m.png',
+  'media/krasnolud/Gemini_Generated_Image_1v8dfm1v8dfm1v8d.png',
+  'media/krasnolud/Gemini_Generated_Image_7lker47lker47lke.png',
+  'media/krasnolud/Gemini_Generated_Image_axo74iaxo74iaxo7.png',
+  'media/krasnolud/Gemini_Generated_Image_v3t5jnv3t5jnv3t5.png',
+  'media/krasnolud/Gemini_Generated_Image_vtmv4vvtmv4vvtmv.png',
+  'media/krasnolud/Gemini_Generated_Image_xal0grxal0grxal0.png',
+  'media/krasnolud/Снимок экрана 2026-01-25 в 18.04.04.png',
   'media/krasnolud/u7173139994_Bronze_gnome_figurine_same_perspective_do_not_chang_42cebd36-ece2-491f-91b2-67f0cc47d8aa.png',
   'media/krasnolud/u7173139994_Bronze_gnome_figurine_same_perspective_do_not_chang_f574f9f5-15cb-4d89-857e-e46a0ac1ac3d.png',
   'media/watercolor/22.png',
@@ -167,6 +177,20 @@ async function copyRootRuntimeFiles() {
   }));
 }
 
+function formatMegabytes(bytes) {
+  return (bytes / 1024 / 1024).toFixed(1);
+}
+
+function assertPackageBudget({ totalBytes }) {
+  const budgetBytes = packageSizeBudgetMegabytes * 1024 * 1024;
+
+  if (totalBytes > budgetBytes) {
+    throw new Error(
+      `Capacitor web package exceeds budget: ${formatMegabytes(totalBytes)} MB > ${packageSizeBudgetMegabytes} MB`
+    );
+  }
+}
+
 async function summarizeBuild() {
   let fileCount = 0;
   let totalBytes = 0;
@@ -192,12 +216,14 @@ async function summarizeBuild() {
 
   await walk(outDir);
 
-  const totalMegabytes = (totalBytes / 1024 / 1024).toFixed(1);
+  const totalMegabytes = formatMegabytes(totalBytes);
   console.log(`Built Capacitor web assets: ${fileCount} files, ${totalMegabytes} MB -> www/`);
+
+  return { fileCount, totalBytes };
 }
 
 await assertExcludedRuntimePathsUnreferenced();
 await rm(outDir, { recursive: true, force: true });
 await mkdir(outDir, { recursive: true });
 await copyRootRuntimeFiles();
-await summarizeBuild();
+assertPackageBudget(await summarizeBuild());

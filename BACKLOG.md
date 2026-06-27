@@ -370,6 +370,26 @@
   - Files: `scripts/build-capacitor-web.mjs`, `docs/refactoring/stage-06-asset-size-report.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
   - Benefit: `make build` now fails if a path excluded from `www` becomes referenced again in runtime HTML/CSS/JS/JSON
 
+- [x] **Build: package media asset exclusions** - Excluded large unreferenced media candidates from Capacitor `www`
+  - Completed: 2026-06-27
+  - Files: `scripts/build-capacitor-web.mjs`, `docs/refactoring/stage-06-asset-size-report.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
+  - Benefit: build output dropped from 348 files / 132.3 MB to 343 files / 105.9 MB without deleting source assets or touching referenced runtime media
+
+- [x] **Build: package size budget guard** - Enforced a logical size budget for Capacitor `www`
+  - Completed: 2026-06-27
+  - Files: `scripts/build-capacitor-web.mjs`, `docs/refactoring/stage-06-asset-size-report.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
+  - Benefit: `make build` now fails if the generated web package exceeds the documented 120 MB budget
+
+- [x] **Build: package gnome source-only exclusions** - Excluded large unreferenced gnome PNG sources from Capacitor `www`
+  - Completed: 2026-06-27
+  - Files: `scripts/build-capacitor-web.mjs`, `docs/refactoring/stage-06-asset-size-report.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
+  - Benefit: build output dropped from 343 files / 105.9 MB to 334 files / 89.0 MB while keeping runtime `krasnal_*.jpg` and `koza.jpg` assets packaged
+
+- [x] **Docs: runtime asset optimization policy** - Documented safe rules for optimizing remaining runtime-heavy assets
+  - Completed: 2026-06-27
+  - Files: `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`, `docs/refactoring/stage-06-asset-size-report.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
+  - Benefit: future image/audio/video optimization now requires derivative assets, screenshot comparison and route/audio review instead of blind source overwrites
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

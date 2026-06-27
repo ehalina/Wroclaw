@@ -159,3 +159,119 @@ make build
 ```
 
 Result: `348 files, 132.3 MB -> www/`.
+
+## Stage 6.4 result
+
+Completed on 2026-06-27:
+
+- Large unreferenced `media/**` candidates were excluded from the Capacitor package through `excludedRuntimePaths`.
+- Source files were not deleted.
+- The existing reference guard protects the exclusions from future explicit runtime references.
+
+Excluded from `www`:
+
+- `media/Wroclaw_Saver.png`;
+- `media/book/Gemini_Generated_Image_5x2pd05x2pd05x2p.png`;
+- `media/krasnolud/u7173139994_Bronze_gnome_figurine_same_perspective_do_not_chang_42cebd36-ece2-491f-91b2-67f0cc47d8aa.png`;
+- `media/krasnolud/u7173139994_Bronze_gnome_figurine_same_perspective_do_not_chang_f574f9f5-15cb-4d89-857e-e46a0ac1ac3d.png`;
+- `media/watercolor/22.png`.
+
+Confirmed still packaged:
+
+- `media/Wroclaw_Saver.mp4`;
+- `media/watercolor/22.jpg`;
+- `media/zwyki/maksim-mrvica-croatian-rhapsody.mp3`.
+
+Build comparison:
+
+| Metric | Before Stage 6.4 | After Stage 6.4 |
+|---|---:|---:|
+| Build summary files | 348 | 343 |
+| Build summary size | 132.3 MB | 105.9 MB |
+| `du -sh www` | 151M | 122M |
+
+Validation:
+
+```bash
+make build
+make test
+make smoke
+```
+
+All passed.
+
+## Stage 6.5 result
+
+Completed on 2026-06-27:
+
+- `scripts/build-capacitor-web.mjs` now enforces a `120 MB` logical package budget.
+- The guard runs after `www` is copied and summarized.
+- If the budget is exceeded, `make build` fails with the actual size and configured limit.
+
+Current result:
+
+```bash
+make build
+```
+
+Result: `343 files, 105.9 MB -> www/`.
+
+## Stage 6.6 result
+
+Completed on 2026-06-27:
+
+- Additional package-only cleanup was applied to large `media/krasnolud` PNG assets.
+- No source files were deleted.
+- No explicit runtime references were found for the excluded `Gemini_Generated_Image_*.png` and screenshot PNG files.
+- `gnome_marker_handler.js` default runtime image convention remains `media/krasnolud/krasnal_<page>.jpg`.
+
+Excluded from `www`:
+
+- `media/krasnolud/Gemini_Generated_Image_1q2txm1q2txm1q2t.png`;
+- `media/krasnolud/Gemini_Generated_Image_1v0m2q1v0m2q1v0m.png`;
+- `media/krasnolud/Gemini_Generated_Image_1v8dfm1v8dfm1v8d.png`;
+- `media/krasnolud/Gemini_Generated_Image_7lker47lker47lke.png`;
+- `media/krasnolud/Gemini_Generated_Image_axo74iaxo74iaxo7.png`;
+- `media/krasnolud/Gemini_Generated_Image_v3t5jnv3t5jnv3t5.png`;
+- `media/krasnolud/Gemini_Generated_Image_vtmv4vvtmv4vvtmv.png`;
+- `media/krasnolud/Gemini_Generated_Image_xal0grxal0grxal0.png`;
+- `media/krasnolud/Снимок экрана 2026-01-25 в 18.04.04.png`.
+
+Confirmed still packaged:
+
+- `media/krasnolud/krasnal_tumski.jpg`;
+- `media/krasnolud/krasnal_tumski032.jpg`;
+- `media/krasnolud/koza.jpg`;
+- existing runtime audio/video and `media/tumski/sunset/*.png`.
+
+Build comparison:
+
+| Metric | Before Stage 6.6 | After Stage 6.6 |
+|---|---:|---:|
+| Build summary files | 343 | 334 |
+| Build summary size | 105.9 MB | 89.0 MB |
+| `du -sh www` | 122M | 101M |
+
+Validation:
+
+```bash
+make build
+```
+
+Result: `334 files, 89.0 MB -> www/`.
+
+## Stage 6.7 result
+
+Completed on 2026-06-27:
+
+- Created `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`.
+- Current package baseline after cleanup remains `334 files, 89.0 MB -> www/`.
+- Remaining heavy assets are treated as runtime assets, not cleanup candidates:
+  - `media/zwyki/maksim-mrvica-croatian-rhapsody.mp3`;
+  - `media/Wroclaw_Saver.mp4`;
+  - `media/zwyki/hang.mp3`;
+  - `media/zwyki/quest.mp3`;
+  - `media/tumski/sunset/sunset1.png`;
+  - `media/tumski/sunset/sunset2.png`;
+  - `media/tumski/sunset/sunset3.png`.
+- Future optimization must use derivative assets plus screenshot/audio review; source originals must not be overwritten blindly.

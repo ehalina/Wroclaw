@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 85% (29/34 основных задач)
+**Общий прогресс:** 89% (39 завершённых задач текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -132,6 +132,10 @@ Wroclaw/
 33. ✅ Stage 6.1 Asset size report and package baseline
 34. ✅ Stage 6.2 Package root asset exclusions
 35. ✅ Stage 6.3 Package exclusion reference guard
+36. ✅ Stage 6.4 Package media asset exclusions
+37. ✅ Stage 6.5 Package size budget guard
+38. ✅ Stage 6.6 Package gnome source-only exclusions
+39. ✅ Stage 6.7 Runtime asset optimization policy
 
 ---
 
@@ -188,6 +192,12 @@ make security
 make audit
 ```
 
+### Текущий Capacitor package baseline:
+- Initial Stage 6 build: `350 files, 138.2 MB -> www/`
+- Current build: `334 files, 89.0 MB -> www/`
+- Package budget guard: `120 MB`
+- Runtime asset optimization policy: `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`
+
 ### Безопасность:
 - Нет обработки чувствительных данных
 - Статический контент без серверной логики
@@ -214,6 +224,30 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.7 выполнен
+- создан `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`
+- оставшиеся heavy assets классифицированы как runtime audio/video/scene assets
+- дальнейшая оптимизация требует derivative files, screenshot comparison и route/audio review
+- текущий post-cleanup package baseline остаётся `334 files, 89.0 MB`
+
+### 2026-06-27 - Refactoring Stage 6.6 выполнен
+- дополнительный cleanup-only audit исключил из `www` крупные source-only `media/krasnolud/Gemini_Generated_Image_*.png` и screenshot PNG
+- runtime gnome assets `krasnal_*.jpg` и `koza.jpg` остаются в package
+- source files не удалялись
+- build baseline улучшен с `343 files, 105.9 MB` до `334 files, 89.0 MB`
+
+### 2026-06-27 - Refactoring Stage 6.5 выполнен
+- `scripts/build-capacitor-web.mjs` получил package budget guard
+- текущий logical budget для `www`: 120 MB
+- `make build` теперь падает, если итоговый package size превышает бюджет
+- текущий build проходит: `343 files, 105.9 MB -> www/`
+
+### 2026-06-27 - Refactoring Stage 6.4 выполнен
+- крупные unreferenced `media/**` candidates исключены из Capacitor `www` без удаления source files
+- исключены `media/Wroclaw_Saver.png`, `media/watercolor/22.png`, book Gemini PNG и два больших gnome PNG
+- runtime assets `media/Wroclaw_Saver.mp4`, `media/watercolor/22.jpg` и heavy audio остаются в пакете
+- build baseline улучшен с `348 files, 132.3 MB` до `343 files, 105.9 MB`
 
 ### 2026-06-27 - Refactoring Stage 5.3 выполнен
 - text-only `innerHTML` sinks в `common.js` заменены на `setI18nText()`/`textContent`

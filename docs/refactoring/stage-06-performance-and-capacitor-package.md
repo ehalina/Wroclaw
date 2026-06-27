@@ -6,7 +6,9 @@
 
 ## Контекст
 
-Текущий `make build` собирает `www/` размером около `138.2 MB`. В `BACKLOG.md` Performance Optimization уже находится в активных задачах Phase 2.
+Стартовый Stage 6 baseline: `make build` собирал `www/` размером `350 files, 138.2 MB -> www/`.
+После cleanup-only package exclusions текущий baseline: `334 files, 89.0 MB -> www/`.
+В `BACKLOG.md` Performance Optimization уже находится в активных задачах Phase 2.
 
 ## Scope
 
@@ -146,3 +148,84 @@ Stage 6.3 выполнен:
 Следующий подэтап:
 
 - Stage 6.4: decision gate для крупных unreferenced `media/**` candidates. Варианты: оставить как source-only debt, исключить из package через path list с guard/report, или готовить визуальный review перед image optimization.
+
+## Status Update - 2026-06-27 - Stage 6.4
+
+Stage 6.4 выполнен:
+
+- Decision gate принят в пользу cleanup-only package exclusion через `excludedRuntimePaths` с уже существующим reference guard.
+- Source files не удалялись.
+- Из Capacitor `www/` дополнительно исключены крупные `media/**` candidates без найденных runtime refs:
+  - `media/Wroclaw_Saver.png`;
+  - `media/book/Gemini_Generated_Image_5x2pd05x2pd05x2p.png`;
+  - `media/krasnolud/u7173139994_Bronze_gnome_figurine_same_perspective_do_not_chang_42cebd36-ece2-491f-91b2-67f0cc47d8aa.png`;
+  - `media/krasnolud/u7173139994_Bronze_gnome_figurine_same_perspective_do_not_chang_f574f9f5-15cb-4d89-857e-e46a0ac1ac3d.png`;
+  - `media/watercolor/22.png`.
+- Проверено, что runtime assets остаются в пакете:
+  - `media/Wroclaw_Saver.mp4`;
+  - `media/watercolor/22.jpg`;
+  - `media/zwyki/maksim-mrvica-croatian-rhapsody.mp3`.
+- Build baseline улучшен:
+  - было после Stage 6.3: `348 files, 132.3 MB -> www/`;
+  - стало: `343 files, 105.9 MB -> www/`;
+  - disk usage `www`: 122M.
+- Проверки после изменения: `make build`, `make test`, `make smoke` прошли; smoke остаётся 44 теста на desktop/mobile.
+
+Следующий подэтап:
+
+- Stage 6.5: закрепить package budget guard, чтобы `www` не вырос обратно без явного решения.
+
+## Status Update - 2026-06-27 - Stage 6.5
+
+Stage 6.5 выполнен:
+
+- В `scripts/build-capacitor-web.mjs` добавлен package budget guard.
+- Текущий лимит: `120 MB` logical build size.
+- `make build` теперь завершится ошибкой, если итоговый `www` превысит budget.
+- Текущий build проходит budget: `343 files, 105.9 MB -> www/`.
+
+Следующий подэтап:
+
+- Stage 6.6: переходить к visual-review-safe optimization policy для крупных runtime PNG/audio/video или к loading/audio lifecycle review из Stage 6 scope.
+
+## Status Update - 2026-06-27 - Stage 6.6
+
+Stage 6.6 выполнен:
+
+- Проведён дополнительный cleanup-only audit `media/krasnolud`.
+- Подтверждено, что runtime gnome handler строит default images как `media/krasnolud/krasnal_<page>.jpg`, а крупные `Gemini_Generated_Image_*.png` и screenshot PNG не имеют явных runtime refs.
+- Из Capacitor `www/` дополнительно исключены source-only gnome PNG:
+  - `media/krasnolud/Gemini_Generated_Image_1q2txm1q2txm1q2t.png`;
+  - `media/krasnolud/Gemini_Generated_Image_1v0m2q1v0m2q1v0m.png`;
+  - `media/krasnolud/Gemini_Generated_Image_1v8dfm1v8dfm1v8d.png`;
+  - `media/krasnolud/Gemini_Generated_Image_7lker47lker47lke.png`;
+  - `media/krasnolud/Gemini_Generated_Image_axo74iaxo74iaxo7.png`;
+  - `media/krasnolud/Gemini_Generated_Image_v3t5jnv3t5jnv3t5.png`;
+  - `media/krasnolud/Gemini_Generated_Image_vtmv4vvtmv4vvtmv.png`;
+  - `media/krasnolud/Gemini_Generated_Image_xal0grxal0grxal0.png`;
+  - `media/krasnolud/Снимок экрана 2026-01-25 в 18.04.04.png`.
+- Source files не удалялись.
+- Проверено, что runtime gnome assets остаются в пакете: `krasnal_*.jpg`, `koza.jpg`.
+- Build baseline улучшен:
+  - было после Stage 6.4/6.5: `343 files, 105.9 MB -> www/`;
+  - стало: `334 files, 89.0 MB -> www/`;
+  - disk usage `www`: 101M.
+
+Следующий подэтап:
+
+- Stage 6.7: visual-review-safe optimization policy для оставшихся runtime-heavy assets: audio/video, `sunset*.png`, map/book/tumski images.
+
+## Status Update - 2026-06-27 - Stage 6.7
+
+Stage 6.7 выполнен:
+
+- Создан `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`.
+- Зафиксирован текущий post-cleanup baseline: `334 files, 89.0 MB -> www/`, disk usage `www` 101M.
+- Выделены оставшиеся top runtime-heavy groups:
+  - audio/video: `maksim-mrvica-croatian-rhapsody.mp3`, `Wroclaw_Saver.mp4`, `hang.mp3`, `quest.mp3`;
+  - visual assets: `sunset1.png`, `sunset2.png`, `sunset3.png`, крупнейшие scene JPG.
+- Принято правило: не переписывать originals, не оптимизировать визуальные assets без desktop/mobile screenshot comparison, не трогать audio/video без route/use review.
+
+Следующий подэтап:
+
+- Stage 6.8: screenshot-only characterization для `tumski21.html` sunset assets перед любой заменой или сжатием PNG.

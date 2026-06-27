@@ -150,9 +150,11 @@ Wroclaw/
 - `scripts/build-capacitor-web.mjs` копирует HTML/CSS/JS, `media/`, `locales/`, `thumbs/` и runtime assets в `www/`.
 - `capacitor.config.json` использует `webDir: "www"`.
 - `make cap-sync` пересобирает `www/` и синхронизирует `android/` и `ios/`.
-- Stage 6 package baseline documented in `docs/refactoring/stage-06-asset-size-report.md`: current logical build size is `138.2 MB`, with cleanup-only candidates identified before image optimization.
-- Stage 6.2 cleanup-only package exclusions reduced the logical web build to `132.3 MB` by excluding root-level unreferenced assets from `www`; source assets remain untouched.
+- Stage 6 package baseline documented in `docs/refactoring/stage-06-asset-size-report.md`: initial logical build size was `138.2 MB`, with cleanup-only candidates identified before image optimization.
+- Stage 6 cleanup-only package exclusions reduced the logical web build to `89.0 MB` by excluding root-level and large media assets with no runtime refs from `www`; source assets remain untouched.
 - Build exclusions are guarded: `make build` scans runtime HTML/CSS/JS/JSON and fails if a path listed in `excludedRuntimePaths` becomes referenced again.
+- Package size is guarded: `make build` fails when generated `www` exceeds the documented `120 MB` logical budget.
+- Runtime asset optimization policy lives in `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`: use derivative files plus screenshot/audio review; do not overwrite original visual/audio sources blindly.
 - Android command-line build требует JDK 21; `make android-debug` задаёт `CAPACITOR_JAVA_HOME`.
 
 ### 1. SPA Architecture через iframe

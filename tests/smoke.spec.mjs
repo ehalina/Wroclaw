@@ -275,7 +275,7 @@ test.describe('Wroclaw static app smoke', () => {
       await window.openFullscreenMap();
     });
 
-    const marker = page.locator('#visited-markers-layer .visited-marker').first();
+    const marker = page.locator('#visited-markers-layer .visited-marker[title="Smoke target"]');
     await expect(marker).toBeAttached();
     await marker.click({ force: true });
 
