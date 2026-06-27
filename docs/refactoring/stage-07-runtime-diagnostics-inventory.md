@@ -23,7 +23,7 @@ rg -n "^[^/]*(console\.log|console\.warn)" --glob "*.js" --glob "*.html" --glob 
 | Audio promise rejection handlers | `language_menu.js`, `index.html` | Done in Stage 7.12 via `DEBUG_AUDIO` gated handlers; default expected promise rejections stay quiet. | none |
 | One-line runtime init diagnostics | `spa_minimap_manager.js`, `firebase_config.js` | Done in Stage 7.13 via `DEBUG_MINIMAP` / `DEBUG_FIREBASE`; visible `console.error` paths preserved. | none |
 | Legacy audio module | `background_music111.js` | Done in Stage 7.14; no active runtime references found, module deleted instead of gated. | none |
-| Standalone/debug pages | `katedra_panorama.html`, `audio_visibility_test.html` | Treat separately from core tour shell; either gate standalone diagnostics or document debug-page exception. | Stage 7.15 |
+| Standalone/debug pages | `katedra_panorama.html`, `audio_visibility_test.html` | Done in Stage 7.15: panorama diagnostics gated via `DEBUG_PANORAMA`; `audio_visibility_test.html` documented as an intentional manual debug-page console mirror. | none |
 
 ## Notes
 
@@ -34,6 +34,7 @@ rg -n "^[^/]*(console\.log|console\.warn)" --glob "*.js" --glob "*.html" --glob 
 - Stage 7.12 closed active audio `.catch(console.log)` handlers in core shell/menu files; legacy audio module remains separate Stage 7.14.
 - Stage 7.13 closed low-value minimap/Firebase init diagnostics; remaining CR-11 work is legacy audio module and standalone/debug page policy.
 - Stage 7.14 removed the unreferenced legacy audio module; remaining CR-11 work is standalone/debug page policy.
+- Stage 7.15 closed the final standalone/debug page diagnostics policy item; remaining visible runtime console output is limited to intentional `console.error` failure paths and the manual debug-page mirror.
 
 ## Validation
 

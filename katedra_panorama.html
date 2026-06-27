@@ -662,6 +662,49 @@
     </div>
 
     <script>
+        const PANORAMA_DEBUG_STORAGE_KEYS = ['DEBUG_PANORAMA', '__panorama_debug'];
+
+        function isPanoramaDebugEnabled() {
+            try {
+                if (
+                    window.DEBUG_PANORAMA === true ||
+                    window.DEBUG_PANORAMA === '1' ||
+                    window.DEBUG_PANORAMA === 'true'
+                ) {
+                    return true;
+                }
+
+                return PANORAMA_DEBUG_STORAGE_KEYS.some((key) => {
+                    try {
+                        const value = localStorage.getItem(key);
+                        return value === '1' || value === 'true';
+                    } catch (_) {
+                        return false;
+                    }
+                });
+            } catch (_) {
+                return false;
+            }
+        }
+
+        function panoramaDebugLog(...args) {
+            if (isPanoramaDebugEnabled()) {
+                console.log(...args);
+            }
+        }
+
+        function panoramaDebugWarn(...args) {
+            if (isPanoramaDebugEnabled()) {
+                console.warn(...args);
+            }
+        }
+
+        window.PanoramaDebug = Object.freeze({
+            isEnabled: isPanoramaDebugEnabled,
+            log: panoramaDebugLog,
+            warn: panoramaDebugWarn
+        });
+
         document.addEventListener('DOMContentLoaded', async function() {
             await window.i18n.loadTranslations();
             window.i18n.updatePageContent();
@@ -789,7 +832,7 @@
 
             // Обработчик загрузки метаданных видео
             videoBackground.addEventListener('loadedmetadata', function() {
-                console.log('Видео загружено');
+                panoramaDebugLog('Видео загружено');
                 // Показываем кнопку воспроизведения
                 playButton.classList.add('visible');
             });
@@ -815,7 +858,7 @@
                 try {
                     videoBackground.currentTime = 0;
                 } catch (error) {
-                    console.warn('Не удалось сбросить видео до начала:', error);
+                    panoramaDebugWarn('Не удалось сбросить видео до начала:', error);
                 }
                 videoBackground.muted = false;
                 const playPromise = videoBackground.play();

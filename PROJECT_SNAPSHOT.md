@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 99% (61 завершённая задача текущего плана)
+**Общий прогресс:** 99% (62 завершённые задачи текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -169,6 +169,7 @@ Wroclaw/
 69. ✅ Stage 7.12 Audio promise rejection diagnostics gate
 70. ✅ Stage 7.13 One-line runtime init diagnostics gate
 71. ✅ Stage 7.14 Legacy audio diagnostics module cleanup
+72. ✅ Stage 7.15 Standalone/debug page diagnostics policy
 
 ---
 
@@ -266,6 +267,11 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 7.15 выполнен
+- `katedra_panorama.html` video diagnostics переведены на `DEBUG_PANORAMA` / legacy-style `__panorama_debug`
+- `audio_visibility_test.html` оформлен как intentional manual debug-page console mirror
+- CR-11 production runtime logging cleanup закрыт
 
 ### 2026-06-27 - Refactoring Stage 7.14 выполнен
 - `background_music111.js` удалён после проверки отсутствия active runtime references

@@ -305,6 +305,23 @@ Stage 7.14 выполнен:
 
 - Stage 7.15: define standalone/debug page diagnostics policy for `katedra_panorama.html` and `audio_visibility_test.html`.
 
+## Status Update - 2026-06-27 - Stage 7.15
+
+Stage 7.15 выполнен:
+
+- `katedra_panorama.html` active video `console.log` / `console.warn` diagnostics переведены на local gated helper:
+  - `window.DEBUG_PANORAMA = true`;
+  - `localStorage.DEBUG_PANORAMA = "1"`;
+  - legacy-style `localStorage.__panorama_debug = "1"`.
+- `console.error` в panorama source/playback failure paths оставлен visible для реальных ошибок.
+- `audio_visibility_test.html` задокументирован как manual debug/test page exception: его in-page event log намеренно зеркалируется в DevTools через `console.log`.
+- Добавлен Playwright smoke на quiet default и global/storage/legacy debug-enable paths для `PanoramaDebug`.
+- CR-11 production runtime logging cleanup закрыт; оставшиеся `console.error` paths и manual debug-page console mirror считаются intentional.
+
+Следующий подэтап:
+
+- Stage 7.16: обновить `AGENTS.md` project-specific sections / удалить placeholder debt, если BACKLOG подтвердит такой следующий пункт.
+
 ## Documentation updates
 
 `BACKLOG.md`:

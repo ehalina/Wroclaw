@@ -550,10 +550,10 @@
   - Files: `background_music111.js`, `AUDIO_VISIBILITY_README.md`, `docs/refactoring/stage-07-14-legacy-audio-module-review.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`
   - Benefit: legacy audio diagnostics module is no longer part of the source tree after reference review confirmed no runtime consumers
 
-- [ ] **Refactor: standalone/debug page diagnostics policy** - Gate or document remaining standalone page logs
-  - Reason: `katedra_panorama.html` and `audio_visibility_test.html` still contain active diagnostics
-  - Benefit: standalone/debug exceptions become explicit and CR-11 can be closed cleanly
-  - Effort: Small
+- [x] **Refactor: standalone/debug page diagnostics policy** - Gated/documented remaining standalone page logs
+  - Completed: 2026-06-27
+  - Files: `katedra_panorama.html`, `audio_visibility_test.html`, `tests/smoke.spec.mjs`, `ARCHITECTURE.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`, `docs/refactoring/stage-07-runtime-diagnostics-inventory.md`
+  - Benefit: `katedra_panorama.html` diagnostics are quiet by default through `DEBUG_PANORAMA`, `audio_visibility_test.html` is documented as a manual debug-page console exception, and CR-11 runtime logging cleanup is closed
 
 ### Planned
 

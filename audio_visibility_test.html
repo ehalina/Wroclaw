@@ -108,6 +108,7 @@
             const timestamp = new Date().toLocaleTimeString();
             logElement.innerHTML += `[${timestamp}] ${message}<br>`;
             logElement.scrollTop = logElement.scrollHeight;
+            // Intentional: this manual debug page mirrors its event log to DevTools.
             console.log(message);
         }
         

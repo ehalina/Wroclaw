@@ -456,3 +456,7 @@ make smoke
   - `background_music111.js` runtime references reviewed and found absent;
   - unreferenced legacy module removed instead of gating unused diagnostics;
   - `AUDIO_VISIBILITY_README.md` updated to describe current MutationObserver/manual registration model.
+- Stage 7.15 выполнен:
+  - `katedra_panorama.html` video diagnostics gated via `DEBUG_PANORAMA` / legacy-style `__panorama_debug`;
+  - `audio_visibility_test.html` documented as an intentional manual debug-page console mirror;
+  - CR-11 production runtime logging cleanup closed.

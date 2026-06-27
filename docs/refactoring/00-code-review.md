@@ -315,6 +315,7 @@ Status 2026-06-26:
 - audio promise rejection diagnostics закрыты в Stage 7.12 через `DEBUG_AUDIO`.
 - one-line runtime init diagnostics закрыты в Stage 7.13 через `DEBUG_MINIMAP` / `DEBUG_FIREBASE`.
 - legacy audio diagnostics module `background_music111.js` удалён в Stage 7.14 после reference review.
+- standalone/debug page diagnostics policy закрыт в Stage 7.15: `katedra_panorama.html` gated через `DEBUG_PANORAMA`, `audio_visibility_test.html` documented как manual debug-page exception.
 
 ### CR-12 - LOW/MEDIUM - Локализация имеет потенциально два source-of-truth файла на язык
 
@@ -403,4 +404,4 @@ make audit
 
 Остается:
 
-- CR-11: Stage 7.15 standalone/debug page diagnostics policy - tracked in `BACKLOG.md`.
+- CR-11: closed in Stage 7.15.

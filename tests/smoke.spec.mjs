@@ -186,6 +186,74 @@ test.describe('Wroclaw static app smoke', () => {
     expect(result.messages).toContain('🎵 [language audio] play() rejected: town start');
   });
 
+  test('panorama diagnostics are quiet by default and gated by DEBUG_PANORAMA', async ({ page }) => {
+    await page.goto('/katedra_panorama.html');
+
+    const result = await page.evaluate(() => {
+      const calls = [];
+      const warns = [];
+      const originalLog = console.log;
+      const originalWarn = console.warn;
+
+      console.log = (...args) => {
+        calls.push(args);
+      };
+      console.warn = (...args) => {
+        warns.push(args);
+      };
+
+      try {
+        delete window.DEBUG_PANORAMA;
+        localStorage.removeItem('DEBUG_PANORAMA');
+        localStorage.removeItem('__panorama_debug');
+        window.PanoramaDebug.log('hidden');
+        window.PanoramaDebug.warn('hidden warning');
+        const disabledLogCount = calls.length;
+        const disabledWarnCount = warns.length;
+
+        window.DEBUG_PANORAMA = true;
+        window.PanoramaDebug.log('global-enabled');
+        const globalEnabledCount = calls.length - disabledLogCount;
+
+        window.DEBUG_PANORAMA = false;
+        localStorage.setItem('DEBUG_PANORAMA', '1');
+        window.PanoramaDebug.log('storage-enabled');
+        const storageEnabledCount = calls.length - disabledLogCount - globalEnabledCount;
+
+        localStorage.removeItem('DEBUG_PANORAMA');
+        localStorage.setItem('__panorama_debug', '1');
+        window.PanoramaDebug.warn('legacy-enabled');
+        const legacyWarnCount = warns.length - disabledWarnCount;
+
+        return {
+          disabledLogCount,
+          disabledWarnCount,
+          globalEnabledCount,
+          legacyWarnCount,
+          storageEnabledCount,
+          messages: calls.map((args) => args[0]),
+          warnings: warns.map((args) => args[0])
+        };
+      } finally {
+        console.log = originalLog;
+        console.warn = originalWarn;
+        delete window.DEBUG_PANORAMA;
+        localStorage.removeItem('DEBUG_PANORAMA');
+        localStorage.removeItem('__panorama_debug');
+      }
+    });
+
+    expect(result).toEqual({
+      disabledLogCount: 0,
+      disabledWarnCount: 0,
+      globalEnabledCount: 1,
+      legacyWarnCount: 1,
+      storageEnabledCount: 1,
+      messages: ['global-enabled', 'storage-enabled'],
+      warnings: ['legacy-enabled']
+    });
+  });
+
   test('mini-map init diagnostics are quiet by default and gated by DEBUG_MINIMAP', async ({ page }) => {
     await page.goto('/');
 

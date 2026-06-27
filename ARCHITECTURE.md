@@ -301,6 +301,8 @@ class SPAManager {
 - `index.html`, `language_menu.js` — expected audio `play()` promise rejection diagnostics gated locally through `DEBUG_AUDIO` / `localStorage.DEBUG_AUDIO`; legacy `localStorage.__audio_debug` remains supported.
 - `spa_minimap_manager.js` — low-value mini-map disabled diagnostics gated through `DEBUG_MINIMAP` / `localStorage.DEBUG_MINIMAP`; legacy-style `localStorage.__minimap_debug` is also supported.
 - `firebase_config.js` — Firebase success diagnostics gated through `DEBUG_FIREBASE` / `localStorage.DEBUG_FIREBASE`; legacy-style `localStorage.__firebase_debug` is also supported, while placeholder/init `console.error` remains visible.
+- `katedra_panorama.html` — standalone panorama video diagnostics gated through `DEBUG_PANORAMA` / `localStorage.DEBUG_PANORAMA`; legacy-style `localStorage.__panorama_debug` is also supported, while video playback/source `console.error` paths remain visible.
+- `audio_visibility_test.html` — manual debug/test page exception: its event log intentionally mirrors to DevTools through `console.log` and is not loaded by the production tour flow.
 - `background_music111.js` — removed in Stage 7.14 after reference review confirmed no active runtime consumers; current audio visibility handling lives in `visibility_audio_manager.js`.
 
 
