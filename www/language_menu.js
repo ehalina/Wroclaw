@@ -216,7 +216,9 @@ const QuestAudio = (() => {
             questMusic.play().then(() => {
                 questMusic.pause();
                 questMusic.currentTime = 0;
-            }).catch(/* console.log */);
+            }).catch((error) => {
+                handleLanguageMenuAudioPlayRejection('questMusic prime', error);
+            });
         } catch (error) {
             // Browser autoplay policies can reject priming; playback remains user-gesture driven.
         }

@@ -1635,7 +1635,8 @@
                 try {
     // console.log('🎵 Инициализируем quest музыку в iframe...');
                     if (window.QuestAudio && typeof window.QuestAudio.attachSharedQuestMusicToFrame === 'function') {
-                        window.QuestAudio.attachSharedQuestMusicToFrame(iframe, { prime: true });
+                        const shouldPrime = this.audioUnlocked && this.isSoundEnabled();
+                        window.QuestAudio.attachSharedQuestMusicToFrame(iframe, { prime: shouldPrime });
                     }
                 } catch (error) {
     // console.log('🎵 Ошибка инициализации quest музыки в iframe:', error);
