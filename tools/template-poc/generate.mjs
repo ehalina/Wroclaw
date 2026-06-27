@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 const pocDir = path.dirname(fileURLToPath(import.meta.url));
 const metadataPath = path.join(pocDir, 'pages.json');
 const outputDir = path.join(pocDir, 'generated');
-const assetPrefix = '../../..';
+const assetPrefix = '../../../www';
 
 function escapeHtml(value) {
   return String(value)

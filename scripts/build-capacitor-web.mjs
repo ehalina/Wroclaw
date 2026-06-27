@@ -1,41 +1,13 @@
-import { cp, mkdir, readFile, readdir, rm, stat } from 'node:fs/promises';
+import { readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const outDir = path.join(rootDir, 'www');
+const webRootDir = path.join(rootDir, 'www');
 const packageSizeBudgetMegabytes = 120;
 
-const runtimeDirectories = new Set(['locales', 'media', 'thumbs']);
-const referenceScanDirectories = new Set(['locales']);
-const rootRuntimeExtensions = new Set([
-  '.css',
-  '.gif',
-  '.html',
-  '.ico',
-  '.jpeg',
-  '.jpg',
-  '.js',
-  '.mp3',
-  '.png',
-  '.svg',
-  '.ttf',
-  '.wav',
-  '.webp',
-  '.woff',
-  '.woff2'
-]);
 const referenceScanExtensions = new Set(['.css', '.html', '.js', '.json']);
-
-const excludedNames = new Set([
-  '.DS_Store',
-  'Thumbs.db',
-  'capacitor.config.json',
-  'package-lock.json',
-  'package.json'
-]);
-
-const excludedRuntimePaths = new Set([
+const forbiddenRuntimePaths = new Set([
   'Gemini_Generated_Image_5x2pd05x2pd05x2p.png',
   'media/Wroclaw_Saver.png',
   'media/book/Gemini_Generated_Image_5x2pd05x2pd05x2p.png',
@@ -59,77 +31,34 @@ const excludedRuntimePaths = new Set([
   'music.mp3'
 ]);
 
-const excludedExtensions = new Set([
-  '.bak',
-  '.backup',
-  '.log',
-  '.md',
-  '.new',
-  '.psd',
-  '.textClipping',
-  '.xlsx',
-  '.zip'
-]);
-
-function toRuntimePath(filePath) {
-  return path.relative(rootDir, filePath).split(path.sep).join('/');
+function toWebPath(filePath) {
+  return path.relative(webRootDir, filePath).split(path.sep).join('/');
 }
 
 function shouldSkipFile(filePath) {
   const baseName = path.basename(filePath);
-  const ext = path.extname(filePath);
-
   return (
-    excludedNames.has(baseName) ||
-    excludedRuntimePaths.has(toRuntimePath(filePath)) ||
-    excludedExtensions.has(ext) ||
+    baseName === '.DS_Store' ||
+    baseName === 'Thumbs.db' ||
     baseName.startsWith('._') ||
     baseName.startsWith('~$') ||
     baseName.includes(' copy.')
   );
 }
 
-async function collectReferenceScanFiles() {
+async function collectFiles(dir, predicate) {
+  const entries = await readdir(dir, { withFileTypes: true });
   const files = [];
 
-  async function walk(dir) {
-    const entries = await readdir(dir, { withFileTypes: true });
-
-    await Promise.all(entries.map(async (entry) => {
-      const current = path.join(dir, entry.name);
-
-      if (entry.isDirectory()) {
-        await walk(current);
-        return;
-      }
-
-      if (
-        entry.isFile() &&
-        !shouldSkipFile(current) &&
-        referenceScanExtensions.has(path.extname(entry.name))
-      ) {
-        files.push(current);
-      }
-    }));
-  }
-
-  const entries = await readdir(rootDir, { withFileTypes: true });
-
   await Promise.all(entries.map(async (entry) => {
-    const current = path.join(rootDir, entry.name);
+    const current = path.join(dir, entry.name);
 
     if (entry.isDirectory()) {
-      if (referenceScanDirectories.has(entry.name)) {
-        await walk(current);
-      }
+      files.push(...await collectFiles(current, predicate));
       return;
     }
 
-    if (
-      entry.isFile() &&
-      !shouldSkipFile(current) &&
-      referenceScanExtensions.has(path.extname(entry.name))
-    ) {
+    if (entry.isFile() && !shouldSkipFile(current) && predicate(current)) {
       files.push(current);
     }
   }));
@@ -137,57 +66,49 @@ async function collectReferenceScanFiles() {
   return files;
 }
 
-async function assertExcludedRuntimePathsUnreferenced() {
-  const files = await collectReferenceScanFiles();
+async function assertForbiddenRuntimePathsAbsent() {
+  const present = [];
+
+  await Promise.all([...forbiddenRuntimePaths].map(async (runtimePath) => {
+    try {
+      await stat(path.join(webRootDir, runtimePath));
+      present.push(runtimePath);
+    } catch (_) {
+      // Not present in the Capacitor web source, as expected.
+    }
+  }));
+
+  if (present.length > 0) {
+    throw new Error([
+      'Capacitor web source contains forbidden non-runtime assets:',
+      ...present.map((runtimePath) => `  - ${runtimePath}`)
+    ].join('\n'));
+  }
+}
+
+async function assertForbiddenRuntimePathsUnreferenced() {
+  const files = await collectFiles(
+    webRootDir,
+    (file) => referenceScanExtensions.has(path.extname(file))
+  );
   const references = [];
 
   await Promise.all(files.map(async (file) => {
     const content = await readFile(file, 'utf8');
 
-    excludedRuntimePaths.forEach((excludedPath) => {
-      if (content.includes(excludedPath)) {
-        references.push(`${toRuntimePath(file)} -> ${excludedPath}`);
+    forbiddenRuntimePaths.forEach((forbiddenPath) => {
+      if (content.includes(forbiddenPath)) {
+        references.push(`${toWebPath(file)} -> ${forbiddenPath}`);
       }
     });
   }));
 
   if (references.length > 0) {
     throw new Error([
-      'Build exclusion reference check failed:',
+      'Capacitor web source forbidden reference check failed:',
       ...references.map((reference) => `  - ${reference}`)
     ].join('\n'));
   }
-}
-
-async function copyDirectory(src, dest) {
-  await cp(src, dest, {
-    recursive: true,
-    filter: (source) => !shouldSkipFile(source)
-  });
-}
-
-async function copyRootRuntimeFiles() {
-  const entries = await readdir(rootDir, { withFileTypes: true });
-
-  await Promise.all(entries.map(async (entry) => {
-    const src = path.join(rootDir, entry.name);
-    const dest = path.join(outDir, entry.name);
-
-    if (entry.isDirectory()) {
-      if (runtimeDirectories.has(entry.name)) {
-        await copyDirectory(src, dest);
-      }
-      return;
-    }
-
-    if (!entry.isFile() || shouldSkipFile(src)) {
-      return;
-    }
-
-    if (rootRuntimeExtensions.has(path.extname(entry.name))) {
-      await cp(src, dest);
-    }
-  }));
 }
 
 function formatMegabytes(bytes) {
@@ -204,39 +125,21 @@ function assertPackageBudget({ totalBytes }) {
   }
 }
 
-async function summarizeBuild() {
-  let fileCount = 0;
+async function summarizeWebSource() {
+  const files = await collectFiles(webRootDir, () => true);
   let totalBytes = 0;
 
-  async function walk(dir) {
-    const entries = await readdir(dir, { withFileTypes: true });
-
-    await Promise.all(entries.map(async (entry) => {
-      const current = path.join(dir, entry.name);
-
-      if (entry.isDirectory()) {
-        await walk(current);
-        return;
-      }
-
-      if (entry.isFile()) {
-        const info = await stat(current);
-        fileCount += 1;
-        totalBytes += info.size;
-      }
-    }));
-  }
-
-  await walk(outDir);
+  await Promise.all(files.map(async (file) => {
+    const info = await stat(file);
+    totalBytes += info.size;
+  }));
 
   const totalMegabytes = formatMegabytes(totalBytes);
-  console.log(`Built Capacitor web assets: ${fileCount} files, ${totalMegabytes} MB -> www/`);
+  console.log(`Validated Capacitor web source: ${files.length} files, ${totalMegabytes} MB in www/`);
 
-  return { fileCount, totalBytes };
+  return { fileCount: files.length, totalBytes };
 }
 
-await assertExcludedRuntimePathsUnreferenced();
-await rm(outDir, { recursive: true, force: true });
-await mkdir(outDir, { recursive: true });
-await copyRootRuntimeFiles();
-assertPackageBudget(await summarizeBuild());
+await assertForbiddenRuntimePathsAbsent();
+await assertForbiddenRuntimePathsUnreferenced();
+assertPackageBudget(await summarizeWebSource());

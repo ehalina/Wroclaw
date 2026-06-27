@@ -25,7 +25,7 @@ Static interactive tour of Tumski Island in Wroclaw. The project runs as a vanil
 - **[Makefile](Makefile)** - Standard commands (`make dev`, `make build`, etc)
 - **[package.json](package.json)** - Capacitor dependencies and npm scripts
 - **[capacitor.config.json](capacitor.config.json)** - Capacitor app ID, app name, and `webDir`
-- **[scripts/build-capacitor-web.mjs](scripts/build-capacitor-web.mjs)** - Static asset copy step for native builds
+- **[scripts/build-capacitor-web.mjs](scripts/build-capacitor-web.mjs)** - Capacitor `www/` source validator and package budget guard
 - **[scripts/static-check-known-issues.json](scripts/static-check-known-issues.json)** - Static inventory allowlist, currently empty for missing assets/routes
 - **[.github/workflows/deploy.yml](.github/workflows/deploy.yml)** - GitHub Pages deployment
 
@@ -47,7 +47,7 @@ Static interactive tour of Tumski Island in Wroclaw. The project runs as a vanil
 - ✅ **Localization** - JSON translations for 7 languages
 - ✅ **Audio system** - location-aware background audio and effects
 - ✅ **Safety checks** - ESLint, JS syntax checks, static inventory, translation consistency, and Playwright smoke
-- ✅ **Package budget** - Capacitor web build guarded below 120 MB; current build is `324 files, 84.5 MB -> www/`
+- ✅ **Package budget** - Capacitor web source guarded below 120 MB; current baseline is `323 files, 84.5 MB in www/`
 - ✅ **Capacitor wrapper** - Android and iOS native projects generated from static web assets
 
 **Legend:**
@@ -63,7 +63,7 @@ Static interactive tour of Tumski Island in Wroclaw. The project runs as a vanil
 - **Framework:** Vanilla JavaScript, no frontend framework
 - **Language:** JavaScript ES6+
 - **Styling:** Plain CSS
-- **Build:** Static files copied to `www/` for Capacitor
+- **Build:** `www/` is the tracked web source used directly by Capacitor; no bundler
 
 ### Backend & Infrastructure
 - **Database:** None
@@ -107,9 +107,9 @@ make dev
 ### Development
 ```bash
 make dev          # Start static dev server on http://localhost:5173
-make build        # Copy runtime web assets into www/
+make build        # Validate tracked www/ source and package budget
 make start        # Same static server as make dev
-make cap-sync     # Build www/ and sync Android/iOS projects
+make cap-sync     # Validate www/ and sync Android/iOS projects
 ```
 
 ### Quality & Testing
@@ -138,7 +138,7 @@ make android-debug    # Build Android debug APK
 ### Utility
 ```bash
 make install      # Install dependencies
-make clean        # Remove generated www/
+make clean        # Remove test/report artifacts
 make reinstall    # Reinstall all dependencies
 make doctor       # Diagnose environment
 make help         # Show all available commands
@@ -158,12 +158,14 @@ No `.env` file is required for the current static tour. Firebase web configurati
 
 ```
 Wroclaw/
-├── index.html            # SPA shell
-├── tumski*.html/css      # Tour location pages
-├── dwor*.html/css        # Courtyard pages
-├── ogrod*.html/css       # Garden pages
-├── media/                # Images, audio, icons, fonts
-├── locales/              # Canonical translations: locales/<lang>/translations.json
+├── www/                  # Web source of truth and Capacitor webDir
+│   ├── index.html        # SPA shell
+│   ├── tumski*.html/css  # Tour location pages
+│   ├── dwor*.html/css    # Courtyard pages
+│   ├── ogrod*.html/css   # Garden pages
+│   ├── media/            # Packaged images, audio, icons, fonts
+│   └── locales/          # Canonical translations: locales/<lang>/translations.json
+├── non_runtime_assets/   # Archived source-only assets excluded from Capacitor package
 ├── scripts/              # Build scripts
 ├── docs/refactoring/     # Refactoring plans, stage docs, verification artifacts
 ├── android/              # Capacitor Android project

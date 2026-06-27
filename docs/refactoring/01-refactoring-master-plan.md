@@ -460,3 +460,8 @@ make smoke
   - `katedra_panorama.html` video diagnostics gated via `DEBUG_PANORAMA` / legacy-style `__panorama_debug`;
   - `audio_visibility_test.html` documented as an intentional manual debug-page console mirror;
   - CR-11 production runtime logging cleanup closed.
+- Stage 7.16 выполнен:
+  - `www/` switched from generated Capacitor output to tracked web source of truth;
+  - dev server, Playwright, static checks and translation checks now use `www/` as runtime root;
+  - `make build` validates tracked `www/` and package budget instead of copying/deleting web source;
+  - source-only excluded assets moved to `non_runtime_assets/`.

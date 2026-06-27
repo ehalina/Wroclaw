@@ -320,7 +320,22 @@ Stage 7.15 выполнен:
 
 Следующий подэтап:
 
-- Stage 7.16: обновить `AGENTS.md` project-specific sections / удалить placeholder debt, если BACKLOG подтвердит такой следующий пункт.
+- Stage 7.16: switch `www/` from generated Capacitor output to tracked web source of truth.
+
+## Status Update - 2026-06-27 - Stage 7.16
+
+Stage 7.16 выполнен:
+
+- `www/` стал tracked web source of truth и остаётся `capacitor.config.json` `webDir`.
+- Root-level HTML/CSS/JS runtime files, `media/`, `locales/` and `thumbs/` сняты с роли source tree; редактировать нужно `www/*`.
+- `make dev`, Playwright web servers, static inventory, JS syntax check and translation check now use `www/` as document/runtime root.
+- `scripts/build-capacitor-web.mjs` больше не удаляет и не копирует `www/`; `make build` валидирует tracked `www/`, forbidden non-runtime paths and 120 MB package budget.
+- Source-only assets that were previously excluded from Capacitor package moved to `non_runtime_assets/`.
+- `make clean` no longer removes `www/`; it only cleans test/report artifacts.
+
+Следующий подэтап:
+
+- Stage 8 decision gate: define whether the next track is content completion, localization, or image optimization.
 
 ## Documentation updates
 

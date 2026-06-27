@@ -47,27 +47,27 @@
 
 - [x] **SPA Navigation System** - Seamless navigation between pages via iframe
   - Implemented: 2024-12
-  - Files: `index.html`, `spa_integration.js`
+  - Files: `www/index.html`, `www/spa_integration.js`
   - Notes: SPAManager class handles page loading and transitions
 
 - [x] **GeoMarker System** - Clickable markers on map with modal windows
   - Implemented: 2024-12
-  - Files: `tumski_cathedral_handler.js`, `map_modal.js`
+  - Files: `www/tumski_cathedral_handler.js`, `www/map_modal.js`
   - Notes: Universal handler for all geo markers
 
 - [x] **Music System** - Background music switching between locations
   - Implemented: 2024-12
-  - Files: `index.html` (SPAManager music methods)
+  - Files: `www/index.html` (SPAManager music methods)
   - Notes: Supports 5 tracks (town, birds, kostel, hang, quest)
 
 - [x] **i18n Localization** - Multi-language support (7 languages)
   - Implemented: 2024-12
-  - Files: `i18n.js`, `locales/*/translations.json`
+  - Files: `www/i18n.js`, `www/locales/*/translations.json`
   - Notes: JSON-based translation system
 
 - [x] **Quest Marker System** - Interactive quest points on map
   - Implemented: 2024-12
-  - Files: `quest_marker_handler.js`
+  - Files: `www/quest_marker_handler.js`
   - Notes: Separate handler for quest-specific markers
 
 - [x] **Responsive Design** - Mobile and desktop support
@@ -83,7 +83,7 @@
 - [x] **Capacitor Native Wrapper** - Android/iOS shell for the static tour
   - Implemented: 2026-06-26
   - Files: `package.json`, `capacitor.config.json`, `scripts/build-capacitor-web.mjs`, `android/`, `ios/`, `Makefile`
-  - Notes: `make cap-sync` builds `www/` and syncs native projects; Android debug build passes with JDK 21
+  - Notes: `make cap-sync` validates tracked `www/` and syncs native projects; Android debug build passes with JDK 21
 
 **Template:**
 ```markdown
@@ -116,7 +116,7 @@
   - Blocked by: None
   - ETA: 2025-01-30
   - Assignee: Developer / AI Agent
-  - Notes: Need to optimize large images in media/tumski/
+  - Notes: Need to optimize large images in `www/media/tumski/`
 
 **Template:**
 ```markdown
@@ -554,6 +554,11 @@
   - Completed: 2026-06-27
   - Files: `katedra_panorama.html`, `audio_visibility_test.html`, `tests/smoke.spec.mjs`, `ARCHITECTURE.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`, `docs/refactoring/stage-07-runtime-diagnostics-inventory.md`
   - Benefit: `katedra_panorama.html` diagnostics are quiet by default through `DEBUG_PANORAMA`, `audio_visibility_test.html` is documented as a manual debug-page console exception, and CR-11 runtime logging cleanup is closed
+
+- [x] **Refactor: `www/` source of truth** - Moved web runtime source into tracked Capacitor webDir
+  - Completed: 2026-06-27
+  - Files: `www/`, `non_runtime_assets/`, `Makefile`, `playwright*.config.mjs`, `scripts/build-capacitor-web.mjs`, `scripts/check-js-syntax.mjs`, `scripts/check-static-inventory.mjs`, `scripts/check-translations.mjs`, `.gitignore`, `.github/workflows/deploy.yml`, `eslint.config.mjs`, `README.md`, `AGENTS.md`, `CLAUDE.md`, `PROJECT_RULES.md`, `QUICK_RULES.md`, `ARCHITECTURE.md`, `PROJECT_SNAPSHOT.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`, `docs/refactoring/01-refactoring-master-plan.md`
+  - Benefit: there is no duplicated root web source; `www/` is now the editable source tree and Capacitor `webDir`, while source-only excluded assets are archived outside the package in `non_runtime_assets/`
 
 ### Planned
 

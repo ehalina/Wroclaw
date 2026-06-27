@@ -29,7 +29,6 @@ playwright-report/
 
 # Node / Capacitor
 node_modules/
-www/
 
 # Build
 dist/

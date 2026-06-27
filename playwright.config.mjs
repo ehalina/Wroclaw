@@ -17,7 +17,7 @@ export default defineConfig({
     trace: 'retain-on-failure'
   },
   webServer: {
-    command: `python3 -m http.server ${port} --bind ${host}`,
+    command: `python3 -m http.server ${port} --bind ${host} --directory www`,
     url: baseURL,
     reuseExistingServer: false,
     timeout: 15_000

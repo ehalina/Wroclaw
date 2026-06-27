@@ -169,7 +169,7 @@
 ### Основные команды через Makefile:
 ```bash
 make dev          # Запустить development сервер
-make build        # Собрать проект для production
+make build        # Validate tracked www/ source and package budget
 make test         # Запустить тесты
 make lint         # Проверить код линтером
 make typecheck    # TypeScript type checking
@@ -291,10 +291,11 @@ gh issue view <number>        # Посмотреть issue
 - **State Management:** localStorage для языка и настроек звука
 
 ### Архитектура:
-- **SPA система:** index.html с SPAManager, страницы загружаются в iframe
-- **Модули:** ES6 import/export (common_tumski.js, tumski_cathedral_handler.js)
+- **Web source:** `www/` is the editable source of truth and Capacitor webDir
+- **SPA система:** `www/index.html` с SPAManager, страницы загружаются в iframe
+- **Модули:** ES6 import/export (`www/common_tumski.js`, `www/tumski_cathedral_handler.js`)
 - **Геометки:** Универсальный обработчик через setupUniversalGeoMarker()
-- **Локализация:** JSON файлы в locales/[lang]/translations.json
+- **Локализация:** JSON файлы в `www/locales/[lang]/translations.json`
 
 ### Критичные правила (см. PROJECT_RULES.md):
 - ❌ **НЕ изменять tumski_cathedral_handler.js** - он универсальный!

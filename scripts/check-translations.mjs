@@ -3,7 +3,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const localesDir = path.join(rootDir, 'locales');
+const webRootDir = path.join(rootDir, 'www');
+const localesDir = path.join(webRootDir, 'locales');
 const canonicalFile = 'translations.json';
 const richHtmlKeys = new Set([
   'gnomes.blue_goat.description',

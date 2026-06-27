@@ -8,7 +8,7 @@ help:
 	@printf "Available commands:\n"
 	@printf "  make install          Install npm dependencies\n"
 	@printf "  make dev              Start static dev server on http://localhost:$(PORT)\n"
-	@printf "  make build            Build Capacitor web assets into www/\n"
+	@printf "  make build            Validate Capacitor web source in www/\n"
 	@printf "  make lint             Run ESLint\n"
 	@printf "  make test             Run static smoke checks\n"
 	@printf "  make test-e2e         Run Playwright browser smoke checks\n"
@@ -41,7 +41,7 @@ build:
 	npm run build
 
 start:
-	python3 -m http.server $(PORT) --bind 127.0.0.1
+	python3 -m http.server $(PORT) --bind 127.0.0.1 --directory www
 
 lint:
 	npm run lint
@@ -78,7 +78,7 @@ audit:
 	$(MAKE) security
 
 clean:
-	rm -rf www
+	rm -rf test-results playwright-report
 
 reinstall:
 	rm -rf node_modules package-lock.json

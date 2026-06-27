@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const webRootDir = path.join(rootDir, 'www');
 const knownIssuesPath = path.join(rootDir, 'scripts/static-check-known-issues.json');
 
 const ignoredDirectories = new Set([
@@ -11,11 +12,9 @@ const ignoredDirectories = new Set([
   'docs',
   'Init',
   'ios',
-  'locales',
   'node_modules',
   'playwright-report',
   'test-results',
-  'www',
   '__BestPractice'
 ]);
 
@@ -23,7 +22,7 @@ const scannedExtensions = new Set(['.html', '.css', '.js']);
 const routeExtensions = new Set(['.html']);
 
 function normalizeRelative(filePath) {
-  return path.relative(rootDir, filePath).split(path.sep).join('/');
+  return path.relative(webRootDir, filePath).split(path.sep).join('/');
 }
 
 function shouldSkipFile(filePath) {
@@ -195,7 +194,7 @@ function extractDuplicateIds(text, file) {
 }
 
 async function fileExistsForReference(sourceFile, target) {
-  const sourceDir = path.dirname(path.join(rootDir, sourceFile));
+  const sourceDir = path.dirname(path.join(webRootDir, sourceFile));
   const candidate = path.resolve(sourceDir, target);
   try {
     await readFile(candidate);
@@ -229,7 +228,7 @@ const knownMissingAssets = buildKnownSet(knownIssues, 'missingAssets', ['file', 
 const knownMissingRoutes = buildKnownSet(knownIssues, 'missingRoutes', ['file', 'target']);
 const knownDuplicateIds = buildKnownSet(knownIssues, 'duplicateIds', ['file', 'id']);
 
-const files = await collectFiles(rootDir);
+const files = await collectFiles(webRootDir);
 const missingAssets = [];
 const knownAssets = [];
 const missingRoutes = [];

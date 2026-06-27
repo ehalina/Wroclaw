@@ -28,7 +28,7 @@
 ```
 - Framework: Vanilla JavaScript (ES6+ modules) - без фреймворков
 - Language: JavaScript (ES6+)
-- Build Tool: Нет для web runtime; Node script копирует runtime-файлы в `www/` для Capacitor
+- Build Tool: Нет для web runtime; tracked `www/` валидируется напрямую для Capacitor
 - State Management: localStorage для настроек пользователя (язык, звук)
 - UI/CSS: Plain CSS с модульной структурой
 - Icons: Custom PNG иконки (media/)
@@ -79,51 +79,28 @@
 
 ```
 Wroclaw/
-├── index.html               # SPA главная страница (SPAManager)
-├── tumski.html             # Основная страница локации 1
-├── tumski02.html - tumski24.html  # 23 дополнительные локации
-├── dwor*.html              # Страницы дворов (13 страниц)
-├── ogrod*.html             # Страницы садов (11 страниц)
-├── katedra_*.html          # Страницы собора (2 страницы)
-│
-├── styles.css              # Общие стили
-├── common_tumski.css       # Общие стили для tumski страниц
-├── tumski*.css             # Специфичные стили для каждой страницы
-├── common_buttons.js       # Общие функции кнопок
-│
-├── spa_config.js           # Pure SPA registry/config: pages, selectors, audio policy
-├── spa_lifecycle.js        # Pure SPA page lifecycle helpers
-├── spa_minimap_manager.js  # SPA mini-map UI/state manager
-├── spa_message_contract.js # Safe postMessage contract for SPA shell and iframes
-├── spa_integration.js      # SPA интеграция для совместимости
-├── common_tumski.js        # Общая логика tumski страниц (ES6 module)
-├── tumski_cathedral_handler.js  # Универсальный обработчик геометок (ES6 module)
-├── quest_marker_handler.js # Обработчик квест-маркеров (ES6 module)
-├── i18n.js                 # Система локализации
-├── map_modal.js            # Модальные окна для геометок
-├── language_menu.js        # Меню переключения языка
-├── arrow_handlers.js        # Обработчики навигационных стрелок
-├── book_paths.js           # Обработчики книжных зон
-├── map_points.js           # Инициализация точек на карте
-├── visibility_audio_manager.js  # Управление видимостью аудио
-├── scripts/build-capacitor-web.mjs  # Копирование runtime-файлов в www/
+├── www/                    # Web source of truth and Capacitor webDir
+│   ├── index.html          # SPA главная страница (SPAManager)
+│   ├── tumski.html         # Основная страница локации 1
+│   ├── tumski02.html - tumski24.html  # 23 дополнительные локации
+│   ├── dwor*.html          # Страницы дворов (13 страниц)
+│   ├── ogrod*.html         # Страницы садов (11 страниц)
+│   ├── katedra_*.html      # Страницы собора (2 страницы)
+│   ├── styles.css          # Общие стили
+│   ├── common_tumski.css   # Общие стили для tumski страниц
+│   ├── tumski*.css         # Специфичные стили для каждой страницы
+│   ├── spa_config.js       # Pure SPA registry/config: pages, selectors, audio policy
+│   ├── spa_lifecycle.js    # Pure SPA page lifecycle helpers
+│   ├── map_modal.js        # Модальные окна для геометок
+│   ├── locales/            # Локализация (7 языков)
+│   └── media/              # Packaged media files
+├── non_runtime_assets/     # Source-only assets excluded from Capacitor package
+├── scripts/build-capacitor-web.mjs  # `www/` validator and package budget guard
 ├── capacitor.config.json    # Конфигурация Capacitor
 ├── package.json             # Capacitor зависимости и npm scripts
 ├── Makefile                 # Стандартизированные команды проекта
 ├── android/                 # Capacitor Android project
 ├── ios/                     # Capacitor iOS project
-│
-├── locales/                # Локализация (7 языков)
-│   ├── ru/
-│   │   └── translations.json
-│   ├── pl/, en/, de/, cs/, be/, uk/  # Остальные языки
-│
-├── media/                  # Медиа файлы
-│   ├── tumski/            # Изображения локаций
-│   ├── book/               # Изображения книжных зон
-│   ├── zwyki/              # Аудио треки (town, birds, kostel, hang, quest)
-│   ├── *.wav               # Звуковые эффекты
-│   └── *.png               # Иконки и курсоры
 │
 └── Init/                   # Документация фреймворка
     ├── CLAUDE.md
@@ -135,6 +112,8 @@ Wroclaw/
 
 ## 🏗️ Core Architecture Decisions
 
+Если не указано иначе, runtime paths в этом разделе указаны относительно `www/`.
+
 ### 0. Native wrapper через Capacitor
 
 **Decision:** Использовать Capacitor 8 как тонкую нативную оболочку вокруг существующего статического SPA.
@@ -143,17 +122,19 @@ Wroclaw/
 - ✅ Сохраняет текущую vanilla JS архитектуру без миграции на Vite/React
 - ✅ Позволяет собирать Android/iOS из тех же HTML/CSS/JS assets
 - ✅ Нативные проекты остаются стандартными Android Studio / Xcode проектами
-- ✅ `www/` генерируется отдельно, чтобы не копировать документацию и служебные файлы в app bundle
+- ✅ `www/` содержит только web runtime source, чтобы документация и служебные файлы не попадали в app bundle
 
 **Implementation:**
-- Source of truth для web runtime остаётся в корне проекта.
-- `scripts/build-capacitor-web.mjs` копирует HTML/CSS/JS, `media/`, `locales/`, `thumbs/` и runtime assets в `www/`.
+- Source of truth для web runtime — tracked `www/`.
+- `scripts/build-capacitor-web.mjs` валидирует `www/`, forbidden non-runtime paths и package budget; он не копирует и не удаляет web source.
 - `capacitor.config.json` использует `webDir: "www"`.
-- `make cap-sync` пересобирает `www/` и синхронизирует `android/` и `ios/`.
+- `make dev` / Playwright web servers обслуживают `www/` как document root.
+- `make cap-sync` валидирует `www/` и синхронизирует `android/` и `ios/`.
 - Stage 6 package baseline documented in `docs/refactoring/stage-06-asset-size-report.md`: initial logical build size was `138.2 MB`, with cleanup-only candidates identified before image optimization.
-- Stage 6 cleanup-only package exclusions reduced the logical web build to `89.0 MB` by excluding root-level and large media assets with no runtime refs from `www`; source assets remain untouched.
-- Build exclusions are guarded: `make build` scans runtime HTML/CSS/JS/JSON and fails if a path listed in `excludedRuntimePaths` becomes referenced again.
-- Package size is guarded: `make build` fails when generated `www` exceeds the documented `120 MB` logical budget.
+- Stage 6 cleanup-only package exclusions reduced the logical web build by excluding root-level and large media assets with no runtime refs from `www`.
+- Stage 7.16 moved web source into tracked `www/`; source-only excluded assets live under `non_runtime_assets/`.
+- Build exclusions are guarded: `make build` scans `www` HTML/CSS/JS/JSON and fails if a forbidden non-runtime path becomes referenced again.
+- Package size is guarded: `make build` fails when tracked `www` exceeds the documented `120 MB` logical budget.
 - Runtime asset optimization policy lives in `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`: use derivative files plus screenshot/audio review; do not overwrite original visual/audio sources blindly.
 - Android command-line build требует JDK 21; `make android-debug` задаёт `CAPACITOR_JAVA_HOME`.
 
@@ -308,7 +289,7 @@ class SPAManager {
 
 ### 1.7. i18n text/rich HTML boundary
 
-**Decision:** Runtime source of truth для локализации - `locales/*/translations.json`; центральный `i18n.js` пишет текст через `textContent` по умолчанию и разрешает rich HTML только по allowlist.
+**Decision:** Runtime source of truth для локализации - `www/locales/*/translations.json`; центральный `www/i18n.js` пишет текст через `textContent` по умолчанию и разрешает rich HTML только по allowlist.
 
 **Reasoning:**
 - ✅ Большинство `data-i18n` ключей - короткие labels/titles и не должны вставлять HTML

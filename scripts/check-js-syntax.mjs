@@ -4,6 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const webRootDir = path.join(rootDir, 'www');
 
 const ignoredDirectories = new Set([
   '.git',
@@ -14,7 +15,6 @@ const ignoredDirectories = new Set([
   'node_modules',
   'playwright-report',
   'test-results',
-  'www',
   '__BestPractice'
 ]);
 
@@ -53,7 +53,7 @@ async function collectJavaScriptFiles(dir) {
   return files;
 }
 
-const files = await collectJavaScriptFiles(rootDir);
+const files = await collectJavaScriptFiles(webRootDir);
 const failures = [];
 
 for (const file of files) {

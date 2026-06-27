@@ -14,7 +14,7 @@ export default defineConfig({
     trace: 'retain-on-failure'
   },
   webServer: {
-    command: `python3 -m http.server ${port} --bind 127.0.0.1`,
+    command: `python3 -m http.server ${port} --bind 127.0.0.1 --directory www`,
     url: `http://127.0.0.1:${port}`,
     reuseExistingServer: !process.env.CI,
     stdout: 'pipe',

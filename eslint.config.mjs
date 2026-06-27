@@ -5,7 +5,6 @@ const ignored = [
   'android/**',
   'ios/**',
   'node_modules/**',
-  'www/**',
   'docs/**',
   '__BestPractice/**',
   'Init/**',
@@ -13,7 +12,7 @@ const ignored = [
 
   // Legacy integration file is not currently loaded by index.html and has
   // module-export issues that belong to the SPA refactor stage.
-  'spa_integration.js'
+  'www/spa_integration.js'
 ];
 
 const baseRules = {

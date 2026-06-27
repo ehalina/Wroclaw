@@ -34,24 +34,24 @@ README.md                      # User-facing documentation
 CLAUDE.md                      # Auto-loaded context for Claude Code
 
 # Core Application
-index.html                     # SPA shell and SPAManager
-spa_config.js                  # SPA page/audio/loading policy
-spa_message_contract.js        # Same-origin iframe message contract
-spa_lifecycle.js               # SPA page/iframe lifecycle helpers
-spa_loading_state.js           # Loading overlay helper
-spa_minimap_manager.js         # Mini-map UI/state manager
-map_modal.js                   # Map modal lifecycle/wiring
-map_modal.css                  # Main map modal styles
-map_marker_navigation.js       # Visited-marker navigation decisions
-visited_markers.js             # Visited marker storage/rendering
-quest_overlay.js               # Quest/book overlay rendering
-page_shell_helpers.js          # Shared page shell/cursor/marker helpers
-i18n.js                        # Runtime localization boundary
-locales/*/translations.json    # Canonical translation files
+www/index.html                 # SPA shell and SPAManager
+www/spa_config.js              # SPA page/audio/loading policy
+www/spa_message_contract.js    # Same-origin iframe message contract
+www/spa_lifecycle.js           # SPA page/iframe lifecycle helpers
+www/spa_loading_state.js       # Loading overlay helper
+www/spa_minimap_manager.js     # Mini-map UI/state manager
+www/map_modal.js               # Map modal lifecycle/wiring
+www/map_modal.css              # Main map modal styles
+www/map_marker_navigation.js   # Visited-marker navigation decisions
+www/visited_markers.js         # Visited marker storage/rendering
+www/quest_overlay.js           # Quest/book overlay rendering
+www/page_shell_helpers.js      # Shared page shell/cursor/marker helpers
+www/i18n.js                    # Runtime localization boundary
+www/locales/*/translations.json # Canonical translation files
 
 # Configuration
 Makefile                       # Standard commands (make dev, make build, etc)
-scripts/build-capacitor-web.mjs # Capacitor web asset build and budget guard
+scripts/build-capacitor-web.mjs # Capacitor www source validator and budget guard
 scripts/check-static-inventory.mjs # Static asset/route/id inventory
 scripts/check-translations.mjs # Translation parse/key/rich HTML checks
 scripts/static-check-known-issues.json # Static inventory allowlist
@@ -65,7 +65,7 @@ PROJECT_SNAPSHOT.md            # Current technical snapshot
 ```bash
 # Development
 make dev          # Запустить development сервер
-make build        # Собрать для production
+make build        # Validate tracked www/ source and package budget
 make start        # Запустить production сервер
 
 # Quality Checks
@@ -81,7 +81,7 @@ make smoke        # Static checks + Playwright smoke checks
 make security     # npm audit проверка
 make security-fix # Автоматически исправить уязвимости
 make audit        # Полная проверка (lint+typecheck+test+build+security)
-make cap-sync     # Build www/ and sync native projects
+make cap-sync     # Validate www/ and sync native projects
 make android-debug # Build Android debug APK with JDK 21
 
 # Utility
@@ -107,7 +107,7 @@ make help         # Показать все команды
 - Language: JavaScript ES modules + classic browser scripts
 - State Management: DOM state, localStorage/sessionStorage, small global helpers
 - Styling: Plain CSS
-- Build Tool: Custom Node script copying static runtime assets to www/
+- Build Tool: No bundler; tracked `www/` is validated directly for Capacitor
 ```
 
 ### Backend & Infrastructure
@@ -130,8 +130,8 @@ make help         # Показать все команды
 ## 🚫 NEVER DO
 
 ### Code & Architecture
-- ❌ **Edit generated `www/` by hand**; update source files and run `make build`
-- ❌ **Reintroduce `locales/*/translation.json`**; canonical localization files are `locales/*/translations.json`
+- ❌ **Edit removed root runtime paths**; web source of truth is `www/`
+- ❌ **Reintroduce `www/locales/*/translation.json`**; canonical localization files are `www/locales/*/translations.json`
 - ❌ **Delete or overwrite source media assets blindly**; package exclusions and derivative assets require inventory/visual/audio review
 - ❌ **Change route/page filenames without updating `spa_config.js`, smoke checks, and docs**
 - ❌ **Update database structure** without migration script

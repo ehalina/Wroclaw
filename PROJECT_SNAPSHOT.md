@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 99% (62 завершённые задачи текущего плана)
+**Общий прогресс:** 99% (63 завершённые задачи текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -38,49 +38,25 @@
 
 ```
 Wroclaw/
-├── index.html ✅                    # SPA главная страница
-├── tumski.html ✅                   # Основная страница локации 1
-├── tumski02.html - tumski24.html ✅ # Остальные 23 локации
-├── dwor*.html ✅                    # Страницы дворов (13 страниц)
-├── ogrod*.html ✅                   # Страницы садов (11 страниц)
-├── katedra_*.html ✅                # Страницы собора (2 страницы)
-│
-├── styles.css ✅                    # Общие стили
-├── common_tumski.css ✅             # Общие стили для tumski
-├── tumski*.css ✅                   # Специфичные стили (24 файла)
-│
-├── spa_message_contract.js ✅       # Safe postMessage contract
-├── spa_config.js ✅                 # SPA registry/config
-├── spa_lifecycle.js ✅              # SPA lifecycle helpers
-├── spa_loading_state.js ✅          # SPA loading overlay helper
-├── spa_minimap_manager.js ✅        # MiniMapManager
-├── spa_integration.js ✅            # Интеграция SPA
-├── common_tumski.js ✅             # Общая логика tumski страниц
-├── tumski_cathedral_handler.js ✅  # Обработчик геометок
-├── quest_marker_handler.js ✅      # Обработчик квестов
-├── i18n.js ✅                       # Система локализации, text/rich safety boundary, shared data-i18n helper
-├── map_modal.js ✅                 # Модальные окна, template helper, идемпотентный init
-├── map_modal.css ✅                # Основные стили карты и квестовых overlays
-├── map_marker_navigation.js ✅     # Переходы по visited markers
-├── visited_markers.js ✅           # Storage/render visited markers
-├── quest_overlay.js ✅             # Opening/render flow квестовой книги, DOM-safe intro/list rendering
-├── map_debug.js ✅                 # Gated map/quest diagnostics
-├── page_shell_helpers.js ✅        # Additive helper для будущих shared content page fragments
-├── language_menu.js ✅              # Меню языков
-├── arrow_handlers.js ✅            # Обработчики навигации
+├── www/ ✅                          # Web source of truth and Capacitor webDir
+│   ├── index.html ✅                # SPA главная страница
+│   ├── tumski*.html/css ✅          # Tumski pages
+│   ├── dwor*.html/css ✅            # Страницы дворов
+│   ├── ogrod*.html/css ✅           # Страницы садов
+│   ├── katedra_*.html ✅            # Страницы собора
+│   ├── spa_message_contract.js ✅   # Safe postMessage contract
+│   ├── spa_config.js ✅             # SPA registry/config
+│   ├── spa_lifecycle.js ✅          # SPA lifecycle helpers
+│   ├── spa_loading_state.js ✅      # SPA loading overlay helper
+│   ├── spa_minimap_manager.js ✅    # MiniMapManager
+│   ├── map_modal.js/css ✅          # Map modal lifecycle/styles
+│   ├── quest_overlay.js ✅          # Quest/book overlay rendering
+│   ├── i18n.js ✅                   # Runtime localization boundary
+│   ├── locales/ ✅                  # Переводы (7 языков)
+│   └── media/ ✅                    # Packaged media files
+├── non_runtime_assets/ ✅           # Source-only assets excluded from Capacitor package
 ├── Makefile ✅                      # Стандартизированные команды
-├── scripts/ ✅                      # Static checks и Capacitor web build
-│
-├── locales/ ✅                      # Переводы (7 языков)
-│   ├── ru/, pl/, en/, de/, cs/, be/, uk/
-│   └── translations.json
-│
-├── media/ ✅                        # Медиа файлы
-│   ├── tumski/ - изображения локаций
-│   ├── book/ - изображения книжных зон
-│   ├── zwyki/ - аудио треки
-│   └── *.wav, *.png - звуки и иконки
-│
+├── scripts/ ✅                      # Static checks и Capacitor web validation
 └── Init/ ✅                         # Документация фреймворка
     ├── CLAUDE.md
     ├── PROJECT_INTAKE.md
@@ -170,6 +146,7 @@ Wroclaw/
 70. ✅ Stage 7.13 One-line runtime init diagnostics gate
 71. ✅ Stage 7.14 Legacy audio diagnostics module cleanup
 72. ✅ Stage 7.15 Standalone/debug page diagnostics policy
+73. ✅ Stage 7.16 `www/` source of truth
 
 ---
 
@@ -237,7 +214,7 @@ make audit
 
 ### Текущий Capacitor package baseline:
 - Initial Stage 6 build: `350 files, 138.2 MB -> www/`
-- Current build: `324 files, 84.5 MB -> www/`
+- Current `www/` validation: `323 files, 84.5 MB in www/`
 - Package budget guard: `120 MB`
 - Runtime asset optimization policy: `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`
 
@@ -267,6 +244,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 7.16 выполнен
+- `www/` стал tracked web source of truth и Capacitor `webDir`
+- `make dev`, Playwright and static checks теперь работают от `www/`
+- `make build` валидирует `www/` и package budget вместо копирования root runtime files
+- source-only excluded assets перенесены в `non_runtime_assets/`
 
 ### 2026-06-27 - Refactoring Stage 7.15 выполнен
 - `katedra_panorama.html` video diagnostics переведены на `DEBUG_PANORAMA` / legacy-style `__panorama_debug`
