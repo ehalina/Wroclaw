@@ -61,6 +61,20 @@
     animation: zoomForward 1.5s ease-in forwards !important;
 }
 
+@keyframes rotate180 {
+    0% {
+        transform: rotateY(30deg);
+    }
+    100% {
+        transform: rotateY(0deg);
+    }
+}
+
+.rotate-transition {
+    animation: rotate180 1.5s ease-in-out forwards !important;
+    transform-style: preserve-3d;
+}
+
 /* ===== ОСНОВНЫЕ ЭЛЕМЕНТЫ ===== */
 .image {
     width: 100%;

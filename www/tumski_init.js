@@ -28,16 +28,34 @@ function debugWarn(...args) {
     }
 }
 
-const TURN_TRANSITION_PAGE = 'tumski08.html';
-const TURN_TRANSITION_DURATION_MS = 1500;
 let turnTransitionTimer = null;
+const PAGE_TRANSITION_CONFIG_SOURCE = (() => {
+    const sourceConfig = window.SpaConfig || (window.parent && window.parent !== window ? window.parent.SpaConfig : null);
+    return (sourceConfig && typeof sourceConfig.getPageTransitionConfig === 'function')
+        ? sourceConfig
+        : null;
+})();
+
+function getPageTransitionConfig(pageName, transitionContext = {}) {
+    if (!PAGE_TRANSITION_CONFIG_SOURCE) {
+        return null;
+    }
+
+    return PAGE_TRANSITION_CONFIG_SOURCE.getPageTransitionConfig(pageName, {
+        document: window.document,
+        window,
+        transition: transitionContext && transitionContext.transition,
+        sourcePage: transitionContext && transitionContext.sourcePage
+    });
+}
 
 function getCurrentPageName() {
     return (window.location.pathname.split('/').pop() || '').split('?')[0];
 }
 
 function runTurnTransitionForPage(pageName = getCurrentPageName()) {
-    if (pageName !== TURN_TRANSITION_PAGE) {
+    const config = getPageTransitionConfig(pageName);
+    if (!config) {
         return;
     }
 
@@ -53,15 +71,15 @@ function runTurnTransitionForPage(pageName = getCurrentPageName()) {
 
     // Перезапускаем анимацию, даже если страница уже была загружена в SPA-кеше
     imageContainer.style.animationPlayState = 'paused';
-    imageContainer.classList.remove('rotate-transition');
+    imageContainer.classList.remove(config.animationClass);
     void imageContainer.offsetWidth;
-    imageContainer.classList.add('rotate-transition');
+    imageContainer.classList.add(config.animationClass);
 
     turnTransitionTimer = window.setTimeout(() => {
-        imageContainer.classList.remove('rotate-transition');
+        imageContainer.classList.remove(config.animationClass);
         imageContainer.style.animationPlayState = 'running';
         turnTransitionTimer = null;
-    }, TURN_TRANSITION_DURATION_MS);
+    }, config.durationMs);
 }
 
 function isSpaParentMessage(event) {
@@ -72,9 +90,9 @@ function isSpaParentMessage(event) {
     return event.source === window.parent;
 }
 
-// Инициализатор страницы tumski19: вызывает общий модуль и настраивает обработчики
+// Инициализатор страницы: запускает общий модуль и настраивает обработчики
 document.addEventListener('DOMContentLoaded', async () => {
-    // Эффект разворота камеры при загрузке / повторной активации tumski08.html
+    // Эффект разворота камеры при загрузке / повторной активации страницы
     runTurnTransitionForPage();
 
     window.addEventListener('message', (event) => {
@@ -89,7 +107,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (data.type === 'PAGE_SHOWN') {
             const shownPage = data.pageName || getCurrentPageName();
-            if (shownPage === TURN_TRANSITION_PAGE || !data.pageName) {
+            const transitionContext = data
+                ? {
+                    transition: data.transition || null,
+                    sourcePage: data.sourcePage || null
+                }
+                : null;
+
+            if (getPageTransitionConfig(shownPage, transitionContext)) {
                 runTurnTransitionForPage(shownPage);
             }
         }

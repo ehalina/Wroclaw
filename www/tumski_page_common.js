@@ -562,7 +562,63 @@ export function setupAllArrows(stepSound) {
         //     cursorLeft: !!cursorLeft,
         //     areaLeft: !!areaLeft
         // });
-        
+
+        const TURN_TRANSITION_IMAGE_HINTS = Object.freeze(['strelka_rondo_l.png']);
+        const getCurrentPageName = () => {
+            return (window.location.pathname.split('/').pop() || '').split('#')[0].split('?')[0];
+        };
+
+        const hasRouteTurnTransition = (targetPage) => {
+            if (!window.parent || window.parent === window || !targetPage) {
+                return false;
+            }
+
+            const configProvider = window.parent.SpaConfig?.getPageTransitionConfig;
+            if (typeof configProvider !== 'function') {
+                return false;
+            }
+
+            return Boolean(configProvider(targetPage, {
+                sourcePage: getCurrentPageName()
+            }));
+        };
+
+        const buildTurnTransitionOptions = (cursorEl, targetPage) => {
+            if (!cursorEl || typeof window.getComputedStyle !== 'function') {
+                return {};
+            }
+
+            const image = window.getComputedStyle(cursorEl)
+                .getPropertyValue('background-image')
+                .toLowerCase();
+
+            if (image && image !== 'none' && TURN_TRANSITION_IMAGE_HINTS.some((hint) => image.includes(hint))) {
+                return {
+                    transition: {
+                        turnTransition: true
+                    }
+                };
+            }
+
+            if (hasRouteTurnTransition(targetPage)) {
+                return {
+                    transition: {
+                        turnTransition: true
+                    }
+                };
+            }
+
+            return {};
+        };
+
+        const navigateWithTransition = (targetPage, cursorEl) => {
+            const transitionOptions = buildTurnTransitionOptions(cursorEl, targetPage);
+            if (window.parent && window.parent !== window && window.parent.spaManager) {
+                window.parent.spaManager.navigateToPage(targetPage, transitionOptions);
+            } else {
+                setTimeout(() => { window.location.href = targetPage; }, 0);
+            }
+        };
 
         // Fallback обработчик клика (для мобильных), читает data-* со стрелки
         const attachDirectNav = (cursorEl, areaEl, attrName) => {
@@ -573,15 +629,8 @@ export function setupAllArrows(stepSound) {
                 if (stepSound && isSoundEnabled()) {
                     try { stepSound.currentTime = 0; stepSound.play().catch(()=>{}); } catch(_) {}
                 }
-                
-                // Проверяем, находимся ли мы в SPA
-                if (window.parent && window.parent !== window && window.parent.spaManager) {
-                    // console.log('🎵 Fallback навигация через SPA:', url);
-                    window.parent.spaManager.navigateToPage(url);
-                } else {
-                    // console.log('🎵 Fallback обычная навигация:', url);
-                    setTimeout(() => { window.location.href = url; }, 0);
-                }
+
+                navigateWithTransition(url, cursorEl);
             };
             ['click','touchend'].forEach(ev => {
                 cursorEl.addEventListener(ev, handler);
@@ -611,7 +660,7 @@ export function setupAllArrows(stepSound) {
                             window.parent.spaManager.switchTrack('kostel');
                             
                             // console.log('🎵 Переход через SPA:', next);
-                            window.parent.spaManager.navigateToPage(next);
+                            window.parent.spaManager.navigateToPage(next, buildTurnTransitionOptions(cursorProsto, next));
                         } else {
                             // console.log('🎵 Обычный переход:', next);
                             window.location.href = next;
@@ -626,7 +675,7 @@ export function setupAllArrows(stepSound) {
                             window.parent.spaManager.switchTrack('hang');
                             
                             // console.log('🎵 Переход через SPA:', next);
-                            window.parent.spaManager.navigateToPage(next);
+                            window.parent.spaManager.navigateToPage(next, buildTurnTransitionOptions(cursorProsto, next));
                         } else {
                             // console.log('🎵 Обычный переход:', next);
                             window.location.href = next;
@@ -641,20 +690,14 @@ export function setupAllArrows(stepSound) {
                             window.parent.spaManager.switchTrack('birds');
                             
                             // console.log('🎵 Переход через SPA:', next);
-                            window.parent.spaManager.navigateToPage(next);
+                            window.parent.spaManager.navigateToPage(next, buildTurnTransitionOptions(cursorProsto, next));
                         } else {
                             // console.log('🎵 Обычный переход:', next);
                             window.location.href = next;
                         }
                     } else {
                         // Обычная логика для других переходов
-                        if (window.parent && window.parent !== window && window.parent.spaManager) {
-                            // console.log('🎵 Переход через SPA:', next);
-                            window.parent.spaManager.navigateToPage(next);
-                        } else {
-                            // console.log('🎵 Обычный переход:', next);
-                            window.location.href = next;
-                        }
+                        navigateWithTransition(next, cursorProsto);
                     }
                 }
             });
@@ -676,7 +719,7 @@ export function setupAllArrows(stepSound) {
                 if (prev) {
                     // Проверяем, находимся ли мы в SPA
                     if (window.parent && window.parent !== window && window.parent.spaManager) {
-                        window.parent.spaManager.navigateToPage(prev);
+                        window.parent.spaManager.navigateToPage(prev, buildTurnTransitionOptions(cursorBack, prev));
                     } else {
                         window.location.href = prev;
                     }
@@ -695,7 +738,7 @@ export function setupAllArrows(stepSound) {
                     // Проверяем, находимся ли мы в SPA
                     if (window.parent && window.parent !== window && window.parent.spaManager) {
                         // console.log('🎵 Переход через SPA:', next);
-                        window.parent.spaManager.navigateToPage(next);
+                        window.parent.spaManager.navigateToPage(next, buildTurnTransitionOptions(cursorLeft, next));
                     } else {
                         // console.log('🎵 Обычный переход:', next);
                         window.location.href = next;
@@ -713,7 +756,7 @@ export function setupAllArrows(stepSound) {
                     // Проверяем, находимся ли мы в SPA
                     if (window.parent && window.parent !== window && window.parent.spaManager) {
                         // console.log('🎵 Переход через SPA:', next);
-                        window.parent.spaManager.navigateToPage(next);
+                        window.parent.spaManager.navigateToPage(next, buildTurnTransitionOptions(cursorProstoLeft, next));
                     } else {
                         // console.log('🎵 Обычный переход:', next);
                         window.location.href = next;

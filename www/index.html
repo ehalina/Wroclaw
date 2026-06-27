@@ -570,6 +570,8 @@
                 this.currentPage = null;
                 this.pages = new Map();
                 this.pendingPageLoads = new Map();
+                this.pendingNavigationContexts = new Map();
+                this.navigationRequestGuards = new Map();
                 this.stepSound = null;
                 this.audioUnlocked = false;
                 this.currentTrack = 'town';
@@ -602,6 +604,101 @@
             isIOS() {
                 return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
                        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            }
+
+            getNavigationContext(pageName) {
+                if (!pageName) {
+                    return {};
+                }
+
+                const reference = splitSpaPageReference(pageName);
+                const normalizedPage = reference.pageName || '';
+                if (!normalizedPage) {
+                    return {};
+                }
+
+                const transition = this.pendingNavigationContexts.get(normalizedPage);
+                if (!transition) {
+                    return {};
+                }
+
+                this.pendingNavigationContexts.delete(normalizedPage);
+                return transition;
+            }
+
+            setNavigationContext(pageName, options = {}) {
+                const reference = splitSpaPageReference(pageName);
+                const normalizedPage = reference.pageName || '';
+                if (!normalizedPage) {
+                    return;
+                }
+
+                const transition = options && options.transition;
+                if (transition && transition.turnTransition === true) {
+                    this.pendingNavigationContexts.set(normalizedPage, {
+                        transition: {
+                            turnTransition: true
+                        },
+                        sourcePage: options && options.sourcePage
+                            ? options.sourcePage
+                            : (this.currentPage || null)
+                    });
+                    return;
+                }
+
+                if (!this.pendingNavigationContexts.has(normalizedPage)) {
+                    this.pendingNavigationContexts.delete(normalizedPage);
+                }
+            }
+
+            buildTurnTransitionContextForElement(element) {
+                if (!element || typeof window.getComputedStyle !== 'function') {
+                    return {};
+                }
+
+                const image = window.getComputedStyle(element)
+                    .getPropertyValue('background-image')
+                    .toLowerCase();
+
+                if (!image || image === 'none') {
+                    return {};
+                }
+
+                if (!image.includes('strelka_rondo_l.png')) {
+                    return {};
+                }
+
+                return {
+                    transition: {
+                        turnTransition: true
+                    }
+                };
+            }
+
+            buildTurnTransitionContextForRoute(sourcePage, targetPage) {
+                const source = (splitSpaPageReference(sourcePage).pageName || '').trim();
+                if (!source || !targetPage) {
+                    return {};
+                }
+
+                const transitionConfigProvider = SPA_CONFIG.getPageTransitionConfig;
+                if (typeof transitionConfigProvider !== 'function') {
+                    return {};
+                }
+
+                const transitionConfig = transitionConfigProvider(targetPage, {
+                    sourcePage: source
+                });
+
+                if (!transitionConfig) {
+                    return {};
+                }
+
+                return {
+                    transition: {
+                        turnTransition: true
+                    }
+                };
             }
 
             /**
@@ -1096,19 +1193,22 @@
                         loadingWasShown = false;
                     }
                 };
+                let actualPageName = null;
 
                 showLoadingWithDelay();
 
                 try {
                     // Извлекаем hash из pageName (если есть)
                     const pageReference = splitSpaPageReference(pageName);
-                    const actualPageName = pageReference.pageName;
+                    actualPageName = pageReference.pageName;
                     const pageHash = pageReference.hash;
 
                     // Если страница уже загружена, просто переключаемся на неё
+                    const pageTransitionContext = this.getNavigationContext(actualPageName);
+
                     if (this.pages.has(actualPageName) && !this.pendingPageLoads.has(actualPageName)) {
                         spaDebugLog('🟡 [SPA] Страница уже загружена:', actualPageName, 'hash:', pageHash);
-                        this.showPage(actualPageName);
+                        this.showPage(actualPageName, pageTransitionContext);
                         // Если есть hash, передаем его в iframe
                         if (pageHash) {
                             const pageContainer = this.pages.get(actualPageName);
@@ -1174,6 +1274,7 @@
                         }
 
                         console.error('❌ Ошибка загрузки iframe:', actualPageName, reason);
+                        this.pendingNavigationContexts.delete(actualPageName);
                         pageContainer.remove();
                         this.pages.delete(actualPageName);
                         this.showLoadingError(actualPageName);
@@ -1212,7 +1313,7 @@
                         }
 
     // console.log('🎵 Вызываем showPage для:', actualPageName);
-                        this.showPage(actualPageName);
+                        this.showPage(actualPageName, pageTransitionContext);
                         hideLoadingWithDelay();
                     };
 
@@ -1225,6 +1326,7 @@
 
                 } catch (error) {
                     console.error('❌ Ошибка загрузки страницы:', error);
+                    this.pendingNavigationContexts.delete(actualPageName);
                     hideLoadingWithDelay();
                 }
             }
@@ -1284,7 +1386,11 @@
                             e.preventDefault();
                             const targetPage = handler.dataset.prevPage || handler.dataset.nextPage;
                             if (targetPage) {
-                                this.navigateToPage(targetPage);
+                                const transitionContext = (
+                                    this.buildTurnTransitionContextForElement(handler)
+                                    || this.buildTurnTransitionContextForRoute(pageName, targetPage)
+                                );
+                                this.navigateToPage(targetPage, transitionContext);
                             }
                         });
                     });
@@ -1367,7 +1473,7 @@
 
             // Обработчики модального окна карты теперь работают в iframe страницы
 
-            showPage(pageName) {
+            showPage(pageName, transitionContext = {}) {
     // console.log('🎵 showPage вызван для:', pageName);
     // console.log('🎵 Текущая страница была:', this.currentPage);
     // console.log('🎵 Доступные страницы:', Array.from(this.pages.keys()));
@@ -1397,9 +1503,18 @@
                     if (iframe && iframe.contentWindow) {
                         setTimeout(() => {
                             try {
-                                postSpaMessageToIframe(iframe, spaMessageType('PAGE_SHOWN', 'PAGE_SHOWN'), {
-                                    pageName: pageName
-                                });
+                            const payload = {
+                                pageName: pageName
+                            };
+
+                            if (transitionContext && transitionContext.transition) {
+                                payload.transition = transitionContext.transition;
+                            }
+                            if (transitionContext && transitionContext.sourcePage) {
+                                payload.sourcePage = transitionContext.sourcePage;
+                            }
+
+                                postSpaMessageToIframe(iframe, spaMessageType('PAGE_SHOWN', 'PAGE_SHOWN'), payload);
                             } catch (err) {
                                 console.error('❌ [SPA] Ошибка при отправке PAGE_SHOWN:', err);
                             }
@@ -1447,15 +1562,43 @@
 
 
 
-            async navigateToPage(pageName) {
-    // console.log('🎵 navigateToPage вызван для:', pageName);
-    // console.log('🎵 Загруженные страницы:', Array.from(this.pages.keys()));
+            async navigateToPage(pageName, transitionContext = {}) {
+// console.log('🎵 navigateToPage вызван для:', pageName);
+// console.log('🎵 Загруженные страницы:', Array.from(this.pages.keys()));
+
+                const targetReference = splitSpaPageReference(pageName);
+                const targetPage = targetReference.pageName;
+                if (!targetPage) {
+                    return;
+                }
+
+                const guardKey = `${this.currentPage || ''}->${targetPage}`;
+                const now = Date.now();
+                const lastNavigation = this.navigationRequestGuards.get(guardKey);
+                if (lastNavigation && (now - lastNavigation) < 350) {
+                    return;
+                }
+
+                this.navigationRequestGuards.set(guardKey, now);
+                for (const [key, ts] of this.navigationRequestGuards.entries()) {
+                    if ((now - ts) > 5000) {
+                        this.navigationRequestGuards.delete(key);
+                    }
+                }
 
                 // Воспроизводим звук шага при навигации
                 this.playStepSound();
 
+                // Передаём источник перехода, чтобы целевой экран знал кто инициировал разворот
+                this.setNavigationContext(targetPage, {
+                    ...transitionContext,
+                    sourcePage: transitionContext && transitionContext.sourcePage
+                        ? transitionContext.sourcePage
+                        : this.currentPage
+                });
+
                 // Загружаем/активируем страницу (если уже загружена — просто возвращаемся к ней без перезагрузки)
-                await this.loadPage(pageName);
+                await this.loadPage(targetPage);
             }
 
             showLoading() {

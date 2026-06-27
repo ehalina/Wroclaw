@@ -5,20 +5,6 @@
 }
 
 /* Анимации разворота камеры при загрузке страницы */
-@keyframes rotate180 {
-    0% {
-        transform: rotateY(30deg);
-    }
-    100% {
-        transform: rotateY(0deg);
-    }
-}
-
-.rotate-transition {
-    animation: rotate180 1.5s ease-in-out forwards !important;
-    transform-style: preserve-3d;
-}
-
 @keyframes rotateAndMove {
     0% {
         transform: rotateY(180deg) translateZ(0px);
@@ -66,6 +52,5 @@
     height: 50px;
     cursor: pointer;
 }
-
 
 

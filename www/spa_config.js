@@ -31,6 +31,32 @@
     const START_PAGE = PAGE_ORDER[0];
     const IFRAME_LOAD_TIMEOUT_MS = 15_000;
 
+    const TURN_TRANSITION_CONFIG = Object.freeze({
+        // Принудительные исключения / ручные настройки переходов
+        // (если нужно завести разворот для страницы без визуального маркера).
+    });
+
+    const TURN_TRANSITION_ROUTE_HINTS = Object.freeze({
+        'tumski08.html': Object.freeze(['tumski07.html']),
+        'tumski14.html': Object.freeze(['tumski08.html']),
+        'tumski22.html': Object.freeze(['tumski23.html'])
+    });
+
+    const TURN_TRANSITION_DEFAULT_CONFIG = Object.freeze({
+        animationClass: 'rotate-transition',
+        durationMs: 1500
+    });
+
+    const TURN_TRANSITION_IMAGE_HINTS = Object.freeze([
+        'strelka_rondo_l.png'
+    ]);
+
+    const TURN_TRANSITION_CURSOR_SELECTORS = Object.freeze([
+        '.custom-cursor-prosto',
+        '.custom-cursor-prosto-left',
+        '.custom-cursor-left'
+    ]);
+
     const SELECTORS = Object.freeze({
         spaContainer: '#spa-container',
         activePage: '.page-content.active',
@@ -127,6 +153,78 @@
         return AUDIO_SOURCES[trackName] || null;
     }
 
+    function hasTurnTransitionVisualCue(context) {
+        const targetDocument = context && context.document;
+        if (!targetDocument || typeof targetDocument.querySelector !== 'function') {
+            return false;
+        }
+
+        const targetWindow = context.window || targetDocument.defaultView;
+        if (!targetWindow || typeof targetWindow.getComputedStyle !== 'function') {
+            return false;
+        }
+
+        const selector = TURN_TRANSITION_CURSOR_SELECTORS.join(', ');
+        const cursor = targetDocument.querySelector(selector);
+        if (!cursor) {
+            return false;
+        }
+
+        const backgroundImage = targetWindow
+            .getComputedStyle(cursor)
+            .getPropertyValue('background-image');
+
+        if (!backgroundImage || backgroundImage === 'none') {
+            return false;
+        }
+
+        const image = backgroundImage.toLowerCase();
+        return TURN_TRANSITION_IMAGE_HINTS.some((hint) => image.includes(hint));
+    }
+
+    function isTurnTransitionByRoute(sourcePage, targetPage) {
+        const source = normalizePageName(sourcePage);
+        if (!source) {
+            return false;
+        }
+
+        const targets = TURN_TRANSITION_ROUTE_HINTS[source];
+        if (!targets) {
+            return false;
+        }
+
+        const target = normalizePageName(targetPage);
+        return Array.isArray(targets) && targets.includes(target);
+    }
+
+    function getPageTransitionConfig(pageName, context) {
+        const normalizedPage = normalizePageName(pageName);
+        if (!normalizedPage) {
+            return null;
+        }
+
+        const transitionHint = context && context.transition;
+        if (transitionHint && transitionHint.turnTransition === true) {
+            return TURN_TRANSITION_DEFAULT_CONFIG;
+        }
+
+        const sourcePage = context && context.sourcePage;
+        if (sourcePage && isTurnTransitionByRoute(sourcePage, normalizedPage)) {
+            return TURN_TRANSITION_DEFAULT_CONFIG;
+        }
+
+        const manualConfig = TURN_TRANSITION_CONFIG[normalizedPage];
+        if (manualConfig) {
+            return manualConfig;
+        }
+
+        if (hasTurnTransitionVisualCue(context || {})) {
+            return TURN_TRANSITION_DEFAULT_CONFIG;
+        }
+
+        return null;
+    }
+
     global.SpaConfig = Object.freeze({
         AUDIO_ROUTE_POLICY,
         AUDIO_SOURCES,
@@ -137,6 +235,7 @@
         START_PAGE,
         getAudioSourceForTrack,
         getAudioTrackForPage,
+        getPageTransitionConfig,
         getNextPage,
         getPageIndex,
         getPageOrder,
