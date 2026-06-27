@@ -380,3 +380,8 @@ make smoke
   - play button readiness перенесён с `loadeddata` на `loadedmetadata`;
   - metadata-mode characterization: loaded `readyState=1`, after-play video playing/unmuted на desktop/mobile;
   - media files и package size не менялись.
+- Stage 6.22 выполнен:
+  - `Wroclaw_Saver.mp4` source перенесён из `src` в `data-src`;
+  - video preload переведён на `none`;
+  - source назначается только после click по play button;
+  - lazy-source characterization: до click `readyState=0`, после click video playing/unmuted на desktop/mobile.

@@ -81,6 +81,8 @@ Stage 6.20 result: `Wroclaw_Saver.mp4` is confirmed as a runtime video/audio ass
 
 Stage 6.21 result: `katedra_panorama.html` now uses `preload=metadata` and `loadedmetadata` readiness for `Wroclaw_Saver.mp4`; playback after user click remains covered on desktop/mobile.
 
+Stage 6.22 result: `katedra_panorama.html` now lazy-loads `Wroclaw_Saver.mp4` by keeping the path in `data-src` until the play click; desktop/mobile click-to-play remains covered.
+
 4. Video review:
    - inspect `katedra_panorama.html` playback;
    - decide whether a smaller derivative video or poster/loading strategy is needed.
@@ -103,4 +105,4 @@ Additional checks:
 
 ## Next safe implementation step
 
-Consider a poster/lazy video source decision gate, or move to another runtime-heavy group. Defer video transcode until there is a stronger need than package size alone.
+Move to another runtime-heavy group or UX issue with a clear oracle. Defer video poster/transcode unless manual product review asks for it.

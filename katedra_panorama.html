@@ -641,8 +641,8 @@
             <div class="image"></div>
         </div>
         <div class="video-container">
-            <video class="video-background" preload="metadata" loop playsinline muted>
-                <source src="media/Wroclaw_Saver.mp4" type="video/mp4">
+            <video class="video-background" preload="none" loop playsinline muted>
+                <source data-src="media/Wroclaw_Saver.mp4" type="video/mp4">
             </video>
         </div>
         <div class="play-button"></div>
@@ -692,6 +692,24 @@
             const imageOverlay = document.querySelector('.image');
             const playButton = document.querySelector('.play-button');
             const pauseButton = document.querySelector('.pause-button');
+            const videoSource = videoBackground.querySelector('source');
+            let videoSourceLoaded = Boolean(videoSource && videoSource.getAttribute('src'));
+
+            function ensureVideoSourceLoaded() {
+                if (videoSourceLoaded) {
+                    return;
+                }
+
+                const sourceUrl = videoSource && videoSource.dataset.src;
+                if (!videoSource || !sourceUrl) {
+                    console.error('Видео source не найден');
+                    return;
+                }
+
+                videoSource.src = sourceUrl;
+                videoBackground.load();
+                videoSourceLoaded = true;
+            }
 
             // Настраиваем обработчики
             Common.setupResetAnimation(container);
@@ -776,6 +794,9 @@
                 playButton.classList.add('visible');
             });
 
+            // Показываем кнопку сразу; само видео подгружается только после user gesture.
+            playButton.classList.add('visible');
+
             // Функция для показа изображения и кнопки play
             function showImage() {
                 imageOverlay.style.opacity = '1';
@@ -790,9 +811,20 @@
                 imageOverlay.style.opacity = '0';
                 videoContainer.style.opacity = '1';
                 playButton.classList.remove('visible');
-                videoBackground.currentTime = 0;
-                videoBackground.play();
+                ensureVideoSourceLoaded();
+                try {
+                    videoBackground.currentTime = 0;
+                } catch (error) {
+                    console.warn('Не удалось сбросить видео до начала:', error);
+                }
                 videoBackground.muted = false;
+                const playPromise = videoBackground.play();
+                if (playPromise && typeof playPromise.catch === 'function') {
+                    playPromise.catch(error => {
+                        console.error('Ошибка воспроизведения видео:', error);
+                        showImage();
+                    });
+                }
             }
 
             // Обработчик клика по кнопке воспроизведения

@@ -2,7 +2,7 @@ CAPACITOR_JAVA_HOME ?= /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents
 PORT ?= 5173
 E2E_PORT ?= 6173
 
-.PHONY: help install dev build start lint fix-lint typecheck test test-watch test-e2e smoke security security-fix audit clean reinstall doctor poc-template stage-06-08-screenshots stage-06-14-audio stage-06-15-audio stage-06-17-sunset-webp stage-06-18-scene-jpg-screenshots stage-06-19-tumski11-webp-poc stage-06-20-video-review stage-06-21-video-metadata cap-sync cap-copy cap-add-android cap-add-ios cap-open-android cap-open-ios android-debug
+.PHONY: help install dev build start lint fix-lint typecheck test test-watch test-e2e smoke security security-fix audit clean reinstall doctor poc-template stage-06-08-screenshots stage-06-14-audio stage-06-15-audio stage-06-17-sunset-webp stage-06-18-scene-jpg-screenshots stage-06-19-tumski11-webp-poc stage-06-20-video-review stage-06-21-video-metadata stage-06-22-video-lazy-source cap-sync cap-copy cap-add-android cap-add-ios cap-open-android cap-open-ios android-debug
 
 help:
 	@printf "Available commands:\n"
@@ -22,6 +22,7 @@ help:
 	@printf "  make stage-06-19-tumski11-webp-poc Verify Stage 6.19 tumski11 WebP candidate screenshots\n"
 	@printf "  make stage-06-20-video-review Capture Stage 6.20 panorama video baseline\n"
 	@printf "  make stage-06-21-video-metadata Verify Stage 6.21 panorama video metadata preload\n"
+	@printf "  make stage-06-22-video-lazy-source Verify Stage 6.22 panorama video lazy source\n"
 	@printf "  make cap-sync         Build and sync Android/iOS projects\n"
 	@printf "  make android-debug    Build Android debug APK with JDK 21\n"
 	@printf "  make cap-open-android Open Android project\n"
@@ -113,6 +114,9 @@ stage-06-20-video-review:
 
 stage-06-21-video-metadata:
 	E2E_PORT=$(E2E_PORT) STAGE_06_VIDEO_EXPECTED_PRELOAD=metadata STAGE_06_VIDEO_ARTIFACT_DIR=docs/refactoring/artifacts/stage-06-21-video-metadata npx playwright test --config=playwright.stage-06-20.config.mjs
+
+stage-06-22-video-lazy-source:
+	E2E_PORT=$(E2E_PORT) STAGE_06_VIDEO_EXPECTED_PRELOAD=none STAGE_06_VIDEO_ARTIFACT_DIR=docs/refactoring/artifacts/stage-06-22-video-lazy-source npx playwright test --config=playwright.stage-06-20.config.mjs
 
 cap-sync:
 	npm run cap:sync

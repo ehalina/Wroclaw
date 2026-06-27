@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 99% (53 завершённые задачи текущего плана)
+**Общий прогресс:** 99% (54 завершённые задачи текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -150,6 +150,7 @@ Wroclaw/
 51. ✅ Stage 6.19 Tumski11 WebP candidate POC
 52. ✅ Stage 6.20 Panorama video review
 53. ✅ Stage 6.21 Panorama video metadata preload
+54. ✅ Stage 6.22 Panorama video lazy source
 
 ---
 
@@ -207,6 +208,7 @@ make stage-06-18-scene-jpg-screenshots
 make stage-06-19-tumski11-webp-poc
 make stage-06-20-video-review
 make stage-06-21-video-metadata
+make stage-06-22-video-lazy-source
 make security
 make audit
 ```
@@ -243,6 +245,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.22 выполнен
+- `Wroclaw_Saver.mp4` source перенесён из `src` в `data-src`
+- video preload переведён на `none`, source назначается после click по play button
+- lazy-source characterization подтвердил: до click `readyState=0`, после click видео играет и размьючено
+- media files и package size не менялись
 
 ### 2026-06-27 - Refactoring Stage 6.21 выполнен
 - `katedra_panorama.html` video preload переведён с `auto` на `metadata`

@@ -1,0 +1,140 @@
+{
+  "consoleMessages": [
+    {
+      "text": "Видео загружено",
+      "type": "log"
+    }
+  ],
+  "expectedPreload": "none",
+  "measurements": {
+    "afterPlay": {
+      "image": {
+        "opacity": "0",
+        "rect": {
+          "height": 742,
+          "width": 401,
+          "x": -4,
+          "y": -7
+        }
+      },
+      "playButton": {
+        "className": "play-button visible",
+        "display": "flex",
+        "opacity": "1",
+        "visibleClass": true
+      },
+      "pauseButton": {
+        "className": "pause-button",
+        "display": "none",
+        "opacity": "1",
+        "visibleClass": false
+      },
+      "video": {
+        "autoplay": false,
+        "bufferedRanges": [
+          {
+            "end": 21.153,
+            "start": 0
+          }
+        ],
+        "currentSrc": "media/Wroclaw_Saver.mp4",
+        "currentTime": 0.874,
+        "duration": 21.153,
+        "ended": false,
+        "loop": true,
+        "muted": false,
+        "networkState": 1,
+        "paused": false,
+        "playsInline": true,
+        "preload": "none",
+        "readyState": 4,
+        "rect": {
+          "height": 727,
+          "width": 393,
+          "x": 0,
+          "y": 0
+        },
+        "sourceDataSrc": "media/Wroclaw_Saver.mp4",
+        "source": "media/Wroclaw_Saver.mp4",
+        "volume": 1
+      },
+      "videoContainer": {
+        "opacity": "1",
+        "rect": {
+          "height": 727,
+          "width": 393,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "viewport": {
+        "height": 727,
+        "width": 393
+      }
+    },
+    "loaded": {
+      "image": {
+        "opacity": "1",
+        "rect": {
+          "height": 731,
+          "width": 395,
+          "x": -1,
+          "y": -2
+        }
+      },
+      "playButton": {
+        "className": "play-button visible",
+        "display": "flex",
+        "opacity": "1",
+        "visibleClass": true
+      },
+      "pauseButton": {
+        "className": "pause-button",
+        "display": "none",
+        "opacity": "1",
+        "visibleClass": false
+      },
+      "video": {
+        "autoplay": false,
+        "bufferedRanges": [],
+        "currentSrc": "",
+        "currentTime": 0,
+        "duration": null,
+        "ended": false,
+        "loop": true,
+        "muted": true,
+        "networkState": 3,
+        "paused": true,
+        "playsInline": true,
+        "preload": "none",
+        "readyState": 0,
+        "rect": {
+          "height": 727,
+          "width": 393,
+          "x": 0,
+          "y": 0
+        },
+        "sourceDataSrc": "media/Wroclaw_Saver.mp4",
+        "source": "",
+        "volume": 1
+      },
+      "videoContainer": {
+        "opacity": "0",
+        "rect": {
+          "height": 727,
+          "width": 393,
+          "x": 0,
+          "y": 0
+        }
+      },
+      "viewport": {
+        "height": 727,
+        "width": 393
+      }
+    }
+  },
+  "page": "katedra_panorama.html",
+  "pageErrors": [],
+  "project": "mobile-pixel5",
+  "screenshot": "docs/refactoring/artifacts/stage-06-22-video-lazy-source/mobile-pixel5-after-play.png"
+}

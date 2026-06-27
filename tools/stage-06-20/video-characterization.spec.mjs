@@ -13,6 +13,8 @@ const haveCurrentDataReadyState = 2;
 const expectedPreload = process.env.STAGE_06_VIDEO_EXPECTED_PRELOAD || 'auto';
 const expectedLoadedReadyState = expectedPreload === 'metadata'
   ? haveMetadataReadyState
+  : expectedPreload === 'none'
+    ? 0
   : haveCurrentDataReadyState;
 
 function projectSlug(projectName) {
@@ -92,6 +94,7 @@ async function collectVideoState(page) {
             preload: video.preload,
             readyState: video.readyState,
             rect: rectToObject(video.getBoundingClientRect()),
+            sourceDataSrc: source?.dataset.src || '',
             source: source?.getAttribute('src') || '',
             volume: video.volume
           }
@@ -135,15 +138,24 @@ test('capture katedra panorama video baseline', async ({ page }, testInfo) => {
   await expect(page.locator('.video-background')).toBeAttached();
   await expect(page.locator('.play-button')).toBeAttached();
 
-  await page.waitForFunction((minimumReadyState) => {
-    const video = document.querySelector('.video-background');
-    return video && video.readyState >= minimumReadyState;
-  }, expectedLoadedReadyState, { timeout: 15_000 });
+  if (expectedLoadedReadyState > 0) {
+    await page.waitForFunction((minimumReadyState) => {
+      const video = document.querySelector('.video-background');
+      return video && video.readyState >= minimumReadyState;
+    }, expectedLoadedReadyState, { timeout: 15_000 });
+  } else {
+    await page.waitForTimeout(300);
+  }
 
   const loadedState = await collectVideoState(page);
-  expect(loadedState.video.source).toBe('media/Wroclaw_Saver.mp4');
   expect(loadedState.video.preload).toBe(expectedPreload);
   expect(loadedState.video.readyState).toBeGreaterThanOrEqual(expectedLoadedReadyState);
+  if (expectedPreload === 'none') {
+    expect(loadedState.video.source).toBe('');
+    expect(loadedState.video.sourceDataSrc).toBe('media/Wroclaw_Saver.mp4');
+  } else {
+    expect(loadedState.video.source).toBe('media/Wroclaw_Saver.mp4');
+  }
 
   await page.locator('.play-button').click();
   await page.waitForFunction(() => {
@@ -152,6 +164,7 @@ test('capture katedra panorama video baseline', async ({ page }, testInfo) => {
   }, null, { timeout: 15_000 });
   await page.waitForTimeout(800);
   const afterPlayState = await collectVideoState(page);
+  expect(afterPlayState.video.currentSrc).toBe('media/Wroclaw_Saver.mp4');
 
   const screenshotName = `${slug}-after-play.png`;
   await page.screenshot({

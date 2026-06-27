@@ -460,6 +460,11 @@
   - Files: `katedra_panorama.html`, `tools/stage-06-20/video-characterization.spec.mjs`, `Makefile`, `docs/refactoring/stage-06-21-video-metadata-preload.md`, `docs/refactoring/artifacts/stage-06-21-video-metadata/`
   - Benefit: `Wroclaw_Saver.mp4` now uses `preload="metadata"` with `loadedmetadata` play-button readiness; desktop/mobile after-play behavior remains covered
 
+- [x] **Performance: panorama video lazy source** - Deferred `Wroclaw_Saver.mp4` source assignment until user click
+  - Completed: 2026-06-27
+  - Files: `katedra_panorama.html`, `tools/stage-06-20/video-characterization.spec.mjs`, `Makefile`, `docs/refactoring/stage-06-22-video-lazy-source.md`, `docs/refactoring/artifacts/stage-06-22-video-lazy-source/`
+  - Benefit: `katedra_panorama.html` no longer assigns video `src` before user intent; click-to-play still passes on desktop/mobile
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

@@ -306,6 +306,19 @@ Completed on 2026-06-27:
 - No media files changed.
 - No package size change: current build baseline remains `331 files, 84.5 MB -> www/`.
 
+## Stage 6.22 result
+
+Completed on 2026-06-27:
+
+- Changed `katedra_panorama.html` video preload policy from `metadata` to `none`.
+- Moved `media/Wroclaw_Saver.mp4` from `source src` to `source data-src`.
+- Added lazy source assignment on play click.
+- Browser result:
+  - before click: source is empty and readyState is `0`;
+  - after click: `currentSrc=media/Wroclaw_Saver.mp4`, video plays and unmutes on desktop/mobile.
+- No media files changed.
+- No package size change: current build baseline remains `331 files, 84.5 MB -> www/`.
+
 Validation:
 
 ```bash

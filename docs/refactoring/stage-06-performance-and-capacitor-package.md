@@ -580,3 +580,29 @@ Stage 6.21 выполнен:
 Следующий подэтап:
 
 - Stage 6.22: poster/lazy video source decision gate или переход к следующей runtime-heavy группе.
+
+## Status Update - 2026-06-27 - Stage 6.22
+
+Stage 6.22 выполнен:
+
+- Создан `docs/refactoring/stage-06-22-video-lazy-source.md`.
+- `katedra_panorama.html`:
+  - `preload="metadata"` заменён на `preload="none"`;
+  - `source src` заменён на `source data-src`;
+  - добавлен `ensureVideoSourceLoaded()`;
+  - source назначается только после click по play button.
+- `tools/stage-06-20/video-characterization.spec.mjs` расширен для lazy-source mode.
+- Добавлен Makefile target `make stage-06-22-video-lazy-source`.
+- Созданы artifacts:
+  - `docs/refactoring/artifacts/stage-06-22-video-lazy-source/desktop-after-play.png`;
+  - `docs/refactoring/artifacts/stage-06-22-video-lazy-source/desktop-video-state.json`;
+  - `docs/refactoring/artifacts/stage-06-22-video-lazy-source/mobile-pixel5-after-play.png`;
+  - `docs/refactoring/artifacts/stage-06-22-video-lazy-source/mobile-pixel5-video-state.json`.
+- Browser characterization:
+  - до click: `preload=none`, `source=""`, `dataSrc=media/Wroclaw_Saver.mp4`, `readyState=0`;
+  - после click: `currentSrc=media/Wroclaw_Saver.mp4`, `paused=false`, `muted=false`.
+- Media files и package baseline не менялись: `331 files, 84.5 MB -> www/`.
+
+Следующий подэтап:
+
+- Stage 6 может перейти к другой runtime-heavy группе; video transcode/poster стоит делать только после manual product review.
