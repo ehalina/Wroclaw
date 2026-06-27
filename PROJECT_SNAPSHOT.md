@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 92% (42 завершённые задачи текущего плана)
+**Общий прогресс:** 93% (43 завершённые задачи текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -139,6 +139,7 @@ Wroclaw/
 40. ✅ Stage 6.8 Tumski21 sunset screenshot characterization
 41. ✅ Stage 6.9 Sunset3 preload/package cleanup
 42. ✅ Stage 6.10 Heavy audio route/use review
+43. ✅ Stage 6.11 Duplicate WAV package cleanup
 
 ---
 
@@ -198,7 +199,7 @@ make audit
 
 ### Текущий Capacitor package baseline:
 - Initial Stage 6 build: `350 files, 138.2 MB -> www/`
-- Current build: `333 files, 87.0 MB -> www/`
+- Current build: `331 files, 86.9 MB -> www/`
 - Package budget guard: `120 MB`
 - Runtime asset optimization policy: `docs/refactoring/stage-06-runtime-asset-optimization-policy.md`
 
@@ -228,6 +229,12 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-27 - Refactoring Stage 6.11 выполнен
+- duplicate `media/zwyki/opening-a-book.wav` и `media/zwyki/step.wav` исключены из Capacitor `www`
+- source files не удалялись
+- root runtime WAV остаются packaged
+- build baseline улучшен с `333 files, 87.0 MB` до `331 files, 86.9 MB`
 
 ### 2026-06-27 - Refactoring Stage 6.10 выполнен
 - создан `docs/refactoring/stage-06-10-audio-route-use-review.md`

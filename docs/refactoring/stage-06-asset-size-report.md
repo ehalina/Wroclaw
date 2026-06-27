@@ -164,6 +164,35 @@ Decision:
 - Do not exclude heavy MP3 files without a playback/lifecycle-specific change.
 - Prefer a small duplicate-WAV package cleanup before larger audio lifecycle refactors.
 
+## Stage 6.11 result
+
+Completed on 2026-06-27:
+
+- Added duplicate effect WAV copies to `excludedRuntimePaths`:
+  - `media/zwyki/opening-a-book.wav`;
+  - `media/zwyki/step.wav`.
+- Kept source files in the repository.
+- Kept runtime root effect files packaged:
+  - `media/opening-a-book.wav`;
+  - `media/step.wav`.
+
+Build comparison:
+
+| Metric | Before Stage 6.11 | After Stage 6.11 |
+|---|---:|---:|
+| Build summary files | 333 | 331 |
+| Build summary size | 87.0 MB | 86.9 MB |
+| `du -sh www` | 99M | 99M |
+
+Validation:
+
+```bash
+node --check scripts/build-capacitor-web.mjs
+make build
+```
+
+Both passed.
+
 ## Stage 6.3 result
 
 Completed on 2026-06-27:

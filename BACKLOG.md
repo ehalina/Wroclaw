@@ -405,6 +405,11 @@
   - Files: `docs/refactoring/stage-06-10-audio-route-use-review.md`, `docs/refactoring/stage-06-asset-size-report.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
   - Benefit: heavy MP3 files are confirmed as runtime assets; next safe work is lifecycle/package cleanup rather than blind compression
 
+- [x] **Build: duplicate WAV package cleanup** - Excluded duplicate effect WAV copies from Capacitor `www`
+  - Completed: 2026-06-27
+  - Files: `scripts/build-capacitor-web.mjs`, `docs/refactoring/stage-06-asset-size-report.md`, `docs/refactoring/stage-06-performance-and-capacitor-package.md`
+  - Benefit: build output dropped from 333 files / 87.0 MB to 331 files / 86.9 MB while root runtime WAV files remain packaged
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

@@ -51,6 +51,8 @@ const excludedRuntimePaths = new Set([
   'media/krasnolud/u7173139994_Bronze_gnome_figurine_same_perspective_do_not_chang_42cebd36-ece2-491f-91b2-67f0cc47d8aa.png',
   'media/krasnolud/u7173139994_Bronze_gnome_figurine_same_perspective_do_not_chang_f574f9f5-15cb-4d89-857e-e46a0ac1ac3d.png',
   'media/tumski/sunset/sunset3.png',
+  'media/zwyki/opening-a-book.wav',
+  'media/zwyki/step.wav',
   'media/watercolor/22.png',
   'music.mp3'
 ]);

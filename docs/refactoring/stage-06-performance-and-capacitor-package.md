@@ -7,7 +7,7 @@
 ## Контекст
 
 Стартовый Stage 6 baseline: `make build` собирал `www/` размером `350 files, 138.2 MB -> www/`.
-После cleanup-only package exclusions текущий baseline: `333 files, 87.0 MB -> www/`.
+После cleanup-only package exclusions текущий baseline: `331 files, 86.9 MB -> www/`.
 В `BACKLOG.md` Performance Optimization уже находится в активных задачах Phase 2.
 
 ## Scope
@@ -299,3 +299,29 @@ Stage 6.10 выполнен:
 Следующий подэтап:
 
 - Stage 6.11: проверить и, если guard разрешит, исключить duplicate `media/zwyki/*.wav` effect copies из Capacitor package без удаления source files.
+
+## Status Update - 2026-06-27 - Stage 6.11
+
+Stage 6.11 выполнен:
+
+- `media/zwyki/opening-a-book.wav` и `media/zwyki/step.wav` добавлены в `excludedRuntimePaths`.
+- Source files не удалялись.
+- Runtime root effects остаются в package:
+  - `media/opening-a-book.wav`;
+  - `media/step.wav`.
+- Build reference guard подтвердил отсутствие runtime refs на excluded duplicate WAV paths.
+- Build baseline улучшен:
+  - было после Stage 6.10: `333 files, 87.0 MB -> www/`;
+  - стало: `331 files, 86.9 MB -> www/`;
+  - `du -sh www`: 99M.
+
+Validation:
+
+```bash
+node --check scripts/build-capacitor-web.mjs
+make build
+```
+
+Следующий подэтап:
+
+- Stage 6.12: перейти к audio lifecycle refactor plan for `preloadBackgroundMusic()` / `quest.mp3` duplication, без изменения аудио файлов.

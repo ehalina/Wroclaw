@@ -89,6 +89,8 @@ The next safe code step is lifecycle-only:
 2. Start with duplicate small WAV package cleanup only if build reference guard proves `media/zwyki/opening-a-book.wav` and `media/zwyki/step.wav` are unreferenced in runtime package files.
 3. Treat `quest.mp3` consolidation as a separate refactor because it spans SPA, language menu, overlay, and marker handler behavior.
 
+Stage 6.11 resolution: duplicate small WAV package cleanup was completed. The `media/zwyki/*.wav` copies are excluded from Capacitor `www`; root effect WAV files remain packaged.
+
 ## Validation
 
 Stage 6.10 is documentation/audit-only. Minimum validation:
@@ -98,4 +100,4 @@ make build
 make audit
 ```
 
-Expected current package baseline remains `333 files, 87.0 MB -> www/`.
+Expected current package baseline after Stage 6.11 is `331 files, 86.9 MB -> www/`.

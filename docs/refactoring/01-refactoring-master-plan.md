@@ -326,3 +326,8 @@ make smoke
   - зафиксированы route/use роли heavy audio assets;
   - подтверждено, что heavy MP3 сейчас нельзя исключать из `www` как unused;
   - следующий безопасный audio шаг: lifecycle/package cleanup, а не blind compression.
+- Stage 6.11 выполнен:
+  - duplicate effect copies `media/zwyki/opening-a-book.wav` и `media/zwyki/step.wav` исключены из Capacitor `www`;
+  - source files не удалялись;
+  - root runtime files `media/opening-a-book.wav` и `media/step.wav` остаются packaged;
+  - baseline улучшен до `331 files, 86.9 MB -> www/`.
