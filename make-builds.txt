@@ -1,0 +1,15 @@
+как собирать debug apk ?
+
+
+• Из корня проекта:
+
+  make android-debug
+
+  Готовый APK будет тут:
+
+  android/app/build/outputs/apk/debug/wroclaw_debug.apk
+
+  Если перед этим менял файлы в www/, лучше сначала синхронизировать Capacitor:
+
+  make cap-sync
+  make android-debug
