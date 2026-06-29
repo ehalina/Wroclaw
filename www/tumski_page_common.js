@@ -69,6 +69,45 @@ function setupMobileSceneScrollCentering() {
     });
 }
 
+function resetPageZoomState() {
+    const imageContainer = document.querySelector('.image-container');
+    if (!imageContainer) {
+        return;
+    }
+
+    imageContainer.classList.remove('zoom-transition', 'zoom-transition-Right', 'zoom-transition-Up', 'reset-animation');
+    imageContainer.style.animationPlayState = 'running';
+    imageContainer.style.animation = 'none';
+    imageContainer.style.webkitAnimation = 'none';
+    imageContainer.style.transform = '';
+    void imageContainer.offsetWidth;
+    imageContainer.style.animation = '';
+    imageContainer.style.webkitAnimation = '';
+    imageContainer.style.animationPlayState = 'running';
+
+    document.querySelectorAll('.next-image-container').forEach((nextImageContainer) => {
+        nextImageContainer.style.opacity = '0';
+    });
+
+    document
+        .querySelectorAll('.custom-cursor-area, .custom-cursor-prostoarea, .custom-cursor-prosto-leftarea')
+        .forEach((arrow) => {
+            arrow.style.transform = 'none';
+        });
+
+    document.querySelectorAll('.map-mark-area').forEach((marker) => {
+        marker.style.animationPlayState = 'running';
+    });
+
+    if (typeof window.positionMarkersOnBg === 'function') {
+        window.setTimeout(() => {
+            try {
+                window.positionMarkersOnBg();
+            } catch (_) {}
+        }, 0);
+    }
+}
+
 /**
  * Проверяет, включен ли звук
  * @returns {boolean} true если звук включен, false если выключен
@@ -143,6 +182,8 @@ export async function initPageCommon() {
             
             // Обработка сообщения о показе страницы - повторная инициализация стрелок
             if (message.type === pageMessageType('PAGE_SHOWN', 'PAGE_SHOWN')) {
+                resetPageZoomState();
+                setupMobileSceneScrollCentering();
                 MapDebug.log('[tumski_page_common] Получен PAGE_SHOWN, повторная инициализация стрелок для:', message.pageName);
                 // Повторно инициализируем стрелки через небольшую задержку
                 setTimeout(() => {
@@ -240,6 +281,7 @@ export async function initPageCommon() {
 
         // 6) Стрелки: навесим обработчики, если элементы присутствуют
         // console.log('🎵 Настраиваем обработчики стрелок...');
+        resetPageZoomState();
         setupAllArrows(stepSound);
         setupMobileSceneScrollCentering();
 
@@ -847,3 +889,4 @@ function forceShowCursorsOnMobile() {
 // Делаем функцию isSoundEnabled доступной глобально
 window.isSoundEnabled = isSoundEnabled;
 window.centerMobileSceneScroll = centerMobileSceneScroll;
+window.resetPageZoomState = resetPageZoomState;

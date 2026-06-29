@@ -1520,6 +1520,73 @@ test.describe('Wroclaw static app smoke', () => {
     });
   });
 
+  test('PAGE_SHOWN resets cached iframe zoom state before reuse', async ({ page }) => {
+    await page.goto('/');
+    await page.waitForFunction(() => window.spaManager?.currentPage === 'tumski.html');
+
+    const frame = await getActiveFrame(page);
+    await frame.waitForFunction(() => typeof window.resetPageZoomState === 'function');
+
+    await frame.evaluate(() => {
+      const imageContainer = document.querySelector('.image-container');
+      const nextImageContainer = document.querySelector('.next-image-container');
+      const arrowArea = document.querySelector('.custom-cursor-area');
+      const marker = document.querySelector('.map-mark-area');
+
+      imageContainer.classList.add('zoom-transition');
+      imageContainer.style.animationPlayState = 'paused';
+      imageContainer.style.transform = 'translateZ(2000px) scale(2.5)';
+      const moveForwardAnimation = imageContainer
+        .getAnimations()
+        .find((animation) => animation.animationName === 'moveForward');
+      if (moveForwardAnimation) {
+        moveForwardAnimation.currentTime = 20000;
+      }
+      nextImageContainer.style.opacity = '1';
+      arrowArea.style.transform = 'matrix(2, 0, 0, 2, 10, 10)';
+      marker.style.animationPlayState = 'paused';
+    });
+
+    await page.evaluate(() => {
+      const activeIframe = document.querySelector(window.SpaConfig.SELECTORS.activeIframe);
+      window.SpaMessages.postToFrame(activeIframe, window.SpaMessages.TYPES.PAGE_SHOWN, {
+        pageName: 'tumski.html'
+      });
+    });
+
+    await expect.poll(() => frame.evaluate(() => {
+      const imageContainer = document.querySelector('.image-container');
+      const nextImageContainer = document.querySelector('.next-image-container');
+      const arrowArea = document.querySelector('.custom-cursor-area');
+      const marker = document.querySelector('.map-mark-area');
+
+      return {
+        animationPlayState: imageContainer.style.animationPlayState,
+        hasZoomTransition: imageContainer.classList.contains('zoom-transition'),
+        imageTransform: imageContainer.style.transform,
+        markerAnimationPlayState: marker.style.animationPlayState,
+        nextOpacity: nextImageContainer.style.opacity,
+        arrowTransform: arrowArea.style.transform
+      };
+    })).toEqual({
+      animationPlayState: 'running',
+      arrowTransform: 'none',
+      hasZoomTransition: false,
+      imageTransform: '',
+      markerAnimationPlayState: 'running',
+      nextOpacity: '0'
+    });
+
+    await expect.poll(() => frame.evaluate(() => {
+      const imageContainer = document.querySelector('.image-container');
+      const moveForwardAnimation = imageContainer
+        .getAnimations()
+        .find((animation) => animation.animationName === 'moveForward');
+
+      return moveForwardAnimation ? moveForwardAnimation.currentTime < 1000 : false;
+    })).toBe(true);
+  });
+
   test('SPA config exposes page registry, selectors and audio policy', async ({ page }) => {
     await page.goto('/');
 
