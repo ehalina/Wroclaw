@@ -35,6 +35,12 @@ function debugWarn(...args) {
     }
 }
 
+function preventDefaultIfCancelable(event) {
+    if (event && event.cancelable) {
+        event.preventDefault();
+    }
+}
+
 function playAudioQuietly(audio) {
     if (!audio) {
         return;
@@ -133,7 +139,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
             const timeSinceTouch = Date.now() - lastTouchTime;
         if (isMobileNow) {
             debugLog('🔵 RIGHT CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             return false;
@@ -145,7 +151,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
         const timeSinceTouch = Date.now() - lastTouchTime;
         if (isMobileNow) {
             debugLog('🔵 RIGHT CURSOR CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             return false;
@@ -160,7 +166,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
         // На мобильных устройствах блокируем click - используем только touchend
         if (isMobileNow || touchHandled) {
             debugLog('🔵 RIGHT CLICK: БЛОКИРУЕМ click на мобильном или touchHandled=true');
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             touchHandled = false; // Сбрасываем флаг
@@ -168,7 +174,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
         }
 
         debugLog('🔵 RIGHT CLICK: Обрабатываем click (десктоп)');
-        e.preventDefault();
+        preventDefaultIfCancelable(e);
         e.stopPropagation();
 
         try {
@@ -206,7 +212,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
     // Добавляем обработчик касания для мобильных устройств (двойной клик)
     if (isMobile) {
         const handleSingleTouch = (e) => {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             lastTouchTime = Date.now();
@@ -255,7 +261,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
 
         // Обработчики для области курсора
         cursorArea.addEventListener('touchstart', function(e) {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             cursor.style.opacity = '1';
             lastTouchTime = Date.now();
             debugLog('🔵 RIGHT AREA TOUCHSTART: lastTouchTime =', lastTouchTime);
@@ -265,7 +271,7 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
 
         // Обработчики для самого элемента курсора
         cursor.addEventListener('touchstart', function(e) {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             cursor.style.opacity = '1';
             lastTouchTime = Date.now();
             debugLog('🔵 RIGHT CURSOR TOUCHSTART: lastTouchTime =', lastTouchTime);
@@ -325,13 +331,13 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
         // Все взаимодействия обрабатываются через touchend (двойной клик)
         // ВАЖНО: проверяем isDesktopDevice() в момент события, не используем cached isMobile
         if (!isDesktopDevice()) {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             return false;
         }
 
-        e.preventDefault();
+        preventDefaultIfCancelable(e);
         e.stopPropagation();
 
         try {
@@ -368,12 +374,12 @@ function setupRightArrowHandler(cursor, cursorArea, stepSound, onRightClick) {
         let touchTimer = null;
 
         cursorArea.addEventListener('touchstart', function(e) {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             cursor.style.opacity = '1';
         });
 
         cursorArea.addEventListener('touchend', function(e) {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             touchCount++;
@@ -480,7 +486,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
             const timeSinceTouch = Date.now() - lastTouchTime;
         if (isMobileNow) {
             debugLog('🟢 FORWARD CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             return false;
@@ -492,7 +498,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
         const timeSinceTouch = Date.now() - lastTouchTime;
         if (isMobileNow) {
             debugLog('🟢 FORWARD CURSOR CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             return false;
@@ -507,7 +513,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
         // На мобильных устройствах блокируем click - используем только touchend
         if (isMobileNow || touchHandled) {
             debugLog('🟢 FORWARD CLICK: БЛОКИРУЕМ click на мобильном или touchHandled=true');
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             touchHandled = false; // Сбрасываем флаг
@@ -515,7 +521,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
         }
 
         debugLog('🟢 FORWARD CLICK: Обрабатываем click (десктоп)');
-        e.preventDefault();
+        preventDefaultIfCancelable(e);
         e.stopPropagation();
 
         try {
@@ -707,7 +713,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
     // Добавляем обработчик касания для мобильных устройств (одинарный тап)
     if (isMobile) {
         const handleSingleTouch = (e) => {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             lastTouchTime = Date.now();
@@ -886,7 +892,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
 
         // Обработчики для области курсора
         cursorProstoArea.addEventListener('touchstart', function(e) {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             cursorProsto.style.opacity = '1';
             lastTouchTime = Date.now();
             debugLog('🟢 FORWARD AREA TOUCHSTART: lastTouchTime =', lastTouchTime);
@@ -896,7 +902,7 @@ function setupForwardArrowHandler(cursorProsto, cursorProstoArea, stepSound, onF
 
         // Обработчики для самого элемента курсора
         cursorProsto.addEventListener('touchstart', function(e) {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             cursorProsto.style.opacity = '1';
             lastTouchTime = Date.now();
             debugLog('🟢 FORWARD CURSOR TOUCHSTART: lastTouchTime =', lastTouchTime);
@@ -987,7 +993,7 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
             const timeSinceTouch = Date.now() - lastTouchTime;
         if (isMobileNow) {
             debugLog('🟠 LEFT CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             return false;
@@ -999,7 +1005,7 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
         const timeSinceTouch = Date.now() - lastTouchTime;
         if (isMobileNow) {
             debugLog('🟠 LEFT CURSOR CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             return false;
@@ -1014,7 +1020,7 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
         // На мобильных устройствах отключаем click событие
         if (isMobileNow || touchHandled) {
             debugLog('🟠 LEFT CLICK: БЛОКИРУЕМ click на мобильном или touchHandled=true');
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             touchHandled = false; // Сбрасываем флаг
@@ -1022,7 +1028,7 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
         }
 
         debugLog('🟠 LEFT CLICK: Обрабатываем click (десктоп)');
-        e.preventDefault();
+        preventDefaultIfCancelable(e);
         hideAllCursors();
         if (stepSound && isSoundEnabled()) {
             stepSound.currentTime = 0;
@@ -1046,7 +1052,7 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
     // Добавляем обработчик касания для мобильных устройств (одинарный тап)
     if (isMobile) {
         const handleSingleTouch = (e) => {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             lastTouchTime = Date.now();
@@ -1095,7 +1101,7 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
 
         // Обработчики для области курсора
         cursorLeftArea.addEventListener('touchstart', function(e) {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             cursorLeft.style.opacity = '1';
             lastTouchTime = Date.now();
             debugLog('🟠 LEFT AREA TOUCHSTART: lastTouchTime =', lastTouchTime);
@@ -1105,7 +1111,7 @@ function setupLeftArrowHandler(cursorLeft, cursorLeftArea, stepSound, onLeftClic
 
         // Обработчики для самого элемента курсора
         cursorLeft.addEventListener('touchstart', function(e) {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             cursorLeft.style.opacity = '1';
             lastTouchTime = Date.now();
             debugLog('🟠 LEFT CURSOR TOUCHSTART: lastTouchTime =', lastTouchTime);
@@ -1178,7 +1184,7 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
         cursorBackArea.addEventListener('click', function(e) {
             const timeSinceTouch = Date.now() - lastTouchTime;
             debugLog('🔴 BACK CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             return false;
@@ -1192,7 +1198,7 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
         // На мобильных устройствах отключаем click событие
         if (isMobile || touchHandled) {
             debugLog('🔴 BACK CLICK: БЛОКИРУЕМ click на мобильном или touchHandled=true');
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             touchHandled = false; // Сбрасываем флаг
@@ -1214,19 +1220,19 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
     // Обработчик touch по стрелке назад (мобильные устройства, одинарный тап)
     if (isMobile) {
         cursorBackArea.addEventListener('touchstart', function(e) {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             lastTouchTime = Date.now();
             debugLog('🔴 BACK AREA TOUCHSTART: lastTouchTime =', lastTouchTime);
         });
 
         cursorBack.addEventListener('touchstart', function(e) {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             lastTouchTime = Date.now();
             debugLog('🔴 BACK CURSOR TOUCHSTART: lastTouchTime =', lastTouchTime);
         });
 
         const handleSingleAreaTouch = (e) => {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             lastTouchTime = Date.now();
@@ -1257,7 +1263,7 @@ function setupBackArrowHandler(cursorBack, cursorBackArea, stepSound, onBackClic
         };
 
         const handleSingleCursorTouch = (e) => {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             lastTouchTime = Date.now();
@@ -1357,7 +1363,7 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
             const timeSinceTouch = Date.now() - lastTouchTime;
         if (isMobileNow) {
             debugLog('🟡 FORWARD-LEFT CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             return false;
@@ -1369,7 +1375,7 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
         const timeSinceTouch = Date.now() - lastTouchTime;
         if (isMobileNow) {
             debugLog('🟡 FORWARD-LEFT CURSOR CLICK (CAPTURE): БЛОКИРУЕМ на мобильном, timeSinceTouch =', timeSinceTouch);
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             return false;
@@ -1384,7 +1390,7 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
         // На мобильных устройствах блокируем click - используем только touchend
         if (isMobileNow || touchHandled) {
             debugLog('🟡 FORWARD-LEFT CLICK: БЛОКИРУЕМ click на мобильном или touchHandled=true');
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             touchHandled = false; // Сбрасываем флаг
@@ -1392,7 +1398,7 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
         }
 
         debugLog('🟡 FORWARD-LEFT CLICK: Обрабатываем click (десктоп)');
-        e.preventDefault();
+        preventDefaultIfCancelable(e);
         e.stopPropagation();
 
         try {
@@ -1641,7 +1647,7 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
         };
 
         const handleSingleTouch = (e) => {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             lastTouchTime = Date.now();
@@ -1651,7 +1657,7 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
 
         // Обработчики для области курсора
         cursorProstoLeftArea.addEventListener('touchstart', function(e) {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             cursorProstoLeft.style.opacity = '1';
             lastTouchTime = Date.now();
             debugLog('🟡 FORWARD-LEFT AREA TOUCHSTART: lastTouchTime =', lastTouchTime);
@@ -1662,7 +1668,7 @@ function setupForwardLeftArrowHandler(cursorProstoLeft, cursorProstoLeftArea, st
 
         // Обработчики для самого элемента курсора
         cursorProstoLeft.addEventListener('touchstart', function(e) {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             cursorProstoLeft.style.opacity = '1';
             lastTouchTime = Date.now();
             debugLog('🟡 FORWARD-LEFT CURSOR TOUCHSTART: lastTouchTime =', lastTouchTime);
@@ -1723,12 +1729,12 @@ function setupUpArrowHandler(cursor, cursorArea, stepSound) {
     cursorArea.addEventListener('click', function(e) {
         // На мобильных устройствах отключаем click событие
         if (isMobile) {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             return;
         }
 
-        e.preventDefault();
+        preventDefaultIfCancelable(e);
         hideAllCursors();
         if (stepSound && isSoundEnabled()) {
             stepSound.currentTime = 0;
@@ -1749,7 +1755,7 @@ function setupUpArrowHandler(cursor, cursorArea, stepSound) {
         let lastTouchTime = 0;
 
         const handleSingleTouch = (e) => {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             e.stopPropagation();
             e.stopImmediatePropagation();
             lastTouchTime = Date.now();
@@ -1778,7 +1784,7 @@ function setupUpArrowHandler(cursor, cursorArea, stepSound) {
         };
 
         cursorArea.addEventListener('touchstart', function(e) {
-            e.preventDefault();
+            preventDefaultIfCancelable(e);
             cursor.style.opacity = '1';
         });
 

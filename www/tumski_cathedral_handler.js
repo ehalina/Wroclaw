@@ -212,7 +212,9 @@ function createExtendedHoverArea() {
                         });
                     }
                     try {
-                        e && e.preventDefault && e.preventDefault();
+                        if (e && e.preventDefault && e.cancelable) {
+                            e.preventDefault();
+                        }
                         e && e.stopPropagation && e.stopPropagation();
                     } catch (_) {}
 
