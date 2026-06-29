@@ -385,6 +385,19 @@ Stage 7.19 выполнен:
 
 Следующий подэтап:
 
+- Stage 7.20: fix portrait mobile scene centering for pages wider than the viewport.
+
+## Status Update - 2026-06-29 - Stage 7.20
+
+Stage 7.20 выполнен:
+
+- Added a shared mobile scene scroll centering helper in `tumski_page_common.js`.
+- On portrait mobile viewports (`width <= 700` and `height > width`), horizontally scrollable `.image-scroll-wrapper` / `.parallax-container` elements are initialized at the center of their scroll range.
+- The helper runs after page common initialization and after resize, preserving manual horizontal panning.
+- Added smoke coverage for `390x844` portrait mobile: `tumski.html` starts with `.image-scroll-wrapper.scrollLeft` at the computed center.
+
+Следующий подэтап:
+
 - Stage 8 decision gate: define whether the next track is content completion, localization, image optimization, or release packaging/signing.
 
 ## Documentation updates

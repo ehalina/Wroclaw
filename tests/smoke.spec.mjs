@@ -1486,6 +1486,40 @@ test.describe('Wroclaw static app smoke', () => {
     });
   });
 
+  test('portrait mobile wide scene starts horizontally centered', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/tumski.html');
+
+    await page.waitForSelector('.image-scroll-wrapper .image');
+    await page.waitForFunction(() => {
+      const wrapper = document.querySelector('.image-scroll-wrapper');
+      if (!wrapper || wrapper.scrollWidth <= wrapper.clientWidth) {
+        return false;
+      }
+
+      const expectedCenter = Math.round((wrapper.scrollWidth - wrapper.clientWidth) / 2);
+      return Math.abs(wrapper.scrollLeft - expectedCenter) <= 2;
+    });
+
+    const scrollState = await page.evaluate(() => {
+      const wrapper = document.querySelector('.image-scroll-wrapper');
+      const expectedCenter = Math.round((wrapper.scrollWidth - wrapper.clientWidth) / 2);
+      return {
+        clientWidth: wrapper.clientWidth,
+        expectedCenter,
+        scrollLeft: wrapper.scrollLeft,
+        scrollWidth: wrapper.scrollWidth
+      };
+    });
+
+    expect(scrollState).toEqual({
+      clientWidth: 390,
+      expectedCenter: 390,
+      scrollLeft: 390,
+      scrollWidth: 1170
+    });
+  });
+
   test('SPA config exposes page registry, selectors and audio policy', async ({ page }) => {
     await page.goto('/');
 

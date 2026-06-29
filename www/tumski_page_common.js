@@ -23,6 +23,52 @@ function parseTrustedParentMessage(event) {
     return window.SpaMessages.parseMessage(event.data);
 }
 
+function isPortraitMobileViewport() {
+    return window.innerWidth <= 700 && window.innerHeight > window.innerWidth;
+}
+
+function centerScrollableElement(element) {
+    if (!element) {
+        return;
+    }
+
+    const maxScrollLeft = element.scrollWidth - element.clientWidth;
+    if (maxScrollLeft <= 0) {
+        return;
+    }
+
+    element.scrollLeft = Math.round(maxScrollLeft / 2);
+}
+
+function centerMobileSceneScroll() {
+    if (!isPortraitMobileViewport()) {
+        return;
+    }
+
+    document.querySelectorAll('.image-scroll-wrapper, .parallax-container').forEach(centerScrollableElement);
+}
+
+function scheduleMobileSceneScrollCentering() {
+    centerMobileSceneScroll();
+    window.setTimeout(centerMobileSceneScroll, 50);
+    window.setTimeout(centerMobileSceneScroll, 250);
+}
+
+function setupMobileSceneScrollCentering() {
+    scheduleMobileSceneScrollCentering();
+
+    if (window.__mobileSceneScrollCenteringResizeHooked) {
+        return;
+    }
+
+    window.__mobileSceneScrollCenteringResizeHooked = true;
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(scheduleMobileSceneScrollCentering, 100);
+    });
+}
+
 /**
  * Проверяет, включен ли звук
  * @returns {boolean} true если звук включен, false если выключен
@@ -195,6 +241,7 @@ export async function initPageCommon() {
         // 6) Стрелки: навесим обработчики, если элементы присутствуют
         // console.log('🎵 Настраиваем обработчики стрелок...');
         setupAllArrows(stepSound);
+        setupMobileSceneScrollCentering();
 
         // Если пришли через карту, мягко простимулируем появление курсора
         try {
@@ -799,3 +846,4 @@ function forceShowCursorsOnMobile() {
 
 // Делаем функцию isSoundEnabled доступной глобально
 window.isSoundEnabled = isSoundEnabled;
+window.centerMobileSceneScroll = centerMobileSceneScroll;

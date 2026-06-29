@@ -14,7 +14,7 @@
 **Phase 2: Content & Localization** [статус: 🔄]
 **Phase 3: Optimization & Polish** [статус: ⏳]
 
-**Общий прогресс:** 99% (66 завершённых задач текущего плана)
+**Общий прогресс:** 99% (67 завершённых задач текущего плана)
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
@@ -150,6 +150,7 @@ Wroclaw/
 74. ✅ Stage 7.17 Stale generated AI context cleanup
 75. ✅ Stage 7.18 Runtime console noise cleanup
 76. ✅ Stage 7.19 Native artifact naming
+77. ✅ Stage 7.20 Portrait mobile scene centering
 
 ---
 
@@ -247,6 +248,11 @@ make audit
 ---
 
 ## 🔄 История обновлений
+
+### 2026-06-29 - Refactoring Stage 7.20 выполнен
+- portrait mobile pages with horizontally scrollable scenes now open at the horizontal center instead of the left edge
+- shared helper added in `tumski_page_common.js` for `.image-scroll-wrapper` and `.parallax-container`
+- smoke coverage added for `390x844` mobile viewport on `tumski.html`
 
 ### 2026-06-27 - Refactoring Stage 7.19 выполнен
 - Android debug APK now builds as `android/app/build/outputs/apk/debug/wroclaw_debug.apk`

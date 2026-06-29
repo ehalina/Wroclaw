@@ -575,6 +575,11 @@
   - Files: `android/app/build.gradle`, `ios/App/App.xcodeproj/project.pbxproj`, `Makefile`, `README.md`, `AGENTS.md`, `ARCHITECTURE.md`, `PROJECT_SNAPSHOT.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`, `docs/refactoring/01-refactoring-master-plan.md`
   - Benefit: Android builds produce `wroclaw_debug.apk` and `wroclaw_release.apk`; future iOS Debug/Release products use `wroclaw_debug` and `wroclaw_release` instead of the generic `App`
 
+- [x] **Fix: portrait mobile scene centering** - Centered horizontally scrollable scenes on narrow portrait screens
+  - Completed: 2026-06-29
+  - Files: `www/tumski_page_common.js`, `tests/smoke.spec.mjs`, `BACKLOG.md`, `PROJECT_SNAPSHOT.md`, `docs/refactoring/stage-07-cleanup-docs-and-governance.md`, `docs/refactoring/01-refactoring-master-plan.md`
+  - Benefit: mobile portrait pages whose scene is wider than the viewport open around the horizontal center instead of the left edge, while horizontal panning remains available
+
 ### Planned
 
 - [ ] **[Refactoring Task]** - [Description]

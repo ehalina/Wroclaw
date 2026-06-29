@@ -479,3 +479,7 @@ make smoke
   - `make android-release` added next to existing `make android-debug`;
   - iOS Debug/Release `PRODUCT_NAME` values set to `wroclaw_debug` / `wroclaw_release` for future packaging;
   - validated both Android debug and release APK builds.
+- Stage 7.20 выполнен:
+  - portrait mobile scenes wider than the viewport now initialize at the horizontal scroll center instead of the left edge;
+  - centering applies to shared `.image-scroll-wrapper` scenes and `.parallax-container` scenes through `tumski_page_common.js`;
+  - Playwright smoke covers the `390x844` portrait mobile contract on `tumski.html`.
