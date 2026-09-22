@@ -68,6 +68,23 @@ function validate(metadata) {
   for (const field of ['contactFirstName', 'contactLastName', 'contactEmail', 'contactPhone']) {
     if (!metadata.reviewContact?.[field]) throw new Error(`Missing reviewContact.${field}.`);
   }
+  const ageFlags = [
+    'advertising', 'gambling', 'healthOrWellnessTopics', 'lootBox', 'messagingAndChat',
+    'parentalControls', 'ageAssurance', 'socialMedia', 'socialMediaAgeRestricted',
+    'unrestrictedWebAccess', 'userGeneratedContent',
+  ];
+  const ageFrequencies = [
+    'alcoholTobaccoOrDrugUseOrReferences', 'contests', 'gamblingSimulated',
+    'gunsOrOtherWeapons', 'medicalOrTreatmentInformation', 'profanityOrCrudeHumor',
+    'sexualContentGraphicAndNudity', 'sexualContentOrNudity', 'horrorOrFearThemes',
+    'matureOrSuggestiveThemes', 'violenceCartoonOrFantasy',
+    'violenceRealisticProlongedGraphicOrSadistic', 'violenceRealistic',
+  ];
+  if (Object.keys(metadata.ageRating || {}).length !== ageFlags.length + ageFrequencies.length ||
+    ageFlags.some((field) => typeof metadata.ageRating[field] !== 'boolean') ||
+    ageFrequencies.some((field) => !['NONE', 'INFREQUENT_OR_MILD', 'FREQUENT_OR_INTENSE'].includes(metadata.ageRating[field]))) {
+    throw new Error('Age rating questionnaire is incomplete or contains an unexpected value.');
+  }
   const limits = { name: 30, subtitle: 30, description: 4000, keywords: 100, promotionalText: 170 };
   for (const [locale, values] of Object.entries(metadata.localizations)) {
     if (!['en-US', 'ru', 'pl'].includes(locale)) throw new Error(`Unexpected locale ${locale}`);
@@ -96,9 +113,10 @@ async function records(auth, metadata) {
   const build = builds.data?.length === 1 && builds.data[0].attributes.version === '1' ? builds.data[0] : null;
   if (!info || version?.attributes.appStoreState !== 'PREPARE_FOR_SUBMISSION') throw new Error('Editable app info/version 1.0 was not found.');
   const buildLocales = build ? await request(auth, `/builds/${build.id}/betaBuildLocalizations`) : { data: [] };
-  const [review, betaReview] = await Promise.all([
+  const [review, betaReview, ageRating] = await Promise.all([
     request(auth, `/appStoreVersions/${version.id}/appStoreReviewDetail`),
     request(auth, `/apps/${app.id}/betaAppReviewDetail`),
+    request(auth, `/appInfos/${info.id}/ageRatingDeclaration`),
   ]);
   return {
     app,
@@ -111,6 +129,7 @@ async function records(auth, metadata) {
     buildLocales: buildLocales.data || [],
     review: review.data || null,
     betaReview: betaReview.data || null,
+    ageRating: ageRating.data || null,
   };
 }
 
@@ -140,6 +159,7 @@ async function main() {
     }
     console.log(`App Review contact: ${current.review ? Object.keys(current.review.attributes).filter((key) => current.review.attributes[key] != null).join(', ') : 'none'}`);
     console.log(`Beta Review contact: ${current.betaReview ? Object.keys(current.betaReview.attributes).filter((key) => current.betaReview.attributes[key] != null).join(', ') : 'none'}`);
+    console.log(`Age rating: ${current.info.attributes.appStoreAgeRating || 'unset'}; questionnaire: ${current.ageRating ? Object.entries(current.ageRating.attributes).filter(([key, value]) => key !== 'kidsAgeBand' && value != null).map(([key, value]) => `${key}=${value}`).join(', ') : 'none'}`);
     return;
   }
   const wantedCategories = { primaryCategory: metadata.primaryCategory, secondaryCategory: metadata.secondaryCategory };
@@ -182,6 +202,9 @@ async function main() {
     { appStoreVersion: { data: { type: 'appStoreVersions', id: current.version.id } } }, 'App Review contact');
   await upsert(auth, mode, 'betaAppReviewDetails', 'betaAppReviewDetails', current.betaReview,
     metadata.reviewContact, null, 'Beta Review contact');
+  if (!current.ageRating) throw new Error('Age rating declaration was not found.');
+  await upsert(auth, mode, 'ageRatingDeclarations', 'ageRatingDeclarations', current.ageRating,
+    metadata.ageRating, null, 'age rating questionnaire');
 }
 
 main().catch((error) => { console.error(error.message); process.exitCode = 1; });

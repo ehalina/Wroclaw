@@ -12,6 +12,7 @@ Checked and updated: 2026-09-22. App: `Wroclaw Storywalk`, bundle ID `com.event.
 - Verified public Privacy Policy URL, saved for all three App Store and TestFlight localizations.
 - Support URL for all three App Store localizations. It currently opens the published policy page, which includes the contact email; replace it with a dedicated support page when available.
 - TestFlight feedback email in all three languages; Halina Yarmolenka's email and phone in App Review and Beta Review contact details.
+- Age rating questionnaire: rare, mild historical references to realistic violence and weapons; no graphic violence, chat, user publishing, advertising, or unrestricted web access. Apple calculated `TWELVE_PLUS` for the current app info. The owner confirmed that historical violence appears only in non-scary text. Apple normalized both nonzero descriptors to `INFREQUENT_OR_MILD` in the API.
 
 The write script checks the bundle ID, version, editable status, lengths and current values. It refuses to replace nonempty text that differs from the local file. It was rerun in dry-run mode after writing; the API reported no remaining differences.
 
@@ -30,7 +31,7 @@ The App Store Connect API key is ignored under `___keys/ios/`. It is never inclu
 
 - **App Privacy answers.** The public policy is live, but the app loads Firebase Auth/Firestore; account initialization can create an anonymous user, save username/quest progress to Firestore, and request the public IP from ipify. Map actual data collection before submitting the questionnaire. The policy is generic and also mentions advertising, which is not planned for this release; an app-specific update would improve accuracy.
 - **Dedicated support page.** The current support URL points to the policy page because it contains the supplied contact email.
-- **Age rating.** Historical content includes descriptions of war and torture; review Apple's current questionnaire against all content before answering. No rating was submitted.
+- **Age rating after content changes.** Recheck the answers if scenes, illustrations, or features change; the current questionnaire is saved.
 - **App Review access.** Contact fields are set. The tour appears accessible without login, but this must be confirmed on a device before setting the demo-account answer.
 - **Content rights, accessibility, pricing and regions.** These require owner decisions or verification; no declarations were guessed.
 - **Screenshots.** The 27 browser-captured candidate images under ignored `artifacts/store-screenshots/` need native rendering and editorial review before upload.
