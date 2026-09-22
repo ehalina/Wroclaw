@@ -32,9 +32,16 @@ The key has **not** been created by adding these scripts. Google Play app creati
 ```bash
 make ios-archive BUILD_ARGS=--dry-run
 make ios-archive
+make ios-archive BUILD_ARGS=--no-upload
 ```
 
-The script regenerates the iOS launcher icon from `resources/icon-source.png`, increments `CURRENT_PROJECT_VERSION` in the Xcode project, syncs Capacitor, and creates a Release archive at `artifacts/native/ios/App-<version>-<build>.xcarchive` using Xcode automatic signing. It appends each run to `artifacts/native/ios/build-ios.log`, including the selected version, build number, archive path, and build output, so old archives can be reviewed and removed manually from the same directory when needed. Pass `IOS_BUILD_NUMBER=N` only when you need to force a specific build number. The first TestFlight build is already `1.0 (1)`, so replacements need higher build numbers. Local `1.0 (2)` archived successfully with an Apple Development signature and the new AppIcon. Xcode Organizer must export or distribute it with the Apple Distribution identity for TestFlight; this script does not upload it. Review the new icon in the app before distribution.
+The script regenerates the iOS launcher icon from `resources/icon-source.png`, increments `CURRENT_PROJECT_VERSION` in the Xcode project, syncs Capacitor, creates a Release archive at `artifacts/native/ios/App-<version>-<build>.xcarchive`, then exports/uploads it to App Store Connect/TestFlight through `xcodebuild -exportArchive`. It appends each run to `artifacts/native/ios/build-ios.log`, including the selected version, build number, archive path, export path, upload status, and build output, so old archives can be reviewed and removed manually from the same directory when needed. Pass `BUILD_ARGS=--no-upload` for a local archive only, or `IOS_BUILD_NUMBER=N` when you need to force a specific build number; if that archive already exists and upload is enabled, the script skips rebuilding and uploads the existing archive. Upload authentication reads `ASC_ISSUER_ID` from `___keys/ios/asc.env`, `___keys/ios/issuer-id.txt`, `.env`, or the shell, and auto-detects the single `___keys/ios/AuthKey_*.p8` file unless `ASC_KEY_ID`/`ASC_KEY_PATH` override it. The first TestFlight build is already `1.0 (1)`, so replacements need higher build numbers. Review the new icon in TestFlight before distribution.
+
+Example ignored `___keys/ios/asc.env`:
+
+```dotenv
+ASC_ISSUER_ID=...
+```
 
 ## Store screenshots
 
