@@ -1,6 +1,6 @@
 # Native release tools
 
-These scripts are adapted from the local Dino and Models42 projects for Wroclaw Storywalk (`com.event.horizon.wroclaw`). Run them from the repository through `make`. They create local build assets and do not upload to either store.
+These scripts are adapted from the local Dino and Models42 projects for Wroclaw Storywalk (`com.event.horizon.wroclaw`). Run them from the repository through `make`. Android commands create local build assets; the iOS archive command can also export/upload to App Store Connect/TestFlight.
 
 ## Icons
 

@@ -18,7 +18,7 @@
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
-**Native release preparation (2026-09-22):** App name `Wroclaw Storywalk` and ID `com.event.horizon.wroclaw` are aligned in Capacitor, Xcode, and Android. iOS `1.0 (1)` is in internal TestFlight with two invited testers. New Wroclaw icon art, icon generation, build/signing scripts and EN/RU/PL screenshot capture are in place; `make audit`, Android debug and all 27 screenshot captures pass. App Store Connect now has Travel/Education categories and EN/RU/PL listing/TestFlight text; privacy, rating, contacts and screenshot review remain. A new local iOS `1.0 (2)` archive contains the icon and has a valid Apple Development signature; distribution/export and upload remain. Later: Android upload-key creation and Play internal test.
+**Native release preparation (2026-09-22):** App name `Wroclaw Storywalk` and ID `com.event.horizon.wroclaw` are aligned in Capacitor, Xcode, and Android. iOS `1.0 (1)` is in internal TestFlight with two invited testers. New Wroclaw icon art, icon generation, build/signing scripts and EN/RU/PL screenshot capture are in place; `make audit`, Android debug and all 27 screenshot captures pass. App Store Connect now has Travel/Education categories and EN/RU/PL listing/TestFlight text; privacy, rating, contacts and screenshot review remain. A new local iOS `1.0 (2)` archive contains the icon and has a valid Apple Development signature. `build-ios.sh` now handles icon generation, build-number incrementing, archive logging, export, and TestFlight upload; `IOS_BUILD_NUMBER=2 ./build-ios.sh` uploads the existing `1.0 (2)` archive after the local App Store Connect issuer ID is present under `___keys/ios/`. Later: Android upload-key creation and Play internal test.
 
 ---
 

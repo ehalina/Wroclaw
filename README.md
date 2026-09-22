@@ -87,7 +87,7 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed technical stack.
 
 `make android-debug` and `make android-release` use `CAPACITOR_JAVA_HOME` and default to Homebrew OpenJDK 21 on Apple Silicon. Override it if your JDK 21 is installed elsewhere.
 
-Both native platforms use ID `com.event.horizon.wroclaw` and display name **Wroclaw Storywalk**. iOS `1.0 (1)` is in internal TestFlight, with invited testers awaiting device validation. Android debug builds with the same ID; an upload key and Play-ready AAB are still pending.
+Both native platforms use ID `com.event.horizon.wroclaw` and display name **Wroclaw Storywalk**. iOS `1.0 (1)` is in internal TestFlight, with invited testers awaiting device validation. The iOS build script now regenerates the icon, increments the build number, archives, and uploads to TestFlight; use `IOS_BUILD_NUMBER=2 ./build-ios.sh` to upload the already-built new-icon archive. Android debug builds with the same ID; an upload key and Play-ready AAB are still pending.
 
 `make dev` defaults to port `5173`; use `make dev PORT=5176` if that port is already busy.
 
@@ -143,7 +143,7 @@ make android-release  # Build Android release APK
 make icons            # Regenerate both native launcher icon sets
 make android-build    # Sync and build Android debug APK
 make android-bundle   # Build and verify signed Android AAB/APK (requires upload key)
-make ios-archive      # Sync and archive signed iOS Release
+make ios-archive      # Sync, archive, and upload signed iOS Release to TestFlight
 make store-screenshots # Capture EN/RU/PL screenshots for review
 ```
 
