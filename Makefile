@@ -2,7 +2,7 @@ CAPACITOR_JAVA_HOME ?= /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents
 PORT ?= 5173
 E2E_PORT ?= 6173
 
-.PHONY: help install dev build start lint fix-lint typecheck test test-watch test-e2e smoke security security-fix audit clean reinstall doctor poc-template stage-06-08-screenshots stage-06-14-audio stage-06-15-audio stage-06-17-sunset-webp stage-06-18-scene-jpg-screenshots stage-06-19-tumski11-webp-poc stage-06-20-video-review stage-06-21-video-metadata stage-06-22-video-lazy-source stage-06-23-loading-state stage-06-24-loading-helper stage-06-25-loading-timeout cap-sync cap-copy cap-add-android cap-add-ios cap-open-android cap-open-ios android-debug android-release android-build android-bundle android-signing-create android-signing-check android-signing-verify ios-archive icons icons-ios icons-android icons-dry-run store-screenshots
+.PHONY: help install dev build start lint fix-lint typecheck test test-watch test-e2e smoke security security-fix audit clean reinstall doctor poc-template stage-06-08-screenshots stage-06-14-audio stage-06-15-audio stage-06-17-sunset-webp stage-06-18-scene-jpg-screenshots stage-06-19-tumski11-webp-poc stage-06-20-video-review stage-06-21-video-metadata stage-06-22-video-lazy-source stage-06-23-loading-state stage-06-24-loading-helper stage-06-25-loading-timeout cap-sync cap-copy cap-add-android cap-add-ios cap-open-android cap-open-ios android-debug android-release android-build android-bundle android-signing-create android-signing-check android-signing-verify ios-archive icons icons-ios icons-android icons-dry-run store-screenshots asc-inspect asc-dry-run asc-apply
 
 help:
 	@printf "Available commands:\n"
@@ -31,9 +31,12 @@ help:
 	@printf "  make android-release  Build Android release APK with JDK 21\n"
 	@printf "  make android-build    Sync and build debug APK\n"
 	@printf "  make android-bundle   Build and verify signed release AAB/APK\n"
-	@printf "  make ios-archive      Build signed iOS Release archive locally\n"
+	@printf "  make ios-archive      Build signed iOS Release archive and upload to TestFlight\n"
 	@printf "  make icons            Generate iOS and Android icons from resources/icon-source.png\n"
 	@printf "  make store-screenshots Capture EN/RU/PL store screenshot matrix\n"
+	@printf "  make asc-inspect      Inspect Wroclaw App Store Connect metadata\n"
+	@printf "  make asc-dry-run      Preview safe metadata updates\n"
+	@printf "  make asc-apply        Apply previewed metadata updates\n"
 	@printf "  make cap-open-android Open Android project\n"
 	@printf "  make cap-open-ios     Open iOS project\n"
 	@printf "  make security         Run npm audit\n"
@@ -192,3 +195,12 @@ icons-dry-run:
 
 store-screenshots:
 	node scripts/capture-store-screenshots.mjs $(SCREENSHOT_ARGS)
+
+asc-inspect:
+	node scripts/app-store-connect-metadata.mjs inspect
+
+asc-dry-run:
+	node scripts/app-store-connect-metadata.mjs dry-run
+
+asc-apply:
+	node scripts/app-store-connect-metadata.mjs apply

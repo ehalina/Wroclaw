@@ -22,6 +22,7 @@ Static interactive tour of historic Wroclaw, currently centered on Tumski Island
 - **[docs/refactoring/](docs/refactoring/)** - Refactoring review, master plan, stage notes, and verification artifacts
 - **[docs/release/ios-android-release-plan.md](docs/release/ios-android-release-plan.md)** - iOS TestFlight and Android release plan
 - **[docs/release/native-tools.md](docs/release/native-tools.md)** - icons, native builds, signing, and store screenshots
+- **[docs/release/app-store-connect-status.md](docs/release/app-store-connect-status.md)** - current App Store Connect fields and remaining declarations
 
 ### Configuration Files
 - **[Makefile](Makefile)** - Standard commands (`make dev`, `make build`, etc)

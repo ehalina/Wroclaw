@@ -192,11 +192,12 @@
 - [x] Record exempt encryption for iOS `1.0 (1)`; Apple reports `IN_BETA_TESTING` and the build is linked to `Internal Testing` (2026-09-22).
 - [x] Add Wroclaw launcher art and reproducible iOS/Android icon generation; adapt local native build, Android upload-key/AAB-signing, and EN/RU/PL screenshot tooling (2026-09-22).
 - [x] Capture all 27 EN/RU/PL candidate screenshots and create a local iOS `1.0 (2)` archive with the new icon; validate bundle ID, build number and local signature (2026-09-22).
+- [x] Fill App Store Connect Travel/Education categories, EN/RU/PL listing text, copyright, manual release setting, TestFlight app descriptions and build `1.0 (1)` test instructions; verify through API (2026-09-22).
 - [ ] Have invited internal testers accept TestFlight and install the build on a device; collect route, audio, localization, and crash feedback.
-- [ ] Review generated icon on devices, EN/RU/PL content, privacy/data practices, metadata, candidate screenshots, and support contacts before App Store submission. The current TestFlight `1.0 (1)` predates the new icon; export and upload local `1.0 (2)` for final validation.
+- [ ] Review generated icon on devices, EN/RU/PL content and submitted listing text, privacy/data practices, age rating, candidate screenshots, and support contacts before App Store submission. The current TestFlight `1.0 (1)` predates the new icon; export and upload local `1.0 (2)` for final validation.
 - [ ] Create and securely back up the Android upload key, prepare a signed AAB, and run Google Play internal testing after iOS device validation.
 
-Detailed sequence: `docs/release/ios-android-release-plan.md`; local commands: `docs/release/native-tools.md`.
+Detailed sequence: `docs/release/ios-android-release-plan.md`; local commands: `docs/release/native-tools.md`; live metadata status: `docs/release/app-store-connect-status.md`.
 
 ---
 

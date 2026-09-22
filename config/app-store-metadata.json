@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "bundleId": "com.event.horizon.wroclaw",
+  "version": "1.0",
+  "primaryCategory": "TRAVEL",
+  "secondaryCategory": "EDUCATION",
+  "copyright": "2026 Halina Yarmolenka",
+  "usesIdfa": false,
+  "releaseType": "MANUAL",
+  "localizations": {
+    "en-US": {
+      "name": "Wroclaw Storywalk",
+      "subtitle": "History comes to life",
+      "description": "Discover the historic heart of Wrocław through an illustrated, interactive walk around Ostrów Tumski (Cathedral Island).\n\nMove between scenes, open the map to find places of interest, and read stories about bridges, churches, legends, and the city's past. Ambient sound accompanies the journey and can be muted at any time.\n\nStart at Cathedral Bridge and explore at your own pace. The tour is available in English, Polish, and Russian.",
+      "keywords": "Wrocław,Ostrów Tumski,history,city walk,heritage,audio guide,architecture,Poland",
+      "promotionalText": "Step into Wrocław's past with an illustrated walk through Cathedral Island, its landmarks, and its stories.",
+      "betaDescription": "An illustrated, interactive tour of Wrocław's historic Ostrów Tumski with scenes, a map, stories, and ambient sound.",
+      "whatToTest": "Explore the Ostrów Tumski route. Check scene navigation, map markers, audio mute and unmute, and English, Polish, and Russian text. Please report crashes, broken routes, and unreadable text."
+    },
+    "ru": {
+      "name": "Wroclaw Storywalk",
+      "subtitle": "Истории старого Вроцлава",
+      "description": "Откройте исторический Вроцлав во время интерактивной прогулки по Острову Тумскому. Иллюстрированные сцены помогут исследовать этот район в собственном темпе.\n\nПереходите между локациями, открывайте карту и читайте истории о мостах, храмах, легендах и прошлом города. Прогулку сопровождают фоновые звуки, которые можно отключить.\n\nНачните с Тумского моста. Приложение доступно на русском, польском и английском языках.",
+      "keywords": "Вроцлав,Остров Тумский,история,прогулка,путеводитель,архитектура,Польша",
+      "promotionalText": "Прогуляйтесь по Острову Тумскому: иллюстрированные сцены, карта и истории старого Вроцлава.",
+      "betaDescription": "Иллюстрированная интерактивная прогулка по Острову Тумскому: сцены, карта, истории и фоновые звуки.",
+      "whatToTest": "Пройдите маршрут по Острову Тумскому. Проверьте переходы между сценами, метки на карте, включение и отключение звука, тексты на русском, польском и английском. Сообщайте о сбоях, сломанных переходах и нечитаемом тексте."
+    },
+    "pl": {
+      "name": "Wroclaw Storywalk",
+      "subtitle": "Historie dawnego Wrocławia",
+      "description": "Odkryj historyczny Wrocław podczas interaktywnego spaceru po Ostrowie Tumskim. Ilustrowane sceny pozwalają poznawać tę część miasta we własnym tempie.\n\nPrzechodź między miejscami, otwieraj mapę i czytaj opowieści o mostach, kościołach, legendach i dziejach miasta. Spacerowi towarzyszą dźwięki tła, które możesz wyłączyć.\n\nZacznij przy Moście Tumskim. Aplikacja jest dostępna po polsku, angielsku i rosyjsku.",
+      "keywords": "Wrocław,Ostrów Tumski,historia,spacer,przewodnik,zabytki,architektura",
+      "promotionalText": "Poznaj Ostrów Tumski przez ilustrowane sceny, mapę i opowieści o dawnym Wrocławiu.",
+      "betaDescription": "Ilustrowany, interaktywny spacer po Ostrowie Tumskim ze scenami, mapą, opowieściami i dźwiękami tła.",
+      "whatToTest": "Przejdź trasę po Ostrowie Tumskim. Sprawdź przechodzenie między scenami, znaczniki na mapie, włączanie i wyłączanie dźwięku oraz teksty po polsku, angielsku i rosyjsku. Zgłaszaj awarie, niedziałające przejścia i nieczytelny tekst."
+    }
+  }
+}
