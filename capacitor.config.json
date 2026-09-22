@@ -1,6 +1,6 @@
 {
-  "appId": "com.wroclaw.tumski",
-  "appName": "Wroclaw Tumski Tour",
+  "appId": "com.event.horizon.wroclaw",
+  "appName": "Wroclaw Storywalk",
   "webDir": "www",
   "bundledWebRuntime": false,
   "server": {

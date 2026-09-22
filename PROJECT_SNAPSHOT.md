@@ -18,6 +18,8 @@
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
+**Native release preparation (2026-09-22):** App name `Wroclaw Storywalk` and ID `com.event.horizon.wroclaw` are aligned in Capacitor, Xcode, and Android. Capacitor sync, Android debug/release builds, unsigned iOS Simulator Release build, signed iOS device archive, `make audit` and 74 smoke tests passed. Xcode reported a successful App Store Connect upload of iOS `1.0 (1)`; Apple processing and internal TestFlight distribution remain to be checked. The iOS icon is still the default Capacitor artwork and needs replacement before public release.
+
 ---
 
 ## 📦 Установленные зависимости

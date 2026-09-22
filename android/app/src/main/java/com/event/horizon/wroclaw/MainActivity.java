@@ -1,4 +1,4 @@
-package com.wroclaw.tumski;
+package com.event.horizon.wroclaw;
 
 import com.getcapacitor.BridgeActivity;
 

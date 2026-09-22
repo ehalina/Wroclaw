@@ -1,9 +1,9 @@
-# Wroclaw - Interactive Tumski Island Tour
+# Wroclaw Storywalk
 
 **Version:** 0.1.0
 **Last Updated:** 2026-06-27
 
-Static interactive tour of Tumski Island in Wroclaw. The project runs as a vanilla JavaScript web app and is wrapped for Android/iOS with Capacitor.
+Static interactive tour of historic Wroclaw, currently centered on Tumski Island. The project runs as a vanilla JavaScript web app and is wrapped for Android/iOS with Capacitor.
 
 ---
 
@@ -20,6 +20,7 @@ Static interactive tour of Tumski Island in Wroclaw. The project runs as a vanil
 - **[WORKFLOW.md](WORKFLOW.md)** - Development workflows and sprint processes
 - **[PROJECT_SNAPSHOT.md](PROJECT_SNAPSHOT.md)** - Current technical snapshot and recent refactoring history
 - **[docs/refactoring/](docs/refactoring/)** - Refactoring review, master plan, stage notes, and verification artifacts
+- **[docs/release/ios-android-release-plan.md](docs/release/ios-android-release-plan.md)** - iOS TestFlight and Android release plan
 
 ### Configuration Files
 - **[Makefile](Makefile)** - Standard commands (`make dev`, `make build`, etc)
@@ -83,6 +84,8 @@ See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed technical stack.
 - Xcode for iOS builds
 
 `make android-debug` and `make android-release` use `CAPACITOR_JAVA_HOME` and default to Homebrew OpenJDK 21 on Apple Silicon. Override it if your JDK 21 is installed elsewhere.
+
+Both native platforms use ID `com.event.horizon.wroclaw` and display name **Wroclaw Storywalk**. A signed iOS archive `1.0 (1)` was uploaded to App Store Connect on 2026-09-22; Apple processing and internal TestFlight distribution remain to be checked. Android debug builds with the new ID, while a Play-ready AAB is still pending.
 
 `make dev` defaults to port `5173`; use `make dev PORT=5176` if that port is already busy.
 

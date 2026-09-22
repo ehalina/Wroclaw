@@ -141,6 +141,9 @@ Wroclaw/
   - `android/app/build/outputs/apk/debug/wroclaw_debug.apk`;
   - `android/app/build/outputs/apk/release/wroclaw_release.apk`.
 - iOS target product names are fixed per configuration for future packaging: `wroclaw_debug` for Debug and `wroclaw_release` for Release.
+- iOS app record identity is `com.event.horizon.wroclaw` with display name `Wroclaw Storywalk`; Capacitor `appId` and Xcode Debug/Release bundle IDs match it.
+- Android package ID, Java namespace, and launcher name match the Capacitor identity: `com.event.horizon.wroclaw` / `Wroclaw Storywalk`.
+- Xcode Debug/Release use automatic signing with Apple Team `AB8LFY64PF`; the App Store Connect API private key stays in the ignored `___keys/` directory and is never bundled into the app.
 
 ### 1. SPA Architecture через iframe
 
