@@ -188,7 +188,8 @@
 
 - [x] Align iOS and Android identity to `Wroclaw Storywalk` / `com.event.horizon.wroclaw`.
 - [x] Build and upload signed iOS `1.0 (1)` archive to App Store Connect (2026-09-22).
-- [ ] Confirm Apple processing, complete internal TestFlight group details, and install the build on a device.
+- [x] Confirm App Store Connect processed iOS `1.0 (1)` as `VALID` and create the `Internal Testing` group (2026-09-22).
+- [ ] Complete export compliance determination (`MISSING_EXPORT_COMPLIANCE`), attach the build to the internal group, add testers, and install on a device.
 - [ ] Review EN/RU/PL content, privacy/data practices, release icon, metadata, screenshots, and support contacts before App Store submission.
 - [ ] Prepare signed Android AAB and Google Play internal test after iOS internal testing.
 

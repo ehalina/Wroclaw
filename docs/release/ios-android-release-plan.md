@@ -16,22 +16,23 @@ Updated: 2026-09-22. This plan covers the current Tumski Island tour and leaves 
 | --- | --- | --- |
 | App identity | Done locally | Capacitor, Xcode and Android use `com.event.horizon.wroclaw`; display name is `Wroclaw Storywalk`. |
 | Web and native sync | Done locally | `make cap-sync` passes. |
-| iOS compilation/upload | Partial | Unsigned Simulator build and signed device archive pass. Xcode reported successful upload of `1.0 (1)` on 2026-09-22; Apple processing and internal TestFlight distribution remain. |
+| iOS compilation/upload | Processing done | Signed `1.0 (1)` was uploaded on 2026-09-22. App Store Connect API reports `processingState=VALID`; distribution still requires export compliance and a tester group. |
 | Android compilation | Partial | `make android-debug` and `make android-release` pass with the new package ID. A signed AAB remains. |
 | Automated checks | Done locally | `make audit` reports zero npm vulnerabilities and `make smoke` passes all 74 browser tests. |
-| Store records | iOS record accepts uploads | App Store Connect accepted the archive for `com.event.horizon.wroclaw`. Create the Android record later. |
+| Store records | iOS record and group exist | App Store Connect confirms `Wroclaw Storywalk` / `com.event.horizon.wroclaw`. An `Internal Testing` group exists with no linked build yet. Create the Android record later. |
+| Export compliance | Needs owner determination | The build has `internalBuildState=MISSING_EXPORT_COMPLIANCE`; Apple's API rejected linking it to the internal group. Review the app and included libraries, then complete Apple's encryption declaration. Do not mark the build exempt without a supported decision. |
 | Release content | Needs review | BACKLOG tracks incomplete tour content and translations. Audit actual EN/RU/PL pages and routes before external testing. |
 | Data practices | Needs review | Web runtime loads Firebase Auth/Firestore scripts and Google Fonts; account code can use Firestore and an IP lookup. Determine what is enabled in native builds before answering privacy forms. |
 | Store assets and contacts | Needs review | The iOS icon is still the default Capacitor artwork. Replace it before public release; prepare screenshots, a public privacy policy URL, support URL/email, and licensed media inventory. |
 
 ## iOS: internal TestFlight first
 
-1. **Account and identity.** Confirm the app record uses `com.event.horizon.wroclaw`, the Apple Team ID, API key Issuer ID, and that signing access is available to Xcode. Keep the `.p8` file outside Git; it authenticates Apple services but is not an app signing certificate. Check pending agreements.
+1. **Account and identity — confirmed.** The app record uses `com.event.horizon.wroclaw`; the Wroclaw key authenticates with the team Issuer ID found in Models42's local App Store Connect configuration. Xcode signs with Team `AB8LFY64PF`. Keep the `.p8` file outside Git; it authenticates Apple services but is not an app signing certificate. Check pending agreements.
 2. **Build readiness.** Resolve any broken first-run route, audio, orientation, online/offline, Firebase sign-in, and navigation behavior on a real iPhone and supported iPad. Audit EN/RU/PL text and missing content. Confirm media rights and icon quality. Make a fresh `make cap-sync` before archiving.
 3. **Release metadata.** Draft EN/RU/PL name, subtitle, description, keywords, support/privacy URLs, copyright, and TestFlight “What to Test” text. Reuse the guarded API metadata pattern from Dino for editable text fields; inspect the remote values before any write. Set age rating, privacy answers, and export compliance from observed app behavior in App Store Connect. Do not guess “no data collected” while Firebase and IP lookup code remain available.
 4. **Signed archive — done for 1.0 (1).** Xcode automatic signing used Team `AB8LFY64PF`; the generic iOS archive has the expected bundle ID, display name, version and embedded provisioning profile. Keep the archive and diagnostics outside Git; validate runtime and icon on device.
-5. **Upload and processing — upload done.** Xcode reported `Upload succeeded` on 2026-09-22. Wait for processing and check the build under TestFlight. An accepted upload is not proof that processing or distribution succeeded.
-6. **Internal testing.** Add an internal group and build, supply feedback contact and “What to Test”, install through TestFlight, and collect crash/route/audio/localization feedback. Internal testing precedes any external TestFlight group; external testing may need Beta App Review.
+5. **Upload and processing — done.** Xcode reported `Upload succeeded` on 2026-09-22, and App Store Connect API now reports the build as `VALID`.
+6. **Internal testing — group created, build blocked.** The `Internal Testing` group exists, but Apple reports `MISSING_EXPORT_COMPLIANCE` and rejected the build assignment. Complete the encryption determination, link the build, supply feedback contact and “What to Test”, add eligible internal testers, install through TestFlight, and collect crash/route/audio/localization feedback. Internal testing precedes any external TestFlight group; external testing may need Beta App Review.
 7. **App Store release later.** Finish screenshots, app privacy, age rating, accessibility and support information, pricing/availability, and a final content review. Submit a tested build to App Review only after owner review of the public listing.
 
 ## Android: prepare after iOS internal test
