@@ -31,10 +31,10 @@ The key has **not** been created by adding these scripts. Google Play app creati
 
 ```bash
 make ios-archive BUILD_ARGS=--dry-run
-make ios-archive IOS_BUILD_NUMBER=2
+make ios-archive
 ```
 
-The script syncs Capacitor and creates a Release archive at `artifacts/native/ios/App.xcarchive` using Xcode automatic signing. It refuses to overwrite an existing archive. The first TestFlight build is already `1.0 (1)`, so a replacement needs a higher build number. Local `1.0 (2)` archived successfully with an Apple Development signature and the new AppIcon. Xcode Organizer must export or distribute it with the Apple Distribution identity for TestFlight; this script does not upload it. Review the new icon in the app before distribution.
+The script regenerates the iOS launcher icon from `resources/icon-source.png`, increments `CURRENT_PROJECT_VERSION` in the Xcode project, syncs Capacitor, and creates a Release archive at `artifacts/native/ios/App-<version>-<build>.xcarchive` using Xcode automatic signing. It appends each run to `artifacts/native/ios/build-ios.log`, including the selected version, build number, archive path, and build output, so old archives can be reviewed and removed manually from the same directory when needed. Pass `IOS_BUILD_NUMBER=N` only when you need to force a specific build number. The first TestFlight build is already `1.0 (1)`, so replacements need higher build numbers. Local `1.0 (2)` archived successfully with an Apple Development signature and the new AppIcon. Xcode Organizer must export or distribute it with the Apple Distribution identity for TestFlight; this script does not upload it. Review the new icon in the app before distribution.
 
 ## Store screenshots
 
