@@ -9,6 +9,8 @@ Checked and updated: 2026-09-22. App: `Wroclaw Storywalk`, bundle ID `com.event.
 - English (U.S.), Russian and Polish: name, subtitle, description, keywords and promotional text. Exact text is in [config/app-store-metadata.json](../../config/app-store-metadata.json).
 - TestFlight app description in all three languages.
 - “What to Test” for the uploaded TestFlight build `1.0 (1)` in all three languages.
+- “What to Test” for processed build `1.0 (2)` in all three languages; iOS version `1.0` is linked to this build for a future App Review submission. Linking the build did not submit the app for review.
+- Added build `1.0 (2)` to the existing **Internal Testing** group. Apple returned `204`, and a follow-up group read lists builds `2` and `1`.
 - Verified public Privacy Policy URL, saved for all three App Store and TestFlight localizations.
 - Support URL for all three App Store localizations. It currently opens the published policy page, which includes the contact email; replace it with a dedicated support page when available.
 - TestFlight feedback email in all three languages; Halina Yarmolenka's email and phone in App Review and Beta Review contact details.
@@ -33,12 +35,12 @@ The App Store Connect API key is ignored under `___keys/ios/`. It is never inclu
 
 ## Still open
 
-- **App Privacy answers.** The public policy is live, but the app loads Firebase Auth/Firestore; account initialization can create an anonymous user, save username/quest progress to Firestore, and request the public IP from ipify. Map actual data collection before submitting the questionnaire. The policy is generic and also mentions advertising, which is not planned for this release; an app-specific update would improve accuracy.
+- **App Privacy answers.** The public policy is live. The runtime loads Firebase Auth/Firestore; account initialization can create an anonymous user, store username, email (if the user registers), and quest progress in Firestore. `saveUser()` requests the public IP from ipify and stores it with the user record. Answer **Yes** to data collection. The likely declarations are **User ID**, **Email Address** (optional account), **Gameplay Content** (saved quest state), and the relevant data type for the stored IP address. For each, review purpose, user linkage and tracking against actual Firebase and ipify practices before publishing. Do not select “No data collected.” The policy is generic and mentions advertising, which is not planned for this release; an app-specific update would improve accuracy.
 - **Dedicated support page.** The current support URL points to the policy page because it contains the supplied contact email.
 - **Age rating after content changes.** Recheck the answers if scenes, illustrations, or features change; the current questionnaire is saved.
 - **App Review access.** Contact fields are set. The tour appears accessible without login, but this must be confirmed on a device before setting the demo-account answer.
-- **Content rights, accessibility, pricing and regions.** These require owner decisions or verification; no declarations were guessed.
+- **Content rights, accessibility, pricing and regions.** Content rights and first-release price await owner confirmation; no declarations were guessed. The selected build is no longer a review blocker.
 - **Screenshot validation.** The 18 iOS browser captures are uploaded and processed. Compare them with the installed native app on iPhone and iPad before App Review. The nine Android captures are for later Google Play preparation.
-- **New icon build.** TestFlight currently has `1.0 (1)` with the old icon. Local `1.0 (2)` contains the new icon and can be uploaded with `IOS_BUILD_NUMBER=2 ./build-ios.sh` after `ASC_ISSUER_ID` is stored under ignored `___keys/ios/`.
+- **New icon build.** App Store Connect has processed `1.0 (2)` as valid. Confirm that invited internal testers can install this build and that its new icon looks correct on a device.
 
 No public App Store submission was made.

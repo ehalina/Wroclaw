@@ -56,7 +56,7 @@ function assertEditable(current, desired, context) {
 }
 
 function validate(metadata) {
-  if (metadata.schemaVersion !== 1 || metadata.bundleId !== 'com.event.horizon.wroclaw' || metadata.version !== '1.0') {
+  if (metadata.schemaVersion !== 1 || metadata.bundleId !== 'com.event.horizon.wroclaw' || metadata.version !== '1.0' || metadata.selectedBuildVersion !== '2') {
     throw new Error('Unexpected metadata schema, bundle ID, or version.');
   }
   if (metadata.primaryCategory !== 'TRAVEL' || metadata.secondaryCategory !== 'EDUCATION') throw new Error('Unexpected categories.');
@@ -110,13 +110,15 @@ async function records(auth, metadata) {
   ]);
   const info = infos.data?.find((item) => item.attributes.appStoreState === 'PREPARE_FOR_SUBMISSION');
   const version = versions.data?.[0];
-  const build = builds.data?.length === 1 && builds.data[0].attributes.version === '1' ? builds.data[0] : null;
+  const build = builds.data?.find((item) => item.attributes.version === metadata.selectedBuildVersion && item.attributes.processingState === 'VALID' && !item.attributes.expired);
+  if (!build) throw new Error(`Valid iOS build 1.0 (${metadata.selectedBuildVersion}) was not found.`);
   if (!info || version?.attributes.appStoreState !== 'PREPARE_FOR_SUBMISSION') throw new Error('Editable app info/version 1.0 was not found.');
-  const buildLocales = build ? await request(auth, `/builds/${build.id}/betaBuildLocalizations`) : { data: [] };
-  const [review, betaReview, ageRating] = await Promise.all([
+  const buildLocales = await request(auth, `/builds/${build.id}/betaBuildLocalizations`);
+  const [review, betaReview, ageRating, linkedBuild] = await Promise.all([
     request(auth, `/appStoreVersions/${version.id}/appStoreReviewDetail`),
     request(auth, `/apps/${app.id}/betaAppReviewDetail`),
     request(auth, `/appInfos/${info.id}/ageRatingDeclaration`),
+    request(auth, `/appStoreVersions/${version.id}/relationships/build`),
   ]);
   return {
     app,
@@ -127,6 +129,7 @@ async function records(auth, metadata) {
     betaLocales: beta.data || [],
     build,
     buildLocales: buildLocales.data || [],
+    linkedBuildId: linkedBuild.data?.id || null,
     review: review.data || null,
     betaReview: betaReview.data || null,
     ageRating: ageRating.data || null,
@@ -154,6 +157,7 @@ async function main() {
   if (mode === 'inspect') {
     console.log(`Categories: ${current.info.relationships?.primaryCategory?.data?.id || 'unset'} / ${current.info.relationships?.secondaryCategory?.data?.id || 'unset'}`);
     console.log(`Version: copyright=${current.version.attributes.copyright || 'unset'}, IDFA=${current.version.attributes.usesIdfa ?? 'unset'}, release=${current.version.attributes.releaseType || 'unset'}`);
+    console.log(`Build: selected=${current.build.attributes.version}, linked=${current.linkedBuildId === current.build.id ? current.build.attributes.version : current.linkedBuildId || 'unset'}`);
     for (const [label, list] of [['app info', current.infoLocales], ['version', current.versionLocales], ['TestFlight', current.betaLocales], ['TestFlight build', current.buildLocales]]) {
       console.log(`${label}: ${list.map((item) => `${item.attributes.locale} (${Object.entries(item.attributes).filter(([key, value]) => key !== 'locale' && value != null && value !== '').map(([key]) => key).join(', ') || 'empty'})`).join('; ') || 'none'}`);
     }
@@ -190,12 +194,10 @@ async function main() {
     await upsert(auth, mode, 'betaAppLocalizations', 'betaAppLocalizations', beta,
       { ...(beta ? {} : { locale }), description: values.betaDescription, feedbackEmail: metadata.feedbackEmail, privacyPolicyUrl: metadata.privacyPolicyUrl },
       { app: { data: { type: 'apps', id: current.app.id } } }, `${locale} TestFlight app`);
-    if (current.build) {
-      const buildLocale = current.buildLocales.find((item) => item.attributes.locale === locale);
-      await upsert(auth, mode, 'betaBuildLocalizations', 'betaBuildLocalizations', buildLocale,
-        { ...(buildLocale ? {} : { locale }), whatsNew: values.whatToTest },
-        { build: { data: { type: 'builds', id: current.build.id } } }, `${locale} TestFlight build 1.0 (1)`);
-    }
+    const buildLocale = current.buildLocales.find((item) => item.attributes.locale === locale);
+    await upsert(auth, mode, 'betaBuildLocalizations', 'betaBuildLocalizations', buildLocale,
+      { ...(buildLocale ? {} : { locale }), whatsNew: values.whatToTest },
+      { build: { data: { type: 'builds', id: current.build.id } } }, `${locale} TestFlight build 1.0 (${metadata.selectedBuildVersion})`);
   }
   await upsert(auth, mode, 'appStoreReviewDetails', 'appStoreReviewDetails', current.review,
     metadata.reviewContact,
@@ -205,6 +207,13 @@ async function main() {
   if (!current.ageRating) throw new Error('Age rating declaration was not found.');
   await upsert(auth, mode, 'ageRatingDeclarations', 'ageRatingDeclarations', current.ageRating,
     metadata.ageRating, null, 'age rating questionnaire');
+  if (current.linkedBuildId && current.linkedBuildId !== current.build.id) throw new Error('A different build is already linked to iOS 1.0; review it before changing.');
+  if (!current.linkedBuildId) {
+    console.log(`${mode === 'apply' ? 'Link' : 'Would link'} iOS 1.0 to build ${metadata.selectedBuildVersion}`);
+    if (mode === 'apply') await request(auth, `/appStoreVersions/${current.version.id}/relationships/build`, 'PATCH', {
+      data: { type: 'builds', id: current.build.id },
+    });
+  }
 }
 
 main().catch((error) => { console.error(error.message); process.exitCode = 1; });

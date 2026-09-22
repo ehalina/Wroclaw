@@ -197,8 +197,10 @@
 - [x] Submit the owner-confirmed age rating questionnaire through the API; Apple calculated `TWELVE_PLUS`, and a second dry run found no differences (2026-09-22).
 - [x] Upload 18 iPhone/iPad App Store screenshots for EN/RU/PL; Apple reports `COMPLETE` for all six sets of three images (2026-09-22).
 - [x] Update `build-ios.sh` so the normal iOS build command regenerates the icon, increments the build number, logs archive paths, exports, and uploads to TestFlight when App Store Connect issuer credentials are available locally (2026-09-22).
+- [x] Confirm App Store Connect processed iOS `1.0 (2)`, add EN/RU/PL TestFlight instructions, link it to iOS App Store version `1.0`, and add it to **Internal Testing**; Apple lists builds `2` and `1` for that group (2026-09-22).
 - [ ] Have invited internal testers accept TestFlight and install the build on a device; collect route, audio, localization, and crash feedback.
-- [ ] Review generated icon on devices, EN/RU/PL content and submitted listing text, privacy/data practices, uploaded browser screenshots against the native app, and support contacts before App Store submission; recheck age rating if content changes. The current TestFlight `1.0 (1)` predates the new icon; add the local App Store Connect issuer ID under `___keys/ios/`, then run `IOS_BUILD_NUMBER=2 ./build-ios.sh` to upload the existing `1.0 (2)` archive for final validation.
+- [ ] Review generated icon on devices, EN/RU/PL content and submitted listing text, privacy/data practices, uploaded browser screenshots against the native app, and support contacts before App Store submission; recheck age rating if content changes. Build `1.0 (2)` is in **Internal Testing**; verify that testers can install and use it.
+- [ ] Complete the App Privacy questionnaire using the audited Firebase account, quest progress, and stored IP data flows; obtain the owner's content rights and first-release price decisions, then complete these two App Store Connect fields.
 - [ ] Create and securely back up the Android upload key, prepare a signed AAB, and run Google Play internal testing after iOS device validation.
 
 Detailed sequence: `docs/release/ios-android-release-plan.md`; local commands: `docs/release/native-tools.md`; live metadata status: `docs/release/app-store-connect-status.md`.

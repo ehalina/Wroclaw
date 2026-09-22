@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "bundleId": "com.event.horizon.wroclaw",
   "version": "1.0",
+  "selectedBuildVersion": "2",
   "primaryCategory": "TRAVEL",
   "secondaryCategory": "EDUCATION",
   "copyright": "2026 Halina Yarmolenka",
