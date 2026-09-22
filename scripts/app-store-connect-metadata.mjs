@@ -60,6 +60,14 @@ function validate(metadata) {
     throw new Error('Unexpected metadata schema, bundle ID, or version.');
   }
   if (metadata.primaryCategory !== 'TRAVEL' || metadata.secondaryCategory !== 'EDUCATION') throw new Error('Unexpected categories.');
+  for (const field of ['privacyPolicyUrl', 'supportUrl']) {
+    const url = new URL(metadata[field]);
+    if (url.protocol !== 'https:') throw new Error(`${field} must use HTTPS.`);
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(metadata.feedbackEmail)) throw new Error('Invalid feedback email.');
+  for (const field of ['contactFirstName', 'contactLastName', 'contactEmail', 'contactPhone']) {
+    if (!metadata.reviewContact?.[field]) throw new Error(`Missing reviewContact.${field}.`);
+  }
   const limits = { name: 30, subtitle: 30, description: 4000, keywords: 100, promotionalText: 170 };
   for (const [locale, values] of Object.entries(metadata.localizations)) {
     if (!['en-US', 'ru', 'pl'].includes(locale)) throw new Error(`Unexpected locale ${locale}`);
@@ -88,6 +96,10 @@ async function records(auth, metadata) {
   const build = builds.data?.length === 1 && builds.data[0].attributes.version === '1' ? builds.data[0] : null;
   if (!info || version?.attributes.appStoreState !== 'PREPARE_FOR_SUBMISSION') throw new Error('Editable app info/version 1.0 was not found.');
   const buildLocales = build ? await request(auth, `/builds/${build.id}/betaBuildLocalizations`) : { data: [] };
+  const [review, betaReview] = await Promise.all([
+    request(auth, `/appStoreVersions/${version.id}/appStoreReviewDetail`),
+    request(auth, `/apps/${app.id}/betaAppReviewDetail`),
+  ]);
   return {
     app,
     info,
@@ -97,6 +109,8 @@ async function records(auth, metadata) {
     betaLocales: beta.data || [],
     build,
     buildLocales: buildLocales.data || [],
+    review: review.data || null,
+    betaReview: betaReview.data || null,
   };
 }
 
@@ -124,6 +138,8 @@ async function main() {
     for (const [label, list] of [['app info', current.infoLocales], ['version', current.versionLocales], ['TestFlight', current.betaLocales], ['TestFlight build', current.buildLocales]]) {
       console.log(`${label}: ${list.map((item) => `${item.attributes.locale} (${Object.entries(item.attributes).filter(([key, value]) => key !== 'locale' && value != null && value !== '').map(([key]) => key).join(', ') || 'empty'})`).join('; ') || 'none'}`);
     }
+    console.log(`App Review contact: ${current.review ? Object.keys(current.review.attributes).filter((key) => current.review.attributes[key] != null).join(', ') : 'none'}`);
+    console.log(`Beta Review contact: ${current.betaReview ? Object.keys(current.betaReview.attributes).filter((key) => current.betaReview.attributes[key] != null).join(', ') : 'none'}`);
     return;
   }
   const wantedCategories = { primaryCategory: metadata.primaryCategory, secondaryCategory: metadata.secondaryCategory };
@@ -142,17 +158,17 @@ async function main() {
     const info = current.infoLocales.find((item) => item.attributes.locale === locale);
     const beta = current.betaLocales.find((item) => item.attributes.locale === locale);
     await upsert(auth, mode, 'appInfoLocalizations', 'appInfoLocalizations', info,
-      { ...(info ? {} : { locale }), name: values.name, subtitle: values.subtitle },
+      { ...(info ? {} : { locale }), name: values.name, subtitle: values.subtitle, privacyPolicyUrl: metadata.privacyPolicyUrl },
       { appInfo: { data: { type: 'appInfos', id: current.info.id } } }, `${locale} app info`);
     const versionLocales = mode === 'apply'
       ? (await request(auth, `/appStoreVersions/${current.version.id}/appStoreVersionLocalizations`)).data || []
       : current.versionLocales;
     const version = versionLocales.find((item) => item.attributes.locale === locale);
     await upsert(auth, mode, 'appStoreVersionLocalizations', 'appStoreVersionLocalizations', version,
-      { ...(version ? {} : { locale }), description: values.description, keywords: values.keywords, promotionalText: values.promotionalText },
+      { ...(version ? {} : { locale }), description: values.description, keywords: values.keywords, promotionalText: values.promotionalText, supportUrl: metadata.supportUrl },
       { appStoreVersion: { data: { type: 'appStoreVersions', id: current.version.id } } }, `${locale} store listing`);
     await upsert(auth, mode, 'betaAppLocalizations', 'betaAppLocalizations', beta,
-      { ...(beta ? {} : { locale }), description: values.betaDescription },
+      { ...(beta ? {} : { locale }), description: values.betaDescription, feedbackEmail: metadata.feedbackEmail, privacyPolicyUrl: metadata.privacyPolicyUrl },
       { app: { data: { type: 'apps', id: current.app.id } } }, `${locale} TestFlight app`);
     if (current.build) {
       const buildLocale = current.buildLocales.find((item) => item.attributes.locale === locale);
@@ -161,6 +177,11 @@ async function main() {
         { build: { data: { type: 'builds', id: current.build.id } } }, `${locale} TestFlight build 1.0 (1)`);
     }
   }
+  await upsert(auth, mode, 'appStoreReviewDetails', 'appStoreReviewDetails', current.review,
+    metadata.reviewContact,
+    { appStoreVersion: { data: { type: 'appStoreVersions', id: current.version.id } } }, 'App Review contact');
+  await upsert(auth, mode, 'betaAppReviewDetails', 'betaAppReviewDetails', current.betaReview,
+    metadata.reviewContact, null, 'Beta Review contact');
 }
 
 main().catch((error) => { console.error(error.message); process.exitCode = 1; });

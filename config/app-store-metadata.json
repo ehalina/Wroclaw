@@ -7,6 +7,15 @@
   "copyright": "2026 Halina Yarmolenka",
   "usesIdfa": false,
   "releaseType": "MANUAL",
+  "privacyPolicyUrl": "https://eventhorizon-hub.github.io/event-horizon/",
+  "supportUrl": "https://eventhorizon-hub.github.io/event-horizon/",
+  "feedbackEmail": "halina.yarmolenka@gmail.com",
+  "reviewContact": {
+    "contactFirstName": "Halina",
+    "contactLastName": "Yarmolenka",
+    "contactEmail": "halina.yarmolenka@gmail.com",
+    "contactPhone": "+48 515 078 653"
+  },
   "localizations": {
     "en-US": {
       "name": "Wroclaw Storywalk",
