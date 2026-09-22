@@ -11,6 +11,8 @@ Checked and updated: 2026-09-22. App: `Wroclaw Storywalk`, bundle ID `com.event.
 - “What to Test” for the uploaded TestFlight build `1.0 (1)` in all three languages.
 - “What to Test” for processed build `1.0 (2)` in all three languages; iOS version `1.0` is linked to this build for a future App Review submission. Linking the build did not submit the app for review.
 - Added build `1.0 (2)` to the existing **Internal Testing** group. Apple returned `204`, and a follow-up group read lists builds `2` and `1`.
+- Content rights: the owner confirmed publication rights for all text, images, map, music and other media. The app includes licensed third-party material, so `contentRightsDeclaration=USES_THIRD_PARTY_CONTENT` was saved and verified through the API.
+- First-release price: **Free**. The existing base territory is `USA`; the permanent manual base price is `$0.00`, and Apple generated automatic prices for the other 174 storefronts. The price schedule and zero-price point were read back through the API.
 - Verified public Privacy Policy URL, saved for all three App Store and TestFlight localizations.
 - Support URL for all three App Store localizations. It currently opens the published policy page, which includes the contact email; replace it with a dedicated support page when available.
 - TestFlight feedback email in all three languages; Halina Yarmolenka's email and phone in App Review and Beta Review contact details.
@@ -39,7 +41,7 @@ The App Store Connect API key is ignored under `___keys/ios/`. It is never inclu
 - **Dedicated support page.** The current support URL points to the policy page because it contains the supplied contact email.
 - **Age rating after content changes.** Recheck the answers if scenes, illustrations, or features change; the current questionnaire is saved.
 - **App Review access.** Contact fields are set. The tour appears accessible without login, but this must be confirmed on a device before setting the demo-account answer.
-- **Content rights, accessibility, pricing and regions.** Content rights and first-release price await owner confirmation; no declarations were guessed. The selected build is no longer a review blocker.
+- **Accessibility and availability.** These still need review before public submission. The owner-confirmed content rights and free price are saved; the selected build is also set.
 - **Screenshot validation.** The 18 iOS browser captures are uploaded and processed. Compare them with the installed native app on iPhone and iPad before App Review. The nine Android captures are for later Google Play preparation.
 - **New icon build.** App Store Connect has processed `1.0 (2)` as valid. Confirm that invited internal testers can install this build and that its new icon looks correct on a device.
 
