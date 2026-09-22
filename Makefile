@@ -2,7 +2,7 @@ CAPACITOR_JAVA_HOME ?= /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents
 PORT ?= 5173
 E2E_PORT ?= 6173
 
-.PHONY: help install dev build start lint fix-lint typecheck test test-watch test-e2e smoke security security-fix audit clean reinstall doctor poc-template stage-06-08-screenshots stage-06-14-audio stage-06-15-audio stage-06-17-sunset-webp stage-06-18-scene-jpg-screenshots stage-06-19-tumski11-webp-poc stage-06-20-video-review stage-06-21-video-metadata stage-06-22-video-lazy-source stage-06-23-loading-state stage-06-24-loading-helper stage-06-25-loading-timeout cap-sync cap-copy cap-add-android cap-add-ios cap-open-android cap-open-ios android-debug android-release
+.PHONY: help install dev build start lint fix-lint typecheck test test-watch test-e2e smoke security security-fix audit clean reinstall doctor poc-template stage-06-08-screenshots stage-06-14-audio stage-06-15-audio stage-06-17-sunset-webp stage-06-18-scene-jpg-screenshots stage-06-19-tumski11-webp-poc stage-06-20-video-review stage-06-21-video-metadata stage-06-22-video-lazy-source stage-06-23-loading-state stage-06-24-loading-helper stage-06-25-loading-timeout cap-sync cap-copy cap-add-android cap-add-ios cap-open-android cap-open-ios android-debug android-release android-build android-bundle android-signing-create android-signing-check android-signing-verify ios-archive icons icons-ios icons-android icons-dry-run store-screenshots
 
 help:
 	@printf "Available commands:\n"
@@ -29,6 +29,11 @@ help:
 	@printf "  make cap-sync         Build and sync Android/iOS projects\n"
 	@printf "  make android-debug    Build Android debug APK with JDK 21\n"
 	@printf "  make android-release  Build Android release APK with JDK 21\n"
+	@printf "  make android-build    Sync and build debug APK\n"
+	@printf "  make android-bundle   Build and verify signed release AAB/APK\n"
+	@printf "  make ios-archive      Build signed iOS Release archive locally\n"
+	@printf "  make icons            Generate iOS and Android icons from resources/icon-source.png\n"
+	@printf "  make store-screenshots Capture EN/RU/PL store screenshot matrix\n"
 	@printf "  make cap-open-android Open Android project\n"
 	@printf "  make cap-open-ios     Open iOS project\n"
 	@printf "  make security         Run npm audit\n"
@@ -154,3 +159,36 @@ android-debug:
 
 android-release:
 	cd android && JAVA_HOME="$(CAPACITOR_JAVA_HOME)" ./gradlew assembleRelease
+
+android-build:
+	CAPACITOR_JAVA_HOME="$(CAPACITOR_JAVA_HOME)" bash build-android.sh $(BUILD_ARGS)
+
+android-bundle:
+	CAPACITOR_JAVA_HOME="$(CAPACITOR_JAVA_HOME)" bash build-android-release.sh $(BUILD_ARGS)
+
+android-signing-create:
+	CAPACITOR_JAVA_HOME="$(CAPACITOR_JAVA_HOME)" bash _createSignOnce/create-sign-once.sh $(SIGNING_ARGS)
+
+android-signing-check:
+	bash _signAAB/sign-aab.sh check
+
+android-signing-verify:
+	CAPACITOR_JAVA_HOME="$(CAPACITOR_JAVA_HOME)" bash _signAAB/sign-aab.sh verify "$(AAB_PATH)"
+
+ios-archive:
+	bash build-ios.sh $(BUILD_ARGS)
+
+icons:
+	node scripts/generate-icons.mjs --all
+
+icons-ios:
+	node scripts/generate-icons.mjs --ios
+
+icons-android:
+	node scripts/generate-icons.mjs --android
+
+icons-dry-run:
+	node scripts/generate-icons.mjs --all --dry-run
+
+store-screenshots:
+	node scripts/capture-store-screenshots.mjs $(SCREENSHOT_ARGS)

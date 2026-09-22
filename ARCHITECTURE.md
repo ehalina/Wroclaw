@@ -144,6 +144,8 @@ Wroclaw/
 - iOS app record identity is `com.event.horizon.wroclaw` with display name `Wroclaw Storywalk`; Capacitor `appId` and Xcode Debug/Release bundle IDs match it.
 - Android package ID, Java namespace, and launcher name match the Capacitor identity: `com.event.horizon.wroclaw` / `Wroclaw Storywalk`.
 - Xcode Debug/Release use automatic signing with Apple Team `AB8LFY64PF`; the App Store Connect API private key stays in the ignored `___keys/` directory and is never bundled into the app.
+- Launcher art is generated from `resources/icon-source.png` into the Xcode asset catalog and Android mipmap densities; `make icons` is the reproducible entry point.
+- Release scripts remain local wrappers around Capacitor/Xcode/Gradle: `make ios-archive`, `make android-build`, and `make android-bundle`. Android release signing reads ignored `___keys/android/signing.properties`; screenshot candidates are written under ignored `artifacts/`.
 
 ### 1. SPA Architecture через iframe
 

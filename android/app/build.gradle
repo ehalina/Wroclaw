@@ -1,5 +1,21 @@
 apply plugin: 'com.android.application'
 
+def localSigningFile = rootProject.file('../___keys/android/signing.properties')
+def localSigningProperties = new Properties()
+if (localSigningFile.exists()) {
+    localSigningFile.withInputStream { localSigningProperties.load(it) }
+}
+def configuredStoreFile = localSigningProperties.getProperty('storeFile')
+def configuredStorePassword = localSigningProperties.getProperty('storePassword')
+def configuredKeyAlias = localSigningProperties.getProperty('keyAlias')
+def configuredKeyPassword = localSigningProperties.getProperty('keyPassword')
+def hasReleaseSigning = configuredStoreFile && configuredStorePassword && configuredKeyAlias && configuredKeyPassword
+def resolvedStoreFile = configuredStoreFile && !new File(configuredStoreFile).isAbsolute()
+    ? new File(localSigningFile.parentFile, configuredStoreFile).absolutePath
+    : configuredStoreFile
+def releaseVersionCode = (project.findProperty('ANDROID_VERSION_CODE') ?: '1').toString().toInteger()
+def releaseVersionName = (project.findProperty('ANDROID_VERSION_NAME') ?: '1.0').toString()
+
 android {
     namespace = "com.event.horizon.wroclaw"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -7,8 +23,8 @@ android {
         applicationId "com.event.horizon.wroclaw"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode releaseVersionCode
+        versionName releaseVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -16,8 +32,21 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        release {
+            if (hasReleaseSigning) {
+                storeFile file(resolvedStoreFile)
+                storePassword configuredStorePassword
+                keyAlias configuredKeyAlias
+                keyPassword configuredKeyPassword
+            }
+        }
+    }
     buildTypes {
         release {
+            if (hasReleaseSigning) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

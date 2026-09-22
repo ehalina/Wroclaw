@@ -4,6 +4,7 @@ import globals from 'globals';
 const ignored = [
   'android/**',
   'ios/**',
+  'artifacts/**',
   'node_modules/**',
   'docs/**',
   '__BestPractice/**',

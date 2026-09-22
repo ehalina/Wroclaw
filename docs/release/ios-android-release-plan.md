@@ -23,7 +23,7 @@ Updated: 2026-09-22. This plan covers the current Tumski Island tour and leaves 
 | Export compliance | Done for current build | The owner confirmed that the current build and libraries use no non-exempt encryption. Apple reports `usesNonExemptEncryption=false`; `Info.plist` now carries the same declaration for future builds with this dependency set. Recheck if encryption behavior or libraries change. |
 | Release content | Needs review | BACKLOG tracks incomplete tour content and translations. Audit actual EN/RU/PL pages and routes before external testing. |
 | Data practices | Needs review | Web runtime loads Firebase Auth/Firestore scripts and Google Fonts; account code can use Firestore and an IP lookup. Determine what is enabled in native builds before answering privacy forms. |
-| Store assets and contacts | Needs review | The iOS icon is still the default Capacitor artwork. Replace it before public release; prepare screenshots, a public privacy policy URL, support URL/email, and licensed media inventory. |
+| Store assets and contacts | In progress | New Wroclaw icon art is generated for iOS/Android, but the uploaded TestFlight `1.0 (1)` still has the old icon. Candidate EN/RU/PL browser screenshots are generated for review. A public privacy policy URL, support URL/email, and licensed media inventory remain. |
 
 ## iOS: internal TestFlight first
 

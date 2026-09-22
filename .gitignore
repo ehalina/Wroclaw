@@ -39,6 +39,7 @@ node_modules/
 # Build
 dist/
 build/
+artifacts/
 *.map
 
 # Native build artifacts

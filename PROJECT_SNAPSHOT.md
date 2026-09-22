@@ -1,6 +1,6 @@
 # PROJECT SNAPSHOT — Текущее состояние проекта
 
-*Последнее обновление: 2026-06-27*
+*Последнее обновление: 2026-09-22*
 
 > 📋 **Процесс обновления этого файла:** см. [`PROCESS.md`](./PROCESS.md)
 >
@@ -18,7 +18,7 @@
 
 **Текущая фаза:** Phase 2 - Content & Localization
 
-**Native release preparation (2026-09-22):** App name `Wroclaw Storywalk` and ID `com.event.horizon.wroclaw` are aligned in Capacitor, Xcode, and Android. Capacitor sync, Android debug/release builds, unsigned iOS Simulator Release build, signed iOS device archive, `make audit` and 74 smoke tests passed. Xcode reported a successful App Store Connect upload of iOS `1.0 (1)`; Apple processing and internal TestFlight distribution remain to be checked. The iOS icon is still the default Capacitor artwork and needs replacement before public release.
+**Native release preparation (2026-09-22):** App name `Wroclaw Storywalk` and ID `com.event.horizon.wroclaw` are aligned in Capacitor, Xcode, and Android. iOS `1.0 (1)` is in internal TestFlight with two invited testers. New Wroclaw icon art, icon generation, build/signing scripts and EN/RU/PL screenshot capture are in place; `make audit`, Android debug and all 27 screenshot captures pass. A new local iOS `1.0 (2)` archive contains the icon and has a valid Apple Development signature; distribution/export and upload remain. Later: Android upload-key creation and Play internal test.
 
 ---
 
