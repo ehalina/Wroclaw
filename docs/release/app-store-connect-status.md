@@ -13,6 +13,7 @@ Checked and updated: 2026-09-22. App: `Wroclaw Storywalk`, bundle ID `com.event.
 - Support URL for all three App Store localizations. It currently opens the published policy page, which includes the contact email; replace it with a dedicated support page when available.
 - TestFlight feedback email in all three languages; Halina Yarmolenka's email and phone in App Review and Beta Review contact details.
 - Age rating questionnaire: rare, mild historical references to realistic violence and weapons; no graphic violence, chat, user publishing, advertising, or unrestricted web access. Apple calculated `TWELVE_PLUS` for the current app info. The owner confirmed that historical violence appears only in non-scary text. Apple normalized both nonzero descriptors to `INFREQUENT_OR_MILD` in the API.
+- App Store screenshots: three landscape images each for iPhone 6.9-inch and iPad 13-inch displays in English (U.S.), Russian and Polish. All 18 assets were uploaded through the API, and Apple reports `COMPLETE` for every image. The source PNGs are browser captures of the app UI and remain under ignored `artifacts/store-screenshots/`.
 
 The write script checks the bundle ID, version, editable status, lengths and current values. It refuses to replace nonempty text that differs from the local file. It was rerun in dry-run mode after writing; the API reported no remaining differences.
 
@@ -23,6 +24,9 @@ The write script checks the bundle ID, version, editable status, lengths and cur
 make asc-inspect
 make asc-dry-run
 make asc-apply
+make asc-screenshots-inspect
+make asc-screenshots-dry-run
+make asc-screenshots-apply
 ```
 
 The App Store Connect API key is ignored under `___keys/ios/`. It is never included in this metadata file or printed by the script.
@@ -34,7 +38,7 @@ The App Store Connect API key is ignored under `___keys/ios/`. It is never inclu
 - **Age rating after content changes.** Recheck the answers if scenes, illustrations, or features change; the current questionnaire is saved.
 - **App Review access.** Contact fields are set. The tour appears accessible without login, but this must be confirmed on a device before setting the demo-account answer.
 - **Content rights, accessibility, pricing and regions.** These require owner decisions or verification; no declarations were guessed.
-- **Screenshots.** The 27 browser-captured candidate images under ignored `artifacts/store-screenshots/` need native rendering and editorial review before upload.
+- **Screenshot validation.** The 18 iOS browser captures are uploaded and processed. Compare them with the installed native app on iPhone and iPad before App Review. The nine Android captures are for later Google Play preparation.
 - **New icon build.** TestFlight currently has `1.0 (1)` with the old icon. Local `1.0 (2)` contains the new icon and can be uploaded with `IOS_BUILD_NUMBER=2 ./build-ios.sh` after `ASC_ISSUER_ID` is stored under ignored `___keys/ios/`.
 
 No public App Store submission was made.

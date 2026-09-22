@@ -49,6 +49,9 @@ ASC_ISSUER_ID=...
 make store-screenshots SCREENSHOT_ARGS='--dry-run'
 make store-screenshots SCREENSHOT_ARGS='--profile ios-phone --language en --state start,map,story'
 make store-screenshots
+make asc-screenshots-dry-run
+make asc-screenshots-apply
+make asc-screenshots-inspect
 ```
 
-The Playwright script captures the current app UI in English, Russian and Polish for an iPhone landscape, iPad landscape and Android phone profile. It writes PNGs to ignored `artifacts/store-screenshots/<language>/<profile>/<state>.png`, checks pixel dimensions, and never alters app content. These are browser captures of the Capacitor web UI. Review every image for localization, layout and store suitability; capture final native screenshots if the store requires device-specific chrome or rendering. The `story` state is the second tour scene, not a completed quest. The app currently has incomplete content and translations, so these files are candidates, not approved listing assets.
+The Playwright script captures the current app UI in English, Russian and Polish for an iPhone landscape, iPad landscape and Android phone profile. It writes PNGs to ignored `artifacts/store-screenshots/<language>/<profile>/<state>.png`, checks pixel dimensions, and never alters app content. The App Store Connect commands require `ASC_KEY_ID`, `ASC_ISSUER_ID`, and `ASC_KEY_PATH` in the shell; the upload command checks dimensions, RGB format, checksum and remote state to avoid duplicates. All 18 iOS screenshots were uploaded and processed as `COMPLETE` on 2026-09-22. These are browser captures of the Capacitor web UI. Compare every image with the installed app before App Review; capture replacement native screenshots if rendering differs. The `story` state is the second tour scene, not a completed quest. The app currently has incomplete content and translations, so the uploaded listing still needs editorial review.
